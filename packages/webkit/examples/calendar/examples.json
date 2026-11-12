@@ -1,0 +1,61 @@
+{
+  "component": "calendar",
+  "title": "Components/Primitives/Inputs/Calendar",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Open",
+      "summary": "The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input` — same heights, same `.text-label-sm` value, same hover and disabled treatment.",
+      "file": "open.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three trigger sizes — `small`, `medium`, and `large`.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Single",
+      "summary": "Single-date mode picks one day instead of a range.",
+      "file": "single.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "Horizontal layout places the Start/End fields and Apply beside the calendar, with a full-height divider.",
+      "file": "horizontal.vue"
+    },
+    {
+      "name": "WithPresets",
+      "summary": "Consumer presets drive the two-part trigger: the left dropdown applies a range in one click; the right calendar fine-tunes it. The presets count back from a fixed reference day, so server and browser render the same range.",
+      "file": "with-presets.vue"
+    },
+    {
+      "name": "MinMax",
+      "summary": "The `min` and `max` bounds (±2 months) around a fixed reference day disable days outside the allowed window and clamp navigation.",
+      "file": "min-max.vue"
+    },
+    {
+      "name": "WithTime",
+      "summary": "Start/End time fields round-trip the hours and minutes of each endpoint.",
+      "file": "with-time.vue"
+    },
+    {
+      "name": "WithTimezone",
+      "summary": "A timezone selector (IANA zones) labels the selection; defaults to the local zone.",
+      "file": "with-timezone.vue"
+    },
+    {
+      "name": "SelectPeriod",
+      "summary": "Select Period mode: pick a relative span (`45m`, `last month`) and the trigger shows the token beside the resolved window (`14:44 – 23:59`).",
+      "file": "select-period.vue"
+    },
+    {
+      "name": "Clearable",
+      "summary": "A clear control on the trigger empties the committed selection when present.",
+      "file": "clearable.vue"
+    }
+  ]
+}

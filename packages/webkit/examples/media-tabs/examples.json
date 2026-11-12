@@ -1,0 +1,36 @@
+{
+  "component": "media-tabs",
+  "title": "Components/Marketing/Primitives/MediaTabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three peer claims and one media frame. The band opens on the first tab and advances on its own every five seconds, drawing a hairline along the active row as the interval runs down. Point at a row and the selection follows the pointer while the timer holds; click one and the timer stops for good, because a reader who has chosen should not be moved off their choice. Each row is a real button, so `Tab` reaches every claim and `Enter` selects it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Positions",
+      "summary": "Every `position` value, one band under the other, with the same five use cases on each. Left and right stack the tabs beside the media and hold the first three; top and bottom lay all five in one row, each carrying its own title, description and progress hairline, with the one medium running the full width on the other side. The seam between the tabs and the media is one hairline wherever the tabs sit. Below the large breakpoint every position stacks and the active tab carries its media inside its row.",
+      "file": "positions.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` value beside the media, one band under the other with the same three claims on each, so the only thing that changes is the height of a row. That height is the component's own — three, four and a half, and six times the padding step inside the row — and the media column matches the stack beside it to the pixel. It is a floor rather than a ceiling: at `small` this copy is taller than three padding steps, so the rows keep their text and the media grows with them instead of the text being squeezed. In a row of tabs (`top` or `bottom`) `small` sets the title and description two steps down, which is what keeps five claims from filling the band.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "TabCounts",
+      "summary": "The two counts the band is built for, both handed the same five claims. Beside the media (`left` or `right`) the band keeps the first three, stacked, each row one height and each title at the same heading size. In a row (`top` or `bottom`) it keeps all five, each with its own title, description and progress hairline. Items past the limit are not rendered, so pick the position from how many claims the page has.",
+      "file": "tab-counts.vue"
+    },
+    {
+      "name": "Static",
+      "summary": "The band at rest: no timer, and the pointer passing over changes nothing. Only a click moves the selection. Reach for this pairing where the reader is meant to choose rather than watch — a comparison they will scan back and forth over, or a band under a heading that already told them what to look for.",
+      "file": "static.vue"
+    },
+    {
+      "name": "Placeholder",
+      "summary": "The band with the library placeholder as the media of every tab. An `Illustration` with no `name` draws the placeholder from the asset library, so the media frame holds its size while the artwork for each claim is still to be made. Name a scene per tab through the `media` slot scope when the artwork lands.",
+      "file": "placeholder.vue"
+    }
+  ]
+}

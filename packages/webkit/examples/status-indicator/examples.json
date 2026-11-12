@@ -1,0 +1,21 @@
+{
+  "component": "status-indicator",
+  "title": "Components/Primitives/Feedback/StatusIndicator",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default success status with label.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Status",
+      "summary": "All status variants side by side.",
+      "file": "status.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Loading state: spinner replaces the dot and the label appends an ellipsis.",
+      "file": "loading.vue"
+    }
+  ]
+}

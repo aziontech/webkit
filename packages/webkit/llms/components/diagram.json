@@ -1,0 +1,81 @@
+{
+ "name": "diagram",
+ "binding": "Diagram",
+ "import": "@aziontech/webkit/diagram",
+ "treeShakeableImport": "@aziontech/webkit/diagram",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked column — centred on one axis, or an indented tree where the row branches — and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+ "setup": null,
+ "useWhen": [
+  "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
+  "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
+  "Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture."
+ ],
+ "avoidWhen": [
+  "For decorative product art → use `illustration`.",
+  "For a world map of points of presence → use `network-map`.",
+  "For a sequence of steps the reader follows in order → use `stepper` or an ordered list.",
+  "For live data or anything the reader operates — a diagram is a figure, not a control."
+ ],
+ "related": [
+  "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
+  "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
+  "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
+  "tag` — the status chip a card or item node carries."
+ ],
+ "bestPractices": [
+  "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
+  "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
+  "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
+  "Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.",
+  "Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.",
+  "Do: for a vertical flow in a docs column (a command → the CLI → the API → the resources), use one `row`. In the column it stacks centred, every connector runs through the horizontal centre of both nodes and an edge label sits centred on its line.",
+  "Don't: nudge nodes or labels with wrappers, margins or spacer nodes to centre a flow; the layout does it.",
+  "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "'ai-gateway' | 'ai-gateway-latency-routing' | 'ai-gateway-model-routing' | 'ai-gateway-provider-failover' | 'ai-gateway-response-cache' | 'ai-inference' | 'application-accelerator' | 'applications' | 'bot-manager' | 'cache' | 'data-stream' | 'ddos-protection' | 'edge-dns' | 'firewall' | 'functions' | 'image-processor' | 'kv-store' | 'load-balancer' | 'network-shield' | 'object-storage' | 'real-time-events' | 'real-time-metrics' | 'sql-database' | 'web-application-firewall' | 'workloads' | 'workloads-gradual-rollout' | 'workloads-isolate-per-request' | 'workloads-security'",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Name of an official diagram in the asset library; ignored when spec is set."
+  },
+  {
+   "name": "spec",
+   "type": "DiagramSpec",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The nodes, their layout and the edges between them, for a diagram the library does not have."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible description of the whole diagram; empty uses the description the spec carries."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Diagram from '@aziontech/webkit/diagram'\n</script>\n\n<template>\n  <Diagram name=\"ai-gateway-model-routing\" />\n</template>"
+  },
+  {
+   "name": "Spec",
+   "sfc": "<script setup>\n  import Diagram from '@aziontech/webkit/diagram'\n\n  const spec = {\n    nodes: [\n      {\n        key: 'user',\n        kind: 'pill',\n        title: 'User',\n        icon: 'pi pi-user',\n        active: true\n      },\n      {\n        key: 'routing',\n        kind: 'card',\n        eyebrow: 'Routing',\n        title: 'Nearest data center',\n        icon: 'pi pi-directions',\n        active: true\n      },\n      {\n        key: 'workload',\n        kind: 'card',\n        eyebrow: 'Workload',\n        title: 'shop.example.com',\n        icon: 'ai ai-workloads',\n        status: {\n          label: 'Live',\n          severity: 'success'\n        },\n        active: true,\n        lit: true\n      },\n      {\n        key: 'cache',\n        kind: 'item',\n        eyebrow: 'Cache',\n        title: 'Served from cache',\n        icon: 'ai ai-tiered-cache',\n        active: true\n      },\n      {\n        key: 'origin',\n        kind: 'item',\n        eyebrow: 'Origin',\n        title: 'origin.example.com',\n        icon: 'pi pi-database'\n      }\n    ],\n    layout: {\n      gap: 'wide',\n      row: [\n        {\n          node: 'user'\n        },\n        {\n          node: 'routing'\n        },\n        {\n          node: 'workload'\n        },\n        {\n          branches: [\n            {\n              node: 'cache'\n            },\n            {\n              node: 'origin'\n            }\n          ]\n        }\n      ]\n    },\n    edges: [\n      {\n        from: 'user',\n        to: 'routing',\n        active: true\n      },\n      {\n        from: 'routing',\n        to: 'workload',\n        active: true\n      },\n      {\n        from: 'workload',\n        to: 'cache',\n        label: 'hit',\n        active: true\n      },\n      {\n        from: 'workload',\n        to: 'origin',\n        label: 'miss'\n      }\n    ]\n  }\n</script>\n\n<template>\n  <Diagram\n    :spec=\"spec\"\n    aria-label=\"A user request is routed to the nearest data center and reaches the workload, which serves it from cache on a hit and from the origin on a miss.\"\n  />\n</template>"
+  },
+  {
+   "name": "NodeKinds",
+   "sfc": "<script setup>\n  import Diagram from '@aziontech/webkit/diagram'\n\n  const spec = {\n    nodes: [\n      {\n        key: 'app',\n        kind: 'app',\n        title: 'App'\n      },\n      {\n        key: 'user',\n        kind: 'pill',\n        title: 'User',\n        icon: 'pi pi-user',\n        active: true\n      },\n      {\n        key: 'gateway',\n        kind: 'card',\n        eyebrow: 'AI Gateway',\n        title: 'Route by cost',\n        icon: 'ai ai-gateway',\n        status: {\n          label: 'On',\n          severity: 'success'\n        },\n        active: true,\n        lit: true\n      },\n      {\n        key: 'model',\n        kind: 'item',\n        eyebrow: 'provider · general',\n        title: 'General model',\n        icon: 'pi pi-sparkles',\n        status: {\n          label: 'Primary',\n          severity: 'info'\n        },\n        active: true\n      },\n      {\n        key: 'cache',\n        kind: 'tile',\n        title: 'Response cache',\n        icon: 'ai ai-tiered-cache'\n      }\n    ],\n    layout: {\n      gap: 'wide',\n      row: [\n        {\n          node: 'app'\n        },\n        {\n          node: 'user'\n        },\n        {\n          node: 'gateway'\n        },\n        {\n          branches: [\n            {\n              node: 'model'\n            },\n            {\n              node: 'cache'\n            }\n          ]\n        }\n      ]\n    },\n    edges: [\n      {\n        from: 'user',\n        to: 'gateway',\n        label: 'prompt',\n        active: true\n      },\n      {\n        from: 'gateway',\n        to: 'model',\n        label: 'route',\n        active: true\n      },\n      {\n        from: 'gateway',\n        to: 'cache',\n        label: 'hit'\n      }\n    ]\n  }\n</script>\n\n<template>\n  <Diagram\n    :spec=\"spec\"\n    aria-label=\"An app sends a prompt to the AI Gateway, which routes it to the general model or answers from the response cache.\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/diagram.md"
+}

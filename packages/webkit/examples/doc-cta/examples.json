@@ -1,0 +1,16 @@
+{
+  "component": "doc-cta",
+  "title": "Components/Documentation/DocCta",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The closing offer at the foot of the page rail: wordmark, headline, one line of copy and one action, at the rail's width.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Two actions",
+      "summary": "A secondary outlined action stacks under the primary when there is a real alternative.",
+      "file": "two-actions.vue"
+    }
+  ]
+}

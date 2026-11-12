@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../../apps/storybook/src/stories/components/marketing/primitives/hero-title/HeroTitle.stories'
+import Centered from '../../../../../examples/hero-title/centered.vue'
+import Default from '../../../../../examples/hero-title/default.vue'
+import Highlight from '../../../../../examples/hero-title/highlight.vue'
+import MobileCentered from '../../../../../examples/hero-title/mobile-centered.vue'
+import WithActions from '../../../../../examples/hero-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
-
-const { Default, Highlight, Centered, MobileCentered, WithActions } = composeStories(stories)
 
 const TESTID = 'marketing-hero-title'
 
@@ -195,14 +196,14 @@ describe('HeroTitle', () => {
 
   describe('stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId, getByRole } = render(Default())
+      const { getByTestId, getByRole } = render(Default)
 
       expect(getByTestId(TESTID)).not.toHaveAttribute('data-centered')
       expect(getByRole('heading', { level: 1 })).toHaveTextContent('Run it everywhere.')
     })
 
     it('renders the Highlight story with the accent phrase in the h1', () => {
-      const { getByRole } = render(Highlight())
+      const { getByRole } = render(Highlight)
 
       expect(getByRole('heading', { level: 1 }).querySelector('span')).toHaveTextContent(
         'Build anything.'
@@ -210,13 +211,13 @@ describe('HeroTitle', () => {
     })
 
     it('renders the Centered story centered', () => {
-      const { getByTestId } = render(Centered())
+      const { getByTestId } = render(Centered)
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-centered', 'true')
     })
 
     it('marks the MobileCentered story mobile-centered, not centered', () => {
-      const { getByTestId } = render(MobileCentered())
+      const { getByTestId } = render(MobileCentered)
       const root = getByTestId(TESTID)
 
       expect(root).toHaveAttribute('data-mobile-centered', 'true')
@@ -224,7 +225,7 @@ describe('HeroTitle', () => {
     })
 
     it('renders the WithActions story with both CTAs', () => {
-      const { getAllByRole } = render(WithActions())
+      const { getAllByRole } = render(WithActions)
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',

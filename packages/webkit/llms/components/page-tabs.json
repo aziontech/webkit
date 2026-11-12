@@ -1,0 +1,58 @@
+{
+ "name": "page-tabs",
+ "binding": "PageTabs",
+ "import": "@aziontech/webkit/page-tabs",
+ "treeShakeableImport": "@aziontech/webkit/page-tabs",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-changes `Tag`, Deploy). It is `Tabs` plus the strip and the actions region, so every detail page stops re-creating the same bar.",
+ "setup": null,
+ "useWhen": [
+  "The top of every resource detail page, under the global header.",
+  "An account page split into tabs, such as Billing."
+ ],
+ "avoidWhen": [
+  "Tabs inside a card, a drawer or a panel → use `tabs`.",
+  "Steps of a flow → use `stepper` or `wizard`.",
+  "Navigation between pages of the app → use `sidebar` or `navigation-menu`."
+ ],
+ "related": [
+  "tabs` — the tablist it renders; pass one `Tabs.Item` per section in the default slot.",
+  "page-header` — the page heading under the strip.",
+  "tag` and `button` — the usual content of the `actions` slot."
+ ],
+ "bestPractices": [
+  "Bind `v-model` to the route (or a ref) and render the section below from it.",
+  "Keep the labels to one word where possible.",
+  "Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`."
+ ],
+ "props": [],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "One Tabs.Item per section of the resource."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'build', label: 'Build' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'variables', label: 'Variables' },\n    { value: 'rules', label: 'Rules' },\n    { value: 'logs', label: 'Logs' },\n    { value: 'metrics', label: 'Metrics' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
+  },
+  {
+   "name": "WithActions",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n    <template #actions>\n      <Tag\n        severity=\"warning\"\n        size=\"small\"\n        label=\"2 changes\"\n      />\n      <Button\n        label=\"Deploy\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"pi pi-cloud-upload\"\n      />\n    </template>\n  </PageTabs>\n</template>"
+  }
+ ],
+ "docs": "components/page-tabs.md"
+}

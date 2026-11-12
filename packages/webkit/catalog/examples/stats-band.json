@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The band as the reach section of a marketing page places it: three figures, each with its unit as suffix and a caption beneath. Edit the items in the Controls panel — a band with no items renders nothing at all.",
+   "sfc": "<script setup>\n  import StatsBand from '@aziontech/webkit/stats-band'\n</script>\n\n<template>\n  <StatsBand\n    :items=\"[\n      { value: '100', suffix: 'ms', label: 'Median response, worldwide' },\n      { value: '24', suffix: '/7', label: 'Support on every plan' },\n      { value: '99.99', suffix: '%', label: 'Availability, contractual' }\n    ]\"\n  />\n</template>"
+  }
+ ]
+}

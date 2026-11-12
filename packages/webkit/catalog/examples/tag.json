@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default primary tag at medium size.",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <Tag\n    label=\"Label\"\n    severity=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All severity variants side by side.",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-xxs` padding and gap), each with default shape, pill, icon, and icon + pill.",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4\">\n    <div class=\"flex flex-wrap items-center gap-4\">\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        rounded\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        icon=\"pi pi-box\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"medium\"\n        icon=\"pi pi-box\"\n        rounded\n      />\n    </div>\n    <div class=\"flex flex-wrap items-center gap-4\">\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        rounded\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        icon=\"pi pi-box\"\n      />\n      <Tag\n        label=\"Label\"\n        severity=\"primary\"\n        size=\"small\"\n        icon=\"pi pi-box\"\n        rounded\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ]
+}

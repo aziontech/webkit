@@ -1,0 +1,11 @@
+{
+  "component": "hero-copy-on-top-art",
+  "title": "Components/Marketing/Sections/HeroCopyOnTopArt",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Workloads hero: the copy centered on top, and the topology under it — two domains feed the lit workload, which binds an application and a firewall. Edit the props in the Controls panel — a card with no title is skipped, and a band with no levels drops the scene.",
+      "file": "default.vue"
+    }
+  ]
+}

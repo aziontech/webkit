@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
+import Default from '../../../../examples/sidebar/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { SidebarInjectionKey } from './injection-key'
 import SidebarFooter from './sidebar-footer.vue'
-
-const { Default } = composeStories(stories)
 
 describe('SidebarFooter', () => {
   describe('rendering (structure grounded in the template)', () => {
@@ -87,7 +84,7 @@ describe('SidebarFooter', () => {
     })
   })
 
-  describe('composeStories (the story fixture that composes a SidebarFooter runs in-test)', () => {
+  describe('documented example (the story fixture that composes a SidebarFooter runs in-test)', () => {
     it('the console sidebar renders the SidebarFooter region inside the Sidebar', () => {
       // The story mounts <SidebarFooter> in the Sidebar #footer slot; with the
       // Sidebar's default testId ("layout-sidebar"), the footer-region testid resolves.

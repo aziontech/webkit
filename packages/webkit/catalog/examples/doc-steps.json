@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Five titled steps — the shape the docs frame specifies.",
+   "sfc": "<script setup>\n  import DocStep from '@aziontech/webkit/doc-step'\n  import DocSteps from '@aziontech/webkit/doc-steps'\n</script>\n\n<template>\n  <DocSteps>\n    <DocStep title=\"Access Azion Console.\" />\n    <DocStep title=\"Click + Create on the homepage.\" />\n    <DocStep title=\"Select your preferred template to start your project.\" />\n    <DocStep title=\"Fill in the fields the template asks for.\" />\n    <DocStep title=\"Customize the elements using the sidebar tools.\" />\n  </DocSteps>\n</template>"
+  },
+  {
+   "name": "WithBody",
+   "summary": "A step can carry anything under its heading — prose, a code block, another component — and the rail stretches to cover it.",
+   "sfc": "<script setup>\n  import DocStep from '@aziontech/webkit/doc-step'\n  import DocSteps from '@aziontech/webkit/doc-steps'\n</script>\n\n<template>\n  <DocSteps>\n    <DocStep title=\"Install the Azion CLI\">\n      <p>\n        Homebrew is the shortest path on macOS; every other platform is documented in the CLI\n        reference.\n      </p>\n    </DocStep>\n    <DocStep title=\"Link the project\">\n      <p>\n        Reads your project, picks a preset, and writes the <code>azion/</code> folder that describes\n        the workload.\n      </p>\n    </DocStep>\n    <DocStep title=\"Deploy\" />\n  </DocSteps>\n</template>"
+  }
+ ]
+}

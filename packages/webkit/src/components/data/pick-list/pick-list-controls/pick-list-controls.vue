@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import { pickListContextKey } from '../injection-key'
 
   defineOptions({
@@ -14,6 +16,7 @@
   }
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ pickList: en.pickList })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-controls'
@@ -29,7 +32,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('source')"
-      aria-label="Move selected to target"
+      :aria-label="t('pickList.moveSelectedToTarget')"
       :data-testid="`${testId}__move-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-target')"
@@ -51,7 +54,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('source') === 0"
-      aria-label="Move all to target"
+      :aria-label="t('pickList.moveAllToTarget')"
       :data-testid="`${testId}__move-all-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-target')"
@@ -74,7 +77,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('target')"
-      aria-label="Move selected to source"
+      :aria-label="t('pickList.moveSelectedToSource')"
       :data-testid="`${testId}__move-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-source')"
@@ -96,7 +99,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('target') === 0"
-      aria-label="Move all to source"
+      :aria-label="t('pickList.moveAllToSource')"
       :data-testid="`${testId}__move-all-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-source')"

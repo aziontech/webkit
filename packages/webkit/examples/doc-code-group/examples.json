@@ -1,0 +1,21 @@
+{
+  "component": "doc-code-group",
+  "title": "Components/Documentation/DocCodeGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One sample renders a code block titled by its language (\"Shell\") with its copy control.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Group",
+      "summary": "The same install command for three package managers, joined in one tab strip labelled by what differs.",
+      "file": "group.vue"
+    },
+    {
+      "name": "WithOutput",
+      "summary": "A command and what it prints: `code` holds only the `curl` the reader runs, and the sample's `output` renders under it as a muted \"Output\" block with no copy control.",
+      "file": "with-output.vue"
+    }
+  ]
+}

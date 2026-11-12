@@ -1,0 +1,47 @@
+{
+ "name": "stats-band",
+ "binding": "StatsBand",
+ "import": "@aziontech/webkit/stats-band",
+ "treeShakeableImport": "@aziontech/webkit/stats-band",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `big-numbers`, which owns the figures' scale and layout.",
+ "setup": null,
+ "useWhen": [
+  "To state reach, scale or results in three to five figures right after a hero or a claim."
+ ],
+ "avoidWhen": [
+  "For figures that need a quote or a logo beside them → use `network-section` or `logo-wall-quote`.",
+  "For a single figure inside another band → use `big-numbers` directly."
+ ],
+ "related": [
+  "big-numbers` — the figure row this band frames.",
+  "network-section` — the band that pairs claims with client outcomes."
+ ],
+ "bestPractices": [
+  "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
+  "Three to five items; more than that and the figures stop reading as a band."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "StatsBandItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import StatsBand from '@aziontech/webkit/stats-band'\n</script>\n\n<template>\n  <StatsBand\n    :items=\"[\n      { value: '100', suffix: 'ms', label: 'Median response, worldwide' },\n      { value: '24', suffix: '/7', label: 'Support on every plan' },\n      { value: '99.99', suffix: '%', label: 'Availability, contractual' }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/stats-band.md"
+}

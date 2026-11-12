@@ -1,0 +1,16 @@
+{
+  "component": "band-stack",
+  "title": "Components/Marketing/Primitives/BandStack",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three `MediaSplit` bands at `size=\"large\"`, not pinned, so the frames and the shared hairlines are the only thing on show. Each band is two frames, left and right, with a registration mark in every corner of both halves. Every band after the first pulls up one pixel, so neighbouring rules overlap into a single hairline. Turn on `sticky` or `flush` in the Controls panel to see the pinned run or the first band without its top rule.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sticky",
+      "summary": "The same run with `sticky` and `flush` on. From `lg` up each band pins under the site header one spacing step lower than the band before it, so the bands already read stay visible as ledges above the one being read; below `lg` they stack in normal flow. A story cannot scroll itself, so the canvas shows the resting state — scroll the Docs page to see the pile form.",
+      "file": "sticky.vue"
+    }
+  ]
+}

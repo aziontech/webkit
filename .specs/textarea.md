@@ -7,16 +7,16 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 626f2f6487602359a433351e7f221cf119c3305354c27c19332068f49e42adea
+checksum: 2bbced62a585f5400e0887648e32689e9af3d77c7999b17e91a7564de7cb8977
 created: 2026-06-23
-last_updated: 2026-07-03
+last_updated: 2026-11-11
 ---
 
 # Textarea — Component Spec
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input-text` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -24,12 +24,12 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ## When NOT to use
 
-- The value is a single line → use `input-text`.
-- The value is strictly numeric → use `input-number`.
+- The value is a single line → use `input`.
+- The value is strictly numeric → use `number-input`.
 
 ## Related
 
-- `input-text` — single-line sibling with the same field API.
+- `input` — single-line sibling with the same field API.
 
 ## Best practices
 
@@ -40,37 +40,48 @@ Collects multi-line free-form text from the user. Sibling of `input-text` in the
 
 ```vue
 <script setup>
-import Textarea from '@aziontech/webkit/textarea'
-import { ref } from 'vue'
+  import Textarea from '@aziontech/webkit/textarea'
+  import { ref } from 'vue'
 
-const value = ref('')
+  const value = ref('')
 </script>
 
 <template>
-  <Textarea v-model="value" placeholder="Write your message" />
+  <Textarea
+    v-model="value"
+    placeholder="Write your message"
+  />
 
   <!-- Lock the field height, or allow horizontal/both-axes drag -->
-  <Textarea v-model="value" placeholder="Fixed size" resizable="none" />
-  <Textarea v-model="value" placeholder="Any direction" resizable="both" />
+  <Textarea
+    v-model="value"
+    placeholder="Fixed size"
+    resizable="none"
+  />
+  <Textarea
+    v-model="value"
+    placeholder="Any direction"
+    resizable="both"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `''` | false | Bound value (v-model). |
-| `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field as read-only; keeps focus styling, blocks edits. |
-| `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
-| `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
-| `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
+| Prop          | Type                                             | Default      | Required | JSDoc                                                                                                                                                  |
+| ------------- | ------------------------------------------------ | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `modelValue`  | `string`                                         | `''`         | false    | Bound value (v-model).                                                                                                                                 |
+| `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                             |
+| `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                      |
+| `readonly`    | `boolean`                                        | `false`      | false    | Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable. |
+| `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                            |
+| `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                  |
+| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior.                                        |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes           |
+| ------------------- | -------- | --------------- |
 | `update:modelValue` | `string` | v-model update. |
 
 ## Slots
@@ -89,46 +100,54 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                          | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| -------------------------------- | ----------------------------------------- | ------ | ------------------------------- |
 | state change (border/background) | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | `.text-body-xs` |
-| surface | `var(--bg-surface)` |
-| surface (hover, empty) | `var(--bg-surface-raised)` |
-| surface (disabled) | `var(--bg-disabled)` |
-| text | `var(--text-default)` |
-| text (placeholder) | `var(--text-muted)` |
-| text (disabled) | `var(--text-disabled)` |
-| border | `var(--border-default)` |
-| border (hover) | `var(--border-strong)` |
-| border (focus) | `var(--ring-color)` |
-| border (required) | `var(--warning-border)` |
-| border (invalid) | `var(--danger-border)` |
-| border width | `var(--border-width-default)` |
-| spacing (padding) | `var(--spacing-sm)` |
-| shape | `var(--shape-elements)` |
+| Region                 | Token (DESIGN.md)             |
+| ---------------------- | ----------------------------- |
+| typography             | `.text-body-xs`               |
+| surface                | `var(--bg-surface)`           |
+| surface (hover, empty) | `var(--bg-surface-raised)`    |
+| surface (disabled)     | `var(--bg-disabled)`          |
+| text                   | `var(--text-default)`         |
+| text (placeholder)     | `var(--text-muted)`           |
+| text (disabled)        | `var(--text-disabled)`        |
+| border                 | `var(--border-default)`       |
+| border (hover)         | `var(--border-strong)`        |
+| border (focus)         | `var(--ring-color)`           |
+| border (required)      | `var(--warning-border)`       |
+| border (invalid)       | `var(--danger-border)`        |
+| border width           | `var(--border-width-default)` |
+| spacing (padding)      | `var(--spacing-sm)`           |
+| shape                  | `var(--shape-elements)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: on `:focus`, a `ring-2` shadow in `var(--ring-color)` plus a `ring-offset-2` in `var(--bg-canvas)` render around the field; the color transition respects `motion-reduce:transition-none`.
 - Keyboard map: `Tab` focuses; typing inserts text; `Enter` inserts a newline; `Shift+Tab` moves focus to the previous element.
+- Direction: the `<textarea>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: root is a native `<textarea>`; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; `aria-disabled` mirrors `disabled` when applicable.
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including disabled state.
 - `motion-reduce:transition-none` on animated state transitions.
 - Touch target: field min-height ≥80px ensures adequate hit area.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none.
+- Keyboard: no horizontal arrow-key logic.
+- User data: the `<textarea>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Examples
 
 - Default
 - Disabled
@@ -149,10 +168,8 @@ _No slots._
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

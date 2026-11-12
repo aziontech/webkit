@@ -107,12 +107,42 @@
   font-display: swap;
 }
 
+/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
+   google/fonts is the fallback while a new upload propagates. */
 @font-face {
-  font-family: 'Sora';
-  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
   font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth,wght%5D.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E;
+}
+
+@layer base {
+  :where(:lang(ar), :lang(fa), :lang(ur)) {
+    line-height: 1.75;
+  }
 }
 
 @font-face {

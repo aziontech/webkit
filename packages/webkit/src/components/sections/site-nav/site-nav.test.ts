@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -201,7 +201,7 @@ describe('SiteNav', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with menu entries: navigation-menu sets role=none items inside its role=list (aria-required-children)', async () => {
+  it('has no a11y violations with menu entries', async () => {
     const { container } = nav()
 
     await expectNoA11yViolations(container)

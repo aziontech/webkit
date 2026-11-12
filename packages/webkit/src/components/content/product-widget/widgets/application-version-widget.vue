@@ -2,12 +2,12 @@
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
 
   defineOptions({ name: 'ApplicationVersionWidget' })
@@ -208,12 +208,12 @@
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted)"
+              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">qa-p-app</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted)"
+              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
@@ -270,7 +270,7 @@
                     label="Name"
                     required
                   />
-                  <InputText
+                  <Input
                     model-value="qa-p-app"
                     size="medium"
                     aria-label="Name"
@@ -342,7 +342,7 @@
                 class="flex items-center gap-(--spacing-xs) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-sm)"
               >
                 <div class="w-77">
-                  <InputText
+                  <Input
                     model-value=""
                     size="medium"
                     placeholder="Search keywords..."
@@ -354,9 +354,9 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
                 </div>
-                <span class="ml-auto inline-flex gap-(--spacing-xs)">
+                <span class="ms-auto inline-flex gap-(--spacing-xs)">
                   <IconButton
                     icon="pi pi-refresh"
                     kind="outlined"
@@ -431,11 +431,11 @@
                 >
                 <span class="inline-flex items-center gap-(--spacing-sm)">
                   <i
-                    class="pi pi-angle-double-left"
+                    class="pi pi-angle-double-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-left"
+                    class="pi pi-angle-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -443,11 +443,11 @@
                     >1</span
                   >
                   <i
-                    class="pi pi-angle-right"
+                    class="pi pi-angle-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-double-right"
+                    class="pi pi-angle-double-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -508,7 +508,7 @@
               live.
             </span>
           </div>
-          <span class="ml-auto inline-flex shrink-0 items-center gap-(--spacing-sm)">
+          <span class="ms-auto inline-flex shrink-0 items-center gap-(--spacing-sm)">
             <Button
               label="New Version"
               kind="outlined"

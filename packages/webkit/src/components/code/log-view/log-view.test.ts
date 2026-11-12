@@ -1,17 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/log-view/LogView.stories'
+import Default from '../../../../examples/log-view/default.vue'
+import Flush from '../../../../examples/log-view/flush.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { LogViewLine } from './injection-key'
 import LogView from './log-view.vue'
 import LogViewContent from './log-view-content.vue'
 import LogViewFooter from './log-view-footer.vue'
 import LogViewHeader from './log-view-header.vue'
-
-const { Default, Flush } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium; stub writeText to resolve
 // so CopyButton's own logic (await write -> emit 'copy') runs. Not a layout mock.
@@ -46,7 +44,7 @@ const LINES: LogViewLine[] = [
  */
 function makeHost(options: {
   lines?: LogViewLine[]
-  showCopy?: boolean
+  copyable?: boolean
   disabled?: boolean
   searchPlaceholder?: string
   withFooter?: boolean
@@ -62,7 +60,7 @@ function makeHost(options: {
           LogView,
           {
             lines: options.lines ?? LINES,
-            showCopy: options.showCopy ?? true,
+            copyable: options.copyable ?? true,
             disabled: options.disabled ?? false,
             searchPlaceholder: options.searchPlaceholder,
             search: search.value,
@@ -89,6 +87,24 @@ function makeHost(options: {
 }
 
 describe('LogView (composition: provide/inject over Header/Content/Footer)', () => {
+  it('mounts a long log in chunks while the count, search and copy cover every line', async () => {
+    const lines: LogViewLine[] = Array.from({ length: 2000 }, (_, i) => ({
+      id: String(i),
+      time: '13:47:33',
+      type: 'text',
+      message: `Line ${i}`
+    }))
+    const { Host, search } = makeHost({ lines })
+    const { getAllByTestId, getByTestId } = render(Host)
+    const mounted = getAllByTestId('code-log-view__line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(2000)
+    expect(getByTestId('code-log-view__header__line-count').textContent).toMatch(/2[,. ]?000/)
+    search.value = 'Line 1999'
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(getAllByTestId('code-log-view__line')).toHaveLength(1)
+  })
+
   describe('composition wiring — the public sub-components are real components sharing one context', () => {
     it('resolves each sub-component as a Vue component with its own defineOptions name', () => {
       // These are the exact modules published as @aziontech/webkit/log-view-*.
@@ -115,13 +131,13 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
 
     // The outline AND the corner radius hang off data-border (Tailwind
     // `data-[border]:` variants), so dropping the attribute drops both.
-    it('sets data-border by default and drops it when border is false', () => {
+    it('sets data-border by default and drops it when bordered is false', () => {
       const bordered = render(LogView, { props: { lines: LINES } })
       expect(
         within(bordered.container).getByTestId('code-log-view').getAttribute('data-border')
       ).toBe('true')
 
-      const flush = render(LogView, { props: { lines: LINES, border: false } })
+      const flush = render(LogView, { props: { lines: LINES, bordered: false } })
       expect(within(flush.container).getByTestId('code-log-view').hasAttribute('data-border')).toBe(
         false
       )
@@ -141,20 +157,60 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(getAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
     })
 
-    it('exposes the log body as a polite live region', () => {
+    it('keeps a polite log region that starts empty instead of the scrolling body', () => {
       const { Host } = makeHost({})
-      const { getByRole } = render(Host)
-      expect(getByRole('log').getAttribute('aria-live')).toBe('polite')
+      const { getByRole, getByTestId } = render(Host)
+      const log = getByRole('log')
+      expect(log.getAttribute('aria-live')).toBe('polite')
+      expect(log.textContent?.trim()).toBe('')
+      expect(getByTestId('code-log-view__content__body').hasAttribute('aria-live')).toBe(false)
+    })
+
+    it('announces appended lines only, not chunks that mount on scroll', async () => {
+      const lines = ref<LogViewLine[]>(
+        Array.from({ length: 2000 }, (_, i) => ({
+          id: String(i),
+          time: '13:47:33',
+          type: 'text' as const,
+          message: `Line ${i}`
+        }))
+      )
+      const Host = defineComponent({
+        setup() {
+          return () =>
+            h(LogView, { lines: lines.value, class: 'h-[480px]' }, () => [h(LogViewContent)])
+        }
+      })
+      const { container, getAllByTestId, getByRole } = render(Host)
+      const log = getByRole('log')
+      const before = getAllByTestId('code-log-view__line').length
+      container.querySelector('[data-chunk="19"]')?.scrollIntoView()
+      await vi.waitFor(() => {
+        expect(getAllByTestId('code-log-view__line').length).toBeGreaterThan(before)
+      })
+      expect(log.textContent?.trim()).toBe('')
+
+      lines.value = [
+        ...lines.value,
+        { id: 'new-1', time: '13:48:00', type: 'success', message: 'Deploy finished' }
+      ]
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(log.textContent).toContain('Deploy finished')
+      expect(log.textContent).not.toContain('Line 0')
+
+      lines.value = [{ id: 'other', time: '00:00:00', type: 'text', message: 'Fresh log' }]
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(log.textContent?.trim()).toBe('')
     })
 
     it('reflects the injected line count and warning-tag label in the header', () => {
       const { Host } = makeHost({})
       const { getByTestId } = render(Host)
-      // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 Warning".
+      // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 warning".
       // Header controls carry `${ctx.testId}__header__<part>` testids.
       expect(getByTestId('code-log-view__header__line-count').textContent?.trim()).toBe('4 lines')
       const filter = getByTestId('code-log-view__header__warnings-filter')
-      expect(filter.textContent).toContain('1 Warning')
+      expect(filter.textContent).toContain('1 warning')
       expect(filter.getAttribute('aria-pressed')).toBe('false')
     })
 
@@ -278,10 +334,10 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(payload.split('\n')).toHaveLength(LINES.length)
     })
 
-    it('does not render the copy control when showCopy is false', () => {
-      const { Host } = makeHost({ showCopy: false })
+    it('does not render the copy control when copyable is false', () => {
+      const { Host } = makeHost({ copyable: false })
       const { queryByTestId } = render(Host)
-      // Header template: v-if="ctx.showCopy.value" on the default copy IconButton.
+      // Header template: v-if="ctx.copyable.value" on the default copy IconButton.
       expect(queryByTestId('code-log-view__copy')).toBeNull()
     })
   })
@@ -363,7 +419,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story renders the composed viewer over the deploy log with rows', () => {
       const { getByTestId, getAllByTestId } = render(Default)
       expect(getByTestId('code-log-view').tagName).toBe('DIV')

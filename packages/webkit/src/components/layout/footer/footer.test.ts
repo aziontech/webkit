@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/footer/Footer.stories'
+import DefaultFooter from '../../../../examples/footer/default-footer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Footer from './index'
-
-const { DefaultFooter } = composeStories(stories)
 
 /**
  * footer is a COMPOSITION component: `index.ts` attaches Column and Link onto
@@ -159,6 +157,43 @@ describe('Footer', () => {
       expect(getByTestId('layout-footer__signature')).toBeTruthy()
     })
 
+    it('drops a band when its slot stops rendering', async () => {
+      const shown = ref(true)
+      const { queryByTestId } = render({
+        components: compoundComponents,
+        setup: () => ({ shown }),
+        template: `
+          <Footer>
+            <template v-if="shown" #brand><a href="/" aria-label="Azion home">Azion</a></template>
+            <template v-if="shown" #status><span>All Systems Operational</span></template>
+          </Footer>
+        `
+      })
+      expect(queryByTestId('layout-footer__signature')).toBeTruthy()
+      expect(queryByTestId('layout-footer__status')).toBeTruthy()
+
+      shown.value = false
+      await nextTick()
+
+      expect(queryByTestId('layout-footer__signature')).toBeNull()
+      expect(queryByTestId('layout-footer__status')).toBeNull()
+    })
+
+    it('marks the signature placement on the root, always by default', () => {
+      const { getByTestId, unmount } = renderComposed()
+      expect(getByTestId('layout-footer')).toHaveAttribute('data-signature', 'always')
+      unmount()
+
+      const compact = render({
+        components: compoundComponents,
+        template: `<Footer signature="compact">${composedBands}</Footer>`
+      })
+      expect(compact.getByTestId('layout-footer')).toHaveAttribute('data-signature', 'compact')
+      expect(compact.getByTestId('layout-footer__signature').className).toContain(
+        'group-data-[signature=compact]:lg:hidden'
+      )
+    })
+
     it('keeps the hatched gutters out of the a11y tree', () => {
       const { getAllByTestId } = renderComposedSite()
       for (const gutter of getAllByTestId('layout-footer__gutter')) {
@@ -308,7 +343,7 @@ describe('Footer', () => {
 
   // This env loads no theme CSS and runs no Tailwind (see src/test/setup.ts), so
   // axe here checks semantics only — landmarks, names, ARIA relationships. The
-  // footer's contrast lives in Storybook + visual regression, not in this suite.
+  // footer's contrast lives in the styled visual suite, not in this suite.
   describe('a11y (axe against the composed tree — semantics, not contrast)', () => {
     it('a fully composed footer has no violations', async () => {
       const { container } = renderComposed()
@@ -324,7 +359,7 @@ describe('Footer', () => {
     })
   })
 
-  describe('composeStories (the Default story fixture runs in-test)', () => {
+  describe('documented example (the Default story fixture runs in-test)', () => {
     it('Default story renders the landmark with its columns and every band', () => {
       const { getByRole, getByTestId, getAllByTestId } = render(DefaultFooter)
       expect(getByRole('contentinfo', { name: 'Footer' })).toBeTruthy()

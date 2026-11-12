@@ -1,13 +1,11 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/sidebar/Sidebar.stories'
+import Default from '../../../../examples/sidebar/default.vue'
+import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Sidebar from './sidebar.vue'
-
-const { Default, Resizable } = composeStories(stories)
 
 describe('Sidebar', () => {
   describe('rendering (structure grounded in the template)', () => {
@@ -144,7 +142,7 @@ describe('Sidebar', () => {
     })
   })
 
-  describe('composeStories (the story fixtures run in-test)', () => {
+  describe('documented example (the story fixtures run in-test)', () => {
     it('Default story renders the console rail: header, nav and footer regions', () => {
       const { getByTestId } = render(Default)
       expect(getByTestId('layout-sidebar').tagName).toBe('ASIDE')
@@ -411,6 +409,31 @@ describe('Sidebar', () => {
 
       await userEvent.keyboard('{ArrowLeft}')
       expect(emitted()['update:width']?.at(-1)).toEqual([300])
+    })
+
+    it('mirrors the arrow keys and the drag in a right-to-left subtree', async () => {
+      const host = document.createElement('div')
+      host.setAttribute('dir', 'rtl')
+      document.body.appendChild(host)
+      const { getByTestId, emitted } = render(Sidebar, {
+        container: host,
+        props: { resizable: true, width: 300 },
+        slots: { default: '<a href="/">Home</a>' }
+      })
+
+      const handle = getByTestId('layout-sidebar__handle')
+      handle.focus()
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([316])
+
+      await userEvent.keyboard('{ArrowRight}')
+      expect(emitted()['update:width']?.at(-1)).toEqual([300])
+
+      await fireEvent.pointerDown(handle, { clientX: 500 })
+      window.dispatchEvent(new PointerEvent('pointermove', { clientX: 460 }))
+      window.dispatchEvent(new PointerEvent('pointerup'))
+      expect(emitted()['update:width']?.at(-1)).toEqual([340])
+      host.remove()
     })
 
     it('the nudge clamps to the token bounds instead of running past them', async () => {

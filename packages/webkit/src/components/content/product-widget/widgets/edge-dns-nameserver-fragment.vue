@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
   import Item from '../../item/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -45,7 +45,7 @@
             </Item.Description>
           </Item.Content>
           <Item.Actions class="w-full justify-start">
-            <InputText
+            <Input
               model-value="edgeflow.com"
               size="medium"
               class="w-full"
@@ -74,7 +74,7 @@
                 v-for="(nameserver, index) in NAMESERVERS"
                 :key="nameserver"
               >
-                <InputText
+                <Input
                   :model-value="nameserver"
                   size="medium"
                   class="flex-1 font-code"

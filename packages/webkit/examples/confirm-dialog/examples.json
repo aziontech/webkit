@@ -1,0 +1,26 @@
+{
+  "component": "confirm-dialog",
+  "title": "Components/Primitives/Overlay/ConfirmDialog",
+  "examples": [
+    {
+      "name": "Confirm",
+      "summary": "A removal: title, one sentence of what happens, Cancel and a danger confirm button; closed behind a visible trigger.",
+      "file": "default.vue"
+    },
+    {
+      "name": "DiscardChanges",
+      "summary": "The unsaved-changes guard on a form that cannot be saved from the dialog: Keep editing returns to the form and the danger Discard changes leaves it.",
+      "file": "discard-changes.vue"
+    },
+    {
+      "name": "RunAgain",
+      "summary": "A commit rather than a removal, so the confirm button is primary (`kind=\"primary\"`).",
+      "file": "run-again.vue"
+    },
+    {
+      "name": "SaveOrDiscard",
+      "summary": "The guard on a form that can be saved from the dialog: the `actions` slot replaces the two buttons with Keep editing, an outlined Discard changes and a primary Save changes.",
+      "file": "save-or-discard.vue"
+    }
+  ]
+}

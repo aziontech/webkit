@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/code/code-block/CodeBlock.stories'
+import Default from '../../../../examples/code-block/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeBlock from './code-block.vue'
 import { highlightCodeLine } from './utils/highlight-code'
-
-const { Default } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
 // focused"), so writeText is stubbed to resolve. This is NOT a layout/focus
@@ -55,6 +52,19 @@ afterEach(() => {
 })
 
 describe('CodeBlock', () => {
+  it('mounts a long file in chunks and still copies the whole file', () => {
+    const code = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`).join('\n')
+    const view = render(CodeBlock, {
+      props: { tabs: [{ label: 'Long', value: 'long', language: 'javascript', code }] }
+    })
+    const mounted = view.getAllByTestId('code-code-block__line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(2000)
+    expect(view.getByTestId('code-code-block__lines').querySelectorAll('[data-chunk]').length).toBe(
+      Math.ceil((2000 - mounted) / 100)
+    )
+  })
+
   describe('rendering & testid', () => {
     it('renders with the default testid', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
@@ -148,7 +158,7 @@ describe('CodeBlock', () => {
       expect(first.getAttribute('tabindex')).toBe('-1')
     })
 
-    it('emits update:value with the clicked tab value', async () => {
+    it('emits update:modelValue with the clicked tab value', async () => {
       const { getAllByRole, emitted } = render(CodeBlock, {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
@@ -156,9 +166,9 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.click(second)
 
-      // update:value carries the user selection (it may also carry a mount-time
+      // update:modelValue carries the user selection (it may also carry a mount-time
       // model sync), so assert its latest emission is the clicked value.
-      const updateValue = emitted()['update:value'] as string[][]
+      const updateValue = emitted()['update:modelValue'] as string[][]
       expect(updateValue).toBeTruthy()
       expect(updateValue[updateValue.length - 1]).toEqual(['second'])
     })
@@ -168,23 +178,23 @@ describe('CodeBlock', () => {
         props: { tabs: twoTabs, defaultValue: 'first' }
       })
 
-      const before = (emitted()['update:value'] ?? []).length
+      const before = (emitted()['update:modelValue'] ?? []).length
       const [first] = getAllByRole('tab')
       await fireEvent.click(first)
 
       // Clicking the active tab is a no-op in setActiveTab, so no new
-      // update:value is emitted beyond any mount-time sync.
-      expect((emitted()['update:value'] ?? []).length).toBe(before)
+      // update:modelValue is emitted beyond any mount-time sync.
+      expect((emitted()['update:modelValue'] ?? []).length).toBe(before)
     })
 
-    it('honors the controlled value prop and updates the active tab when it changes', async () => {
+    it('honors the controlled modelValue prop and updates the active tab when it changes', async () => {
       const { getAllByRole, rerender } = render(CodeBlock, {
-        props: { tabs: twoTabs, value: 'first' }
+        props: { tabs: twoTabs, modelValue: 'first' }
       })
 
       expect(getAllByRole('tab')[0].getAttribute('aria-selected')).toBe('true')
 
-      await rerender({ tabs: twoTabs, value: 'second' })
+      await rerender({ tabs: twoTabs, modelValue: 'second' })
 
       const tabs = getAllByRole('tab')
       expect(tabs[1].getAttribute('aria-selected')).toBe('true')
@@ -230,8 +240,8 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'Enter' })
 
-      expect(emitted()['update:value']).toBeTruthy()
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('activates a tab with Space', async () => {
@@ -242,8 +252,8 @@ describe('CodeBlock', () => {
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: ' ' })
 
-      expect(emitted()['update:value']).toBeTruthy()
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue']).toBeTruthy()
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('moves to the next tab with ArrowRight and wraps to the first from the last', async () => {
@@ -253,12 +263,12 @@ describe('CodeBlock', () => {
 
       const [first] = getAllByRole('tab')
       await fireEvent.keyDown(first, { key: 'ArrowRight' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
 
       // From the last tab, ArrowRight wraps back to the first.
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'ArrowRight' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['first'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
     })
 
     it('moves to the previous tab with ArrowLeft and wraps to the last from the first', async () => {
@@ -270,7 +280,7 @@ describe('CodeBlock', () => {
       await fireEvent.keyDown(first, { key: 'ArrowLeft' })
 
       // From the first tab, ArrowLeft wraps to the last tab.
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
     })
 
     it('jumps to the first tab with Home and the last with End', async () => {
@@ -280,11 +290,11 @@ describe('CodeBlock', () => {
 
       const [first] = getAllByRole('tab')
       await fireEvent.keyDown(first, { key: 'End' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['second'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['second'])
 
       const [, second] = getAllByRole('tab')
       await fireEvent.keyDown(second, { key: 'Home' })
-      expect(emitted()['update:value'].at(-1)).toEqual(['first'])
+      expect(emitted()['update:modelValue'].at(-1)).toEqual(['first'])
     })
   })
 
@@ -412,16 +422,16 @@ describe('CodeBlock', () => {
     })
   })
 
-  describe('border', () => {
+  describe('bordered', () => {
     it('draws the outer border by default (data-border set)', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
       expect(getByTestId('code-code-block').getAttribute('data-border')).toBe('true')
     })
 
-    it('drops the outer border when border is false (data-border absent)', () => {
+    it('drops the outer border when bordered is false (data-border absent)', () => {
       const { getByTestId } = render(CodeBlock, {
-        props: { tabs: singleTab, border: false }
+        props: { tabs: singleTab, bordered: false }
       })
 
       expect(getByTestId('code-code-block').getAttribute('data-border')).toBeNull()
@@ -487,7 +497,7 @@ describe('CodeBlock', () => {
 
   describe('story fixture', () => {
     it('renders the Default story cleanly', async () => {
-      const { getByTestId, container } = render(Default())
+      const { getByTestId, container } = render(Default)
 
       expect(getByTestId('code-code-block')).toBeTruthy()
       await expectNoA11yViolations(container)
@@ -704,6 +714,128 @@ describe('CodeBlock', () => {
       expect(
         highlightCodeLine('js', 'this.#count += 1').some((token) => token.type === 'comment')
       ).toBe(false)
+    })
+  })
+})
+
+describe('CodeBlock docs surfaces', () => {
+  const shell = [{ label: 'Shell', value: 'sh', language: 'bash', code: 'azion deploy' }]
+
+  describe('label header', () => {
+    it('is off by default', () => {
+      const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
+      expect(queryByTestId('code-code-block__label')).toBeNull()
+    })
+
+    it('names the block with the tab label when showLabel is on', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Shell')
+    })
+
+    it('falls back to the readable language name when the tab label is empty', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: {
+          tabs: [{ label: '', value: 'js', language: 'js', code: 'const a = 1' }],
+          showLabel: true
+        }
+      })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+    })
+
+    it('uses title over the tab label', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: shell, title: 'Terminal' }
+      })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Terminal')
+    })
+
+    it('gives way to the tab strip and to the filename bar', () => {
+      const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
+      expect(tabs.queryByTestId('code-code-block__label')).toBeNull()
+      tabs.unmount()
+      const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
+      expect(file.queryByTestId('code-code-block__label')).toBeNull()
+    })
+  })
+
+  describe('output kind', () => {
+    const output = [
+      { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
+    ]
+
+    it('labels the block Output, drops the copy control and marks the root', () => {
+      const { getByTestId, queryByTestId } = render(CodeBlock, {
+        props: { tabs: output, kind: 'output' }
+      })
+      const root = getByTestId('code-code-block')
+      expect(root.getAttribute('data-kind')).toBe('output')
+      expect(root.hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
+    })
+
+    it('draws every line flat, without syntax tokens', () => {
+      const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, kind: 'output' } })
+      for (const line of getAllByTestId('code-code-block__line-content')) {
+        expect(line.children).toHaveLength(1)
+      }
+    })
+
+    it('keeps a copy control when copyable is set explicitly', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: output, kind: 'output', copyable: true }
+      })
+      expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
+    })
+
+    it('a code block stays copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+      expect(getByTestId('code-code-block').getAttribute('data-kind')).toBe('code')
+      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+    })
+
+    it('has no a11y violations beside its command', async () => {
+      const { container } = render({
+        components: { CodeBlock },
+        setup: () => ({ shell, output }),
+        template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" kind="output" data-testid="out" /></div>`
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('shell prompt', () => {
+    it('draws a leading $ as a prompt token and the rest as a command', () => {
+      const tokens = highlightCodeLine('bash', '$ azion deploy')
+      expect(tokens[0]).toEqual({ text: '$ ', type: 'prompt' })
+      expect(tokens.find((token) => token.text.trim() === 'azion')?.type).toBe('function')
+    })
+
+    it('copies the commands without their prompts, and skips unprompted lines', async () => {
+      const writeText = stubClipboardResolved()
+      const { getByTestId, emitted } = render(CodeBlock, {
+        props: {
+          tabs: [
+            {
+              label: 'Shell',
+              value: 'sh',
+              language: 'bash',
+              code: '$ azion login\n$ azion deploy \\\n  --local\nDeploy finished'
+            }
+          ]
+        }
+      })
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(emitted().copy).toBeTruthy())
+      expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
+    })
+
+    it('copies a block without prompts as written', async () => {
+      const writeText = stubClipboardResolved()
+      const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(emitted().copy).toBeTruthy())
+      expect(writeText).toHaveBeenCalledWith('azion deploy')
     })
   })
 })

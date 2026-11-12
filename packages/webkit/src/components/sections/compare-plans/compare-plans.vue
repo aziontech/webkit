@@ -2,6 +2,8 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Overline from '../../content/overline/overline.vue'
+  import Tag from '../../content/tag/tag.vue'
   import Hint from '../../inputs/hint/hint.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
@@ -9,8 +11,6 @@
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import Link from '../../navigation/link/link.vue'
-  import Overline from '../../overline/overline.vue'
-  import Tag from '../../tag/tag.vue'
 
   defineOptions({
     name: 'ComparePlans',
@@ -33,6 +33,8 @@
     name: string
     /** Marks the recommended plan: accent bar, secondary button, picked first. */
     highlighted?: boolean
+    /** One line under the name saying who the plan is for. */
+    description?: string
     /** The button under the plan name. */
     action: ComparePlansAction
   }
@@ -64,6 +66,8 @@
     description?: string
     /** The feature rows, in order. */
     rows: ComparePlansRow[]
+    /** Link closing the band, opened in a new tab; `{ label, href }`. */
+    link?: ComparePlansAction
   }
 
   interface Props {
@@ -79,9 +83,9 @@
     includedLabel?: string
     /** Screen-reader text of a dashed cell. */
     excludedLabel?: string
-    /** The plan columns, in order; each is `{ id, name, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
+    /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: ComparePlansPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows }` and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
+    /** The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
     sections?: ComparePlansSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ComparePlansAction
@@ -146,7 +150,7 @@
       :divided="false"
       :padded="false"
     >
-      <table class="w-full table-auto border-separate border-spacing-0 text-left lg:table-fixed">
+      <table class="w-full table-auto border-separate border-spacing-0 text-start lg:table-fixed">
         <caption
           v-if="caption"
           class="sr-only"
@@ -159,7 +163,7 @@
           <tr>
             <th
               scope="col"
-              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal"
+              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal"
             >
               <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
                 columnLabel
@@ -188,7 +192,7 @@
               scope="col"
               :data-folded="plan.id !== visiblePlan || null"
               :data-highlighted="plan.highlighted || null"
-              class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal max-lg:data-folded:hidden"
+              class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
             >
               <span
                 v-if="plan.highlighted"
@@ -196,15 +200,20 @@
                 aria-hidden="true"
               />
               <div class="flex h-full flex-col items-start gap-(--spacing-sm)">
-                <span class="text-heading-md text-(--text-default) max-lg:sr-only">{{
-                  plan.name
-                }}</span>
+                <span class="flex flex-col gap-(--spacing-sm) max-lg:sr-only">
+                  <span class="text-heading-md text-(--text-default)">{{ plan.name }}</span>
+                  <span
+                    v-if="plan.description"
+                    class="text-body-sm text-(--text-muted)"
+                    >{{ plan.description }}</span
+                  >
+                </span>
                 <Button
                   v-if="plan.action"
                   :label="plan.action.label"
                   :kind="plan.highlighted ? 'secondary' : 'outlined'"
                   size="large"
-                  class="w-full"
+                  class="w-full max-lg:h-auto max-lg:min-h-10 max-lg:py-(--spacing-xs) max-lg:text-center max-lg:whitespace-normal"
                   :href="plan.action.href"
                 />
               </div>
@@ -220,7 +229,7 @@
               scope="colgroup"
               :colspan="columns.length + 1"
               :data-ruled="sectionIndex > 0 || null"
-              class="border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-left font-normal data-ruled:border-t"
+              class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
             >
               <Overline
                 v-if="section.eyebrow"
@@ -247,7 +256,7 @@
           >
             <th
               scope="row"
-              class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
+              class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
             >
               <span>
                 <template v-if="row.hint">
@@ -256,7 +265,7 @@
                     >{{ labelTail(row.label)
                     }}<Hint
                       :text="row.hint"
-                      class="ml-(--spacing-xxs) align-middle"
+                      class="ms-(--spacing-xxs) align-middle"
                   /></span>
                 </template>
                 <template v-else>{{ row.label }}</template>
@@ -265,7 +274,7 @@
                   :label="row.tag"
                   severity="secondary"
                   size="small"
-                  class="ml-(--spacing-xs) align-middle"
+                  class="ms-(--spacing-xs) align-middle"
                 />
               </span>
             </th>
@@ -273,7 +282,7 @@
               v-for="{ plan, index } in columns"
               :key="plan.id"
               :data-folded="plan.id !== visiblePlan || null"
-              class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
+              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
             >
               <template v-if="isIncluded(row.values[index])">
                 <i
@@ -291,6 +300,20 @@
                 <span class="sr-only">{{ excludedLabel }}</span>
               </template>
               <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
+            </td>
+          </tr>
+          <tr v-if="section.link">
+            <td
+              :colspan="columns.length + 1"
+              class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+            >
+              <Link
+                :label="section.link.label"
+                :href="section.link.href"
+                target="_blank"
+                icon="pi pi-arrow-right"
+                size="medium"
+              />
             </td>
           </tr>
         </tbody>

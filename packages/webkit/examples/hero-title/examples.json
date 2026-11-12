@@ -1,0 +1,31 @@
+{
+  "component": "hero-title",
+  "title": "Components/Marketing/Primitives/HeroTitle",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Overline, `h1` and description, aligned to the start — the alignment that pairs with a backdrop weighted to one side.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Highlight",
+      "summary": "The opening phrase painted in the brand accent. It is a `span` inside the same `h1`, so the accessible name is still the full sentence — only the paint differs.",
+      "file": "highlight.vue"
+    },
+    {
+      "name": "Centered",
+      "summary": "The whole block centered — for a hero whose backdrop is symmetric or that leads with one statement. The eyebrow carries a `//` prefix, set with `eyebrow-prefix`.",
+      "file": "centered.vue"
+    },
+    {
+      "name": "MobileCentered",
+      "summary": "Centered below `md` only, and aligned to the start from `md` up — the alignment for a hero whose copy sits beside art on a wide screen and stacks above it on a phone. An eyebrow longer than the column wraps instead of overflowing it. Open the story on its own to see it at phone width.",
+      "file": "mobile-centered.vue"
+    },
+    {
+      "name": "WithActions",
+      "summary": "The `actions` slot owns its own responsive layout, and measures its own container rather than the viewport: a content-width row from `20rem` up, wrapping when a pair is too long, and a full-width stack below it — a hero button is the page’s primary target on a 320 px screen.",
+      "file": "with-actions.vue"
+    }
+  ]
+}

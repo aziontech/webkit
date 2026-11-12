@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Message from '../../feedback/message/message.vue'
+  import Alert from '../../feedback/alert/alert.vue'
 
   defineOptions({ name: 'DocCallout', inheritAttrs: false })
 
@@ -42,7 +42,7 @@
 </script>
 
 <template>
-  <Message
+  <Alert
     v-bind="$attrs"
     data-doc-block
     data-doc-chrome
@@ -57,9 +57,9 @@
       :data-kind="kind"
       :data-severity="preset.severity"
       :data-neutral="preset.neutral || null"
-      class="text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:pl-(--spacing-lg) [&_ol]:list-decimal [&_ol]:pl-(--spacing-lg) [&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-(--shape-elements) [&_code]:border [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default) data-[severity=info]:[&_code]:border-(--info-border) data-[severity=info]:[&_code]:bg-(--info-contrast)/10 data-[severity=success]:[&_code]:border-(--success-border) data-[severity=success]:[&_code]:bg-(--success-contrast)/10 data-[severity=warning]:[&_code]:border-(--warning-border) data-[severity=warning]:[&_code]:bg-(--warning-contrast)/10 data-[severity=danger]:[&_code]:border-(--danger-border) data-[severity=danger]:[&_code]:bg-(--danger-contrast)/10 data-[neutral]:[&_code]:border-(--border-default)! data-[neutral]:[&_code]:bg-(--bg-hover)!"
+      class="text-(--text-default) [&_:is(p,ul,ol)+:is(p,ul,ol)]:pt-(--spacing-sm) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) [&_li+li]:pt-(--spacing-xs) [&_strong]:font-normal [&_a]:font-normal [&_a]:text-inherit! [&_a]:underline [&_a]:underline-offset-2 [&_code]:rounded-(--shape-elements) [&_code]:border [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default) data-[severity=info]:[&_code]:border-(--info-border) data-[severity=info]:[&_code]:bg-(--info-contrast)/10 data-[severity=success]:[&_code]:border-(--success-border) data-[severity=success]:[&_code]:bg-(--success-contrast)/10 data-[severity=warning]:[&_code]:border-(--warning-border) data-[severity=warning]:[&_code]:bg-(--warning-contrast)/10 data-[severity=danger]:[&_code]:border-(--danger-border) data-[severity=danger]:[&_code]:bg-(--danger-contrast)/10 data-[neutral]:[&_code]:border-(--border-default)! data-[neutral]:[&_code]:bg-(--bg-hover)!"
     >
       <slot>{{ label }}</slot>
     </div>
-  </Message>
+  </Alert>
 </template>

@@ -1,0 +1,31 @@
+{
+  "id": "platform/detail/attached-resources",
+  "name": "AttachedResources",
+  "title": "Templates/Platform/Detail/AttachedResources",
+  "surface": "product",
+  "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `Table.CellActions` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "domains section",
+    "domains card",
+    "domains table",
+    "resource domains",
+    "domain list in settings",
+    "hostnames",
+    "seção de domínios",
+    "domínios do recurso",
+    "lista de domínios",
+    "attached resources",
+    "related resources table",
+    "recursos vinculados"
+  ],
+  "skills": ["webkit-tables"],
+  "primary": {
+    "name": "Default",
+    "file": "attached-resources.vue"
+  },
+  "variants": []
+}

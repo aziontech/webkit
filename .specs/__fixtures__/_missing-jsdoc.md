@@ -52,7 +52,7 @@ Fixture: a Props row has no JSDoc — spec-validator must reject.
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

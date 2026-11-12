@@ -1,0 +1,19 @@
+{
+ "purpose": "A row of client cards, each painted in the client's own colours with its reversed logo; the hovered or focused card opens to reveal its story line and a \"Read story\" cue, and the whole card links to the success story. Below the large breakpoint the cards stack and stay open. From the design sample's site `CustomerSpotlight`.",
+ "useWhen": [
+  "Three or four flagship customer stories on a landing page."
+ ],
+ "avoidWhen": [
+  "For many clients — use `ClientMosaic` or `LogoWallQuote`.",
+  "For a quotation — use `ClientQuotes` or `LogoWallQuote` `kind=\"quote\"`."
+ ],
+ "related": [
+  "ClientMosaic`, `ClientQuotes`, `LogoWallQuote`.",
+  "FrameBox`."
+ ],
+ "bestPractices": [
+  "Three or four cards.",
+  "Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.",
+  "One sentence per story line."
+ ]
+}

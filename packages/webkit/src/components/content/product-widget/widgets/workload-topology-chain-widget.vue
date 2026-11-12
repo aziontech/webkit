@@ -2,12 +2,12 @@
   import { onMounted, onScopeDispose, ref } from 'vue'
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadTopologyChainWidget' })
 
@@ -304,7 +304,7 @@
               v-for="side in portsOf(arrangement, node.key)"
               :key="side"
               :data-side="side"
-              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=left]:-left-px data-[side=left]:-translate-x-full data-[side=right]:-right-px data-[side=right]:translate-x-full"
+              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=left]:-start-px data-[side=left]:-translate-x-full data-[side=right]:-end-px data-[side=right]:translate-x-full"
               aria-hidden="true"
             />
             <div
@@ -330,7 +330,7 @@
                 aria-hidden="true"
               />
               <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
-              <span class="ml-auto inline-flex shrink-0">
+              <span class="ms-auto inline-flex shrink-0">
                 <StatusIndicator
                   v-if="node.indicator"
                   :label="node.label"

@@ -51,7 +51,7 @@ Fixture: an event uses camelCase instead of kebab-case — spec-validator must r
 
 - Visible focus ring.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - LightDark

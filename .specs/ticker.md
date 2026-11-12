@@ -2,11 +2,11 @@
 name: ticker
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
-checksum: e853a8ab2cd802be280cb287f535e186a51845357901fc74aa7c7246e06548fc
+checksum: 364edd19b5e2bc85e6b506624f2fd8f40d7db0e7dfade7df15147914e55877c3
 created: 2026-09-23
-last_updated: 2026-10-21
+last_updated: 2026-11-11
 ---
 
 # Ticker — Component Spec
@@ -63,15 +63,15 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Props
 
-| Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                              |
-| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                                                                        |
+| ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `kind`      | `'plain' \| 'band'`   | `'plain'`  | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
-| `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete. |
-| `items`     | `TickerItem[]`        | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered. |
-| `label`     | `string`              | `''`       | false    | Overline above the row, stating the claim the marks make.                                                                                          |
-| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column.                           |
-| `duration`  | `number`              | `0`        | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                   |
-| `ariaLabel` | `string`              | `''`       | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                        |
+| `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete.                                           |
+| `items`     | `TickerItem[]`        | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.                                                 |
+| `label`     | `string`              | `''`       | false    | Overline above the row, stating the claim the marks make.                                                                                                                                    |
+| `size`      | `'small' \| 'medium'` | `'medium'` | false    | Mark scale; `medium` is the marketing band and climbs 32/40/48 px by device class, `small` is a flat 24 px for a column.                                                                     |
+| `duration`  | `number`              | `0`        | false    | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed.                                                               |
+| `ariaLabel` | `string`              | `''`       | false    | Accessible name for the row of marks, announced instead of an unnamed list.                                                                                                                  |
 
 ## Events
 
@@ -101,17 +101,17 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                   |
-| --------------------------------- | --------------------------------------------------- |
-| typography (fallback wordmark)    | `.text-heading-xxs`                                 |
-| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`      |
+| Region                            | Token (DESIGN.md)                                      |
+| --------------------------------- | ------------------------------------------------------ |
+| typography (fallback wordmark)    | `.text-heading-xxs`                                    |
+| typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`         |
 | spacing (item row gap)            | `max(var(--spacing-xxl), calc(var(--spacing-xl) * 2))` |
-| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                 |
-| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover |
-| spacing (label ↔ row)             | `var(--spacing-xl)`                                 |
-| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`             |
-| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark        |
-| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                 |
+| spacing (item icon ↔ label)       | `var(--spacing-xs)`                                    |
+| ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover    |
+| spacing (label ↔ row)             | `var(--spacing-xl)`                                    |
+| spacing (row gap, medium)         | `var(--spacing-4)` / `var(--spacing-8)`                |
+| spacing (row gap, small)          | `var(--spacing-10)`, cells sized to the mark           |
+| spacing (reduced-motion grid gap) | `var(--spacing-md)`                                    |
 
 ## Theme gaps
 
@@ -128,7 +128,14 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - `motion-reduce:animate-none` on the track and `motion-reduce:transition-none` on the mark hover. WCAG 2.2.2 applies — the loop is longer than five seconds, so it pauses on hover and on focus-within, and stops outright under `prefers-reduced-motion`.
 - Touch target ≥40×40 px: marks are not interactive targets; the whole strip is one decorative band.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: the marquee runs toward the start edge in both directions: under `dir="rtl"` the track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 - Sizes — composite story rendering both `size` values side-by-side
@@ -149,10 +156,8 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

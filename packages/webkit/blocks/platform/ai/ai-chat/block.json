@@ -1,0 +1,64 @@
+{
+  "id": "platform/ai/ai-chat",
+  "name": "AiChat",
+  "title": "Templates/Platform/AI/AiChat",
+  "surface": "product",
+  "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "ai chat",
+    "ai assistant",
+    "chatbot",
+    "copilot",
+    "chat with ai",
+    "generative ai chat",
+    "assistant page",
+    "ask ai",
+    "llm chat",
+    "conversational ui",
+    "prompt and response",
+    "streaming response",
+    "chat de ia",
+    "assistente de ia",
+    "assistente virtual",
+    "conversa com ia",
+    "chat con ia",
+    "asistente de ia",
+    "artifact",
+    "artifact canvas",
+    "generated file",
+    "code canvas",
+    "canvas de artefato",
+    "artefato gerado"
+  ],
+  "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Empty",
+    "file": "ai-chat.vue"
+  },
+  "variants": [
+    {
+      "name": "Streaming",
+      "summary": "A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear.",
+      "file": "variants/streaming.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place.",
+      "file": "variants/error.vue"
+    },
+    {
+      "name": "LongThread",
+      "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread.",
+      "file": "variants/long-thread.vue"
+    },
+    {
+      "name": "Artifact",
+      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it.",
+      "file": "variants/artifact.vue"
+    }
+  ]
+}

@@ -14,6 +14,7 @@
     watch
   } from 'vue'
 
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
@@ -54,9 +55,9 @@
     /** Accessible name for the wall of client cards. */
     ariaLabel?: string
     /** Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. */
-    autoPlay?: boolean
+    autoplay?: boolean
     /** Milliseconds each client is held before the band advances. */
-    autoPlayInterval?: number
+    autoplayInterval?: number
     /** Advances a hairline along the quotation panel's bottom edge while the timer runs. */
     showProgress?: boolean
   }
@@ -64,8 +65,8 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     ariaLabel: '',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true
   })
 
@@ -122,16 +123,16 @@
     () => !current.value.logo && Boolean(current.value.art || current.value.label)
   )
 
-  const autoPlayEnabled = computed(
-    () => props.autoPlay && props.items.length > 1 && reducedMotion.value !== 'reduce'
+  const autoplayEnabled = computed(
+    () => props.autoplay && props.items.length > 1 && reducedMotion.value !== 'reduce'
   )
 
-  const autoPlayRunning = computed(
-    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  const autoplayRunning = computed(
+    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
   )
 
   watch(selected, (next, previous) => {
@@ -140,10 +141,10 @@
     elapsed.value = 0
   })
 
-  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   onMounted(() => {
-    if (autoPlayRunning.value) start()
+    if (autoplayRunning.value) start()
   })
 
   onScopeDispose(stop)
@@ -179,7 +180,7 @@
 
   function tick(): void {
     elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoPlayInterval) return
+    if (elapsed.value < props.autoplayInterval) return
     pendingDirection = 'forward'
     select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
   }
@@ -217,11 +218,12 @@
   }
 
   async function onKeydown(event: globalThis.KeyboardEvent): Promise<void> {
-    const next = targetOf(event.key)
+    const key = logicalArrowKey(event.key, eventDirection(event))
+    const next = targetOf(key)
     if (next === null) return
     event.preventDefault()
     if (next !== selected.value) {
-      pendingDirection = directionOf(event.key)
+      pendingDirection = directionOf(key)
       select(next)
     }
     await nextTick()
@@ -238,7 +240,7 @@
     v-if="clients.length"
     v-bind="$attrs"
     :data-testid="testId"
-    :data-autoplay="autoPlayRunning || null"
+    :data-autoplay="autoplayRunning || null"
     class="flex flex-col"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
@@ -302,9 +304,9 @@
         <Transition
           mode="out-in"
           enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:duration-0"
-          enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          enter-from-class="opacity-0 group-data-[direction=forward]/panel:translate-x-(--spacing-xl) group-data-[direction=back]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
           leave-active-class="pointer-events-none transition-[translate,opacity] duration-moderate-01 ease-productive-exit motion-reduce:transition-none motion-reduce:duration-0"
-          leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) motion-reduce:translate-x-0"
+          leave-to-class="opacity-0 group-data-[direction=forward]/panel:-translate-x-(--spacing-xl) group-data-[direction=back]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=forward]/panel:translate-x-(--spacing-xl) rtl:group-data-[direction=back]/panel:-translate-x-(--spacing-xl) motion-reduce:translate-x-0"
           @before-leave="hideLeaving"
         >
           <div
@@ -351,16 +353,17 @@
       </div>
 
       <span
-        v-if="showProgress && autoPlayEnabled"
+        v-if="showProgress && autoplayEnabled"
         aria-hidden="true"
         :data-testid="`${testId}__progress`"
         :style="{ width: `${progress}%` }"
-        class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+        class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
       />
     </FrameBox>
 
     <CardGrid
       kind="frame"
+      layout="fixed"
       flush
       :columns="3"
       :mobile-columns="2"

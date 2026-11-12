@@ -22,7 +22,7 @@
   <li
     v-bind="$attrs"
     :data-testid="testId"
-    class="grid shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:-mr-px"
+    class="grid shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:-me-px"
   >
     <slot />
   </li>

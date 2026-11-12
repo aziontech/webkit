@@ -7,26 +7,73 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 13f4fed9da5a838e97b034a2878dc931a235f7c30add98f6a3c0ba45b390b993
+checksum: 8669bc99ef2a2d44394645ee3d2a869ad35f99a01318649faa12abe8c65c77b4
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-11
 ---
+
 # Avatar — Component Spec
 
 ## Purpose
 
-Displays content or metadata in the UI. Migrated from the existing implementation at `packages/webkit/src/components/webkit/content/avatar/`.
+Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/avatar/`.
+
+## When to use
+
+- Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
+- The user entry in a header or account menu.
+
+## When NOT to use
+
+- The Azion logo → use `brand`.
+- A count or short status → use `badge`.
+- A loading placeholder → use `skeleton`.
+
+## Related
+
+- `badge` — overlay on an avatar to show a count.
+- `quote` — composes an avatar for the speaker.
+- `brand` — the product mark, not a person.
+
+## Best practices
+
+- Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
+- Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
+- Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).
+- `size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
+
+## Usage
+
+```vue
+<script setup>
+  import Avatar from '@aziontech/webkit/avatar'
+</script>
+
+<template>
+  <Avatar label="JD" />
+  <Avatar
+    src="https://example.com/jane.jpg"
+    alt="Jane Doe"
+    size="large"
+  />
+  <Avatar
+    icon="pi pi-users"
+    kind="square"
+    size="small"
+  />
+</template>
+```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
-| `alt` | `string` | `undefined` | false | Accessible description for the image. Use when `src` is set. |
-| `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `undefined` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
-| `kind` | `AvatarKind` | `undefined` | false | Visual shape of the avatar container. |
-| `size` | `AvatarSize` | `undefined` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| Prop    | Type         | Default        | Required | JSDoc                                                                                                    |
+| ------- | ------------ | -------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `src`   | `string`     | `undefined`    | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                           |
+| `alt`   | `string`     | `undefined`    | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
+| `label` | `string`     | `undefined`    | false    | Initials shown when no image (normalized to two uppercase characters).                                   |
+| `icon`  | `string`     | `'pi pi-user'` | false    | Icon class for the fallback when no image or label (PrimeIcons class).                                   |
+| `kind`  | `AvatarKind` | `'circle'`     | false    | Visual shape of the avatar container.                                                                    |
+| `size`  | `AvatarSize` | `'medium'`     | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                               |
 
 ## Events
 
@@ -46,20 +93,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -70,7 +117,7 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -87,9 +134,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

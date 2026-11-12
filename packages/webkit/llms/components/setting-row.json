@@ -1,0 +1,97 @@
+{
+ "name": "setting-row",
+ "binding": "SettingRow",
+ "import": "@aziontech/webkit/setting-row",
+ "treeShakeableImport": "@aziontech/webkit/setting-row",
+ "category": "layout",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`).",
+ "setup": null,
+ "useWhen": [
+  "Every row of a settings card: account settings, build settings, create pages, resource settings.",
+  "A field with a validation message under it (put the `HelperText` in the default slot after the control)."
+ ],
+ "avoidWhen": [
+  "A stand-alone form field with a visible label above it → use `field-text` and the other `field-*` components.",
+  "A read-only list of label and value pairs → use `key-value-pairs`.",
+  "A navigable list row → use `item` directly."
+ ],
+ "related": [
+  "settings-section` — the band the card of rows sits in.",
+  "item` — the row primitive it renders; place rows in an `Item.List` inside the card.",
+  "helper-text` — the required or invalid message under the control."
+ ],
+ "bestPractices": [
+  "The title is the label: give the control the same text as `aria-label`.",
+  "Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.",
+  "Show a validation message only after Save was pressed.",
+  "Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "The setting name; the control takes the same text as its aria-label."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One sentence under the title that says what the setting does."
+  },
+  {
+   "name": "kind",
+   "type": "'field' | 'compact' | 'stacked'",
+   "default": "'field'",
+   "required": "false",
+   "doc": "Where the control sits relative to the copy."
+  },
+  {
+   "name": "level",
+   "type": "0 | 1 | 2",
+   "default": "0",
+   "required": "false",
+   "doc": "Indent depth under a rule, for a setting that only applies when its parent is on."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The control, plus the HelperText message under it when there is one."
+  },
+  {
+   "name": "title",
+   "scope": "—",
+   "notes": "Rich title content (a Tag, a Hint); replaces the `title` prop."
+  },
+  {
+   "name": "description",
+   "scope": "—",
+   "notes": "Rich description content (links, inline code); replaces the `description` prop."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "SettingsCard",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import Input from '@aziontech/webkit/input'\n  import Item from '@aziontech/webkit/item'\n  import SettingRow from '@aziontech/webkit/setting-row'\n  import Textarea from '@aziontech/webkit/textarea'\n  import { reactive } from 'vue'\n\n  const form = reactive({ companyName: '', companyId: '', billingEmails: 'jane.doe@example.com' })\n</script>\n\n<template>\n  <Card :padded=\"false\">\n    <template #content>\n      <Item.List>\n        <SettingRow\n          title=\"Company Name\"\n          description=\"The legal entity that owns this account.\"\n        >\n          <Input\n            v-model=\"form.companyName\"\n            size=\"large\"\n            class=\"w-full\"\n            aria-label=\"Company Name\"\n            placeholder=\"Company S.A.\"\n          />\n        </SettingRow>\n        <SettingRow\n          title=\"Company ID\"\n          description=\"Personal or company ID number that identifies account ownership.\"\n        >\n          <Input\n            v-model=\"form.companyId\"\n            size=\"large\"\n            class=\"w-full\"\n            aria-label=\"Company ID\"\n            placeholder=\"00.000.000/0001-00\"\n          />\n        </SettingRow>\n        <SettingRow\n          title=\"Billing emails\"\n          description=\"Billing is forwarded to every address listed here. Separate each one with a semicolon ( ; ).\"\n          kind=\"stacked\"\n        >\n          <Textarea\n            v-model=\"form.billingEmails\"\n            class=\"w-full\"\n            :rows=\"3\"\n            aria-label=\"Billing emails\"\n          />\n        </SettingRow>\n      </Item.List>\n    </template>\n  </Card>\n</template>"
+  },
+  {
+   "name": "CompactRows",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Card from '@aziontech/webkit/card'\n  import Item from '@aziontech/webkit/item'\n  import SettingRow from '@aziontech/webkit/setting-row'\n  import Switch from '@aziontech/webkit/switch'\n  import { reactive } from 'vue'\n\n  const form = reactive({ allowSocialLogin: true, enforceMfa: false })\n</script>\n\n<template>\n  <Card :padded=\"false\">\n    <template #content>\n      <Item.List>\n        <SettingRow\n          title=\"Allow social login\"\n          description=\"Users linked to the account can log in with their social network credentials.\"\n          kind=\"compact\"\n        >\n          <Switch\n            v-model=\"form.allowSocialLogin\"\n            aria-label=\"Allow social login\"\n          />\n        </SettingRow>\n        <SettingRow\n          title=\"Enforce multi-factor authentication\"\n          description=\"MFA is required on login for every user linked to this account.\"\n          kind=\"compact\"\n        >\n          <Switch\n            v-model=\"form.enforceMfa\"\n            aria-label=\"Enforce multi-factor authentication\"\n          />\n        </SettingRow>\n        <SettingRow\n          title=\"Authenticator devices\"\n          description=\"Manage the devices and recovery codes registered for this account.\"\n          kind=\"compact\"\n        >\n          <Button\n            type=\"button\"\n            label=\"Manage\"\n            kind=\"outlined\"\n            size=\"medium\"\n          />\n        </SettingRow>\n      </Item.List>\n    </template>\n  </Card>\n</template>"
+  },
+  {
+   "name": "WithMessage",
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import HelperText from '@aziontech/webkit/helper-text'\n  import Input from '@aziontech/webkit/input'\n  import Item from '@aziontech/webkit/item'\n  import SettingRow from '@aziontech/webkit/setting-row'\n  import { reactive } from 'vue'\n\n  const form = reactive({ name: '' })\n</script>\n\n<template>\n  <Card :padded=\"false\">\n    <template #content>\n      <Item.List>\n        <SettingRow\n          title=\"Name\"\n          description=\"Give a unique and descriptive name to identify the resource.\"\n        >\n          <Input\n            v-model=\"form.name\"\n            size=\"large\"\n            class=\"w-full\"\n            aria-label=\"Name\"\n            placeholder=\"office-ranges\"\n            autocomplete=\"off\"\n            required\n            aria-describedby=\"resource-name-message\"\n          />\n          <HelperText\n            id=\"resource-name-message\"\n            kind=\"required\"\n            label=\"This field is required.\"\n          />\n        </SettingRow>\n      </Item.List>\n    </template>\n  </Card>\n</template>"
+  }
+ ],
+ "docs": "components/setting-row.md"
+}

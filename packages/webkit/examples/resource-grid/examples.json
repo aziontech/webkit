@@ -1,0 +1,36 @@
+{
+  "component": "resource-grid",
+  "title": "Components/Marketing/Sections/ResourceGrid",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Financial Services band: four cards fill the grid beside the copy and its button. Edit the props in the Controls panel — add more than four items and the grid scrolls; a card with no title is skipped.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Scrollable",
+      "summary": "Six cards: past four, the grid scrolls inside a fading scroll area, so the band keeps the height of its copy.",
+      "file": "scrollable.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Financial Services band: four resource cards beside the copy and the See all guides button.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    },
+    {
+      "name": "Scrollable",
+      "summary": "The Technology band: six cards, so the grid scrolls inside the band.",
+      "file": "site-scrollable.vue",
+      "json": "site-scrollable.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Content/ResourceGrid",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson", "Scrollable", "ScrollableJson"]
+}

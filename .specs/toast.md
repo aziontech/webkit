@@ -2,24 +2,50 @@
 name: toast
 category: feedback
 structure: composition
-status: approved
+status: implemented
 spec_version: 1
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 73cc405c1a70f571a239ccca39e40583c18424507ce6581b0d21372807080c9e
+checksum: 28739def4c0bc527810b85b0f9d2171322b97428e847f992dfe3bb87f87c860f
 created: 2026-06-23
-last_updated: 2026-08-14
+last_updated: 2026-11-11
 ---
 
 # Toast — Component Spec
 
 ## Purpose
 
-A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Message`](./message.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
+A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
 
 The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.
+
+## When to use
+
+- Confirming the result of an action that finished out of view or in the background: saved, deployed, copied.
+- Following an async operation from start to finish with `toast.promise`, or `toast.loading` plus a dismiss by id.
+- A short notice that is not tied to one place on the page and can disappear on its own.
+
+## When NOT to use
+
+- The message must stay visible next to the content it concerns → use `message`.
+- The user must decide something before continuing → use `dialog`.
+- Validation feedback for a single field → use `helper-text`.
+
+## Related
+
+- `message` — inline severity banner placed in the page flow; it stays until it is closed.
+- `dialog` — blocking modal for decisions and confirmations.
+- `spinner` — rendered by the `loading` toast type.
+
+## Best practices
+
+- Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.
+- Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon; every type is announced once and politely by the Toaster's single live region (an error interrupting what the user is doing is worse than hearing it a moment later, and switching the region between polite and assertive made screen readers drop or repeat the stack).
+- Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
+- `duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
+- Don't make a toast the only path to an important action. It auto-dismisses and never takes focus.
 
 ## Usage
 
@@ -29,16 +55,22 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 
 ```vue
 <script setup>
-import { Toaster, toast } from '@aziontech/webkit/toast'
-import Button from '@aziontech/webkit/button'
+  import { Toaster, toast } from '@aziontech/webkit/toast'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
   <!-- Mount the region ONCE, near the app root -->
-  <Toaster position="bottom-right" :duration="4000" />
+  <Toaster
+    position="bottom-right"
+    :duration="4000"
+  />
 
   <!-- Raise a toast from anywhere -->
-  <Button label="Save" @click="() => toast.success('Saved', { description: 'Your changes are live.' })" />
+  <Button
+    label="Save"
+    @click="() => toast.success('Saved', { description: 'Your changes are live.' })"
+  />
 </template>
 ```
 
@@ -52,8 +84,8 @@ app.use(ToastPlugin, { position: 'bottom-right' })
 
 ```vue
 <script setup>
-import { useToast } from '@aziontech/webkit/toast'
-const toast = useToast()
+  import { useToast } from '@aziontech/webkit/toast'
+  const toast = useToast()
 </script>
 ```
 
@@ -64,15 +96,21 @@ The imperative surface — `toast(message, options?)` returns the toast `id` (a 
 ```ts
 import { toast } from '@aziontech/webkit/toast'
 
-const id = toast('Saved')                                  // default type
+const id = toast('Saved') // default type
 toast.success('Deployed', { description: 'edge-01 live' }) // typed shortcut
 toast.error('Failed', { action: { label: 'Retry', onClick: () => retry() } })
-toast.loading('Uploading…', { duration: 0 })               // persists until dismissed
-toast('Heads up', { position: 'top-center' })              // anchor this toast to a corner (overrides Toaster)
-toast('Saved', { closable: true })                         // always-visible close control (overrides Toaster)
-toast('Saved', { onClose: () => track('dismissed') })      // callback fired when the toast is dismissed
+toast.error('Deploy failed', {
+  actions: [
+    { label: 'Edit', onClick: () => edit() },
+    { label: 'Redeploy', onClick: () => redeploy() }
+  ]
+}) // up to two actions; `actions` wins over `action`
+toast.loading('Uploading…', { duration: 0 }) // persists until dismissed
+toast('Heads up', { position: 'top-center' }) // anchor this toast to a corner (overrides Toaster)
+toast('Saved', { closable: true }) // always-visible close control (overrides Toaster)
+toast('Saved', { onClose: () => track('dismissed') }) // callback fired when the toast is dismissed
 toast.promise(deploy(), { loading: 'Deploying…', success: 'Deployed', error: 'Failed' })
-toast.dismiss(id)                                          // dismiss one; toast.dismiss() clears all
+toast.dismiss(id) // dismiss one; toast.dismiss() clears all
 ```
 
 Each toast can override the Toaster's anchor with its own `position`; the Toaster groups toasts by corner and renders one fixed stack per corner in use.
@@ -81,7 +119,7 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 
 ```vue
 <script setup>
-import Toast from '@aziontech/webkit/toast'
+  import Toast from '@aziontech/webkit/toast'
 </script>
 
 <template>
@@ -90,7 +128,11 @@ import Toast from '@aziontech/webkit/toast'
       <Toast.Item :type="t.type">
         <Toast.Title>{{ t.message }}</Toast.Title>
         <Toast.Description v-if="t.description">{{ t.description }}</Toast.Description>
-        <Toast.Action v-if="t.action" :label="t.action.label" @click="t.action.onClick" />
+        <Toast.Action
+          v-if="t.action"
+          :label="t.action.label"
+          @click="t.action.onClick"
+        />
         <Toast.Close @click="dismiss" />
       </Toast.Item>
     </template>
@@ -100,7 +142,7 @@ import Toast from '@aziontech/webkit/toast'
 
 ## Sub-components
 
-<!-- Each sub-component lives in its own folder under the root, with its own package.json.
+<!-- Each sub-component lives in its own folder under the root.
      The shared injection-key.ts sits one directory up from each sub-component.
      Per-sub-component props/events are listed here (the root Props/Events/Slots tables
      below describe ONLY the root Toaster element).
@@ -111,11 +153,11 @@ import Toast from '@aziontech/webkit/toast'
      There is NO `Trigger` / `Content`: a toast has no disclosure open/closed state — its lifecycle
      is presence in the stack, expressed via `data-type` and enter/leave transitions. -->
 
-- `toaster/toaster.vue` — the mount-once region. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store, with `aria-live` (`polite`, or `assertive` when an `error` toast is present) and `aria-atomic="false"`. Props `position?: ToastPosition` (default `'bottom-right'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; older ones drop when exceeded), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap), `closable?: boolean` (default `false`; when `true`, every toast shows an always-visible close control unless its own `closable` option overrides). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast.Toaster`.
+- `toaster.vue` — the mount-once region, at the component root. `<Teleport to="body">` + a fixed-positioned, `position`-anchored container that renders the live `<TransitionGroup>` stack of `ToastItem`s from the injected store, with `aria-live="polite"`, `aria-relevant="additions text"` and `aria-atomic="false"`; the region for the default `position` is in the DOM before the first toast so the first addition is announced. Props `position?: ToastPosition` (default `'bottom-right'`), `duration?: number` (default `4000`, ms — the stack-wide default each toast inherits unless its own `duration` overrides), `max?: number` (cap the number of simultaneously visible toasts; the rest queue behind until a slot frees), `expand?: boolean` (when `false`, the default, stacked toasts overlap into a peek; when `true`, they lay out fully expanded with a gap), `closable?: boolean` (default `false`; when `true`, every toast shows an always-visible close control unless its own `closable` option overrides). Exposes a scoped `default` slot (`{ toast, dismiss }`) for a bespoke body; falls back to composing `ToastItem` from the store entry. This is the public root attached to the compound as `Toast.Toaster`.
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-xxs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — a PrimeIcons glyph by `type` sized with the `text-label-md` token to match the title (`pi pi-check` / `pi pi-info-circle` / `pi pi-exclamation-triangle` / `pi pi-exclamation-circle`); the neutral `default` type has **no** icon, and `loading` renders a `Spinner`. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `error`/`warning`). Props `type?: ToastType` (default `'default'`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-type`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="text"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="transparent"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
 - `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`pi pi-times`, `kind="transparent"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
@@ -127,17 +169,16 @@ The imperative API is backed by a small reactive store composable, declared here
   packages/webkit/src/components/feedback/toast/
   ├── toaster.vue            (root region — Teleport + TransitionGroup + aria-live)
   ├── index.ts               (compound: Object.assign attaches sub-components + re-exports `toast`; vue-tsc emits index.d.ts)
-  ├── package.json           (main/module → ./index.ts, types → ./index.d.ts)
   ├── injection-key.ts       (shared provide/inject key for the store)
   ├── use-toast-store.ts      (singleton reactive store backing toast())
-  ├── toast-item/            { toast-item.vue, package.json }
-  ├── toast-title/           { toast-title.vue, package.json }
-  ├── toast-description/     { toast-description.vue, package.json }
-  ├── toast-action/          { toast-action.vue, package.json }
-  └── toast-close/           { toast-close.vue, package.json }
+  ├── toast-item/            { toast-item.vue }
+  ├── toast-title/           { toast-title.vue }
+  ├── toast-description/     { toast-description.vue }
+  ├── toast-action/          { toast-action.vue }
+  └── toast-close/           { toast-close.vue }
 
-  Public exports stay flat: ./feedback/toast (→ index.ts), ./feedback/toast-item, ./feedback/toast-title,
-  ./feedback/toast-description, ./feedback/toast-action, ./feedback/toast-close (each → its .vue).
+  Public exports stay flat: ./toast (→ index.ts), ./toast-root (→ toaster.vue), ./toast-item, ./toast-title,
+  ./toast-description, ./toast-action, ./toast-close (each → its .vue).
   The root binding for dot-notation is PascalCase `Toast`; `Toast.Toaster` is the mount-once region. -->
 
 ## Props
@@ -145,28 +186,28 @@ The imperative API is backed by a small reactive store composable, declared here
 <!-- Root <Toaster> element only (reached as `Toast.Toaster`). Sub-component props are listed in the Sub-components section.
      The imperative `toast()` function and its options object are documented in Usage and Sub-components. -->
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | false | Corner (or edge-center) the stack is anchored to. |
-| `duration` | `number` | `4000` | false | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
-| `max` | `number` | `3` | false | Maximum simultaneously visible toasts per corner before the rest queue behind. |
-| `expand` | `boolean` | `false` | false | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek. |
-| `closable` | `boolean` | `false` | false | Show an always-visible close control on every toast; a per-toast `closable` option overrides it. |
+| Prop       | Type                                                                                              | Default          | Required | JSDoc                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------- | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `position` | `'top-left' \| 'top-center' \| 'top-right' \| 'bottom-left' \| 'bottom-center' \| 'bottom-right'` | `'bottom-right'` | false    | Corner (or edge-center) the stack is anchored to.                                                                                  |
+| `duration` | `number`                                                                                          | `4000`           | false    | Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. |
+| `max`      | `number`                                                                                          | `3`              | false    | Maximum simultaneously visible toasts per corner before the rest queue behind.                                                     |
+| `expand`   | `boolean`                                                                                         | `false`          | false    | Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek.                                  |
+| `closable` | `boolean`                                                                                         | `false`          | false    | Show an always-visible close control on every toast; a per-toast `closable` option overrides it.                                   |
 
 ## Events
 
 <!-- The Toaster has no DOM events of its own: it is driven by the imperative store, not by consumer-bound listeners.
      Item-level events (action click, close) live on the sub-components (see Sub-components). -->
 
-| Event | Payload | Notes |
-|---|---|---|
-| _none_ | — | The `Toaster` is store-driven; it raises no events. Item actions emit from `ToastAction` / `ToastClose`. |
+| Event  | Payload | Notes                                                                                                    |
+| ------ | ------- | -------------------------------------------------------------------------------------------------------- |
+| _none_ | —       | The `Toaster` is store-driven; it raises no events. Item actions emit from `ToastAction` / `ToastClose`. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry. |
+| Slot      | Scope                | Notes                                                                                                                                                                                                                                                                                                                                                                         |
+| --------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, actions?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`. |
 
 ## States
 
@@ -174,18 +215,18 @@ The imperative API is backed by a small reactive store composable, declared here
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `left`/`center`/`right`) and the enter/leave translate direction.
 - `data-expanded` on the `Toaster` container mirrors the `expand` prop (`true` when expanded).
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
-- `aria-live` on the region: `polite` by default, `assertive` while an `error` toast is present; `role="status"` per item, `role="alert"` for `error`/`warning`. Focus is never stolen (the region is not focused on mount).
+- `aria-live="polite"` on the region for every type; items inside a Toaster carry no role of their own, so each toast is announced once by the region and never twice by a nested live region. A `ToastItem` rendered outside a Toaster keeps `role="status"` (or `role="alert"` for `error`/`warning`). Focus is never stolen (the region is not focused on mount). Tests: `toast.test.ts` › live region (spec).
 - Visual states on interactive controls (`ToastAction`, `ToastClose`): `default`, `hover`, `focus-visible`, `active` (inherited from `Button` / `IconButton`).
 
 ## Motion & Animations
 
-Toast motion reads its **speeds and curves only from the foundation** (`duration` / `curve` in `packages/theme/src/tokens/primitives/animations/animate.js`, imported as `@aziontech/theme/animations`) through `toast/presets/transitions.ts`, and applies them as **inline `transition` styles** — the same pattern the sibling [`Message`](./message.md) and the overlay `Dialog` / `Drawer` use, because Tailwind does not emit dynamic `duration-[…]` / curve classes. No ad-hoc `duration-300` / `ease-out` utilities, no component-local `@keyframes`.
+Toast motion reads its **speeds and curves only from the foundation** (`duration` / `curve` in `packages/theme/src/tokens/primitives/animations/animate.js`, imported as `@aziontech/theme/animations`) through `toast/presets/transitions.ts`, and applies them as **inline `transition` styles** — the same pattern the sibling [`Alert`](./alert.md) and the overlay `Dialog` / `Drawer` use, because Tailwind does not emit dynamic `duration-[…]` / curve classes. No ad-hoc `duration-300` / `ease-out` utilities, no component-local `@keyframes`.
 
-| Trigger | Animation / Transition | Token (foundation, via `presets/transitions.ts`) | Reduced-motion fallback |
-|---|---|---|---|
-| toast enters the stack | inline `transition` on `transform` + `opacity` + `height`: slides in from the anchored edge (off-edge `translateY` → `0`) while fading in | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` (instant) |
-| toast leaves the stack | inline `transition` on `transform` + `opacity` + `height`: slides back off the anchored edge while fading out; DOM unmount deferred (`TOAST_UNMOUNT_MS`) until the exit finishes | `duration['slow-01']` + `curve['productive-exit']` | `motion-reduce:transition-none` (instant) |
-| stack reflows when a toast is added / removed / expanded | inline `transition` on the region container (`height`) and each resting card (`transform` / `height`) | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` |
+| Trigger                                                  | Animation / Transition                                                                                                                                                           | Token (foundation, via `presets/transitions.ts`)           | Reduced-motion fallback                   |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------------------------- |
+| toast enters the stack                                   | inline `transition` on `transform` + `opacity` + `height`: slides in from the anchored edge (off-edge `translateY` → `0`) while fading in                                        | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none` (instant) |
+| toast leaves the stack                                   | inline `transition` on `transform` + `opacity` + `height`: slides back off the anchored edge while fading out; DOM unmount deferred (`TOAST_UNMOUNT_MS`) until the exit finishes | `duration['slow-01']` + `curve['productive-exit']`         | `motion-reduce:transition-none` (instant) |
+| stack reflows when a toast is added / removed / expanded | inline `transition` on the region container (`height`) and each resting card (`transform` / `height`)                                                                            | `duration['moderate-02']` + `curve['productive-entrance']` | `motion-reduce:transition-none`           |
 
 <!-- Enter/leave/reflow apply the foundation `duration`/`curve` tokens as inline `transition` styles (the
      geometry — directional translate + scale + height — is computed inline so the slide reads correctly from
@@ -196,42 +237,43 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| toast surface | `var(--bg-surface-raised)` |
-| toast border | `var(--border-default)` |
-| border width | `var(--border-width-default)` |
-| elevation | `var(--shadow-sm)` |
-| shape | `var(--shape-elements)` |
-| title typography | `.text-label-md` |
-| description typography | `.text-body-xs` |
-| title text | `var(--text-default)` |
-| description text | `var(--text-muted)` |
-| success icon | `var(--success-contrast)` |
-| info icon | `var(--info-contrast)` |
-| warning icon | `var(--warning-contrast)` |
-| error icon | `var(--danger-contrast)` |
-| padding | `var(--spacing-sm)` |
-| gap | `var(--spacing-xs)` |
-| stack inset (viewport edge) | `var(--spacing-md)` |
-| ring | `var(--ring-color)` |
+| Region                      | Token (DESIGN.md)             |
+| --------------------------- | ----------------------------- |
+| toast surface               | `var(--bg-surface-raised)`    |
+| toast border                | `var(--border-default)`       |
+| border width                | `var(--border-width-default)` |
+| elevation                   | `var(--shadow-sm)`            |
+| shape                       | `var(--shape-elements)`       |
+| title typography            | `.text-label-md`              |
+| description typography      | `.text-body-xs`               |
+| title text                  | `var(--text-default)`         |
+| description text            | `var(--text-muted)`           |
+| success icon                | `var(--success-contrast)`     |
+| info icon                   | `var(--info-contrast)`        |
+| warning icon                | `var(--warning-contrast)`     |
+| error icon                  | `var(--danger-contrast)`      |
+| padding                     | `var(--spacing-sm)`           |
+| gap                         | `var(--spacing-xs)`           |
+| stack inset (viewport edge) | `var(--spacing-md)`           |
+| ring                        | `var(--ring-color)`           |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                                                           | Temporary primitive                                                                                                                                                    | Follow-up                                                                                         |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | directional slide-in/out for toasts (no `slide-up`/`slide-left`/`slide-right` in the semantic catalogue) | inline `transform` (computed geometry) + inline `transition` bound to the foundation `duration` / `curve` tokens via `presets/transitions.ts` (enter / leave / reflow) | `TODO: add directional toast slide utilities to packages/theme/src/tokens/semantic/animations.js` |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1` on the action and close controls (inherited from `Button` / `IconButton`).
 - Keyboard map: `Tab` reaches the action then the close control of each visible toast; `Enter`/`Space` activates them. The region itself is not a focus trap and is not focused on mount, so toasts never steal focus from the current task.
-- ARIA: the region carries `aria-live` (`polite`, or `assertive` while an `error` toast is present) and `aria-atomic="false"`; each item is `role="status"` (or `role="alert"` for `error`/`warning`); the close control has an `aria-label`; the severity icon is `aria-hidden="true"`.
+- ARIA: the region carries `aria-live="polite"`, `aria-relevant="additions text"` and `aria-atomic="false"`; items inside it have no role (a standalone `ToastItem` is `role="status"`, or `role="alert"` for `error`/`warning`); the close control has an `aria-label`; the severity icon is `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted description text and severity icons.
 - `motion-reduce:animate-none` on the enter/leave fades and `motion-reduce:transition-none` on the move transition.
 - Touch target ≥40×40 px on the action and close controls (from `Button` / `IconButton` `size="small"`).
+- Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 This component has no `kind`/`size` on its root, and it is driven imperatively rather than by props, so the canonical Types/Sizes/state stories do not apply to the root. Each story renders `<Toast.Toaster />` once plus button(s) that call `toast(…)`, so the docs "Show code" is copy-paste runnable. Every story justifies its existence below.
 
@@ -255,10 +297,8 @@ This component has no `kind`/`size` on its root, and it is driven imperatively r
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

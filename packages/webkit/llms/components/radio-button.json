@@ -1,0 +1,92 @@
+{
+ "name": "radio-button",
+ "binding": "RadioButton",
+ "import": "@aziontech/webkit/radio-button",
+ "treeShakeableImport": "@aziontech/webkit/radio-button",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Wrap it in a horizontal `Field`, or a `Field.Label` choice card, for labeled layouts.",
+ "setup": null,
+ "useWhen": [
+  "One choice from a small set of mutually exclusive options whose labels are laid out separately (a table row, a custom option row).",
+  "A custom radio layout that the horizontal `Field` and the `Field.Label` choice card do not cover."
+ ],
+ "avoidWhen": [
+  "A radio option in a form that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation=\"horizontal\"` + `Field.Content`).",
+  "Options that need visual weight, such as plans or tiers → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`), or `radio-cards` for a horizontal grid of cards.",
+  "More than one option may be selected → use `checkbox`.",
+  "The options are many or loaded from data → use `select`."
+ ],
+ "related": [
+  "field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.",
+  "radio-cards` — horizontal grid of selectable cards with its own model.",
+  "checkbox` — the multi-pick counterpart.",
+  "select` — single choice from a dropdown when the options do not fit inline."
+ ],
+ "bestPractices": [
+  "Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.",
+  "value` and `modelValue` are strings; map numeric or object ids to strings before binding.",
+  "Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.",
+  "Wrap the group in a `fieldset` with a `legend` so the question itself is announced."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Selected value for v-model."
+  },
+  {
+   "name": "value",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Option value for this radio instance."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "HTML name shared across a mutually exclusive group."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "inputId",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "id for the native input; links label to control."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "string",
+   "notes": "v-model."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import RadioButton from '@aziontech/webkit/radio-button'\n  import { ref } from 'vue'\n\n  const selected = ref('')\n</script>\n\n<template>\n  <RadioButton\n    v-model=\"selected\"\n    name=\"webkit-radio\"\n    value=\"a\"\n    input-id=\"webkit-radio-a\"\n    aria-label=\"Option A\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import RadioButton from '@aziontech/webkit/radio-button'\n  import { ref } from 'vue'\n\n  const selected = ref('a')\n</script>\n\n<template>\n  <fieldset class=\"flex items-center gap-(--spacing-4) border-0 p-0 m-0\">\n    <RadioButton\n      v-model=\"selected\"\n      name=\"webkit-radio-disabled\"\n      value=\"a\"\n      disabled\n      input-id=\"webkit-radio-disabled-a\"\n      aria-label=\"Disabled selected\"\n    />\n    <RadioButton\n      v-model=\"selected\"\n      name=\"webkit-radio-disabled\"\n      value=\"b\"\n      disabled\n      input-id=\"webkit-radio-disabled-b\"\n      aria-label=\"Disabled unselected\"\n    />\n  </fieldset>\n</template>"
+  }
+ ],
+ "docs": "components/radio-button.md"
+}

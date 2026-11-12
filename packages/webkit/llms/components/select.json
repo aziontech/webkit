@@ -1,0 +1,155 @@
+{
+ "name": "select",
+ "binding": "Select",
+ "import": "@aziontech/webkit/select",
+ "treeShakeableImport": "@aziontech/webkit/select-root",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/select-trigger",
+  "@aziontech/webkit/select-content",
+  "@aziontech/webkit/select-group",
+  "@aziontech/webkit/select-option"
+ ],
+ "purpose": "Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<SelectContent>`. Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).",
+ "setup": null,
+ "useWhen": [
+  "One value from a list too long to show inline (regions, runtimes, plans).",
+  "Options grouped under headings, with icons or trailing tags.",
+  "A list that needs a search box or a \"Create new\" action inside the panel."
+ ],
+ "avoidWhen": [
+  "A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.",
+  "The field is always multi-pick → use `multi-select`.",
+  "Two to five options that fit on screen → use horizontal `field`s with a `radio-button`, or `radio-cards` for cards.",
+  "The list triggers actions or navigation instead of holding a value → use `dropdown`."
+ ],
+ "related": [
+  "field` — label, this select, and description/error, with the wiring done.",
+  "multi-select` — multi-only variant with checkbox rows and an array model.",
+  "dropdown` — action menu that reports the chosen option as an event and holds no form value.",
+  "input-group` — joins a select to an input, such as currency plus amount."
+ ],
+ "bestPractices": [
+  "Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.",
+  "Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.",
+  "With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.",
+  "Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string | number | unknown[]",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+  },
+  {
+   "name": "multiple",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Trigger placeholder shown when no option is selected."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+  },
+  {
+   "name": "displayValue",
+   "type": "(value: unknown) => string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "unknown",
+   "notes": "Fires when an option is selected (single) or toggled (multi)."
+  },
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "Fires when the dropdown opens or closes."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Composition slot; receives `<SelectTrigger>` and `<SelectContent>` (and the option tree inside it)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Select from '@aziontech/webkit/select'\n  import { ref } from 'vue'\n\n  const value = ref('')\n  const options = [\n    { value: 'opt-1', label: 'Option 1' },\n    { value: 'opt-2', label: 'Option 2' },\n    { value: 'opt-3', label: 'Option 3' },\n    { value: 'opt-4', label: 'Option 4' }\n  ]\n</script>\n\n<template>\n  <Select\n    aria-label=\"Option\"\n    v-model=\"value\"\n    size=\"large\"\n    placeholder=\"Select an option\"\n  >\n    <Select.Trigger />\n    <Select.Content>\n      <Select.Option\n        v-for=\"o in options\"\n        :key=\"o.value\"\n        :value=\"o.value\"\n        >{{ o.label }}</Select.Option\n      >\n    </Select.Content>\n  </Select>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Select from '@aziontech/webkit/select'\n  import { ref } from 'vue'\n\n  const value = ref('')\n  const options = [\n    { value: 'a', label: 'Option A' },\n    { value: 'b', label: 'Option B' }\n  ]\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 w-[280px]\">\n    <Select\n      :aria-label=\"`Option, ${s}`\"\n      v-for=\"s in sizes\"\n      :key=\"s\"\n      v-model=\"value\"\n      :size=\"s\"\n      :placeholder=\"s.charAt(0).toUpperCase() + s.slice(1)\"\n    >\n      <Select.Trigger />\n      <Select.Content>\n        <Select.Option\n          v-for=\"o in options\"\n          :key=\"o.value\"\n          :value=\"o.value\"\n          >{{ o.label }}</Select.Option\n        >\n      </Select.Content>\n    </Select>\n  </div>\n</template>"
+  },
+  {
+   "name": "Multiple",
+   "sfc": "<script setup>\n  import Select from '@aziontech/webkit/select'\n  import { ref } from 'vue'\n\n  const value = ref([])\n  const options = [\n    { value: 'opt-1', label: 'Option 1' },\n    { value: 'opt-2', label: 'Option 2' },\n    { value: 'opt-3', label: 'Option 3' },\n    { value: 'opt-4', label: 'Option 4' }\n  ]\n</script>\n\n<template>\n  <Select\n    aria-label=\"Options\"\n    v-model=\"value\"\n    multiple\n    placeholder=\"Select an option\"\n  >\n    <Select.Trigger />\n    <Select.Content>\n      <Select.Option\n        v-for=\"o in options\"\n        :key=\"o.value\"\n        :value=\"o.value\"\n        >{{ o.label }}</Select.Option\n      >\n    </Select.Content>\n  </Select>\n</template>"
+  }
+ ],
+ "docs": "components/select.md"
+}

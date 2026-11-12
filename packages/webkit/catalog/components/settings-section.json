@@ -1,0 +1,24 @@
+{
+ "purpose": "A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.",
+ "useWhen": [
+  "Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.",
+  "An Advanced band that starts closed (`collapsible`)."
+ ],
+ "avoidWhen": [
+  "A band whose heading carries a description line and actions → use `section-header`.",
+  "The page title → use `page-header`.",
+  "A disclosure list of several independent panels → use `accordion`."
+ ],
+ "related": [
+  "setting-row` — the rows inside the band's card.",
+  "card` — the flush (`:padded=\"false\"`) surface the rows sit on.",
+  "hint` — the guidance glyph beside the title.",
+  "section-header` — the band heading with a description and actions."
+ ],
+ "bestPractices": [
+  "One sentence of guidance in `hint`; the title names the band in one or two words.",
+  "Set `anchor` on bands people link to.",
+  "Use `collapsible` only for an Advanced band whose defaults are right for most people; it starts closed.",
+  "Stack the bands inside one form column (`layout-column-form`); the first band takes no top margin."
+ ]
+}

@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: b37467c8f3882bd035f55b6dbcbf85eae17774ac5bde875546bf68fcd223b703
+last_updated: 2026-11-11
+checksum: fa530d27e1466bab1fb5bd3913e57eb4f2ed3bfa80de41c9e6fe43e004e1de06
 ---
+
 # PhotoMarquee — Component Spec
 
 ## Purpose
@@ -35,7 +36,7 @@ The office band of the careers page: a horizontal section title over a framed st
 
 ```vue
 <script setup>
-import PhotoMarquee from '@aziontech/webkit/photo-marquee'
+  import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 </script>
 
 <template>
@@ -54,14 +55,14 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Paragraph beside the headline. |
-| `descriptionWidth` | `PhotoMarqueeDescriptionWidth` | `'narrow'` | false | Width the description is capped at: `narrow` or `wide`. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
-| `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo. |
-| `photos` | `PhotoMarqueePhoto[]` | `[]` | false | The photographs, in order; each is `{ src, alt, width, height }`. |
+| Prop               | Type                           | Default    | Required | JSDoc                                                                                                              |
+| ------------------ | ------------------------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
+| `title`            | `string`                       | `''`       | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
+| `description`      | `string`                       | `''`       | false    | Paragraph beside the headline.                                                                                     |
+| `descriptionWidth` | `PhotoMarqueeDescriptionWidth` | `'narrow'` | false    | Width the description is capped at: `narrow` or `wide`.                                                            |
+| `ariaLabel`        | `string`                       | `''`       | false    | Accessible name of the scrolling region.                                                                           |
+| `duration`         | `number`                       | `0`        | false    | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo.                                        |
+| `photos`           | `PhotoMarqueePhoto[]`          | `[]`       | false    | The photographs, in order; each is `{ src, alt, width, height }`.                                                  |
 
 ## Events
 
@@ -79,23 +80,23 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee) | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------------------ | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee)                          | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| photo gap | `var(--spacing-md)` |
-| focus ring | `var(--ring-color)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| photo gap             | `var(--spacing-md)`     |
+| focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -106,7 +107,14 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed, so photos flow in reading order; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 
@@ -123,10 +131,8 @@ import PhotoMarquee from '@aziontech/webkit/photo-marquee'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

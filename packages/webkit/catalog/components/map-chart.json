@@ -1,0 +1,24 @@
+{
+ "purpose": "Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value. One tab stop walks every place from the highest value down, with a tooltip, a polite announcement and a table twin, so nothing on the map needs a pointer. The country shapes are a lazy chunk; the map itself adds no dependency.",
+ "useWhen": [
+  "Requests, threats or bandwidth by country (Real-Time Metrics map card).",
+  "Traffic by point of presence or by city, as bubbles.",
+  "A regional view of either, framed with `view` (for example `south-america`)."
+ ],
+ "avoidWhen": [
+  "Ranking a handful of countries where the exact order matters → use `bar-list`; a map hides small countries.",
+  "A decorative network backdrop with no data → use `network-map`.",
+  "Values over time → use `chart`."
+ ],
+ "related": [
+  "network-map` — the same dot grid as decoration in marketing and empty states.",
+  "bar-list` — the ranked list that usually sits beside the map.",
+  "chart-card` — the card a dashboard map sits in; the map takes its accessible name from the card title."
+ ],
+ "bestPractices": [
+  "Pair the map with a ranked list or a table: the map shows where, the list shows how much.",
+  "Pass ISO 3166-1 alpha-2 codes as region ids; names come from the locale (`Intl.DisplayNames`) unless you pass `name`.",
+  "Keep region and point ids distinct: `v-model:activeId` holds one of them.",
+  "Give points a status color only when the color means a state; otherwise leave the series slot."
+ ]
+}

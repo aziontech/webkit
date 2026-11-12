@@ -1,0 +1,31 @@
+{
+  "component": "section-title",
+  "title": "Components/Marketing/Primitives/SectionTitle",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Overline, headline and description centered inside the frame. The frame’s bottom rule is what divides the header from the section body, so no margin is needed below it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The three layouts stacked. `centered` and `left` share one column and differ only in alignment; `horizontal` puts the headline and its description in a three-column grid, which is what makes a wide band read as one row instead of a tall stack.",
+      "file": "kinds.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three steps of the headline scale, stacked. `size` moves the headline between `text-heading-lg`, `text-heading-xl` and `text-heading-2xl` — the description stays at reading size in all three, and the heading stays an `h2`, so the page outline is unaffected by how loud a header is.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithActions",
+      "summary": "The `actions` slot owns its own responsive layout: the controls stack full-width below `sm` and return to a content-width row above it, centered only when the header is.",
+      "file": "with-actions.vue"
+    },
+    {
+      "name": "DescriptionWidths",
+      "summary": "The horizontal layout with each `descriptionWidth`, stacked. `narrow` keeps the description to the third column; `wide` runs it across the middle column too, for a description long enough to stack into a tall block on its own.",
+      "file": "description-widths.vue"
+    }
+  ]
+}

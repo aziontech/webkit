@@ -1,13 +1,15 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Message from '../../feedback/message/message.vue'
-  import FieldText from '../../inputs/field-text/field-text.vue'
+  import Overline from '../../content/overline/overline.vue'
+  import Alert from '../../feedback/alert/alert.vue'
+  import Field from '../../inputs/field/field.vue'
+  import FieldDescription from '../../inputs/field/field-description/field-description.vue'
+  import Input from '../../inputs/input/input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'ClosingCallToActionNewsletter',
@@ -20,9 +22,9 @@
     placeholder: string
     /** Label of the submit button. */
     submitLabel: string
-    /** Message shown in place of the form once the site reports the address was sent. */
+    /** Alert shown in place of the form once the site reports the address was sent. */
     successMessage: string
-    /** Message shown under the form when the site reports the address could not be sent. */
+    /** Alert shown under the form when the site reports the address could not be sent. */
     errorMessage?: string
     /** Message shown under the field when it is submitted empty. */
     requiredMessage: string
@@ -76,15 +78,22 @@
       (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action-newsletter'
   )
 
+  const outcome = ref<HTMLElement | null>(null)
+
+  watch(
+    () => props.submitted,
+    (submitted) => {
+      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      nextTick(() => document.getElementById(`${inputId}-success`)?.focus())
+    }
+  )
+
   const subscribe = (event: Event) => {
     if (props.loading) return
     const value = email.value.trim()
-    if (!value) {
-      invalidMessage.value = props.form.requiredMessage
-      return
-    }
-    if (!EMAIL_PATTERN.test(value)) {
-      invalidMessage.value = props.form.invalidMessage
+    if (!value || !EMAIL_PATTERN.test(value)) {
+      invalidMessage.value = value ? props.form.invalidMessage : props.form.requiredMessage
+      nextTick(() => document.getElementById(inputId)?.focus())
       return
     }
     invalidMessage.value = ''
@@ -134,7 +143,10 @@
             </h2>
           </div>
 
-          <div class="flex flex-col gap-(--spacing-md)">
+          <div
+            ref="outcome"
+            class="flex flex-col gap-(--spacing-md)"
+          >
             <template v-if="submitted">
               <p
                 v-if="title"
@@ -142,7 +154,10 @@
               >
                 {{ title }}
               </p>
-              <Message
+              <Alert
+                :id="`${inputId}-success`"
+                tabindex="-1"
+                class="outline-none"
                 severity="success"
                 :label="form.successMessage"
               />
@@ -161,19 +176,26 @@
                 @submit.prevent="subscribe"
               >
                 <div class="min-w-0 flex-1">
-                  <FieldText
-                    v-model="email"
-                    :input-id="inputId"
-                    name="email"
-                    size="large"
-                    type="email"
-                    autocomplete="email"
-                    :placeholder="form.placeholder"
-                    :invalid="Boolean(invalidMessage)"
-                    :helper-text="invalidMessage"
+                  <Field
+                    :required="Boolean(invalidMessage) && !email.trim()"
+                    :invalid="Boolean(invalidMessage) && Boolean(email.trim())"
                     :disabled="loading"
-                    @update:model-value="clearError"
-                  />
+                  >
+                    <Input
+                      v-model="email"
+                      name="email"
+                      size="large"
+                      type="email"
+                      autocomplete="email"
+                      :spellcheck="false"
+                      :id="inputId"
+                      :placeholder="form.placeholder"
+                      @update:model-value="clearError"
+                    />
+                    <FieldDescription v-if="invalidMessage">
+                      {{ invalidMessage }}
+                    </FieldDescription>
+                  </Field>
                 </div>
                 <div>
                   <Button
@@ -185,7 +207,7 @@
                   />
                 </div>
               </form>
-              <Message
+              <Alert
                 v-if="error && form.errorMessage"
                 severity="danger"
                 :label="form.errorMessage"

@@ -1,0 +1,71 @@
+{
+  "component": "chart",
+  "title": "Components/Primitives/Chart/Chart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Threats vs requests chart: allowed requests as an area, blocked and logged threats as lines. Each series means a state, so it wears a status color. Hover, or focus the plot and use the arrow keys, to read every series at one point.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Forms",
+      "summary": "The same three series as lines, as areas and as grouped bars. Lines and areas share a point scale; any bar switches the category axis to bands so every mark sits on a band center.",
+      "file": "forms.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "Parts of a total over time. Stacked bars keep a 2px surface gap between segments and round only the top of each column.",
+      "file": "stacked.vue"
+    },
+    {
+      "name": "MultiSeries",
+      "summary": "Eight hosts. The first six take the six series slots in order and the last two fold into Other, so no hue is ever generated or reused. Toggle a host in the legend: the others keep their colors.",
+      "file": "multi-series.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "Ordered horizontal bars with the value at each bar end, the form for a top-N list. One series means one color for every bar; bar length already carries the magnitude.",
+      "file": "horizontal.vue"
+    },
+    {
+      "name": "Mixed",
+      "summary": "Bars and a line on one value axis: requests as bars, the part served from cache as a line. The bar sets the axis to bands, so the line points sit on the bar centers.",
+      "file": "mixed.vue"
+    },
+    {
+      "name": "Scatter",
+      "summary": "Dots with no connecting line, on a linear label scale: each object size sits at its own distance along the axis, so the spacing reads as the measure it is.",
+      "file": "scatter.vue"
+    },
+    {
+      "name": "Brush",
+      "summary": "Drag across the plot, or hold Shift with the arrow keys and press Enter, to select a span. The chart reports it through v-model:range; the page filters to it. Escape clears it.",
+      "file": "brush.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "A Skeleton fills the plot while the first response loads.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No series has a value, so the plot renders an EmptyState at full plot height and the dashboard keeps its rhythm. Name the reason in the copy: nothing in the range, filters that match nothing (offer Clear filters), or a source that is not set up yet (offer the setup action).",
+      "file": "empty.vue"
+    },
+    {
+      "name": "ErrorState",
+      "summary": "The request failed. A danger Alert takes the plot; the card around it keeps its title and controls.",
+      "file": "error-state.vue"
+    },
+    {
+      "name": "Refetching",
+      "summary": "A new range is loading. The previous render holds at reduced opacity instead of flashing a skeleton.",
+      "file": "refetching.vue"
+    },
+    {
+      "name": "TableView",
+      "summary": "The accessible twin of the chart, made visible: every label by every series. It is always present for assistive tech.",
+      "file": "table-view.vue"
+    }
+  ]
+}

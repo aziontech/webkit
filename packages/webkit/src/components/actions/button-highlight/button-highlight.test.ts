@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/button-highlight/ButtonHighlight.stories'
+import Default from '../../../../examples/button-highlight/default.vue'
+import Disabled from '../../../../examples/button-highlight/disabled.vue'
+import Loading from '../../../../examples/button-highlight/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ButtonHighlight from './button-highlight.vue'
-
-const { Default, Disabled, Loading } = composeStories(stories)
 
 describe('ButtonHighlight', () => {
   describe('rendering & polymorphism', () => {
@@ -136,7 +135,7 @@ describe('ButtonHighlight', () => {
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story mounts an enabled button', async () => {
       const { getByRole, emitted } = render(Default)
       const node = getByRole('button', { name: /Ask Azion/ })

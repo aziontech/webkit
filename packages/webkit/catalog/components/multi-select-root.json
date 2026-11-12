@@ -1,0 +1,26 @@
+{
+ "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.",
+ "useWhen": [
+  "Choosing several values from a long list (regions, tags, permissions) in a compact field.",
+  "A filter whose selected values stay editable from the same dropdown.",
+  "Grouped options with icons or trailing tags, optionally with search."
+ ],
+ "avoidWhen": [
+  "Only one value may be chosen → use `select`.",
+  "A labelled form field with helper/error text → put it (or `select` with `multiple`) inside a `field`.",
+  "A handful of options that fit on screen → use a horizontal `field` with a `checkbox` for each.",
+  "The user builds a subset and needs the chosen and remaining items side by side → use `pick-list`."
+ ],
+ "related": [
+  "select` — single-choice counterpart; also accepts `multiple`.",
+  "field` — wraps this control with its label, description and error; it hands the trigger its id and state.",
+  "pick-list` — dual-list transfer for building larger subsets.",
+  "checkbox` — the indicator every option row renders."
+ ],
+ "bestPractices": [
+  "modelValue` is always an array; start it as `[]`, never `null`.",
+  "Pass `displayValue` to summarise long selections (e.g. \"3 regions\") instead of a list that overflows the trigger.",
+  "Keep each option's `value` stable and unique; selection is matched by value.",
+  "Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content`."
+ ]
+}

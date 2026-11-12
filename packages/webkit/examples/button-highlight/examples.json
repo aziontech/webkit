@@ -1,0 +1,31 @@
+{
+  "component": "button-highlight",
+  "title": "Components/Primitives/Actions/ButtonHighlight",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default highlight button at large size with an icon.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Loading adopts the disabled visual treatment for clarity: the gradient is replaced by disabled tokens, a spinner replaces the icon, and activation is blocked while the async action runs.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Icon",
+      "summary": "Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `label` is required — for icon-only controls use `IconButton`.",
+      "file": "icon.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state with the gradient replaced by disabled tokens.",
+      "file": "disabled.vue"
+    }
+  ]
+}

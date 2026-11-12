@@ -10,7 +10,7 @@ packages/webkit/src/
 │   ├── actions/  content/  data/  feedback/  inputs/  layout/
 │   ├── navigation/  overlay/  code/  utils/
 │   └── avatar/, tag/, overline/   (legacy flat folders — migrate into a category when touched)
-├── composables/         use-controllable, use-focus-trap, use-placement
+├── composables/         use-controllable, use-direction, use-focus-trap, use-placement
 ├── utils/               cn (clsx + tailwind-merge), csv
 ├── cli/                 `webkit` bin — init / doctor / plan / apply
 ├── mcp/                 `webkit-mcp` bin — catalog-backed MCP server
@@ -19,11 +19,10 @@ packages/webkit/src/
 ├── svg/, images/, styles/, vite/
 ```
 
-Component creation under `components/**` is **always** driven by the pipeline at [`../../.claude/`](../../.claude/) — see [`../../.claude/commands/component-create.md`](../../.claude/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`docs/PROCESS.md`](./docs/PROCESS.md).
+Component creation under `components/**` is **always** driven by the pipeline at [`../../.claude/`](../../.claude/) — see [`../../.claude/commands/component-create.md`](../../.claude/commands/component-create.md). The end-to-end process (creation → release, adoption → enforcement) is mapped in [`.claude/docs/PROCESS.md`](../../.claude/docs/PROCESS.md).
 
 ## 2) Files agents must NOT edit without explicit human approval
 
-- [`../../.claude/docs/DESIGN.md`](../../.claude/docs/DESIGN.md)
 - [`../../.claude/docs/COMPONENT_REQUIREMENTS.md`](../../.claude/docs/COMPONENT_REQUIREMENTS.md)
 - `package.json` outside of the `exports` block (structural changes only with approval)
 - `.github/workflows/governance.yml` (CI config)
@@ -39,21 +38,21 @@ Component creation under `components/**` is **always** driven by the pipeline at
 pnpm webkit:lint
 pnpm webkit:type-check
 pnpm webkit:type-coverage
-pnpm storybook:build
+pnpm --filter @aziontech/webkit test:ssr
 ```
 
 Type coverage threshold: **95%**.
 
 ## 5) Dependency status (gotchas for the pipeline)
 
-- **`@storybook/test`** — installed in `apps/storybook/package.json`. New stories may use `userEvent`/`expect`/`within` in a `play` function when the spec explicitly lists an Accessibility/play story.
+- **`@testing-library/user-event`** — installed in `packages/webkit` for the browser tests (`import userEvent from '@testing-library/user-event'`); `vitest/browser` also exports a `userEvent`.
 - **`@figma/code-connect`** — installed; config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` works locally; publishing requires `FIGMA_ACCESS_TOKEN`.
 - **`cn` helper** — installed (`clsx` + `tailwind-merge`) at [`src/utils/cn.js`](./src/utils/cn.js), exported as `@aziontech/webkit/utils/cn`. Use it inside `:class` when the consumer must be able to override internal token choices.
 - **`asChild` Slot helper** — **pending**. No helper exists yet. Do not import a phantom path — `validate-references.mjs` will block.
 
 ## 6) Common pitfalls
 
-- **Tokenizing manually:** if Figma exposes a variable that has no equivalent in DESIGN.md, register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
+- **Tokenizing manually:** if Figma exposes a variable that has no equivalent token (check `list_tokens` in the webkit MCP), register a theme gap in the spec and use the closest primitive temporarily. Do not invent a HEX or hardcode a Tailwind palette.
 - **Slots in the wrong layer:** monolithic components (button, icon-button, tag) do not expose slots. Card-pricing exposes `default` + named `actions` because the layout positions are fixed configuration points — not Composition Pattern.
 - **Typography raw classes leaking in:** `text-[length:var(--text-button-lg-font-size)]` and similar are legacy. New components always use the generated class (`text-button-lg`). `validate-tokens.mjs` only blocks **new** violations; the remaining legacy debt is frozen in [`scripts/authoring-baseline.json`](./scripts/authoring-baseline.json) and blocked from growing by the CI ratchet.
 - **Hook blocking a legitimate edit:** read the stderr message — it states the rule that fired and how to fix it. The hooks fail open on unexpected errors and never silently break workflows.

@@ -1,0 +1,18 @@
+{
+ "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.",
+ "useWhen": [
+  "To list every success story with search and facet filters."
+ ],
+ "avoidWhen": [
+  "For a closing row of three related stories → use `article-cards`.",
+  "For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`."
+ ],
+ "related": [
+  "article-index-resource-hub` — the sibling listing of articles with facet dropdowns.",
+  "empty-state` — the no-match state."
+ ],
+ "bestPractices": [
+  "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
+  "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet."
+ ]
+}

@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -73,6 +75,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ articleIndex: en.articleIndex })
 
   const selection = ref<Record<string, string>>({})
 
@@ -146,7 +149,7 @@
 
           <div
             v-if="facets.length > 0"
-            class="flex flex-col gap-(--spacing-sm) sm:flex-row"
+            class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:flex-wrap"
           >
             <Select
               v-for="facet in facets"
@@ -160,11 +163,13 @@
               <SelectTrigger :aria-label="facet.label" />
               <SelectContent>
                 <template #search>
-                  <InputText
+                  <Input
                     :model-value="optionQuery[facet.key] ?? ''"
                     size="small"
-                    placeholder="Search"
-                    :aria-label="`Search ${facet.label.toLowerCase()}`"
+                    :placeholder="t('articleIndex.search')"
+                    :aria-label="
+                      t('articleIndex.searchFacet', { facet: facet.label.toLowerCase() })
+                    "
                     @update:model-value="setOptionQuery(facet.key, $event)"
                   >
                     <template #iconLeft>
@@ -173,7 +178,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </InputText>
+                  </Input>
                 </template>
                 <SelectOption :value="facet.allLabel">
                   {{ facet.allLabel }}
@@ -190,7 +195,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
                 >
-                  No results found
+                  {{ t('articleIndex.empty') }}
                 </p>
               </SelectContent>
             </Select>
@@ -222,7 +227,7 @@
                 class="group/row relative grid transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none lg:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]"
               >
                 <div
-                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-r lg:border-b-0"
+                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-e lg:border-b-0"
                 >
                   <img
                     :src="item.image"

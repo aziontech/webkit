@@ -1,0 +1,26 @@
+{
+  "component": "shell-mockup",
+  "title": "Components/Primitives/Content/ShellMockup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A window mockup with the console rail, a breadcrumb title and three parts on successive beats, fading at the bottom. The host sets the height; the frame scales the 860 design width to fit it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "`window` plates the body in a bordered console window; `bare` with the bar off lets the parts float on the host's own surface.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Shells",
+      "summary": "The current console as a slim bar, the current console with its side rail and breadcrumb bar, and the previous console with its top bar.",
+      "file": "shells.vue"
+    },
+    {
+      "name": "Fades",
+      "summary": "The mockup fading along the bottom, the right, and both top and bottom, so it meets the host surface instead of ending on a hard edge.",
+      "file": "fades.vue"
+    }
+  ]
+}

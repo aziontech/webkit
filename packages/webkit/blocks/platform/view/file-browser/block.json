@@ -1,0 +1,51 @@
+{
+  "id": "platform/view/file-browser",
+  "name": "FileBrowser",
+  "title": "Templates/Platform/View/FileBrowser",
+  "surface": "product",
+  "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "file browser",
+    "file manager",
+    "storage browser",
+    "bucket browser",
+    "object storage",
+    "folders and files",
+    "upload files",
+    "navegador de arquivos",
+    "gerenciador de arquivos",
+    "arquivos do bucket",
+    "upload progress",
+    "move files",
+    "move objects",
+    "drag and drop upload",
+    "enviar arquivos",
+    "mover arquivos"
+  ],
+  "skills": ["webkit-tables", "webkit-lists", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "file-browser.vue"
+  },
+  "variants": [
+    {
+      "name": "InsideAFolder",
+      "summary": "Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age.",
+      "file": "variants/inside-a-folder.vue"
+    },
+    {
+      "name": "Uploading",
+      "summary": "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one.",
+      "file": "variants/uploading.vue"
+    },
+    {
+      "name": "MoveObject",
+      "summary": "Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation=\"move\"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move.",
+      "file": "variants/move-object.vue"
+    }
+  ]
+}

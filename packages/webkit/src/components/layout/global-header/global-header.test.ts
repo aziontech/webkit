@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/global-header/GlobalHeader.stories'
+import ContentZone from '../../../../examples/global-header/content-zone.vue'
+import DefaultHeader from '../../../../examples/global-header/default-header.vue'
+import SitePlacement from '../../../../examples/global-header/site-placement.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'
-
-const { DefaultHeader, ContentZone, SitePlacement } = composeStories(stories)
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
@@ -301,7 +300,7 @@ describe('GlobalHeader', () => {
     })
   })
 
-  describe('composeStories (the Default story fixture runs in-test)', () => {
+  describe('documented example (the Default story fixture runs in-test)', () => {
     it('Default story renders the banner with its Left/Brand/Middle/Right regions', () => {
       const { getByTestId, getByRole } = render(DefaultHeader)
       // The story composes Left>Brand (Azion logo), plus empty Middle and Right.

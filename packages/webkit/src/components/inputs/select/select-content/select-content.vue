@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
+  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { selectContextKey } from '../injection-key'
@@ -20,6 +22,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-content')
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
+  const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
     triggerRef: ctx.triggerRef,
@@ -37,7 +40,9 @@
       return
     }
     if (event.key === 'Tab') {
+      if (event.shiftKey) event.preventDefault()
       ctx.setOpen(false)
+      ctx.triggerRef.value?.focus()
       return
     }
     if (
@@ -48,6 +53,16 @@
     )
       return
     event.preventDefault()
+    if (lazy.value?.hasHidden()) {
+      lazy.value.revealAll()
+      const key = event.key
+      nextTick(() => moveFocus(key))
+      return
+    }
+    moveFocus(event.key)
+  }
+
+  const moveFocus = (key: string) => {
     const el = root.value
     if (!el) return
     const options = Array.from(
@@ -57,12 +72,10 @@
     const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
     const currentIndex = active ? options.indexOf(active) : -1
     let nextIndex = currentIndex
-    if (event.key === 'ArrowDown')
-      nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0
-    else if (event.key === 'ArrowUp')
-      nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1
-    else if (event.key === 'Home') nextIndex = 0
-    else if (event.key === 'End') nextIndex = options.length - 1
+    if (key === 'ArrowDown') nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0
+    else if (key === 'ArrowUp') nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1
+    else if (key === 'Home') nextIndex = 0
+    else if (key === 'End') nextIndex = options.length - 1
     options[nextIndex]?.focus()
   }
 
@@ -77,14 +90,33 @@
     ctx.setOpen(false)
   }
 
+  const focusInitial = () => {
+    const el = root.value
+    if (!el) return
+    const search = el.querySelector<HTMLElement>(
+      'input:not([type="checkbox"]):not([type="radio"]):not([disabled])'
+    )
+    const target =
+      search ??
+      el.querySelector<HTMLElement>('[role="option"][aria-selected="true"]:not([data-disabled])') ??
+      el.querySelector<HTMLElement>('[role="option"]:not([data-disabled])')
+    target?.focus()
+  }
+
   watch(
     () => ctx.open.value,
     async (next) => {
       if (next) {
         await nextTick()
+        focusInitial()
         document.addEventListener('pointerdown', onDocumentPointerDown, true)
       } else {
+        const hadFocus = !!root.value?.contains(document.activeElement)
         document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+        if (hadFocus) {
+          await nextTick()
+          ctx.triggerRef.value?.focus()
+        }
       }
     }
   )
@@ -98,6 +130,8 @@
   onBeforeUnmount(() => {
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -108,6 +142,8 @@
     >
       <div
         v-if="ctx.open.value"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         ref="root"
         v-bind="$attrs"
         :id="ctx.contentId"
@@ -132,7 +168,12 @@
           class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
-          <slot />
+          <LazyNodes
+            ref="lazy"
+            :row-height="32"
+          >
+            <slot />
+          </LazyNodes>
         </ScrollArea>
         <div
           v-if="$slots['footer']"

@@ -177,8 +177,8 @@ describe('ShellMockup (composition)', () => {
       .toBe(true)
   })
 
-  it('draws every part in place from the start when still', () => {
-    const { container } = render(host({ still: true }))
+  it('draws every part in place from the start when not animated', () => {
+    const { container } = render(host({ animated: false }))
 
     expect(parts(container).every((part) => part.hasAttribute('data-entered'))).toBe(true)
   })
@@ -274,5 +274,14 @@ describe('ShellMockup (composition)', () => {
 
     const interactive = render(host({ interactive: true, shell: 'legacy' }))
     await expectNoA11yViolations(interactive.container)
+  })
+})
+
+describe('ShellMockup right-to-left', () => {
+  it('scales the frame from its start corner in both directions', () => {
+    const { container } = render(host())
+    const frame = container.querySelector('.origin-top-left')
+    expect(frame?.className).toContain('start-0')
+    expect(frame?.className).toContain('rtl:origin-top-right')
   })
 })

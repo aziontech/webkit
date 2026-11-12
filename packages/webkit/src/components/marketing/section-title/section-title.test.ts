@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/marketing/primitives/section-title/SectionTitle.stories'
+import Default from '../../../../examples/section-title/default.vue'
+import DescriptionWidths from '../../../../examples/section-title/description-widths.vue'
+import Kinds from '../../../../examples/section-title/kinds.vue'
+import Sizes from '../../../../examples/section-title/sizes.vue'
+import WithActions from '../../../../examples/section-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
-
-const { Default, Kinds, Sizes, WithActions, DescriptionWidths } = composeStories(stories)
 
 const TESTID = 'marketing-section-title'
 
@@ -178,14 +179,14 @@ describe('SectionTitle', () => {
 
   describe('stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId, getByRole } = render(Default())
+      const { getByTestId, getByRole } = render(Default)
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'centered')
       expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
     })
 
     it('renders the Kinds story with one header per layout', () => {
-      const { getAllByTestId } = render(Kinds())
+      const { getAllByTestId } = render(Kinds)
 
       expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-kind'))).toEqual([
         'centered',
@@ -195,7 +196,7 @@ describe('SectionTitle', () => {
     })
 
     it('renders the Sizes story with one header per step', () => {
-      const { getAllByTestId } = render(Sizes())
+      const { getAllByTestId } = render(Sizes)
 
       expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-size'))).toEqual([
         'small',
@@ -205,7 +206,7 @@ describe('SectionTitle', () => {
     })
 
     it('renders the WithActions story with both CTAs', () => {
-      const { getAllByRole } = render(WithActions())
+      const { getAllByRole } = render(WithActions)
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',
@@ -214,7 +215,7 @@ describe('SectionTitle', () => {
     })
 
     it('renders the DescriptionWidths story with one horizontal header per width', () => {
-      const { getAllByTestId } = render(DescriptionWidths())
+      const { getAllByTestId } = render(DescriptionWidths)
       const roots = getAllByTestId(TESTID)
 
       expect(roots.map((el) => el.getAttribute('data-kind'))).toEqual(['horizontal', 'horizontal'])

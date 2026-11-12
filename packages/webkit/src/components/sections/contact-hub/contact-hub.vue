@@ -47,7 +47,7 @@
     statusLink?: ContactHubStatusLink
   }
 
-  /** One self-serve channel, rendered as a linked topic of the three-column row. */
+  /** One self-serve channel, rendered as a linked topic of the channel row. */
   export type ContactHubChannel = {
     /** Icon class for the glyph that leads the channel's heading. */
     icon: string
@@ -147,7 +147,7 @@
                   :href="lane.statusLink.href"
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
-                  class="inline-flex h-10 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                  class="inline-flex min-h-10 max-w-full items-center gap-(--spacing-xs) rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                 >
                   <span
                     class="size-2 shrink-0 rounded-full bg-(--success-contrast)"

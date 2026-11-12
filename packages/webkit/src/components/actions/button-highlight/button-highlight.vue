@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
   export type ButtonHighlightSize = 'small' | 'medium' | 'large'
@@ -152,7 +153,7 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="shrink-0 text-[length:inherit] leading-none"
         aria-hidden="true"
       />
@@ -197,7 +198,7 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="shrink-0 text-[length:inherit] leading-none"
         aria-hidden="true"
       />

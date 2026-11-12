@@ -1,0 +1,60 @@
+<script setup>
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import NetworkSection from '@aziontech/webkit/network-section'
+
+  const claims = [
+    '100+ data centers',
+    '100+ Tbps network capacity',
+    '30 ms median latency',
+    '100% availability'
+  ]
+
+  const outcomes = [
+    {
+      logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+      logoAlt: 'Dafiti',
+      logoTreatment: 'monochrome',
+      text: '86% faster load times, with a 45% cost reduction in data transfer.',
+      highlights: ['86% faster load times', '45% cost reduction']
+    },
+    {
+      logo: '/marketing-components/clients/madeiramadeira.svg',
+      logoAlt: 'MadeiraMadeira',
+      logoTreatment: 'as-is',
+      text: '90% lower cloud costs and faster applications at scale.',
+      highlights: ['90% lower cloud costs']
+    },
+    {
+      logo: '/marketing-components/clients/renner-color.svg',
+      logoAlt: 'Renner',
+      logoTreatment: 'as-is',
+      text: '67% saved on data transfer, even during massive traffic spikes.',
+      highlights: ['67% saved']
+    },
+    {
+      logo: '/marketing-components/clients/fourbank.svg',
+      logoAlt: 'Fourbank',
+      logoTreatment: 'monochrome',
+      text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
+      highlights: ['DDoS mitigated']
+    }
+  ]
+</script>
+
+<template>
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <NetworkSection
+      kind="outcomes"
+      eyebrow="Region: Earth."
+      title="One distributed infrastructure without the complexity of managing, securing and scaling it"
+      lead="Built around your users. Distributed around your data."
+      :claims="claims"
+      :outcomes="outcomes"
+    />
+
+    <SectionGap hatch />
+  </SectionContainer>
+</template>

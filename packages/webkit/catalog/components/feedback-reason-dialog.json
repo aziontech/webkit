@@ -1,0 +1,20 @@
+{
+ "purpose": "Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.",
+ "useWhen": [
+  "After a thumbs-down on an AI response, to collect the reason.",
+  "Any rating of generated content that needs a short, categorised reason."
+ ],
+ "avoidWhen": [
+  "General product feedback with several fields → a page or `Drawer` form.",
+  "A confirmation with no input → `ConfirmDialog`."
+ ],
+ "related": [
+  "chat-message` — `ChatMessage.Feedback` holds the thumbs that open it.",
+  "confirm-dialog` — the same dialog anatomy for a yes/no decision."
+ ],
+ "bestPractices": [
+  "Open it only after a thumbs-down; a thumbs-up needs no reason.",
+  "Keep the reasons short and mutually exclusive; the last is `Other`, and details stay optional.",
+  "Close it from the `submit` handler once the request succeeds; keep it open with `loading` while it is sent."
+ ]
+}

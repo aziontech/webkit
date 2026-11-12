@@ -1,0 +1,21 @@
+{
+ "purpose": "The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own.",
+ "useWhen": [
+  "On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.",
+  "Whenever a band pairs one pitch with a long, browsable list of deployable starters."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles`.",
+  "For a ticker of marks alone → compose `ticker` directly.",
+  "For a handful of icon-led use cases → use `use-cases`."
+ ],
+ "related": [
+  "media-split` — the framed copy-and-media split the band is built on; it owns the band's named region.",
+  "ticker` — the row of framework and cloud marks that closes the band."
+ ],
+ "bestPractices": [
+  "Keep the wall to an even number of templates so the two columns end level.",
+  "Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.",
+  "Set `templatesAriaLabel` so the scrolling wall is announced by name."
+ ]
+}

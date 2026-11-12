@@ -1,0 +1,88 @@
+{
+ "name": "progress",
+ "binding": "Progress",
+ "import": "@aziontech/webkit/progress",
+ "treeShakeableImport": "@aziontech/webkit/progress",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.",
+ "setup": null,
+ "useWhen": [
+  "A task with measurable progress: an upload, a build, a multi-step import.",
+  "A bar-shaped busy indicator at the top of a region when progress can't be measured (`indeterminate`)."
+ ],
+ "avoidWhen": [
+  "A placeholder for content that is still loading → use `skeleton`.",
+  "A busy state inside a button or another compact control → use `spinner` (or the control's own `loading` prop).",
+  "A discrete state with no quantity, such as Active or Failed → use `status-indicator`."
+ ],
+ "related": [
+  "skeleton` — reserves the layout of loading content instead of showing task progress.",
+  "spinner` — compact, always-indeterminate busy glyph.",
+  "status-indicator` — labelled dot for a settled or transitional state."
+ ],
+ "bestPractices": [
+  "Pass `value` on the scale of `max`, for example `:value=\"3\" :max=\"5\"` for steps. Don't convert it to a percentage yourself.",
+  "Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.",
+  "There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.",
+  "The default is the thin `small` bar with `flat` corners. Use `shape=\"rounded\"` and a larger `size` only when the bar stands alone."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Current progress, relative to `max`."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "100",
+   "required": "false",
+   "doc": "Upper bound; percentage = `value / max * 100`."
+  },
+  {
+   "name": "shape",
+   "type": "'rounded' | 'flat'",
+   "default": "'flat'",
+   "required": "false",
+   "doc": "Track and fill corner-radius variant."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'small'",
+   "required": "false",
+   "doc": "Bar height token."
+  },
+  {
+   "name": "indeterminate",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Loading state; animates a sliding segment and ignores `value`."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <Progress :value=\"60\" />\n</template>"
+  },
+  {
+   "name": "Shapes",
+   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      shape=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      shape=\"flat\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      size=\"small\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"medium\"\n    />\n    <Progress\n      :value=\"60\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/progress.md"
+}

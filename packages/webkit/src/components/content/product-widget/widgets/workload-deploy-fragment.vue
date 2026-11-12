@@ -50,7 +50,7 @@
             <span class="truncate text-body-sm text-(--text-default)">Deploying v42</span>
             <span class="truncate text-label-sm text-(--text-muted)">storefront-prod</span>
           </span>
-          <Spinner class="ml-auto size-6 shrink-0 text-(--text-default)" />
+          <Spinner class="ms-auto size-6 shrink-0 text-(--text-default)" />
         </div>
       </ShellMockupPart>
 
@@ -74,7 +74,7 @@
               <span class="truncate text-body-sm text-(--text-default)">
                 {{ EVENTS[index].label }}
               </span>
-              <span class="ml-auto truncate text-label-sm text-(--text-muted)">
+              <span class="ms-auto truncate text-label-sm text-(--text-muted)">
                 {{ EVENTS[index].note }}
               </span>
             </div>

@@ -1,0 +1,36 @@
+{
+  "component": "card-grid",
+  "title": "Components/Marketing/Primitives/CardGrid",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three cells with gutters between them — the `gap` register.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The same layout drawn three ways. In `divider` the seams are the grid’s own 1px gaps, so every cell must fill its own background; in `frame` each cell is a real frame box that draws its own rules and corner marks.",
+      "file": "kinds.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "Two column counts in one view — a count only reads against another.",
+      "file": "columns.vue"
+    },
+    {
+      "name": "Balanced",
+      "summary": "Two, four and five cells under `columns: 3`. Every row is full: two split in halves, four make a 2 × 2, five make 3 + 2 with the last row sharing the width evenly. Pass `layout=\"fixed\"` only for tiles whose width must not change from row to row.",
+      "file": "balanced.vue"
+    },
+    {
+      "name": "SeparatorColor",
+      "summary": "The muted hairline weight, for rules one step back.",
+      "file": "divider-color.vue"
+    },
+    {
+      "name": "Frame",
+      "summary": "The framed register and everything its cell carries: the two fills, and an unpadded `kind=\"none\"` cell whose content reaches the rules. Each cell draws only its right and bottom rules — the grid draws the matching top and left ones, so every edge is one hairline.",
+      "file": "frame.vue"
+    }
+  ]
+}

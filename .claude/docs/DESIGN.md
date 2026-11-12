@@ -4,7 +4,7 @@ How to style components under `packages/webkit/src/components/webkit/` using tok
 
 ## Prerequisites
 
-- Import the theme stylesheet in the app (Storybook already does).
+- Import the theme stylesheet in the app (the docs site and the demos already do: `apps/docs/src/main.ts`, `apps/demos/src/main.ts`).
 - Rebuild theme tokens when `texts.data.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
 
 ---
@@ -23,8 +23,8 @@ That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --b
 
 Integration points:
 
-- **Vite / Storybook:** register `@tailwindcss/vite` once. See [`apps/storybook/.storybook/main.js`](../../apps/storybook/.storybook/main.js).
-- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/storybook/src/styles/preview.css`](../../apps/storybook/src/styles/preview.css).
+- **Vite:** register `@tailwindcss/vite` once. See [`apps/docs/vite.config.ts`](../../apps/docs/vite.config.ts).
+- **`@apply` inside secondary CSS files:** requires `@reference "@aziontech/theme/globals.css";` at the top of the file (Tailwind v4 constraint). Example: [`apps/docs/src/styles/main.css`](../../apps/docs/src/styles/main.css) (`@reference "@aziontech/theme";`).
 - **`!important`:** use the v4 suffix syntax (`opacity-50!`, `size-10!`). The v3 prefix (`!opacity-50`) is forbidden.
 
 Do not add a `tailwind.config.*` file to any package under `packages/`. All theme customization lives in the token sources under `packages/theme/src/tokens/`, is compiled into `@theme { … }`, and reaches components via CSS custom properties.
@@ -80,7 +80,7 @@ These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do
 
 Inside `packages/webkit/src/components/webkit/`, **never** set:
 
-- `font-family` / `font-proto-mono` / `font-sora`
+- `font-family` / `font-proto-mono` / `font-rubik`
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
 - `letter-spacing` / `tracking-*`
 - Raw `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
@@ -207,7 +207,7 @@ Rhythm is two steps and no more: `--layout-section-gap` between the sections of 
 
 Every layout token is a `var()` reference to `--spacing-*` / `--container-*` — never a literal length —
 which is what lets the layout scale inherit the spacing scale's breakpoints instead of restating them.
-Full catalog: **Foundations → Layout** in Storybook.
+Full catalog: **Foundations → Layout and devices** on the docs site.
 
 ### Fixed content widths
 
@@ -310,6 +310,8 @@ text-(--text-default) text-(--text-muted) ring-(--ring-color)
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
 | Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
 
+Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#999999`) on it is 2.96:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
+
 ### Loading placeholders
 
 A loading placeholder (skeleton, image stand-in, lazy block) does **not** use a surface token. Surface tokens
@@ -357,15 +359,13 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
 2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacings.data.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
-4. **Container** — Use `max-w-(--container-<size>)` for page sections and fixed content (cards, modals, columns), with sizes `3xs` … `7xl` from `primitives/shape/container.js`.
+4. **Container** — A page band carries one of the layout container classes (§ Layout containers), never its own `max-w-*`. `max-w-(--container-<size>)` (`3xs` … `7xl` from `primitives/shape/container.js`) is only for fixed content: cards, modals, columns.
 5. **Radius** — `rounded-(--shape-*)`.
 6. **Shadow** — `shadow-(--shadow-*)` from `primitives/effects/shadow.js` when the surface elevates.
 7. **Color** — `bg-(--…)`, `text-(--…)`, `border-(--…)`.
 8. **Interactive states** — `::before` / `::after` ghost layers for `--bg-hover` / `--bg-active`; `focus-visible:ring-2 focus-visible:ring-offset-1`; `duration-fast-02` + `ease-productive-*` (see § Interactive states).
 9. **Motion** — `duration` / `curve` from `animate.js` only; `data-state` overlays use a `presets/transitions.ts` module (see § Motion — reference: Drawer).
-10. **Storybook** — Add or update stories under `apps/storybook/src/stories/webkit/` for new states and sizes.
-
----
+10. **Examples** — Add or update examples under `packages/webkit/examples/<name>/` for new states and sizes.
 
 ---
 
@@ -394,13 +394,6 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 
 `animate-shimmer` drives a gradient sweep and expects a `background-image` gradient plus `bg-[length:200%_100%]` — see § Loading placeholders for the canonical class string.
 
-The pop rides the same 9s cycle with a **negative `animation-delay` per message**
-(`-6.75s` / `-4.5s` / `-2.25s` / `0s`), which lands its 4% pop on a step boundary — the moment that
-message stops moving at the bottom. CSS cannot re-trigger an entrance once per pass; phase-locking
-one long loop to another is how you get one anyway. Fade the ends **unevenly**: deep at the top
-where messages leave (`mask-t-from-72%`), shallow at the bottom where they arrive
-(`mask-b-from-92%`) — a deep bottom fade is one message tall and lands every arrival half-faded.
-
 `animate-flow-dash` animates an **SVG stroke** and expects a `stroke-dasharray` whose cycle **divides 24** (`4 4` = 8, `2 4` = 6, `8 4` = 12), because 24 is the keyframe's travel: the pattern lands exactly where it started and the loop has no visible seam. A cycle that does not divide 24 (`5 5` = 10) jumps on every repeat. Like `animate-shimmer` and `animate-spin` it is `linear` — an endlessly looping animation must not accelerate, or the seam between repeats becomes visible.
 
 ### Easing primitives — `primitives/animations/ease.js`
@@ -421,14 +414,16 @@ Productive and expressive curves live in `animate.js` — see § Motion primitiv
 
 **Durations**
 
-| Token         | Value   | Typical use                              |
-| ------------- | ------- | ---------------------------------------- |
-| `fast-01`     | `70ms`  | Micro-feedback                           |
-| `fast-02`     | `110ms` | Hover / active ghost layers, popup close |
-| `moderate-01` | `150ms` | Popup open, overlay open (drawer)        |
-| `moderate-02` | `240ms` | General color/layout transitions         |
-| `slow-01`     | `400ms` | Panel close (drawer), overlay open       |
-| `slow-02`     | `700ms` | Large surface enter (drawer panel open)  |
+| Token         | Value    | Typical use                              |
+| ------------- | -------- | ---------------------------------------- |
+| `fast-01`     | `70ms`   | Micro-feedback                           |
+| `fast-02`     | `110ms`  | Hover / active ghost layers, popup close |
+| `moderate-01` | `150ms`  | Popup open, overlay open (drawer)        |
+| `moderate-02` | `240ms`  | General color/layout transitions         |
+| `slow-01`     | `400ms`  | Panel close (drawer), overlay open       |
+| `slow-02`     | `700ms`  | Large surface enter (drawer panel open)  |
+| `slow-03`     | `1100ms` | Highlight fade, indeterminate offset     |
+| `slow-04`     | `2100ms` | Indeterminate progress sweep             |
 
 **Curves**
 
@@ -544,7 +539,7 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 
 ### Forbidden in animations
 
-- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `semantic/animations.js`.
+- Custom `@keyframes` declared inside a component `.vue` — keyframes live in `primitives/animations/keyframes.js`.
 - Hardcoded durations (`duration-[180ms]`, `transition: opacity 200ms`) — use `duration` from `animate.js`, Tailwind `duration-*` utilities, or a `presets/transitions.ts` helper (Drawer pattern).
 - Inline easing (`ease-[cubic-bezier(...)]`) — use `curve` from `animate.js` or `ease-productive-*` / `ease-expressive-*` / `ease.in` · `ease.out` · `ease.in-out`.
 - `data-state` / overlay motion without importing `duration` / `curve` from `animate.js` (no ad-hoc ms or bezier literals in `.vue` files).
@@ -560,7 +555,7 @@ For `animate-popup-scale-in/out`, set `--popup-origin` per instance to match the
 The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hook blocks: **fix the value, do not work around it.**
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
-- **Typography:** `font-family`, `font-proto-mono`, `font-sora`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
+- **Typography:** `font-family`, `font-proto-mono`, `font-rubik`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
 - **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
 - **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
 - **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
@@ -575,7 +570,7 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - Token architecture: `packages/theme/src/tokens/README.md`
 - Component structure and API: [`COMPONENT_REQUIREMENTS.md`](./COMPONENT_REQUIREMENTS.md)
-- Storybook foundations (typography catalog): `apps/storybook/src/foundations/data/typography.js`
+- Docs foundations (typography catalog, parsed from the theme): `apps/docs/src/lib/foundations.ts`
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)

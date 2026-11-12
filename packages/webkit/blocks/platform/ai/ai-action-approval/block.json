@@ -1,0 +1,52 @@
+{
+  "id": "platform/ai/ai-action-approval",
+  "name": "AiActionApproval",
+  "title": "Templates/Platform/AI/AiActionApproval",
+  "surface": "product",
+  "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "ai action approval",
+    "approve ai action",
+    "user authorized action",
+    "agent asks permission",
+    "human in the loop",
+    "tool call approval",
+    "confirm agent command",
+    "allow tool",
+    "aprovar ação da ia",
+    "autorizar ação do agente",
+    "confirmar comando",
+    "aprobar acción de la ia"
+  ],
+  "skills": ["webkit-genai", "webkit-ui-states", "webkit-errors"],
+  "primary": {
+    "name": "Pending",
+    "file": "ai-action-approval.vue"
+  },
+  "variants": [
+    {
+      "name": "Irreversible",
+      "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name.",
+      "file": "variants/irreversible.vue"
+    },
+    {
+      "name": "Approved",
+      "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback.",
+      "file": "variants/approved.vue"
+    },
+    {
+      "name": "Denied",
+      "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed.",
+      "file": "variants/denied.vue"
+    },
+    {
+      "name": "Expired",
+      "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed.",
+      "file": "variants/expired.vue"
+    }
+  ]
+}

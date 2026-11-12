@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/card-pricing/CardPricing.stories'
+import Default from '../../../../examples/card-pricing/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CardPricing from './card-pricing.vue'
-
-const { Default } = composeStories(stories)
 
 const SLOT_POSITIONS = ['bottom', 'middle'] as const
 const CARD_STYLES = ['contained', 'transparent'] as const

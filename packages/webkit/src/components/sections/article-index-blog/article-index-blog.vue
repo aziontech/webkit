@@ -2,9 +2,9 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import SegmentedButton from '../../actions/segmented-button/segmented-button.vue'
-  import Avatar from '../../avatar/avatar.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
+  import Input from '../../inputs/input/input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
 
@@ -135,7 +135,7 @@
             v-if="categories.length > 0"
             class="min-w-0 overflow-x-auto"
           >
-            <SegmentedButton
+            <ToggleGroup
               v-model="category"
               :options="options"
               :aria-label="categoryLabel || undefined"
@@ -147,7 +147,7 @@
             v-if="search"
             class="w-full shrink-0 lg:w-(--container-3xs)"
           >
-            <InputText
+            <Input
               v-model="query"
               size="medium"
               type="text"
@@ -157,7 +157,7 @@
               <template #iconLeft>
                 <i class="pi pi-search text-(--text-muted)" />
               </template>
-            </InputText>
+            </Input>
           </div>
         </div>
       </FrameBox>
@@ -186,7 +186,7 @@
                 class="group/row relative grid transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none lg:grid-cols-[minmax(0,2fr)_minmax(0,5fr)]"
               >
                 <div
-                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-r lg:border-b-0"
+                  class="flex aspect-40/21 items-center justify-center overflow-hidden border-b border-(--border-default) bg-(--bg-surface) lg:border-e lg:border-b-0"
                 >
                   <img
                     :src="item.image"

@@ -1,0 +1,31 @@
+{
+  "component": "donut-chart",
+  "title": "Components/Primitives/Chart/DonutChart",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Blocked threats by country. Hover a slice, or focus the ring and use the arrow keys, to swap the center to that country.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "A ring with the total in the center, and a solid disc with no center readout.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Ring diameters of 128, 176 and 240 pixels.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "A circular Skeleton the size of the ring.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "Every slice is zero, so an EmptyState holds the ring footprint. Say why the range is empty; when filters caused it, offer Clear filters.",
+      "file": "empty.vue"
+    }
+  ]
+}

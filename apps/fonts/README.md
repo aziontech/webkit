@@ -15,14 +15,24 @@ To use in your application just copy and paste the code below.
 
 ## Azion Brand Fonts
 
-### Sora
+### Rubik
+
+The Azion sans-serif (variable, weights 300–900, normal and italic). Licensed under the SIL Open Font License; see [`rubik/OFL.txt`](./rubik/OFL.txt).
 
 ```css
 @font-face {
-  font-family: 'Sora';
-  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
-  font-weight: 200 900;
+  font-family: 'Rubik';
+  src: url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype');
+  font-weight: 300 900;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: italic;
   font-display: swap;
 }
 ```

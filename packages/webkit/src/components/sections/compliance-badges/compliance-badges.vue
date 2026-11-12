@@ -107,7 +107,7 @@
                   class="h-16 w-24 object-contain"
                 />
                 <span
-                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pr-(--spacing-sm) pl-(--spacing-xxs) text-overline-sm text-(--text-default)"
+                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-xxs) text-overline-sm text-(--text-default)"
                 >
                   <span
                     aria-hidden="true"
@@ -132,7 +132,7 @@
                 {{ primaryAction.label }}
                 <i
                   aria-hidden="true"
-                  class="pi pi-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 motion-reduce:transition-none"
+                  class="pi pi-chevron-right shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
                 />
               </a>
             </CardGridCell>

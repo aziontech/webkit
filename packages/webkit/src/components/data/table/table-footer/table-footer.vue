@@ -25,7 +25,6 @@
 <template>
   <div
     v-bind="$attrs"
-    role="rowgroup"
     :data-testid="testId"
     class="flex min-w-full flex-col bg-(--bg-surface) text-(--text-muted) border-t-(length:--border-width-default) border-solid border-(--border-default)"
   >

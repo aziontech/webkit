@@ -1,0 +1,25 @@
+{
+  "accordion": { "value": "modelValue" },
+  "accordion-root": { "value": "modelValue" },
+  "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
+  "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
+  "code-block": { "border": "bordered", "value": "modelValue" },
+  "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
+  "doc-card-group": { "mobileCols": "mobileColumns" },
+  "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
+  "item": { "kind": { "to": "kind", "values": { "outline": "outlined" } } },
+  "item-root": { "kind": { "to": "kind", "values": { "outline": "outlined" } } },
+  "log-view": { "border": "bordered", "showCopy": "copyable" },
+  "media-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
+  "navigation-menu": { "value": "modelValue" },
+  "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
+  "severity-tag": { "level": "severity" },
+  "shell-mockup": { "still": { "to": "animated", "values": { "true": "false", "false": "true" } } },
+  "shell-mockup-root": {
+    "still": { "to": "animated", "values": { "true": "false", "false": "true" } }
+  },
+  "table": { "border": "bordered" },
+  "table-root": { "border": "bordered" },
+  "tabs": { "value": "modelValue" },
+  "theme-switcher": { "value": "modelValue" }
+}

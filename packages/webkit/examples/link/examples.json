@@ -1,0 +1,21 @@
+{
+  "component": "link",
+  "title": "Components/Primitives/Navigation/Link",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default large link with a trailing icon.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state; interaction is blocked and the disabled tokens apply.",
+      "file": "disabled.vue"
+    }
+  ]
+}

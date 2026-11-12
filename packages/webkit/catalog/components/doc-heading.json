@@ -1,0 +1,20 @@
+{
+ "purpose": "A documentation section heading that is also the link to itself. The whole text links to its own `id`, so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.",
+ "useWhen": [
+  "Every `h2`–`h4` on a docs page that the page rail lists.",
+  "Section headings on a designed docs page composed in Vue."
+ ],
+ "avoidWhen": [
+  "For the page title — use `DocPageHeader`.",
+  "On marketing pages — use `SectionTitle`."
+ ],
+ "related": [
+  "DocOnThisPage` — the rail that points at the ids.",
+  "useHeadingNav` — the page-provided scroll handler.",
+  "DocProse` — skips `[data-doc-anchor]` in its link rules."
+ ],
+ "bestPractices": [
+  "Give every heading a stable, slug-like `id`.",
+  "Without an `id` the heading renders plain text with no anchor — a link to nowhere is never drawn."
+ ]
+}

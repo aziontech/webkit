@@ -1,0 +1,31 @@
+{
+  "component": "icon-button",
+  "title": "Components/Primitives/Actions/IconButton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default primary icon button at large size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All kind variants side by side.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Loading adopts the disabled visual treatment for clarity: a spinner replaces the icon and activation is blocked while the async action runs.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state.",
+      "file": "disabled.vue"
+    }
+  ]
+}

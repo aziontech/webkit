@@ -2,14 +2,14 @@
 name: media-tabs
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 3f52f749cabe1cb771937f5e4a99c1d8137a15643c529bbf9776143481f3ae4b
+checksum: 46fbc0b4ce3dfc1791b4f67245a1eddd1771d93f78dbbec5e09689a4580081e7
 created: 2026-09-24
-last_updated: 2026-10-22
+last_updated: 2026-11-10
 ---
 
 # Media Tabs — Component Spec
@@ -28,7 +28,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 - For one claim beside one picture → use `media-split`.
 - For questions and answers → use `faq`.
-- For switching a page's content between peer views the reader navigates → use `tab-view`, which is a real ARIA tab set.
+- For switching a page's content between peer views the reader navigates → use `tabs`, which is a real ARIA tab set.
 
 ## Related
 
@@ -44,7 +44,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Give every tab a medium: the frame holds one at a time and cross-fades within it, so a tab with nothing to show reads as a broken rotation, not as a quiet one.
 - Use scenes of the same shape. The frame does not resize between tabs.
 - Pick `size` from the copy, not from the section: `medium` holds a title and two lines, `large` a title and four. In a row of tabs, `small` drops each title one step so five claims fit.
-- Leave `autoPlay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.
+- Leave `autoplay` on for a band a reader is expected to watch. It pauses under the pointer or keyboard focus, restarts its count on a click (and keeps running under the pointer that clicked), and never starts under reduced motion.
 
 ## Usage
 
@@ -88,10 +88,10 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
 | `position`         | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'`     | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row.                                                                 |
-| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                     |
+| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                    |
 | `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
-| `autoPlay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                                                  |
-| `autoPlayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
+| `autoplay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                                                  |
+| `autoplayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
 | `showProgress`     | `boolean`                                | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                          |
 | `texture`          | `TextureMaterialKind`                    | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                     |
 | `textureSize`      | `TextureMaterialSize`                    | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                           |
@@ -178,13 +178,13 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `big-numbers`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value, so the row-height ladder that the media column measures from is visible in one frame
 - TabCounts — composite story rendering three tabs beside the media (`left`) and five tabs in a row (`top`), the two counts the band is built for
 - Positions — composite story rendering `left`, `right`, `top` and `bottom`, so the four placements and their seams are visible in one frame
-- Static — `autoPlay` off and `selectOn` on click, so the band rests on its first tab and a reader can inspect it without it moving
+- Static — `autoplay` off and `selectOn` on click, so the band rests on its first tab and a reader can inspect it without it moving
 
 ## Constraints — DO NOT
 
@@ -199,10 +199,8 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + TabCounts + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/TabCounts into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + TabCounts + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/TabCounts into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

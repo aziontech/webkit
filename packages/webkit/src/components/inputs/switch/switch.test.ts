@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
+import '../../../test/reflow.css'
+
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/switch/Switch.stories'
+import Default from '../../../../examples/switch/default.vue'
+import Disabled from '../../../../examples/switch/disabled.vue'
+import Types from '../../../../examples/switch/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Switch from './switch.vue'
-
-const { Default, Types, Disabled } = composeStories(stories)
 
 describe('Switch', () => {
   describe('data-testid', () => {
@@ -279,26 +280,48 @@ describe('Switch', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Default story', () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       expect(getByTestId('input-switch')).toBeTruthy()
       expect(getByTestId('input-switch').getAttribute('role')).toBe('switch')
     })
 
     it('renders the Types story with four switches', () => {
-      const { getAllByTestId } = render(Types())
+      const { getAllByTestId } = render(Types)
       const switches = getAllByTestId('input-switch')
       expect(switches.length).toBe(4)
     })
 
     it('renders the Disabled story locked in both positions', () => {
-      const { getAllByTestId } = render(Disabled())
+      const { getAllByTestId } = render(Disabled)
       const switches = getAllByTestId('input-switch') as globalThis.HTMLButtonElement[]
 
       expect(switches.length).toBe(2)
       expect(switches.every((node) => node.disabled)).toBe(true)
       expect(switches.map((node) => node.getAttribute('aria-checked'))).toEqual(['false', 'true'])
     })
+  })
+})
+
+describe('Switch touch target', () => {
+  it('extends its hit area to 24px, and 44px on coarse pointers', () => {
+    const view = render(Switch, { attrs: { 'aria-label': 'Enabled' } })
+
+    expect(view.getByRole('switch').className).toContain(
+      'pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
+    )
+  })
+})
+
+describe('Switch direction', () => {
+  it('mirrors the checked handle slide under rtl', () => {
+    const view = render(Switch, {
+      props: { modelValue: true },
+      attrs: { 'aria-label': 'Enabled' }
+    })
+    const handle = view.getByTestId('input-switch__handle').className
+    expect(handle).toContain('group-data-[checked]:translate-x-3.5')
+    expect(handle).toContain('rtl:group-data-[checked]:-translate-x-3.5')
   })
 })

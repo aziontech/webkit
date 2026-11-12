@@ -1,13 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/pick-list/PickList.stories'
+import Default from '../../../../examples/pick-list/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import PickList, { PickListControls, PickListSource, PickListTarget } from './index'
-
-const { Default } = composeStories(stories)
 
 // A small, stable dataset: three available (source), one selected (target).
 const makeModel = () => [

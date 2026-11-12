@@ -1,0 +1,90 @@
+name: New block
+description: Request a new WebKit block (a screen agents copy). An agent builds it through /webkit-new-block from this issue.
+title: 'block: <category>/<name>'
+labels: ['new-block', 'ai-flow']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is the input of `/webkit-new-block <issue number>`
+        (`.claude/commands/webkit-new-block.md`). A block is a screen built only from WebKit
+        components: `block.json`, the primary `.vue` and its states in `variants/`. Describe the
+        job the screen does; the agent picks the components.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: The task the screen serves.
+      options:
+        - auth
+        - account
+        - create
+        - view
+        - detail
+        - edit
+        - delete
+        - settings
+        - states
+        - dashboard
+        - shell
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      description: kebab-case English, named by the job (e.g. `domain-details`, `api-token-create`).
+    validations:
+      required: true
+  - type: textarea
+    id: intent
+    attributes:
+      label: Intent
+      description: What the user comes to this screen to do, and what they leave with.
+    validations:
+      required: true
+  - type: textarea
+    id: benchmarks
+    attributes:
+      label: Benchmark links
+      description: Cloudscape patterns or demos (`https://cloudscape.design/patterns/<x>/index.html.md`), shadcn blocks (`https://ui.shadcn.com/blocks`), or console screenshots.
+    validations:
+      required: true
+  - type: textarea
+    id: usage
+    attributes:
+      label: Where it is used
+      description: The console routes, sites or docs pages that will copy it.
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - product
+        - marketing
+        - docs
+    validations:
+      required: true
+  - type: textarea
+    id: states
+    attributes:
+      label: States
+      description: The variants the screen needs besides the default (empty, loading, error, no permission, success, ...).
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable behaviour the PR must show. One per line.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Figma link, existing blocks it overlaps with, components it must use.
+    validations:
+      required: false

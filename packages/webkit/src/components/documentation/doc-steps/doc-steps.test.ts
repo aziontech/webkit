@@ -1,17 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-steps/DocSteps.stories'
+import Default from '../../../../examples/doc-steps/default.vue'
+import WithBody from '../../../../examples/doc-steps/with-body.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocStep from '../doc-step/doc-step.vue'
 import DocSteps from './doc-steps.vue'
 
 // Browser mode loads no Tailwind — circle/rail/spacing belong to the visual gate;
 // asserted here: the provide/inject numbering registry, the connector markup, testids.
-
-const { Default, WithBody } = composeStories(stories)
 
 const host = (template: string) =>
   defineComponent({
@@ -90,12 +88,12 @@ describe('DocSteps', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default walkthrough', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations when steps carry body content', async () => {
-      const { container } = render(WithBody())
+      const { container } = render(WithBody)
       await expectNoA11yViolations(container)
     })
   })

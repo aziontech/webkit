@@ -1,0 +1,10 @@
+{
+  "_id": "hero-band",
+  "props": {
+    "kind": "title-band",
+    "size": "medium",
+    "eyebrow": "Contact",
+    "title": "Contact us",
+    "description": "Talk to sales about a new project, or reach support about one already running."
+  }
+}

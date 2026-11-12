@@ -3,13 +3,16 @@
 The page-composition language shared by **Hub**, **Docs**, and **Site**: a fluid hero band, a
 centered column framed by vertical rules, and a stack of self-contained modules divided by
 hairlines. Nothing floats, nothing is rounded, and **no line is ever drawn twice**. The result is
-the drawn-grid, technical-drawing look — the *industrial* register of the Azion brand.
+the drawn-grid, technical-drawing look — the _industrial_ register of the Azion brand.
 
 Reference implementations live in
-[`apps/webkit-sample/src/site/components/`](../../apps/webkit-sample/src/site/components/) and
-[`.../site/docs/components/`](../../apps/webkit-sample/src/site/docs/components/); the layout primitives —
+the WebKit shells [`blocks/shells/website`](../../packages/webkit/blocks/shells/website/website.vue) and
+[`blocks/shells/documentation`](../../packages/webkit/blocks/shells/documentation/documentation.vue), and the page sections in
+[`src/components/sections/`](../../packages/webkit/src/components/sections/); the layout primitives —
 shared by Site, Hub and Docs — are in
-[`shared/ui/layout/`](../../apps/webkit-sample/src/shared/ui/layout/).
+[`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`SectionContainer`, `SectionModule`, `CardGrid`, `Hero`)
+and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`FrameBox`, `PageHeader`). The design sample these
+were taken from lives on the `design/sample` branch only.
 
 For the token-level vocabulary (weights, border colors, radii) and how individual **webkit
 components** draw their own edges, see [§ Vocabulary](#vocabulary) below and
@@ -23,15 +26,15 @@ The whole page is **one continuous frame**. Every edge in it is owned by exactly
 neighbour on the other side of that edge draws nothing. This is the rule the entire language hangs
 on; a doubled line is the one unmistakable failure.
 
-| Edge | Owned by | Utility |
-| --- | --- | --- |
-| Top rule of the page body | The hero band | `border-b` (full-bleed) |
-| Left + right rules | The content column | `border-x` |
-| Bottom rule | The footer | `border-t` |
-| Rule between two modules | The **lower** module | `border-t` |
-| Rule under a module header | The header row | `border-b` |
-| Left/right edge of any module | *Nobody* — it's the column's `border-x` | — |
-| Internal rules of a cell grid | The grid's `gap-px` showing its own background | — |
+| Edge                          | Owned by                                       | Utility                 |
+| ----------------------------- | ---------------------------------------------- | ----------------------- |
+| Top rule of the page body     | The hero band                                  | `border-b` (full-bleed) |
+| Left + right rules            | The content column                             | `border-x`              |
+| Bottom rule                   | The footer                                     | `border-t`              |
+| Rule between two modules      | The **lower** module                           | `border-t`              |
+| Rule under a module header    | The header row                                 | `border-b`              |
+| Left/right edge of any module | _Nobody_ — it's the column's `border-x`        | —                       |
+| Internal rules of a cell grid | The grid's `gap-px` showing its own background | —                       |
 
 Two consequences you have to actively remember:
 
@@ -58,12 +61,12 @@ Two consequences you have to actively remember:
   </SectionModule>
 </SectionContainer>
 
-<SiteFooter />                            <!-- owns border-t -->
+<SiteFooter />
+<!-- owns border-t -->
 ```
 
-Live: [`WebkitHub.vue:200-363`](../../apps/webkit-sample/src/hub/views/WebkitHub.vue#L200-L363),
-[`DocsHome.vue:244-539`](../../apps/webkit-sample/src/site/docs/components/DocsHome.vue#L244-L539),
-[`HubFoundations.vue:209-269`](../../apps/webkit-sample/src/hub/components/HubFoundations.vue#L209-L269).
+Live: [`website.vue:198-262`](../../packages/webkit/blocks/shells/website/website.vue#L198-L262) (hero band, framed column,
+footer) and [`documentation.vue:225`](../../packages/webkit/blocks/shells/documentation/documentation.vue#L225) (the docs column).
 
 ---
 
@@ -73,11 +76,13 @@ Live: [`WebkitHub.vue:200-363`](../../apps/webkit-sample/src/hub/views/WebkitHub
 
 A **full-bleed** band. Its bottom hairline runs the entire viewport width; the framed column hangs
 below it. That contrast — one edge-to-edge rule above a narrower framed column — is what makes the
-frame read as *drawn on* the page rather than as a card sitting on it.
+frame read as _drawn on_ the page rather than as a card sitting on it.
 
 ```html
-<section class="relative w-full overflow-hidden border-b border-[var(--border-default)]
-                flex min-h-[calc(100dvh-var(--banner-offset,0px))] flex-col justify-center">
+<section
+  class="relative w-full overflow-hidden border-b border-[var(--border-default)]
+                flex min-h-[calc(100dvh-var(--banner-offset,0px))] flex-col justify-center"
+>
   <!-- #background: z-0 -->
   <div class="relative z-10 mx-auto w-full max-w-[…] px-[var(--spacing-xl)] py-[var(--spacing-xl)]">
     <!-- default slot: z-10 copy -->
@@ -94,12 +99,14 @@ class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem
 ```
 
 Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
-([`DocsGetStarted.vue:368`](../../apps/webkit-sample/src/site/docs/components/DocsGetStarted.vue#L368))
+([`hero.vue:123-126`](../../packages/webkit/src/components/marketing/hero/hero.vue#L123-L126): the `offset` prop sets
+`--banner-offset`, and `kind="screen"` subtracts it.)
 
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
-(`banner="<key>"`) and resolved from the registry
-([`banners/index.js`](../../apps/webkit-sample/src/shared/ui/banners/index.js)); the `#background`
-slot is the escape hatch for a one-off, and wins over the prop when both are given.
+with the `texture` prop (a `TextureMaterial` kind) or filled through the `#background` slot
+([`hero.vue:143`](../../packages/webkit/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
+[`BannerArt`](../../packages/webkit/src/components/marketing/banner/banner-art/banner-art.vue) `art="globe" | "map" | "network"`,
+the design sample's banner registry — and it wins over the prop when both are given.
 
 **Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
 square at every intersection of a 48px lattice, flat across the band — measured off the source's
@@ -120,33 +127,38 @@ A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there i
 headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
 same step from the ground on either theme instead of being tuned for the dark one.
 
-([`WebkitHub.vue:199-202`](../../apps/webkit-sample/src/hub/views/WebkitHub.vue#L199-L202),
-[`AzionHome.vue:211-221`](../../apps/webkit-sample/src/site/components/AzionHome.vue#L211-L221))
+([`hero-band.vue`](../../packages/webkit/src/components/sections/hero-band/hero-band.vue) — `kind="centered"` paints the dots
+texture with its top fade; [`banner-art.vue`](../../packages/webkit/src/components/marketing/banner/banner-art/banner-art.vue)
+carries the mask and scrim recipe for the heavier backdrops.)
 
 **Hero copy anatomy** — left-aligned, always in this order
-([`PageHeader.vue`](../../apps/webkit-sample/src/shared/ui/layout/PageHeader.vue)):
+([`page-header.vue`](../../packages/webkit/src/components/layout/page-header/page-header.vue); on the Site the opening uses
+[`hero-title.vue`](../../packages/webkit/src/components/marketing/hero/hero-title/hero-title.vue)):
 
-| Part | Style |
-| --- | --- |
-| Eyebrow | `Overline` (uppercase, tracking baked in) — or an orange dot + `text-overline-sm` on the Site |
-| Headline | `text-heading-2xl`, `text-balance`, capped at `--container-4xl` |
-| Description | `text-body-lg`, `text-pretty`, capped at `--container-2xl` |
-| Actions | Primary `Button` + secondary, or a `ContrastBanner` copy-prompt pill |
+| Part        | Style                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------- |
+| Eyebrow     | `Overline` (uppercase, tracking baked in) — or an orange dot + `text-overline-sm` on the Site |
+| Headline    | `text-heading-2xl`, `text-balance`, capped at `--container-4xl`                               |
+| Description | `text-body-lg`, `text-pretty`, capped at `--container-2xl`                                    |
+| Actions     | Primary `Button` + secondary, or a `ContrastBanner` copy-prompt pill                          |
 
 The Site hero closes with a **capability strip** — a 2/3/5-column grid separated from the copy by
 `border-t border-[var(--border-muted)]`, bold lead-in plus one supporting line per cell.
-([`AzionHome.vue:251-260`](../../apps/webkit-sample/src/site/components/AzionHome.vue#L251-L260))
+(the client strip on the band floor: [`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue) `carousel`,
+`carousel-marks`, `carousel-label`; the stat cells are [`stats-band`](../../packages/webkit/src/components/sections/stats-band/stats-band.vue))
 
 ---
 
 ## 2. The container rule — `SectionContainer`
 
-[`SectionContainer.vue`](../../apps/webkit-sample/src/shared/ui/layout/SectionContainer.vue)
+[`section-container.vue`](../../packages/webkit/src/components/marketing/section-container/section-container.vue)
 
 The framed column. Centered, capped, and carrying **only** `border-x`.
 
 ```html
-<div class="mx-auto w-full max-w-[var(--container-7xl)] border-x border-[var(--border-default)]">
+<div
+  class="mx-auto w-full max-w-[var(--container-7xl)] border-x border-[var(--border-default)]"
+></div>
 ```
 
 - **`padded` defaults to `false`.** An edge-to-edge stack of modules each own their padding; adding
@@ -158,31 +170,33 @@ The framed column. Centered, capped, and carrying **only** `border-x`.
 
 ## 3. The module rule — `SectionModule`
 
-[`SectionModule.vue`](../../apps/webkit-sample/src/shared/ui/layout/SectionModule.vue)
+[`section-module.vue`](../../packages/webkit/src/components/marketing/section-module/section-module.vue)
 
 The "lego brick". A `<section>` with a header row divided from its body by a hairline, and divided
 from the module above by a hairline. Stacked in a `SectionContainer`, the modules read as bricks in
 one continuous frame.
 
 ```html
-<section class="w-full border-t border-[var(--border-default)]">   <!-- divided -->
+<section class="w-full border-t border-[var(--border-default)]">
+  <!-- divided -->
   <header class="border-b border-[var(--border-default)] p-[var(--spacing-xl)]">…</header>
-  <div class="p-[var(--spacing-xl)]">…</div>                        <!-- padded -->
+  <div class="p-[var(--spacing-xl)]">…</div>
+  <!-- padded -->
 </section>
 ```
 
-| Prop | When to change it |
-| --- | --- |
-| `divided` | `false` on the **first** module in a column — its top edge is the hero's `border-b`. |
-| `padded` | `false` when the body is an edge-to-edge `CardGrid`, so the grid's rules meet the frame with no gutter. |
-| `#header` | Replaces the default title row entirely. |
-| `#actions` | Trailing CTAs inside the default header row. |
+| Prop       | When to change it                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------- |
+| `divided`  | `false` on the **first** module in a column — its top edge is the hero's `border-b`.                    |
+| `padded`   | `false` when the body is an edge-to-edge `CardGrid`, so the grid's rules meet the frame with no gutter. |
+| `#header`  | Replaces the default title row entirely.                                                                |
+| `#actions` | Trailing CTAs inside the default header row.                                                            |
 
 ---
 
 ## 4. The hairline box grid — `CardGrid variant="divider"`
 
-[`CardGrid.vue`](../../apps/webkit-sample/src/shared/ui/layout/CardGrid.vue)
+[`card-grid.vue`](../../packages/webkit/src/components/marketing/card-grid/card-grid.vue)
 
 The signature industrial module: a grid whose internal rules are **gaps**, not borders.
 
@@ -206,19 +220,20 @@ background, separated by real gutters.
 **Cells are square.** `ComponentGridCell` uses `rounded-[var(--shape-flat)]` — the interactive
 component showcase grid is deliberately unrounded, with a dashed `--primary` ring and a corner label
 pinned at `top-0 left-0` on hover/focus-within.
-([`ComponentGridCell.vue:33-49`](../../apps/webkit-sample/src/hub/components/ComponentGridCell.vue#L33-L49))
+([`card-grid-cell.vue`](../../packages/webkit/src/components/marketing/card-grid/card-grid-cell/card-grid-cell.vue); the hub's
+component showcase grid moves to the docs site, M2.5.)
 
 ---
 
 ## 5. The registration frame — `FrameBox`
 
-[`FrameBox.vue`](../../apps/webkit-sample/src/shared/ui/layout/FrameBox.vue)
+[`frame-box.vue`](../../packages/webkit/src/components/layout/frame-box/frame-box.vue)
 
 The most literal piece of the industrial language: a thin bordered box with **crosshair registration
 marks** straddling each corner, plus an optional vertical hatch texture. Used for the final CTA
 block.
 
-- **Marks** (`marks`, default `true`) — an 11px crosshair per corner, centered *on* the corner with a
+- **Marks** (`marks`, default `true`) — an 11px crosshair per corner, centered _on_ the corner with a
   half-size translate so it straddles the border line. Two 1px spans in `--border-default`.
 - **Hatch** (`hatch`, default `false`) — vertical rules every `--spacing-lg`, drawn as a
   `repeating-linear-gradient` in `--border-muted` at `opacity-40`, faded at the edges with
@@ -226,9 +241,11 @@ block.
 
 ```html
 <div class="relative border border-[var(--border-muted)]">
-  <div class="pointer-events-none absolute inset-0 opacity-40
+  <div
+    class="pointer-events-none absolute inset-0 opacity-40
               [background-image:repeating-linear-gradient(to_right,var(--border-muted)_0,var(--border-muted)_1px,transparent_1px,transparent_var(--spacing-lg))]
-              mask-[radial-gradient(ellipse_at_center,black,transparent_85%)]" />
+              mask-[radial-gradient(ellipse_at_center,black,transparent_85%)]"
+  />
   <!-- 4× corner crosshairs, z-20 -->
   <div class="relative z-10"><slot /></div>
 </div>
@@ -242,22 +259,22 @@ The token layer everything above resolves to.
 
 ### Weights
 
-| Token | Value | Role |
-| --- | --- | --- |
+| Token                                     | Value   | Role                                                           |
+| ----------------------------------------- | ------- | -------------------------------------------------------------- |
 | `--border-width-default` (= `--border-1`) | `0.8px` | Component-level hairline (opt-in, see [drift](#known-issues)). |
-| `--border-2` | `2px` | Accent bar — painted as a **filled element**, never a border. |
+| `--border-2`                              | `2px`   | Accent bar — painted as a **filled element**, never a border.  |
 
 The page layer uses the bare `border` / `border-x` / `border-t` utilities throughout, which is
 Tailwind's **1px**.
 
 ### Colors
 
-| Token | Light | Dark | Role |
-| --- | --- | --- | --- |
-| `--border-default` | `#00000014` | `#FFFFFF1A` | The frame: hero rule, column rules, module dividers, grid gaps. |
-| `--border-muted` | `#00000014` | `#FFFFFF0D` | One step back: rules *inside* a module, capability strips, `FrameBox` perimeter + hatch. |
-| `--border-strong` | `#000000` | `#FFFFFF` | Pressed / active edge. |
-| `--border-selected` | `#F3652B` | `#F3652B` | Selection (Azion orange, both modes). |
+| Token               | Light       | Dark        | Role                                                                                     |
+| ------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- |
+| `--border-default`  | `#00000014` | `#FFFFFF1A` | The frame: hero rule, column rules, module dividers, grid gaps.                          |
+| `--border-muted`    | `#00000014` | `#FFFFFF0D` | One step back: rules _inside_ a module, capability strips, `FrameBox` perimeter + hatch. |
+| `--border-strong`   | `#000000`   | `#FFFFFF`   | Pressed / active edge.                                                                   |
+| `--border-selected` | `#F3652B`   | `#F3652B`   | Selection (Azion orange, both modes).                                                    |
 
 > **`default` and `muted` are identical in light mode** (`#00000014`); only dark mode separates them.
 > Pick by role and verify in dark — light mode cannot show you the mistake.
@@ -282,7 +299,7 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 - **`variant="divider"` children must fill their own background.**
 - **Heroes are full-bleed; columns are capped.** Never put `border-x` on a hero or `border-b` on a
   column.
-- **No shadow anywhere in this language.** Shadows mean *floating* — overlays, popovers, drawers.
+- **No shadow anywhere in this language.** Shadows mean _floating_ — overlays, popovers, drawers.
 - **No radius above `--shape-card` (8px); grid cells are `--shape-flat`.**
 - **Texture is masked, never raw.** Every ASCII field / hatch carries a radial mask and an opacity
   below 1, so it never competes with copy.
@@ -295,19 +312,20 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 
 Found while documenting; **not fixed** — each changes rendered output.
 
-1. **`FrameBox` is used but never imported** —
-   [`AzionHome.vue:550`](../../apps/webkit-sample/src/site/components/AzionHome.vue#L550) wraps the
-   final CTA in `<FrameBox hatch>`, but the script block imports only `Button`, `CardBox`,
+1. **`FrameBox` is used but never imported** (design sample only; fixed in WebKit, where
+   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/sections/closing-call-to-action/closing-call-to-action.vue#L146)
+   imports it) — the sample's `AzionHome.vue:550` wraps the
+   final CTA in `<FrameBox hatch>`, but the script block imports only `Button`, `Card`,
    `CardPricing`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and
    `main.js` registers nothing globally. The route is live (`/site/home` → `LandingAzion` →
-   `AzionHome`), so Vue logs *"Failed to resolve component: FrameBox"* and the CTA renders with **no
+   `AzionHome`), so Vue logs _"Failed to resolve component: FrameBox"_ and the CTA renders with **no
    frame, no crosshairs, no hatch**. One-line fix:
    `import FrameBox from './foundations/components/layout/FrameBox.vue'`.
 
 2. **`maxWidth` keys don't mean the same width in the two containers.** `Hero`'s map is
    shifted two steps down from `SectionContainer`'s — `max-width="7xl"` gives `--container-5xl`
    (1192px) in the banner but `--container-7xl` (1620px) in the column; `"6xl"` gives 1024px vs
-   1388px. `SectionContainer`'s docstring says *"match the banner above it"*, which reads as "pass
+   1388px. `SectionContainer`'s docstring says _"match the banner above it"_, which reads as "pass
    the same key" — and passing the same key does **not** align their content edges. (The banner also
    adds `px-[var(--spacing-xl)]`, so some inset is intended; the two-step shift is systematic across
    all five keys.)

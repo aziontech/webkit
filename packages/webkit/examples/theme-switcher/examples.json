@@ -1,0 +1,16 @@
+{
+  "component": "theme-switcher",
+  "title": "Components/Primitives/Inputs/ThemeSwitcher",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Controlled theme switcher; defaults to the system mode. Click a segment and the highlight slides to it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "The whole control is disabled and applies disabled tokens; no segment can be selected.",
+      "file": "disabled.vue"
+    }
+  ]
+}

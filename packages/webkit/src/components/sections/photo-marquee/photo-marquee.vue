@@ -98,14 +98,14 @@
         >
           <div
             :style="{ animationDuration: `${loopDuration}s` }"
-            class="flex w-max animate-brand-marquee group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
+            class="flex w-max animate-brand-marquee rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
           >
             <ul
               v-for="copy in 2"
               :key="copy"
               :data-duplicate="copy === 2 || null"
               :aria-hidden="copy === 2 ? 'true' : undefined"
-              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pr-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
             >
               <li
                 v-for="photo in photos"

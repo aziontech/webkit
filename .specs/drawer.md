@@ -4,16 +4,16 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 9ff68fe95159eb76ff5d31cd3c0915de99adc3ca9e09c919e592816c2866a18c
+checksum: 98f67ca63f3d0c87a76762427ab723685eb499fb920d09d7ac95e13f52a1eafc
 created: 2026-05-22
-last_updated: 2026-07-15
+last_updated: 2026-11-11
 ---
 
 # Drawer — Component Spec
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/drawer/`.
+Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/drawer/`.
 
 ## When to use
 
@@ -35,6 +35,68 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 - Pick the edge (side) intentionally and keep it consistent across the app.
 - Trap focus while open and provide an obvious close affordance.
 
+## Usage
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+  import Button from '@aziontech/webkit/button'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import DrawerDescription from '@aziontech/webkit/drawer-description'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+
+  const open = ref(false)
+</script>
+
+<template>
+  <Drawer
+    v-model:open="open"
+    side="right"
+    size="medium"
+  >
+    <DrawerTrigger>
+      <Button
+        label="Add origin"
+        kind="primary"
+      />
+    </DrawerTrigger>
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerContent>
+        <PanelHeader>
+          <DrawerTitle>Add origin</DrawerTitle>
+          <DrawerClose />
+        </PanelHeader>
+        <PanelContent>
+          <DrawerDescription>
+            Point the application at the server that holds the original content.
+          </DrawerDescription>
+        </PanelContent>
+        <PanelFooter>
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </PanelFooter>
+      </DrawerContent>
+    </DrawerPortal>
+  </Drawer>
+</template>
+```
+
 ## Sub-components
 
 - `drawer-close.vue` — Public sub-component `drawer-close`.
@@ -43,7 +105,7 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 - `drawer-overlay.vue` — Public sub-component `drawer-overlay`.
 - `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
-- `drawer-trigger.vue` — Public sub-component `drawer-trigger`.
+- `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 ## Props
 
@@ -71,10 +133,12 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- Phones: below `md` the drawer is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`top-0`, `h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content with full-width actions.
+- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a drawer rendered open on the server hydrates with the desktop panel and switches to the phone sheet in the same tick as mount, before paint.
 
 ## Motion & Animations
 
-_none_
+- From `md` up the panel slides in from its `side` edge (`translate-x`) and out to it. `side` names the physical edge of a left-to-right page and the panel anchors on the logical one (`start-0` / `end-0`), so under `dir="rtl"` the slide mirrors with it (`rtl:` variants): a `left` drawer sits on the right and leaves to the right.
 
 ## Tokens
 
@@ -96,13 +160,14 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
+- Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Sizes
@@ -121,9 +186,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

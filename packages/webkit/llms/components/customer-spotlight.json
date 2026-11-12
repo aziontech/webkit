@@ -1,0 +1,69 @@
+{
+ "name": "customer-spotlight",
+ "binding": "CustomerSpotlight",
+ "import": "@aziontech/webkit/customer-spotlight",
+ "treeShakeableImport": "@aziontech/webkit/customer-spotlight",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A row of client cards, each painted in the client's own colours with its reversed logo; the hovered or focused card opens to reveal its story line and a \"Read story\" cue, and the whole card links to the success story. Below the large breakpoint the cards stack and stay open. From the design sample's site `CustomerSpotlight`.",
+ "setup": null,
+ "useWhen": [
+  "Three or four flagship customer stories on a landing page."
+ ],
+ "avoidWhen": [
+  "For many clients — use `ClientMosaic` or `LogoWallQuote`.",
+  "For a quotation — use `ClientQuotes` or `LogoWallQuote` `kind=\"quote\"`."
+ ],
+ "related": [
+  "ClientMosaic`, `ClientQuotes`, `LogoWallQuote`.",
+  "FrameBox`."
+ ],
+ "bestPractices": [
+  "Three or four cards.",
+  "Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.",
+  "One sentence per story line."
+ ],
+ "props": [
+  {
+   "name": "cards",
+   "type": "CustomerSpotlightCard[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list; empty uses the built-in \"Customer stories\"."
+  },
+  {
+   "name": "storyLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'\n\n  const cards = [\n    {\n      name: 'Agibank',\n      logo: '/marketing-components/logos/agibank-extended-reversed.svg',\n      href: '/customers/agibank',\n      description: 'Agibank moved its digital bank to a platform that scales with every campaign.',\n      brand: { base: '#0e89ff', glow: '#0e89ff' }\n    },\n    {\n      name: 'Americanas',\n      logo: '/marketing-components/logos/americanas-extended-reversed.svg',\n      href: '/customers/americanas',\n      description: 'Americanas serves Black Friday traffic with no capacity planning.',\n      brand: { base: '#e60014', glow: '#ff4d5e' }\n    },\n    {\n      name: 'Arezzo',\n      logo: '/marketing-components/logos/arezzo-extended-reversed.svg',\n      href: '/customers/arezzo',\n      description: 'Arezzo cut image weight by half across its storefronts.',\n      brand: { base: '#2b2b2b', glow: '#6b6b6b' }\n    }\n  ]\n</script>\n\n<template>\n  <CustomerSpotlight :cards=\"cards\" />\n</template>"
+  }
+ ],
+ "docs": "components/customer-spotlight.md"
+}

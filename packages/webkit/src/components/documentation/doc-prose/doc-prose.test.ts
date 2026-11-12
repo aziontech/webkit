@@ -1,16 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-prose/DocProse.stories'
+import ChromeBoundary from '../../../../examples/doc-prose/chrome-boundary.vue'
+import Default from '../../../../examples/doc-prose/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocProse from './doc-prose.vue'
 
 // Browser mode loads no Tailwind, so the typographic ladder and the chrome exclusions
 // (all CSS) are verified by the visual gate; asserted here: the container renders its
 // slot as-is, adds no semantics of its own, and forwards attributes.
-
-const { Default, ChromeBoundary } = composeStories(stories)
 
 // The real Clipboard API rejects in headless Chromium ("Document is not focused"), so
 // writeText is stubbed; under test is which chips hand a string over. The rejecting
@@ -108,6 +106,32 @@ describe('DocProse', () => {
       await waitFor(() => expect(copyTip()?.textContent).toContain('to copy'))
     })
 
+    it('names the copy shortcut of the platform when the clipboard is refused', async () => {
+      const writeText = vi.fn().mockRejectedValue(new Error('denied'))
+      vi.stubGlobal('navigator', {
+        platform: 'Win32',
+        userAgent: 'Windows',
+        clipboard: { writeText }
+      })
+      const windows = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(windows.getByText('azion deploy'))
+      await waitFor(() => expect(copyTip()?.textContent).toContain('Press Ctrl+C to copy'))
+      windows.unmount()
+
+      vi.stubGlobal('navigator', {
+        platform: 'MacIntel',
+        userAgent: 'Macintosh',
+        clipboard: { writeText }
+      })
+      const mac = render(DocProse, {
+        slots: { default: '<p>Run <code>azion deploy</code> to publish.</p>' }
+      })
+      await fireEvent.click(mac.getByText('azion deploy'))
+      await waitFor(() => expect(copyTip()?.textContent).toContain('Press ⌘C to copy'))
+    })
+
     it('offers the copy on hover and withdraws it on leave', async () => {
       stubClipboard()
       const { getByText } = render(DocProse, {
@@ -157,12 +181,12 @@ describe('DocProse', () => {
 
   describe('accessibility', () => {
     it('has no violations over the full ladder', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations with a chrome subtree nested in prose', async () => {
-      const { container } = render(ChromeBoundary())
+      const { container } = render(ChromeBoundary)
       await expectNoA11yViolations(container)
     })
   })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { DialogInjectionKey, type DialogSize } from './injection-key'
@@ -41,6 +41,7 @@
   const attrs = useAttrs()
   const uid = useId()
   const triggerRef = ref<HTMLElement | null>(null)
+  const returnFocusRef = ref<HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-dialog')
 
@@ -64,16 +65,29 @@
     isOpen.set(false)
   }
 
+  watch(
+    () => isOpen.value,
+    (open) => {
+      if (open && typeof document !== 'undefined') {
+        returnFocusRef.value = document.activeElement as HTMLElement | null
+      }
+    },
+    { flush: 'sync' }
+  )
+
   provide(DialogInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    dismissible: props.dismissible,
+    get dismissible() {
+      return props.dismissible
+    },
     size: props.size,
     open: openDialog,
     close: closeDialog,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
-    triggerRef
+    triggerRef,
+    returnFocusRef
   })
 </script>
 

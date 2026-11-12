@@ -1,0 +1,21 @@
+{
+  "component": "pick-list",
+  "title": "Components/Primitives/Data/PickList",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Two lists with select-and-move and move-all controls. Double-clicking an item moves it to the opposite list (and fires `item-double-click`); toggle the `moveOnDoubleClick` control to cancel the auto-move.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state: selection and all move controls are inert.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "One side loading: the source shows a spinner and its moves are locked while the target stays interactive. Set the `loading` control to `true` for both sides, or `'target'` for the other side.",
+      "file": "loading.vue"
+    }
+  ]
+}

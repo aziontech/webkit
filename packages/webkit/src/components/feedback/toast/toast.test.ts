@@ -1,9 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent as keyboardUser } from 'vitest/browser'
 import { createApp, defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/toast/Toast.stories'
+import Default from '../../../../examples/toast/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'
@@ -11,8 +11,6 @@ import ToastClose from './toast-close/toast-close.vue'
 import ToastDescription from './toast-description/toast-description.vue'
 import ToastItem from './toast-item/toast-item.vue'
 import ToastTitle from './toast-title/toast-title.vue'
-
-const { Default } = composeStories(stories)
 
 // The store (`toastStore`) is a module-level singleton driven by the imperative
 // `toast()` — and only ONE mounted <Toaster> renders the stack (registerToaster).
@@ -86,9 +84,8 @@ describe('Toast (composition + imperative store)', () => {
       const region = await regionFor('bottom-right')
       const scope = within(region!)
 
-      // Default (non-error/warning) ToastItem announces as role="status".
       const item = scope.getByTestId('feedback-toast__item')
-      expect(item.getAttribute('role')).toBe('status')
+      expect(item.hasAttribute('role')).toBe(false)
       expect(item.getAttribute('data-type')).toBe('default')
       expect(scope.getByTestId('feedback-toast__title').textContent).toContain('Saved')
       expect(scope.getByTestId('feedback-toast__description').textContent).toContain(
@@ -113,35 +110,31 @@ describe('Toast (composition + imperative store)', () => {
     })
   })
 
-  describe('typed variants map to data-type + role (source: ToastItem)', () => {
-    // A floor smoke: the store carries the raised type through to data-type.
-    it.each([
-      ['success', 'status'],
-      ['info', 'status'],
-      ['warning', 'alert'],
-      ['error', 'alert']
-    ] as const)('toast.%s renders data-type=%s with the right role', async (type, role) => {
-      await mountToaster({ position: 'bottom-right', duration: 0 })
-      ;(toast as unknown as Record<string, (m: string, o?: object) => string>)[type](
-        `${type} message`
-      )
-      const region = await regionFor('bottom-right')
-      const scope = within(region!)
+  describe('typed variants map to data-type, announced by the region alone (source: ToastItem)', () => {
+    it.each(['success', 'info', 'warning', 'error'] as const)(
+      'toast.%s renders its data-type with no nested live role',
+      async (type) => {
+        await mountToaster({ position: 'bottom-right', duration: 0 })
+        ;(toast as unknown as Record<string, (m: string, o?: object) => string>)[type](
+          `${type} message`
+        )
+        const region = await regionFor('bottom-right')
+        const scope = within(region!)
 
-      const item = scope.getByTestId('feedback-toast__item')
-      expect(item.getAttribute('data-type')).toBe(type)
-      expect(item.getAttribute('role')).toBe(role)
-      expect(scope.getByText(`${type} message`)).toBeTruthy()
-    })
+        const item = scope.getByTestId('feedback-toast__item')
+        expect(item.getAttribute('data-type')).toBe(type)
+        expect(item.hasAttribute('role')).toBe(false)
+        expect(scope.getByText(`${type} message`)).toBeTruthy()
+      }
+    )
 
-    it('an error toast makes the region announce assertively (aria-live)', async () => {
+    it('an error toast keeps the region polite (one stable live region)', async () => {
       await mountToaster({ position: 'bottom-right', duration: 0 })
 
       toast.error('Something failed')
       const region = await regionFor('bottom-right')
 
-      // Template: aria-live = 'assertive' when any entry is type error, else 'polite'.
-      expect(region!.getAttribute('aria-live')).toBe('assertive')
+      expect(region!.getAttribute('aria-live')).toBe('polite')
       expect(region!.getAttribute('aria-atomic')).toBe('false')
     })
 
@@ -154,7 +147,7 @@ describe('Toast (composition + imperative store)', () => {
       expect(region!.getAttribute('aria-live')).toBe('polite')
     })
 
-    it('toast.loading persists (duration 0) and renders a status role', async () => {
+    it('toast.loading persists (duration 0)', async () => {
       // toast.loading forces duration: 0 (source: toastFn.loading).
       await mountToaster({ position: 'bottom-right' })
 
@@ -164,7 +157,6 @@ describe('Toast (composition + imperative store)', () => {
 
       const item = scope.getByTestId('feedback-toast__item')
       expect(item.getAttribute('data-type')).toBe('loading')
-      expect(item.getAttribute('role')).toBe('status')
       expect(scope.getByText('Working…')).toBeTruthy()
     })
   })
@@ -186,6 +178,27 @@ describe('Toast (composition + imperative store)', () => {
       expect(onClick).toHaveBeenCalledTimes(1)
       // Payload is the MouseEvent (ToastAction emits click[event]).
       expect(onClick.mock.calls[0][0]).toBeInstanceOf(MouseEvent)
+    })
+
+    it('renders up to two actions from `actions`, each firing its own onClick', async () => {
+      await mountToaster({ position: 'bottom-right', duration: 0 })
+      const onEdit = vi.fn()
+      const onRedeploy = vi.fn()
+
+      toast.error('Deploy failed', {
+        action: { label: 'Ignored', onClick: () => {} },
+        actions: [
+          { label: 'Edit', onClick: onEdit },
+          { label: 'Redeploy', onClick: onRedeploy },
+          { label: 'Third', onClick: () => {} }
+        ]
+      })
+      const region = await regionFor('bottom-right')
+      const buttons = within(region!).getAllByTestId('feedback-toast__action')
+      expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Edit', 'Redeploy'])
+      buttons[1].click()
+      expect(onRedeploy).toHaveBeenCalledTimes(1)
+      expect(onEdit).not.toHaveBeenCalled()
     })
   })
 
@@ -348,9 +361,9 @@ describe('Toast (composition + imperative store)', () => {
     })
   })
 
-  describe('story smoke (composeStories)', () => {
+  describe('documented examples smoke', () => {
     it('Default story mounts a Toaster and its trigger button', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await nextTick()
 
       // The Default story renders a "Show toast" Button trigger in the canvas.
@@ -382,5 +395,72 @@ describe('Toast (composition + imperative store)', () => {
       await nextTick()
       expect(document.body.querySelector('[data-webkit-toaster]')).toBeNull()
     })
+  })
+})
+
+describe('live region (spec)', () => {
+  it('the polite region is in the DOM before the first toast arrives', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    const region = await regionFor('bottom-right')
+    expect(region).not.toBeNull()
+    expect(region!.getAttribute('aria-live')).toBe('polite')
+    expect(region!.getAttribute('aria-atomic')).toBe('false')
+    expect(region!.textContent?.trim()).toBe('')
+  })
+
+  it('a toast is added to the existing region once, with no nested live region', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    const before = await regionFor('bottom-right')
+    toast.error('Deploy failed')
+    const region = await regionFor('bottom-right')
+    expect(region).toBe(before)
+    expect(within(region!).getAllByText('Deploy failed')).toHaveLength(1)
+    expect(
+      region!.querySelector('[aria-live], [role="status"], [role="alert"], [role="log"]')
+    ).toBeNull()
+  })
+
+  it('ToastItem outside a Toaster keeps its own status/alert role', () => {
+    const { getAllByTestId } = render({
+      components: { ToastItem },
+      template: `<div><ToastItem type="success">Saved</ToastItem><ToastItem type="error">Failed</ToastItem></div>`
+    })
+    const [success, error] = getAllByTestId('feedback-toast__item')
+    expect(success!.getAttribute('role')).toBe('status')
+    expect(error!.getAttribute('role')).toBe('alert')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  it('a toast never takes focus from the current control', async () => {
+    const view = render({
+      components: { Toaster },
+      template: `<div><button type="button" data-testid="work">Work</button><Toaster :duration="0" /></div>`
+    })
+    await nextTick()
+    await nextTick()
+    const work = view.getByTestId('work')
+    work.focus()
+    toast('Saved', { action: { label: 'Undo', onClick: () => {} } })
+    await regionFor('bottom-right')
+    expect(document.activeElement).toBe(work)
+  })
+
+  it('Tab reaches the toast action, and Enter activates it', async () => {
+    const onClick = vi.fn()
+    const view = render({
+      components: { Toaster },
+      template: `<div><button type="button" data-testid="work">Work</button><Toaster :duration="0" /></div>`
+    })
+    await nextTick()
+    await nextTick()
+    toast('Saved', { action: { label: 'Undo', onClick } })
+    const region = await regionFor('bottom-right')
+    view.getByTestId('work').focus()
+    await keyboardUser.keyboard('{Tab}')
+    const action = within(region!).getByText('Undo').closest('button')
+    expect(document.activeElement).toBe(action)
+    await keyboardUser.keyboard('{Enter}')
+    expect(onClick).toHaveBeenCalledTimes(1)
   })
 })

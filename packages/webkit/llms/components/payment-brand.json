@@ -1,0 +1,75 @@
+{
+ "name": "payment-brand",
+ "binding": "PaymentBrand",
+ "import": "@aziontech/webkit/payment-brand",
+ "treeShakeableImport": "@aziontech/webkit/payment-brand",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.",
+ "setup": null,
+ "useWhen": [
+  "A payment method row, a checkout summary or a billing table names the card on file: the plate sits before `Ending in 4242` or `Visa •••• 4242`.",
+  "A list of saved cards where the brand helps the reader tell them apart."
+ ],
+ "avoidWhen": [
+  "The Azion logo → use `Brand`.",
+  "A partner or integration logo (Git providers, clouds) → use the product's logo asset or an `Avatar`.",
+  "A status or category of the card (expired, default) → use `Tag` beside the plate."
+ ],
+ "related": [
+  "brand` — the same idea for the Azion lockup: an inline mark, sized by token.",
+  "tag` — put `Default` or `Expired` next to the plate, not inside it."
+ ],
+ "bestPractices": [
+  "Pass the brand as the payment API returns it; the plate normalizes `American Express`, `american_express`, `Diners Club` and casing.",
+  "When the row text already says the brand (`Visa •••• 4242`), set `decorative` so the name is not read twice; when the text says only `Ending in 4242`, leave the plate named.",
+  "Keep the plate at `medium` in rows and forms, `small` inside dense tables."
+ ],
+ "props": [
+  {
+   "name": "brand",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
+  },
+  {
+   "name": "decorative",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Hide the plate from assistive technology when the text next to it already names the brand."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PaymentBrand from '@aziontech/webkit/payment-brand'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-sm)\">\n    <PaymentBrand brand=\"visa\" />\n    <span class=\"text-label-md text-(--text-default)\">Ending in 4242</span>\n  </div>\n</template>"
+  },
+  {
+   "name": "Brands",
+   "sfc": "<script setup>\n  import PaymentBrand from '@aziontech/webkit/payment-brand'\n\n  const brands = [\n    'Visa',\n    'Mastercard',\n    'American Express',\n    'Diners Club',\n    'JCB',\n    'Discover',\n    'Elo',\n    'Hipercard',\n    'UnionPay',\n    'Maestro'\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"size in ['medium', 'small']\"\n      :key=\"size\"\n      class=\"flex flex-wrap items-center gap-(--spacing-sm)\"\n    >\n      <PaymentBrand\n        v-for=\"brand in brands\"\n        :key=\"brand\"\n        :brand=\"brand\"\n        :size=\"size\"\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/payment-brand.md"
+}

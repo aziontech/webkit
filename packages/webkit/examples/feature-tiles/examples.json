@@ -1,0 +1,36 @@
+{
+  "component": "feature-tiles",
+  "title": "Components/Marketing/Sections/FeatureTiles",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the home page places it: the `artwork` layout with the overline, headline and lead over two picture tiles in the four-column frame. Edit the props in the Controls panel — a band with no tiles renders nothing at all, and one with no title drops its header.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both layouts stacked: the `artwork` band with its header and picture tiles in the four-column frame with marks on every corner, then the `illustrated` band with no header, an `anchor`, and three illustration tiles in the three-column frame with marks on the bottom rule.",
+      "file": "types.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Artwork",
+      "summary": "The Why Azion band: an eyebrow, a title and a description over four tiles, each picture an image URL.",
+      "file": "site-artwork.vue",
+      "json": "site-artwork.json"
+    },
+    {
+      "name": "Illustrated",
+      "summary": "The Pricing band: three tiles with no heading, each picture a registered illustration scaled per tile.",
+      "file": "site-illustrated.vue",
+      "json": "site-illustrated.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Features/FeatureTiles",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Artwork", "ArtworkJson", "Illustrated", "IllustratedJson"]
+}

@@ -1,0 +1,91 @@
+{
+ "name": "column-navigation",
+ "binding": "ColumnNavigation",
+ "import": "@aziontech/webkit/column-navigation",
+ "treeShakeableImport": "@aziontech/webkit/column-navigation-root",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/column-navigation-column",
+  "@aziontech/webkit/column-navigation-item"
+ ],
+ "purpose": "A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is. It is the page-level navigation band a marketing page closes a section with, so a reader who got that far can leave for anything the platform holds without going back to the bar.",
+ "setup": null,
+ "useWhen": [
+  "As the \"everything on the platform\" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.",
+  "When a set of destinations is grouped and the group's name carries as much as the destinations under it.",
+  "When each destination needs a glyph and one line of what it is, not just a label.",
+  "When the same directory appears on several pages and has to read identically on every one."
+ ],
+ "avoidWhen": [
+  "For the header's mega-menu → use `navigation-menu`, which owns the trigger, the panel, and the open/closed state this block deliberately has none of.",
+  "For a set of claims rather than destinations → use `card-grid` with `topic`, or `bento-grid` when the claims are unequal.",
+  "For the site-wide link directory at the foot of the page → use `footer`, which already lays its columns out.",
+  "For a trail back up the current hierarchy → use `breadcrumb`.",
+  "For the headings of the page currently being read → use `doc-on-this-page`."
+ ],
+ "related": [
+  "card-grid` — the equal-cell grid whose `divider` register draws its rules the same way; reach for it when the cells are cards rather than columns of links.",
+  "bento-grid` — unequal cells on the same shared rules.",
+  "navigation-menu` — the same anatomy inside an overlay, with a trigger and a panel.",
+  "footer` — the other place a directory of links is laid out in columns.",
+  "section-module` / `frame-box` — the frame this block is normally dropped into."
+ ],
+ "bestPractices": [
+  "Name the block with `ariaLabel`. It is a `nav` landmark, and a page carrying more than one needs every one of them named.",
+  "Let the grid draw the rules: a column paints the page canvas and the 1px gaps between columns are the hairlines, so a border added inside a column doubles them.",
+  "Keep the column count and the number of groups in step — four groups in a three-column block wrap the fourth onto a row of its own, beside two tracks of bare canvas.",
+  "Give every row in a column a `description`, or give none of them one; a single row without its line reads as a mistake rather than as brevity.",
+  "Leave `href` empty for a destination that does not exist yet. The row still renders and still reads, and it does not answer the pointer or take focus.",
+  "Inside a framed page column, set the surrounding `frame-box` to `flush` so the column's rules stay one hairline each."
+ ],
+ "props": [
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the navigation landmark; a page carrying more than one needs each of them named."
+  },
+  {
+   "name": "columns",
+   "type": "ColumnNavigationColumns",
+   "default": "4",
+   "required": "false",
+   "doc": "How many columns the directory fans out to at the large breakpoint."
+  },
+  {
+   "name": "mobileColumns",
+   "type": "ColumnNavigationMobileColumns",
+   "default": "1",
+   "required": "false",
+   "doc": "How many columns the directory holds below the small breakpoint."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The columns, composed as `ColumnNavigation.Column` elements in reading order."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ColumnNavigation from '@aziontech/webkit/column-navigation'\n  import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'\n  import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'\n</script>\n\n<template>\n  <ColumnNavigation\n    aria-label=\"Platform\"\n    :columns=\"4\"\n  >\n    <ColumnNavigationColumn title=\"Compute\">\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-functions\"\n        title=\"Functions\"\n        description=\"Run serverless code closer to users\"\n        href=\"/functions\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-orchestrator\"\n        title=\"Rules Engine\"\n        description=\"Automate request handling with programmable rules\"\n        href=\"/rules-engine\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-load-balancer\"\n        title=\"Load Balancer\"\n        description=\"Distribute traffic for performance and availability\"\n        href=\"/load-balancer\"\n      />\n    </ColumnNavigationColumn>\n    <ColumnNavigationColumn title=\"Data\">\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-storage\"\n        title=\"Object Storage\"\n        description=\"Scalable, durable storage for unstructured data\"\n        href=\"/object-storage\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-sql\"\n        title=\"SQL Database\"\n        description=\"Relational database built for distributed applications\"\n        href=\"/sql-database\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-tiered-cache\"\n        title=\"Cache\"\n        description=\"Accelerate content delivery and reduce origin load\"\n        href=\"/cache\"\n      />\n    </ColumnNavigationColumn>\n    <ColumnNavigationColumn title=\"Security\">\n      <ColumnNavigationItem\n        icon=\"ai ai-waf-rules\"\n        title=\"WAF\"\n        description=\"Block application attacks at the edge\"\n        href=\"/waf\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-network-lists\"\n        title=\"Network Shield\"\n        description=\"Absorb volumetric and protocol attacks\"\n        href=\"/network-shield\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-dns\"\n        title=\"Edge DNS\"\n        description=\"Authoritative DNS answered from every location\"\n        href=\"/edge-dns\"\n      />\n    </ColumnNavigationColumn>\n    <ColumnNavigationColumn title=\"Observe\">\n      <ColumnNavigationItem\n        icon=\"ai ai-real-time-metrics\"\n        title=\"Real-Time Metrics\"\n        description=\"Watch traffic and errors as they happen\"\n        href=\"/real-time-metrics\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-data-stream\"\n        title=\"Data Stream\"\n        description=\"Ship events to the tools you already run\"\n        href=\"/data-stream\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-real-time-events\"\n        title=\"Real-Time Events\"\n        description=\"Query every request without sampling\"\n        href=\"/real-time-events\"\n      />\n    </ColumnNavigationColumn>\n  </ColumnNavigation>\n</template>"
+  },
+  {
+   "name": "Columns",
+   "sfc": "<script setup>\n  import ColumnNavigation from '@aziontech/webkit/column-navigation'\n  import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'\n  import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <ColumnNavigation\n      aria-label=\"Platform, two columns\"\n      :columns=\"2\"\n    >\n      <ColumnNavigationColumn title=\"Compute\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-functions\"\n          title=\"Functions\"\n          description=\"Run serverless code closer to users\"\n          href=\"/functions\"\n        />\n        <ColumnNavigationItem\n          icon=\"ai ai-load-balancer\"\n          title=\"Load Balancer\"\n          description=\"Distribute traffic for performance and availability\"\n          href=\"/load-balancer\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Data\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-sql\"\n          title=\"SQL Database\"\n          description=\"Relational database built for distributed applications\"\n          href=\"/sql-database\"\n        />\n        <ColumnNavigationItem\n          icon=\"ai ai-tiered-cache\"\n          title=\"Cache\"\n          description=\"Accelerate content delivery and reduce origin load\"\n          href=\"/cache\"\n        />\n      </ColumnNavigationColumn>\n    </ColumnNavigation>\n\n    <ColumnNavigation\n      aria-label=\"Platform, three columns\"\n      :columns=\"3\"\n    >\n      <ColumnNavigationColumn title=\"Compute\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-functions\"\n          title=\"Functions\"\n          description=\"Run serverless code closer to users\"\n          href=\"/functions\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Data\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-sql\"\n          title=\"SQL Database\"\n          description=\"Relational database built for distributed applications\"\n          href=\"/sql-database\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Security\">\n        <ColumnNavigationItem\n          icon=\"ai ai-waf-rules\"\n          title=\"WAF\"\n          description=\"Block application attacks at the edge\"\n          href=\"/waf\"\n        />\n      </ColumnNavigationColumn>\n    </ColumnNavigation>\n\n    <ColumnNavigation\n      aria-label=\"Platform, four columns\"\n      :columns=\"4\"\n    >\n      <ColumnNavigationColumn title=\"Compute\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-functions\"\n          title=\"Functions\"\n          description=\"Run serverless code closer to users\"\n          href=\"/functions\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Data\">\n        <ColumnNavigationItem\n          icon=\"ai ai-edge-sql\"\n          title=\"SQL Database\"\n          description=\"Relational database built for distributed applications\"\n          href=\"/sql-database\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Security\">\n        <ColumnNavigationItem\n          icon=\"ai ai-waf-rules\"\n          title=\"WAF\"\n          description=\"Block application attacks at the edge\"\n          href=\"/waf\"\n        />\n      </ColumnNavigationColumn>\n      <ColumnNavigationColumn title=\"Observe\">\n        <ColumnNavigationItem\n          icon=\"ai ai-real-time-metrics\"\n          title=\"Real-Time Metrics\"\n          description=\"Watch traffic and errors as they happen\"\n          href=\"/real-time-metrics\"\n        />\n      </ColumnNavigationColumn>\n    </ColumnNavigation>\n  </div>\n</template>"
+  },
+  {
+   "name": "Rows",
+   "sfc": "<script setup>\n  import ColumnNavigation from '@aziontech/webkit/column-navigation'\n  import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'\n  import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'\n</script>\n\n<template>\n  <ColumnNavigation\n    aria-label=\"Row states\"\n    :columns=\"2\"\n  >\n    <ColumnNavigationColumn title=\"Available now\">\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-functions\"\n        title=\"Functions\"\n        description=\"Run serverless code closer to users\"\n        href=\"/functions\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-sql\"\n        title=\"SQL Database\"\n        href=\"/sql-database\"\n      />\n    </ColumnNavigationColumn>\n    <ColumnNavigationColumn title=\"On the way\">\n      <ColumnNavigationItem\n        icon=\"ai ai-edge-ai\"\n        title=\"AI Inference\"\n        description=\"Run AI models closer to users\"\n      />\n      <ColumnNavigationItem\n        icon=\"ai ai-gateway\"\n        title=\"AI Gateway\"\n        description=\"Secure, manage, and optimize AI traffic\"\n      />\n    </ColumnNavigationColumn>\n  </ColumnNavigation>\n</template>"
+  }
+ ],
+ "docs": "components/column-navigation.md"
+}

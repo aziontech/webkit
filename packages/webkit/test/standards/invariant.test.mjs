@@ -25,7 +25,7 @@ const ruleIds = readdirSync(join(ROOT, '.claude/rules'))
   .map((f) => f.replace(/\.md$/, ''))
 
 // The consumer rule population that shipped skills reference in their enforced_by.
-const CONSUMER_RULES_DIR = 'packages/webkit/cli-templates/claude/rules'
+const CONSUMER_RULES_DIR = 'rules'
 const consumerRuleIds = readdirSync(join(ROOT, CONSUMER_RULES_DIR))
   .filter((f) => f.endsWith('.md') && f !== 'README.md')
   .map((f) => f.replace(/\.md$/, ''))
@@ -35,16 +35,16 @@ const dirNames = (rel) =>
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
 
-// Both skill populations: internal (.claude/skills) and consumer (cli-templates).
+// Both skill populations: internal (.claude/skills) and consumer (skills/ at the repo root).
 const SKILLS = [
   ...dirNames('.claude/skills').map((id) => ({
     id,
     path: join('.claude/skills', id, 'SKILL.md'),
     valid: new Set([...ruleIds, 'review'])
   })),
-  ...dirNames('packages/webkit/cli-templates/claude/skills').map((id) => ({
+  ...dirNames('skills').map((id) => ({
     id,
-    path: join('packages/webkit/cli-templates/claude/skills', id, 'SKILL.md'),
+    path: join('skills', id, 'SKILL.md'),
     valid: new Set([...consumerRuleIds, 'ui-verify', 'review'])
   }))
 ]
@@ -149,7 +149,7 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
   assert.match(rule, /\.\.\/authoring-checks\.js/, 'consumer lint rule does not import the engine')
 })
 
-test('the token, spec-compliance, and story-source engines are shared by hook AND ratchet', () => {
+test('the token and spec-compliance engines are shared by hook AND ratchet', () => {
   const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
 
   // token engine: package canonical, hook via shim, ratchet direct
@@ -165,12 +165,6 @@ test('the token, spec-compliance, and story-source engines are shared by hook AN
   const specHook = readFileSync(join(ROOT, '.claude/hooks/validate-spec-compliance.mjs'), 'utf-8')
   assert.match(specHook, /_lib\/spec-compliance-checks\.mjs/, 'spec hook does not use the engine')
   assert.match(ratchet, /spec-compliance-checks\.mjs/, 'ratchet does not import the spec engine')
-
-  // story-source engine: hook + ratchet share _lib
-  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/story-source-checks.mjs')))
-  const storyHook = readFileSync(join(ROOT, '.claude/hooks/validate-story-source.mjs'), 'utf-8')
-  assert.match(storyHook, /_lib\/story-source-checks\.mjs/, 'story hook does not use the engine')
-  assert.match(ratchet, /story-source-checks\.mjs/, 'ratchet does not import the story engine')
 })
 
 test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-checks engine', () => {
@@ -217,7 +211,7 @@ const CI_ENFORCERS = new Set([
   'size-limit',
   'type-check',
   'vuejs-accessibility',
-  'storybook-build',
+  'visual',
   'vitest',
   'check-tests',
   'check-authoring-docs'

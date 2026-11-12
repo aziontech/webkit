@@ -1,0 +1,60 @@
+{
+  "id": "platform/dashboard/analytics-dashboard",
+  "name": "AnalyticsDashboard",
+  "title": "Templates/Platform/Dashboard/AnalyticsDashboard",
+  "surface": "product",
+  "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "metrics",
+    "metric panel",
+    "kpi tiles",
+    "sparkline",
+    "real-time metrics",
+    "analytics dashboard",
+    "painel de métricas",
+    "indicadores",
+    "analytics",
+    "traffic analytics",
+    "requests over time",
+    "period comparison",
+    "painel analítico",
+    "análise de tráfego",
+    "real-time metrics per product",
+    "product metrics",
+    "metrics by product",
+    "period filter",
+    "métricas por produto",
+    "métricas en tiempo real"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "analytics-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    },
+    {
+      "name": "Metrics",
+      "summary": "Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair.",
+      "file": "variants/metrics.vue"
+    }
+  ]
+}

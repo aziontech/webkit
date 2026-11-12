@@ -1,0 +1,244 @@
+{
+ "name": "chart",
+ "binding": "Chart",
+ "import": "@aziontech/webkit/chart",
+ "treeShakeableImport": "@aziontech/webkit/chart-root",
+ "category": "chart",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/chart-area",
+  "@aziontech/webkit/chart-axis",
+  "@aziontech/webkit/chart-bar",
+  "@aziontech/webkit/chart-brush",
+  "@aziontech/webkit/chart-crosshair",
+  "@aziontech/webkit/chart-grid",
+  "@aziontech/webkit/chart-legend",
+  "@aziontech/webkit/chart-line",
+  "@aziontech/webkit/chart-scatter",
+  "@aziontech/webkit/chart-tooltip",
+  "@aziontech/webkit/chart-card"
+ ],
+ "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+ "setup": null,
+ "useWhen": [
+  "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
+  "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
+  "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
+  "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+  "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+  "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+  "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`."
+ ],
+ "avoidWhen": [
+  "A single headline number with a delta → use `stat-tile`.",
+  "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
+  "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
+  "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+  "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+  "Values by country or location → use `map-chart`."
+ ],
+ "related": [
+  "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+  "donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+  "stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+  "table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+ ],
+ "bestPractices": [
+  "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",
+  "Keep one value axis. Index two measures to a common base or split them into two charts.",
+  "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
+  "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+  "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
+  "Keep filters and the time range in one row above the dashboard, never inside a chart.",
+  "While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).",
+  "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
+ ],
+ "props": [
+  {
+   "name": "series",
+   "type": "ChartSeries[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other."
+  },
+  {
+   "name": "labels",
+   "type": "ChartLabel[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "One category label per index: a string, a number, or a Date."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Value axis direction. Horizontal lays categories down the side, for ordered bars."
+  },
+  {
+   "name": "labelScale",
+   "type": "'category' | 'linear'",
+   "default": "'category'",
+   "required": "false",
+   "doc": "How categories sit along their axis. `linear` places numeric or Date labels by value, for scatter plots and uneven time buckets."
+  },
+  {
+   "name": "min",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Floor of the value axis. Marks grow from one baseline."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Ceiling of the value axis. When absent, the nice ceiling of the visible data."
+  },
+  {
+   "name": "cap",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "Series kept before the rest fold into Other."
+  },
+  {
+   "name": "otherLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of the folded series. Empty uses the locale catalog (`Other`)."
+  },
+  {
+   "name": "formatValue",
+   "type": "(value: number) => string",
+   "default": "formatCompact",
+   "required": "false",
+   "doc": "Formats ticks, tooltip values and legend totals."
+  },
+  {
+   "name": "formatLabel",
+   "type": "(label: ChartLabel) => string",
+   "default": "formatLabel",
+   "required": "false",
+   "doc": "Formats category labels on the axis and in the tooltip."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "IANA time zone the default label format prints Date labels in. Empty prints UTC on the server and in the first client render, then the runtime's zone."
+  },
+  {
+   "name": "height",
+   "type": "number",
+   "default": "240",
+   "required": "false",
+   "doc": "Minimum plot height in pixels; the plot grows to fill a taller container."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders a Skeleton sized to the plot and suppresses interaction."
+  },
+  {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous render at reduced opacity while new data loads."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, the plot renders a danger Alert instead of marks."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the empty state shown when no series has a value. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why the range is empty, or what to do next."
+  },
+  {
+   "name": "tableView",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the data table in place of the marks. The table is always present for assistive tech."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+  }
+ ],
+ "events": [
+  {
+   "name": "point-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, point: ChartPoint)",
+   "notes": "Click on the plot, or Enter / Space on the focused chart, at the active index. `point` carries the index, the label and every visible series value."
+  },
+  {
+   "name": "legend-toggle",
+   "payload": "(event: MouseEvent, series: ChartSeries)",
+   "notes": "A legend entry toggled; `series` is the consumer's own series object."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default EmptyState."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default danger Alert."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Chart from '@aziontech/webkit/chart'\n\n  const labels = [\n    '13:05',\n    '13:10',\n    '13:15',\n    '13:20',\n    '13:25',\n    '13:30',\n    '13:35',\n    '13:40',\n    '13:45',\n    '13:50',\n    '13:55',\n    '14:00'\n  ]\n  const series = [\n    {\n      id: 'allowed',\n      name: 'WAF requests allowed',\n      color: 'success',\n      values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]\n    },\n    {\n      id: 'blocked',\n      name: 'WAF requests blocked',\n      color: 'danger',\n      values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]\n    },\n    {\n      id: 'threat',\n      name: 'WAF requests threat',\n      color: 'warning',\n      values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]\n    }\n  ]\n</script>\n\n<template>\n  <Chart\n    :series=\"series\"\n    :labels=\"labels\"\n    aria-label=\"Threats vs requests\"\n  >\n    <Chart.Grid />\n    <Chart.Axis kind=\"y\" />\n    <Chart.Axis kind=\"x\" />\n    <Chart.Area :ids=\"['allowed']\" />\n    <Chart.Line :ids=\"['blocked', 'threat']\" />\n    <Chart.Crosshair />\n    <Chart.Tooltip />\n    <Chart.Legend totals />\n  </Chart>\n</template>"
+  },
+  {
+   "name": "Forms",
+   "sfc": "<script setup>\n  import Chart from '@aziontech/webkit/chart'\n\n  const labels = [\n    '13:05',\n    '13:10',\n    '13:15',\n    '13:20',\n    '13:25',\n    '13:30',\n    '13:35',\n    '13:40',\n    '13:45',\n    '13:50',\n    '13:55',\n    '14:00'\n  ]\n  const series = [\n    {\n      id: 'allowed',\n      name: 'WAF requests allowed',\n      color: 'success',\n      values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]\n    },\n    {\n      id: 'blocked',\n      name: 'WAF requests blocked',\n      color: 'danger',\n      values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]\n    },\n    {\n      id: 'threat',\n      name: 'WAF requests threat',\n      color: 'warning',\n      values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-3\">\n    <Chart\n      :series=\"series\"\n      :labels=\"labels\"\n      aria-label=\"Threats as lines\"\n    >\n      <Chart.Grid />\n      <Chart.Axis kind=\"y\" />\n      <Chart.Axis\n        kind=\"x\"\n        :ticks=\"4\"\n      />\n      <Chart.Line />\n      <Chart.Crosshair />\n      <Chart.Tooltip />\n    </Chart>\n    <Chart\n      :series=\"series\"\n      :labels=\"labels\"\n      aria-label=\"Threats as areas\"\n    >\n      <Chart.Grid />\n      <Chart.Axis kind=\"y\" />\n      <Chart.Axis\n        kind=\"x\"\n        :ticks=\"4\"\n      />\n      <Chart.Area />\n      <Chart.Crosshair />\n      <Chart.Tooltip />\n    </Chart>\n    <Chart\n      :series=\"series\"\n      :labels=\"labels\"\n      aria-label=\"Threats as bars\"\n    >\n      <Chart.Grid />\n      <Chart.Axis kind=\"y\" />\n      <Chart.Axis\n        kind=\"x\"\n        :ticks=\"4\"\n      />\n      <Chart.Bar />\n      <Chart.Tooltip />\n    </Chart>\n  </div>\n</template>"
+  },
+  {
+   "name": "Stacked",
+   "sfc": "<script setup>\n  import Chart from '@aziontech/webkit/chart'\n\n  const labels = [\n    '13:05',\n    '13:10',\n    '13:15',\n    '13:20',\n    '13:25',\n    '13:30',\n    '13:35',\n    '13:40',\n    '13:45',\n    '13:50',\n    '13:55',\n    '14:00'\n  ]\n  const series = [\n    {\n      id: 'allowed',\n      name: 'WAF requests allowed',\n      color: 'success',\n      values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]\n    },\n    {\n      id: 'blocked',\n      name: 'WAF requests blocked',\n      color: 'danger',\n      values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]\n    },\n    {\n      id: 'threat',\n      name: 'WAF requests threat',\n      color: 'warning',\n      values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-2\">\n    <Chart\n      :series=\"series\"\n      :labels=\"labels\"\n      aria-label=\"Requests stacked as areas\"\n    >\n      <Chart.Grid />\n      <Chart.Axis kind=\"y\" />\n      <Chart.Axis kind=\"x\" />\n      <Chart.Area stacked />\n      <Chart.Crosshair />\n      <Chart.Tooltip />\n      <Chart.Legend />\n    </Chart>\n    <Chart\n      :series=\"series\"\n      :labels=\"labels\"\n      aria-label=\"Requests stacked as bars\"\n    >\n      <Chart.Grid />\n      <Chart.Axis kind=\"y\" />\n      <Chart.Axis kind=\"x\" />\n      <Chart.Bar stacked />\n      <Chart.Tooltip />\n      <Chart.Legend />\n    </Chart>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/chart.md"
+}

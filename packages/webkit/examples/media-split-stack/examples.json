@@ -1,0 +1,36 @@
+{
+  "component": "media-split-stack",
+  "title": "Components/Marketing/Sections/MediaSplitStack",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The run as the home page places it: five solution areas, every picture at the closing end, each band linking to its solution page. Edit the props in the Controls panel — switch `kind` to `alternating`, or set a `title` to open the run with a header.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both layouts stacked: the `media-end` run of solution areas with no header, then the `alternating` run of network claims under its centered header, the pictures swapping sides band by band.",
+      "file": "types.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Solutions",
+      "summary": "The five solution areas of Home: large, centered bands, every picture at the closing end, each with an outlined \"Learn more\" button.",
+      "file": "site-solutions.vue",
+      "json": "site-solutions.json"
+    },
+    {
+      "name": "Alternating",
+      "summary": "The Our Network run: a centered section title, then four bands alternating the picture between the opening and the closing end.",
+      "file": "site-alternating.vue",
+      "json": "site-alternating.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/MediaSplitStack",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Solutions", "SolutionsJson", "Alternating", "AlternatingJson"]
+}

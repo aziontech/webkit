@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 2d8e39974295440e86995b3ab82a9defae99d770b64470a8cce56e9c3b935db0
+last_updated: 2026-11-12
+checksum: 1c1353129624e15ee6c12dc4e13fe0b0f47ec4b3c7a03a15986de76a6b12d25e
 ---
+
 # ContactHub — Component Spec
 
 ## Purpose
@@ -30,7 +31,8 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ## Best practices
 
-- Keep two lanes so they split the frame evenly, and three channels for the three-column row.
+- Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
+- Don't pad `channels` to three or drop one to make the row fit.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 
@@ -38,7 +40,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ```vue
 <script setup>
-import ContactHub from '@aziontech/webkit/contact-hub'
+  import ContactHub from '@aziontech/webkit/contact-hub'
 </script>
 
 <template>
@@ -66,10 +68,10 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `lanes` | `ContactHubLane[]` | `[]` | false | The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. |
-| `channels` | `ContactHubChannel[]` | `[]` | false | The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. |
+| Prop       | Type                  | Default | Required | JSDoc                                                                                                                                                                                      |
+| ---------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `lanes`    | `ContactHubLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. |
+| `channels` | `ContactHubChannel[]` | `[]`    | false    | The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                      |
 
 ## Events
 
@@ -84,29 +86,30 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 - Visual states: `default`
 - Empty: the lanes frame renders only when `lanes` is set and the channels frame only when `channels` is set; with neither the band renders nothing but its root
 - A lane's action and status link render only when given
+- Lanes fill rows of up to two and channels rows of up to three, each balanced so every row is full
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger           | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| status link hover | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| lane heading | `.text-body-md`, `var(--text-muted)` |
-| lane description | `.text-heading-sm`, `var(--text-default)` |
-| lane glyph | `var(--primary)` |
-| status link | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
-| status dot | `var(--success-contrast)` |
-| frame rules and marks | `var(--border-default)` |
+| Region                | Token (DESIGN.md)                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| lane heading          | `.text-body-md`, `var(--text-muted)`                                                        |
+| lane description      | `.text-heading-sm`, `var(--text-default)`                                                   |
+| lane glyph            | `var(--primary)`                                                                            |
+| status link           | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
+| status dot            | `var(--success-contrast)`                                                                   |
+| frame rules and marks | `var(--border-default)`                                                                     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -115,9 +118,10 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 - ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs and the status dot are `aria-hidden`. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lane heading `var(--text-muted)`, description `var(--text-default)`.
 - `motion-reduce:transition-none` on the status link's colour transition.
-- Touch target ≥40×40 px — the status link is `h-10`, buttons are large, channels are whole-cell links.
+- Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.
+- Reflow: the status link has `min-h-10` and wraps its label inside `max-w-full`, so it never overflows a narrow column or a 200% zoom.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -134,10 +138,8 @@ import ContactHub from '@aziontech/webkit/contact-hub'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

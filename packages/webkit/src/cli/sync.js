@@ -2,14 +2,16 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, sep } from 'node:path'
 
 import {
+  AI_TEMPLATES,
   classify,
-  CLAUDE_TEMPLATES,
   FRAGMENT_END,
   FRAGMENT_START,
+  fragmentFile,
   LEGACY_MARKER,
   listBundle,
   spliceFragment,
   stamp,
+  templateFile,
   WEBKIT_VERSION
 } from './bundle.js'
 
@@ -82,7 +84,7 @@ function classifyFragment(claudeMdContent, fragmentBody) {
 
 export function planSync(
   projectDir,
-  { force = false, templatesDir = CLAUDE_TEMPLATES, version = WEBKIT_VERSION } = {}
+  { force = false, templatesDir = AI_TEMPLATES, version = WEBKIT_VERSION } = {}
 ) {
   const claudeDir = join(projectDir, '.claude')
   const bundleRels = listBundle(templatesDir)
@@ -92,7 +94,7 @@ export function planSync(
   const actions = []
 
   for (const rel of bundleRels) {
-    const templatePath = join(templatesDir, rel)
+    const templatePath = templateFile(templatesDir, rel)
     const templateContent = readOrNull(templatePath) ?? ''
     const consumerPath = join(claudeDir, rel)
     const consumerContent = readOrNull(consumerPath)
@@ -151,31 +153,31 @@ export function planSync(
     actions.push(action)
   }
 
-  const claudeMdPath = join(projectDir, 'CLAUDE.md')
-  const claudeMdContent = readOrNull(claudeMdPath)
-  const fragmentBody = readOrNull(join(templatesDir, 'CLAUDE.fragment.md')) || ''
-  const fragmentState = classifyFragment(claudeMdContent, fragmentBody)
-  let fragmentAction = null
-  if (fragmentState !== 'current') {
-    fragmentAction = {
-      type: 'fence',
-      path: 'CLAUDE.md',
-      start: FRAGMENT_START,
-      end: FRAGMENT_END,
-      content: fragmentBody
-    }
-    actions.push(fragmentAction)
+  const fragmentBody = readOrNull(fragmentFile(templatesDir)) || ''
+  const fenceFor = (path) => {
+    const content = readOrNull(join(projectDir, path))
+    const state = classifyFragment(content, fragmentBody)
+    const action =
+      state === 'current'
+        ? null
+        : { type: 'fence', path, start: FRAGMENT_START, end: FRAGMENT_END, content: fragmentBody }
+    if (action) actions.push(action)
+    return { state, action }
   }
+  const agentsFragment = fenceFor('AGENTS.md')
+  const claudeFragment = fenceFor('CLAUDE.md')
+  const fragmentState = claudeFragment.state
 
+  const isDrift = (state) => state === 'legacy' || state === 'stale' || state === 'missing'
   const drift =
     entries.some((e) => e.state === 'missing' || e.state === 'stale' || e.state === 'orphan') ||
-    fragmentState === 'legacy' ||
-    fragmentState === 'stale' ||
-    fragmentState === 'missing'
+    isDrift(fragmentState) ||
+    isDrift(agentsFragment.state)
 
   return {
     entries,
-    fragment: { state: fragmentState, action: fragmentAction },
+    fragment: claudeFragment,
+    agentsFragment,
     actions,
     drift
   }

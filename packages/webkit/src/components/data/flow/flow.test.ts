@@ -1,12 +1,15 @@
-import { composeStories } from '@storybook/vue3'
+import '../../../test/reflow.css'
+
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/flow/Flow.stories'
+import AnchoredNode from '../../../../examples/flow/anchored-node.vue'
+import Branches from '../../../../examples/flow/branches.vue'
+import Default from '../../../../examples/flow/default.vue'
+import Disabled from '../../../../examples/flow/disabled.vue'
+import Parallel from '../../../../examples/flow/parallel.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Flow, { FlowAnchor, FlowNode, FlowParallel } from './index'
-
-const { Default, Parallel, Branches, AnchoredNode, Disabled } = composeStories(stories)
 
 // Vue's runtime string-template compiler cannot resolve member-expression tags
 // like Flow.Node, so trees register the same component objects under flat
@@ -211,7 +214,7 @@ describe('Flow (composition compound)', () => {
   })
 
   describe('Flow.Parallel — flow-parallel.vue align prop', () => {
-    it('renders role=group with data-flow-kind=parallel and default align=start', () => {
+    it('renders a list item with data-flow-kind=parallel holding its branches in a nested list, default align=start', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowParallel>
@@ -221,9 +224,13 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       const group = getByTestId('data-flow__parallel')
-      expect(group.getAttribute('role')).toBe('group')
+      expect(group.getAttribute('role')).toBe('listitem')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
       expect(group.getAttribute('data-align')).toBe('start')
+      const branches = getByTestId('data-flow__parallel-branches')
+      expect(branches.parentElement).toBe(group)
+      expect(branches.getAttribute('role')).toBe('list')
+      expect(branches.querySelectorAll(':scope > [role="listitem"]').length).toBe(2)
     })
 
     it('reflects align=end onto data-align', () => {
@@ -327,9 +334,19 @@ describe('Flow (composition compound)', () => {
           path.getAttribute('d')
         )
 
+      // Same path commands and coordinates within 0.1px: under a scale, engines
+      // round the scaled layout to device pixels (Firefox lands 0.02px off).
+      const numbersOf = (testid: string) =>
+        pathsOf(testid).flatMap((d) => (d ?? '').match(/-?\d+(\.\d+)?/g)?.map(Number) ?? [])
+      const commandsOf = (testid: string) => pathsOf(testid).map((d) => d?.replace(/[-\d.]+/g, '#'))
+
       await waitFor(() => {
         expect(pathsOf('flow-plain').length).toBeGreaterThan(0)
-        expect(pathsOf('flow-scaled')).toEqual(pathsOf('flow-plain'))
+        expect(commandsOf('flow-scaled')).toEqual(commandsOf('flow-plain'))
+        const plain = numbersOf('flow-plain')
+        const scaled = numbersOf('flow-scaled')
+        expect(scaled).toHaveLength(plain.length)
+        scaled.forEach((value, index) => expect(Math.abs(value - plain[index]!)).toBeLessThan(0.1))
       })
     })
 
@@ -346,33 +363,33 @@ describe('Flow (composition compound)', () => {
 
   describe('stories compose and render (grounded end-to-end usage)', () => {
     it('renders the Default sequential flow', () => {
-      const { getByText, getAllByTestId } = render(Default())
+      const { getByText, getAllByTestId } = render(Default)
       expect(getByText('Source')).toBeTruthy()
       expect(getByText('Deliver')).toBeTruthy()
       expect(getAllByTestId('data-flow__node').length).toBe(3)
     })
 
     it('renders the Parallel story with a parallel group between nodes', () => {
-      const { getByTestId, getByText } = render(Parallel())
-      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('group')
+      const { getByTestId, getByText } = render(Parallel)
+      expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('listitem')
       expect(getByText('Branch A')).toBeTruthy()
       expect(getByText('Branch C')).toBeTruthy()
     })
 
     it('renders the Branches story with leading and trailing parallel groups', () => {
-      const { getAllByTestId } = render(Branches())
+      const { getAllByTestId } = render(Branches)
       expect(getAllByTestId('data-flow__parallel').length).toBe(2)
     })
 
     it('renders the AnchoredNode story exposing start/end anchors inside an unstyled node', () => {
-      const { getAllByTestId } = render(AnchoredNode())
+      const { getAllByTestId } = render(AnchoredNode)
       const anchors = getAllByTestId('data-flow__anchor')
       const types = anchors.map((a) => a.getAttribute('data-flow-anchor')).sort()
       expect(types).toEqual(['end', 'start'])
     })
 
     it('renders the Disabled story with the middle node marked disabled', () => {
-      const { getAllByTestId } = render(Disabled())
+      const { getAllByTestId } = render(Disabled)
       const disabled = getAllByTestId('data-flow__node').filter(
         (n) => n.getAttribute('data-flow-disabled') === 'true'
       )
@@ -391,6 +408,50 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       await expectNoA11yViolations(getByTestId('data-flow'))
+    })
+
+    it('has no violations for a flow with parallel branches', async () => {
+      // A parallel step is a list item that owns its branches as a nested list.
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode>Source</FlowNode>
+          <FlowParallel>
+            <FlowNode>Branch A</FlowNode>
+            <FlowNode>Branch B</FlowNode>
+          </FlowParallel>
+          <FlowNode>Deliver</FlowNode>
+        </Flow>
+      `)
+      await expectNoA11yViolations(getByTestId('data-flow'))
+    })
+  })
+
+  describe('right-to-left', () => {
+    it('draws connectors from the inline-end edge of a node to the inline-start edge of the next', async () => {
+      const { getByTestId } = renderTree(`
+        <div dir="rtl">
+          <Flow>
+            <FlowNode>Source</FlowNode>
+            <FlowNode>Sink</FlowNode>
+          </Flow>
+        </div>
+      `)
+      const root = getByTestId('data-flow')
+      const nodes = root.querySelectorAll<HTMLElement>('[data-flow-kind="node"]')
+      await waitFor(() => {
+        expect(root.querySelectorAll('svg path').length).toBe(1)
+      })
+      const d = root.querySelector('svg path')?.getAttribute('d') ?? ''
+      const [fromX, toX] = [...d.matchAll(/[ML](-?[\d.]+),/g)].map((m) => Number(m[1]))
+      const base = root.querySelector('svg')!.getBoundingClientRect().left
+      const source = nodes[0]!.getBoundingClientRect()
+      const sink = nodes[1]!.getBoundingClientRect()
+      expect(source.left).toBeGreaterThan(sink.left)
+      expect(Math.abs(fromX! - (source.left - base))).toBeLessThan(2)
+      expect(Math.abs(toX! - (sink.right - base))).toBeLessThan(2)
+
+      const port = nodes[0]!.querySelector<HTMLElement>('[data-flow-port="start"]')!
+      expect(port.getBoundingClientRect().right).toBeLessThanOrEqual(source.left + 1)
     })
   })
 })

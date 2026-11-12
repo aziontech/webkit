@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/icon-button/IconButton.stories'
+import Default from '../../../../examples/icon-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import IconButton from './icon-button.vue'
-
-const { Default } = composeStories(stories)
 
 const KINDS = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
 const SIZES = ['small', 'medium', 'large'] as const
@@ -196,5 +193,14 @@ describe('IconButton', () => {
   it('renders the composed Default story', () => {
     const { getByTestId } = render(Default)
     expect(getByTestId('actions-icon-button')).toBeInTheDocument()
+  })
+})
+
+describe('IconButton touch target', () => {
+  it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
+    const view = render(IconButton, { props: { icon: 'pi pi-times', ariaLabel: 'Close' } })
+    const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
+
+    expect(target?.className).toContain('pointer-coarse:block')
   })
 })

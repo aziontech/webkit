@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+import { missingComponentDocs } from './lib/component-docs.mjs'
+import { readBlocks, readExamples } from './lib/blocks.mjs'
+import { summary as llmsSummary, writeLlms } from './build-llms.mjs'
+import { buildAliases, retiredNames } from './lib/naming.mjs'
+import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -13,9 +18,15 @@ import {
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
+const PKG_ROOT = resolve(SCRIPT_DIR, '..')
 const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
+const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
+const PATTERN_HEAVY_KEYS = ['sfc', 'variants', 'guidelines']
+const COMPONENT_PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']
+const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
+const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
@@ -123,6 +134,7 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/svg/')) return 'svg'
   if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
+  if (target.startsWith('./src/locales/')) return 'locale'
   if (target.startsWith('./src/vite/')) return 'other'
   if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
@@ -215,7 +227,7 @@ function _readSpec(subpath) {
   }
 }
 
-function build() {
+export async function build() {
   const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf-8'))
   const exportsMap = pkg.exports || {}
   const subpaths = Object.keys(exportsMap)
@@ -282,7 +294,9 @@ function build() {
               ? 'util'
               : seg === 'styles'
                 ? 'style'
-                : 'component'
+                : seg === 'locales'
+                  ? 'locale'
+                  : 'component'
       entry.treeShakeableImport = importPath
     } else {
       entry.kind = kindFromTarget(target)
@@ -316,7 +330,6 @@ function build() {
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
       entry.structure = spec.structure
-      entry.status = spec.status
       if (spec.props.length) entry.props = spec.props
       if (spec.events.length) entry.events = spec.events
       if (spec.slots.length) entry.slots = spec.slots
@@ -333,7 +346,16 @@ function build() {
       entry.category = categoryFromTarget(target)
     }
 
+    const surface = surfaceFromTarget(target)
+    if (surface) entry.surface = surface
     imports[subpath] = entry
+  }
+
+  const patterns = readBlocks(PKG_ROOT)
+  const patternAliases = readPatternAliases(patterns)
+  const examples = readExamples(PKG_ROOT, subpathSet)
+  for (const [subpath, list] of Object.entries(examples)) {
+    if (imports[subpath]) imports[subpath].examples = list
   }
 
   return {
@@ -343,8 +365,27 @@ function build() {
     tokenRules: TOKEN_RULES,
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
-    imports
+    surfaces: SURFACES,
+    aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
+    imports,
+    patterns,
+    patternAliases
   }
+}
+
+function readPatternAliases(patterns) {
+  const aliases = existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
+  const broken = []
+  for (const [from, to] of Object.entries(aliases)) {
+    const [id, variant] = to.split('#')
+    const p = patterns[id]
+    if (patterns[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
+    else if (!p) broken.push(`${from} -> ${to}: no block "${id}"`)
+    else if (variant && variant !== p.primary && !p.variants.some((v) => v.name === variant))
+      broken.push(`${from} -> ${to}: block "${id}" has no variant "${variant}"`)
+  }
+  if (broken.length) throw new Error(`src/cli/migrations/v6-blocks.json:\n  ${broken.join('\n  ')}`)
+  return Object.fromEntries(Object.entries(aliases).sort(([a], [b]) => a.localeCompare(b)))
 }
 
 function buildTokens() {
@@ -394,9 +435,103 @@ function buildTokens() {
   return { cssVars, typography, groups, animations, animationGuide }
 }
 
-const catalog = build()
-writeFileSync(OUT_PATH, JSON.stringify(catalog, null, 2) + '\n', 'utf-8')
-const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
-process.stdout.write(
-  `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components) @ ${catalog.webkitVersion}\n`
-)
+export function splitCatalog(full) {
+  const files = {}
+  const patterns = {}
+  for (const [id, p] of Object.entries(full.patterns)) {
+    const file = `catalog/patterns/${id}.json`
+    const part = {}
+    const meta = {}
+    for (const [k, v] of Object.entries(p)) {
+      if (PATTERN_HEAVY_KEYS.includes(k)) part[k] = v
+      else meta[k] = v
+    }
+    meta.variants = (p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
+    meta.file = file
+    patterns[id] = meta
+    files[file] = part
+  }
+  const imports = {}
+  for (const [subpath, e] of Object.entries(full.imports)) {
+    const meta = {}
+    const prose = {}
+    for (const [k, v] of Object.entries(e)) {
+      if (k === 'examples') continue
+      if (COMPONENT_PROSE_KEYS.includes(k)) prose[k] = v
+      else meta[k] = v
+    }
+    if (e.examples) {
+      const file = `catalog/examples/${subpath}.json`
+      meta.examplesFile = file
+      files[file] = { examples: e.examples }
+    }
+    if (Object.keys(prose).length) {
+      const file = `catalog/components/${subpath}.json`
+      meta.docsFile = file
+      files[file] = prose
+    }
+    imports[subpath] = meta
+  }
+  return { catalog: { ...full, imports, patterns }, files }
+}
+
+const serialize = (value) => JSON.stringify(value, null, 1) + '\n'
+
+function listParts(dir, out = []) {
+  if (!existsSync(dir)) return out
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) listParts(p, out)
+    else out.push(relative(PKG_ROOT, p).split('\\').join('/'))
+  }
+  return out
+}
+
+function checkParts(catalog, files) {
+  const drift = []
+  const expected = { 'catalog.json': serialize(catalog) }
+  for (const [file, part] of Object.entries(files)) expected[file] = serialize(part)
+  for (const [file, text] of Object.entries(expected)) {
+    const abs = resolve(PKG_ROOT, file)
+    if (!existsSync(abs)) drift.push(`missing ${file}`)
+    else if (readFileSync(abs, 'utf-8') !== text) drift.push(`stale ${file}`)
+  }
+  for (const file of listParts(PARTS_DIR)) if (!(file in expected)) drift.push(`extra ${file}`)
+  return drift
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  const full = await build()
+  const missingDocs = missingComponentDocs(full.imports)
+  if (missingDocs.length) {
+    process.stderr.write(
+      `✖ ${missingDocs.length} exported component(s) without agent docs in .specs/<name>.md:\n  ${missingDocs.join('\n  ')}\n` +
+        'Every exported component needs ## Purpose, ## When to use and ## When NOT to use in its spec.\n'
+    )
+    process.exit(1)
+  }
+  const { catalog, files } = splitCatalog(full)
+  if (process.argv.includes('--check')) {
+    const drift = checkParts(catalog, files)
+    if (drift.length) {
+      process.stderr.write(
+        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit catalog:build\n`
+      )
+      process.exit(1)
+    }
+    process.stdout.write(`✓ catalog.json and ${Object.keys(files).length} catalog/ files in sync\n`)
+    process.exit(0)
+  }
+  rmSync(PARTS_DIR, { recursive: true, force: true })
+  for (const [file, part] of Object.entries(files)) {
+    const abs = resolve(PKG_ROOT, file)
+    mkdirSync(dirname(abs), { recursive: true })
+    writeFileSync(abs, serialize(part), 'utf-8')
+  }
+  writeFileSync(OUT_PATH, serialize(catalog), 'utf-8')
+  const llms = writeLlms()
+  const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
+  process.stdout.write(
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
+  )
+}

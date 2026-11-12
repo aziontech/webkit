@@ -1,0 +1,35 @@
+{
+ "purpose": "The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it. It is the top layer of the page language and the owner of the page's first rule — the bottom hairline every column below it hangs from. `Hero.Title` is the copy block it centers.",
+ "useWhen": [
+  "As the opening band of a marketing, hub or documentation page.",
+  "Whenever a band must span the window while its copy stays on the page's measure.",
+  "For any band that carries a decorative backdrop behind its content.",
+  "With `kind=\"screen\"` when the opening should measure exactly one viewport."
+ ],
+ "avoidWhen": [
+  "For the framed column of bands below the opening → use `section-container`.",
+  "For one band inside that column → use `section-module`.",
+  "For a section header further down the page → use `section-title`, which renders an `h2`.",
+  "For a mid-page announcement → use `banner`; for the closing ask → use `call-to-action`.",
+  "For a copy-and-media pairing that is not the page opening → use `media-split`."
+ ],
+ "related": [
+  "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
+  "section-module` — the brick stacked inside that column.",
+  "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
+  "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
+  "banner` — the mid-page announcement band."
+ ],
+ "bestPractices": [
+  "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
+  "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
+  "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
+  "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
+  "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
+  "Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.",
+  "Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.",
+  "Set `mediaAlign=\"end\"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.",
+  "Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.",
+  "Leave the `media` slot out entirely rather than filling it with decoration — a band with one column and a strong statement beats one with a stock image."
+ ]
+}

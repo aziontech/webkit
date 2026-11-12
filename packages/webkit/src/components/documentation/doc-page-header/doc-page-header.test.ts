@@ -1,8 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-page-header/DocPageHeader.stories'
+import Actions from '../../../../examples/doc-page-header/actions.vue'
+import Default from '../../../../examples/doc-page-header/default.vue'
+import Regions from '../../../../examples/doc-page-header/regions.vue'
+import Slots from '../../../../examples/doc-page-header/slots.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPageHeader from './doc-page-header.vue'
 
@@ -11,8 +13,6 @@ import DocPageHeader from './doc-page-header.vue'
 // the visual gate owns those. What is real without CSS: which regions render, the heading
 // level, the date formatting (pure JS), the time element's machine-readable value, which
 // element each meta entry becomes (anchor vs button), and the event payload.
-
-const { Default, Actions, Regions, Slots } = composeStories(stories)
 
 const CRUMBS = [{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]
 
@@ -175,7 +175,7 @@ describe('DocPageHeader', () => {
         props: { title: 'T', lastUpdated: '2026-06-30', metaActions: META_ACTIONS }
       })
       const separators = getByTestId('documentation-doc-page-header').querySelectorAll(
-        '[data-testid="layout-divider"]'
+        '[data-testid="layout-separator"]'
       )
       expect(separators.length).toBeGreaterThan(0)
       // Three announced separators on the way to three controls is noise, not structure.
@@ -240,16 +240,16 @@ describe('DocPageHeader', () => {
       await expectNoA11yViolations(container)
     })
 
-    // The masthead's own control used to be a SplitButton, whose Dropdown.Trigger nests a
+    // The masthead's own control used to be a SplitButton, whose DropdownMenu.Trigger nests a
     // real IconButton inside a span[role=button] — axe's nested-interactive, which forced
     // these three to be skipped. The meta line is plain buttons and anchors, so they run.
     it('has no violations on the default story', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across the belt', async () => {
-      const { container } = render(Actions())
+      const { container } = render(Actions)
       await expectNoA11yViolations(container)
     })
 
@@ -259,12 +259,12 @@ describe('DocPageHeader', () => {
     // a page has one masthead, and each variant it shows is covered by the prop-driven
     // renders above. Asserting here would be asserting the gallery.
     it('renders every region variant', () => {
-      const { container } = render(Regions())
+      const { container } = render(Regions)
       expect(container.querySelectorAll('header')).toHaveLength(4)
     })
 
     it('has no violations with the title and details slots filled', async () => {
-      const { container } = render(Slots())
+      const { container } = render(Slots)
       await expectNoA11yViolations(container)
     })
   })

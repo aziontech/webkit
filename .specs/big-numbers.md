@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: b06798c158c116494644e5df488eb7b731b450a6d9540047c70321d5c866a814
+checksum: c7cab719fead9edc69a1f7e812e5d0f407e45b43823ea10f01b09d96f63d3505
 created: 2026-09-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # Big Numbers — Component Spec
@@ -49,7 +49,7 @@ A band of headline figures — throughput, uptime, points of presence — set in
 
 ```vue
 <script setup>
-import BigNumbers from '@aziontech/webkit/big-numbers'
+  import BigNumbers from '@aziontech/webkit/big-numbers'
 </script>
 
 <template>
@@ -66,10 +66,10 @@ import BigNumbers from '@aziontech/webkit/big-numbers'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `BigNumberItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; picks the big-number scale the figures are set at. |
+| Prop    | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                      |
+| ------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items` | `BigNumberItem[]`                | `[]`       | false    | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `size`  | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; picks the big-number scale the figures are set at.                                                                                                                                             |
 
 ## Events
 
@@ -91,37 +91,38 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (figure, small) | `.text-big-number-sm` |
-| typography (figure, medium) | `.text-big-number-md` |
-| typography (figure, large) | `.text-big-number-lg` |
-| typography (caption) | `.text-overline-sm` |
-| figure text | `var(--text-default)` |
-| prefix accent | `var(--primary)` |
-| suffix text | `var(--text-muted)` |
-| caption text | `var(--text-muted)` |
-| cell rules and marks | `var(--border-default)` |
-| spacing (cell padding) | `var(--spacing-xl)` |
-| spacing (figure to caption) | `var(--spacing-sm)` |
-| spacing (figure parts) | `var(--spacing-xxs)` |
+| Region                      | Token (DESIGN.md)       |
+| --------------------------- | ----------------------- |
+| typography (figure, small)  | `.text-big-number-sm`   |
+| typography (figure, medium) | `.text-big-number-md`   |
+| typography (figure, large)  | `.text-big-number-lg`   |
+| typography (caption)        | `.text-overline-sm`     |
+| figure text                 | `var(--text-default)`   |
+| prefix accent               | `var(--text-primary)`   |
+| suffix text                 | `var(--text-muted)`     |
+| caption text                | `var(--text-muted)`     |
+| cell rules and marks        | `var(--border-default)` |
+| spacing (cell padding)      | `var(--spacing-xl)`     |
+| spacing (figure to caption) | `var(--spacing-sm)`     |
+| spacing (figure parts)      | `var(--spacing-xxs)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: not applicable — the band is static copy and holds no interactive control.
 - Keyboard map: none of its own; the band contains no focusable element and is skipped by `Tab`.
 - ARIA: each cell is a `<figure>` whose `<figcaption>` carries the caption, so the figure and what it measures are one unit for a screen reader; `prefix` and `suffix` are plain spans inside the figure's text, so the announced value is the whole expression.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--primary)` is large text (3.00:1 light, 6.71:1 dark). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the figure is `var(--text-default)` (17.65:1 light, 20.12:1 dark) and the accent prefix `var(--text-primary)` (`primary-700` in light, `primary-500` in dark) is large text (5.5:1 or more light, 6.71:1 dark). The caption is `var(--text-muted)` at overline scale — 5.32:1 on the dark canvas, but **3.78:1 on the light canvas, under AA for normal text**. This is a system-wide property of `--text-muted`, not of this component; it is carried as a theme-level follow-up and is not worked around here with an off-token colour.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
+- Reflow: the figure row wraps (`flex-wrap`), so the prefix and the suffix move under the value when a cell is narrow, and the value itself breaks (`wrap-anywhere`) rather than overflow at 200% zoom.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value one under the other
@@ -139,10 +140,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

@@ -1,0 +1,177 @@
+---
+name: pagination-button
+category: data
+structure: monolithic
+status: implemented
+spec_version: 1
+checksum: e49ab7623e6b853022526f9926f377268e5451be2510f33af592a8d9ff6b684c
+created: 2026-11-10
+last_updated: 2026-11-11
+---
+
+# PaginationButton — Component Spec
+
+## Purpose
+
+PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
+
+## When to use
+
+- Compose a custom page strip inside `pagination`'s default slot (composition mode), one button per Previous, page number, overflow and Next.
+- Render the current page of a hand-wired pagination with `selected`, and the unavailable Previous / Next ends with `disabled`.
+
+## When NOT to use
+
+- You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.
+- The rows live in a data-driven `table` → set `paginated` on the table instead.
+- The control is a previous / next link between documentation pages → use `doc-pagination`.
+- It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
+- It is a "Load more" control at the end of a list → use `button`.
+
+## Related
+
+- `pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
+- `pagination-info` — the page-info text that sits beside the strip.
+- `pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
+- `icon-button` — a standalone icon-only action with its own frame and radius.
+
+## Best practices
+
+- Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.
+- Pass `aria-label` on every `previous` and `next` button: those kinds render an `aria-hidden` icon only and have no accessible name otherwise. `more` is decorative and hidden from assistive tech, so it takes no `aria-label`.
+- Put the page number in the default slot of `kind="number"` only; the other kinds ignore the slot.
+- Set `selected` on exactly one number button (it sets `aria-current="page"`), and `disabled` on Previous at the first page and Next at the last.
+- In composition mode you own every click: listen to `click` and update the page yourself; a `disabled` button never emits it.
+
+## Usage
+
+```vue
+<script setup>
+  import Pagination from '@aziontech/webkit/pagination'
+  import PaginationButton from '@aziontech/webkit/pagination-button'
+</script>
+
+<template>
+  <Pagination>
+    <PaginationButton
+      kind="previous"
+      aria-label="Previous page"
+      disabled
+    />
+    <PaginationButton
+      kind="number"
+      selected
+      >1</PaginationButton
+    >
+    <PaginationButton kind="number">2</PaginationButton>
+    <PaginationButton kind="more" />
+    <PaginationButton
+      kind="next"
+      aria-label="Next page"
+    />
+  </Pagination>
+</template>
+```
+
+## Props
+
+| Prop       | Type                                         | Default    | Required | JSDoc                                                   |
+| ---------- | -------------------------------------------- | ---------- | -------- | ------------------------------------------------------- |
+| `kind`     | `'previous' \| 'next' \| 'number' \| 'more'` | `'number'` | false    | Button role within the pagination.                      |
+| `selected` | `boolean`                                    | `false`    | false    | Marks the current page (filled surface + aria-current). |
+| `disabled` | `boolean`                                    | `false`    | false    | Disables interaction and applies disabled tokens.       |
+
+## Events
+
+| Event   | Payload      | Notes                                                                                                                            |
+| ------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `click` | `MouseEvent` | Fires on activation. Not emitted while `disabled` (the native `disabled` attribute also blocks it), and never for `kind="more"`. |
+
+## Slots
+
+| Slot      | Scope | Notes                                                   |
+| --------- | ----- | ------------------------------------------------------- |
+| `default` | —     | The page number. Rendered only when `kind` is `number`. |
+
+## States
+
+- Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`.
+- Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `selected` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
+- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `pi pi-chevron-left`, `next` renders `pi pi-chevron-right`, `more` renders `pi pi-ellipsis-h`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
+- `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
+- `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
+- Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
+
+## Motion & Animations
+
+| Trigger                          | Animation / Transition                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                        |
+| -------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| selected / disabled color change | `transition-colors duration-150 ease-out`                                             | inline                                            | `motion-reduce:transition-none`                                                |
+| hover / active layer             | `before:transition-opacity` / `after:transition-opacity` with `duration-150 ease-out` | inline                                            | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
+
+## Tokens
+
+| Region                                    | Token (DESIGN.md)                                       |
+| ----------------------------------------- | ------------------------------------------------------- |
+| typography                                | `.text-button-lg`                                       |
+| size                                      | `h-7` · `min-w-7` (28px, no horizontal padding)         |
+| surface (number / more)                   | `var(--bg-surface)`                                     |
+| surface (hover layer)                     | `var(--bg-hover)`                                       |
+| surface (active layer)                    | `var(--bg-active)`                                      |
+| surface (selected)                        | `var(--bg-selected)`                                    |
+| border (selected)                         | `var(--border-default)` · `var(--border-width-default)` |
+| text                                      | `var(--text-default)`                                   |
+| text (disabled)                           | `var(--text-disabled)`                                  |
+| gap (content)                             | `var(--spacing-xs)`                                     |
+| shape (first / last button outer corners) | `var(--shape-elements)`                                 |
+| ring                                      | `var(--ring-color)` · offset `var(--bg-canvas)`         |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Keyboard map: native button — `Tab` focuses; `Enter` / `Space` activates; a `disabled` button is skipped by `Tab`; the `more` ellipsis is a `span` and never receives focus.
+- ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
+- `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
+- Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard: arrow keys are handled by `pagination`, swapped under `dir="rtl"`.
+- User data: none.
+
+## Examples
+
+- Covered by the `pagination` examples (`packages/webkit/examples/pagination/`), which render it inside the full strip. No standalone example — the button is only meaningful inside the pagination's strip, whose frame it does not draw itself.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

@@ -2,32 +2,57 @@
 name: split-button
 category: actions
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: ed48d496a5f7c61b7d4c353fd4985517567664a6cae6f9a770f245ecf4922ef4
+checksum: 95deb6ea47b61d9fef4185cee24e98478037ce8b274543790616e97752516384
 created: 2026-06-30
-last_updated: 2026-07-05
+last_updated: 2026-11-11
 ---
 
 # Split Button — Component Spec
 
 ## Purpose
 
-A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `Dropdown`.
+A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
+
+## When to use
+
+- One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).
+- A "repeat the last choice" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked.
+
+## When NOT to use
+
+- A single action → use `button`.
+- A menu with no default action → use `dropdown-menu`.
+- Picking one of a few visible, mutually exclusive options → use `toggle-group`.
+
+## Related
+
+- `button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.
+- `dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.
+- `icon-button` — the chevron toggle segment.
+
+## Best practices
+
+- Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.
+- Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.
+- With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.
+- Set `loading` while the action runs: it disables both segments and keeps the menu closed.
+- Disable a single action with `disabled: true` on its model entry instead of removing it, so the menu does not shift.
 
 ## Usage
 
 ```vue
 <script setup>
-import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton from '@aziontech/webkit/split-button'
 
-const items = [
-  { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
-  { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
-]
+  const items = [
+    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
+    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
+  ]
 </script>
 
 <template>
@@ -43,24 +68,24 @@ const items = [
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Visible label text on the primary command button. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the primary button's leading icon. |
-| `model` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false | Visual variant applied to both joined segments. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
-| `disabled` | `boolean` | `false` | false | Disables both segments and prevents the menu from opening. |
-| `loading` | `boolean` | `false` | false | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
-| `updateLabelOnSelect` | `boolean` | `false` | false | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
+| Prop                  | Type                                     | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`               | `string`                                 | `''`        | false    | Visible label text on the primary command button.                                                                                                                                                                                                                                 |
+| `icon`                | `string`                                 | `''`        | false    | PrimeIcons class for the primary button's leading icon.                                                                                                                                                                                                                           |
+| `model`               | `SplitButtonItem[]`                      | `[]`        | false    | Actions rendered as rows in the attached overlay menu.                                                                                                                                                                                                                            |
+| `kind`                | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false    | Visual variant applied to both joined segments.                                                                                                                                                                                                                                   |
+| `size`                | `'small' \| 'medium' \| 'large'`         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                                                                                                                              |
+| `disabled`            | `boolean`                                | `false`     | false    | Disables both segments and prevents the menu from opening.                                                                                                                                                                                                                        |
+| `loading`             | `boolean`                                | `false`     | false    | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves.                                                                                                                                       |
+| `updateLabelOnSelect` | `boolean`                                | `false`     | false    | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
 
 `SplitButtonItem` is the menu-action shape: `{ label: string; value?: string; icon?: string; disabled?: boolean }`. When `value` is omitted, `label` identifies the action.
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `click` | `(event: MouseEvent, item: SplitButtonItem \| null)` | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`. |
+| Event        | Payload                                                       | Notes                                                                                                                                                                                                                              |
+| ------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `click`      | `(event: MouseEvent, item: SplitButtonItem \| null)`          | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`.                   |
 | `item-click` | `(event: MouseEvent \| KeyboardEvent, item: SplitButtonItem)` | Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
 
 ## Slots
@@ -74,58 +99,65 @@ const items = [
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
-- `data-state` on the menu toggle: `open` | `closed` (provided by the composed `Dropdown.Trigger`)
-- When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `Dropdown` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
+- `data-state` on the menu toggle: `open` | `closed` (provided by the composed `DropdownMenu.Trigger`)
+- When `loading`, the control takes the disabled status: the primary button shows the spinner over the disabled tokens and blocks activation (owned by `Button`), the menu toggle is natively disabled with the disabled tokens, and the composed `DropdownMenu` is disabled so the menu cannot open. No `click` or `item-click` is emitted while loading.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`) | `motion-reduce:transition-none` |
-| hover/focus state change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| menu open / close | provided by the composed `navigation/dropdown` overlay | semantic (owned by `Dropdown`) | owned by `Dropdown` |
+| Trigger                   | Animation / Transition                                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`)                       | `motion-reduce:transition-none` |
+| hover/focus state change  | `transition-colors duration-150 ease-out`                                      | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| menu open / close         | provided by the composed `navigation/dropdown-menu` overlay                    | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (large) | `.text-button-lg` |
+| Region                      | Token (DESIGN.md)                                        |
+| --------------------------- | -------------------------------------------------------- |
+| typography (large)          | `.text-button-lg`                                        |
 | typography (small / medium) | `text-button-md` (semantic sibling of `.text-button-lg`) |
-| brand surface | `var(--primary)` |
-| brand text | `var(--primary-contrast)` |
-| secondary surface | `var(--secondary)` |
-| secondary text | `var(--secondary-contrast)` |
-| outlined surface | `var(--bg-surface)` |
-| neutral text | `var(--text-default)` |
-| segment divider / border | `var(--border-default)` |
-| hover overlay | `var(--bg-hover)` |
-| active overlay | `var(--bg-active)` |
-| outlined hover overlay | `var(--bg-mask)` |
-| spacing | `var(--spacing-md)` |
-| shape | `var(--shape-button)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` |
-| disabled surface | `var(--bg-disabled)` |
-| disabled text | `var(--text-disabled)` |
+| brand surface               | `var(--primary)`                                         |
+| brand text                  | `var(--primary-contrast)`                                |
+| secondary surface           | `var(--secondary)`                                       |
+| secondary text              | `var(--secondary-contrast)`                              |
+| outlined surface            | `var(--bg-surface)`                                      |
+| neutral text                | `var(--text-default)`                                    |
+| segment divider / border    | `var(--border-default)`                                  |
+| hover overlay               | `var(--bg-hover)`                                        |
+| active overlay              | `var(--bg-active)`                                       |
+| outlined hover overlay      | `var(--bg-mask)`                                         |
+| spacing                     | `var(--spacing-md)`                                      |
+| shape                       | `var(--shape-button)`                                    |
+| ring                        | `var(--ring-color)`                                      |
+| ring offset                 | `var(--bg-canvas)`                                       |
+| disabled surface            | `var(--bg-disabled)`                                     |
+| disabled text               | `var(--text-disabled)`                                   |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on both segments; the focused segment raises its z-index so the ring is not clipped by its neighbor.
-- Keyboard map: `Tab` focuses each segment; `Enter`/`Space` activates the primary button; on the toggle `Enter`/`Space`/`Down` open the menu, arrows navigate items, `Esc` closes and returns focus to the toggle (behavior owned by `Dropdown`).
-- ARIA: the primary button is a native `button`; the toggle exposes `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` via `Dropdown.Trigger` and carries an `aria-label`; the chevron icon is `aria-hidden`; `aria-busy` reflects the loading state. While `loading`, the toggle is a natively disabled button, so the menu cannot be opened by pointer or keyboard and assistive tech perceives the whole control as non-interactive.
+- Keyboard map: `Tab` focuses each segment; `Enter`/`Space` activates the primary button; on the toggle `Enter`/`Space`/`Down` open the menu, arrows navigate items, `Esc` closes and returns focus to the toggle (behavior owned by `DropdownMenu`).
+- ARIA: the primary button is a native `button`; the toggle exposes `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` via `DropdownMenu.Trigger` and carries an `aria-label`; the chevron icon is `aria-hidden`; `aria-busy` reflects the loading state. While `loading`, the toggle is a natively disabled button, so the menu cannot be opened by pointer or keyboard and assistive tech perceives the whole control as non-interactive.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px at the large size.
 
-## Stories (Storybook)
+## Right-to-left
 
-Canonical layout — matches `apps/storybook/src/stories/components/actions/button/Button.stories.js`. Composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta.
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: each menu item's directional `icon` mirrors (`directionalIconClass`); the caret toggle points down and does not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
+
+Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default
 - Types — composite story rendering every `kind` value side-by-side.
@@ -147,10 +179,8 @@ Canonical layout — matches `apps/storybook/src/stories/components/actions/butt
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

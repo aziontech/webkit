@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default empty input at medium size.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Input\n    v-model=\"value\"\n    placeholder=\"Type something\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const small = ref('')\n  const medium = ref('')\n  const large = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"small\"\n      size=\"small\"\n      placeholder=\"Small (28px)\"\n    />\n    <Input\n      v-model=\"medium\"\n      size=\"medium\"\n      placeholder=\"Medium (32px)\"\n    />\n    <Input\n      v-model=\"large\"\n      size=\"large\"\n      placeholder=\"Large (40px)\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Icons",
+   "summary": "The `iconLeft` slot, the `iconRight` slot, and both combined.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const leading = ref('')\n  const trailing = ref('')\n  const both = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"leading\"\n      placeholder=\"Leading icon\"\n    >\n      <template #iconLeft>\n        <i class=\"pi pi-globe\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"trailing\"\n      placeholder=\"Trailing icon\"\n    >\n      <template #iconRight>\n        <i class=\"pi pi-search\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"both\"\n      placeholder=\"Both icons\"\n    >\n      <template #iconLeft>\n        <i class=\"pi pi-globe\" />\n      </template>\n      <template #iconRight>\n        <i class=\"pi pi-search\" />\n      </template>\n    </Input>\n  </div>\n</template>"
+  }
+ ]
+}

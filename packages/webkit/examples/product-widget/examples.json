@@ -1,0 +1,21 @@
+{
+  "component": "product-widget",
+  "title": "Components/Primitives/Content/ProductWidget",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A framed widget, the workloads list, filling a panel the host sizes.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "A framed widget plated as a console window, and the same widget bare, floating on the host surface.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Library",
+      "summary": "Every registered widget in the cell that hosts it on the site: full screens in wide panels, fragments in grid cells that play their beat on hover. These are the only values `name` accepts.",
+      "file": "library.vue"
+    }
+  ]
+}

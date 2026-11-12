@@ -1,0 +1,86 @@
+{
+ "name": "line-figure",
+ "binding": "LineFigure",
+ "import": "@aziontech/webkit/line-figure",
+ "treeShakeableImport": "@aziontech/webkit/line-figure",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.",
+ "setup": null,
+ "useWhen": [
+  "The art beside a product's copy on a landing or a docs home.",
+  "An empty state or a not-found page (`azion-404`)."
+ ],
+ "avoidWhen": [
+  "For static, non-interactive art — use `Illustration`.",
+  "For data — use the charts.",
+  "Inside dense application screens."
+ ],
+ "related": [
+  "Illustration` — static art from the registry.",
+  "ProductWidget`, `ShellMockup` — product scenes.",
+  "EmptyState` — can carry a figure in its art slot."
+ ],
+ "bestPractices": [
+  "One figure per view; two figures answering the pointer compete.",
+  "Pass `aria-label` when the page says something more specific than the figure's own description.",
+  "Use `play` only where nothing else moves."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "LineFigureName \\ | ''",
+   "default": "''",
+   "required": "false",
+   "doc": "Registered figure to draw; an unknown or empty name draws nothing."
+  },
+  {
+   "name": "intensity",
+   "type": "number",
+   "default": "0.5",
+   "required": "false",
+   "doc": "How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong)."
+  },
+  {
+   "name": "play",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name; falls back to the figure's own English description."
+  }
+ ],
+ "events": [
+  {
+   "name": "read",
+   "payload": "caption: string",
+   "notes": "The figure's current reading each time it changes (the first reading on mount)."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-sm)\">\n    <LineFigure name=\"cache-ttl\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Play",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n  import { ref } from 'vue'\n\n  const reading = ref('')\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-sm) flex-col gap-(--spacing-sm)\">\n    <LineFigure\n      name=\"lb-rotor\"\n      play\n      :intensity=\"0.8\"\n      @read=\"reading = $event\"\n    />\n    <p\n      class=\"m-0 text-body-sm text-(--text-muted)\"\n      aria-live=\"polite\"\n    >\n      {{ reading }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Gallery",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n\n  const names = [\n    'azion-404',\n    'build-terminal',\n    'secure-shield',\n    'infra-workloads',\n    'ai-versioning',\n    'store-replicas',\n    'observe-stream',\n    'platform-edge',\n    'cache-ttl',\n    'lb-rotor',\n    'ddos-flood',\n    'bot-lineup',\n    'dns-lookup',\n    'metrics-gauge',\n    'image-variants',\n    'orchestrator-scale',\n    'functions-invoke',\n    'applications-rules',\n    'object-storage-bucket',\n    'deployments-release',\n    'variables-keys',\n    'connectors-link',\n    'custom-pages-status',\n    'certificates-chain',\n    'network-lists-gate'\n  ]\n</script>\n\n<template>\n  <ul class=\"m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 md:grid-cols-4\">\n    <li\n      v-for=\"name in names\"\n      :key=\"name\"\n      class=\"flex flex-col gap-(--spacing-xs)\"\n    >\n      <LineFigure :name=\"name\" />\n      <span class=\"text-label-code-sm text-(--text-muted)\">{{ name }}</span>\n    </li>\n  </ul>\n</template>"
+  }
+ ],
+ "docs": "components/line-figure.md"
+}

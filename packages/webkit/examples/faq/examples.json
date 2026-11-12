@@ -1,0 +1,11 @@
+{
+  "component": "faq",
+  "title": "Components/Marketing/Primitives/Faq",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five objections a buyer raises before signing, each written the way the reader would ask it. Every answer starts closed, so the band opens as a scannable list of questions rather than a wall of prose. Edit `title` and `items` in the Controls panel — a band with no items renders no frame at all.",
+      "file": "default.vue"
+    }
+  ]
+}

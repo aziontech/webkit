@@ -1,0 +1,77 @@
+name: Usage check (AI flow, step 8)
+
+# Opt-in and paid: a fresh Claude Code session in a clean Vite + Vue app gets an intent-only
+# prompt and must pick the new component or block through the webkit MCP; the app must then
+# pass `webkit doctor`. See CONTRIBUTING.md, "Adding a component or block (AI flow)".
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Component export (date-picker) or block id (platform/auth)'
+        required: true
+        type: string
+      prompt:
+        description: 'Intent-only prompt that needs the target without naming it'
+        required: true
+        type: string
+      max_turns:
+        description: 'Turns for the claude session'
+        required: false
+        default: '40'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  usage-check:
+    name: Usage check (${{ inputs.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install the Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run the usage check
+        working-directory: packages/webkit
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET: ${{ inputs.target }}
+          PROMPT: ${{ inputs.prompt }}
+          MAX_TURNS: ${{ inputs.max_turns }}
+        run: |
+          test -n "$ANTHROPIC_API_KEY" || { echo "::error::ANTHROPIC_API_KEY secret is not set"; exit 1; }
+          node scripts/usage-check.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
+
+      - name: Publish the report
+        if: always()
+        working-directory: packages/webkit
+        run: test -f usage-report.md && cat usage-report.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload the report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: usage-report
+          path: packages/webkit/usage-report.md
+          if-no-files-found: ignore
+          retention-days: 30

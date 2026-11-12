@@ -3,28 +3,62 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 6bcdd94d8dcfc289eedfa534379a74a056ca75b6319c615e657514a8f9129e7d
+spec_version: 2
+checksum: 0eb451f0acc8d40346f83e2be1e7f7cbb51cfb5f07eb40b05a68258c0b503370
 created: 2026-05-22
-last_updated: 2026-10-19
+last_updated: 2026-11-11
 ---
 
 # Button — Component Spec
 
 ## Purpose
 
-Interactive control for user actions. Migrated from the existing implementation at `packages/webkit/src/components/webkit/actions/button/`.
+Interactive control for user actions. Lives at `packages/webkit/src/components/actions/button/`.
+
+## When to use
+
+- Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
+- Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
+- Submit or reset a form with `type="submit"` / `type="reset"`.
+- A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
+
+## When NOT to use
+
+- The control is icon-only → use `icon-button`.
+- One default action with related alternatives in an attached menu → use `split-button`.
+- A standalone navigation link with a trailing icon and a ghost hover → use `link`.
+- The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
+
+## Related
+
+- `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.
+- `split-button` — joins a Button to a chevron menu of related actions.
+- `button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
+- `mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.
+- `toggle-group` — a group of mutually exclusive options, not a single action.
+
+## Best practices
+
+- Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
+- Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
+- Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
+- Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
+- `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
 
 ## Usage
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
   <Button label="Save" />
-  <Button label="Deploy" kind="secondary" icon="pi pi-upload" />
+  <Button
+    label="Deploy"
+    kind="secondary"
+    icon="pi pi-upload"
+  />
   <Button
     label="Read the docs"
     kind="outlined"
@@ -38,19 +72,19 @@ import Button from '@aziontech/webkit/button'
 
 ## Props
 
-| Prop           | Type                                                           | Default     | Required | JSDoc                                                                                                                                     |
-| -------------- | -------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`        | `string`                                                       | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
-| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'text' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
-| `size`         | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
-| `disabled`     | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
-| `loading`      | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                              |
-| `icon`         | `string`                                                       | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
-| `iconPosition` | `'leading' \| 'trailing'`                                      | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
-| `animated`     | `boolean`                                                      | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
-| `href`         | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
-| `target`       | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
-| `type`         | `'button' \| 'submit' \| 'reset'`                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.        |
+| Prop           | Type                                                                  | Default     | Required | JSDoc                                                                                                                                     |
+| -------------- | --------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`        | `string`                                                              | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
+| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
+| `size`         | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
+| `disabled`     | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
+| `loading`      | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                              |
+| `icon`         | `string`                                                              | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
+| `iconPosition` | `'leading' \| 'trailing'`                                             | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
+| `animated`     | `boolean`                                                             | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
+| `href`         | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
+| `target`       | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
 
 ## Events
 
@@ -69,13 +103,14 @@ import Button from '@aziontech/webkit/button'
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
+- Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
 ## Motion & Animations
 
-| Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback         |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
-| state change                                       | `transition-colors duration-150 ease-out`                                                                                        | inline                                                 | `motion-reduce:transition-none` |
-| hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                            | Animation / Transition                                                                                                           | Token                                                  | Reduced-motion fallback                |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
+| hover / active (state layer fade)                  | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                              | `@aziontech/theme` semantic duration + curve           | `motion-reduce:before:transition-none` |
+| hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none`        |
 
 ## Tokens
 
@@ -102,8 +137,17 @@ import Button from '@aziontech/webkit/button'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the filled kinds (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Motion: the hover nudge of an `icon-position="right"` arrow moves toward the end (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 - Primary (kind)
@@ -131,9 +175,8 @@ import Button from '@aziontech/webkit/button'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

@@ -1,0 +1,16 @@
+{
+  "component": "doc-on-this-page",
+  "title": "Components/Documentation/DocOnThisPage",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Change `activeId` in the controls and watch the marker travel along the rail rather than jump — it is a dash cut from the same path the rail draws.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Nesting",
+      "summary": "The rail bends between levels as the outline nests, and each level change is split into two half-curves meeting exactly on the boundary — which is what makes the marker measurable to the pixel. The complementary groups below are drawn as peers of the outline, not entries in it: no rail, no indent, no marker, and each its own named landmark, so a reader never reads \"Discord\" as a section of the page.",
+      "file": "nesting.vue"
+    }
+  ]
+}

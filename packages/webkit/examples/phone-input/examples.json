@@ -1,0 +1,11 @@
+{
+  "component": "phone-input",
+  "title": "Components/Primitives/Inputs/PhoneInput",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Inside a `Field`: the label targets the tel input, the dial-code select filters as you type, and `update:phone` hands over the E.164 number and whether it is complete.",
+      "file": "default.vue"
+    }
+  ]
+}

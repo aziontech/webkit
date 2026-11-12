@@ -88,9 +88,17 @@ export interface TableContext {
   /** Request editing a committed filter (sets `editingFilter`). */
   editFilter: (filter: AppliedFilter) => void
   /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`). */
-  exportCsv: (options?: { filename?: string; scope?: 'page' | 'filtered' | 'all' }) => void
+  exportCsv: (options?: {
+    filename?: string
+    scope?: 'page' | 'filtered' | 'all'
+    rows?: Record<string, unknown>[]
+  }) => Promise<void>
   /** Signal a refresh; the root emits `refresh` (the app refetches). */
   reload: () => void
+  /** Id a `TableCaption` takes, so the table is labelled by it (`aria-labelledby`). */
+  captionId?: string
+  /** A `TableCaption` registers while mounted; returns the unregister function. */
+  registerCaption?: () => () => void
 }
 
 export const TableInjectionKey: InjectionKey<TableContext> = Symbol('TableContext')

@@ -8,11 +8,13 @@ import {
   getBestPractices,
   getComponent,
   getImport,
+  getPattern,
   getUsageExample,
   listCategories,
   listComponents,
   listTokens,
   searchComponents,
+  searchPatterns,
   suggestComponent,
   validateUsage
 } from './queries.js'
@@ -53,7 +55,16 @@ async function main() {
 
   const catalog = loadCatalog(process.cwd())
 
-  const server = new McpServer({ name: '@aziontech/webkit-mcp', version: serverVersion() })
+  const server = new McpServer(
+    { name: '@aziontech/webkit-mcp', version: serverVersion() },
+    {
+      instructions:
+        'Azion webkit design system. For a whole screen (login, signup, settings, list, create, ' +
+        'detail), call search_patterns, then get_pattern, and start from that SFC — never build ' +
+        'the screen from scratch. For a single piece, use suggest_component and get_component. ' +
+        'For a marketing band, suggest_component returns the page section to import.'
+    }
+  )
 
   const tool = (name, config, handler) => {
     if (typeof server.registerTool === 'function') {
@@ -69,15 +80,21 @@ async function main() {
       title: 'List webkit components',
       description:
         'List every renderable @aziontech/webkit component (compact cards: name, category, ' +
-        'structure, import, tree-shakeable import, PascalCase binding). Optionally filter by category.',
+        'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
+        'by category or by surface: "product" (console and apps), "marketing" (the azion.com site: ' +
+        'sections, bands, brand assets) or "docs" (the documentation site).',
       inputSchema: {
         category: z
           .string()
           .optional()
-          .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").')
+          .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ category }) => json(listComponents(catalog, { category }))
+    async ({ category, surface }) => json(listComponents(catalog, { category, surface }))
   )
 
   tool(
@@ -117,8 +134,9 @@ async function main() {
     {
       title: 'Get a webkit component API',
       description:
-        'Full API for one component: props, events, slots, sub-components, structure, and ' +
-        'compound-root info. Returns fuzzy suggestions when the name is unknown.',
+        'Full API for one component: purpose, when to use / when not to use, props, events, ' +
+        'slots, sub-components, structure, compound-root info, runnable examples taken from its ' +
+        'examples and the classes allowed on its tag. Returns fuzzy suggestions when the name is unknown.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }
@@ -164,10 +182,16 @@ async function main() {
         'Fuzzy / substring search across component names and categories. Ranked results so a phrase ' +
         'like "dropdown" or "paginated table" resolves to a real component.',
       inputSchema: {
-        query: z.string().describe('Free-text query, e.g. "dropdown", "date picker", "toast".')
+        query: z
+          .string()
+          .describe('Free-text query in en, pt-BR or es, e.g. "dropdown", "date picker", "botão".'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ query }) => json(searchComponents(catalog, query))
+    async ({ query, surface }) => json(searchComponents(catalog, query, { surface }))
   )
 
   tool(
@@ -176,14 +200,68 @@ async function main() {
       title: 'Suggest a webkit component for a need',
       description:
         'Given a plain-language need, suggest the single best-fitting component (plus runners-up) so ' +
-        'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue.',
+        'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue. ' +
+        'When the need is a whole screen it returns the pattern first (recommendation "pattern"); ' +
+        'for a marketing band it returns the page section (recommendation "section").',
       inputSchema: {
         need: z
           .string()
-          .describe('What you are trying to build, e.g. "a searchable paginated table".')
+          .describe('What you are trying to build, e.g. "a searchable paginated table".'),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
       }
     },
-    async ({ need }) => json(suggestComponent(catalog, need))
+    async ({ need, surface }) => json(suggestComponent(catalog, need, { surface }))
+  )
+
+  tool(
+    'search_patterns',
+    {
+      title: 'Search webkit screen patterns',
+      description:
+        'Find the reviewed screen pattern for an intent ("login", "sign up", "account settings", ' +
+        '"delete dialog", "tela de login"). Patterns are whole screens built from WebKit ' +
+        'blocks: start every screen from one. Returns ranked ids with their intents, components, ' +
+        'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
+        'every pattern.',
+      inputSchema: {
+        query: z
+          .string()
+          .describe(
+            'The screen you need, in plain words (en, pt-BR or es), e.g. "login page", "cadastro".'
+          ),
+        surface: z
+          .enum(['product', 'marketing', 'docs'])
+          .optional()
+          .describe('Restrict to one surface. Console screens use "product" only.')
+      }
+    },
+    async ({ query, surface }) => json(searchPatterns(catalog, query, { surface }))
+  )
+
+  tool(
+    'get_pattern',
+    {
+      title: 'Get a webkit screen pattern',
+      description:
+        'The whole pattern: a runnable SFC (script setup + template) with the webkit imports, the ' +
+        'components it uses, the skills to follow, its steps, the other variants (states) of ' +
+        "the same screen and its `guidelines` (when to use, building blocks, do and don't, copy, " +
+        'accessibility). Read the guidelines, copy the SFC and change only the content. A pre-v6 id (e.g. ' +
+        '"platform/lists/table-view") resolves to its new block and carries a `note`.',
+      inputSchema: {
+        id: z
+          .string()
+          .describe('Pattern id from search_patterns, e.g. "platform/view/table-view".'),
+        variant: z
+          .string()
+          .optional()
+          .describe('A variant name from the pattern, e.g. "IncorrectCredentials".')
+      }
+    },
+    async ({ id, variant }) => json(getPattern(catalog, id, { variant }))
   )
 
   tool(
@@ -207,7 +285,8 @@ async function main() {
       description:
         'Validate an import path (real / denied / unknown + suggestions) and/or a class string ' +
         '(scanned against the catalog token rules: hex, rgb/hsl, tailwind palette, raw text size, ' +
-        'PrimeVue color). Returns { ok, problems }.',
+        'PrimeVue color). With `component`, also checks the classes against the layout utilities ' +
+        'allowed on a webkit tag. Returns { ok, problems }.',
       inputSchema: {
         import: z
           .string()
@@ -216,11 +295,17 @@ async function main() {
         classes: z
           .string()
           .optional()
-          .describe('A class string to scan for forbidden hardcoded colors / raw utilities.')
+          .describe('A class string to scan for forbidden hardcoded colors / raw utilities.'),
+        component: z
+          .string()
+          .optional()
+          .describe(
+            'The webkit component the classes sit on (kebab-case). When set, any class outside the layout utilities (w-full, max-w-*, self-*, shrink-0) is reported as a style override.'
+          )
       }
     },
-    async ({ import: importPath, classes }) =>
-      json(validateUsage(catalog, { import: importPath, classes }))
+    async ({ import: importPath, classes, component }) =>
+      json(validateUsage(catalog, { import: importPath, classes, component }))
   )
 
   const transport = new StdioServerTransport()

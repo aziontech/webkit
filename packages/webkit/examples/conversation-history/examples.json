@@ -1,0 +1,16 @@
+{
+  "component": "conversation-history",
+  "title": "Components/Primitives/AI/ConversationHistory",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The rail of an assistant page: conversations grouped Today, Yesterday, Previous 7 days, Previous 30 days and Older against a fixed `now`, the open one current, and Delete on every row.",
+      "file": "default.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Loading (five placeholder rows, `aria-busy`) and empty (`No conversations yet.`).",
+      "file": "states.vue"
+    }
+  ]
+}

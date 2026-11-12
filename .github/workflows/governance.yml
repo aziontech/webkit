@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
-      toolkit: ${{ steps.filter.outputs.toolkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
       canary: ${{ steps.filter.outputs.canary }}
@@ -35,22 +34,16 @@ jobs:
               - 'packages/webkit/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-            toolkit:
-              - '.specs/**'
-              - '.claude/hooks/**'
-              - '.claude/rules/**'
-              - '.claude/skills/**'
-              - '.claude/agents/**'
-              - 'apps/storybook/**'
-              - 'packages/webkit/**'
             tests:
               - 'packages/webkit/**'
-              - 'apps/storybook/**'
             visual:
               - 'packages/webkit/**'
               - 'packages/theme/**'
               - 'packages/icons/**'
-              - 'apps/storybook/**'
+              - 'apps/docs/**'
+              - 'apps/demos/**'
+              - 'apps/visual/**'
+              - 'pnpm-lock.yaml'
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
@@ -173,6 +166,9 @@ jobs:
       - name: TypeScript check
         run: pnpm run webkit:type-check
 
+      - name: Docs site TypeScript check
+        run: pnpm run docs:type-check
+
       - name: Type coverage (enforce 95% threshold)
         run: pnpm run webkit:type-coverage
 
@@ -204,11 +200,12 @@ jobs:
         run: pnpm run size
         working-directory: packages/webkit
 
-  storybook:
-    name: Storybook Build
+  site:
+    name: Docs site and demos build
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
-    if: needs.changes.outputs.webkit == 'true'
+    if: needs.changes.outputs.visual == 'true'
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -224,16 +221,27 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm storybook:build
+      - name: Build the docs site (every route prerendered)
+        run: pnpm docs:build
 
-      - name: Verify Storybook output
-        run: test -d apps/storybook/dist && echo "Storybook built successfully"
+      - name: Build the demos
+        run: pnpm demos:build
 
+      - name: Upload the built sites for the visual shards
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sites
+          path: |
+            apps/docs/dist/
+            apps/demos/dist/
+          retention-days: 3
+
+  # Runs on every PR (no path filter): these gates are the machine half of the AI flow
+  # (.claude/commands/webkit-new.md) and finish in under a minute. Locally:
+  # pnpm --filter @aziontech/webkit run gates
   toolkit:
     name: Adoption Toolkit (tests + catalog drift)
     needs: changes
-    if: needs.changes.outputs.toolkit == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v4
@@ -255,8 +263,39 @@ jobs:
       - name: Catalog is in sync (no drift from exports/specs)
         run: pnpm --filter @aziontech/webkit catalog:check
 
+      - name: No spec in status draft (.specs/_template.md excepted)
+        run: pnpm --filter @aziontech/webkit run spec-status
+
+      - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
+        run: pnpm --filter @aziontech/webkit run spec-template:check
+
+      - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
+        run: pnpm --filter @aziontech/webkit run patterns:check
+
+      - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
+        run: pnpm --filter @aziontech/webkit run cited-names
+
+      - name: Naming (2.7) — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
+        run: pnpm --filter @aziontech/webkit run naming:check
+
+      - name: Declarations for the runtime .js modules are in sync
+        run: pnpm --filter @aziontech/webkit run js-dts:check
+
+      - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
+        run: pnpm --filter @aziontech/webkit run marketing:check
+
+      - name: Public API changes have a codemod entry (removed or renamed export, pattern, prop or value)
+        run: pnpm --filter @aziontech/webkit run migrations:check
+
+      - name: Hook tests (spec, authoring and reference hooks)
+        run: pnpm --filter @aziontech/webkit run hooks:test
+
+
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
+
+      - name: Server rendering — every block and example renders with vue/server-renderer in Node
+        run: pnpm --filter @aziontech/webkit test:ssr
 
       - name: Construction-standard ratchet (no new authoring violations)
         run: pnpm --filter @aziontech/webkit run authoring
@@ -331,11 +370,14 @@ jobs:
         working-directory: packages/webkit
 
   visual:
-    name: Storybook visual tests (shard ${{ matrix.shard }}/4)
+    name: Visual tests, styled (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, tests]
+    needs: [changes, security, lint-canary, lint, types, build, site, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      options: --ipc=host
     strategy:
       fail-fast: false
       matrix:
@@ -355,38 +397,31 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Download the built sites
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: playwright-${{ runner.os }}-
-
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
-        working-directory: apps/storybook
-
-      - name: Build Storybook
-        run: pnpm run storybook:build
+          name: sites
+          path: apps
 
       - name: Run visual tests (shard ${{ matrix.shard }}/4)
-        run: pnpm --filter storybook run test:visual:ci
-        env:
-          VISUAL_SHARD: ${{ matrix.shard }}/4
+        run: pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Upload diff output on failure
+      - name: Upload the report on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: visual-diff-output-shard-${{ matrix.shard }}
-          path: apps/storybook/.storybook/test-visual/__diff_output__/
+          name: visual-report-shard-${{ matrix.shard }}
+          path: |
+            apps/visual/playwright-report/
+            apps/visual/test-results/
           retention-days: 7
           if-no-files-found: ignore
 
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, storybook, toolkit, smoke, tests, visual]
+    needs:
+      [changes, security, lint-canary, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -398,7 +433,7 @@ jobs:
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"
-            [storybook]="${{ needs.storybook.result }}"
+            [site]="${{ needs.site.result }}"
             [toolkit]="${{ needs.toolkit.result }}"
             [smoke]="${{ needs.smoke.result }}"
             [tests]="${{ needs.tests.result }}"

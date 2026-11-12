@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Idle copy button. Activating it writes the value to the clipboard and briefly confirms success.",
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled state — interaction is blocked and disabled tokens are applied.",
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n    disabled\n  />\n</template>"
+  }
+ ]
+}

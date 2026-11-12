@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/link/Link.stories'
+import Default from '../../../../examples/link/default.vue'
+import Disabled from '../../../../examples/link/disabled.vue'
+import Sizes from '../../../../examples/link/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Link from './link.vue'
-
-const { Default, Sizes, Disabled } = composeStories(stories)
 
 describe('Link', () => {
   it('renders as an anchor with the default testid and label', () => {
@@ -26,7 +25,12 @@ describe('Link', () => {
     expect(getByTestId('custom-link').tagName).toBe('A')
     expect(getByTestId('custom-link__content')).toBeTruthy()
     expect(getByTestId('custom-link__label').textContent?.trim()).toBe('Docs')
-    expect(getByTestId('custom-link__ghost')).toBeTruthy()
+  })
+
+  it('underlines the label on hover and focus instead of painting a surface', () => {
+    const { getByTestId, queryByTestId } = render(Link, { props: { label: 'Docs' } })
+    expect(queryByTestId('navigation-link__ghost')).toBeNull()
+    expect(getByTestId('navigation-link__label').className).toContain('group-hover:underline')
   })
 
   it('applies href and defaults target to _self with no rel', () => {

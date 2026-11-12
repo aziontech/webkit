@@ -2,13 +2,13 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Overline from '../../content/overline/overline.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import Link from '../../navigation/link/link.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'CompareSupportTiers',
@@ -136,7 +136,7 @@
       :divided="false"
       :padded="false"
     >
-      <table class="w-full table-auto border-separate border-spacing-0 text-left lg:table-fixed">
+      <table class="w-full table-auto border-separate border-spacing-0 text-start lg:table-fixed">
         <caption
           v-if="caption"
           class="sr-only"
@@ -149,7 +149,7 @@
           <tr>
             <th
               scope="col"
-              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal"
+              class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal"
             >
               <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
                 columnLabel
@@ -178,7 +178,7 @@
               scope="col"
               :data-folded="tier.id !== visibleTier || null"
               :data-highlighted="tier.highlighted || null"
-              class="sticky top-14 z-20 h-px border-b border-l border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg) align-top font-normal max-lg:data-folded:hidden"
+              class="sticky top-14 z-20 h-px border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
             >
               <span
                 v-if="tier.highlighted"
@@ -215,7 +215,7 @@
               scope="colgroup"
               :colspan="columns.length + 1"
               :data-ruled="sectionIndex > 0 || null"
-              class="border-b border-(--border-default) p-(--spacing-lg) pt-(--spacing-xl) text-left font-normal data-ruled:border-t"
+              class="border-b border-(--border-default) p-(--spacing-sm) pt-(--spacing-xl) text-start lg:p-(--spacing-lg) lg:pt-(--spacing-xl) font-normal data-ruled:border-t"
             >
               <Overline
                 v-if="section.eyebrow"
@@ -236,7 +236,7 @@
           >
             <th
               scope="row"
-              class="border-(--border-default) px-(--spacing-lg) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
+              class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
             >
               {{ row.label }}
             </th>
@@ -244,7 +244,7 @@
               v-for="{ tier, index } in columns"
               :key="tier.id"
               :data-folded="tier.id !== visibleTier || null"
-              class="border-l border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
+              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
             >
               <template v-if="isIncluded(row.values[index])">
                 <i

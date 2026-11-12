@@ -11,7 +11,7 @@ If a fixture stops failing, a rule in [`eslint.config.js`](../eslint.config.js),
 
 The check is **per rule id**, not per exit code: each fixture must be flagged by the exact rule it guards, so a parse error or an unrelated finding cannot fake a pass.
 
-The wrong/correct code pairs these fixtures are drawn from are documented in [`packages/webkit/docs/DOC_LINTS.md`](../packages/webkit/docs/DOC_LINTS.md).
+The wrong/correct code pairs these fixtures are drawn from are documented in [`.claude/docs/DOC_LINTS.md`](../.claude/docs/DOC_LINTS.md).
 
 ## Where it runs
 
@@ -36,12 +36,13 @@ lint-canaries/
     typescript/           # §4 — @typescript-eslint/*, unused-imports/no-unused-vars
     import-hygiene/       # §5 — simple-import-sort/*, import/*, unused-imports/no-unused-imports
     clean-code/           # §6 — no-console, no-debugger, prefer-const
+    webkit/               # webkit/* rules from the package ESLint plugin (no-physical-direction, its gradient case)
   stylelint/              # §7 — one .css per rule
   prettier/               # §8 — files that must stay "unformatted"
   commitlint/             # §10 — one wrong commit message per .txt
 ```
 
-56 canaries: 39 ESLint · 8 Stylelint · 2 Prettier · 7 commitlint.
+59 canaries: 41 ESLint · 9 Stylelint · 2 Prettier · 7 commitlint.
 
 ## Why these files never break the normal pipeline
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
+  import Input from '../../../inputs/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -11,15 +13,16 @@
 
   withDefaults(
     defineProps<{
-      /** Placeholder text for the search input. */
+      /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
       placeholder?: string
     }>(),
     {
-      placeholder: 'Search'
+      placeholder: ''
     }
   )
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ tableSearch: en.tableSearch })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -36,13 +39,13 @@
 </script>
 
 <template>
-  <InputText
+  <Input
     size="small"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex-1"
     :model-value="globalFilter"
-    :placeholder="placeholder"
+    :placeholder="placeholder || t('tableSearch.placeholder')"
     @update:model-value="setFilter"
   >
     <template #iconLeft>
@@ -51,5 +54,5 @@
         aria-hidden="true"
       />
     </template>
-  </InputText>
+  </Input>
 </template>

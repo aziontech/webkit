@@ -1,0 +1,31 @@
+{
+  "component": "code-editor",
+  "title": "Components/Primitives/Code/CodeEditor",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The plain editor inside a `Field`: line numbers, two-space Tab indentation (Escape then Tab leaves), and server diagnostics as `markers` painted on their lines and listed under the editor. Pass `loader: () => import('monaco-editor')` and Monaco takes over the same value and markers once it loads.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Diff",
+      "summary": "`diff` with `original`: the saved version on the left (read-only) beside the edited one, side by side on a wide container and stacked on a narrow one.",
+      "file": "diff.vue"
+    },
+    {
+      "name": "ReadOnly",
+      "summary": "`readonly` code that can be read, selected and copied but not changed.",
+      "file": "read-only.vue"
+    },
+    {
+      "name": "WithToolbar",
+      "summary": "The `toolbar` slot holds a Code / Arguments switch, a hint and a Run action; the markers follow the active document.",
+      "file": "with-toolbar.vue"
+    },
+    {
+      "name": "Monaco",
+      "summary": "The real Monaco, loaded lazily: `loadMonaco` wires the editor and JSON workers with Vite's `?worker` imports, sets `MonacoEnvironment`, then returns `import('monaco-editor')`. `monaco-editor` is the app's dependency (an optional peer of WebKit), so it never enters WebKit's bundle. The editor and the diff take the theme tokens and the markers; the plain editor is live until Monaco mounts.",
+      "file": "monaco.vue"
+    }
+  ]
+}

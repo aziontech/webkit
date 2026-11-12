@@ -144,3 +144,27 @@ describe('LogoWallQuote', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('LogoWallQuote — quote band', () => {
+  it('renders the quote alone with no logos', () => {
+    const { getByTestId, getByText } = render(LogoWallQuote, {
+      props: { kind: 'quote', quote, anchor: 'quote' }
+    })
+    const root = getByTestId(TESTID)
+    expect(root).toHaveAttribute('data-kind', 'quote')
+    expect(root).toHaveAttribute('id', 'quote')
+    expect(getByText(quote.text)).toBeInTheDocument()
+  })
+
+  it('renders nothing in the quote layout without a quote', () => {
+    const { queryByTestId } = render(LogoWallQuote, { props: { kind: 'quote' } })
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('has no axe violations in the quote band example', async () => {
+    const { default: QuoteBand } =
+      await import('../../../../examples/logo-wall-quote/quote-band.vue')
+    const { container } = render(QuoteBand)
+    await expectNoA11yViolations(container)
+  })
+})

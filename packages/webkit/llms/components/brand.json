@@ -1,0 +1,67 @@
+{
+ "name": "brand",
+ "binding": "Brand",
+ "import": "@aziontech/webkit/brand",
+ "treeShakeableImport": "@aziontech/webkit/brand",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.",
+ "setup": null,
+ "useWhen": [
+  "The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.",
+  "kind=\"reduced\"` where space is tight (collapsed sidebar, mobile header).",
+  "kind=\"extended\"` in marketing layouts that carry the tagline."
+ ],
+ "avoidWhen": [
+  "A customer or partner logo → use `logo-wall`.",
+  "A person's or organization's picture → use `avatar`.",
+  "A decorative product graphic → use `illustration`."
+ ],
+ "related": [
+  "site-nav` and `site-footer` — compose Brand for the site chrome.",
+  "avatar` — the picture or initials of a user, not the product mark.",
+  "logo-wall` — third-party company marks."
+ ],
+ "bestPractices": [
+  "Choose the lockup with `kind` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.",
+  "Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.",
+  "For a home link, wrap Brand in an anchor; its `role=\"img\"` and accessible name \"Azion\" give the link its name."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "'default' | 'reduced' | 'extended'",
+   "default": "'default'",
+   "required": "false",
+   "doc": "Brand lockup to render: `default` (AZION wordmark), `reduced` (the \"A\" glyph for tight spaces), `extended` (wordmark with the \"move to the edge technologies®\" tagline)."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <Brand kind=\"default\" />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <Brand kind=\"default\" />\n    <Brand kind=\"reduced\" />\n    <Brand kind=\"extended\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Brand from '@aziontech/webkit/brand'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-8\">\n    <Brand\n      kind=\"default\"\n      size=\"small\"\n    />\n    <Brand\n      kind=\"default\"\n      size=\"medium\"\n    />\n    <Brand\n      kind=\"default\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/brand.md"
+}

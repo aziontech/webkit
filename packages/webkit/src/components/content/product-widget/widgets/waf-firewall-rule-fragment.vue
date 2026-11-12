@@ -2,7 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -168,7 +168,7 @@
                 value="starts with"
                 aria-label="Operator"
               />
-              <InputText
+              <Input
                 model-value="/"
                 size="medium"
                 aria-label="Argument"
@@ -229,13 +229,13 @@
                 value="Set Rate Limit"
                 aria-label="Behavior"
               />
-              <InputText
+              <Input
                 model-value="10"
                 size="medium"
                 aria-label="Average rate"
               />
               <span class="col-start-2 flex">
-                <InputText
+                <Input
                   model-value="20"
                   size="medium"
                   aria-label="Burst"
@@ -245,7 +245,7 @@
                 value="Tag Event"
                 aria-label="Behavior"
               />
-              <InputText
+              <Input
                 model-value="checkout-guard"
                 size="medium"
                 aria-label="Tag"

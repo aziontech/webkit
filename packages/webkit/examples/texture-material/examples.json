@@ -1,0 +1,26 @@
+{
+  "component": "texture-material",
+  "title": "Components/Marketing/Primitives/TextureMaterial",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The layer fills its nearest positioned ancestor, so the box it sits in is what gives it a size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "Five materials at their measured geometry. `dots` is the quiet default and `lines` the quietest — fine vertical rules whose transparency is the ink’s own, so each one stays solid edge to edge. `dither` ramps its density along an axis, and `pixelate` lights its grid from underneath with two crossing waves.",
+      "file": "kinds.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "One step either side of the measured pitch. A size scales the texture whole, so the cell keeps its proportion to the lattice.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Fades",
+      "summary": "The layer masks itself so it can meet copy without a hard edge. `--texture-fade-start` is where it still holds full ink and `--texture-fade-end` is where it reaches zero, so a band can steer the fade without re-writing the mask.",
+      "file": "fades.vue"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "component": "popover",
+  "title": "Components/Primitives/Overlay/Popover",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A `Button` trigger that opens the popover. The panel content is composed by part — here a header (title + close) and a free-form body.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Placements",
+      "summary": "All four explicit `placement` values side-by-side. Click a trigger to open its panel and see how it anchors against the trigger.",
+      "file": "placements.vue"
+    },
+    {
+      "name": "AutoPlacement",
+      "summary": "`placement=\"auto\"` lets the popover choose the best-fitting corner at open time. The four triggers below all use the same value — each, anchored near a different viewport corner and forced open, resolves toward the corner with the most available space.",
+      "file": "auto-placement.vue"
+    },
+    {
+      "name": "Anatomy",
+      "summary": "Region combinations side-by-side — click a trigger to open each: (a) `PopoverHeader` (title + description) + body + `PopoverFooter`, (b) header with title only + body, and (c) body-only with no header or footer. `PopoverHeader`, `PopoverDescription`, and `PopoverFooter` are all optional — compose the panel by part.",
+      "file": "anatomy.vue"
+    },
+    {
+      "name": "Widths",
+      "summary": "The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 348px), `medium` (`var(--container-sm)`, 408px), and `large` (`var(--container-md)`, 472px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.",
+      "file": "widths.vue"
+    },
+    {
+      "name": "FilterExample",
+      "summary": "A filter builder composed from `Popover` + `Select` + `Input` + `Button` — a real usage, not a new variant. The header carries the title/description/close; the body is a `New Filter` row (field select, operator select, value input); the footer holds Cancel / Apply. It sets `:dismissible=\"false\"` on purpose: the panel nests `Select` overlays (which teleport their own menus to `<body>`), so light-dismiss would treat picking an option as an outside-click; instead it is closed via the header close, Cancel, or Apply, driven by `v-model:open`.",
+      "file": "filter-example.vue"
+    }
+  ]
+}

@@ -236,7 +236,7 @@ describe('ListingBrowser', () => {
     globalThis.history.replaceState(null, '', '?area=Security')
     const { getByTestId, findByText } = band()
 
-    await findByText('Security', { selector: '[data-testid="select-trigger__value"]' })
+    await findByText('Security', { selector: '[data-testid="select-trigger__value"] bdi' })
     expect(tableRoles(getByTestId)).toEqual(['GRC Analyst'])
   })
 
@@ -270,7 +270,7 @@ describe('ListingBrowser', () => {
     await expectNoA11yViolations(getByTestId(`${TESTID}__list`))
   })
 
-  it.skip('has no a11y violations in the table — blocked by Table nesting its focusable ScrollArea viewport directly under role=table (aria-required-children)', async () => {
+  it('has no a11y violations in the table', async () => {
     const { getByTestId } = band()
 
     await expectNoA11yViolations(getByTestId(`${TESTID}__table`))

@@ -1,0 +1,21 @@
+{
+  "component": "tabs",
+  "title": "Components/Primitives/Navigation/Tabs",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three tabs with sliding indicator and horizontally animated panels. The active tab is held in `v-model`; clicking a tab or using Arrow / Home / End keys updates it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Standalone",
+      "summary": "A `Tabs.Item` used on its own, outside a `Tabs.Root` — a highlight chip rather than a tab. With no context to inject, the item reads its own `selected` prop, and it carries the pill treatment itself: the translucent mask, the hairline border and the small shadow that the List’s sliding indicator supplies in the composed case. This is the only story that renders that branch.",
+      "file": "standalone.vue"
+    },
+    {
+      "name": "Scrollable",
+      "summary": "More tabs than fit the container: on narrow (mobile) widths the tab bar scrolls horizontally instead of overflowing or wrapping, the scrollbar is hidden, and the active indicator stays aligned while scrolling.",
+      "file": "scrollable.vue"
+    }
+  ]
+}

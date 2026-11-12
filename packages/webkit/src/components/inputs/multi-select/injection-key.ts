@@ -20,11 +20,23 @@ export interface MultiSelectContext {
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>
   required: ComputedRef<boolean>
+  /** Id the enclosing Field assigns to the trigger. */
+  controlId: ComputedRef<string | undefined>
+  /** Description and error ids of the enclosing Field, for the trigger's aria-describedby. */
+  describedBy: ComputedRef<string | undefined>
+  /** `aria-label` set on the root, forwarded to the trigger. */
+  ariaLabel: ComputedRef<string | undefined>
+  /** `aria-labelledby` set on the root, forwarded to the trigger. */
+  ariaLabelledby: ComputedRef<string | undefined>
   placeholder: ComputedRef<string>
   /** Formats the selected values for the trigger label. */
   displayValue: ComputedRef<string>
   /** Whether the current selection is non-empty (drives data-filled). */
   filled: ComputedRef<boolean>
+  /** Records the visible label of an option so the trigger can show labels, not values. */
+  registerLabel: (value: unknown, label: string) => void
+  /** Whether a selected value still has no recorded label, so the closed list renders its options once to read them. */
+  labelsPending: ComputedRef<boolean>
 }
 
 export const multiSelectContextKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelectContext')

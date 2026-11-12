@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 8b386405cb685ad4eafbf981fa27631dff0f7b1ae55f2bcca6ab05b90df18d89
+checksum: bc512bfc435c5e4a8e01fe5ed012335fa6cba3c423df57a34f694dc0d42ce438
 created: 2026-06-23
-last_updated: 2026-07-28
+last_updated: 2026-11-09
 ---
 
 # Skeleton — Component Spec
@@ -18,27 +18,60 @@ last_updated: 2026-07-28
 
 A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
 
+## When to use
+
+- Content is loading and its final layout is known: text lines, cards, media blocks.
+- Avatar and icon placeholders, with `kind="circle"`.
+
+## When NOT to use
+
+- The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.
+- Rows in a data-driven `table` → use the `table` `loading` prop, which renders aligned skeleton rows.
+- Loading finished with no data → use `empty-state`.
+- A settled state such as Active or Failed → use `status-indicator`.
+
+## Related
+
+- `progress` — measured or indeterminate progress of a task, not a placeholder.
+- `spinner` — compact busy glyph for buttons and inline status.
+- `empty-state` — what replaces the skeleton when the request returns nothing.
+- `table` — its `loading` prop renders skeleton rows for you.
+
+## Best practices
+
+- Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.
+- For `kind="circle"`, set `width` and `height` to the same value.
+- The skeleton is `aria-hidden`. Mark the container you own with `aria-busy="true"` while it loads.
+- Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated="false"` only for static captures.
+
 ## Usage
 
 ```vue
 <script setup>
-import Skeleton from '@aziontech/webkit/skeleton'
+  import Skeleton from '@aziontech/webkit/skeleton'
 </script>
 
 <template>
-  <Skeleton width="240px" height="100px" />
-  <Skeleton kind="circle" width="100px" height="100px" />
+  <Skeleton
+    width="240px"
+    height="100px"
+  />
+  <Skeleton
+    kind="circle"
+    width="100px"
+    height="100px"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'shape' \| 'circle'` | `'shape'` | false | Geometry: a rounded rectangular block (`shape`) or a circle. |
-| `width` | `string` | `'100%'` | false | CSS width (any length). |
-| `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
+| Prop       | Type                  | Default   | Required | JSDoc                                                        |
+| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
+| `kind`     | `'shape' \| 'circle'` | `'shape'` | false    | Geometry: a rounded rectangular block (`shape`) or a circle. |
+| `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
+| `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
+| `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
 
 ## Events
 
@@ -56,17 +89,17 @@ import Skeleton from '@aziontech/webkit/skeleton'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger                    | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations)                                                                      | Reduced-motion fallback                                                        |
+| -------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | while loading (`animated`) | `animate-shimmer` (linear gradient sweep over the fill) | `--animate-shimmer` (`primitives/animations/animate.js`) + `@keyframes shimmer` (`primitives/animations/keyframes.js`) | gated behind `motion-safe:` (no sweep) + `motion-reduce:animate-none` (static) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| fill | `var(--bg-placeholder)` |
-| shimmer sweep | `var(--bg-placeholder-highlight)` |
-| shape radius (`shape`) | `var(--shape-elements)` |
+| Region                 | Token (DESIGN.md)                 |
+| ---------------------- | --------------------------------- |
+| fill                   | `var(--bg-placeholder)`           |
+| shimmer sweep          | `var(--bg-placeholder-highlight)` |
+| shape radius (`shape`) | `var(--shape-elements)`           |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 
@@ -80,7 +113,7 @@ import Skeleton from '@aziontech/webkit/skeleton'
 - Not focusable, not interactive: no keyboard map, no focus ring.
 - The shimmer is gated behind `motion-safe:` and `motion-reduce:animate-none` suppresses it for users who prefer reduced motion (static flat fill).
 
-## Stories (Storybook)
+## Examples
 
 This component has no `size` axis, so the canonical Sizes story does not apply.
 
@@ -101,10 +134,8 @@ This component has no `size` axis, so the canonical Sizes story does not apply.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

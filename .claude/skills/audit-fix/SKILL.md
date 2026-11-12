@@ -34,7 +34,7 @@ Compare the **current resolved version** against the **minimum patched version**
 | Bump class | Example | Action |
 |---|---|---|
 | **patch** (`x.y.Z`) | `1.2.3 → 1.2.9` | ✅ **Apply automatically.** Patches are backward-compatible bug fixes. |
-| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / storybook build). |
+| **minor** (`x.Y.z`) | `10.30.3 → 10.34.4` | ⚠️ **Apply, then validate carefully** — frozen-lockfile install + re-audit; for runtime/build deps also run the affected `governance` checks (lint / type-check / docsbook build). |
 | **major** (`X.y.z`) | `10.x → 11.x` | 🚨 **ALERT and ASK first** (`AskUserQuestion`). Majors carry breaking changes — **never auto-apply.** Present the advisory, the current → target jump, and the blast radius (which project; runtime vs tooling). |
 
 **Pre-1.0 caveat (SemVer §4):** for a `0.y.z` package, a **minor** bump (`0.Y.z`) MAY break — treat it with the **major** rule (ALERT + ask). Only `0.y.Z` patch stays patch.
@@ -74,7 +74,7 @@ If the *only* version that clears a high advisory is a major (or a `0.x` minor) 
    pnpm install --frozen-lockfile                       # CI's first step — must pass
    cd packages/webkit && pnpm audit --audit-level=high  # CI runs the audit HERE; exit must be 0
    ```
-   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run webkit:lint`, `pnpm run webkit:type-check`, `pnpm run storybook:build`).
+   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run webkit:lint`, `pnpm run webkit:type-check`, `pnpm docs:build`).
    If a high advisory remains, return to step 3 with a higher target — and **re-apply the semver policy**, because a higher target may cross into major (→ ASK).
 
 8. **Repeat** until `pnpm audit --audit-level=high` exits **0**.

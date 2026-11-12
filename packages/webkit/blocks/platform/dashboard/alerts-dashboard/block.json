@@ -1,0 +1,44 @@
+{
+  "id": "platform/dashboard/alerts-dashboard",
+  "name": "AlertsDashboard",
+  "title": "Templates/Platform/Dashboard/AlertsDashboard",
+  "surface": "product",
+  "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Its page-level parts are `PageHeader`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "alerts dashboard",
+    "open alerts",
+    "alerts by severity",
+    "incident dashboard",
+    "false positive rate",
+    "alert triage",
+    "painel de alertas",
+    "alertas abertos",
+    "alertas por severidade"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "alerts-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

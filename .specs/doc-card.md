@@ -4,16 +4,16 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: f1d5312457c3fc6efe885b1eec38934f5f01fe9458b0adeb15219924c31b3232
+checksum: 1798e8dbadc863ce70cac75e931ad18653cae88319ac903d008f5ee1c76b181f
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocCard — Component Spec
 
 ## Purpose
 
-One cell of the grid a documentation page scans across: a leading glyph, an optional overline, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.
+One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.
 
 ## When to use
 
@@ -24,7 +24,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 - When each entry needs a sentence to be understood — use `DocItem` rows, one column, so every description is read at the page's own measure instead of squeezed into a cell.
 - For a single call to action at the end of a page — that is a button, not a card.
-- For an application surface — use `CardBox`, which is the console's carded surface.
+- For an application surface — use `Card`, which is the console's carded surface.
 
 ## Related
 
@@ -34,8 +34,8 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 ## Best practices
 
 - Keep the title to a noun phrase and let the copy carry the verb.
-- Use `overline` only when the title alone does not say who or when; it is not a category label.
-- Set `link` when the card should close on an explicit call to action; otherwise the whole tile being the link is enough.
+- Use `eyebrow` only when the title alone does not say who or when; it is not a category label.
+- Set `link-label` when the card should close on an explicit call to action; otherwise the whole tile being the link is enough.
 
 ## Usage
 
@@ -49,7 +49,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
     title="Edge Application"
     icon="pi pi-server"
     href="/docs/edge-application"
-    link="Read the guide"
+    link-label="Read the guide"
   >
     Serve and cache your application at the edge, close to the people using it.
   </DocCard>
@@ -58,15 +58,15 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ## Props
 
-| Prop       | Type                  | Default   | Required | JSDoc                                                                                |
-| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
-| `title`    | `string`              | `''`      | false    | Card heading.                                                                        |
-| `overline` | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
-| `icon`     | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
-| `href`     | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
-| `target`   | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
-| `label`    | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |
-| `link`     | `string`              | `''`      | false    | Call-to-action text; when set the card closes on a link row.                         |
+| Prop        | Type                  | Default   | Required | JSDoc                                                                                |
+| ----------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
+| `title`     | `string`              | `''`      | false    | Card heading.                                                                        |
+| `eyebrow`   | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
+| `icon`      | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
+| `href`      | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
+| `target`    | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
+| `label`     | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |
+| `linkLabel` | `string`              | `''`      | false    | Call-to-action text; when set the card closes on a link row.                         |
 
 ## Events
 
@@ -94,19 +94,19 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ## Tokens
 
-| Region                | Token (DESIGN.md)                                                |
-| --------------------- | ---------------------------------------------------------------- |
-| typography (title)    | `.text-heading-xs`                                               |
-| typography (copy)     | `.text-body-sm`                                                  |
-| typography (overline) | `.text-overline-sm`                                              |
-| typography (cta)      | `.text-label-md`                                                 |
-| text                  | `var(--text-default)`                                            |
-| text (overline, copy) | `var(--text-muted)`                                              |
-| link (cta)            | `var(--text-link)`                                               |
-| surface               | `var(--bg-surface)`                                              |
-| surface.hover         | `var(--bg-hover)`                                                |
-| spacing               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
-| ring                  | `var(--ring-color)`                                              |
+| Region               | Token (DESIGN.md)                                                |
+| -------------------- | ---------------------------------------------------------------- |
+| typography (title)   | `.text-heading-xs`                                               |
+| typography (copy)    | `.text-body-sm`                                                  |
+| typography (eyebrow) | `.text-overline-sm`                                              |
+| typography (cta)     | `.text-label-md`                                                 |
+| text                 | `var(--text-default)`                                            |
+| text (eyebrow, copy) | `var(--text-muted)`                                              |
+| link (cta)           | `var(--text-link)`                                               |
+| surface              | `var(--bg-surface)`                                              |
+| surface.hover        | `var(--bg-hover)`                                                |
+| spacing              | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
+| ring                 | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
@@ -123,10 +123,17 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the whole tile is the hit area, comfortably over 40×40 px.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the chevron mirrors; the external-link arrow does not, but its hover nudge moves toward the end edge (`rtl:group-hover:-translate-x-0.5`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default — a single linked card with a glyph, copy and a call-to-action row.
-- Variants — composite story covering the axes that change the anatomy: with and without an overline, with a slotted mark instead of a font glyph, an external destination, and a non-linked card. Justified in writing here because the root element itself changes with `href`, which no single-arg story can show.
+- Variants — composite story covering the axes that change the anatomy: with and without an eyebrow, with a slotted mark instead of a font glyph, an external destination, and a non-linked card. Justified in writing here because the root element itself changes with `href`, which no single-arg story can show.
 
 ## Constraints — DO NOT
 
@@ -141,10 +148,8 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

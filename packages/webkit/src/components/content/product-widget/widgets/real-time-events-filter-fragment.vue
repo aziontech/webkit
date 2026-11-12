@@ -3,7 +3,7 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -149,10 +149,10 @@
               severity="primary"
               size="small"
               aria-hidden="true"
-              class="pointer-events-none absolute -top-2 -right-2 min-w-5"
+              class="pointer-events-none absolute -top-2 -end-2 min-w-5"
             />
           </span>
-          <InputText
+          <Input
             model-value=""
             size="medium"
             placeholder="Search events, hosts, paths or addresses"
@@ -165,7 +165,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
         </div>
       </ShellMockupPart>
 
@@ -179,7 +179,7 @@
             class="flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-shown:translate-x-0 data-shown:opacity-100 motion-reduce:transition-none"
           >
             <div class="border-b border-(--border-default) p-(--spacing-xs)">
-              <InputText
+              <Input
                 model-value=""
                 size="medium"
                 class="w-full"
@@ -192,7 +192,7 @@
                     aria-hidden="true"
                   />
                 </template>
-              </InputText>
+              </Input>
             </div>
             <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
               <span
@@ -210,7 +210,7 @@
                   {{ summary(field.id) }}
                 </span>
                 <i
-                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                  class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
               </span>
@@ -234,7 +234,7 @@
               <span class="truncate text-label-sm text-(--text-default)">Source</span>
             </div>
             <div class="border-b border-(--border-default) p-(--spacing-xs)">
-              <InputText
+              <Input
                 model-value=""
                 size="medium"
                 class="w-full"
@@ -247,7 +247,7 @@
                     aria-hidden="true"
                   />
                 </template>
-              </InputText>
+              </Input>
             </div>
             <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
               <span

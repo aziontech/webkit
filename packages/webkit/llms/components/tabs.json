@@ -1,0 +1,70 @@
+{
+ "name": "tabs",
+ "binding": "Tabs",
+ "import": "@aziontech/webkit/tabs",
+ "treeShakeableImport": "@aziontech/webkit/tabs",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [],
+ "purpose": "Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tabs/`.",
+ "setup": null,
+ "useWhen": [
+  "A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).",
+  "The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.",
+  "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.",
+  "A tab whose form holds unsaved changes: set `dirty` on the item (bind it to `useUnsavedChanges().isDirty`) so the reader sees which section still needs a save."
+ ],
+ "avoidWhen": [
+  "Several sections may need to be open at once, or the content should expand inline → use `accordion`.",
+  "The tabs switch the media of a marketing band → use `media-tabs`.",
+  "It moves the reader between pages of the app → use `navigation-menu` or `sidebar`."
+ ],
+ "related": [
+  "accordion` — stacked disclosure sections; more than one can be open and content expands below each header.",
+  "media-tabs` — the marketing band that switches an illustration per tab.",
+  "breadcrumb` — location in a hierarchy, not sibling views."
+ ],
+ "bestPractices": [
+  "Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.",
+  "Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.",
+  "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
+  "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
+  "Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.",
+  "Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel."
+ ],
+ "props": [
+  {
+   "name": "defaultValue",
+   "type": "TabsValue | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Initial active tab when uncontrolled."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "—"
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const active = ref('tab-1')\n</script>\n\n<template>\n  <Tabs.Root\n    v-model=\"active\"\n    class=\"w-full max-w-[40rem]\"\n  >\n    <Tabs.List>\n      <Tabs.Item\n        value=\"tab-1\"\n        label=\"Tab Item\"\n      />\n      <Tabs.Item\n        value=\"tab-2\"\n        label=\"Tab Item\"\n      />\n      <Tabs.Item\n        value=\"tab-3\"\n        label=\"Tab Item\"\n      />\n    </Tabs.List>\n    <Tabs.Content class=\"mt-(--spacing-4)\">\n      <Tabs.Panel\n        value=\"tab-1\"\n        class=\"rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)\"\n      >\n        <p class=\"text-body-sm text-(--text-default)\">Content for tab 1</p>\n      </Tabs.Panel>\n      <Tabs.Panel\n        value=\"tab-2\"\n        class=\"rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)\"\n      >\n        <p class=\"text-body-sm text-(--text-default)\">Content for tab 2</p>\n      </Tabs.Panel>\n      <Tabs.Panel\n        value=\"tab-3\"\n        class=\"rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)\"\n      >\n        <p class=\"text-body-sm text-(--text-default)\">Content for tab 3</p>\n      </Tabs.Panel>\n    </Tabs.Content>\n  </Tabs.Root>\n</template>"
+  },
+  {
+   "name": "Standalone",
+   "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-xxs)\">\n    <Tabs.Item\n      label=\"Selected\"\n      selected\n    />\n    <Tabs.Item label=\"Idle\" />\n    <Tabs.Item\n      label=\"Disabled\"\n      disabled\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Scrollable",
+   "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const tabs = [\n    {\n      value: 'tab-1',\n      label: 'Overview'\n    },\n    {\n      value: 'tab-2',\n      label: 'Metrics'\n    },\n    {\n      value: 'tab-3',\n      label: 'Logs'\n    },\n    {\n      value: 'tab-4',\n      label: 'Settings'\n    },\n    {\n      value: 'tab-5',\n      label: 'Security'\n    },\n    {\n      value: 'tab-6',\n      label: 'Integrations'\n    },\n    {\n      value: 'tab-7',\n      label: 'Billing'\n    },\n    {\n      value: 'tab-8',\n      label: 'Advanced'\n    }\n  ]\n  const active = ref('tab-1')\n</script>\n\n<template>\n  <Tabs.Root\n    v-model=\"active\"\n    class=\"w-full max-w-[20rem]\"\n  >\n    <Tabs.List>\n      <Tabs.Item\n        v-for=\"tab in tabs\"\n        :key=\"tab.value\"\n        :value=\"tab.value\"\n        :label=\"tab.label\"\n      />\n    </Tabs.List>\n    <Tabs.Content class=\"mt-(--spacing-4)\">\n      <Tabs.Panel\n        v-for=\"tab in tabs\"\n        :key=\"tab.value\"\n        :value=\"tab.value\"\n        class=\"rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)\"\n      >\n        <p class=\"text-body-sm text-(--text-default)\">Content for {{ tab.label }}</p>\n      </Tabs.Panel>\n    </Tabs.Content>\n  </Tabs.Root>\n</template>"
+  }
+ ],
+ "docs": "components/tabs.md"
+}

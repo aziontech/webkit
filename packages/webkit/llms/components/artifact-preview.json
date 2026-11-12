@@ -1,0 +1,119 @@
+{
+ "name": "artifact-preview",
+ "binding": "ArtifactPreview",
+ "import": "@aziontech/webkit/artifact-preview",
+ "treeShakeableImport": "@aziontech/webkit/artifact-preview",
+ "category": "ai",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact). The header names it (title, description, metadata such as size or format, a file-type icon) and carries its actions: Copy (when `copyValue` is set), Download (when `downloadHref` is set) and Open (when `openable`, emitting `open` so the owner shows the full artifact in a side panel — Cloudscape's canvas preview). The body holds a short inline preview (Cloudscape's inline preview): the first lines of code, the first rows of a table.",
+ "setup": null,
+ "useWhen": [
+  "The assistant produced an artifact the reader may copy, download or open: a rules file, a CSV export, a command, a generated function."
+ ],
+ "avoidWhen": [
+  "Short code inside the prose of a response → fenced code in `StreamingResponse` (rendered as `CodeBlock`).",
+  "A resource that already exists in the product → link to its page; this card is for generated content.",
+  "Uploads the reader attached → `file-dropzone` items or chips in `PromptInput`'s attachments."
+ ],
+ "related": [
+  "code-block` — the usual inline preview body.",
+  "drawer` — where an `open` artifact is shown in full.",
+  "chat-message` — artifacts stack under the response, not inside its bubble."
+ ],
+ "bestPractices": [
+  "Stack artifacts below the message text, one card each; do not nest them in the bubble.",
+  "Keep artifact actions in the card and message actions in `ChatMessage.Actions`.",
+  "Express sizes in KB, MB or GB in `meta`.",
+  "Long or editable content opens (canvas); the inline body stays a preview."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "—",
+   "required": "true",
+   "doc": "File name or title of what was generated (`cache-rules.json`)."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One line on what it is or does."
+  },
+  {
+   "name": "meta",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Facts that help recognize it: size, rows, language (`2.4 KB · JSON`)."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-file'",
+   "required": "false",
+   "doc": "Icon class for the file type."
+  },
+  {
+   "name": "copyValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Text the Copy control puts on the clipboard. Empty hides Copy."
+  },
+  {
+   "name": "downloadHref",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "URL of the file for the Download control. Empty hides Download."
+  },
+  {
+   "name": "openable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview)."
+  }
+ ],
+ "events": [
+  {
+   "name": "open",
+   "payload": "—",
+   "notes": ""
+  },
+  {
+   "name": "copy",
+   "payload": "string",
+   "notes": ""
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The inline preview; scrolls inside a 20 rem body."
+  },
+  {
+   "name": "actions",
+   "scope": "—",
+   "notes": "Extra icon actions, placed before Copy and Download."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Code",
+   "sfc": "<script setup>\n  import ArtifactPreview from '@aziontech/webkit/artifact-preview'\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import { ref } from 'vue'\n\n  const opened = ref(false)\n  const rules = JSON.stringify(\n    {\n      cache_by_query_string: 'allowlist',\n      query_string_fields: ['page', 'lang'],\n      browser_cache_ttl: 3600,\n      edge_cache_ttl: 86400\n    },\n    null,\n    2\n  )\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ArtifactPreview\n      title=\"cache-rules.json\"\n      description=\"Cache settings for storefront\"\n      meta=\"1 KB · JSON\"\n      icon=\"pi pi-code\"\n      :copy-value=\"rules\"\n      openable\n      @open=\"opened = true\"\n    >\n      <CodeBlock\n        :tabs=\"[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]\"\n        :show-line-numbers=\"false\"\n        :copyable=\"false\"\n        :bordered=\"false\"\n      />\n    </ArtifactPreview>\n    <p\n      v-if=\"opened\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      The full file opens in a side panel here.\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Table",
+   "sfc": "<script setup>\n  import ArtifactPreview from '@aziontech/webkit/artifact-preview'\n\n  const rows = [\n    { country: 'Brazil', requests: '1,204,330', hit: '92%' },\n    { country: 'United States', requests: '884,102', hit: '89%' },\n    { country: 'Portugal', requests: '120,448', hit: '95%' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ArtifactPreview\n      title=\"cache-hits-by-country.csv\"\n      description=\"Last 7 days\"\n      meta=\"48 KB · 212 rows\"\n      icon=\"pi pi-table\"\n      download-href=\"data:text/csv;charset=utf-8,country,requests,hit\"\n    >\n      <table class=\"w-full border-collapse text-body-sm\">\n        <thead class=\"bg-(--bg-surface-raised)\">\n          <tr>\n            <th\n              scope=\"col\"\n              class=\"px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm\"\n            >\n              Country\n            </th>\n            <th\n              scope=\"col\"\n              class=\"px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm\"\n            >\n              Requests\n            </th>\n            <th\n              scope=\"col\"\n              class=\"px-(--spacing-sm) py-(--spacing-xs) text-end text-label-sm\"\n            >\n              Hit ratio\n            </th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr\n            v-for=\"row in rows\"\n            :key=\"row.country\"\n            class=\"border-t border-(--border-muted)\"\n          >\n            <td class=\"px-(--spacing-sm) py-(--spacing-xs)\">{{ row.country }}</td>\n            <td class=\"px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums\">\n              {{ row.requests }}\n            </td>\n            <td class=\"px-(--spacing-sm) py-(--spacing-xs) text-end tabular-nums\">{{ row.hit }}</td>\n          </tr>\n        </tbody>\n      </table>\n    </ArtifactPreview>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/artifact-preview.md"
+}

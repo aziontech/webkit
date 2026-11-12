@@ -1,0 +1,93 @@
+{
+ "name": "toggle-group",
+ "binding": "ToggleGroup",
+ "import": "@aziontech/webkit/toggle-group",
+ "treeShakeableImport": "@aziontech/webkit/toggle-group",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment. It renders as a `radiogroup` whose segments are `radio` buttons, is driven by an `options` array plus `v-model`, and works uncontrolled through `defaultValue`. It differs from `tabs`, which switches between content panels it owns: a segmented button only holds the chosen value and leaves rendering what that value means to the consumer.",
+ "setup": null,
+ "useWhen": [
+  "Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.",
+  "Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.",
+  "Show a choice that is currently unavailable as a locked segment (`disabled` option) instead of hiding it."
+ ],
+ "avoidWhen": [
+  "The choice switches between content panels that belong to the control → use `tabs`.",
+  "The choice is a form field with a label, helper text or validation → use horizontal `field`s with a `radio-button`, or `Field.Label` choice cards when each option needs a description.",
+  "The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).",
+  "The user can pick more than one option → use `checkbox` (in a horizontal `field`).",
+  "The control triggers an action instead of holding a value → use `button` or `split-button`."
+ ],
+ "related": [
+  "tabs` — tabs that own their panels; reach for it when each option reveals its own content region.",
+  "field` — a horizontal `Field` with a `radio-button` is the form-field single choice with label and description; a `Field.Label` choice card when each option carries a title and description.",
+  "switch` — a single boolean toggle.",
+  "button` — a lone action; the segments here hold a value instead of firing one."
+ ],
+ "bestPractices": [
+  "Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.",
+  "Give every option a unique `value`; values are coerced to strings and used as the list key and the selection identity, so duplicates collide.",
+  "Pass `ariaLabel` whenever no visible label names the group.",
+  "Use `fluid` to make the group fill a narrow container and share its width across segments, instead of styling the width at the call site.",
+  "Bind `v-model` when the selection lives in the parent; use `defaultValue` only to seed an uncontrolled group."
+ ],
+ "props": [
+  {
+   "name": "options",
+   "type": "ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean }`)",
+   "default": "[]",
+   "required": "false",
+   "doc": "Segmented choices shown as a mutually exclusive group."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Accessible name when no visible group label is associated."
+  },
+  {
+   "name": "defaultValue",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Initial selection when `v-model` is not set."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'large'",
+   "required": "false",
+   "doc": "Size token, on the same 28 / 32 / 40 rhythm every other control uses."
+  },
+  {
+   "name": "fluid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Stretches the group to its container and lets the options share that width."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n  import { ref } from 'vue'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2' },\n    { label: 'Label', value: 'option-3' },\n    { label: 'Label', value: 'option-4' },\n    { label: 'Label', value: 'option-5' }\n  ]\n\n  const selected = ref('option-1')\n</script>\n\n<template>\n  <ToggleGroup\n    v-model=\"selected\"\n    :options=\"options\"\n    aria-label=\"Segmented options\"\n  />\n</template>"
+  },
+  {
+   "name": "WithDisabledOption",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n  import { ref } from 'vue'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2', disabled: true },\n    { label: 'Label', value: 'option-3' },\n    { label: 'Label', value: 'option-4' }\n  ]\n\n  const selected = ref('option-1')\n</script>\n\n<template>\n  <ToggleGroup\n    v-model=\"selected\"\n    :options=\"options\"\n    aria-label=\"Segmented options\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import ToggleGroup from '@aziontech/webkit/toggle-group'\n\n  const options = [\n    { label: 'Label', value: 'option-1' },\n    { label: 'Label', value: 'option-2' },\n    { label: 'Label', value: 'option-3' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"small\"\n      aria-label=\"Small\"\n    />\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"medium\"\n      aria-label=\"Medium\"\n    />\n    <ToggleGroup\n      :options=\"options\"\n      default-value=\"option-1\"\n      size=\"large\"\n      aria-label=\"Large\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/toggle-group.md"
+}

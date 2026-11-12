@@ -1,0 +1,51 @@
+{
+  "id": "platform/delete/delete-with-confirmation",
+  "name": "DeleteWithConfirmation",
+  "title": "Templates/Platform/Delete/DeleteWithConfirmation",
+  "surface": "product",
+  "summary": "The destructive confirmation a resource list uses for Delete: a warning `Alert`, a sentence naming what goes with the resource and a Help Center link, then a prompt that shows the resource name as a click-to-copy chip and an input the user must match before Delete enables. Every resource list, a folder of files and a table of records open it from the row Delete action; the title reads Delete plus the resource kind, and a container that holds other items passes its own consequence sentence. The typed confirmation and the Copied reveal reset each time the dialog opens, so the content stays put while it closes. Built from `ConfirmDialog` (the body in its default slot, Cancel and Delete in its `actions` slot), `Alert`, `Tooltip`, `Input` and `Button`; closed by default behind a visible danger trigger. The LabelledField variant asks for the name through a labelled `Field` + `Input` inside a medium `Dialog`, opened from an outlined `Item` row on the page, for a delete that sits in a settings form rather than a list.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "delete",
+    "delete dialog",
+    "delete confirmation",
+    "delete resource",
+    "type to confirm",
+    "destructive confirmation",
+    "remove resource",
+    "excluir",
+    "confirmar exclusão",
+    "excluir recurso",
+    "apagar",
+    "delete with confirmation",
+    "excluir com confirmação",
+    "form in modal",
+    "dialog form",
+    "modal form",
+    "blocking decision",
+    "type name to delete",
+    "confirm in dialog",
+    "formulário em modal",
+    "formulário no diálogo",
+    "modal com formulário"
+  ],
+  "skills": ["webkit-ux-heuristics", "webkit-microcopy", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Default",
+    "file": "delete-with-confirmation.vue"
+  },
+  "variants": [
+    {
+      "name": "LabelledField",
+      "summary": "A short, blocking decision in a modal: an outlined `Item` row on the page names what the delete removes and holds the danger trigger, and the medium dialog it opens stacks a warning `Alert` over a labelled `Field` + `Input` asking for the exact resource name, with Delete disabled until the typed name matches. The field clears every time the dialog opens, so its content stays in place while it closes. It is the form counterpart of the default Delete dialog on the resource lists, which renders the name as a copy chip with a bare input instead of a labelled field. Built from `PageHeader`, the platform shell, `Item`, `Dialog` with its trigger, portal, overlay, content, title and close parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Input` and `Button`.",
+      "file": "variants/labelled-field.vue",
+      "preview": {
+        "layout": "fullscreen",
+        "background": "dark"
+      }
+    }
+  ]
+}

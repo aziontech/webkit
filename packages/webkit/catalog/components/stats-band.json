@@ -1,0 +1,18 @@
+{
+ "purpose": "The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `big-numbers`, which owns the figures' scale and layout.",
+ "useWhen": [
+  "To state reach, scale or results in three to five figures right after a hero or a claim."
+ ],
+ "avoidWhen": [
+  "For figures that need a quote or a logo beside them → use `network-section` or `logo-wall-quote`.",
+  "For a single figure inside another band → use `big-numbers` directly."
+ ],
+ "related": [
+  "big-numbers` — the figure row this band frames.",
+  "network-section` — the band that pairs claims with client outcomes."
+ ],
+ "bestPractices": [
+  "Keep `value` short and the unit in `suffix`, so the figure reads at a glance.",
+  "Three to five items; more than that and the figures stop reading as a band."
+ ]
+}

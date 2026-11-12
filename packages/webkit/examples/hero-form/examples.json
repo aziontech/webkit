@@ -1,0 +1,51 @@
+{
+  "component": "hero-form",
+  "title": "Components/Marketing/Sections/HeroForm",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Contact page. Submit with a required field empty or a malformed email to see the field messages; a valid form fires the `submit` action with the values and nothing is sent.",
+      "file": "default.vue"
+    },
+    {
+      "name": "UnderAttack",
+      "summary": "The same block with the incident `fields` and `items`: no role and no message, a website instead.",
+      "file": "under-attack.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the site sends the values: the button spins and a submit is ignored.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Submitted",
+      "summary": "The site reported the values as sent: the form gives way to `messages.success`.",
+      "file": "submitted.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The site could not send the values: `messages.error` shows under the button and the form stays editable.",
+      "file": "failed.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "ContactSplit",
+      "summary": "The Contact page. A valid form fires the `submit` action and sends nothing; toggle `loading`, `submitted` and `error` to see what the site sets back.",
+      "file": "site-contact-split.vue",
+      "json": "site-contact-split.json"
+    },
+    {
+      "name": "UnderAttack",
+      "summary": "The incident field set, for a team under attack: the same block with other `fields`, no role and no message, a website instead. The highlights under the description carry the attack figures.",
+      "file": "site-under-attack.vue",
+      "json": "site-under-attack.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Heroes/HeroForm",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["ContactSplit", "ContactSplitJson", "UnderAttack", "UnderAttackJson"]
+}

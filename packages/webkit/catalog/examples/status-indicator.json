@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default success status with label.",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <StatusIndicator\n    severity=\"success\"\n    label=\"Status\"\n  />\n</template>"
+  },
+  {
+   "name": "Status",
+   "summary": "All status variants side by side.",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-3)\">\n    <StatusIndicator\n      severity=\"success\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"info\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"neutral\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"warning\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"alt\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"danger\"\n      label=\"Status\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "Loading state: spinner replaces the dot and the label appends an ellipsis.",
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <StatusIndicator\n    severity=\"success\"\n    label=\"Status\"\n    loading\n  />\n</template>"
+  }
+ ]
+}

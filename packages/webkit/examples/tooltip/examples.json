@@ -1,0 +1,31 @@
+{
+  "component": "tooltip",
+  "title": "Components/Primitives/Overlay/Tooltip",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Outlined button trigger. Hover or focus “Hover me” to reveal the tooltip.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Placements",
+      "summary": "All four anchor sides with directional arrow triggers. Hover or focus each icon button to compare placement.",
+      "file": "placements.vue"
+    },
+    {
+      "name": "AutoPlacement",
+      "summary": "`placement=\"auto\"` lets the tooltip pick the side with the most available space at open time. The four edge-positioned triggers all share the same prop value — each resolves to the side that fits best, reflected in `data-placement`.",
+      "file": "auto-placement.vue"
+    },
+    {
+      "name": "LongContent",
+      "summary": "Long text wraps within the tooltip max width (`var(--container-3xs)`). Hover or focus the info icon to preview the multi-line layout.",
+      "file": "long-content.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Tooltip activation is a no-op; the trigger renders but no hint appears on hover or focus.",
+      "file": "disabled.vue"
+    }
+  ]
+}

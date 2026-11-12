@@ -1,0 +1,404 @@
+# Azion WebKit
+
+> The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
+
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`).
+
+Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
+
+## Foundations
+
+- [Design tokens](foundations/tokens.md): Every visual decision comes from a token: the token groups, what to use and what lint blocks.
+- [Color](foundations/color.md): Semantic color roles, light and dark themes, and the color tokens by group.
+- [Typography](foundations/typography.md): The generated typography classes: font, size, line height and tracking in one class.
+- [Spacing and layout](foundations/spacing.md): Page levels, the five measures, the two rhythm steps and the spacing scale.
+- [Motion](foundations/motion.md): The catalogued animate-* utilities, their timing, when to use each, and reduced motion.
+- [Languages (i18n)](foundations/i18n.md): Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.
+- [Right-to-left](foundations/rtl.md): Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.
+- [Devices](foundations/devices.md): Viewport breakpoints for the shell, container queries for the content, touch targets and reflow at 320 px.
+- [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
+- [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
+
+## Blocks: Headers
+
+- [AuthHeader (headers/auth-header)](blocks/headers/auth-header.md): The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps.
+- [CreationHeader (headers/creation-header)](blocks/headers/creation-header.md): The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail.
+- [DocsHeader (headers/docs-header)](blocks/headers/docs-header.md): The top bar of the documentation site.
+- [ResourceHeader (headers/resource-header)](blocks/headers/resource-header.md): The top bar of every page inside the persistent console shell.
+- [SiteHeader (headers/site-header)](blocks/headers/site-header.md): The sticky top bar of the marketing site.
+
+## Blocks: Platform
+
+- [ActivityHistory (platform/account/activity-history)](blocks/platform/account/activity-history.md): The account's audit log.
+- [ChangePlanDrawer (platform/account/change-plan-drawer)](blocks/platform/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
+- [ManageResources (platform/account/manage-resources)](blocks/platform/account/manage-resources.md): Where an account admin arranges the account's hierarchy.
+- [MfaManagement (platform/account/mfa-management)](blocks/platform/account/mfa-management.md): Multi-factor authentication for a whole account.
+- [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
+- [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
+- [Profile (platform/account/profile)](blocks/platform/account/profile.md): The profile page of a signed-in account, and the layout every account settings page follows.
+- [TeamPermissions (platform/account/team-permissions)](blocks/platform/account/team-permissions.md): Who can do what in the account.
+- [Tokens (platform/account/tokens)](blocks/platform/account/tokens.md): The Personal tokens page of the account settings.
+- [Users (platform/account/users)](blocks/platform/account/users.md): Who can sign in to the account, and through which teams.
+- [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
+- [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
+- [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
+- [Auth (platform/auth)](blocks/platform/auth.md): The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included.
+- [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
+- [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
+- [DeployDrawer (platform/create/deploy-drawer)](blocks/platform/create/deploy-drawer.md): The drawer a platform deploys from, opened by Deploy on a service or a project.
+- [DeployProgressDialog (platform/create/deploy-progress-dialog)](blocks/platform/create/deploy-progress-dialog.md): The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it.
+- [DeploySuccess (platform/create/deploy-success)](blocks/platform/create/deploy-success.md): The screen a create flow ends on.
+- [DeployTemplate (platform/create/deploy-template)](blocks/platform/create/deploy-template.md): A focused page, outside the console shell, where the user turns a template into a running project.
+- [DeploymentFlow (platform/create/deployment-flow)](blocks/platform/create/deployment-flow.md): The card a create flow hands its column to once the user has pressed Deploy.
+- [MultipageCreate (platform/create/multipage-create)](blocks/platform/create/multipage-create.md): The page a first-level resource is created on one step at a time.
+- [ProvisionWizard (platform/create/provision-wizard)](blocks/platform/create/provision-wizard.md): The two-step wizard that provisions a resource bound to another and puts it into traffic.
+- [ReleaseImpact (platform/create/release-impact)](blocks/platform/create/release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
+- [ResourcePicker (platform/create/resource-picker)](blocks/platform/create/resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
+- [SinglePageCreate (platform/create/single-page-create)](blocks/platform/create/single-page-create.md): The page a first-level resource is created on when everything it needs fits on one screen.
+- [SourceWizard (platform/create/source-wizard)](blocks/platform/create/source-wizard.md): The wizard that starts a resource from code and deploys it.
+- [ActivityOutcomesDashboard (platform/dashboard/activity-outcomes-dashboard)](blocks/platform/dashboard/activity-outcomes-dashboard.md): The page an operator opens to answer "what did these actors ask for, and what did the rules decide?".
+- [AlertsDashboard (platform/dashboard/alerts-dashboard)](blocks/platform/dashboard/alerts-dashboard.md): The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved.
+- [AnalyticsDashboard (platform/dashboard/analytics-dashboard)](blocks/platform/dashboard/analytics-dashboard.md): The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the ta…
+- [CompositionDashboard (platform/dashboard/composition-dashboard)](blocks/platform/dashboard/composition-dashboard.md): The page that answers "what is this total made of, and how did the mix move?".
+- [ConfigurableDashboard (platform/dashboard/configurable-dashboard)](blocks/platform/dashboard/configurable-dashboard.md): A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout.
+- [DataDashboard (platform/dashboard/data-dashboard)](blocks/platform/dashboard/data-dashboard.md): The usage page: how much the account's projects consumed in the period, how that compares with the previous period, and which projects drove it.
+- [ExecutiveSummaryDashboard (platform/dashboard/executive-summary-dashboard)](blocks/platform/dashboard/executive-summary-dashboard.md): The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewe…
+- [FunnelCohortDashboard (platform/dashboard/funnel-cohort-dashboard)](blocks/platform/dashboard/funnel-cohort-dashboard.md): The growth page: how people move through the steps from a first visit to a paid plan, where they drop off, and how well each weekly sign-up cohort keeps coming back.
+- [HealthScoreDashboard (platform/dashboard/health-score-dashboard)](blocks/platform/dashboard/health-score-dashboard.md): The page that answers "how well does this work for the people who use it, and where is it worst?".
+- [HomeDashboard (platform/dashboard/home-dashboard)](blocks/platform/dashboard/home-dashboard.md): The Console's Home page inside the platform shell: the first screen a signed-in user lands on.
+- [ProjectStatusDashboard (platform/dashboard/project-status-dashboard)](blocks/platform/dashboard/project-status-dashboard.md): Where one project stands against its plan, one project and sprint at a time.
+- [ScanResultsDashboard (platform/dashboard/scan-results-dashboard)](blocks/platform/dashboard/scan-results-dashboard.md): The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict.
+- [SecurityDashboard (platform/dashboard/security-dashboard)](blocks/platform/dashboard/security-dashboard.md): The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresse…
+- [ServiceMonitoringDashboard (platform/dashboard/service-monitoring-dashboard)](blocks/platform/dashboard/service-monitoring-dashboard.md): The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now.
+- [DeleteWithConfirmation (platform/delete/delete-with-confirmation)](blocks/platform/delete/delete-with-confirmation.md): The last stop before a resource is gone for good.
+- [AttachedResources (platform/detail/attached-resources)](blocks/platform/detail/attached-resources.md): A short list of the things one resource is attached to, shown in place inside its Settings tab.
+- [DeploymentLogs (platform/detail/deployment-logs)](blocks/platform/detail/deployment-logs.md): The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why.
+- [DetailsPage (platform/detail/details-page)](blocks/platform/detail/details-page.md): The second-level page of one resource.
+- [GetStarted (platform/detail/get-started)](blocks/platform/detail/get-started.md): The first thing a user reads about a resource they created from the CLI and have not deployed yet.
+- [ProductionChecklist (platform/detail/production-checklist)](blocks/platform/detail/production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
+- [RecordTable (platform/detail/record-table)](blocks/platform/detail/record-table.md): The detail page of a resource that owns a long list of records, here a DNS zone.
+- [VersionDetail (platform/detail/version-detail)](blocks/platform/detail/version-detail.md): One version of a resource, opened from its Versions tab.
+- [AttributeEditor (platform/edit/attribute-editor)](blocks/platform/edit/attribute-editor.md): A list of key and value pairs and the drawer that edits them, here environment variables.
+- [CodeEditor (platform/edit/code-editor)](blocks/platform/edit/code-editor.md): The editing page of a service whose behavior lives in source code.
+- [EditResource (platform/edit/edit-resource)](blocks/platform/edit/edit-resource.md): The settings page of one existing resource.
+- [RuleBuilder (platform/edit/rule-builder)](blocks/platform/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
+- [SchemaEditor (platform/edit/schema-editor)](blocks/platform/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
+- [SettingsForm (platform/settings/settings-form)](blocks/platform/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
+- [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen.
+- [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.
+- [FormError (platform/states/form-error)](blocks/platform/states/form-error.md): The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section.
+- [FormValidation (platform/states/form-validation)](blocks/platform/states/form-validation.md): Every state a submit can land in, on one create form.
+- [NotFound (platform/states/not-found)](blocks/platform/states/not-found.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
+- [PageWires (platform/states/page-wires)](blocks/platform/states/page-wires.md): The skeleton wires an app paints while a page is still arriving.
+- [ProjectIntake (platform/states/project-intake)](blocks/platform/states/project-intake.md): The surfaces a project passes through when the user drops it on the page.
+- [CardView (platform/view/card-view)](blocks/platform/view/card-view.md): The first-level index of one resource type, in cards.
+- [FileBrowser (platform/view/file-browser)](blocks/platform/view/file-browser.md): The contents of one storage resource.
+- [Marketplace (platform/view/marketplace)](blocks/platform/view/marketplace.md): The page where people find something made by Azion or a partner and add it to what they run.
+- [QueryEditor (platform/view/query-editor)](blocks/platform/view/query-editor.md): The workspace of one SQL database.
+- [RulesList (platform/view/rules-list)](blocks/platform/view/rules-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
+- [SplitView (platform/view/split-view)](blocks/platform/view/split-view.md): The events explorer.
+- [TableView (platform/view/table-view)](blocks/platform/view/table-view.md): The first-level index of one resource type, in rows.
+- [TemplateBrowser (platform/view/template-browser)](blocks/platform/view/template-browser.md): The catalog of templates a person starts a project from.
+- [WafTuning (platform/view/waf-tuning)](blocks/platform/view/waf-tuning.md): The Tuning tab of a WAF rule set.
+
+## Blocks: Shells
+
+- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside, built on `AppLayout`.
+- [Documentation (shells/documentation)](blocks/shells/documentation.md): The documentation shell.
+- [Website (shells/website)](blocks/shells/website.md): The marketing shell.
+
+## Components: Actions
+
+- [Button](components/button.md): Interactive control for user actions.
+- [ButtonGroup](components/button-group.md): A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group.
+- [ButtonHighlight](components/button-highlight.md): Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button).
+- [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
+- [IconButton](components/icon-button.md): Interactive control for user actions.
+- [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
+- [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array.
+- [ToggleGroup](components/toggle-group.md): ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment.
+
+## Components: Ai
+
+- [ActionConfirmation](components/action-confirmation.md): A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader a…
+- [AiLoading](components/ai-loading.md): The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with th…
+- [ArtifactCanvas](components/artifact-canvas.md): The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document.
+- [ArtifactPreview](components/artifact-preview.md): A card for something the assistant generated — a file, a code snippet, a table, a configuration (Cloudscape artifact previews, AI Elements Artifact).
+- [ChatMessage](components/chat-message.md): One message in a generative AI conversation (Cloudscape's chat bubble, AI Elements' Message): who wrote it (avatar and author line), the content, and — once the response is complete — the inline actions a reader takes…
+- [Citation](components/citation.md): An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL…
+- [Conversation](components/conversation.md): The scrolling message log of a generative AI chat.
+- [ConversationHistory](components/conversation-history.md): The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and…
+- [FeedbackReasonDialog](components/feedback-reason-dialog.md): Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback.
+- [PromptInput](components/prompt-input.md): The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated,…
+- [Reasoning](components/reasoning.md): Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is…
+- [ResponseBranches](components/response-branches.md): Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it.
+- [Sources](components/sources.md): The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line descript…
+- [StreamingResponse](components/streaming-response.md): Renders a model's Markdown as it streams in (AI Elements Response / Streamdown), safely.
+- [SuggestionGroup](components/suggestion-group.md): A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clar…
+- [ToolCall](components/tool-call.md): One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Runnin…
+
+## Components: Charts
+
+- [BarList](components/bar-list.md): A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column.
+- [Chart](components/chart.md): A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand.
+- [DonutChart](components/donut-chart.md): A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it.
+- [GaugeChart](components/gauge-chart.md): One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it.
+- [MapChart](components/map-chart.md): Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value.
+- [SparkChart](components/spark-chart.md): A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height.
+- [StatTile](components/stat-tile.md): A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom.
+- [Tracker](components/tracker.md): A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus.
+
+## Components: Code
+
+- [CodeBlock](components/code-block.md): Read-only code viewer for docs, API examples, and configuration previews.
+- [CodeEditor](components/code-editor.md): An editable code surface with line numbers, diagnostics and a read-only and a diff mode.
+- [LogView](components/log-view.md): Composition-based terminal log viewer for CI/deploy output.
+- [Trace](components/trace.md): A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock.
+
+## Components: Content
+
+- [Accordion](components/accordion.md): A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel.
+- [Avatar](components/avatar.md): Displays content or metadata in the UI.
+- [Badge](components/badge.md): Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding.
+- [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
+- [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
+- [Card](components/card.md): Displays content or metadata in the UI.
+- [CardPricing](components/card-pricing.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
+- [Currency](components/currency.md): Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string ea…
+- [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation — or, in tutorial mode, an ordered list of tasks with the reader's prog…
+- [Hotspot](components/hotspot.md): Marks a real control as a step of a tutorial.
+- [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.
+- [Item](components/item.md): Versatile flex row for title, description, media, and actions.
+- [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
+- [KeyValuePairs](components/key-value-pairs.md): A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`.
+- [LineFigure](components/line-figure.md): An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it…
+- [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.
+- [OverflowCount](components/overflow-count.md): A small `+N` chip that stands for the items a slot cannot show, and opens a popover with the whole list.
+- [Overline](components/overline.md): Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow").
+- [PaymentBrand](components/payment-brand.md): The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme…
+- [ProductWidget](components/product-widget.md): Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product.
+- [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws the…
+- [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
+- [ShellMockup](components/shell-mockup.md): A scaled, inert picture of an Azion Console screen, for marketing bands that show the product.
+- [Tag](components/tag.md): Compact status or category label with severity-based color coding.
+- [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
+
+## Components: Data
+
+- [Cards](components/cards.md): A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot.
+- [CollectionPreferences](components/collection-preferences.md): The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wr…
+- [Flow](components/flow.md): Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-ancho…
+- [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
+- [PickList](components/pick-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
+- [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
+- [Table](components/table.md): Composition primitives for building accessible, pixel-perfect data tables, in two modes.
+- [TopologyDiagram](components/topology-diagram.md): The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its…
+- [Tree](components/tree.md): A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron.
+
+## Components: Documentation
+
+- [DocAccordionGroup](components/doc-accordion-group.md): The FAQ and "expand for detail" block of a documentation page.
+- [DocAccordionItem](components/doc-accordion-item.md): One collapsible entry inside a `DocAccordionGroup`.
+- [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the…
+- [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
+- [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
+- [DocCodeGroup](components/doc-code-group.md): One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface.
+- [DocCta](components/doc-cta.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
+- [DocFrame](components/doc-frame.md): The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset.
+- [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
+- [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
+- [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
+- [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
+- [DocPagination](components/doc-pagination.md): The previous / next pair that closes a documentation page.
+- [DocPrompt](components/doc-prompt.md): DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent".
+- [DocProse](components/doc-prose.md): The typography contract every documentation page inherits.
+- [DocStep](components/doc-step.md): One numbered step of a `DocSteps` walkthrough: the circled index, the rail that continues to the next step, the step heading, and any content the author nests underneath.
+- [DocSteps](components/doc-steps.md): The ordered walkthrough from the docs frame: a column of `DocStep` children joined by a rail.
+- [DocTab](components/doc-tab.md): One panel inside `DocTabs`.
+- [DocTabs](components/doc-tabs.md): Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI").
+- [DocTooltip](components/doc-tooltip.md): The inline gloss: a term in running prose that carries its own definition, shown when the reader hovers or focuses it.
+- [DocUpdate](components/doc-update.md): One entry in a changelog: what shipped, when, and under which version.
+
+## Components: Feedback
+
+- [Alert](components/alert.md): Inline feedback banner that communicates status, alerts, or progress.
+- [EmptyState](components/empty-state.md): Centered placeholder shown when a resource list or section has no content yet.
+- [ErrorBoundary](components/error-boundary.md): Guards one region of a page.
+- [OutcomeMark](components/outcome-mark.md): A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run).
+- [Progress](components/progress.md): Communicates the progress of an ongoing task as a horizontal bar.
+- [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
+- [StatusIndicator](components/status-indicator.md): Communicates status, alerts, or progress to the user.
+- [Toast](components/toast.md): A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`…
+- [UploadProgress](components/upload-progress.md): A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them.
+
+## Components: Inputs
+
+- [AttributeEditor](components/attribute-editor.md): An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`.
+- [Calendar](components/calendar.md): Date-range picker.
+- [Checkbox](components/checkbox.md): Binary selection control.
+- [Chip](components/chip.md): A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view.
+- [Combobox](components/combobox.md): A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed.
+- [DateRangePicker](components/date-range-picker.md): A time range for queries over time: logs, events, traces and metrics.
+- [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
+- [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
+- [FileTokenGroup](components/file-token-group.md): The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress ba…
+- [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
+- [Hint](components/hint.md): Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
+- [Input](components/input.md): Single-line text input for forms and inline editing.
+- [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`.
+- [Label](components/label.md): Form-field label that pairs descriptive text with an optional required indicator and an optional hint.
+- [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
+- [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
+- [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
+- [PasswordInput](components/password-input.md): Single-line password input for forms.
+- [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
+- [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
+- [RadioButton](components/radio-button.md): Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper).
+- [RadioCards](components/radio-cards.md): Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers).
+- [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
+- [Select](components/select.md): Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list.
+- [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
+- [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
+- [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.
+- [Textarea](components/textarea.md): Collects multi-line free-form text from the user.
+- [ThemeSwitcher](components/theme-switcher.md): A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments.
+
+## Components: Layout
+
+- [AppLayout](components/app-layout.md): The frame every signed-in product page renders inside.
+- [Board](components/board.md): A configurable dashboard grid: the reader arranges the cards.
+- [Footer](components/footer.md): Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`.
+- [FrameBox](components/frame-box.md): The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content.
+- [GlobalHeader](components/global-header.md): Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants.
+- [PageHeader](components/page-header.md): The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right.
+- [Resizable](components/resizable.md): A group of adjacent regions whose shared edges the reader can drag.
+- [SaveBar](components/save-bar.md): The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions.
+- [ScrollArea](components/scroll-area.md): Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling.
+- [SectionHeader](components/section-header.md): The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right.
+- [Separator](components/separator.md): Thin separator line that visually splits content into groups.
+- [SettingRow](components/setting-row.md): One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs.
+- [SettingsSection](components/settings-section.md): A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows).
+- [Sidebar](components/sidebar.md): Helps users move between views or sections.
+
+## Components: Marketing
+
+- [BandStack](components/band-stack.md): A run of framed bands that follow one another down the page, each one drawn as two registration frames — its left half and its right half — sharing a hairline with the next.
+- [Banner](components/banner.md): A split promotional band: the announcement and its actions in the wide leading column, a short supporting note on a raised surface in the narrow trailing one.
+- [BannerArt](components/banner-art.md): The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice,…
+- [BentoGrid](components/bento-grid.md): A mosaic of unequal cells on one set of shared rules: each cell claims a number of columns and rows, and the rules between them are drawn once so the whole block reads as a single framed surface.
+- [BigNumbers](components/big-numbers.md): A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath.
+- [CallToAction](components/call-to-action.md): The closing ask of a marketing page: a headline, a supporting sentence and the actions that follow from them, set apart from the surrounding copy by its own surface.
+- [CardGrid](components/card-grid.md): The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `fram…
+- [Carousel](components/carousel.md): A horizontally scrollable track of cards with snap points and a pair of step controls.
+- [ColumnNavigation](components/column-navigation.md): A directory of destinations laid out in columns on one set of shared hairlines: each column carries an overline heading over a rule, then its rows — a glyph, the destination's name, and one line of what it is.
+- [ContentColumns](components/content-columns.md): A titled band whose body is two or three columns of short copy, drawn in one hairline `card-grid` so the columns read as a single surface.
+- [Diagram](components/diagram.md): A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform.
+- [Embed](components/embed.md): A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs.
+- [Faq](components/faq.md): The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right.
+- [Hero](components/hero.md): The opening band of a page: a full-bleed section spanning the whole viewport width whose copy is centered in a capped column, optionally filling one screen and optionally carrying a decorative backdrop behind it.
+- [LogoWall](components/logo-wall.md): The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name.
+- [MediaSplit](components/media-split.md): A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame.
+- [MediaTabs](components/media-tabs.md): A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen.
+- [MediaTile](components/media-tile.md): One cell of a media band: a scene above, and under it a run-in caption whose lead names what the scene shows and whose sentence continues on the same line, so a row of tiles reads as one paragraph of claims under one…
+- [Quote](components/quote.md): A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for.
+- [QuoteCarousel](components/quote-carousel.md): A band of customer testimonials laid out as one scrollable row of flush cards.
+- [QuoteTabs](components/quote-tabs.md): A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings…
+- [SectionContainer](components/section-container.md): The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside.
+- [SectionGap](components/section-gap.md): The empty registration frame that divides two page sections.
+- [SectionModule](components/section-module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
+- [SectionTitle](components/section-title.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
+- [StickyStack](components/sticky-stack.md): A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open.
+- [TextureMaterial](components/texture-material.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
+- [Ticker](components/ticker.md): An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses.
+- [Topic](components/topic.md): One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it.
+
+## Components: Navigation
+
+- [Breadcrumb](components/breadcrumb.md): Shows the page hierarchy so users can navigate back to parent views.
+- [DropdownMenu](components/dropdown-menu.md): Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections.
+- [Link](components/link.md): Helps users move between views or sections.
+- [Menu](components/menu.md): A vertical, hierarchical navigation menu.
+- [NavigationMenu](components/navigation-menu.md): Helps users move between views or sections.
+- [PageTabs](components/page-tabs.md): The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-change…
+- [Stepper](components/stepper.md): A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots.
+- [Tabs](components/tabs.md): Helps users move between views or sections.
+- [Wizard](components/wizard.md): A multi-step create flow in one surface.
+
+## Components: Overlay
+
+- [Command](components/command.md): Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions.
+- [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary…
+- [Dialog](components/dialog.md): Modal surface above the page, built on the shared Panel shell.
+- [Drawer](components/drawer.md): Layered surface above the page (modal, drawer, menu).
+- [Panel](components/panel.md): Layered surface above the page (modal, drawer, menu).
+- [Popover](components/popover.md): Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a fl…
+- [Tooltip](components/tooltip.md): Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it.
+
+## Components: Marketing sections
+
+- [ArchitectureTabs](components/architecture-tabs.md): The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame.
+- [ArticleBody](components/article-body.md): The reading page of an article.
+- [ArticleCards](components/article-cards.md): A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile.
+- [ArticleHighlight](components/article-highlight.md): The band that opens a blog under its hero.
+- [ArticleIndexBlog](components/article-index-blog.md): Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field.
+- [ArticleIndexResourceHub](components/article-index-resource-hub.md): Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room.
+- [CapabilityGrid](components/capability-grid.md): A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row.
+- [CliTerminal](components/cli-terminal.md): The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another.
+- [ClientMosaic](components/client-mosaic.md): The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's l…
+- [ClientMosaicColumns](components/client-mosaic-columns.md): Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case.
+- [ClientQuotes](components/client-quotes.md): The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it.
+- [ClosingCallToAction](components/closing-call-to-action.md): The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one.
+- [ClosingCallToActionAgents](components/closing-call-to-action-agents.md): The close for a reader who may be a person or an agent: one centred ask in the loud `primary` register of the call to action, under a pixelated, waving texture, with a small segmented switch under the title that picks…
+- [ClosingCallToActionNewsletter](components/closing-call-to-action-newsletter.md): The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatch…
+- [ClosingCallToActionTemplates](components/closing-call-to-action-templates.md): The close for a page whose last ask is "start from a template": a framed split whose start cell carries the ask — headline, sentence and two actions, start-aligned — over the pixelated, waving texture of the `primary`…
+- [CodeSplit](components/code-split.md): The claim-beside-its-code band of a product page: a framed media split whose copy states the claim, with one or two large buttons under it, and whose media is a code sample on the pixelate texture, cut off by the fram…
+- [ComparePlans](components/compare-plans.md): The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead…
+- [CompareSupportTiers](components/compare-support-tiers.md): The tier-by-tier comparison on the Support page: one column per support tier with its name, who it is for and its action button pinned in the header while the page scrolls, one band per service family with an overline…
+- [ComparisonTable](components/comparison-table.md): The capability-by-capability comparison of Azion with one competitor on a migration landing page: a left section title over a framed table whose header row (the capability column, the Azion brand and the competitor lo…
+- [ComplianceBadges](components/compliance-badges.md): The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell.
+- [ConsolePanel](components/console-panel.md): A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene.
+- [ContactHub](components/contact-hub.md): The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels.
+- [CustomerSpotlight](components/customer-spotlight.md): A row of client cards, each painted in the client's own colours with its reversed logo; the hovered or focused card opens to reveal its story line and a "Read story" cue, and the whole card links to the success story.
+- [FaqSection](components/faq-section.md): The frequently asked questions band near the end of a landing page: the heading in the left column and the questions on the right, each answer closed until the reader opens it, one at a time.
+- [FeatureScroll](components/feature-scroll.md): The walkthrough band of a product page: a large section title over one screen per feature.
+- [FeatureTabs](components/feature-tabs.md): The feature walkthrough band of a product page: a left-aligned section title over up to three tabs on one side and the active tab's illustration on the other, closed by a small link under the frame.
+- [FeatureTiles](components/feature-tiles.md): The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence.
+- [FeatureWidgets](components/feature-widgets.md): The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is an illustration above a bold-led sentence and one affordance — a link bu…
+- [HeroBand](components/hero-band.md): The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor.
+- [HeroCopyOnTopArt](components/hero-copy-on-top-art.md): The opening band of a product page whose copy sits centered on top of a topology scene: the page `h1` with its overline, sentence and up to two actions over columns of status cards wired left to right.
+- [HeroForm](components/hero-form.md): The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor.
+- [HeroWithOpening](components/hero-with-opening.md): The opening band of a product page followed straight by its arguments: a large centered title band with the page `h1`, overline, sentence and up to two actions, then a frame grid of three-column argument cells in the…
+- [InvestorMarks](components/investor-marks.md): The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line.
+- [ListingBrowser](components/listing-browser.md): The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small brea…
+- [ListingTable](components/listing-table.md): A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list.
+- [LogoWallQuote](components/logo-wall-quote.md): The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action.
+- [MediaSplitBand](components/media-split-band.md): One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other.
+- [MediaSplitStack](components/media-split-stack.md): A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through.
+- [NetworkSection](components/network-section.md): The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a…
+- [PhotoMarquee](components/photo-marquee.md): The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus.
+- [PlatformDirectory](components/platform-directory.md): A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product.
+- [PricingPlans](components/pricing-plans.md): The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button.
+- [ProcessScroll](components/process-scroll.md): The stages of a process as a row of numbered dark cards on a pixel texture, under a section title.
+- [RecognitionMarquee](components/recognition-marquee.md): The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus.
+- [ResourceGrid](components/resource-grid.md): A band that points readers to further reading on solution pages: an overline, a headline and a short lead with an optional button sit beside a two-column frame grid of linked resource cards, each a title and one sente…
+- [SectionCommand](components/section-command.md): A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …").
+- [SiteFooter](components/site-footer.md): The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select.
+- [SiteNav](components/site-nav.md): The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`.
+- [StatsBand](components/stats-band.md): The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit.
+- [StickyCarousel](components/sticky-carousel.md): A row of numbered dark cards that pins under the site header while the page scrolls and slides the row sideways until its last card is in view, then lets the page continue.
+- [StickyScrollCode](components/sticky-scroll-code.md): The developer-capabilities band of a product page: a large section title over a sticky stack whose claims scroll past a pinned media frame, the open claim showing its one-file code sample on the pixelate texture and i…
+- [StoryLibrary](components/story-library.md): Every success story of a company as one filterable library.
+- [SubjectLibrary](components/subject-library.md): A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells s…
+- [TemplateGallery](components/template-gallery.md): The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a tic…
+- [UseCaseLinks](components/use-case-links.md): The use-case directory band of a solution page: a left-aligned section title over a divider grid of linked topics, one per use case, each an icon, a heading and a sentence that link to the page that explains it.
+- [UseCases](components/use-cases.md): The "what teams use it for" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case.
+
+## Components: Utilities
+
+- [Spinner](components/spinner.md): Shared visual utility used by other components.
+- [WebkitProvider](components/webkit-provider.md): Sets the language and text direction of every WebKit component below it.
+
+## Optional
+
+- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines without their code and the first example of each component (the pages above hold the code and every example).
+- [catalog.json](../catalog.json): the machine catalog the pages are generated from (exports, props, tokens, blocks).

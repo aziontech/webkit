@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Headings, paragraphs, links, inline code, both list kinds, a blockquote and a section rule — all of it plain semantic HTML, none of it carrying a class. The markup is hand-written here, which is also the proof that the contract is not tied to any renderer.",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>Deploy an application</h2>\n    <p>\n      Templates are ready-made projects that go live in a few clicks. You don't need any local\n      tooling, and the <a href=\"https://www.azion.com/en/documentation/\">template's guide</a> lists\n      what each one needs.\n    </p>\n    <h3>What you get</h3>\n    <ul>\n      <li>A <strong>workload</strong> bound to its own Azion domain</li>\n      <li>An edge application built from your <code>azion.config.js</code></li>\n      <li>A certificate issued and renewed for you</li>\n    </ul>\n    <ol>\n      <li>Pick a template</li>\n      <li>Fill in the fields it asks for</li>\n      <li>Deploy</li>\n    </ol>\n    <blockquote>\n      <p>The first request to a location is a cache miss. Warm-up is per location, not global.</p>\n    </blockquote>\n    <h4>Build command</h4>\n    <p>\n      An h4 is a label inside a section rather than a new section, so it shares the base gap of the\n      prose around it and carries its level on weight instead.\n    </p>\n    <hr />\n    <p>A section break above resets the reader before the next part of the page.</p>\n  </DocProse>\n</template>"
+  },
+  {
+   "name": "ChromeBoundary",
+   "summary": "`DocProse` styles descendants, so without a guard it would restyle the internals of every documentation component sitting in the prose — a callout body, a code block’s lines, an accordion trigger’s heading. Every prose rule carries `:not([data-doc-chrome],[data-doc-chrome]_*)`, so a subtree marked `data-doc-chrome` is left alone while the prose around it is not.",
+   "sfc": "<script setup>\n  import DocProse from '@aziontech/webkit/doc-prose'\n</script>\n\n<template>\n  <DocProse>\n    <h2>The contract stops at a component's edge</h2>\n    <p>This paragraph is authored prose, so it takes the prose rung and the prose ink.</p>\n    <div data-doc-chrome>\n      <h2>A component's own heading</h2>\n      <p>A component's own copy keeps whatever that component gives it.</p>\n    </div>\n    <p>And prose after the component picks the ladder back up.</p>\n  </DocProse>\n</template>"
+  }
+ ]
+}

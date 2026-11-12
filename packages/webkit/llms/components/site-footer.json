@@ -1,0 +1,106 @@
+{
+ "name": "site-footer",
+ "binding": "SiteFooter",
+ "import": "@aziontech/webkit/site-footer",
+ "treeShakeableImport": "@aziontech/webkit/site-footer",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.",
+ "setup": null,
+ "useWhen": [
+  "As the last block of every marketing page."
+ ],
+ "avoidWhen": [
+  "Inside the product console or the docs → compose `footer` directly.",
+  "For a closing ask above the footer → use `closing-call-to-action`."
+ ],
+ "related": [
+  "footer` — the composition footer this section fills.",
+  "closing-call-to-action` — the band that sits right above it."
+ ],
+ "bestPractices": [
+  "**Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.",
+  "**Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.",
+  "Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.",
+  "Keep four link columns so the grid fills at `md`.",
+  "Give every social link a `label` that names the network, since the button shows only the glyph."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "SiteFooterKind",
+   "default": "'site'",
+   "required": "false",
+   "doc": "Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`)."
+  },
+  {
+   "name": "home",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Destination of the Azion mark; the mark is not rendered when empty."
+  },
+  {
+   "name": "homeAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`)."
+  },
+  {
+   "name": "columns",
+   "type": "SiteFooterColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href }`."
+  },
+  {
+   "name": "socials",
+   "type": "SiteFooterSocial[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab."
+  },
+  {
+   "name": "statusLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Line of the system status indicator; the indicator is not rendered when empty."
+  },
+  {
+   "name": "languages",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty."
+  },
+  {
+   "name": "languageAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`)."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import SiteFooter from '@aziontech/webkit/site-footer'\n\n  const columns = [\n    {\n      title: 'Products',\n      links: [\n        {\n          label: 'Functions',\n          href: '#'\n        },\n        {\n          label: 'Cache',\n          href: '#'\n        },\n        {\n          label: 'Object Storage',\n          href: '#'\n        },\n        {\n          label: 'SQL Database',\n          href: '#'\n        },\n        {\n          label: 'WAF',\n          href: '#'\n        },\n        {\n          label: 'Edge DNS',\n          href: '#'\n        },\n        {\n          label: 'Data Stream',\n          href: '#'\n        }\n      ]\n    },\n    {\n      title: 'Solutions',\n      links: [\n        {\n          label: 'Web Apps',\n          href: '#'\n        },\n        {\n          label: 'AI',\n          href: '#'\n        },\n        {\n          label: 'Application Security',\n          href: '#'\n        },\n        {\n          label: 'Financial Services',\n          href: '#'\n        },\n        {\n          label: 'Retail',\n          href: '#'\n        },\n        {\n          label: 'Technology',\n          href: '#'\n        }\n      ]\n    },\n    {\n      title: 'Developers',\n      links: [\n        {\n          label: 'Docs',\n          href: '#'\n        },\n        {\n          label: 'API Reference',\n          href: '#'\n        },\n        {\n          label: 'Dev Tools',\n          href: '#'\n        },\n        {\n          label: 'Release Notes',\n          href: '#'\n        },\n        {\n          label: 'Marketplace',\n          href: '#'\n        },\n        {\n          label: 'Status',\n          href: '#'\n        }\n      ]\n    },\n    {\n      title: 'Company',\n      links: [\n        {\n          label: 'About',\n          href: '#'\n        },\n        {\n          label: 'Customers',\n          href: '#'\n        },\n        {\n          label: 'Partners',\n          href: '#'\n        },\n        {\n          label: 'Careers',\n          href: '#'\n        },\n        {\n          label: 'Blog',\n          href: '#'\n        },\n        {\n          label: 'Contact',\n          href: '#'\n        }\n      ]\n    }\n  ]\n\n  const socials = [\n    {\n      icon: 'pi pi-github',\n      label: 'Azion on GitHub',\n      href: 'https://github.com/aziontech'\n    },\n    {\n      icon: 'pi pi-linkedin',\n      label: 'Azion on LinkedIn',\n      href: 'https://www.linkedin.com/company/aziontech'\n    },\n    {\n      icon: 'pi pi-youtube',\n      label: 'Azion on YouTube',\n      href: 'https://www.youtube.com/aziontech'\n    },\n    {\n      icon: 'ai ai-x',\n      label: 'Azion on X',\n      href: 'https://x.com/aziontech'\n    },\n    {\n      icon: 'pi pi-instagram',\n      label: 'Azion on Instagram',\n      href: 'https://www.instagram.com/aziontech'\n    },\n    {\n      icon: 'pi pi-discord',\n      label: 'Azion on Discord',\n      href: 'https://discord.gg/azion'\n    },\n    {\n      icon: 'pi pi-reddit',\n      label: 'Azion on Reddit',\n      href: 'https://www.reddit.com/r/aziontech'\n    }\n  ]\n\n  const languages = ['EN', 'PT-BR', 'ES']\n</script>\n\n<template>\n  <SiteFooter\n    kind=\"site\"\n    aria-label=\"Footer\"\n    home=\"#\"\n    home-aria-label=\"Azion home\"\n    :columns=\"columns\"\n    :socials=\"socials\"\n    status-label=\"All Systems Operational\"\n    :languages=\"languages\"\n    language-aria-label=\"Language\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/site-footer.md"
+}

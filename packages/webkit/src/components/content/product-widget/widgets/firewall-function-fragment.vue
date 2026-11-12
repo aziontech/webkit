@@ -3,7 +3,7 @@
 
   import CodeBlock from '../../../code/code-block/code-block.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -145,7 +145,7 @@
               label="Name"
               required
             />
-            <InputText
+            <Input
               id="firewall-function-name"
               model-value="qa-qc-fwfi"
               size="medium"

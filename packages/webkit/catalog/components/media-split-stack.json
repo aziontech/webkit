@@ -1,0 +1,18 @@
+{
+ "purpose": "A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined \"learn more\" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.",
+ "useWhen": [
+  "To list the solution areas or the claims of a page, one large band each, with a link through to its own page."
+ ],
+ "avoidWhen": [
+  "For a single claim beside its media → use `media-split` directly.",
+  "For small reasons in a grid → use `feature-tiles`."
+ ],
+ "related": [
+  "band-stack` — the sticky run the bands pile up in.",
+  "media-split` — the band each entry renders through."
+ ],
+ "bestPractices": [
+  "Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.",
+  "Give every band an `action`; it is both the button and the link the whole band follows."
+ ]
+}

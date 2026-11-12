@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 371bba13a17c40647e284efac51cd2ee47d3b17c241aa843ff9b1c4d6ea2a256
+checksum: 131451f1ccc0a4b8324677bbaa78769c6ea5fcd2d14e04bc9f2700327f7d5120
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocOnThisPage — Component Spec
@@ -67,12 +67,12 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 ## Props
 
-| Prop       | Type            | Default          | Required | JSDoc                                                      |
-| ---------- | --------------- | ---------------- | -------- | ---------------------------------------------------------- |
-| `items`    | `DocTocItem[]`  | `[]`             | false    | The headings, in document order.                           |
-| `activeId` | `string`        | `''`             | false    | The id of the heading currently in view.                   |
-| `title`    | `string`        | `'On this page'` | false    | The rail's own heading.                                    |
-| `groups`   | `DocTocGroup[]` | `[]`             | false    | Complementary groups rendered below the outline, in order. |
+| Prop       | Type            | Default | Required | JSDoc                                                                   |
+| ---------- | --------------- | ------- | -------- | ----------------------------------------------------------------------- |
+| `items`    | `DocTocItem[]`  | `[]`    | false    | The headings, in document order.                                        |
+| `activeId` | `string`        | `''`    | false    | The id of the heading currently in view.                                |
+| `title`    | `string`        | `''`    | false    | The rail's own heading. Empty uses the locale catalog (`On this page`). |
+| `groups`   | `DocTocGroup[]` | `[]`    | false    | Complementary groups rendered below the outline, in order.              |
 
 ## Events
 
@@ -122,12 +122,12 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 
 - Visible focus: each entry takes the focus ring on `focus-visible`.
 - Keyboard map: `Tab` moves through the entries and then through each group's links; `Enter` activates. The rail owns no arrow-key model — it is a list of links, not a widget.
-- ARIA: the outline is a `nav` named by `title`, and **each complementary group is its own named `nav`**, so the three read as three landmarks rather than one long list. Entries are `li` children of a `ul` (the axe `list` rule requires that), and the active entry carries `aria-current="location"`. The rail path and the group glyphs are decorative (`aria-hidden`).
+- ARIA: the outline is a `nav` named by `title`, and **each complementary group is its own named `nav`**, so the three read as three landmarks rather than one long list. Entries are `li` children of a `ul` (the axe `list` rule requires that), and the active entry carries `aria-current="location"`. The rail path and the group glyphs are decorative (`aria-hidden`). Under `dir="rtl"` the rail svg is mirrored (`rtl:-scale-x-100`), so its depth bends step toward the inline end like the entries they follow.
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default — a two-level outline with an active heading and one complementary group.
 - Nesting and groups — composite story with a deeper outline and two groups, which is the only way to see the rail bend between levels and the groups render as peers rather than entries. Justified in writing here because the bend and the peer treatment are the component's two central decisions and neither is visible in a flat single-group story.
@@ -145,10 +145,8 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

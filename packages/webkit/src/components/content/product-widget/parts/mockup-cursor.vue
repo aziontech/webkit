@@ -23,7 +23,7 @@
   <span
     :style="placement"
     :data-pressed="pressed || null"
-    class="group pointer-events-none absolute top-0 left-0 z-2 flex items-start transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+    class="group pointer-events-none absolute top-0 start-0 z-2 flex items-start transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
   >
     <svg
       viewBox="0 0 16 16"
@@ -39,7 +39,7 @@
       />
     </svg>
     <span
-      class="mt-3 -ml-1 rounded-(--shape-elements) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm whitespace-nowrap text-(--text-contrast) shadow-(--shadow-xs)"
+      class="mt-3 -ms-1 rounded-(--shape-elements) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm whitespace-nowrap text-(--text-contrast) shadow-(--shadow-xs)"
     >
       {{ name }}
     </span>

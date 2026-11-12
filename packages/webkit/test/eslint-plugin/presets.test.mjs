@@ -7,7 +7,7 @@ import * as astroParser from 'astro-eslint-parser'
 // Point the catalog-backed rules at the fixture (version-locked, deterministic).
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
 
-const webkitPlugin = (await import('../../src/eslint-plugin/index.js')).default
+const { default: webkitPlugin, HEURISTIC_RULES } = await import('../../src/eslint-plugin/index.js')
 
 test('every preset covers .astro and .vue files', () => {
   for (const name of ['strict', 'recommended', 'performance']) {
@@ -18,14 +18,17 @@ test('every preset covers .astro and .vue files', () => {
   }
 })
 
-test('every rule ships in recommended or strict, never as warn; performance is a subset of recommended', () => {
+test('every rule ships in recommended or strict, never as warn except the layout heuristics; performance is a subset of recommended', () => {
   const [recommended] = webkitPlugin.configs.recommended
   const [strict] = webkitPlugin.configs.strict
   const [performance] = webkitPlugin.configs.performance
 
-  const allPresetRules = { ...recommended.rules, ...strict.rules, ...performance.rules }
-  for (const severity of Object.values(allPresetRules)) {
-    assert.notEqual(severity, 'warn', 'no preset rule should be set to warn')
+  const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
+  assert.deepEqual([...HEURISTIC_RULES], ['container-needs-width', 'no-output-in-command'])
+  for (const preset of [recommended, strict, performance]) {
+    for (const [key, severity] of Object.entries(preset.rules)) {
+      assert.equal(severity, heuristics.has(key) ? 'warn' : 'error', key)
+    }
   }
 
   for (const ruleName of Object.keys(webkitPlugin.rules)) {

@@ -4,9 +4,9 @@
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Checkbox from '../../../inputs/checkbox/checkbox.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/index'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -121,7 +121,7 @@
   >
     <div class="py-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox :padded="false">
+        <Card :padded="false">
           <template #content>
             <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
               <div
@@ -156,7 +156,7 @@
                         aria-hidden="true"
                       />
                     </span>
-                    <InputText
+                    <Input
                       :model-value="column.name"
                       size="large"
                       class="w-full min-w-0 font-code"
@@ -180,7 +180,7 @@
                         </template>
                       </Select.Trigger>
                     </Select>
-                    <InputText
+                    <Input
                       :model-value="column.defaultValue"
                       size="large"
                       class="w-full min-w-0 font-code"
@@ -228,7 +228,7 @@
                         :data-focused="frame.focused || null"
                         class="flex min-w-0 rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
                       >
-                        <InputText
+                        <Input
                           :model-value="frame.name"
                           size="large"
                           class="w-full min-w-0 font-code"
@@ -253,7 +253,7 @@
                           </template>
                         </Select.Trigger>
                       </Select>
-                      <InputText
+                      <Input
                         model-value=""
                         size="large"
                         class="w-full min-w-0 font-code"
@@ -292,7 +292,7 @@
               </span>
             </div>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

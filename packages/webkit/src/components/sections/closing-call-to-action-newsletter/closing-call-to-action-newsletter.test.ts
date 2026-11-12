@@ -1,6 +1,6 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import ClosingCallToActionNewsletter from './closing-call-to-action-newsletter.vue'
@@ -63,6 +63,17 @@ describe('ClosingCallToActionNewsletter', () => {
     expect(field(getByLabelText).getAttribute('placeholder')).toBe(form.placeholder)
   })
 
+  it('puts type="email" and autocomplete="email" on the <input>, not on the field wrapper', () => {
+    const { getByLabelText } = band()
+    const input = field(getByLabelText)
+
+    expect(input.getAttribute('type')).toBe('email')
+    expect(input.getAttribute('autocomplete')).toBe('email')
+    const wrapper = input.closest('[data-slot="field"]')
+    expect(wrapper?.hasAttribute('type') ?? false).toBe(false)
+    expect(wrapper?.hasAttribute('autocomplete') ?? false).toBe(false)
+  })
+
   it('emits submit once with the event and the trimmed address on a valid submit', async () => {
     const { getByLabelText, getByRole, emitted } = band()
 
@@ -90,8 +101,10 @@ describe('ClosingCallToActionNewsletter', () => {
     await userEvent.click(getByRole('button', { name: form.submitLabel }))
 
     expect(getByText(form.requiredMessage)).toBeInTheDocument()
-    expect(field(getByLabelText).getAttribute('aria-invalid')).toBe('true')
+    expect(field(getByLabelText).getAttribute('aria-required')).toBe('true')
+    expect(field(getByLabelText).getAttribute('aria-invalid')).toBeNull()
     expect(emitted('submit')).toBeUndefined()
+    await vi.waitFor(() => expect(document.activeElement).toBe(field(getByLabelText)))
   })
 
   it('shows the invalid message for a malformed address and clears it on typing', async () => {
@@ -100,6 +113,9 @@ describe('ClosingCallToActionNewsletter', () => {
     await userEvent.type(field(getByLabelText), 'name@')
     await userEvent.click(getByRole('button', { name: form.submitLabel }))
     expect(getByText(form.invalidMessage)).toBeInTheDocument()
+    expect(field(getByLabelText).getAttribute('aria-invalid')).toBe('true')
+    expect(field(getByLabelText).getAttribute('aria-required')).toBeNull()
+    expect(field(getByLabelText).getAttribute('spellcheck')).toBe('false')
     expect(emitted('submit')).toBeUndefined()
 
     await userEvent.type(field(getByLabelText), 'x')
@@ -114,6 +130,15 @@ describe('ClosingCallToActionNewsletter', () => {
     await userEvent.click(getByRole('button', { name: form.submitLabel }))
 
     expect(emitted('submit')).toBeUndefined()
+  })
+
+  it('moves focus to the success message when the form it replaces held focus', async () => {
+    const view = band()
+
+    view.getByRole('button', { name: form.submitLabel }).focus()
+    await view.rerender({ submitted: true })
+
+    await vi.waitFor(() => expect(document.activeElement).toBe(view.getByRole('status')))
   })
 
   it('replaces the form with the success message when submitted', () => {

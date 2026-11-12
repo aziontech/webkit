@@ -1,0 +1,26 @@
+{
+  "component": "closing-call-to-action-newsletter",
+  "title": "Components/Marketing/Sections/ClosingCallToActionNewsletter",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Blog close. Submit the field empty or with a malformed address to see its message; a valid address fires the `submit` action with `{ email }` and nothing is sent.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the site sends the address: the field is disabled and the button spins.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Submitted",
+      "summary": "The site reported the address as sent: the form gives way to `form.successMessage`.",
+      "file": "submitted.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The site could not send the address: `form.errorMessage` shows under the form, which stays editable.",
+      "file": "failed.vue"
+    }
+  ]
+}

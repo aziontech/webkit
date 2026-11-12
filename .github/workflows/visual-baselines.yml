@@ -1,0 +1,85 @@
+name: Visual baselines
+
+# The committed baselines in apps/visual/baselines are the CI contract. They are taken in the
+# same container image the visual job runs in, so fonts and rasterization match. Dispatch this
+# on a branch (pnpm visual:update:baseline) after an intended visual change, review the uploaded
+# images, then commit them to the branch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      update_baselines:
+        description: 'Regenerate every baseline and upload them as an artifact (commit them by hand after review)'
+        type: boolean
+        default: false
+      grep:
+        description: 'Only (re)generate the tests whose title matches this pattern (empty = the whole suite)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baselines:
+    name: Generate visual baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build the docs site
+        run: pnpm docs:build
+
+      - name: Build the demos
+        run: pnpm demos:build
+
+      - name: Regenerate baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: pnpm --filter @aziontech/webkit-visual exec playwright test --update-snapshots=all ${GREP:+--grep "$GREP"}
+        env:
+          GREP: ${{ github.event.inputs.grep }}
+
+      - name: Compare against the committed baselines
+        if: ${{ github.event.inputs.update_baselines != 'true' }}
+        run: pnpm --filter @aziontech/webkit-visual exec playwright test ${GREP:+--grep "$GREP"}
+        env:
+          GREP: ${{ github.event.inputs.grep }}
+
+      - name: Upload regenerated baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-baselines
+          path: apps/visual/baselines/
+          retention-days: 7
+
+      - name: Upload the report on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-report
+          path: |
+            apps/visual/playwright-report/
+            apps/visual/test-results/
+          retention-days: 7
+          if-no-files-found: ignore

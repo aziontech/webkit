@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { cn } from '../../../utils/cn'
 
   defineOptions({
@@ -34,6 +35,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    labelledBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    disabled: () => props.disabled
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-switch')
 
   const passthroughAttrs = computed(() => {
@@ -57,12 +72,12 @@
   )
 
   function handleToggle() {
-    if (props.disabled) return
+    if (isDisabled.value) return
     emit('update:modelValue', !isChecked.value)
   }
 
   function handleKeydown(event: globalThis.KeyboardEvent) {
-    if (props.disabled) return
+    if (isDisabled.value) return
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
       handleToggle()
@@ -70,10 +85,10 @@
   }
 
   const ROOT_CLASS =
-    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent) data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none'
+    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
 
   const HANDLE_CLASS =
-    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled)'
+    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]'
 
   const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
   const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-(--bg-surface)`
@@ -87,14 +102,19 @@
     ref="buttonRef"
     type="button"
     role="switch"
+    :id="controlId"
+    :aria-describedby="describedBy"
+    :aria-labelledby="attrs['aria-label'] ? undefined : labelledBy"
+    :aria-invalid="isInvalid || undefined"
+    :aria-required="isRequired || undefined"
     :aria-checked="isChecked"
-    :aria-disabled="disabled || undefined"
-    :disabled="disabled"
+    :aria-disabled="isDisabled || undefined"
+    :disabled="isDisabled"
     :data-testid="testId"
     :data-kind="kind"
     :data-checked="isChecked || null"
     :data-focused="focused || null"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :class="rootClass"
     v-bind="passthroughAttrs"
     @click="handleToggle"

@@ -1,0 +1,21 @@
+{
+  "component": "doc-callout",
+  "title": "Components/Documentation/DocCallout",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One row of prose beside the glyph — the whole component, for every kind.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Prose",
+      "summary": "A paragraph followed by a list. The copy region is a flow container, so block markup arriving from a server render stays inside the box instead of being pushed beside it, and the callout lays out the rhythm itself because DocProse stops at its edge.",
+      "file": "prose.vue"
+    },
+    {
+      "name": "Kinds",
+      "summary": "The six kinds together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.",
+      "file": "kinds.vue"
+    }
+  ]
+}

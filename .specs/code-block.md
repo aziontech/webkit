@@ -3,15 +3,14 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 70c85ded32c0a1b7fea52b3e27e306f092a6d34cfc0f93553bce4d230a0d1c70
+checksum: 344fd06d5a9a3cce271601d158c6e596af3836a02a6e45768152130b30461778
 created: 2026-05-28
-last_updated: 2026-10-20
+last_updated: 2026-11-12
 ---
-
 
 # CodeBlock — Component Spec
 
@@ -24,18 +23,51 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar.
 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
 
-Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
+Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** kind (`kind="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
+
+The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 
 **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:
 
-| `language` | Tokenised as |
-|---|---|
-| `javascript`, `js`, `typescript`, `ts` | Expressions: keywords, strings, function calls, punctuation. `//` runs to end of line as a `comment`; a `//` inside a quoted string stays part of the `string`. |
-| `bash`, `sh`, `shell`, `zsh`, `console` | **Commands.** A command line has a different shape from an expression, so it is read as one: the **first word is the program** being run (`function`), and so is any program after an operator that starts a new command (`\|`, `&&`, `\|\|`, `;`); every `-f` / `--flag` and every shell language word (`if`, `for`, `export`, …) is a `keyword`; quoted text is a `string`; a `$VAR` / `${VAR}` expansion is a `type` — the one thing on the line that is a value; the operators joining commands are `punctuation`; and sub-commands, paths, URLs and whitespace are `identifier`. A `#` at line start or after whitespace runs to end of line as a `comment`. This adds **no** new syntax token: a CLI snippet gets the same palette a JS snippet does. |
-| `hcl`, `terraform`, `tf` | **Configuration blocks.** The first word of a line that opens a block (`resource`, `data`, a nested `application {`) is a `keyword`; the first word before `=` is the attribute key and takes `function`, the same colour a key gets in a JavaScript config object; a word before `(` is a call (`function`); quoted labels and values are `string`; `true` / `false` / `null` and numbers are `type`; references (`azion_application.storefront.id`) and whitespace are `identifier`; brackets, `=`, `.` and `,` are `punctuation`. `#` and `//` run to end of line as a `comment`. |
-| `graphql`, `gql` | **Operations.** A definition word opening the line (`query`, `mutation`, `fragment`, `type`, …), a `@directive` and a fragment's `on` are `keyword`; the operation name and every field called with arguments (`httpMetrics(`, `sum(`) are `function`; a `$variable`, a capitalised type name (`DateTime`), a number and `true` / `false` / `null` are `type`; quoted text is `string`; plain fields, aliases and argument names are `identifier`; brackets, `:`, `!`, `,` and `...` are `punctuation`. `#` runs to end of line as a `comment`. |
-| `markdown`, `md` | One `comment` token per line. Prose inside a code block (a markdown snippet, an agent prompt) is commentary, not code, so it takes the comment colour rather than being tokenised as identifiers. |
-| anything else, or unset | Flat — one `identifier` token per line, no highlighting. |
+| `language`                              | Tokenised as                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `javascript`, `js`, `typescript`, `ts`  | Expressions: keywords, strings, function calls, punctuation. `//` runs to end of line as a `comment`; a `//` inside a quoted string stays part of the `string`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `bash`, `sh`, `shell`, `zsh`, `console` | **Commands.** A command line has a different shape from an expression, so it is read as one: the **first word is the program** being run (`function`), and so is any program after an operator that starts a new command (`\|`, `&&`, `\|\|`, `;`); every `-f` / `--flag` and every shell language word (`if`, `for`, `export`, …) is a `keyword`; quoted text is a `string`; a `$VAR` / `${VAR}` expansion is a `type` — the one thing on the line that is a value; the operators joining commands are `punctuation`; and sub-commands, paths, URLs and whitespace are `identifier`. A `#` at line start or after whitespace runs to end of line as a `comment`. A leading `$ ` prompt is a `prompt` token (drawn in the line-number colour, not selectable) and is never copied: when any line carries a prompt, the copy control copies only the prompted lines (and their `\` continuations). This adds **no** new syntax token: a CLI snippet gets the same palette a JS snippet does. |
+| `hcl`, `terraform`, `tf`                | **Configuration blocks.** The first word of a line that opens a block (`resource`, `data`, a nested `application {`) is a `keyword`; the first word before `=` is the attribute key and takes `function`, the same colour a key gets in a JavaScript config object; a word before `(` is a call (`function`); quoted labels and values are `string`; `true` / `false` / `null` and numbers are `type`; references (`azion_application.storefront.id`) and whitespace are `identifier`; brackets, `=`, `.` and `,` are `punctuation`. `#` and `//` run to end of line as a `comment`.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `graphql`, `gql`                        | **Operations.** A definition word opening the line (`query`, `mutation`, `fragment`, `type`, …), a `@directive` and a fragment's `on` are `keyword`; the operation name and every field called with arguments (`httpMetrics(`, `sum(`) are `function`; a `$variable`, a capitalised type name (`DateTime`), a number and `true` / `false` / `null` are `type`; quoted text is `string`; plain fields, aliases and argument names are `identifier`; brackets, `:`, `!`, `,` and `...` are `punctuation`. `#` runs to end of line as a `comment`.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `markdown`, `md`                        | One `comment` token per line. Prose inside a code block (a markdown snippet, an agent prompt) is commentary, not code, so it takes the comment colour rather than being tokenised as identifiers.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| anything else, or unset                 | Flat — one `identifier` token per line, no highlighting.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+
+## When to use
+
+- Read-only code in docs, API examples or configuration previews that readers copy from.
+- The same snippet in several languages, switched by tabs (one `tabs` entry per language).
+- Showing a change as a diff (`lineChanges`) or pointing at one line (`highlightedLine`) on the active tab.
+
+## When NOT to use
+
+- The content is build or deploy output with timestamps and log levels → use `log-view`.
+- It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.
+- It is a terminal session of CLI commands on a product page → use `cli-terminal`.
+- You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
+
+## Related
+
+- `copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.
+- `log-view` — terminal-style viewer for CI and deploy logs.
+- `code-split` — page section built around one code sample.
+- `scroll-area` — the scroll container the code region runs in.
+
+## Best practices
+
+- Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.
+- Set `language` on every tab. Only JavaScript/TypeScript, shell, HCL, GraphQL and Markdown are tokenised; anything else renders as flat text.
+- Use `default-value` for the initial tab, and `v-model` only when something outside the block must follow the selected tab.
+- Set `:copyable="false"` on decorative blocks, and `:bordered="false"` when the block sits inside a surface that already frames it.
+- Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
+- Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `kind="output"` (or in prose).
+- Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `webkit/no-output-in-command` lint warns on it.
+- Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title.
 
 ## Usage
 
@@ -43,78 +75,89 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
 
 ```vue
 <script setup>
-import CodeBlock from '@aziontech/webkit/code-block'
+  import CodeBlock from '@aziontech/webkit/code-block'
 
-const code = `export default {
+  const code = `export default {
   async fetch(request) {
     return new Response('OK')
   }
 }`
 
-const tabs = [
-  {
-    label: 'JavaScript',
-    value: 'js',
-    language: 'javascript',
-    fileName: 'handler.js',
-    code
-  }
-]
+  const tabs = [
+    {
+      label: 'JavaScript',
+      value: 'js',
+      language: 'javascript',
+      fileName: 'handler.js',
+      code
+    }
+  ]
 </script>
 
 <template>
-  <CodeBlock :tabs="tabs" default-value="js" show-line-numbers />
+  <CodeBlock
+    :tabs="tabs"
+    default-value="js"
+    show-line-numbers
+  />
 </template>
 ```
 
-For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model:value` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
+For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `tabs` | `CodeBlockTab[]` | `[]` | false | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
-| `value` | `string` | `undefined` | false | Controlled active tab value (`v-model:value`). |
-| `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
-| `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
-| `copyAriaLabel` | `string` | `'Copy code'` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). |
-| `copyable` | `boolean` | `true` | false | Shows the copy control; turn it off for a decorative block nobody copies from. |
-| `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
-| `border` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:border="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
+| Prop              | Type                 | Default     | Required | JSDoc                                                                                                                                                                                                                            |
+| ----------------- | -------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tabs`            | `CodeBlockTab[]`     | `[]`        | false    | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata.                                                                                                                           |
+| `defaultValue`    | `string`             | `undefined` | false    | Initial active tab when uncontrolled.                                                                                                                                                                                            |
+| `showLineNumbers` | `boolean`            | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line.                                                                                                                                                  |
+| `copyAriaLabel`   | `string`             | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                        |
+| `copyable`        | `boolean`            | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                    |
+| `kind`            | `'code' \| 'output'` | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |
+| `showLabel`       | `boolean`            | `false`     | false    | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it.                                                     |
+| `title`           | `string`             | `''`        | false    | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block.                                                                                                                      |
+| `animateLines`    | `boolean`            | `false`     | false    | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart.                                                                                                                    |
+| `bordered`        | `boolean`            | `true`      | false    | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
 ## Type shapes
 
 ### `CodeBlockTab`
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `label` | `string` | true | Tab label (uppercase in UI via `.text-overline-sm`). |
-| `value` | `string` | true | Stable tab id for `v-model:value`. |
-| `code` | `string` | true | Raw source; split on `\n` for rendering. |
-| `language` | `string` | false | Drives syntax highlighting and default file icon when `fileIcon` is omitted. |
-| `fileName` | `string` | false | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
-| `fileIcon` | `string` | false | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted. |
-| `highlightedLine` | `number` | false | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted). |
-| `lineChanges` | `CodeBlockLineChange[]` | false | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff). |
+| Field             | Type                    | Required | Notes                                                                                                                        |
+| ----------------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `label`           | `string`                | true     | Tab label (uppercase in UI via `.text-overline-sm`).                                                                         |
+| `value`           | `string`                | true     | Stable tab id for `v-model`.                                                                                                 |
+| `code`            | `string`                | true     | Raw source; split on `\n` for rendering.                                                                                     |
+| `language`        | `string`                | false    | Drives syntax highlighting and default file icon when `fileIcon` is omitted.                                                 |
+| `fileName`        | `string`                | false    | When set on the active tab, renders the 40 px filename bar below the tab header (or as the top region when tabs are hidden). |
+| `fileIcon`        | `string`                | false    | Icon name for the filename bar (PrimeIcons class, e.g. `'pi pi-file'`). Falls back to a language-derived icon when omitted.  |
+| `highlightedLine` | `number`                | false    | 1-based line index. Applies info background + leading bar on that row (Figma: Highlighted).                                  |
+| `lineChanges`     | `CodeBlockLineChange[]` | false    | Per-line diff metadata. When non-empty, renders diff gutter markers and row backgrounds (Figma: Diff).                       |
 
 ### `CodeBlockLineChange`
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `line` | `number` | true | 1-based line index. |
-| `change` | `'added' \| 'removed'` | true | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
+| Field    | Type                   | Required | Notes                                                                    |
+| -------- | ---------------------- | -------- | ------------------------------------------------------------------------ |
+| `line`   | `number`               | true     | 1-based line index.                                                      |
+| `change` | `'added' \| 'removed'` | true     | `added` → success row + `+` marker; `removed` → danger row + `-` marker. |
+
+## v-model
+
+| Model     | Type                  | Default     | Emits               | Notes                                                                                                                                         |
+| --------- | --------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string \| undefined` | `undefined` | `update:modelValue` | Active tab `value` via `defineModel`. While unbound (`undefined`) the block is uncontrolled: it starts at `defaultValue`, else the first tab. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:value` | `string` | v-model:value. |
+| Event  | Payload  | Notes                                                       |
+| ------ | -------- | ----------------------------------------------------------- |
 | `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
+| Slot       | Scope                   | Notes                                                                                      |
+| ---------- | ----------------------- | ------------------------------------------------------------------------------------------ |
 | `tab-icon` | `{ tab: CodeBlockTab }` | Leading mark before a tab's label in the tab strip; nothing renders when it is not filled. |
 
 ## States
@@ -123,83 +166,98 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 - `data-state` on tabs: `active` | `inactive`
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`
 - `data-disabled` not used (tabs are not disabled in v2)
+- `data-kind` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 ### Layout rules (derived from Figma)
 
-| Region | Visible when |
-|---|---|
-| Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1` |
-| Filename bar (`FileName`, 40 px) | active tab has `fileName` |
-| Diff gutter (`+`/`-` + 8 px spacer on unchanged lines) | active tab `lineChanges.length > 0` |
-| Line highlight (info background + 2 px leading bar) | active tab `highlightedLine` is set |
+| Region                                                                     | Visible when                                                             |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1`                                                        |
+| Filename bar (`FileName`, 40 px)                                           | active tab has `fileName`                                                |
+| Label header (40 px, `pi pi-code` / `pi pi-align-left` + label)            | no tab strip, no `fileName`, and `showLabel`, `title` or `kind="output"` |
+| Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                     | active tab `lineChanges.length > 0`                                      |
+| Line highlight (info background + 2 px leading bar)                        | active tab `highlightedLine` is set                                      |
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
-Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
+Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
+- Long files: above 300 lines the panel mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 5,000-line file mounts and switches tabs within its runtime budget. Copy always copies the whole file.
+
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| tab change (indicator) | sliding pill via `transform` / `width` transition | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none` |
+| Trigger                                                                                                | Animation / Transition                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations)                                   | Reduced-motion fallback                                                                |
+| ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| tab change (indicator)                                                                                 | sliding pill via `transform` / `width` transition                                                                                 | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transition-none`                                                        |
 | tab panel change — a tab click, a controlled `value` change, or the active tab's `code` being replaced | content enters **line by line**: each row slides from the direction of travel + fades, `24ms` a line, the step capped at 12 lines | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
-| tab panel height — on the same triggers as the panel change | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`) | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps) |
-| tab label hover | `transition-colors duration-fast-02 ease-productive-entrance` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| code line hover | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`) | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states) | `motion-reduce:transition-none` |
-| line entrance (`animateLines`) | per-line slide from `-8px` + opacity, staggered `40ms` | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
+| tab panel height — on the same triggers as the panel change                                            | the shell animates between the two panels' heights (pin the old height, measure the new, transition `height`)                     | `duration-moderate-02` · `ease-productive-entrance` (DESIGN.md § Motion primitives) | skipped entirely under `prefers-reduced-motion` (height snaps)                         |
+| tab label hover                                                                                        | `transition-colors duration-fast-02 ease-productive-entrance`                                                                     | `duration-fast-02` · `ease-productive-entrance`                                     | `motion-reduce:transition-none`                                                        |
+| code line hover                                                                                        | `transition-opacity duration-fast-02 ease-productive-entrance` on row ghost layer (`--bg-hover`)                                  | `duration-fast-02` · `ease-productive-entrance` (DESIGN.md § Interactive states)    | `motion-reduce:transition-none`                                                        |
+| line entrance (`animateLines`)                                                                         | per-line slide from `-8px` + opacity, staggered `40ms`                                                                            | `duration-moderate-02` · `ease-productive-entrance`                                 | `motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| tab typography | `.text-label-sm` |
-| filename typography | `.text-label-code-sm` |
-| code typography | `.text-label-code-sm` |
-| shell surface | `var(--bg-surface)` |
-| filename bar surface | `var(--bg-surface-raised)` |
-| border | `var(--border-default)` |
-| tab strip surface | `var(--bg-canvas)` |
-| tab indicator (pill) | `var(--bg-surface)` fill · `var(--border-default)` hairline · `var(--shadow-sm)` |
-| text default / muted | `var(--text-default)` / `var(--text-muted)` |
-| spacing | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
-| shape | `var(--shape-elements)` / `var(--shape-button)` |
-| ring | `var(--ring-color)` |
-| syntax keyword | `var(--code-sintax-keyword)` |
-| syntax string | `var(--code-sintax-string)` |
-| syntax function | `var(--code-sintax-function)` |
-| syntax type | `var(--code-sintax-type)` |
-| syntax punctuation | `var(--code-sintax-punctuation)` |
-| syntax identifier | `var(--code-sintax-identifier)` |
-| syntax comment | `var(--code-sintax-comment)` |
-| syntax line number | `var(--code-sintax-line-number)` |
-| diff removed row | `var(--danger)` |
-| diff removed leading bar | `var(--danger-border)` |
-| diff removed marker | `var(--danger-contrast)` |
-| diff added row | `var(--success)` |
-| diff added leading bar | `var(--success-border)` |
-| diff added marker | `var(--success-contrast)` |
-| highlighted row | `var(--info)` |
-| highlighted leading bar | `var(--info-border)` |
+| Region                   | Token (DESIGN.md)                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| tab typography           | `.text-label-sm`                                                                       |
+| filename typography      | `.text-label-code-sm`                                                                  |
+| code typography          | `.text-label-code-sm`                                                                  |
+| shell surface            | `var(--bg-surface)`                                                                    |
+| filename bar surface     | `var(--bg-surface-raised)`                                                             |
+| label header             | `.text-label-code-sm`, `var(--text-muted)`, `var(--border-default)` divider            |
+| output shell / text      | `var(--bg-canvas)` · `var(--text-muted)`                                               |
+| shell prompt `$ `        | `var(--code-sintax-line-number)`                                                       |
+| border                   | `var(--border-default)`                                                                |
+| tab strip surface        | `var(--bg-canvas)`                                                                     |
+| tab indicator (pill)     | `var(--bg-surface)` fill · `var(--border-default)` hairline · `var(--shadow-sm)`       |
+| text default / muted     | `var(--text-default)` / `var(--text-muted)`                                            |
+| spacing                  | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
+| shape                    | `var(--shape-elements)` / `var(--shape-button)`                                        |
+| ring                     | `var(--ring-color)`                                                                    |
+| syntax keyword           | `var(--code-sintax-keyword)`                                                           |
+| syntax string            | `var(--code-sintax-string)`                                                            |
+| syntax function          | `var(--code-sintax-function)`                                                          |
+| syntax type              | `var(--code-sintax-type)`                                                              |
+| syntax punctuation       | `var(--code-sintax-punctuation)`                                                       |
+| syntax identifier        | `var(--code-sintax-identifier)`                                                        |
+| syntax comment           | `var(--code-sintax-comment)`                                                           |
+| syntax line number       | `var(--code-sintax-line-number)`                                                       |
+| diff removed row         | `var(--danger)`                                                                        |
+| diff removed leading bar | `var(--danger-border)`                                                                 |
+| diff removed marker      | `var(--danger-contrast)`                                                               |
+| diff added row           | `var(--success)`                                                                       |
+| diff added leading bar   | `var(--success-border)`                                                                |
+| diff added marker        | `var(--success-contrast)`                                                              |
+| highlighted row          | `var(--info)`                                                                          |
+| highlighted leading bar  | `var(--info-border)`                                                                   |
 
 ## Theme gaps
 
-| Gap | Shipped instead | Why |
-|---|---|---|
-| The Figma Language switcher frame ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) draws the active tab as a 2 px underline on a `var(--bg-surface)` strip. | A sliding **pill**: the strip steps down to `var(--bg-canvas)` and the active tab carries `var(--bg-surface)` — the code surface itself — under a `var(--border-default)` hairline and `var(--shadow-sm)`, behind a sentence-case `.text-label-sm` label. | The pill ties the tab to the panel it opens (the active tab *is* the surface below it), which an underline on the same fill cannot say; and it is the anatomy the docs layer's reference reads as. The motion is unchanged — the same measured `transform` / `width` slide, only the indicator's shape and fill differ. Figma frame to be updated to match; raise with design before the next spec revision. |
+| Gap                                                                                                                                                                                                      | Shipped instead                                                                                                                                                                                                                                           | Why                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| The Figma Language switcher frame ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) draws the active tab as a 2 px underline on a `var(--bg-surface)` strip. | A sliding **pill**: the strip steps down to `var(--bg-canvas)` and the active tab carries `var(--bg-surface)` — the code surface itself — under a `var(--border-default)` hairline and `var(--shadow-sm)`, behind a sentence-case `.text-label-sm` label. | The pill ties the tab to the panel it opens (the active tab _is_ the surface below it), which an underline on the same fill cannot say; and it is the anatomy the docs layer's reference reads as. The motion is unchanged — the same measured `transform` / `width` slide, only the indicator's shape and fill differ. Figma frame to be updated to match; raise with design before the next spec revision. |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on the CopyButton (native `<button>`); when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
 - ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
-- Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark.
+- Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark. Row backgrounds for `added`, `removed` and `highlighted` are the feedback fills at 40% (`bg-(--success)/40`, `bg-(--danger)/40`, `bg-(--info)/40`): at full strength the light fills (`--danger` `#F3A5A5`, `--info` `#99C9FF`) put the line numbers and the `function` and `type` syntax colours under 4.5:1 (3.93:1 for a line number on a removed row); at 40% every syntax colour clears 4.5:1 in light and dark (the lowest, the light `function` orange `#B03C02` on a removed row, is 4.6:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
 - Copy control uses CopyButton `size="small"` (28×28 px).
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
+- Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
+- User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
+
+## Examples
 
 - Default — language switcher: two tabs, `fileName` on each tab, JavaScript sample, copy affordance (Figma: Language Switcher).
 - WithoutLineNumbers — same Default sample with `showLineNumbers={false}`.
@@ -211,7 +269,8 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - Shell — single tab with `language: 'bash'`; justified because the command tokeniser is a distinct rendered surface from the expression one (program, flags, operator hand-off, expansion, trailing comment) that no JavaScript sample exercises.
 - UnevenTabs — two tabs whose snippets have different line counts; the only geometry where the shell's height changes on a swap, so it is what exercises the height transition and the per-line entrance together.
 - SingleLine — one `bash` line, `showLineNumbers={false}`, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
-- Borderless — Default sample with `border={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
+- Borderless — Default sample with `bordered={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
+- CommandAndOutput — a `$ `-prompted `curl -I` command with `show-label` ("Shell" header) and, under it, a second block with `kind="output"` holding `HTTP/2 200`; justified because the label header and the output kind are two rendered surfaces no other example shows, and they are the docs pattern for a command and what it prints.
 
 ## Constraints — DO NOT
 
@@ -226,10 +285,8 @@ Code content scrolls inside `@aziontech/webkit/layout/scroll-area` (`orientation
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

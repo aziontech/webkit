@@ -1,9 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/drawer/Drawer.stories'
+import Default from '../../../../examples/drawer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'
@@ -13,8 +13,6 @@ import DrawerOverlay from './drawer-overlay.vue'
 import DrawerPortal from './drawer-portal.vue'
 import DrawerTitle from './drawer-title.vue'
 import DrawerTrigger from './drawer-trigger.vue'
-
-const { Default } = composeStories(stories)
 
 // The panel + backdrop are Teleported to <body> by DrawerPortal, so they escape
 // the render container. Query them from document.body, not the utils container.
@@ -33,7 +31,7 @@ const panel = () => byTestId('overlay-drawer__panel')
 const backdrop = () => byTestId('overlay-drawer__backdrop')
 
 /**
- * A realistic composed tree wired like the Storybook Default: Root > Trigger
+ * A realistic composed tree wired like the Default example: Root > Trigger
  * (button-like) + Portal > Overlay + Content (Title / Description / Close).
  * Slots take plain strings so the assertions stay grounded in the drawer
  * sub-components under test (DrawerContent still wraps its internal Panel).
@@ -102,8 +100,11 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       // The Root + Trigger render in-place; DrawerPortal renders nothing until open.
       expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
       const trigger = getByTestId('overlay-drawer__trigger')
-      expect(trigger.getAttribute('role')).toBe('button')
-      expect(trigger.getAttribute('tabindex')).toBe('0')
+      expect(trigger.hasAttribute('role')).toBe(false)
+      expect(trigger.hasAttribute('tabindex')).toBe(false)
+      const button = trigger.querySelector('button') as HTMLElement
+      expect(button.getAttribute('aria-haspopup')).toBe('dialog')
+      expect(button.getAttribute('aria-expanded')).toBe('false')
 
       expect(panel()).toBeNull()
       expect(backdrop()).toBeNull()
@@ -231,7 +232,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
       // Focus is restored to the trigger element (watch on isOpen -> triggerRef.focus()).
       await vi.waitFor(() => {
-        expect(document.activeElement).toBe(trigger)
+        expect(document.activeElement).toBe(trigger.querySelector('button'))
       })
     })
 
@@ -378,9 +379,9 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('Storybook Default story composes and opens', () => {
+  describe('Default fixture composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       await fireEvent.click(getByTestId('overlay-drawer__trigger'))
@@ -390,6 +391,87 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       expect(dlg).not.toBeNull()
       expect(dlg!.getAttribute('role')).toBe('dialog')
       expect(byTestId('overlay-drawer__title')!.textContent).toContain('Drawer Title')
+    })
+  })
+})
+
+describe('Drawer on phones', () => {
+  it('opens as a full-height, full-width sheet below sm', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+
+    const shell = byTestId('overlay-drawer__panel-shell')
+    expect(shell?.className).toContain('max-sm:h-dvh')
+    expect(byTestId('overlay-drawer__panel')?.className).toContain('max-sm:top-0')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const twoActions = defineComponent({
+    components: { Drawer, DrawerTrigger, DrawerPortal, DrawerOverlay, DrawerContent, DrawerTitle },
+    setup() {
+      const open = ref(false)
+      return { open }
+    },
+    template: `
+      <Drawer v-model:open="open">
+        <DrawerTrigger>
+          <button type="button">Open drawer</button>
+        </DrawerTrigger>
+        <DrawerPortal>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerTitle>Edit</DrawerTitle>
+            <button type="button" data-testid="first-action">First</button>
+            <button type="button" data-testid="last-action">Last</button>
+          </DrawerContent>
+        </DrawerPortal>
+      </Drawer>
+    `
+  })
+
+  const openWithKey = async (key: string) => {
+    const { getByTestId } = render(twoActions)
+    await settle()
+    const trigger = getByTestId('overlay-drawer__trigger').querySelector('button')!
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    return { trigger }
+  }
+
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens and focuses the first control',
+    async (key) => {
+      await openWithKey(key)
+      expect(panel()).not.toBeNull()
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(byTestId('first-action'))
+      })
+    }
+  )
+
+  it('Tab on the last control wraps to the first (focus is trapped)', async () => {
+    await openWithKey('{Enter}')
+    byTestId('last-action')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('first-action'))
+  })
+
+  it('Shift+Tab on the first control wraps to the last', async () => {
+    await openWithKey('{Enter}')
+    byTestId('first-action')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(byTestId('last-action'))
+  })
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWithKey('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => {
+      expect(panel()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
     })
   })
 })

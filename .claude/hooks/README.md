@@ -4,7 +4,7 @@
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
 
-Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs` and `_lib/story-source-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 
 ## Hooks
 
@@ -15,7 +15,7 @@ Blocks `Write`/`Edit`/`MultiEdit` on `.vue` / `.css` / `.scss` / `.ts` files und
 - Hex/RGB/HSL colors
 - Tailwind palette names (`bg-gray-500`, `text-violet-600`, ...)
 - Raw Tailwind text sizes (`text-xs|sm|base|lg|...`)
-- Raw typography tokens (`text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`, `font-sora`, ...)
+- Raw typography tokens (`text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`, `font-rubik`, ...)
 - External/legacy color utilities (`text-color`, `surface-*`)
 - `class` declared in `defineProps`
 - `any` type
@@ -44,16 +44,9 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - A composable returning `reactive()` state or authored as `.js`
 - `@deprecated` without a named replacement + removal version
 - A prose comment (`prose-comment`) in any non-test source under `packages/` — only component API JSDoc and tool directives are allowed ([`comments`](../rules/comments.md)); blocks when the count grows
+- A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/i18n/messages/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
 
-Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run.
-
-### [`validate-story-source.mjs`](./validate-story-source.mjs)
-
-Blocks `Write`/`Edit`/`MultiEdit` on any `*.stories.*` file whose **resulting content** violates the [storybook-source](../rules/storybook-source.md) contract — the Docs "Show code" must be a single runnable PascalCase SFC. **Strict**: the whole stories tree is on the canonical pattern, so every check applies to the full result of the write (no "newly-introduced-only" grandfathering). 13 checks: `docs-not-literal`, `handrolled-transform`, `dynamic-source`, `nested-template`, `lowercase-tag` (native HTML tags exempt), `import-binding-mismatch`, `argtypes-regex`, `legacy-csf2-assignment`, `figma-reference`, `args-destructure`, `missing-helper`, `missing-source-code`, `missing-sourcestate` (foundations pages exempt from the helper/`toSfc` requirement).
-
-Also runs standalone: `node .claude/hooks/validate-story-source.mjs --all` audits the entire stories tree and exits non-zero on any violation.
-
-Engine: [`_lib/story-source-checks.mjs`](./_lib/story-source-checks.mjs) — shared with the CI ratchet.
+Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./_lib/built-in-strings.mjs) → [`packages/webkit/scripts/lib/built-in-strings.mjs`](../../packages/webkit/scripts/lib/built-in-strings.mjs), shared with `scripts/check-authoring.mjs`.
 
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 
@@ -66,6 +59,7 @@ PreToolUse hook on `Write` of any `packages/webkit/src/components/<category>/<na
 - `.specs/<name>.md` is missing.
 - The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
 - The body sha256 does not match the frontmatter `checksum` (tamper detection).
+- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`_lib/spec.mjs`](./_lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/webkit run spec-template:check`).
 
 Bypassed for components on the legacy whitelist ([`_lib/legacy-components.json`](./_lib/legacy-components.json)).
 

@@ -3,8 +3,8 @@
 
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Select from '../../../inputs/select/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -202,7 +202,7 @@
             :data-focused="frame.focused || null"
             class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
           >
-            <InputNumber
+            <NumberInput
               id="address-weight"
               :model-value="frame.weight"
               size="medium"

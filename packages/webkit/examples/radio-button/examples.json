@@ -1,0 +1,16 @@
+{
+  "component": "radio-button",
+  "title": "Components/Primitives/Inputs/RadioButton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single control only — labels are supplied by the consumer (aria-label here for demo). Selecting it emits its `value`; share a `name` and one `v-model` across instances for a mutually exclusive group.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled selected and unselected controls sharing one group name, without label chrome.",
+      "file": "disabled.vue"
+    }
+  ]
+}

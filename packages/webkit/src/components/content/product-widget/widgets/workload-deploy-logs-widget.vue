@@ -4,14 +4,14 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import Divider from '../../../layout/divider/divider.vue'
-  import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Separator from '../../../layout/separator/separator.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { DEFAULT_DEPLOYMENT_STEPS } from '../data/deployment-steps'
   import DeploymentLogs from '../parts/deployment-logs.vue'
 
@@ -107,7 +107,7 @@
   >
     <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           class="w-full"
         >
@@ -142,7 +142,7 @@
                     :key="resource.key"
                     :style="rowDelay(index)"
                   >
-                    <Divider v-if="index" />
+                    <Separator v-if="index" />
                     <div
                       class="flex items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm)"
                     >
@@ -160,7 +160,7 @@
                         </span>
                       </span>
                       <Tag
-                        class="ml-auto shrink-0"
+                        class="ms-auto shrink-0"
                         label="Deployed"
                         severity="success"
                         size="small"
@@ -179,7 +179,7 @@
                   active-at="build"
                   label="Logs"
                   :controls="false"
-                  :progress-bar="false"
+                  :progress="false"
                   :steps="STEPS"
                   :interval="interval"
                   @finished="onFinished"
@@ -187,7 +187,7 @@
               </div>
             </Transition>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

@@ -1,9 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, nextTick } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/popover/Popover.stories'
+import Default from '../../../../examples/popover/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Popover, {
   PopoverClose,
@@ -15,16 +15,16 @@ import Popover, {
   PopoverTrigger
 } from './index'
 
-const { Default } = composeStories(stories)
-
 /** The panel Teleports to <body>, escaping the render container. */
 const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="overlay-popover__panel"]')
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
+const control = () =>
+  document.body.querySelector<HTMLElement>('[data-testid="overlay-popover__trigger"] button')!
 
 /**
- * Realistic composed tree mirroring the Storybook Default: a trigger wrapping a
+ * Realistic composed tree mirroring the Default example: a trigger wrapping a
  * native <button> (the trigger span is a passthrough — the child owns focus and
  * keyboard activation), a header with title + close, a description, free body
  * text and a footer. Anatomy toggles let tests exercise the aria gating that
@@ -121,14 +121,18 @@ describe('Popover (compound / overlay)', () => {
     expect(panel()).toBeNull()
   })
 
-  it('wires the trigger as a passthrough span with aria-haspopup/expanded/controls', () => {
+  it('forwards aria-haspopup/expanded/controls onto the slotted button instead of wrapping it', () => {
     const { getByTestId } = render(host())
 
     const trigger = getByTestId('overlay-popover__trigger')
     expect(trigger.tagName).toBe('SPAN')
-    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    expect(trigger.getAttribute('aria-controls')).toBeTruthy()
+    expect(trigger.hasAttribute('role')).toBe(false)
+    expect(trigger.hasAttribute('tabindex')).toBe(false)
+    expect(trigger.hasAttribute('aria-expanded')).toBe(false)
+    expect(control().getAttribute('aria-haspopup')).toBe('dialog')
+    expect(control().getAttribute('aria-expanded')).toBe('false')
+    expect(control().getAttribute('aria-controls')).toBeTruthy()
+    expect(control().id).toBeTruthy()
     expect(trigger.getAttribute('data-state')).toBe('closed')
     // The scoped slot receives isOpen — closed label while closed.
     expect(trigger.textContent).toContain('Show filters')
@@ -157,7 +161,8 @@ describe('Popover (compound / overlay)', () => {
     // Root + trigger reflect the injected open state; scoped slot flips.
     expect(getByTestId('overlay-popover').getAttribute('data-state')).toBe('open')
     const trigger = getByTestId('overlay-popover__trigger')
-    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(control().getAttribute('aria-expanded')).toBe('true')
+    expect(control().getAttribute('aria-controls')).toBe(dialog.id)
     expect(trigger.getAttribute('data-state')).toBe('open')
     expect(trigger.textContent).toContain('Hide filters')
   })
@@ -171,7 +176,7 @@ describe('Popover (compound / overlay)', () => {
 
     await fireEvent.click(trigger)
     await waitFor(() => expect(panel()).toBeNull())
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(control().getAttribute('aria-expanded')).toBe('false')
   })
 
   it('opens on Enter and Space keydown landing directly on the trigger wrapper', async () => {
@@ -383,7 +388,26 @@ describe('Popover (compound / overlay)', () => {
     await fireEvent.click(trigger)
     await Promise.resolve()
     expect(panel()).toBeNull()
-    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(control().getAttribute('aria-expanded')).toBe('false')
+    expect(control().getAttribute('aria-disabled')).toBe('true')
+  })
+
+  it('becomes the button itself when the slot holds no focusable control', () => {
+    render(
+      defineComponent({
+        components: { Popover, PopoverTrigger, PopoverContent },
+        template: `<Popover><PopoverTrigger>Filters</PopoverTrigger><PopoverContent>Body</PopoverContent></Popover>`
+      })
+    )
+    const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+    expect(trigger.getAttribute('role')).toBe('button')
+    expect(trigger.getAttribute('tabindex')).toBe('0')
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
+  })
+
+  it('has no axe violations on the closed trigger', async () => {
+    const { container } = render(host())
+    await expectNoA11yViolations(container)
   })
 
   // ---- Width + placement presets ------------------------------------------------
@@ -554,7 +578,7 @@ describe('Popover (compound / overlay)', () => {
     // Re-anchoring is invisible on an inner scroll (the trigger has not moved, so the
     // recomputed coordinates are identical) — asserting on `style.top` would pass in
     // the broken state too. The observable difference is the measurement itself.
-    const measure = vi.spyOn(trigger, 'getBoundingClientRect')
+    const measure = vi.spyOn(control(), 'getBoundingClientRect')
     // Opening anchors the panel over two ticks; let that settle before counting.
     await nextTick()
     await nextTick()
@@ -599,18 +623,88 @@ describe('Popover (compound / overlay)', () => {
 
   // ---- Story smoke: the composed Default story opens through the real compound -----
   it('renders the Default story open through the real compound', async () => {
-    // Drive `open` through the story args instead of clicking: the composeStories
+    // Drive `open` through the story args instead of clicking: the fixture's
     // mount glue re-renders the story right after mount, and a click landing on
     // the pre-settle instance is discarded with it (flaky). Controlled args are
     // race-free; the click path is covered by the direct compound tests above.
-    const { getByRole, getByTestId } = render(Default({ open: true }))
+    const { getByRole } = render(Default, { props: { open: true } })
 
     await waitFor(() => expect(panel()).not.toBeNull())
     expect(getByRole('button', { name: 'Open popover' })).toBeTruthy()
-    expect(getByTestId('overlay-popover__trigger').getAttribute('aria-expanded')).toBe('true')
+    expect(getByRole('button', { name: 'Open popover' }).getAttribute('aria-expanded')).toBe('true')
 
     expect((byTestId('overlay-popover__title') as HTMLElement).textContent).toContain(
       'Popover title'
     )
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const openWith = async (key: string) => {
+    render(host())
+    control().focus()
+    await userEvent.keyboard(key)
+    await waitFor(() => expect(panel()).not.toBeNull())
+  }
+
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens the panel and keeps focus on the trigger',
+    async (key) => {
+      await openWith(key)
+      expect(document.activeElement).toBe(control())
+    }
+  )
+
+  it('Tab from the trigger moves into the panel, to its first control', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('overlay-popover__close'))
+  })
+
+  it('Tab on the last control returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    const controls = panel()!.querySelectorAll<HTMLElement>('button')
+    controls[controls.length - 1]!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(control())
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Shift+Tab on the first control returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    byTestId('overlay-popover__close')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(control())
+  })
+
+  it('Escape inside the panel closes it and returns focus to the trigger', async () => {
+    await openWith('{Enter}')
+    byTestId('overlay-popover__close')!.focus()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(control())
+  })
+})
+
+describe('text input as the trigger control', () => {
+  it('leaves the popup attributes off a textbox, where ARIA does not allow them', async () => {
+    const Host = defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent },
+      template: `
+        <Popover>
+          <PopoverTrigger>
+            <input type="text" aria-label="Domain" data-testid="domain-input" />
+          </PopoverTrigger>
+          <PopoverContent>Checks</PopoverContent>
+        </Popover>
+      `
+    })
+    const { getByTestId, container } = render(Host)
+    await nextTick()
+    const input = getByTestId('domain-input')
+    expect(input.hasAttribute('aria-expanded')).toBe(false)
+    expect(input.hasAttribute('aria-haspopup')).toBe(false)
+    expect(input.hasAttribute('aria-controls')).toBe(false)
+    await expectNoA11yViolations(container)
   })
 })

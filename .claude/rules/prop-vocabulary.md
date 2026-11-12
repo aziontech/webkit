@@ -14,15 +14,63 @@ The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hook
 | Light-dismiss (closes on outside-click / Esc) | `dismissible` | `boolean` | overlay-specific | `dismissable`, `closeable` |
 | Explicit close affordance (X button) | `closable` | `boolean` | `false` | — (distinct concept; not an alias of `dismissible`) |
 | Primary heading text | `title` | `string` | `''` | `heading`, `header` (as a **prop**) |
-| Primary two-way value | `modelValue` (default `v-model`) | component-specific | per component | `isToggled` |
+| Primary two-way value | `modelValue` (default `v-model`) | component-specific | per component | `isToggled`; `v-model:value` for the primary value† |
 | Overlay open state | `open` (+ `v-model:open`), seed `defaultOpen` | `boolean` | `undefined` (controlled) | `visible`, `show`, `opened` |
 | Disabled | `disabled` | `boolean` | `false` | `isDisabled`, `enabled` |
 | Loading | `loading` | `boolean` | `false` | `isLoading` |
 | Leading/trailing glyph | `icon` | `string` (icon name) | `''` | `iconName`, `leadingIcon`, `trailingIcon` |
+| Validation state† | `invalid` | `boolean` | `false` | `error` / `hasError` as a validation flag (an `error` *message* string, or a send-failed state on a form band, is a different concept) |
+| Read-only† | `readonly` | `boolean` | `false` | `readOnly`, `isReadonly` |
+| Outline around the box† | `bordered` | `boolean` | per component | `border` (boolean), `hasBorder` |
+| Copy affordance† | `copyable` | `boolean` | per component | `showCopy` |
+| Self-advancing media† | `autoplay` (+ `autoplayInterval`, ms) | `boolean` | per component | `autoPlay`, `autoPlayInterval` |
+| Motion on / off† | `animated` | `boolean` | per component | `still` (negative polarity) |
+| Short label above a heading† | `eyebrow` | `string` | `''` | `overline` (as a prop) |
+| Text of a link or call-to-action† | `linkLabel` (`actionLabel` for a button) | `string` | `''` | `link` / `cta` as the text |
+| Column count below `md`† | `mobileColumns` | number union | `1` | `mobileCols` |
 | Accessible name | `ariaLabel` (+ prefixed `xAriaLabel`) | `string` | per component | `aria-label` as a prop |
 | In-page anchor (the `id` a `#hash` link targets, set by the component on its landmark) | `anchor` | `string` | `''` | `anchorId`, `sectionId`, `hash` |
 | Boolean (any) | no `is`/`has` prefix; **positive polarity** | `boolean` | `false` | `isX`, `hasX`; negatives `hidden`→`visible`, `closed`→`open`, `inactive`→`active`, `invisible`→`visible`, `collapsed`→`expanded` (`disabled`/`readonly` are accepted exceptions) |
 | Value change signal | `v-model` / `update:<x>` (no separate echo) | — | — | **`<x>-change` when `update:<x>` exists** (redundant echo — blocked). A genuinely distinct commit event (e.g. commit-on-blur) is a bare `change`, never `<x>-change`. |
+
+## Shared values
+
+Value names are shared too. The same look gets the same token on every component:
+
+| Idea | Value | Prop | Banned values |
+|---|---|---|---|
+| Bordered surface, no fill | `outlined` | `kind` | `outline` |
+| No surface until hover | `transparent` | `kind` | `text`, `ghost` |
+| Error / destructive color | `danger` | `severity`, `kind` | `error`, `destructive` |
+| Size tokens | `small`, `medium`, `large` | `size` | `xs`, `sm`, `md`, `lg`, `xl` |
+
+`kind` and `small | medium | large` stay as they are in v6. shadcn and Radix call these `variant` and
+`sm | md | lg`; webkit already ships `kind` and the long tokens on every component, so a rename
+would break every consumer for no gain. Code ported from shadcn maps `variant` → `kind`,
+`ghost` → `transparent`, `destructive` → `danger`, `outline` → `outlined`.
+
+## v6 renames (M1.2 item 2.6)
+
+Every prop that drifted from this table is renamed in v6. The full map, with value renames,
+is `packages/webkit/src/cli/migrations/v6-props.json` (`{ "<subpath>": { "<old>": "<new>" } }`).
+The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
+
+| Component | Before | After |
+|---|---|---|
+| `accordion`, `tabs`, `navigation-menu`, `code-block`, `theme-switcher` | `v-model:value` | `v-model` (`modelValue`) |
+| `alert` | `severity="error"` | `severity="danger"` |
+| `button` | `kind="text"` | `kind="transparent"` |
+| `item` | `kind="outline"` | `kind="outlined"` |
+| `severity-tag` | `level` | `severity` |
+| `code-block`, `log-view`, `table` | `border` | `bordered` |
+| `log-view` | `showCopy` | `copyable` |
+| `media-tabs`, `quote-tabs` | `autoPlay`, `autoPlayInterval` | `autoplay`, `autoplayInterval` |
+| `shell-mockup` | `still` | `animated` (inverted) |
+| `doc-card` | `overline`, `link` | `eyebrow`, `linkLabel` |
+| `doc-card-group` | `mobileCols` | `mobileColumns` |
+| `doc-tooltip` | `headline`, `cta` | `title`, `linkLabel` |
+
+† Added in v6. [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
 
 **Not banned — legitimate competing uses:**
 

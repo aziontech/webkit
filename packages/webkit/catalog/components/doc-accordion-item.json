@@ -1,0 +1,15 @@
+{
+ "purpose": "One collapsible entry inside a `DocAccordionGroup`. It carries its title and its body only; the group owns the open-state model, the trigger and the panel. Rendered on its own it is a `display: contents` wrapper around its body.",
+ "useWhen": [
+  "As a direct child of `DocAccordionGroup`."
+ ],
+ "avoidWhen": [
+  "Outside a `DocAccordionGroup` — it renders no trigger of its own."
+ ],
+ "related": [
+  "DocAccordionGroup` — the group that reads it."
+ ],
+ "bestPractices": [
+  "Keep the title a question; keep the body prose."
+ ]
+}

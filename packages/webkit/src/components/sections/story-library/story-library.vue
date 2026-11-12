@@ -1,9 +1,11 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -111,6 +113,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ storyLibrary: en.storyLibrary })
 
   const query = ref('')
 
@@ -202,7 +205,7 @@
           role="search"
           class="grid items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))]"
         >
-          <InputText
+          <Input
             v-if="search"
             v-model="query"
             size="large"
@@ -213,7 +216,7 @@
             <template #iconLeft>
               <i class="pi pi-search text-(--text-muted)" />
             </template>
-          </InputText>
+          </Input>
           <Select
             v-for="facet in facets"
             :key="facet.key"
@@ -226,11 +229,11 @@
             <SelectTrigger :aria-label="facet.label" />
             <SelectContent>
               <template #search>
-                <InputText
+                <Input
                   :model-value="optionQuery[facet.key] ?? ''"
                   size="small"
-                  placeholder="Search"
-                  :aria-label="`Search ${facet.label.toLowerCase()}`"
+                  :placeholder="t('storyLibrary.search')"
+                  :aria-label="t('storyLibrary.searchFacet', { facet: facet.label.toLowerCase() })"
                   @update:model-value="setOptionQuery(facet.key, $event)"
                 >
                   <template #iconLeft>
@@ -239,7 +242,7 @@
                       aria-hidden="true"
                     />
                   </template>
-                </InputText>
+                </Input>
               </template>
               <SelectOption
                 v-for="option in optionsOf(facet)"
@@ -253,7 +256,7 @@
                 role="status"
                 class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
               >
-                No results found
+                {{ t('storyLibrary.empty') }}
               </p>
             </SelectContent>
           </Select>
@@ -275,7 +278,7 @@
               :key="item.key"
               :data-last-row-sm="index >= lastRowFrom(2) || undefined"
               :data-last-row-lg="index >= lastRowFrom(3) || undefined"
-              class="border-b border-(--border-default) last:border-b-0 sm:border-r sm:max-lg:even:border-r-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-r-0 lg:data-last-row-lg:border-b-0"
+              class="border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0"
             >
               <a
                 :href="item.href"
@@ -300,7 +303,7 @@
                 >
                   {{ linkLabel }}
                   <i
-                    class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 motion-reduce:transition-none"
+                    class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
                   />
                 </span>
               </a>

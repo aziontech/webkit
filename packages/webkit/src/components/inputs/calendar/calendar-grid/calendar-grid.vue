@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
+  import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
+  import { intlLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
-    type TabViewSlideDirection
-  } from '../../../navigation/tab-view/presets/transitions'
+    type TabsSlideDirection
+  } from '../../../navigation/tabs/presets/transitions'
   import { asRange, asSingle, sameDay, startOfDay } from '../format'
   import { CalendarInjectionKey } from '../injection-key'
 
@@ -13,9 +16,20 @@
     inheritAttrs: false
   })
 
+  const { t, locale } = useTranslate({ calendar: en.calendar })
+  const monthLabel = computed(
+    () => new Intl.DateTimeFormat(intlLocale(locale.value), { month: 'long', year: 'numeric' })
+  )
+  const weekdayLabels = computed(() =>
+    Array.from({ length: 7 }, (_, day) =>
+      new Intl.DateTimeFormat(intlLocale(locale.value), { weekday: 'narrow' }).format(
+        new Date(2023, 0, day + 1)
+      )
+    )
+  )
+
   const ctx = inject(CalendarInjectionKey, null)
 
-  const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const
   const MS_PER_DAY = 86_400_000
 
   const mode = computed(() => ctx?.mode.value ?? 'single')
@@ -44,7 +58,7 @@
   const viewYear = computed(() => viewDate.value.getFullYear())
   const viewMonth = computed(() => viewDate.value.getMonth())
 
-  const slideDirection = ref<TabViewSlideDirection>(null)
+  const slideDirection = ref<TabsSlideDirection>(null)
   const transitioning = ref(false)
 
   const monthsKey = computed(() => `${viewYear.value}-${viewMonth.value}`)
@@ -52,13 +66,13 @@
 
   const monthsEnterFromClass = computed(() =>
     slideDirection.value === 'left'
-      ? 'motion-safe:-translate-x-full motion-safe:opacity-0'
-      : 'motion-safe:translate-x-full motion-safe:opacity-0'
+      ? 'motion-safe:-translate-x-full rtl:motion-safe:translate-x-full motion-safe:opacity-0'
+      : 'motion-safe:translate-x-full rtl:motion-safe:-translate-x-full motion-safe:opacity-0'
   )
   const monthsLeaveToClass = computed(() =>
     slideDirection.value === 'left'
-      ? 'motion-safe:translate-x-full motion-safe:opacity-0'
-      : 'motion-safe:-translate-x-full motion-safe:opacity-0'
+      ? 'motion-safe:translate-x-full rtl:motion-safe:-translate-x-full motion-safe:opacity-0'
+      : 'motion-safe:-translate-x-full rtl:motion-safe:translate-x-full motion-safe:opacity-0'
   )
 
   watch(
@@ -188,7 +202,7 @@
       key: `${year}-${month}`,
       year,
       month,
-      label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+      label: monthLabel.value.format(date),
       weeks: buildWeeks(year, month)
     }
   })
@@ -271,7 +285,7 @@
   }
 
   const onDayKeydown = (event: globalThis.KeyboardEvent, day: CalendarDay) => {
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowLeft':
         event.preventDefault()
         moveFocus(day.time, -1)
@@ -324,12 +338,12 @@
         <button
           type="button"
           :disabled="disabledAll"
-          aria-label="Previous month"
+          :aria-label="t('calendar.previousMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToPreviousMonth"
         >
           <i
-            class="pi pi-chevron-left text-[length:inherit] leading-none"
+            class="pi pi-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>
@@ -337,12 +351,12 @@
         <button
           type="button"
           :disabled="disabledAll"
-          aria-label="Next month"
+          :aria-label="t('calendar.nextMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToNextMonth"
         >
           <i
-            class="pi pi-chevron-right text-[length:inherit] leading-none"
+            class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>
@@ -375,7 +389,7 @@
               class="flex items-start"
             >
               <span
-                v-for="(weekday, index) in WEEKDAY_LABELS"
+                v-for="(weekday, index) in weekdayLabels"
                 :key="`weekday-${index}`"
                 role="columnheader"
                 :data-size="size"
@@ -411,7 +425,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="input-calendar__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-elements) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-elements) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-contrast) data-[band=start]:rounded-l-(--shape-elements) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-contrast) data-[band=end]:rounded-r-(--shape-elements) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-contrast) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-elements) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-elements) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-contrast) data-[band=start]:rounded-s-(--shape-elements) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-contrast) data-[band=end]:rounded-e-(--shape-elements) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-contrast) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
                   >

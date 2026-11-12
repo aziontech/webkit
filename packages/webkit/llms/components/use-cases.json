@@ -1,0 +1,79 @@
+{
+ "name": "use-cases",
+ "binding": "UseCases",
+ "import": "@aziontech/webkit/use-cases",
+ "treeShakeableImport": "@aziontech/webkit/use-cases",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The \"what teams use it for\" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.",
+ "setup": null,
+ "useWhen": [
+  "On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.",
+  "Whenever a page needs three to six short, icon-led use cases with one link out to the documentation."
+ ],
+ "avoidWhen": [
+  "For a grid of features with artwork → use `feature-tiles`.",
+  "For use cases that each link to their own page → use `use-case-links`.",
+  "Inside another band's cell → compose `topic` directly."
+ ],
+ "related": [
+  "topic` — the icon, title and description cell each use case is rendered with.",
+  "card-grid` — the frame grid this band lays its cells in."
+ ],
+ "bestPractices": [
+  "Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.",
+  "Write `title` as the heading the page's outline needs; it is the band's `h2`.",
+  "Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as \"go\".",
+  "Leave `eyebrow` as the product name; it is the overline the reader scans first."
+ ],
+ "props": [
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the headline in the title cell, closed by the blinking cursor."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered as its `h2` in the title cell."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "One-line lead under the headline."
+  },
+  {
+   "name": "primaryAction",
+   "type": "UseCasesAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
+  },
+  {
+   "name": "items",
+   "type": "UseCasesItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import UseCases from '@aziontech/webkit/use-cases'\n</script>\n\n<template>\n  <UseCases\n    eyebrow=\"SQL Database\"\n    title=\"What teams use SQL Database for\"\n    description=\"Teams use it to:\"\n    :primary-action=\"{ label: 'Docs', href: '/site/docs', trailing: true }\"\n    :items=\"[\n      {\n        icon: 'pi pi-comments',\n        title: 'RAG Applications',\n        description: 'Build topic-specific chatbots with the topic data stored in SQL Database.'\n      },\n      {\n        icon: 'pi pi-search',\n        title: 'Search Applications',\n        description: 'Power search with vector similarity queries on stored embeddings.'\n      },\n      {\n        icon: 'pi pi-sync',\n        title: 'AI Context Injection',\n        description: 'Give AI applications relevant context from vector embeddings.'\n      },\n      {\n        icon: 'pi pi-globe',\n        title: 'AI Workflows',\n        description: 'Pair stored embeddings with AI Inference to run RAG applications on Azion.'\n      }\n    ]\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/use-cases.md"
+}

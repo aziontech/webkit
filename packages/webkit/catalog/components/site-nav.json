@@ -1,0 +1,20 @@
+{
+ "purpose": "The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state.",
+ "useWhen": [
+  "At the top of every marketing page, once."
+ ],
+ "avoidWhen": [
+  "For the Console's application header → use `global-header` directly.",
+  "For an in-page list of links → use `navigation-menu` or `menu` directly."
+ ],
+ "related": [
+  "global-header` — the bar primitive the navigation is rendered in.",
+  "navigation-menu` — the mega-menu the bar opens from `xl` up.",
+  "menu` — the drill-down tree the sheet carries below `xl`."
+ ],
+ "bestPractices": [
+  "Keep a panel to one, two or four columns; only the four-column panel is stretched to the page column.",
+  "Stack a short group under another in the same column (Platform under Observe) instead of adding a fifth column.",
+  "Give every entry an `href`; an entry without one links to `#`."
+ ]
+}

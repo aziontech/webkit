@@ -4,15 +4,16 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0d5200dbd6defbad67007e7b66555b33baf207acbb9dda2c23a22e8b059c73d1
+checksum: 5d9a3f73325e824f90d8c694a1e43474b23012aa3f4831cdd863f764c5d47ff2
 created: 2026-07-23
-last_updated: 2026-07-24
+last_updated: 2026-11-11
 ---
+
 # Kbd — Component Spec
 
 ## Purpose
 
-Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, Ctrl elsewhere), so consumers never hardcode platform symbols. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command-menu`).
+Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
 
 ## When to use
 
@@ -26,20 +27,21 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 ## Related
 
-- `command-menu` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.
+- `command` — consumes Kbd for its per-item shortcut hints and its ⌘K trigger affordance.
 - `badge` — compact non-interactive indicator for counts/status; Kbd is specifically for keyboard keys.
 
 ## Best practices
 
 - Keep the default slot to a single key or glyph (`K`, `7`, `Enter`, `Esc`, `/`); avoid lowercase words or sentences.
 - Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.
+- Name a key with `key-name` (`<Kbd key-name="escape" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `WebkitProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.
 - Place surrounding punctuation outside the element, not inside the keycap.
 
 ## Usage
 
 ```vue
 <script setup>
-import Kbd from '@aziontech/webkit/kbd'
+  import Kbd from '@aziontech/webkit/kbd'
 </script>
 
 <template>
@@ -49,13 +51,14 @@ import Kbd from '@aziontech/webkit/kbd'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `meta` | `boolean` | `false` | false | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). |
-| `ctrl` | `boolean` | `false` | false | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). |
-| `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
-| `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
-| `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
+| Prop      | Type                                                                                               | Default     | Required | JSDoc                                                                                                             |
+| --------- | -------------------------------------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| `meta`    | `boolean`                                                                                          | `false`     | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).                                             |
+| `ctrl`    | `boolean`                                                                                          | `false`     | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                                                  |
+| `shift`   | `boolean`                                                                                          | `false`     | false    | Prepend the Shift modifier glyph (⇧).                                                                             |
+| `alt`     | `boolean`                                                                                          | `false`     | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).                                                |
+| `size`    | `'small' \| 'medium'`                                                                              | `'medium'`  | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells.                                  |
+| `keyName` | `'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete'` | `undefined` | false    | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
 
 ## Events
 
@@ -63,9 +66,9 @@ import Kbd from '@aziontech/webkit/kbd'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`). |
+| Slot      | Scope | Notes                                                                             |
+| --------- | ----- | --------------------------------------------------------------------------------- |
+| `default` | —     | The single key or glyph rendered after any modifier glyphs (`K`, `Enter`, `Esc`). |
 
 ## States
 
@@ -79,17 +82,17 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (medium) | `.text-overline-md` + `leading-none` |
-| typography (small) | `.text-overline-sm` + `leading-none` |
-| surface | `var(--bg-surface)` |
-| label | `var(--text-default)` |
-| border (keycap outline + thicker bottom edge) | `var(--border-default)` |
-| shape | `var(--shape-elements)` |
-| elevation (keycap lift) | `var(--shadow-sm)` |
-| spacing (medium) | `var(--spacing-xs)` horizontal padding |
-| spacing (small) | `var(--spacing-xs)` horizontal padding |
+| Region                                        | Token (DESIGN.md)                      |
+| --------------------------------------------- | -------------------------------------- |
+| typography (medium)                           | `.text-overline-md` + `leading-none`   |
+| typography (small)                            | `.text-overline-sm` + `leading-none`   |
+| surface                                       | `var(--bg-surface)`                    |
+| label                                         | `var(--text-default)`                  |
+| border (keycap outline + thicker bottom edge) | `var(--border-default)`                |
+| shape                                         | `var(--shape-elements)`                |
+| elevation (keycap lift)                       | `var(--shadow-sm)`                     |
+| spacing (medium)                              | `var(--spacing-xs)` horizontal padding |
+| spacing (small)                               | `var(--spacing-xs)` horizontal padding |
 
 ## Theme gaps
 
@@ -104,7 +107,14 @@ _none_
 - `motion-reduce:*`: not applicable — Kbd is static (no motion).
 - Touch target: not applicable — Kbd is non-interactive.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
+
+## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value side-by-side.
@@ -125,10 +135,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

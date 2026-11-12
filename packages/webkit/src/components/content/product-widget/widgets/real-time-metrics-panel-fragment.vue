@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
@@ -93,7 +93,7 @@
           :active="hover || !canHover"
         >
           <template #default="{ index }">
-            <CardBox>
+            <Card>
               <template #content>
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-baseline justify-between gap-(--spacing-xs)">
@@ -133,7 +133,7 @@
                   </svg>
                 </div>
               </template>
-            </CardBox>
+            </Card>
           </template>
         </MockupElevator>
       </ShellMockupPart>

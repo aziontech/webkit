@@ -1,13 +1,12 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/button/Button.stories'
+import Default from '../../../../examples/button/default.vue'
+import Disabled from '../../../../examples/button/disabled.vue'
+import Loading from '../../../../examples/button/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Button from './button.vue'
-
-const { Default, Disabled, Loading } = composeStories(stories)
 
 describe('Button', () => {
   describe('rendering & polymorphism', () => {
@@ -34,6 +33,57 @@ describe('Button', () => {
         attrs: { 'data-testid': 'save-button' }
       })
       expect(getByTestId('save-button').tagName).toBe('BUTTON')
+    })
+
+    it('renders kind="transparent" with no surface fill', () => {
+      const { getByRole } = render(Button, { props: { label: 'Skip', kind: 'transparent' } })
+      expect(getByRole('button', { name: 'Skip' }).className).toContain('bg-transparent')
+    })
+  })
+
+  describe('attribute forwarding', () => {
+    it('gives the button the consumer aria-label as its accessible name', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      expect(getByRole('button', { name: 'Import repository' }).tagName).toBe('BUTTON')
+    })
+
+    it('gives the anchor the consumer aria-label as its accessible name', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Import', href: '/import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      expect(getByRole('link', { name: 'Import repository' }).tagName).toBe('A')
+    })
+
+    it('lands id, aria-describedby, name and form on the native button', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save' },
+        attrs: { id: 'save', 'aria-describedby': 'save-hint', name: 'intent', form: 'settings' }
+      })
+      const node = getByRole('button', { name: 'Save' })
+      expect(node.id).toBe('save')
+      expect(node.getAttribute('aria-describedby')).toBe('save-hint')
+      expect(node.getAttribute('name')).toBe('intent')
+      expect(node.getAttribute('form')).toBe('settings')
+    })
+
+    it('keeps its own disabled state when the consumer passes a conflicting aria-disabled', () => {
+      const { getByRole } = render(Button, {
+        props: { label: 'Save', disabled: true },
+        attrs: { 'aria-disabled': 'false' }
+      })
+      expect(getByRole('button', { name: 'Save' }).getAttribute('aria-disabled')).toBe('true')
+    })
+
+    it('has no axe violations with a consumer aria-label', async () => {
+      const { container } = render(Button, {
+        props: { label: 'Import' },
+        attrs: { 'aria-label': 'Import repository' }
+      })
+      await expectNoA11yViolations(container)
     })
   })
 
@@ -240,7 +290,7 @@ describe('Button', () => {
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story mounts an enabled button', () => {
       const { getByRole } = render(Default)
       expect(getByRole('button', { name: 'Button' }).tagName).toBe('BUTTON')
@@ -255,5 +305,16 @@ describe('Button', () => {
       const { getByTestId } = render(Loading)
       expect(getByTestId('actions-button-loading')).toBeTruthy()
     })
+  })
+})
+
+describe('Button touch target', () => {
+  it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
+    const view = render(Button, { props: { label: 'Save' } })
+    const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
+
+    expect(target?.getAttribute('aria-hidden')).toBe('true')
+    expect(target?.className).toContain('pointer-coarse:block')
+    expect(target?.className).toContain('inset-[min(0rem,calc(50%-22px))]')
   })
 })

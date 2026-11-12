@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/spinner/Spinner.stories'
+import Sizes from '../../../../examples/spinner/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Spinner from './spinner.vue'
-
-const { Sizes } = composeStories(stories)
 
 describe('Spinner', () => {
   it('renders an svg root', () => {
@@ -66,7 +63,7 @@ describe('Spinner', () => {
   })
 
   it('renders the Sizes story fixture without a11y violations', async () => {
-    const { container } = render(Sizes())
+    const { container } = render(Sizes)
 
     const svg = container.querySelector('svg')
     expect(svg).not.toBeNull()

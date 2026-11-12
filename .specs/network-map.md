@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: b96dd07e922c28b1063fce55e28c91aafee4c88e468865b5139024952292e24d
+checksum: 920705d31ce49893a1201d7949a8111d10190c10644166b3fb13dba4ea50e3a8
 created: 2026-09-26
 last_updated: 2026-09-26
 ---
@@ -77,6 +77,7 @@ import NetworkMap from '@aziontech/webkit/network-map'
 | `offsetX` | `number` | `0` | false | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough. |
 | `offsetY` | `number` | `0` | false | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough. |
 | `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the map out along an axis so it meets content without a hard edge. |
+| `traffic` | `boolean` | `false` | false | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## Events
 
@@ -106,7 +107,9 @@ import NetworkMap from '@aziontech/webkit/network-map'
 |---|---|---|---|
 | `animated` set — PoP pulse, three waves at 0 / 700 / 1400ms | `animate-pulse` | catalog (`animate.js`, Tailwind stock loop) | `motion-reduce:animate-none` (static PoPs) |
 
-Static by default: without `animated` no PoP carries an animation class.
+| `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked) | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
+
+Static by default: without `animated` no PoP carries an animation class. `traffic` builds the mesh from the lit PoPs, deterministically (a fixed-seed generator, so server and client and every export draw the same network): 14 participants by farthest-point sampling, each linked to at least two and at most three others no closer than 60 map units, each ray a quadratic bowed 5–9% of its length to a random side. Links are `--border-strong`, packets `--primary`, both `non-scaling-stroke` so they stay hairlines at any size. The server renders the links and the parked packets; the packets start on mount.
 
 ## Tokens
 
@@ -130,7 +133,7 @@ Static by default: without `animated` no PoP carries an animation class.
 - `motion-reduce:animate-none` stops the pulse under reduced motion
 - Touch target: not applicable (no interactive parts)
 
-## Stories (Storybook)
+## Examples
 
 `region`, `density` and `fade` are this component's multi-option axes — its equivalent of `kind` — so each gets one composite story in place of Types / Sizes, which it does not have. `animated` is the one state prop, so it gets the one state story. `position` is left to the Default story's controls: it only shows when the box's ratio differs from the region's, so nine frames of the same map would teach little. `scale`, `offsetX` and `offsetY` are left there too, since they are continuous ranges rather than sets of options.
 
@@ -138,6 +141,7 @@ Static by default: without `animated` no PoP carries an animation class.
 - Regions — composite story rendering every `region` value side-by-side.
 - Densities — composite story rendering every `density` value side-by-side.
 - Fades — composite story rendering every `fade` value side-by-side.
+- Traffic — `traffic` with `animated` over the Atlantic at high density.
 - Animated — state story; the Default args plus `animated: true`.
 
 ## Constraints — DO NOT
@@ -153,10 +157,8 @@ Static by default: without `animated` no PoP carries an animation class.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

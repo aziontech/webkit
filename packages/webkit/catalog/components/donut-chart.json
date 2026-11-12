@@ -1,0 +1,23 @@
+{
+ "purpose": "A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it. It shares the cartesian chart's data model, palette, legend behavior and loading / empty / error surface, so a dashboard reads as one system. Each slice is the sum of its series values, so a time series passes straight in as its share of the range.",
+ "useWhen": [
+  "Share of a small whole at a glance: top countries by blocked threats, traffic by protocol, cache hit versus miss.",
+  "A dashboard card where the total is the headline and the split is the context."
+ ],
+ "avoidWhen": [
+  "Comparing close values or more than six slices → use `chart` with horizontal bars; angles are hard to compare.",
+  "Two slices → use `stat-tile` with the ratio; a two-slice pie says less than the number.",
+  "Change over time → use `chart`."
+ ],
+ "related": [
+  "chart` — the cartesian sibling; same series model, so a dataset moves between them without reshaping.",
+  "chart-card` — the box a dashboard donut sits in.",
+  "stat-tile` — the total alone, with a delta."
+ ],
+ "bestPractices": [
+  "Keep it to six slices or fewer; the seventh and beyond fold into Other automatically.",
+  "Order series by size so the largest slice starts at the top.",
+  "Use the center for the total and let hover or focus swap it to the active slice.",
+  "Pair it with the bar form of the same data when exact ranks matter (the console's country pie plus ordered bar)."
+ ]
+}

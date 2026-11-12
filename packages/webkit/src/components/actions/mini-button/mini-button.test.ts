@@ -1,12 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/mini-button/MiniButton.stories'
+import Default from '../../../../examples/mini-button/default.vue'
+import Sizes from '../../../../examples/mini-button/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MiniButton from './mini-button.vue'
-
-const { Default, Sizes } = composeStories(stories)
 
 describe('MiniButton', () => {
   describe('rendering', () => {
@@ -128,7 +126,7 @@ describe('MiniButton', () => {
     })
   })
 
-  describe('composeStories (the story fixture runs in-test)', () => {
+  describe('documented examples (the example file runs in-test)', () => {
     it('Default story mounts a large mini button with its label', () => {
       const { getByRole } = render(Default)
       const link = getByRole('link', { name: 'Learn more' })

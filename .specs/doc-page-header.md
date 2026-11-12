@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 0f497e00e7d9821b5fd7faa38768717c38f90bd082daabeeb4de10471e18501a
+checksum: 5542144fe8dc786082ebf0c54e3539755dbd4038cfd11f8f510205451feb2623
 created: 2026-08-22
-last_updated: 2026-08-28
+last_updated: 2026-11-10
 ---
 
 # DocPageHeader — Component Spec
@@ -28,7 +28,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 - `DocProse` — the body below it. The masthead's `h1` is chrome, so authored content starts at `h2`.
 - `DocOnThisPage` — the rail beside the body, which lists those `h2`s.
-- `Button` / `Tooltip` / `Divider` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
+- `Button` / `Tooltip` / `Separator` — the meta line's entries: a quiet `text` button (an anchor when the entry has an `href`), the sentence its label has no room for, and the rule between two of them.
 
 ## Best practices
 
@@ -110,17 +110,17 @@ _none_
 
 ## Tokens
 
-| Region                    | Token (DESIGN.md)                           |
-| ------------------------- | ------------------------------------------- |
-| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl` |
-| typography (deck)         | `.text-body-md`                             |
-| typography (last updated) | `.text-label-sm`                            |
-| typography (meta entry)   | `Button` `kind="text"` `size="small"`       |
-| text                      | `var(--text-default)`                       |
-| text (last updated)       | `var(--text-muted)`                         |
-| border (the closing rule) | `var(--border-default)`                     |
-| border (entry separator)  | `Divider` `orientation="vertical"`          |
-| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`  |
+| Region                    | Token (DESIGN.md)                            |
+| ------------------------- | -------------------------------------------- |
+| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl`  |
+| typography (deck)         | `.text-body-md`                              |
+| typography (last updated) | `.text-label-sm`                             |
+| typography (meta entry)   | `Button` `kind="transparent"` `size="small"` |
+| text                      | `var(--text-default)`                        |
+| text (last updated)       | `var(--text-muted)`                          |
+| border (the closing rule) | `var(--border-default)`                      |
+| border (entry separator)  | `Separator` `orientation="vertical"`         |
+| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`   |
 
 ## Theme gaps
 
@@ -137,7 +137,7 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: each meta-line entry is a standard `small` button (28px) with its own hover surface; nothing else is interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default — the full masthead: breadcrumb, title, deck and the meta line.
 - Actions — composite story of the belt's entry shapes in one line: a button, an in-app link, and an external link. Justified in writing here because the shapes differ only by the entry's own fields, which no single-arg story shows.
@@ -157,10 +157,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

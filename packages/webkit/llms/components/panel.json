@@ -1,0 +1,65 @@
+{
+ "name": "panel",
+ "binding": "Panel",
+ "import": "@aziontech/webkit/panel",
+ "treeShakeableImport": "@aziontech/webkit/panel",
+ "category": "overlay",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/panel-content",
+  "@aziontech/webkit/panel-footer",
+  "@aziontech/webkit/panel-header"
+ ],
+ "purpose": "Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/panel/`.",
+ "setup": null,
+ "useWhen": [
+  "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title and close control, `PanelContent` for the body that scrolls, `PanelFooter` for the actions.",
+  "A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page."
+ ],
+ "avoidWhen": [
+  "The surface has to open over the page and trap focus → use `dialog`.",
+  "The surface slides in from a screen edge → use `drawer`.",
+  "Rich content anchored to a trigger that leaves the page interactive → use `popover`.",
+  "A card in the page layout, with header, content and footer slots → use `card`."
+ ],
+ "related": [
+  "dialog` — renders a `Panel` inside `DialogContent`; compose the `Panel*` regions directly in it.",
+  "drawer` — renders a `Panel` inside `DrawerContent`; there `PanelContent` scrolls through a `ScrollArea`.",
+  "card` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets."
+ ],
+ "bestPractices": [
+  "Inside a dialog or drawer, use only `PanelHeader`, `PanelContent` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.",
+  "Put long content in `PanelContent`. It is the only region that scrolls; the header and footer stay in place.",
+  "size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.",
+  "Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal."
+ ],
+ "props": [
+  {
+   "name": "size",
+   "type": "PanelSize",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Max width of the panel shell."
+  },
+  {
+   "name": "sizeAtMd",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "—"
+  }
+ ],
+ "styleSeam": false,
+ "examples": [],
+ "docs": "components/panel.md"
+}

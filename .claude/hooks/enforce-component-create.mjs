@@ -34,8 +34,8 @@ function pipelineReferencedInTranscript(transcriptPath) {
     return (
       // 1. New pipeline
       /\.claude\/commands\/(component-create|spec-create|component-verify)\.md/i.test(content) ||
-      /\.claude\/skills\/(component-scaffold|spec-create|spec-validate|figma-discover|token-map|reuse-audit|structure-decide|storybook-write|code-connect-write|validate-component|echo-report)\/SKILL\.md/i.test(content) ||
-      /\.claude\/agents\/(scaffolder|spec-author|spec-validator|figma-extractor|token-mapper|reuse-auditor|structure-decider|storybook-writer|code-connect-writer|echo-reporter)\.md/i.test(content) ||
+      /\.claude\/skills\/(component-scaffold|spec-create|spec-validate|figma-discover|token-map|reuse-audit|structure-decide|code-connect-write|validate-component|echo-report)\/SKILL\.md/i.test(content) ||
+      /\.claude\/agents\/(scaffolder|spec-author|spec-validator|figma-extractor|token-mapper|reuse-auditor|structure-decider|code-connect-writer|echo-reporter)\.md/i.test(content) ||
       // 2. Spec was loaded
       /\.specs\/[a-z][a-z0-9-]*\.md/i.test(content) ||
       // 3. Cultural anchors

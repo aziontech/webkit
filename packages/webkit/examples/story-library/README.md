@@ -1,0 +1,43 @@
+# StoryLibrary
+
+Every success story of a company as one library, with the controls to narrow it. A left-aligned title band sits over a search field and one select per facet (industry, solution and product) on one row, then a grid of cards and a button that reveals the next page.
+
+Each card is one link, named by its company: the client mark in a single ink, the story's industry as an overline, its description, and a "Read story" line whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Below `lg` the field and the selects stack. When nothing matches, an empty state offers to clear every filter.
+
+The band is the `StoryLibrary` component from `@aziontech/webkit/story-library`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `Input`, `Select`, `Button` and, when nothing matches, `EmptyState`. The search, the facet selections and each select's option search are local state.
+
+## Examples
+
+### Default
+
+The library at rest, from `lg` up: no search and no facet applied, six stories across Retail, Tech and Media in a three-column grid, and the button that reveals the next page.
+
+Example: [`site-default.vue`](./site-default.vue)
+
+##### Use it on the site
+
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `anchor` is the band id for in-page links, and `title` is the band heading.
+- `items[]` are the stories, each a `key`, an `href`, a `client` with its `name` and `logo`, a `category` overline, a `description`, and `facets` listing its `industry`, `solution` and `product` values.
+- `facets[]` are the selects, each a `key`, a `label`, an `allLabel` and its `options`.
+- `search` sets the field's `placeholder` and `label`; `empty` sets the empty state's `title` and `action`.
+- `linkLabel` is the read cue on every card and the lead of its accessible name, `moreLabel` the button under the grid, and `ariaLabel` names the list for assistive tech.
+
+Example:
+
+Site JSON: [`site-story-library.json`](./site-story-library.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### No Results
+
+The state when the search and the facets match no story: the grid gives way to an empty state whose action clears every filter. The story renders it with an empty `items`.
+
+Example: [`site-no-results.vue`](./site-no-results.vue)

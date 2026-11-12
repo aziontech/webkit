@@ -1,0 +1,21 @@
+{
+  "component": "kbd",
+  "title": "Components/Primitives/Content/Kbd",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A single keycap driven by the controls.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All sizes side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Combinations",
+      "summary": "Representative shortcuts, showing single keys, modifier combinations, and OS-aware glyphs.",
+      "file": "combinations.vue"
+    }
+  ]
+}

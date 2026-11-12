@@ -5,11 +5,11 @@
   import Button from '../../actions/button/button.vue'
   import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import Avatar from '../../avatar/avatar.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
     type TextureMaterialKind
   } from '../../marketing/texture-material/texture-material.vue'
+  import Avatar from '../avatar/avatar.vue'
   import Brand from '../brand/brand.vue'
   import Kbd from '../kbd/kbd.vue'
   import { SHELL_MOCKUP_KEY } from './injection-key'
@@ -55,8 +55,8 @@
     active?: boolean
     /** Lets the viewer operate the controls inside instead of drawing them as an inert picture. */
     interactive?: boolean
-    /** Draws every part in place from the start, with no entrance and no replay. */
-    still?: boolean
+    /** Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay. */
+    animated?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -74,7 +74,7 @@
     beat: 'fast-01',
     active: true,
     interactive: false,
-    still: false
+    animated: true
   })
 
   defineSlots<{
@@ -143,7 +143,7 @@
 
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
 
-  const entered = ref(reduced || props.still)
+  const entered = ref(reduced || !props.animated)
   const onScreen = ref(false)
 
   let observer: globalThis.ResizeObserver | null = null
@@ -180,7 +180,7 @@
   watch(
     () => props.active,
     (active) => {
-      if (reduced || props.still) return
+      if (reduced || !props.animated) return
       if (active) arm()
       else entered.value = false
     }
@@ -218,7 +218,7 @@
   }
 
   function arm() {
-    if (reduced || props.still || entered.value || !onScreen.value || !props.active) return
+    if (reduced || !props.animated || entered.value || !onScreen.value || !props.active) return
     globalThis.requestAnimationFrame(() =>
       globalThis.requestAnimationFrame(() => {
         if (onScreen.value && props.active) entered.value = true
@@ -227,7 +227,7 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced || props.still) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    if (reduced || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
     return {
       '--part-duration': duration[props.travel],
       '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
@@ -251,7 +251,7 @@
   >
     <div
       :data-kind="kind"
-      class="absolute top-0 left-0 flex origin-top-left flex-col data-[kind=window]:bg-(--bg-canvas)"
+      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[kind=window]:bg-(--bg-canvas)"
       :style="frameStyle"
     >
       <TextureMaterial
@@ -281,7 +281,7 @@
           class="truncate text-label-sm text-(--text-muted)"
           >{{ title }}</span
         >
-        <span class="ml-auto inline-flex shrink-0 items-center">
+        <span class="ms-auto inline-flex shrink-0 items-center">
           <Avatar
             label="myemail@example.com"
             size="small"
@@ -306,7 +306,7 @@
           kind="default"
           size="small"
         />
-        <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+        <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Create"
             kind="primary"
@@ -344,7 +344,7 @@
           v-if="rail && shell === 'console'"
           inert
           aria-hidden="true"
-          class="hidden w-64 shrink-0 flex-col border-r border-(--border-default) md:flex"
+          class="hidden w-64 shrink-0 flex-col border-e border-(--border-default) md:flex"
         >
           <div class="flex h-14 shrink-0 items-center px-(--spacing-md)">
             <Brand
@@ -396,7 +396,7 @@
               >
                 <i
                   v-if="index > 0"
-                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                  class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <li
@@ -407,7 +407,7 @@
                 </li>
               </template>
             </ol>
-            <div class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+            <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
               <span
                 class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
               >

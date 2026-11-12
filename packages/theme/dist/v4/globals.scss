@@ -111,12 +111,42 @@
   font-display: swap;
 }
 
+/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
+   google/fonts is the fallback while a new upload propagates. */
 @font-face {
-  font-family: 'Sora';
-  src: url('https://fonts.azion.com/sora/Sora-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
   font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src:
+    url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype'),
+    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf') format('truetype');
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth,wght%5D.ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E;
+}
+
+@layer base {
+  :where(:lang(ar), :lang(fa), :lang(ur)) {
+    line-height: 1.75;
+  }
 }
 
 @font-face {
@@ -571,9 +601,9 @@
   --shape-button: 6px;
   --shape-elements: 6px;
   --border-width-default: 0.8px;
-  --font-sans: Sora;
-  --font-code: Roboto Mono;
-  --font-display: Proto Mono;
+  --font-sans: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-code: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-display: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-xs: 0.75rem;
   --text-xs--line-height: calc(1 / 0.75);
   --text-sm: 0.875rem;
@@ -719,15 +749,15 @@
   --text-big-number-md-font-size: 1.25rem;
   --text-big-number-md-line-height: 1.25;
   --text-big-number-md-font-weight: 400;
-  --text-big-number-md-font-family: Proto Mono;
+  --text-big-number-md-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-big-number-sm-font-size: 1rem;
   --text-big-number-sm-line-height: 1.25;
   --text-big-number-sm-font-weight: 400;
-  --text-big-number-sm-font-family: Proto Mono;
+  --text-big-number-sm-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-big-number-lg-font-size: 1.5rem;
   --text-big-number-lg-line-height: 1.25;
   --text-big-number-lg-font-weight: 400;
-  --text-big-number-lg-font-family: Proto Mono;
+  --text-big-number-lg-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-amount-lg-text-wrap-style: balance;
   --text-amount-lg-font-size: 1.875rem;
   --text-amount-lg-line-height: 1.25;
@@ -794,23 +824,23 @@
   --text-label-sm-line-height: 1.5;
   --text-label-sm-font-weight: 400;
   --text-label-sm-letter-spacing: -0.025rem;
-  --text-label-code-sm-font-family: Roboto Mono;
+  --text-label-code-sm-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-label-code-sm-font-size: 0.75rem;
   --text-label-code-sm-line-height: 1;
   --text-label-code-sm-font-weight: 400;
   --text-label-code-sm-letter-spacing: 0.025rem;
   --text-body-code-sm-text-wrap-style: pretty;
-  --text-body-code-sm-font-family: Roboto Mono;
+  --text-body-code-sm-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-body-code-sm-font-size: 0.75rem;
   --text-body-code-sm-line-height: 1.625;
   --text-body-code-sm-font-weight: 400;
   --text-body-code-sm-letter-spacing: 0.025rem;
-  --text-label-code-md-font-family: Roboto Mono;
+  --text-label-code-md-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-label-code-md-font-size: 0.875rem;
   --text-label-code-md-line-height: 1;
   --text-label-code-md-font-weight: 400;
   --text-label-code-md-letter-spacing: 0.025rem;
-  --text-label-code-lg-font-family: Roboto Mono;
+  --text-label-code-lg-font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-label-code-lg-font-size: 1rem;
   --text-label-code-lg-line-height: 1;
   --text-label-code-lg-font-weight: 400;
@@ -844,27 +874,27 @@
   --text-tag-md-font-size: 0.75rem;
   --text-tag-md-line-height: 1.25;
   --text-tag-md-font-weight: 400;
-  --text-overline-md-font-family: Proto Mono;
+  --text-overline-md-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-overline-md-font-size: 0.75rem;
   --text-overline-md-line-height: 1.375;
   --text-overline-md-letter-spacing: 0.1rem;
   --text-overline-md-text-transform: uppercase;
-  --text-overline-sm-font-family: Proto Mono;
+  --text-overline-sm-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-overline-sm-font-size: 0.75rem;
   --text-overline-sm-line-height: 1.375;
   --text-overline-sm-letter-spacing: 0.1rem;
   --text-overline-sm-text-transform: uppercase;
-  --text-overline-xs-font-family: Proto Mono;
+  --text-overline-xs-font-family: 'Proto Mono', 'Roboto Mono', ui-monospace, monospace;
   --text-overline-xs-font-size: 0.75rem;
   --text-overline-xs-line-height: 1.375;
   --text-overline-xs-letter-spacing: 0.1rem;
   --text-overline-xs-text-transform: uppercase;
-  --text-button-lg-font-family: Sora;
+  --text-button-lg-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-lg-font-size: 0.875rem;
   --text-button-lg-font-weight: 400;
   --text-button-lg-line-height: 1.25;
   --text-button-lg-letter-spacing: 0;
-  --text-button-md-font-family: Sora;
+  --text-button-md-font-family: Rubik, 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
   --text-button-md-font-size: 0.75rem;
   --text-button-md-font-weight: 400;
   --text-button-md-line-height: 1.25;
@@ -872,6 +902,8 @@
   --text-link-font-size: inherit;
   --text-link-line-height: inherit;
   --text-link-color: var(--text-link);
+  --text-link-text-decoration-line: underline;
+  --text-link-text-underline-offset: 0.15em;
   --text-link-border-radius: var(--shape-elements);
   --text-link-transition: all 110ms cubic-bezier(0.39, 0.57, 0.56, 1);
 
@@ -970,30 +1002,31 @@
   --text-default: #141414;
   --text-muted: #535353;
   --text-disabled: #999999;
+  --text-primary: #B03C02;
   --text-link: #005FCC;
   --text-link-hover: #004799;
   --text-contrast: #FAFAFA;
   --ring-color: #666666;
   --code-sintax-identifier: #141414;
-  --code-sintax-line-number: #808080;
-  --code-sintax-keyword: #005FCC;
-  --code-sintax-punctuation: #808080;
-  --code-sintax-comment: #808080;
-  --code-sintax-function: #F3652B;
-  --code-sintax-type: #947105;
-  --code-sintax-string: #005FCC;
-  --success: #A4F4C0;
+  --code-sintax-line-number: #535353;
+  --code-sintax-keyword: #004799;
+  --code-sintax-punctuation: #535353;
+  --code-sintax-comment: #535353;
+  --code-sintax-function: #B03C02;
+  --code-sintax-type: #634B03;
+  --code-sintax-string: #004799;
+  --success: #78EDA2;
   --success-border: #22C55E66;
-  --success-contrast: #12542B;
-  --warning: #FCE49C;
+  --success-contrast: #0A2916;
+  --warning: #FAD76B;
   --warning-border: #F7BD0880;
-  --warning-contrast: #634B03;
-  --danger: #F9D2D2;
+  --warning-contrast: #312602;
+  --danger: #F3A5A5;
   --danger-border: #E51A1A66;
-  --danger-contrast: #891010;
-  --info: #CCE4FF;
+  --danger-contrast: #5B0B0B;
+  --info: #99C9FF;
   --info-border: #0072F566;
-  --info-contrast: #004799;
+  --info-contrast: #003066;
   --illustration-ground: #F5F5F5;
   --illustration-surface: #FFFFFF;
   --illustration-surface-raised: #FFFFFF;
@@ -1006,15 +1039,49 @@
   --illustration-ink-muted: #535353;
   --illustration-primary: #F3652B;
   --illustration-accent: #0072F5;
-  --illustration-code-punctuation: #808080;
-  --illustration-code-keyword: #005FCC;
-  --illustration-success: #12542B;
-  --illustration-success-surface: #A4F4C0;
-  --illustration-danger: #891010;
-  --illustration-warning: #634B03;
-  --illustration-warning-surface: #FCE49C;
-  --illustration-info: #004799;
-  --illustration-info-surface: #CCE4FF;
+  --illustration-code-punctuation: #535353;
+  --illustration-code-keyword: #004799;
+  --illustration-success: #0A2916;
+  --illustration-success-surface: #78EDA2;
+  --illustration-danger: #5B0B0B;
+  --illustration-warning: #312602;
+  --illustration-warning-surface: #FAD76B;
+  --illustration-info: #003066;
+  --illustration-info-surface: #99C9FF;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #ECECEC;
+  --chart-axis: #D1D1D1;
+  --chart-label: #535353;
+  --chart-crosshair: #535353;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-text: #141414;
+  --chart-tooltip-muted: #535353;
+  --chart-tooltip-border: #D1D1D1;
+  --chart-status-success: #0A2916;
+  --chart-status-warning: #312602;
+  --chart-status-danger: #5B0B0B;
+  --chart-status-info: #003066;
+  --chart-series-2: #005FCC;
+  --chart-series-5: #625BD5;
+  --chart-sequential-1: #CCE4FF;
+  --chart-sequential-2: #99C9FF;
+  --chart-sequential-3: #66ADFF;
+  --chart-sequential-4: #3392FF;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #005FCC;
+  --chart-sequential-7: #004799;
+  --chart-diverging-negative: #B71515;
+  --chart-diverging-neutral: #ECECEC;
+  --chart-diverging-positive: #005FCC;
+  --severity-critical: #B71515;
+  --severity-high: #D94A03;
+  --severity-medium: #947105;
+  --severity-low: #005FCC;
+  --severity-info: #808080;
 }
 
 [data-theme=dark], .dark, .azion.azion-dark {
@@ -1039,7 +1106,7 @@
   --primary: #F3652B;
   --primary-mask: #FE601F33;
   --primary-selected: #FE601F33;
-  --primary-contrast: #FFFFFF;
+  --primary-contrast: #000000;
   --secondary: #FFFFFF;
   --secondary-mask: #FFFFFF1A;
   --secondary-selected: #FFFFFF;
@@ -1068,18 +1135,19 @@
   --text-default: #FAFAFA;
   --text-muted: #999999;
   --text-disabled: #4D4D4D;
+  --text-primary: #F3652B;
   --text-link: #3392FF;
   --text-link-hover: #66ADFF;
   --text-contrast: #000000;
   --ring-color: #4D4D4D;
   --code-sintax-identifier: #FAFAFA;
   --code-sintax-line-number: #999999;
-  --code-sintax-keyword: #3392FF;
+  --code-sintax-keyword: #66ADFF;
   --code-sintax-punctuation: #999999;
   --code-sintax-comment: #999999;
   --code-sintax-function: #F3652B;
   --code-sintax-type: #FAD76B;
-  --code-sintax-string: #3392FF;
+  --code-sintax-string: #66ADFF;
   --success: #0A2916;
   --success-border: #22C55E66;
   --success-contrast: #52E086;
@@ -1088,7 +1156,7 @@
   --warning-contrast: #F7BD08;
   --danger: #5B0B0B;
   --danger-border: #E51A1A66;
-  --danger-contrast: #ED7878;
+  --danger-contrast: #F3A5A5;
   --info: #001833;
   --info-border: #0072F566;
   --info-contrast: #66ADFF;
@@ -1105,14 +1173,48 @@
   --illustration-primary: #F3652B;
   --illustration-accent: #0072F5;
   --illustration-code-punctuation: #999999;
-  --illustration-code-keyword: #3392FF;
+  --illustration-code-keyword: #66ADFF;
   --illustration-success: #52E086;
   --illustration-success-surface: #0A2916;
-  --illustration-danger: #ED7878;
+  --illustration-danger: #F3A5A5;
   --illustration-warning: #F7BD08;
   --illustration-warning-surface: #312602;
   --illustration-info: #66ADFF;
   --illustration-info-surface: #001833;
+  --chart-series-1: #D94A03;
+  --chart-series-3: #16833F;
+  --chart-series-4: #E51A1A;
+  --chart-series-6: #947105;
+  --chart-series-other: #808080;
+  --chart-grid: #242424;
+  --chart-axis: #2B2B2B;
+  --chart-label: #999999;
+  --chart-crosshair: #999999;
+  --chart-tooltip-bg: #141414;
+  --chart-tooltip-text: #FAFAFA;
+  --chart-tooltip-muted: #999999;
+  --chart-tooltip-border: #2B2B2B;
+  --chart-status-success: #52E086;
+  --chart-status-warning: #F7BD08;
+  --chart-status-danger: #F3A5A5;
+  --chart-status-info: #66ADFF;
+  --chart-series-2: #0072F5;
+  --chart-series-5: #756FE5;
+  --chart-sequential-1: #001833;
+  --chart-sequential-2: #003066;
+  --chart-sequential-3: #004799;
+  --chart-sequential-4: #005FCC;
+  --chart-sequential-5: #0072F5;
+  --chart-sequential-6: #3392FF;
+  --chart-sequential-7: #66ADFF;
+  --chart-diverging-negative: #E74B4B;
+  --chart-diverging-neutral: #2B2B2B;
+  --chart-diverging-positive: #3392FF;
+  --severity-critical: #E74B4B;
+  --severity-high: #FF8E4D;
+  --severity-medium: #F7BD08;
+  --severity-low: #3392FF;
+  --severity-info: #999999;
 }
 
 @keyframes fadeIn {
@@ -1501,9 +1603,11 @@
   font-size: var(--text-link-font-size);
   line-height: var(--text-link-line-height);
   color: var(--text-link-color);
+  text-decoration-line: var(--text-link-text-decoration-line);
+  text-underline-offset: var(--text-link-text-underline-offset);
   border-radius: var(--text-link-border-radius);
   transition: var(--text-link-transition);
-  &:hover { color: var(--text-link-hover); text-decoration: underline; }
+  &:hover { color: var(--text-link-hover); text-decoration-thickness: 2px; }
   &:focus-visible { outline: 2px solid var(--ring-color); outline-offset: 2px; }
 }
 
@@ -1742,5 +1846,26 @@
   [role="button"]:not([aria-disabled="true"]),
   summary {
     cursor: pointer;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+
+  :is([role="option"][aria-selected="true"], [role="tab"][aria-selected="true"], [role="row"][aria-selected="true"], [role="gridcell"][aria-selected="true"], [role="treeitem"][aria-selected="true"], [role="menuitemradio"][aria-checked="true"], [role="menuitemcheckbox"][aria-checked="true"], [aria-current]:not([aria-current="false"]), [aria-pressed="true"]) {
+    outline: 2px solid SelectedItem;
+    outline-offset: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -6,8 +6,9 @@
 // No external deps. Uses spawnSync to feed JSON to the hooks via stdin.
 
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, mkdirSync, writeFileSync, rmSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
+import { existsSync, readFileSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { resolve, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
   parseSpecFile,
@@ -22,7 +23,9 @@ import {
   extractAnimationClasses,
   hasMotionReduceEscape,
   resolveSpecForComponentPath,
-  isLegacyComponent
+  isLegacyComponent,
+  templateSectionErrors,
+  TEMPLATE_2_SECTIONS
 } from '../_lib/spec.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -44,7 +47,9 @@ function test(name, fn) {
 }
 function assertEqual(actual, expected, msg) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) {
-    throw new Error(`${msg ?? 'assertEqual'}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`)
+    throw new Error(
+      `${msg ?? 'assertEqual'}: expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`
+    )
   }
 }
 function assertTrue(cond, msg) {
@@ -55,12 +60,12 @@ function group(name, fn) {
   fn()
 }
 
-function runHook(hookRelPath, input) {
-  const res = spawnSync(
-    process.execPath,
-    [resolve(ROOT, hookRelPath)],
-    { input: JSON.stringify(input), cwd: ROOT, encoding: 'utf-8' }
-  )
+function runHook(hookRelPath, input, cwd = ROOT) {
+  const res = spawnSync(process.execPath, [resolve(ROOT, hookRelPath)], {
+    input: JSON.stringify(input),
+    cwd,
+    encoding: 'utf-8'
+  })
   return { code: res.status, stderr: res.stderr ?? '', stdout: res.stdout ?? '' }
 }
 
@@ -68,15 +73,17 @@ function runHook(hookRelPath, input) {
 
 group('lib: parseYamlFrontmatter', () => {
   test('parses strings, ints, dates, nested figma', () => {
-    const fm = parseYamlFrontmatter([
-      'name: tooltip',
-      'category: feedback',
-      'spec_version: 1',
-      'created: 2026-05-22',
-      'figma:',
-      '  url: https://figma.com/design/abc',
-      '  node_id: 10:42'
-    ].join('\n'))
+    const fm = parseYamlFrontmatter(
+      [
+        'name: tooltip',
+        'category: feedback',
+        'spec_version: 1',
+        'created: 2026-05-22',
+        'figma:',
+        '  url: https://figma.com/design/abc',
+        '  node_id: 10:42'
+      ].join('\n')
+    )
     assertEqual(fm.name, 'tooltip')
     assertEqual(fm.category, 'feedback')
     assertEqual(fm.spec_version, 1)
@@ -118,7 +125,10 @@ group('lib: validateFrontmatter', () => {
       last_updated: '2026-05-22'
     }
     const errs = validateFrontmatter(fm)
-    assertTrue(errs.some((e) => e.startsWith('checksum:')), 'should flag missing checksum')
+    assertTrue(
+      errs.some((e) => e.startsWith('checksum:')),
+      'should flag missing checksum'
+    )
   })
   test('invalid category fails', () => {
     const fm = {
@@ -131,7 +141,10 @@ group('lib: validateFrontmatter', () => {
       last_updated: '2026-05-22'
     }
     const errs = validateFrontmatter(fm)
-    assertTrue(errs.some((e) => e.startsWith('category:')), 'should flag bad category')
+    assertTrue(
+      errs.some((e) => e.startsWith('category:')),
+      'should flag bad category'
+    )
   })
 })
 
@@ -151,11 +164,59 @@ group('lib: body parsing', () => {
     assertTrue(propNames.includes('disabled'), 'disabled missing')
   })
   test('defaultCellIsStringUndefined flags quoted undefined/null only', () => {
-    assertTrue(defaultCellIsStringUndefined("`'undefined'`") === true, "quoted 'undefined' should flag")
+    assertTrue(
+      defaultCellIsStringUndefined("`'undefined'`") === true,
+      "quoted 'undefined' should flag"
+    )
     assertTrue(defaultCellIsStringUndefined("`'null'`") === true, "quoted 'null' should flag")
-    assertTrue(defaultCellIsStringUndefined('`undefined`') === false, 'unquoted undefined is legitimate')
+    assertTrue(
+      defaultCellIsStringUndefined('`undefined`') === false,
+      'unquoted undefined is legitimate'
+    )
     assertTrue(defaultCellIsStringUndefined("`''`") === false, 'empty string is legitimate')
-    assertTrue(defaultCellIsStringUndefined("`'medium'`") === false, 'real string default is legitimate')
+    assertTrue(
+      defaultCellIsStringUndefined("`'medium'`") === false,
+      'real string default is legitimate'
+    )
+  })
+})
+
+group('lib: template 2 sections', () => {
+  const filled = TEMPLATE_2_SECTIONS.map((h) => `## ${h}\n\n- Filled in.\n`).join('\n')
+  test('a template-1 spec created before the cutoff is exempt', () => {
+    assertEqual(templateSectionErrors({ created: '2026-05-22' }, '## Purpose\n\nx\n'), [])
+  })
+  test('a spec created after the cutoff must declare template 2', () => {
+    const errs = templateSectionErrors({ created: '2030-01-01' }, filled)
+    assertTrue(
+      errs.some((e) => e.startsWith('template:')),
+      'should require template: 2'
+    )
+  })
+  test('a template-2 spec with every section filled passes', () => {
+    assertEqual(templateSectionErrors({ template: 2, created: '2030-01-01' }, filled), [])
+  })
+  test('a template-2 spec missing or leaving a section as a placeholder fails', () => {
+    const tpl = getSection(parseSpecFile(resolve(ROOT, '.specs/_template.md')).body, 'Performance')
+    const body = filled.replace('## Performance\n\n- Filled in.', `## Performance\n\n${tpl}`)
+    const errs = templateSectionErrors(
+      { template: 2 },
+      body.replace(/## Responsive[\s\S]*?(?=## )/, '')
+    )
+    assertTrue(
+      errs.some((e) => e.includes('Responsive') && e.includes('missing')),
+      'flags missing section'
+    )
+    assertTrue(
+      errs.some((e) => e.includes('Performance') && e.includes('placeholder')),
+      'flags placeholder'
+    )
+  })
+  test('the template itself declares template 2 and carries every section', () => {
+    const { frontmatter, body } = parseSpecFile(resolve(ROOT, '.specs/_template.md'))
+    assertEqual(frontmatter.template, 2)
+    for (const h of TEMPLATE_2_SECTIONS)
+      assertTrue(getSection(body, h) !== null, `template has ## ${h}`)
   })
 })
 
@@ -212,7 +273,10 @@ defineSlots<{ default(): unknown }>()
     assertEqual(r.defineOptionsName, 'Tooltip')
     assertEqual(r.props.map((p) => p.name).sort(), ['disabled', 'text'])
     assertEqual(r.emits.map((e) => e.name).sort(), ['hide', 'show'])
-    assertEqual(r.slots.map((s) => s.name), ['default'])
+    assertEqual(
+      r.slots.map((s) => s.name),
+      ['default']
+    )
   })
   test('parseVueSfc extracts defineProps with indented closing brace', () => {
     const sfc = `
@@ -233,7 +297,8 @@ defineSlots<{ default(): unknown }>()
 
 group('lib: animation extraction', () => {
   test('extractAnimationClasses picks up animate-* and transition-*', () => {
-    const vue = '<div class="animate-popup-scale-in transition-colors duration-150 ease-out motion-reduce:transition-none"></div>'
+    const vue =
+      '<div class="animate-popup-scale-in transition-colors duration-150 ease-out motion-reduce:transition-none"></div>'
     const classes = extractAnimationClasses(vue)
     assertTrue(classes.includes('animate-popup-scale-in'))
     assertTrue(classes.includes('transition-colors'))
@@ -260,12 +325,29 @@ group('lib: component path resolution', () => {
   })
 })
 
+// Every component has a spec since #1148, so the shipped whitelist is empty; the bypass is
+// exercised against a fixture root that lists one component.
+const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
+mkdirSync(resolve(LEGACY_ROOT, '.claude/hooks/_lib'), { recursive: true })
+writeFileSync(
+  resolve(LEGACY_ROOT, '.claude/hooks/_lib/legacy-components.json'),
+  JSON.stringify([{ category: 'actions', name: 'button' }])
+)
+const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget/no-such-widget.vue'
+
 group('lib: legacy whitelist', () => {
+  test('the shipped whitelist is empty', () => {
+    assertEqual(
+      JSON.parse(readFileSync(resolve(ROOT, '.claude/hooks/_lib/legacy-components.json'), 'utf-8')),
+      []
+    )
+    assertTrue(!isLegacyComponent('actions', 'button', ROOT))
+  })
   test('legacy button is whitelisted', () => {
-    assertTrue(isLegacyComponent('actions', 'button', ROOT))
+    assertTrue(isLegacyComponent('actions', 'button', LEGACY_ROOT))
   })
   test('unknown component is NOT whitelisted', () => {
-    assertTrue(!isLegacyComponent('feedback', 'tooltip', ROOT))
+    assertTrue(!isLegacyComponent('feedback', 'tooltip', LEGACY_ROOT))
   })
 })
 
@@ -279,7 +361,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
-  test('legacy component bypass (exit 0)', () => {
+  test('component with an approved spec passes (exit 0)', () => {
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
@@ -288,12 +370,27 @@ group('hook: enforce-spec-exists.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
+  test('legacy component bypass (exit 0)', () => {
+    const r = runHook(
+      '.claude/hooks/enforce-spec-exists.mjs',
+      {
+        tool_name: 'Write',
+        tool_input: {
+          file_path: resolve(
+            LEGACY_ROOT,
+            'packages/webkit/src/components/actions/button/button.vue'
+          )
+        }
+      },
+      LEGACY_ROOT
+    )
+    assertEqual(r.code, 0)
+  })
   test('new component without spec blocks (exit 2)', () => {
+    assertTrue(!existsSync(resolve(ROOT, '.specs/no-such-widget.md')))
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
-      tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
-      }
+      tool_input: { file_path: resolve(ROOT, MISSING_SPEC_VUE) }
     })
     assertEqual(r.code, 2)
     assertTrue(r.stderr.includes('Spec missing'), 'stderr mentions missing spec')
@@ -315,7 +412,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     })
     assertEqual(r.code, 0)
   })
-  test('legacy component bypass (exit 0)', () => {
+  test('component that matches its spec passes (exit 0)', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
@@ -327,127 +424,9 @@ group('hook: validate-spec-compliance.mjs', () => {
   test('non-existent .vue path passes through (exit 0)', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
-      tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/feedback/tooltip/tooltip.vue')
-      }
+      tool_input: { file_path: resolve(ROOT, MISSING_SPEC_VUE) }
     })
     assertEqual(r.code, 0)
-  })
-})
-
-group('hook: validate-story-source.mjs', () => {
-  const story = (content) => ({ tool_name: 'Write', tool_input: { file_path: resolve(ROOT, 'x.stories.js'), content } })
-
-  test('non-story path passes through (exit 0)', () => {
-    const r = runHook('.claude/hooks/validate-story-source.mjs', {
-      tool_name: 'Write',
-      tool_input: { file_path: resolve(ROOT, 'random/file.vue'), content: '<foo />' }
-    })
-    assertEqual(r.code, 0)
-  })
-  test('new story with literal docs + toSfc + PascalCase passes (exit 0)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import Foo from '@aziontech/webkit/foo'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          'const T = `<Foo bar="1" />`',
-          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 0)
-  })
-  test('docs as a function call blocks (exit 2)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import Foo from '@aziontech/webkit/foo'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          "docs: runnableDocs({ imports: IMPORT })"
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 2)
-    assertTrue(/docs-not-literal/.test(r.stderr), 'should flag docs function call')
-  })
-  test('lowercase/kebab component tag blocks (exit 2)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import EmptyState from '@aziontech/webkit/empty-state'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          'const T = `<empty-state title="x" />`',
-          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 2)
-    assertTrue(/lowercase-tag/.test(r.stderr), 'should flag lowercase tag')
-  })
-  test('import binding not matching export subpath blocks (exit 2)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import Chip from '@aziontech/webkit/chips'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          'const T = `<Chip label="x" />`',
-          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 2)
-    assertTrue(/import-binding-mismatch/.test(r.stderr), 'should flag binding/subpath mismatch')
-  })
-  test('asset import keeps its camelCase binding (exit 0)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import Illustration from '@aziontech/webkit/illustration'",
-          "import ddosProtection from '@aziontech/webkit/assets/ddos-protection.svg'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          'const T = `<img :src="ddosProtection" alt="" />`',
-          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 0)
-  })
-  test('hand-rolled transform blocks (exit 2)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        ["import Foo from '@aziontech/webkit/foo'", "tags: ['autodocs']", 'docs: { source: { transform: (code) => code } }'].join('\n')
-      )
-    )
-    assertEqual(r.code, 2)
-    assertTrue(/handrolled-transform|missing-helper/.test(r.stderr), 'should flag hand-rolled / missing helper')
-  })
-  test('nested <template> blocks (exit 2)', () => {
-    const r = runHook(
-      '.claude/hooks/validate-story-source.mjs',
-      story(
-        [
-          "import Foo from '@aziontech/webkit/foo'",
-          "import { toSfc } from '../../_shared/story-source'",
-          "tags: ['autodocs']",
-          'const T = `<template>\n  <template>\n    <Foo />\n  </template>\n</template>`',
-          'docs: { canvas: { sourceState: "shown" }, source: { code: toSfc(IMPORT, T) } }'
-        ].join('\n')
-      )
-    )
-    assertEqual(r.code, 2)
-    assertTrue(/nested-template/.test(r.stderr), 'should flag nested template')
   })
 })
 
@@ -458,7 +437,10 @@ group('hook: validate-authoring.mjs comments', () => {
       tool_input: { file_path: resolve(ROOT, rel), content }
     })
   test('a prose comment in a component blocks (exit 2)', () => {
-    const r = write('packages/webkit/src/components/actions/button/zz.ts', '// why\nexport const a = 1')
+    const r = write(
+      'packages/webkit/src/components/actions/button/zz.ts',
+      '// why\nexport const a = 1'
+    )
     assertEqual(r.code, 2)
     assertTrue(r.stderr.includes('prose-comment'), 'names the check')
   })
@@ -481,7 +463,59 @@ group('hook: validate-authoring.mjs comments', () => {
     assertEqual(write('packages/webkit/src/components/actions/button/zz.vue', sfc).code, 0)
   })
   test('test files are out of scope (exit 0)', () => {
-    assertEqual(write('packages/webkit/src/components/actions/button/zz.test.ts', '// ok\n').code, 0)
+    assertEqual(
+      write('packages/webkit/src/components/actions/button/zz.test.ts', '// ok\n').code,
+      0
+    )
+  })
+})
+
+group('hook: validate-authoring.mjs built-in strings', () => {
+  const write = (rel, content) =>
+    runHook('.claude/hooks/validate-authoring.mjs', {
+      tool_name: 'Write',
+      tool_input: { file_path: resolve(ROOT, rel), content }
+    })
+  const sfc = (template, defaults = '') =>
+    [
+      '<script setup lang="ts">',
+      '  interface Props {',
+      '    /** Visible label. */',
+      '    label?: string',
+      '  }',
+      `  withDefaults(defineProps<Props>(), { ${defaults} })`,
+      '</script>',
+      `<template>${template}</template>`
+    ].join('\n')
+  test('a literal aria-label in a component template blocks (exit 2)', () => {
+    const r = write(
+      'packages/webkit/src/components/actions/button/zz.vue',
+      sfc('<button aria-label="Close dialog" />')
+    )
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('i18n:hardcoded-ui-string'), 'names the check')
+  })
+  test('an English prop default blocks (exit 2)', () => {
+    const r = write(
+      'packages/webkit/src/components/actions/button/zz.vue',
+      sfc('<span />', "\n    label: 'Save changes'\n")
+    )
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('i18n:hardcoded-default-string'), 'names the check')
+  })
+  test('a catalog-bound label passes (exit 0)', () => {
+    const r = write(
+      'packages/webkit/src/components/actions/button/zz.vue',
+      sfc('<button :aria-label="t(\'dialog.close\')" />')
+    )
+    assertEqual(r.code, 0)
+  })
+  test('examples are product copy and out of scope (exit 0)', () => {
+    assertEqual(
+      write('packages/webkit/examples/button/zz.vue', sfc('<button aria-label="Close dialog" />'))
+        .code,
+      0
+    )
   })
 })
 
@@ -511,5 +545,8 @@ group('hook: validate-references.mjs', () => {
 // ---- summary ----
 
 const failed = results.filter((r) => !r.ok)
-process.stdout.write(`\n${results.length} tests, ${results.length - failed.length} passed, ${failed.length} failed.\n`)
+process.stdout.write(
+  `\n${results.length} tests, ${results.length - failed.length} passed, ${failed.length} failed.\n`
+)
+rmSync(LEGACY_ROOT, { recursive: true, force: true })
 process.exit(failed.length === 0 ? 0 : 1)

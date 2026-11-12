@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
-  import Tag, { type TagSeverity } from '../../../tag/tag.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag, { type TagSeverity } from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadTopologyWidget' })
 
@@ -130,7 +130,7 @@
             severity="success"
             size="small"
           />
-          <span class="ml-auto inline-flex shrink-0">
+          <span class="ms-auto inline-flex shrink-0">
             <Button
               label="Deploy"
               kind="outlined"
@@ -165,7 +165,7 @@
               class="flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) data-lead:border-(--primary)"
             >
               <div
-                class="flex items-center gap-(--spacing-xxs) px-(--spacing-sm) pt-(--spacing-xs)"
+                class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs) px-(--spacing-sm) pt-(--spacing-xs)"
               >
                 <i
                   :class="node.icon"
@@ -174,7 +174,7 @@
                 />
                 <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
                 <Tag
-                  class="ml-auto shrink-0"
+                  class="ms-auto shrink-0"
                   :label="node.label"
                   :severity="node.severity"
                   size="small"

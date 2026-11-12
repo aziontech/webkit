@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 716e6f39f0143afd33352362bdb58dcec110b9cf96415f168123449329cda20f
+last_updated: 2026-11-11
+checksum: ffa6f9f79d9eb57ea91a791bec3a182df2de5865d553867f4f0da31f240b46e7
 ---
+
 # RecognitionMarquee — Component Spec
 
 ## Purpose
@@ -37,7 +38,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 ```vue
 <script setup>
-import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
+  import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 </script>
 
 <template>
@@ -46,8 +47,21 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
     title="Recognized as a market leader"
     aria-label="Analyst recognitions"
     :items="[
-      { text: 'Named a Leader and Fast Mover.', reportName: 'GigaOm Radar for Full-Stack Edge Deployments', date: 'May 2026', firmName: 'GigaOm', logo: '/logos/gigaom-reversed.svg', logoLight: '/logos/gigaom-color.svg' },
-      { text: 'Recognized as a Leader in CDN.', reportName: 'G2 Reports', date: 'March 2026', firmName: 'G2', logo: '/logos/g2.svg' }
+      {
+        text: 'Named a Leader and Fast Mover.',
+        reportName: 'GigaOm Radar for Full-Stack Edge Deployments',
+        date: 'May 2026',
+        firmName: 'GigaOm',
+        logo: '/logos/gigaom-reversed.svg',
+        logoLight: '/logos/gigaom-color.svg'
+      },
+      {
+        text: 'Recognized as a Leader in CDN.',
+        reportName: 'G2 Reports',
+        date: 'March 2026',
+        firmName: 'G2',
+        logo: '/logos/g2.svg'
+      }
     ]"
   />
 </template>
@@ -55,13 +69,13 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
-| `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item. |
-| `items` | `RecognitionMarqueeItem[]` | `[]` | false | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
+| Prop        | Type                       | Default | Required | JSDoc                                                                                                                                                                                       |
+| ----------- | -------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`   | `string`                   | `''`    | false    | Overline above the section title.                                                                                                                                                           |
+| `title`     | `string`                   | `''`    | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                     |
+| `ariaLabel` | `string`                   | `''`    | false    | Accessible name of the scrolling region.                                                                                                                                                    |
+| `duration`  | `number`                   | `0`     | false    | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item.                                                                                                               |
+| `items`     | `RecognitionMarqueeItem[]` | `[]`    | false    | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
 
 ## Events
 
@@ -79,25 +93,25 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee) | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
+| ------------------------------ | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
+| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee)                          | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card fill | `var(--bg-surface)` |
-| card inset | `var(--spacing-xl)` |
-| card width | `var(--container-md)` |
-| focus ring | `var(--ring-color)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| card fill             | `var(--bg-surface)`     |
+| card inset            | `var(--spacing-xl)`     |
+| card width            | `var(--container-md)`   |
+| focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -108,7 +122,14 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 
@@ -125,10 +146,8 @@ import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

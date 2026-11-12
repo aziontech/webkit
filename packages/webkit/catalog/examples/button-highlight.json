@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default highlight button at large size with an icon.",
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    size=\"large\"\n    label=\"Ask Azion\"\n    icon=\"pi pi-sparkles\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <ButtonHighlight\n      size=\"small\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"medium\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"large\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "Loading adopts the disabled visual treatment for clarity: the gradient is replaced by disabled tokens, a spinner replaces the icon, and activation is blocked while the async action runs.",
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    label=\"Ask Azion\"\n    icon=\"pi pi-sparkles\"\n    loading\n  />\n</template>"
+  }
+ ]
+}

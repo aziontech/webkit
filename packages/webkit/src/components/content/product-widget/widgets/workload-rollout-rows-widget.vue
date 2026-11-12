@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
-  import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadRolloutRowsWidget' })
 
@@ -114,13 +114,13 @@
   >
     <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           class="w-full overflow-hidden"
         >
           <template #header>
             <h3 class="m-0 truncate text-heading-xs text-(--text-default)">Versions</h3>
-            <span class="ml-auto inline-flex shrink-0">
+            <span class="ms-auto inline-flex shrink-0">
               <Button
                 label="New Version"
                 kind="outlined"
@@ -176,7 +176,7 @@
               </div>
             </ShellMockupPart>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

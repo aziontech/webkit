@@ -3,11 +3,11 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
-  import Tag from '../../../tag/tag.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
@@ -180,10 +180,10 @@
               severity="primary"
               size="small"
               aria-hidden="true"
-              class="pointer-events-none absolute -top-2 -right-2 min-w-5"
+              class="pointer-events-none absolute -top-2 -end-2 min-w-5"
             />
           </span>
-          <InputText
+          <Input
             model-value=""
             size="medium"
             placeholder="Search events, hosts, paths or addresses"
@@ -196,7 +196,7 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
           <IconButton
             icon="pi pi-refresh"
             kind="outlined"
@@ -244,7 +244,7 @@
             >
               <i
                 :data-open="selected(index) || null"
-                class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
+                class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-open:-rotate-90"
                 aria-hidden="true"
               />
             </span>

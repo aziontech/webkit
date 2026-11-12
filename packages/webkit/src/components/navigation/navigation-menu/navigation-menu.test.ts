@@ -1,10 +1,10 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/navigation/navigation-menu/NavigationMenu.stories'
+import Default from '../../../../examples/navigation-menu/default.vue'
 import NavigationMenu from './index'
 import NavigationMenuArrow from './navigation-menu-arrow.vue'
 import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
@@ -22,8 +22,6 @@ import NavigationMenuViewport from './navigation-menu-viewport.vue'
 // which itself lives in body). Open/close transitions run ~400ms (slow-01), so
 // state assertions poll via waitFor with a generous timeout.
 const OPEN_TIMEOUT = 3000
-
-const { Default } = composeStories(stories)
 
 // The runtime string-template compiler lowercases member-expression tags
 // (`<NavigationMenu.Trigger>` -> `<navigation-menu.trigger>`), so — exactly like
@@ -435,7 +433,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   })
 
   describe('events on real user actions (navigation-menu-root.vue emits)', () => {
-    it('emits update:value with the item value when a submenu opens', async () => {
+    it('emits update:modelValue with the item value when a submenu opens', async () => {
       const updateValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
@@ -446,7 +444,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           }
         },
         template: `
-          <NavigationMenu @update:value="onUpdate">
+          <NavigationMenu @update:modelValue="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -470,7 +468,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       })
     })
 
-    it('emits update:value(null) when the Backdrop is clicked (root.close)', async () => {
+    it('emits update:modelValue(null) when the Backdrop is clicked (root.close)', async () => {
       const updateValues: Array<unknown> = []
 
       const Wrapped = defineComponent({
@@ -483,7 +481,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           }
         },
         template: `
-          <NavigationMenu v-model:value="value" @update:value="onUpdate">
+          <NavigationMenu v-model="value" @update:modelValue="onUpdate">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -521,7 +519,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     })
   })
 
-  describe('v-model:value round-trip (controlled)', () => {
+  describe('v-model round-trip (controlled)', () => {
     it('an external value opens the matching panel; an entry click writes back null', async () => {
       const controlled = ref<string | null>(null)
 
@@ -531,7 +529,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
           return { controlled }
         },
         template: `
-          <NavigationMenu v-model:value="controlled">
+          <NavigationMenu v-model="controlled">
             <NavigationMenuList :highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
@@ -621,10 +619,120 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     )
   })
 
-  describe('story integration (composeStories)', () => {
+  describe('documented example integration', () => {
     it('renders the Default story composition without error', () => {
-      const { getByTestId } = render(Default())
-      expect(getByTestId('navigation-menu-demo')).toBeTruthy()
+      const { getByRole } = render(Default)
+      expect(getByRole('navigation', { name: 'Azion' })).toBeTruthy()
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const setup = async () => {
+    const view = renderTree(COMPOSED)
+    const solutions = view.getByRole('button', { name: /Solutions/ })
+    const products = view.getByRole('button', { name: /Products/ })
+    solutions.focus()
+    return { ...view, solutions, products }
+  }
+
+  const expanded = (el: HTMLElement, value: 'true' | 'false') =>
+    waitFor(() => expect(el).toHaveAttribute('aria-expanded', value), { timeout: OPEN_TIMEOUT })
+
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent ?? ''
+
+  it.each(['{Enter}', ' '])('%s on a trigger toggles its panel', async (key) => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard(key)
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard(key)
+    await expanded(solutions, 'false')
+  })
+
+  it('ArrowRight and ArrowLeft move between triggers and wrap', async () => {
+    const { solutions, products } = await setup()
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(products)
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(solutions)
+    await keyboardUser.keyboard('{ArrowLeft}')
+    expect(document.activeElement).toBe(products)
+  })
+
+  it('ArrowDown on a trigger opens its panel and focuses the first entry', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await expanded(solutions, 'true')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+  })
+
+  it('Tab on the trigger of an open panel moves into the panel', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{Enter}')
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard('{Tab}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+  })
+
+  it('ArrowDown and ArrowUp move between panel entries and wrap', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await expanded(solutions, 'true')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{ArrowDown}')
+    expect(focusedText()).toContain('See all')
+    await keyboardUser.keyboard('{ArrowDown}')
+    expect(focusedText()).toContain('App development')
+    await keyboardUser.keyboard('{ArrowUp}')
+    expect(focusedText()).toContain('See all')
+  })
+
+  it('Escape in the panel closes it and returns focus to its trigger', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{Escape}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(solutions)
+  })
+
+  it('Shift+Tab on the first entry returns focus to the trigger', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(solutions)
+  })
+
+  it('Tab on the last entry closes the panel and moves on to the next trigger', async () => {
+    const { solutions, products } = await setup()
+    await keyboardUser.keyboard('{ArrowDown}')
+    await waitFor(() => expect(focusedText()).toContain('App development'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await keyboardUser.keyboard('{End}')
+    expect(focusedText()).toContain('See all')
+    await keyboardUser.keyboard('{Tab}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(products)
+  })
+
+  it('Escape on a trigger closes its open panel', async () => {
+    const { solutions } = await setup()
+    await keyboardUser.keyboard('{Enter}')
+    await expanded(solutions, 'true')
+    await keyboardUser.keyboard('{Escape}')
+    await expanded(solutions, 'false')
+    expect(document.activeElement).toBe(solutions)
   })
 })

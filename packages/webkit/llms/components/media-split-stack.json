@@ -1,0 +1,72 @@
+{
+ "name": "media-split-stack",
+ "binding": "MediaSplitStack",
+ "import": "@aziontech/webkit/media-split-stack",
+ "treeShakeableImport": "@aziontech/webkit/media-split-stack",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined \"learn more\" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration` and `button`. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.",
+ "setup": null,
+ "useWhen": [
+  "To list the solution areas or the claims of a page, one large band each, with a link through to its own page."
+ ],
+ "avoidWhen": [
+  "For a single claim beside its media → use `media-split` directly.",
+  "For small reasons in a grid → use `feature-tiles`."
+ ],
+ "related": [
+  "band-stack` — the sticky run the bands pile up in.",
+  "media-split` — the band each entry renders through."
+ ],
+ "bestPractices": [
+  "Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.",
+  "Give every band an `action`; it is both the button and the link the whole band follows."
+ ],
+ "props": [
+  {
+   "name": "kind",
+   "type": "MediaSplitStackKind",
+   "default": "'media-end'",
+   "required": "false",
+   "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty."
+  },
+  {
+   "name": "bands",
+   "type": "MediaSplitStackBand[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import MediaSplitStack from '@aziontech/webkit/media-split-stack'\n\n  const bands = [\n    {\n      image: '/marketing-components/illustrations/quick-start-with-templates.svg',\n      title: 'Modern applications',\n      description: 'Build static sites, run serverless applications, or modernize legacy systems.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/web-apps/'\n      }\n    },\n    {\n      illustration: 'improve-application-performance-and-reliability',\n      title: 'Optimized workloads',\n      description:\n        'Speed up applications, deliver content through the CDN, and process images on demand.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/performance/'\n      }\n    },\n    {\n      illustration: 'ai-applications',\n      title: 'AI applications',\n      description:\n        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/ai/'\n      }\n    },\n    {\n      illustration: 'automate-threat-mitigation',\n      title: 'Protected applications and APIs',\n      description:\n        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/security/'\n      }\n    },\n    {\n      illustration: 'content-and-media-delivery',\n      title: 'Media and streaming content',\n      description:\n        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/streaming/'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <MediaSplitStack\n    kind=\"media-end\"\n    :bands=\"bands\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import MediaSplitStack from '@aziontech/webkit/media-split-stack'\n\n  const solutionBands = [\n    {\n      image: '/marketing-components/illustrations/quick-start-with-templates.svg',\n      title: 'Modern applications',\n      description: 'Build static sites, run serverless applications, or modernize legacy systems.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/web-apps/'\n      }\n    },\n    {\n      illustration: 'improve-application-performance-and-reliability',\n      title: 'Optimized workloads',\n      description:\n        'Speed up applications, deliver content through the CDN, and process images on demand.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/performance/'\n      }\n    },\n    {\n      illustration: 'ai-applications',\n      title: 'AI applications',\n      description:\n        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/ai/'\n      }\n    },\n    {\n      illustration: 'automate-threat-mitigation',\n      title: 'Protected applications and APIs',\n      description:\n        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/security/'\n      }\n    },\n    {\n      illustration: 'content-and-media-delivery',\n      title: 'Media and streaming content',\n      description:\n        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/streaming/'\n      }\n    }\n  ]\n\n  const networkBands = [\n    {\n      title: 'Run closer to users',\n      description:\n        'Handle requests close to users instead of sending everything back to a few central regions. That cuts latency, absorbs spikes automatically, and reduces backhaul.',\n      illustration: 'fastest-path-to-live-website',\n      illustrationLabel: 'Requests served from the data center nearest the user',\n      action: {\n        label: 'Learn more',\n        href: '/en/products/application-accelerator/'\n      }\n    },\n    {\n      title: 'Keep delivery, logic, and data in one place',\n      description:\n        'Run delivery, execution, and data on one platform. APIs and dynamic applications get real-time request handling, origin protection, and state kept next to the code with KV Store.',\n      illustration: 'runtime',\n      illustrationLabel: 'Delivery, execution and data served from one platform',\n      action: {\n        label: 'Learn more',\n        href: '/en/products/kv-store/'\n      }\n    },\n    {\n      title: 'Get better routes and more stable delivery',\n      description:\n        'Traffic enters inside ISP last-mile networks and connects through IXPs, peering, and Tier 1 transit. Fewer hops mean better routes and stable delivery during traffic spikes, upstream issues, and regional incidents.',\n      illustration: 'distributed-apis',\n      illustrationLabel: 'Entry points inside ISP networks, connected through IXPs and transit',\n      action: {\n        label: 'Learn more',\n        href: '/en/products/load-balancer/'\n      }\n    },\n    {\n      title: 'Stop attack traffic earlier',\n      description:\n        'Block attack traffic in the delivery path, before it reaches your origin. Deploy code and policies and let the platform handle scaling, execution, and traffic steering. Your team manages fewer regions, less capacity, and fewer scaling rules.',\n      illustration: 'automate-threat-mitigation',\n      illustrationLabel: 'Attack traffic stopped in the delivery path, before the origin',\n      action: {\n        label: 'Learn more',\n        href: '/en/products/ddos-protection/'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <MediaSplitStack\n      kind=\"media-end\"\n      :bands=\"solutionBands\"\n    />\n    <MediaSplitStack\n      kind=\"alternating\"\n      eyebrow=\"Managed Infrastructure\"\n      title=\"Stop managing regions and capacity by hand\"\n      :bands=\"networkBands\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/media-split-stack.md"
+}

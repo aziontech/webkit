@@ -1,0 +1,44 @@
+{
+  "component": "code-split",
+  "title": "Components/Marketing/Sections/CodeSplit",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Application Accelerator page places it: the claim and one large button beside a one-file sample, drawn with a filename bar. Edit the props in the Controls panel — add a second file to get a tab strip, or a `secondaryAction` for a second button.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Functions band: a two-tab code sample beside the claim, with a large secondary button and an outlined GitHub button.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    },
+    {
+      "name": "Accelerator",
+      "summary": "The Application Accelerator band: a one-file sample, drawn with a filename bar, and one large button.",
+      "file": "site-accelerator.vue",
+      "json": "site-accelerator.json"
+    },
+    {
+      "name": "Agents",
+      "summary": "The AI Gateway band: one tab per coding agent, each with the agent's mark beside its label, and one large button.",
+      "file": "site-agents.vue",
+      "json": "site-agents.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/CodeSplit",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "Default",
+    "DefaultJson",
+    "Accelerator",
+    "AcceleratorJson",
+    "Agents",
+    "AgentsJson"
+  ]
+}

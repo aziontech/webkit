@@ -8,7 +8,7 @@ const instance = figma.selectedInstance
 const kind = instance.getEnum('kind', {
   inline: 'inline',
   default: 'default',
-  outline: 'outline',
+  outline: 'outlined',
   muted: 'muted'
 })
 const size = instance.getEnum('size', {

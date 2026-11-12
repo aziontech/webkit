@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -211,7 +211,7 @@ describe('ArticleBody', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.skip('has no a11y violations with the copy-page split button — BLOCKED by the split-button nested-interactive defect', async () => {
+  it('has no a11y violations with the copy-page split button', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)

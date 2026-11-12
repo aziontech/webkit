@@ -1,0 +1,148 @@
+{
+ "name": "multi-select",
+ "binding": "MultiSelect",
+ "import": "@aziontech/webkit/multi-select",
+ "treeShakeableImport": "@aziontech/webkit/multi-select-root",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/multi-select-trigger",
+  "@aziontech/webkit/multi-select-content",
+  "@aziontech/webkit/multi-select-group",
+  "@aziontech/webkit/multi-select-option"
+ ],
+ "purpose": "Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and \"Create new\" footer are exposed as slots on `<MultiSelectContent>`. Unlike `Select` (which toggles between single and multi via a `multiple` prop), MultiSelect is multi-only: `modelValue` is always an array and the indicator is always a checkbox. Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.",
+ "setup": null,
+ "useWhen": [
+  "Choosing several values from a long list (regions, tags, permissions) in a compact field.",
+  "A filter whose selected values stay editable from the same dropdown.",
+  "Grouped options with icons or trailing tags, optionally with search."
+ ],
+ "avoidWhen": [
+  "Only one value may be chosen → use `select`.",
+  "A labelled form field with helper/error text → put it (or `select` with `multiple`) inside a `field`.",
+  "A handful of options that fit on screen → use a horizontal `field` with a `checkbox` for each.",
+  "The user builds a subset and needs the chosen and remaining items side by side → use `pick-list`."
+ ],
+ "related": [
+  "select` — single-choice counterpart; also accepts `multiple`.",
+  "field` — wraps this control with its label, description and error; it hands the trigger its id and state.",
+  "pick-list` — dual-list transfer for building larger subsets.",
+  "checkbox` — the indicator every option row renders."
+ ],
+ "bestPractices": [
+  "modelValue` is always an array; start it as `[]`, never `null`.",
+  "Pass `displayValue` to summarise long selections (e.g. \"3 regions\") instead of a list that overflows the trigger.",
+  "Keep each option's `value` stable and unique; selection is matched by value.",
+  "Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content`."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "unknown[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Trigger placeholder shown when no option is selected."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the trigger and prevents opening; applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field read-only; the current selection is visible but the dropdown cannot open."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger."
+  },
+  {
+   "name": "displayValue",
+   "type": "(value: unknown[]) => string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "unknown[]",
+   "notes": "Fires when an option is toggled; payload is the next selection array."
+  },
+  {
+   "name": "update:open",
+   "payload": "boolean",
+   "notes": "Fires when the dropdown opens or closes."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Composition slot; receives `<MultiSelectTrigger>` and `<MultiSelectContent>` (and the option tree inside it)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import MultiSelect from '@aziontech/webkit/multi-select'\n  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'\n  import MultiSelectContent from '@aziontech/webkit/multi-select-content'\n  import MultiSelectOption from '@aziontech/webkit/multi-select-option'\n  import { ref } from 'vue'\n\n  const value = ref(['opt-1'])\n  const options = [\n    { value: 'opt-1', label: 'Option 1' },\n    { value: 'opt-2', label: 'Option 2' },\n    { value: 'opt-3', label: 'Option 3' },\n    { value: 'opt-4', label: 'Option 4' }\n  ]\n</script>\n\n<template>\n  <div style=\"width: 280px\">\n    <MultiSelect\n      aria-label=\"Options\"\n      v-model=\"value\"\n      placeholder=\"Select options\"\n    >\n      <MultiSelectTrigger />\n      <MultiSelectContent>\n        <MultiSelectOption\n          v-for=\"o in options\"\n          :key=\"o.value\"\n          :value=\"o.value\"\n          >{{ o.label }}</MultiSelectOption\n        >\n      </MultiSelectContent>\n    </MultiSelect>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import MultiSelect from '@aziontech/webkit/multi-select'\n  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'\n  import MultiSelectContent from '@aziontech/webkit/multi-select-content'\n  import MultiSelectOption from '@aziontech/webkit/multi-select-option'\n  import { ref } from 'vue'\n\n  const value = ref([])\n  const options = [\n    { value: 'a', label: 'Option A' },\n    { value: 'b', label: 'Option B' }\n  ]\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div\n    class=\"flex flex-col gap-4\"\n    style=\"width: 280px\"\n  >\n    <MultiSelect\n      :aria-label=\"`Option, ${s}`\"\n      v-for=\"s in sizes\"\n      :key=\"s\"\n      v-model=\"value\"\n      :size=\"s\"\n      :placeholder=\"s.charAt(0).toUpperCase() + s.slice(1)\"\n    >\n      <MultiSelectTrigger />\n      <MultiSelectContent>\n        <MultiSelectOption\n          v-for=\"o in options\"\n          :key=\"o.value\"\n          :value=\"o.value\"\n          >{{ o.label }}</MultiSelectOption\n        >\n      </MultiSelectContent>\n    </MultiSelect>\n  </div>\n</template>"
+  },
+  {
+   "name": "WithGroups",
+   "sfc": "<script setup>\n  import MultiSelect from '@aziontech/webkit/multi-select'\n  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'\n  import MultiSelectContent from '@aziontech/webkit/multi-select-content'\n  import MultiSelectGroup from '@aziontech/webkit/multi-select-group'\n  import MultiSelectOption from '@aziontech/webkit/multi-select-option'\n  import { ref } from 'vue'\n\n  const value = ref([])\n  const groups = [\n    {\n      label: 'Group A',\n      options: [\n        { value: 'a-1', label: 'Option 1' },\n        { value: 'a-2', label: 'Option 2' }\n      ]\n    },\n    {\n      label: 'Group B',\n      options: [\n        { value: 'b-1', label: 'Option 1' },\n        { value: 'b-2', label: 'Option 2' }\n      ]\n    }\n  ]\n</script>\n\n<template>\n  <div style=\"width: 280px\">\n    <MultiSelect\n      aria-label=\"Options\"\n      v-model=\"value\"\n      placeholder=\"Select options\"\n    >\n      <MultiSelectTrigger />\n      <MultiSelectContent>\n        <MultiSelectGroup\n          v-for=\"g in groups\"\n          :key=\"g.label\"\n          :label=\"g.label\"\n        >\n          <MultiSelectOption\n            v-for=\"o in g.options\"\n            :key=\"o.value\"\n            :value=\"o.value\"\n            >{{ o.label }}</MultiSelectOption\n          >\n        </MultiSelectGroup>\n      </MultiSelectContent>\n    </MultiSelect>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/multi-select.md"
+}

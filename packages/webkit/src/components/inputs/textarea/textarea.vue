@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
+
   defineOptions({
     name: 'Textarea',
     inheritAttrs: false
@@ -41,6 +43,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => props.modelValue.length > 0)
 
@@ -59,20 +75,23 @@
 
 <template>
   <textarea
+    dir="auto"
     v-bind="passthroughAttrs"
+    :id="controlId"
+    :aria-describedby="describedBy"
     style="width: 100%"
     :value="modelValue"
     :placeholder="placeholder"
-    :disabled="disabled"
+    :disabled="isDisabled"
     :readonly="readonly"
-    :required="required"
-    :aria-invalid="invalid || undefined"
-    :aria-required="required || undefined"
-    :aria-disabled="disabled || undefined"
+    :required="isRequired"
+    :aria-invalid="isInvalid || undefined"
+    :aria-required="isRequired || undefined"
+    :aria-disabled="isDisabled || undefined"
     :data-testid="testId"
-    :data-disabled="disabled || null"
-    :data-invalid="invalid || null"
-    :data-required="required || null"
+    :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
     :data-readonly="readonly || null"
     :data-filled="isFilled || null"
     :data-resize="resizable"
@@ -83,12 +102,12 @@
       'border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default)',
       'placeholder:text-(--text-muted)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus):not([data-disabled])]:hover:border-(--border-strong)',
+      '[&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong)',
       'focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas)',
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
       'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0',
-      'data-[readonly]:cursor-default',
+      'data-[readonly]:bg-transparent data-[readonly]:border-dashed data-[readonly]:cursor-default',
       'data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none',
       attrs.class
     ]"

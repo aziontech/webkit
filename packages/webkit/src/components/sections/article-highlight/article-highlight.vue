@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import Button from '../../actions/button/button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
@@ -89,7 +90,7 @@
       Home: 0,
       End: props.items.length - 1
     }
-    const target = moves[event.key]
+    const target = moves[logicalArrowKey(event.key, eventDirection(event))]
     if (target === undefined) return
     event.preventDefault()
     void focusTab(target)
@@ -126,14 +127,14 @@
               <div
                 aria-hidden="true"
                 inert
-                class="pointer-events-none grid opacity-0 *:col-start-1 *:row-start-1"
+                class="pointer-events-none grid min-w-0 opacity-0 *:col-start-1 *:row-start-1"
               >
                 <div
                   v-for="item in items"
                   :key="item.key"
-                  class="grid lg:grid-cols-2"
+                  class="grid min-w-0 lg:grid-cols-2"
                 >
-                  <span class="block aspect-video lg:aspect-4/3" />
+                  <span class="block min-w-0 aspect-video lg:aspect-4/3" />
                   <div
                     class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl)"
                   >
@@ -148,7 +149,7 @@
 
               <article class="group/article relative grid min-w-0 lg:grid-cols-2">
                 <div
-                  class="relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) lg:aspect-4/3 lg:border-r lg:border-b-0"
+                  class="relative block aspect-video overflow-hidden border-b border-(--border-default) bg-(--bg-canvas) lg:aspect-4/3 lg:border-e lg:border-b-0"
                 >
                   <img
                     :src="current.highlightImage || current.image"
@@ -213,7 +214,7 @@
                   :aria-controls="panelId"
                   :tabindex="index === selected ? 0 : -1"
                   :data-active="index === selected || undefined"
-                  class="relative isolate flex h-full w-full cursor-pointer flex-col items-start gap-(--spacing-xs) p-(--spacing-lg) text-left transition-colors duration-moderate-01 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[active]:bg-(--bg-selected) data-[active]:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
+                  class="relative isolate flex h-full w-full cursor-pointer flex-col items-start gap-(--spacing-xs) p-(--spacing-lg) text-start transition-colors duration-moderate-01 ease-out before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) data-[active]:bg-(--bg-selected) data-[active]:before:hidden motion-reduce:transition-none motion-reduce:before:transition-none"
                   @click="select(index)"
                   @keydown="onKeydown($event, index)"
                 >

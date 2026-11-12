@@ -1,0 +1,102 @@
+{
+ "name": "toast",
+ "binding": "Toast",
+ "import": "@aziontech/webkit/toast",
+ "treeShakeableImport": "@aziontech/webkit/toast-root",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/toast-item",
+  "@aziontech/webkit/toast-title",
+  "@aziontech/webkit/toast-description",
+  "@aziontech/webkit/toast-action",
+  "@aziontech/webkit/toast-close"
+ ],
+ "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
+ "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
+ "useWhen": [
+  "Confirming the result of an action that finished out of view or in the background: saved, deployed, copied.",
+  "Following an async operation from start to finish with `toast.promise`, or `toast.loading` plus a dismiss by id.",
+  "A short notice that is not tied to one place on the page and can disappear on its own."
+ ],
+ "avoidWhen": [
+  "The message must stay visible next to the content it concerns → use `message`.",
+  "The user must decide something before continuing → use `dialog`.",
+  "Validation feedback for a single field → use `helper-text`."
+ ],
+ "related": [
+  "message` — inline severity banner placed in the page flow; it stays until it is closed.",
+  "dialog` — blocking modal for decisions and confirmations.",
+  "spinner` — rendered by the `loading` toast type."
+ ],
+ "bestPractices": [
+  "Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.",
+  "Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon; every type is announced once and politely by the Toaster's single live region (an error interrupting what the user is doing is worse than hearing it a moment later, and switching the region between polite and assertive made screen readers drop or repeat the stack).",
+  "Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).",
+  "duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.",
+  "Don't make a toast the only path to an important action. It auto-dismisses and never takes focus."
+ ],
+ "props": [
+  {
+   "name": "position",
+   "type": "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+   "default": "'bottom-right'",
+   "required": "false",
+   "doc": "Corner (or edge-center) the stack is anchored to."
+  },
+  {
+   "name": "duration",
+   "type": "number",
+   "default": "4000",
+   "required": "false",
+   "doc": "Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed."
+  },
+  {
+   "name": "max",
+   "type": "number",
+   "default": "3",
+   "required": "false",
+   "doc": "Maximum simultaneously visible toasts per corner before the rest queue behind."
+  },
+  {
+   "name": "expand",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Lay the stack out fully expanded with a gap; when `false` the resting stack overlaps into a peek."
+  },
+  {
+   "name": "closable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Show an always-visible close control on every toast; a per-toast `closable` option overrides it."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "{ toast, dismiss }",
+   "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, type, message, description?, action?, actions?, duration }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { Toaster, toast } from '@aziontech/webkit/toast'\n  import Button from '@aziontech/webkit/button'\n\n  const show = () =>\n    toast('Event has been created', {\n      description: 'Sunday, December 03, 2023 at 9:00 AM',\n      action: { label: 'Undo', onClick: () => {} }\n    })\n</script>\n\n<template>\n  <Toaster position=\"bottom-right\" />\n  <Button\n    label=\"Show toast\"\n    @click=\"show\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import { Toaster, toast } from '@aziontech/webkit/toast'\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <Toaster position=\"bottom-right\" />\n  <div class=\"flex flex-wrap justify-center gap-2\">\n    <Button\n      label=\"Default\"\n      kind=\"secondary\"\n      @click=\"\n        () =>\n          toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })\n      \"\n    />\n    <Button\n      label=\"Success\"\n      kind=\"primary\"\n      @click=\"\n        () =>\n          toast.success('Event has been created', {\n            description: 'Sunday, December 03, 2023 at 9:00 AM'\n          })\n      \"\n    />\n    <Button\n      label=\"Info\"\n      kind=\"outlined\"\n      @click=\"\n        () =>\n          toast.info('Event has been created', {\n            description: 'Sunday, December 03, 2023 at 9:00 AM'\n          })\n      \"\n    />\n    <Button\n      label=\"Warning\"\n      kind=\"outlined\"\n      @click=\"\n        () =>\n          toast.warning('Event has been created', {\n            description: 'Sunday, December 03, 2023 at 9:00 AM'\n          })\n      \"\n    />\n    <Button\n      label=\"Error\"\n      kind=\"danger\"\n      @click=\"\n        () =>\n          toast.error('Event has been created', {\n            description: 'Sunday, December 03, 2023 at 9:00 AM'\n          })\n      \"\n    />\n    <Button\n      label=\"Loading\"\n      kind=\"transparent\"\n      @click=\"\n        () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })\n      \"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithDescription",
+   "sfc": "<script setup>\n  import { Toaster, toast } from '@aziontech/webkit/toast'\n  import Button from '@aziontech/webkit/button'\n\n  const show = () =>\n    toast('Event has been created', {\n      description: 'Sunday, December 03, 2023 at 9:00 AM'\n    })\n</script>\n\n<template>\n  <Toaster position=\"bottom-right\" />\n  <Button\n    label=\"Show toast\"\n    @click=\"show\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/toast.md"
+}

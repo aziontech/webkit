@@ -1,10 +1,14 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
-  import FieldRadio from '../../../inputs/field-radio/field-radio.vue'
+  import Field from '../../../inputs/field/field.vue'
+  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
+  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
+  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -139,7 +143,7 @@
           label="Max Age"
           required
         />
-        <InputNumber
+        <NumberInput
           id="browser-max-age"
           :model-value="600"
           size="medium"
@@ -155,15 +159,25 @@
       >
         <div class="flex flex-col gap-(--spacing-md)">
           <span class="text-label-sm text-(--text-default)">Cache Behavior</span>
-          <FieldRadio
+          <Field
             v-for="behavior in BEHAVIORS"
             :key="behavior.value"
-            :model-value="frame.behavior"
-            name="cache-behavior"
-            :value="behavior.value"
-            :label="behavior.label"
-            :description="behavior.description"
-          />
+            orientation="horizontal"
+          >
+            <RadioButton
+              :model-value="frame.behavior"
+              name="cache-behavior"
+              :value="behavior.value"
+            />
+            <FieldContent>
+              <FieldLabel>
+                {{ behavior.label }}
+              </FieldLabel>
+              <FieldDescription v-if="behavior.description">
+                {{ behavior.description }}
+              </FieldDescription>
+            </FieldContent>
+          </Field>
         </div>
       </ShellMockupPart>
 
@@ -177,7 +191,7 @@
             label="Max Age"
             required
           />
-          <InputNumber
+          <NumberInput
             id="cache-max-age"
             :model-value="3600"
             size="medium"
@@ -225,7 +239,7 @@
             for="cache-offset"
             label="Offset (KB)"
           />
-          <InputNumber
+          <NumberInput
             id="cache-offset"
             :model-value="1024"
             size="medium"

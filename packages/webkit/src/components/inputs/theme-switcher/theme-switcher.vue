@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -12,34 +15,31 @@
   export type ThemeSwitcherValue = 'system' | 'dark' | 'light'
 
   interface Props {
-    /** Selected theme mode. Bind with `v-model:value`. */
-    value?: ThemeSwitcherValue
     /** Disables the whole control and applies disabled tokens. */
     disabled?: boolean
-    /** Accessible name for the icon-only segmented group. */
+    /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
     ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    value: 'system',
     disabled: false,
-    ariaLabel: 'Theme'
+    ariaLabel: ''
   })
 
-  const emit = defineEmits<{
-    'update:value': [value: ThemeSwitcherValue]
-  }>()
+  const model = defineModel<ThemeSwitcherValue>({ default: 'system' })
 
   const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ themeSwitcher: en.themeSwitcher })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-theme-switcher'
   )
 
   const MODES = [
-    { value: 'system', icon: 'pi pi-desktop', label: 'System' },
-    { value: 'dark', icon: 'pi pi-moon', label: 'Dark' },
-    { value: 'light', icon: 'pi pi-sun', label: 'Light' }
+    { value: 'system', icon: 'pi pi-desktop', key: 'themeSwitcher.system' },
+    { value: 'dark', icon: 'pi pi-moon', key: 'themeSwitcher.dark' },
+    { value: 'light', icon: 'pi pi-sun', key: 'themeSwitcher.light' }
   ] as const
 
   const rootRef = ref<globalThis.HTMLElement | null>(null)
@@ -48,7 +48,7 @@
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
 
-  const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === props.value))
+  const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === model.value))
 
   function setSegmentRef(el: globalThis.HTMLButtonElement | null, index: number) {
     if (el) {
@@ -58,7 +58,7 @@
 
   function select(next: ThemeSwitcherValue) {
     if (!props.disabled) {
-      emit('update:value', next)
+      model.value = next
     }
   }
 
@@ -74,7 +74,7 @@
     const last = MODES.length - 1
     let target: number | null = null
 
-    switch (event.key) {
+    switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowRight':
       case 'ArrowDown':
         target = index === last ? 0 : index + 1
@@ -140,7 +140,7 @@
     resizeObserver = null
   })
 
-  watch(() => props.value, scheduleIndicatorSync)
+  watch(() => model.value, scheduleIndicatorSync)
 
   const ROOT_CLASS =
     'relative inline-flex h-7 w-fit items-center gap-(--spacing-xxs) p-(--spacing-xxs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
@@ -154,7 +154,7 @@
     ref="rootRef"
     v-bind="$attrs"
     role="radiogroup"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || t('themeSwitcher.label')"
     :aria-disabled="disabled || undefined"
     :data-disabled="disabled || undefined"
     :data-testid="testId"
@@ -164,23 +164,26 @@
       v-show="indicatorVisible"
       aria-hidden="true"
       :data-testid="`${testId}__indicator`"
-      :style="{ transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)` }"
-      class="pointer-events-none absolute left-0 top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      :style="{
+        left: 0,
+        transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)`
+      }"
+      class="pointer-events-none absolute top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
     />
     <Tooltip
       v-for="(mode, index) in MODES"
       :key="mode.value"
-      :text="mode.label"
+      :text="t(mode.key)"
       placement="bottom"
     >
       <button
         :ref="(el) => setSegmentRef(el as globalThis.HTMLButtonElement | null, index)"
         type="button"
         role="radio"
-        :aria-checked="mode.value === value"
-        :aria-label="mode.label"
-        :data-state="mode.value === value ? 'active' : 'inactive'"
-        :tabindex="mode.value === value ? 0 : -1"
+        :aria-checked="mode.value === model"
+        :aria-label="t(mode.key)"
+        :data-state="mode.value === model ? 'active' : 'inactive'"
+        :tabindex="mode.value === model ? 0 : -1"
         :disabled="disabled"
         :class="SEGMENT_CLASS"
         @click="select(mode.value)"

@@ -1,0 +1,73 @@
+{
+ "name": "doc-heading",
+ "binding": "DocHeading",
+ "import": "@aziontech/webkit/doc-heading",
+ "treeShakeableImport": "@aziontech/webkit/doc-heading",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A documentation section heading that is also the link to itself. The whole text links to its own `id`, so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.",
+ "setup": null,
+ "useWhen": [
+  "Every `h2`–`h4` on a docs page that the page rail lists.",
+  "Section headings on a designed docs page composed in Vue."
+ ],
+ "avoidWhen": [
+  "For the page title — use `DocPageHeader`.",
+  "On marketing pages — use `SectionTitle`."
+ ],
+ "related": [
+  "DocOnThisPage` — the rail that points at the ids.",
+  "useHeadingNav` — the page-provided scroll handler.",
+  "DocProse` — skips `[data-doc-anchor]` in its link rules."
+ ],
+ "bestPractices": [
+  "Give every heading a stable, slug-like `id`.",
+  "Without an `id` the heading renders plain text with no anchor — a link to nowhere is never drawn."
+ ],
+ "props": [
+  {
+   "name": "level",
+   "type": "1 \\ | 2 \\ | 3 \\ | 4",
+   "default": "2",
+   "required": "false",
+   "doc": "Heading level; drives the tag and the prose type scale."
+  },
+  {
+   "name": "id",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Anchor id: what the page rail entry and the copied URL point at. Empty renders the heading without a link."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback text when the default slot is empty."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The heading text."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <DocHeading\n    id=\"purge-by-url\"\n    :level=\"2\"\n  >\n    Purge by URL\n  </DocHeading>\n</template>"
+  },
+  {
+   "name": "Levels",
+   "sfc": "<script setup>\n  import DocHeading from '@aziontech/webkit/doc-heading'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <DocHeading\n      id=\"cache\"\n      :level=\"1\"\n      label=\"Cache\"\n    />\n    <DocHeading\n      id=\"cache-rules\"\n      :level=\"2\"\n      label=\"Cache rules\"\n    />\n    <DocHeading\n      id=\"cache-keys\"\n      :level=\"3\"\n      label=\"Cache keys\"\n    />\n    <DocHeading\n      id=\"query-strings\"\n      :level=\"4\"\n      label=\"Query strings\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/doc-heading.md"
+}

@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 04806fbfcf832773d171cfcfa4a367ca8c072b82d37a73d2775994f75b227096
+checksum: 38f3a3438c14b62803b55a5d96f633280ff0e2780b0be765d1086a708997c7c0
 created: 2026-09-22
-last_updated: 2026-09-26
+last_updated: 2026-11-11
 ---
 
 # Carousel — Component Spec
@@ -52,7 +52,7 @@ The unit is Carousel, then a `Carousel.Item` card, then its content — usually 
 
 ```vue
 <script setup>
-import Carousel from '@aziontech/webkit/carousel'
+  import Carousel from '@aziontech/webkit/carousel'
 </script>
 
 <template>
@@ -76,9 +76,9 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable track, announced before its contents. |
+| Prop        | Type     | Default | Required | JSDoc                                                                    |
+| ----------- | -------- | ------- | -------- | ------------------------------------------------------------------------ |
+| `ariaLabel` | `string` | `''`    | false    | Accessible name for the scrollable track, announced before its contents. |
 
 ## Events
 
@@ -86,10 +86,10 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The slides, composed as `Carousel.Item` elements in reading order. |
-| `controls` | — | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
+| Slot       | Scope | Notes                                                                                             |
+| ---------- | ----- | ------------------------------------------------------------------------------------------------- |
+| `default`  | —     | The slides, composed as `Carousel.Item` elements in reading order.                                |
+| `controls` | —     | The step controls, composed as `Carousel.Previous` and `Carousel.Next`; rendered above the track. |
 
 ## States
 
@@ -105,34 +105,34 @@ import Carousel from '@aziontech/webkit/carousel'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| step control pressed | `scroll-smooth` on the track | native smooth scrolling | `motion-reduce:scroll-auto` (jumps instantly) |
-| control hover / focus | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| pointer drag | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | — | unaffected; the drag is direct manipulation, not motion |
+| Trigger               | Animation / Transition                                                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------------------------------- |
+| step control pressed  | `scroll-smooth` on the track                                                                           | native smooth scrolling                           | `motion-reduce:scroll-auto` (jumps instantly)           |
+| control hover / focus | `transition-colors duration-150 ease-out`                                                              | inline (matches catalog)                          | `motion-reduce:transition-none`                         |
+| pointer drag          | none — the track follows the pointer 1:1 (`data-[dragging]:scroll-auto` stands the smooth scroll down) | —                                                 | unaffected; the drag is direct manipulation, not motion |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| control surface | `var(--bg-surface)` |
-| control border | `var(--border-default)` |
-| control glyph | `var(--text-muted)` |
-| control glyph (hover) | `var(--text-default)` |
-| control shape | `var(--shape-button)` |
-| card surface | `var(--bg-surface)` |
-| card border | `var(--border-default)` |
-| card padding | `var(--spacing-xl)` |
-| spacing (controls gap) | `var(--spacing-sm)` |
-| spacing (controls to track) | `var(--spacing-lg)` |
-| ring | `var(--ring-color)` |
-| focus ring offset | `var(--bg-canvas)` |
+| Region                      | Token (DESIGN.md)       |
+| --------------------------- | ----------------------- |
+| control surface             | `var(--bg-surface)`     |
+| control border              | `var(--border-default)` |
+| control glyph               | `var(--text-muted)`     |
+| control glyph (hover)       | `var(--text-default)`   |
+| control shape               | `var(--shape-button)`   |
+| card surface                | `var(--bg-surface)`     |
+| card border                 | `var(--border-default)` |
+| card padding                | `var(--spacing-xl)`     |
+| spacing (controls gap)      | `var(--spacing-sm)`     |
+| spacing (controls to track) | `var(--spacing-lg)`     |
+| ring                        | `var(--ring-color)`     |
+| focus ring offset           | `var(--bg-canvas)`      |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -143,7 +143,15 @@ import Carousel from '@aziontech/webkit/carousel'
 - `motion-reduce:scroll-auto` on the track and `motion-reduce:transition-none` on the controls. The track never auto-advances, so WCAG 2.2.2 (pause, stop, hide) does not apply by construction.
 - Touch target ≥40×40 px — each step control is a 40×40 button.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard and buttons: next scrolls toward the end edge; the scroll sign is inverted under `dir="rtl"` (`useDirection(track)`), and progress reads `Math.abs(scrollLeft)` because `scrollLeft` is zero or negative under `rtl`.
+- Edge fades: the start/end masks follow the reading direction.
+- User data: none.
+
+## Examples
 
 - Default
 - Peek — narrow quote cards that overflow the row so one lands under the trailing fade (justified: a carousel whose content fits shows no scrolling and no enabled control, so the default alone never exercises the component's purpose)
@@ -161,10 +169,8 @@ import Carousel from '@aziontech/webkit/carousel'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

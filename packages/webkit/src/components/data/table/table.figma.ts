@@ -46,7 +46,7 @@ const columns = instance
     figma.code``
   )
 
-const paginator = instance.findInstance('_Paginator', { traverseInstances: true })
+const pagination = instance.findInstance('_Paginator', { traverseInstances: true })
 const emptyState = instance.findInstance('EmptyState', { traverseInstances: true })
 
 export default {
@@ -54,7 +54,7 @@ export default {
   :data="${template === 'empty' ? '[]' : 'rows'}"
   :columns="[${columns}
   ]"${
-    paginator.type === 'INSTANCE' && template !== 'empty'
+    pagination.type === 'INSTANCE' && template !== 'empty'
       ? figma.code`
   paginated`
       : ''

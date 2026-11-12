@@ -1,0 +1,151 @@
+{
+ "name": "property-filter",
+ "binding": "PropertyFilter",
+ "import": "@aziontech/webkit/property-filter",
+ "treeShakeableImport": "@aziontech/webkit/property-filter",
+ "category": "data",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode=\"query\"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.",
+ "setup": null,
+ "useWhen": [
+  "A list or table that people narrow by several fields at once (status, region, owner) and by text.",
+  "Any collection driven by `useCollection`, client or server mode.",
+  "Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`.",
+  "With `mode=\"query\"`: an explorer (events, logs) whose users type queries by hand, keep and reuse them as text, or need a grammar of the product (pass `validate` and `suggest`)."
+ ],
+ "avoidWhen": [
+  "A single text search over a short list → use `input` bound to `filterProps`.",
+  "A few fixed choices always on screen → use `toggle-group` or `chip` filters.",
+  "A structured filter builder with its own panel inside a table toolbar → use `table-filter`."
+ ],
+ "related": [
+  "use-collection` — applies the query; `propertyFilterProps` is the binding.",
+  "table` — the collection it usually filters.",
+  "cards` — the card form of a collection.",
+  "collection-preferences` — the panel that sits beside it in the controls row."
+ ],
+ "bestPractices": [
+  "Give every property with a closed set of values its `options`, so values are suggested and tokens print labels.",
+  "Set `type: 'number'` or `type: 'date'` on ordered properties to offer `>`, `<`, `>=`, `<=`.",
+  "Bind `totalCount` so people hear how many items match after each change.",
+  "Name the field after the collection (`aria-label=\"Filter resources\"`).",
+  "In query mode, fields are written by `key` (no spaces); quote values that hold spaces or operator characters (`\"edge cache\"`). Apply the `query` of `submit` when it is not null; keep the `text` for saved and recent queries.",
+  "A product grammar (`like`, `between`, parentheses) passes `validate` and `suggest`; `submit` then carries `query: null` for text the built-in grammar cannot flatten, and the product parses `text` itself."
+ ],
+ "props": [
+  {
+   "name": "query",
+   "type": "PropertyFilterQuery",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The tokens and how they combine. Supports v-model:query."
+  },
+  {
+   "name": "properties",
+   "type": "FilteringProperty[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Properties the suggestions offer, with their operators and values."
+  },
+  {
+   "name": "totalCount",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Items that match the query, announced next to the tokens. Hidden when unset."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder of the field. Empty uses the locale catalog."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the field. Empty uses the locale catalog."
+  },
+  {
+   "name": "freeText",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Accepts typed text with no property as a free-text token."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the field and the tokens."
+  },
+  {
+   "name": "mode",
+   "type": "'tokens' | 'query'",
+   "default": "'tokens'",
+   "required": "false",
+   "doc": "tokens` turns each choice into a token; `query` edits one query string."
+  },
+  {
+   "name": "text",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The query string in query mode. Supports v-model:text."
+  },
+  {
+   "name": "validate",
+   "type": "(text: string) => string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check."
+  },
+  {
+   "name": "suggest",
+   "type": "(text: string, caret: number) => PropertyFilterQuerySuggestion[]",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:query",
+   "payload": "PropertyFilterQuery",
+   "notes": "A token was added or removed, the operation changed, or all cleared. Tokens mode only."
+  },
+  {
+   "name": "update:text",
+   "payload": "string",
+   "notes": "The query string changed (typing, a suggestion, Escape clearing). Query mode only."
+  },
+  {
+   "name": "submit",
+   "payload": "PropertyFilterSubmit",
+   "notes": "Enter with no active suggestion and a valid query. Query mode only."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { ref } from 'vue'\n\n  const properties = [\n    {\n      key: 'status',\n      label: 'Status',\n      options: [{ value: 'Active' }, { value: 'Inactive' }, { value: 'Degraded' }]\n    },\n    {\n      key: 'region',\n      label: 'Region',\n      options: [{ value: 'sa-east' }, { value: 'us-east' }, { value: 'eu-west' }]\n    },\n    { key: 'name', label: 'Name' },\n    { key: 'requests', label: 'Requests', type: 'number' }\n  ]\n\n  const query = ref({\n    tokens: [{ propertyKey: 'status', operator: '=', value: 'Active' }],\n    operation: 'and'\n  })\n</script>\n\n<template>\n  <PropertyFilter\n    v-model:query=\"query\"\n    :properties=\"properties\"\n    :total-count=\"12\"\n  />\n</template>"
+  },
+  {
+   "name": "WithCollection",
+   "sfc": "<script setup>\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import Table from '@aziontech/webkit/table'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const workloads = Array.from({ length: 36 }, (_, i) => ({\n    id: String(1001 + i),\n    name: `workload-${String(i + 1).padStart(2, '0')}`,\n    status: ['Active', 'Inactive', 'Degraded'][i % 3],\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3],\n    requests: (i * 137) % 1000\n  }))\n\n  const properties = [\n    {\n      key: 'status',\n      label: 'Status',\n      options: [{ value: 'Active' }, { value: 'Inactive' }, { value: 'Degraded' }]\n    },\n    {\n      key: 'region',\n      label: 'Region',\n      options: [{ value: 'sa-east' }, { value: 'us-east' }, { value: 'eu-west' }]\n    },\n    { key: 'requests', label: 'Requests', type: 'number' }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name', enableSorting: true },\n    { accessorKey: 'status', header: 'Status', enableSorting: true },\n    { accessorKey: 'region', header: 'Region' },\n    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' }\n  ]\n\n  const { propertyFilterProps, tableProps } = useCollection({\n    items: workloads,\n    columns,\n    propertyFiltering: { properties },\n    pagination: { pageSize: 10 }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <PropertyFilter v-bind=\"propertyFilterProps\" />\n    <Table v-bind=\"tableProps\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "QueryMode",
+   "sfc": "<script setup>\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { matchesQuery } from '@aziontech/webkit/use-collection'\n  import { computed, ref } from 'vue'\n\n  const events = Array.from({ length: 40 }, (_, i) => ({\n    id: String(i + 1),\n    level: ['Info', 'Warning', 'Error', 'Info'][i % 4],\n    method: ['GET', 'POST', 'GET', 'DELETE', 'GET'][i % 5],\n    status: [200, 404, 500, 200, 301][i % 5],\n    host: ['shop.example.com', 'api.example.com'][i % 2]\n  }))\n\n  const properties = [\n    {\n      key: 'level',\n      label: 'Level',\n      options: [{ value: 'Info' }, { value: 'Warning' }, { value: 'Error' }]\n    },\n    {\n      key: 'method',\n      label: 'Method',\n      options: [{ value: 'GET' }, { value: 'POST' }, { value: 'DELETE' }]\n    },\n    { key: 'status', label: 'Status code', type: 'number' },\n    {\n      key: 'host',\n      label: 'Host',\n      options: [{ value: 'shop.example.com' }, { value: 'api.example.com' }]\n    }\n  ]\n\n  const text = ref('level = Error AND method = GET')\n  const applied = ref({\n    tokens: [\n      { propertyKey: 'level', operator: '=', value: 'Error' },\n      { propertyKey: 'method', operator: '=', value: 'GET' }\n    ],\n    operation: 'and'\n  })\n\n  const matches = computed(\n    () => events.filter((event) => matchesQuery(event, applied.value, properties)).length\n  )\n\n  const apply = ({ query }) => {\n    if (query) applied.value = query\n  }\n</script>\n\n<template>\n  <PropertyFilter\n    v-model:text=\"text\"\n    mode=\"query\"\n    :properties=\"properties\"\n    :total-count=\"matches\"\n    aria-label=\"Query events\"\n    @submit=\"apply\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/property-filter.md"
+}

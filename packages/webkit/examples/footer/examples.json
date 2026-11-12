@@ -1,0 +1,16 @@
+{
+  "component": "footer",
+  "title": "Components/Primitives/Layout/Footer",
+  "examples": [
+    {
+      "name": "DefaultFooter",
+      "summary": "The footer composed with four link columns, the status row, the signature band (brand beside its tagline) and the social icon buttons. From md the icons and the status cluster share one row above the signature, each band sized by its content; stacked, the order is links, status, signature, icons. The social buttons are small, so the row holds the brand mark and seven icons beside the status pair in a zone as narrow as the docs reading column.",
+      "file": "default-footer.vue"
+    },
+    {
+      "name": "SitePlacement",
+      "summary": "The footer closing a framed marketing page: the bands capped at the site measure and centred, with the side rules, the hatched gutters and the framed column whose bottom rule finishes the page frame. The hero band and the framed sections above resolve to that same measure, which is the only reason the rules running down the page are continuous.",
+      "file": "site-placement.vue"
+    }
+  ]
+}

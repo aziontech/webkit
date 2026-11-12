@@ -1,17 +1,19 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Message from '../../feedback/message/message.vue'
-  import { defaultCountries } from '../../inputs/field-phone-number/countries'
-  import FieldPhoneNumber from '../../inputs/field-phone-number/field-phone-number.vue'
-  import FieldSelect, { type FieldSelectValue } from '../../inputs/field-select/field-select.vue'
-  import FieldText from '../../inputs/field-text/field-text.vue'
-  import FieldTextarea from '../../inputs/field-textarea/field-textarea.vue'
+  import Alert from '../../feedback/alert/alert.vue'
+  import Field from '../../inputs/field/field.vue'
+  import FieldDescription from '../../inputs/field/field-description/field-description.vue'
+  import Input from '../../inputs/input/input.vue'
   import Label from '../../inputs/label/label.vue'
+  import { defaultCountries } from '../../inputs/phone-input/countries'
+  import PhoneInput from '../../inputs/phone-input/phone-input.vue'
+  import Textarea from '../../inputs/textarea/textarea.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
+  import HeroFormSelect from './hero-form-select/hero-form-select.vue'
 
   defineOptions({
     name: 'HeroForm',
@@ -57,9 +59,9 @@
     missing: string
     /** Message under an email field holding a malformed address. */
     invalidEmail: string
-    /** Message shown in place of the form once the site reports the values were sent. */
+    /** Alert shown in place of the form once the site reports the values were sent. */
     success: string
-    /** Message shown under the form when the site reports the values could not be sent. */
+    /** Alert shown under the form when the site reports the values could not be sent. */
     error: string
   }
 
@@ -129,13 +131,10 @@
 
   const fieldId = (field: HeroFormField) => `${baseId}-${field.name}`
 
-  const optionsOf = (field: HeroFormField) =>
-    (field.options ?? []).map((label) => ({ value: label, label }))
-
   const countryOf = (field: HeroFormField) => countries.value[field.name] ?? field.country ?? 'US'
 
-  const setValue = (field: HeroFormField, next: FieldSelectValue) => {
-    values.value = { ...values.value, [field.name]: next === undefined ? '' : String(next) }
+  const setValue = (field: HeroFormField, next: string) => {
+    values.value = { ...values.value, [field.name]: next }
     if (errors.value[field.name]) errors.value = { ...errors.value, [field.name]: '' }
   }
 
@@ -164,6 +163,16 @@
     return ''
   }
 
+  const outcome = ref<HTMLElement | null>(null)
+
+  watch(
+    () => props.submitted,
+    (submitted) => {
+      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      nextTick(() => document.getElementById(`${baseId}-success`)?.focus())
+    }
+  )
+
   const send = (event: Event) => {
     if (props.loading) return
     const collected: Record<string, string> = {}
@@ -175,7 +184,11 @@
       if (message) found[field.name] = message
     }
     errors.value = found
-    if (Object.keys(found).length > 0) return
+    const first = props.fields.find((field) => found[field.name])
+    if (first) {
+      nextTick(() => document.getElementById(fieldId(first))?.focus())
+      return
+    }
     emit('submit', event as SubmitEvent, collected)
   }
 </script>
@@ -230,9 +243,15 @@
           </li>
         </ul>
 
-        <div class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <Message
+        <div
+          ref="outcome"
+          class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+        >
+          <Alert
             v-if="submitted"
+            :id="`${baseId}-success`"
+            tabindex="-1"
+            class="outline-none"
             severity="success"
             :label="messages.success"
           />
@@ -252,68 +271,63 @@
                 {{ formAriaLabel }}
               </legend>
 
-              <div
+              <Field
                 v-for="field in fields"
                 :key="field.name"
+                :required="emptyRequired(field)"
+                :invalid="malformed(field)"
+                :disabled="loading"
                 :data-half="field.half || null"
-                class="flex min-w-0 flex-col gap-(--spacing-xs) sm:col-span-2 sm:data-[half]:col-span-1"
+                class="min-w-0 sm:col-span-2 sm:data-[half]:col-span-1"
               >
                 <Label
                   :for="fieldId(field)"
                   :label="field.label"
                   :required="field.required"
                 />
-                <FieldSelect
+                <HeroFormSelect
                   v-if="field.kind === 'select'"
-                  :model-value="values[field.name] || undefined"
-                  :input-id="fieldId(field)"
+                  :model-value="values[field.name] ?? ''"
+                  :trigger-id="fieldId(field)"
                   :placeholder="field.placeholder"
-                  :options="optionsOf(field)"
-                  :required="emptyRequired(field)"
-                  :invalid="malformed(field)"
-                  :helper-text="errors[field.name]"
-                  size="large"
-                  searchable
+                  :options="field.options"
                   @update:model-value="setValue(field, $event)"
                 />
-                <FieldPhoneNumber
+                <PhoneInput
                   v-else-if="field.kind === 'phone'"
+                  :id="fieldId(field)"
                   size="large"
                   :model-value="values[field.name] ?? ''"
                   :country="countryOf(field)"
-                  :input-id="fieldId(field)"
                   :name="field.name"
                   :placeholder="field.placeholder"
-                  :required="emptyRequired(field)"
-                  :invalid="malformed(field)"
-                  :helper-text="errors[field.name]"
                   @update:model-value="setValue(field, $event)"
                   @update:country="setCountry(field, $event)"
                 />
-                <FieldTextarea
+                <Textarea
                   v-else-if="field.kind === 'textarea'"
+                  :id="fieldId(field)"
                   :model-value="values[field.name] ?? ''"
-                  :input-id="fieldId(field)"
                   :name="field.name"
                   :placeholder="field.placeholder"
-                  :required="emptyRequired(field)"
-                  :invalid="malformed(field)"
-                  :helper-text="errors[field.name]"
                   @update:model-value="setValue(field, $event)"
                 />
-                <FieldText
+                <Input
                   v-else
+                  :id="fieldId(field)"
                   :model-value="values[field.name] ?? ''"
-                  :input-id="fieldId(field)"
                   :name="field.name"
                   :placeholder="field.placeholder"
-                  :required="emptyRequired(field)"
-                  :invalid="malformed(field)"
-                  :helper-text="errors[field.name]"
+                  :type="field.kind === 'email' ? 'email' : 'text'"
+                  :autocomplete="field.kind === 'email' ? 'email' : undefined"
+                  :spellcheck="field.kind === 'email' ? false : undefined"
                   size="large"
                   @update:model-value="setValue(field, $event)"
                 />
-              </div>
+                <FieldDescription v-if="errors[field.name]">
+                  {{ errors[field.name] }}
+                </FieldDescription>
+              </Field>
             </fieldset>
 
             <div class="flex flex-col">
@@ -326,7 +340,7 @@
               />
             </div>
 
-            <Message
+            <Alert
               v-if="error"
               severity="danger"
               :label="messages.error"

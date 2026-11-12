@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, useAttrs } from 'vue'
+
+  import { useFieldControl } from '../../../composables/use-field-control'
 
   defineOptions({
     name: 'Checkbox',
@@ -45,6 +47,20 @@
 
   const attrs = useAttrs()
 
+  const {
+    controlId,
+    describedBy,
+    labelledBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => props.inputId || (attrs['id'] as string | undefined),
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    disabled: () => props.disabled
+  })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-checkbox')
 
   const passthroughAttrs = computed(() => {
@@ -73,25 +89,8 @@
     return isChecked.value ? 'checked' : 'unchecked'
   })
 
-  const ariaChecked = computed<'true' | 'false' | 'mixed'>(() => {
-    if (props.indeterminate) return 'mixed'
-    return isChecked.value ? 'true' : 'false'
-  })
-
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
-
-  watch(
-    () => props.indeterminate,
-    (value) => {
-      if (inputRef.value) {
-        inputRef.value.indeterminate = value
-      }
-    },
-    { immediate: true, flush: 'post' }
-  )
-
   const handleChange = () => {
-    if (props.disabled || props.readonly) {
+    if (isDisabled.value || props.readonly) {
       return
     }
 
@@ -120,21 +119,24 @@
     :data-state="dataState"
     :data-checked="isChecked || null"
     :data-indeterminate="indeterminate || null"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
     class="group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) focus-within:before:opacity-0 has-[:focus-visible]:before:opacity-0 data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-contrast) data-[checked]:before:hidden data-[checked]:after:hidden data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-contrast) data-[indeterminate]:before:hidden data-[indeterminate]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden"
   >
     <input
-      :id="inputId || ''"
-      ref="inputRef"
+      :id="controlId || ''"
+      :indeterminate.prop="indeterminate"
       :name="name || ''"
       type="checkbox"
-      class="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
+      :aria-describedby="describedBy"
+      :aria-labelledby="attrs['aria-label'] ? undefined : labelledBy"
+      :aria-invalid="isInvalid || undefined"
+      :required="isRequired || undefined"
+      class="absolute inset-[min(0rem,calc(50%-12px))] cursor-pointer opacity-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))] disabled:cursor-not-allowed"
       :checked="isChecked"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :readonly="readonly"
       :tabindex="tabindex"
-      :aria-checked="ariaChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @change="handleChange"

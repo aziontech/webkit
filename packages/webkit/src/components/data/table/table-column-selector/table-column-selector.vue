@@ -2,7 +2,9 @@
   import type { Column } from '@tanstack/vue-table'
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
+  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
+  import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Checkbox from '../../../inputs/checkbox/checkbox.vue'
   import { TableInjectionKey, type TableRowRecord } from '../injection-key'
@@ -12,13 +14,13 @@
     inheritAttrs: false
   })
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
-      /** Popover heading. */
+      /** Popover heading. Empty uses the locale catalog (`Columns`). */
       title?: string
     }>(),
     {
-      title: 'Columns'
+      title: ''
     }
   )
 
@@ -28,6 +30,9 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ tableColumnSelector: en.tableColumnSelector })
+  const portalLocale = usePortalLocale()
+  const heading = computed(() => props.title || t('tableColumnSelector.title'))
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -96,7 +101,7 @@
         <IconButton
           :data-testid="testId"
           icon="ai ai-column"
-          :ariaLabel="title"
+          :ariaLabel="heading"
           kind="outlined"
           size="medium"
           :aria-expanded="open"
@@ -114,12 +119,14 @@
           v-if="open"
           ref="panelRef"
           role="dialog"
-          :aria-label="title"
+          :dir="portalLocale.dir"
+          :lang="portalLocale.lang"
+          :aria-label="heading"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
           class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col gap-(--spacing-xs) overflow-y-auto rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
-          <p class="text-label-md text-(--text-default)">{{ title }}</p>
+          <p class="text-label-md text-(--text-default)">{{ heading }}</p>
           <label
             v-for="column in columns"
             :key="column.id"
@@ -136,7 +143,7 @@
             v-if="columns.length === 0"
             class="text-body-sm text-(--text-muted)"
           >
-            No hideable columns.
+            {{ t('tableColumnSelector.empty') }}
           </p>
         </div>
       </Transition>

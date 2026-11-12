@@ -10,6 +10,10 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
@@ -27,8 +31,10 @@
     type CodeBlockHighlightToken,
     formatLineNumber,
     getHighlightTokenClass,
-    highlightCode
+    highlightCode,
+    plainLines
   } from './utils/highlight-code'
+  import { languageName, stripShellPrompts } from './utils/language-name'
   import {
     buildLineChangeMap,
     type CodeBlockLineChange,
@@ -38,6 +44,8 @@
   } from './utils/line-decorations'
 
   export type { CodeBlockLineChange }
+
+  export type CodeBlockKind = 'code' | 'output'
 
   export type CodeBlockTab = {
     label: string
@@ -58,39 +66,44 @@
   interface Props {
     /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
     tabs?: CodeBlockTab[]
-    /** Controlled active tab value (`v-model:value`). */
-    value?: string
     /** Initial active tab when uncontrolled. */
     defaultValue?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
     showLineNumbers?: boolean
-    /** Accessible name for the copy control (forwarded to CopyButton's aria-label). */
+    /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
-    /** Shows the copy control; turn it off for a decorative block nobody copies from. */
+    /** Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. */
     copyable?: boolean
+    /** What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. */
+    kind?: CodeBlockKind
+    /** Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it. */
+    showLabel?: boolean
+    /** Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. */
+    title?: string
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
-    border?: boolean
+    bordered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     tabs: () => [],
-    value: undefined,
     defaultValue: undefined,
     showLineNumbers: true,
-    copyAriaLabel: 'Copy code',
-    copyable: true,
+    copyAriaLabel: '',
+    copyable: undefined,
+    kind: 'code',
+    showLabel: false,
+    title: '',
     animateLines: false,
-    border: true
+    bordered: true
   })
 
   const emit = defineEmits<{
-    'update:value': [value: string]
     copy: [code: string]
   }>()
 
-  const valueModel = defineModel<string | undefined>('value', { default: undefined })
+  const valueModel = defineModel<string | undefined>({ default: undefined })
 
   defineSlots<{
     /** Leading mark of a tab in the tab strip; receives the tab. */
@@ -98,6 +111,8 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ codeBlock: en.codeBlock })
   const tabListRef = ref<HTMLElement | null>(null)
   const tabRefs = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
@@ -117,12 +132,12 @@
     props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
   )
 
-  const isControlled = computed(() => valueModel.value !== undefined || props.value !== undefined)
+  const isControlled = computed(() => valueModel.value !== undefined)
 
   const activeValue = computed({
     get: () => {
       if (isControlled.value) {
-        return valueModel.value ?? props.value ?? ''
+        return valueModel.value ?? ''
       }
 
       return internalValue.value
@@ -133,7 +148,6 @@
       }
 
       valueModel.value = next
-      emit('update:value', next)
     }
   })
 
@@ -154,6 +168,28 @@
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
 
+  const isOutput = computed(() => props.kind === 'output')
+
+  const canCopy = computed(() => props.copyable ?? !isOutput.value)
+
+  const showLabelBar = computed(
+    () =>
+      Boolean(activeTab.value) &&
+      !showTabHeader.value &&
+      !showFileNameBar.value &&
+      (props.showLabel || isOutput.value || Boolean(props.title))
+  )
+
+  const labelText = computed(() => {
+    if (props.title) return props.title
+    if (isOutput.value) return t('codeBlock.output')
+    return activeTab.value?.label || languageName(activeTab.value?.language)
+  })
+
+  const copyValue = computed(() =>
+    activeTab.value ? stripShellPrompts(activeTab.value.code, activeTab.value.language) : ''
+  )
+
   const showDiffGutter = computed(() => (activeTab.value?.lineChanges?.length ?? 0) > 0)
 
   const activeLineChangeMap = computed(() => buildLineChangeMap(activeTab.value?.lineChanges))
@@ -167,8 +203,13 @@
       return [] as CodeBlockHighlightToken[][]
     }
 
-    return highlightCode(activeTab.value.code, activeTab.value.language)
+    return isOutput.value
+      ? plainLines(activeTab.value.code)
+      : highlightCode(activeTab.value.code, activeTab.value.language)
   })
+
+  const { split: splitLines, observe: observeLineChunk } = useLazyChunks({ rowHeight: 24 })
+  const lineChunks = computed(() => splitLines(highlightedLines.value))
 
   const getLineState = (lineNumber: number): CodeBlockLineState =>
     resolveLineState(lineNumber, activeLineChangeMap.value, activeTab.value?.highlightedLine)
@@ -176,6 +217,7 @@
   const indicatorTransitionStyle = computed(() => getCodeBlockIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
+    left: '0',
     width: `${indicatorWidth.value}px`,
     transform: `translate3d(${indicatorOffsetX.value}px, 0, 0)`
   }))
@@ -198,15 +240,21 @@
       : codeBlockLineEnterMotion.offsetClass
   )
 
-  const getLineMotionClasses = (lineIndex: number) =>
-    cn(
-      lineMotionMode.value &&
-        'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-      lineMotionMode.value &&
-        (linesMotionReady.value && lineIndex < revealedLines.value
-          ? 'translate-x-0 opacity-100'
-          : cn(lineEnterOffsetClass.value, 'opacity-0'))
-    )
+  const lineMotion = computed(() => {
+    if (!lineMotionMode.value) return null
+    const motion =
+      'transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none'
+    return {
+      shown: cn(motion, 'translate-x-0 opacity-100'),
+      hidden: cn(motion, lineEnterOffsetClass.value, 'opacity-0')
+    }
+  })
+
+  const getLineMotionClasses = (lineIndex: number) => {
+    const motion = lineMotion.value
+    if (!motion) return ''
+    return linesMotionReady.value && lineIndex < revealedLines.value ? motion.shown : motion.hidden
+  }
 
   const getLineMotionStyle = (lineIndex: number) => {
     if (lineMotionMode.value === 'swap') {
@@ -349,7 +397,9 @@
       return
     }
 
-    if (event.key === 'ArrowRight') {
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
       event.preventDefault()
       const next = getNextTabValue(1)
 
@@ -361,7 +411,7 @@
       return
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (key === 'ArrowLeft') {
       event.preventDefault()
       const next = getNextTabValue(-1)
 
@@ -553,14 +603,37 @@
   <div
     :class="
       cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
         attrs.class as string | undefined
       )
     "
-    :data-border="border || null"
-    :data-copyable="copyable || null"
+    :data-border="bordered || null"
+    :data-copyable="canCopy || null"
+    :data-kind="kind"
     :data-testid="testId"
   >
+    <div
+      v-if="showLabelBar"
+      class="flex h-10 shrink-0 items-center gap-(--spacing-xs) overflow-hidden border-b border-(--border-default) px-(--spacing-sm)"
+      :data-testid="`${testId}__label`"
+    >
+      <i
+        :class="
+          cn(
+            'text-label-code-sm shrink-0 text-(--text-muted)',
+            isOutput ? 'pi pi-align-left' : 'pi pi-code'
+          )
+        "
+        aria-hidden="true"
+      />
+      <span
+        class="text-label-code-sm min-w-0 flex-1 truncate text-(--text-muted)"
+        :data-testid="`${testId}__label-text`"
+      >
+        {{ labelText }}
+      </span>
+    </div>
+
     <div
       v-if="showTabHeader"
       class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)"
@@ -574,7 +647,7 @@
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute inset-y-0 left-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -648,14 +721,14 @@
       @transitionend="onContentTransitionEnd"
     >
       <div
-        v-if="copyable"
-        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
+        v-if="canCopy"
+        class="absolute end-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >
         <CopyButton
-          :value="activeTab?.code ?? ''"
-          :ariaLabel="copyAriaLabel"
+          :value="copyValue"
+          :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
           kind="outlined"
           size="small"
           :data-testid="`${testId}__copy`"
@@ -666,7 +739,10 @@
       <ScrollArea
         orientation="both"
         :class="
-          cn('min-h-0 min-w-0 flex-1 py-(--spacing-sm)', 'focus-visible:ring-offset-(--bg-surface)')
+          cn(
+            'min-h-0 min-w-0 flex-1 py-(--spacing-sm) in-data-[copyable]:pe-10',
+            'focus-visible:ring-offset-(--bg-surface)'
+          )
         "
         :data-testid="`${testId}__scroll`"
       >
@@ -679,66 +755,77 @@
           :data-testid="`${testId}__panel`"
         >
           <div
+            dir="ltr"
             class="flex min-w-full w-max flex-col"
             :data-testid="`${testId}__lines`"
           >
-            <div
-              v-for="(lineTokens, lineIndex) in highlightedLines"
-              :key="`${activeTab.value}-${panelVersion}-${lineIndex}`"
-              :class="
-                cn(
-                  'group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm',
-                  'data-[state=added]:bg-(--success) data-[state=removed]:bg-(--danger) data-[state=highlighted]:bg-(--info)',
-                  getLineMotionClasses(lineIndex)
-                )
-              "
-              :style="getLineMotionStyle(lineIndex)"
-              :data-testid="`${testId}__line`"
-              :data-state="getLineState(lineIndex + 1)"
+            <template
+              v-for="chunk in lineChunks"
+              :key="chunk.index"
             >
-              <span
-                class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+              <div
+                v-if="!chunk.mounted"
+                :ref="(el) => observeLineChunk(el, chunk.index)"
+                :data-chunk="chunk.index"
                 aria-hidden="true"
+                class="shrink-0"
+                :style="{ height: `${chunk.estimatedHeight}px` }"
               />
-              <span
-                v-if="showDiffGutter"
-                class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
-                :data-testid="`${testId}__diff-marker`"
-                aria-hidden="true"
-              >
-                {{ getDiffMarker(getLineState(lineIndex + 1)) }}
-              </span>
-              <span
-                v-if="showLineNumbers"
-                class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
-                :data-testid="`${testId}__line-number`"
-              >
-                {{ formatLineNumber(lineIndex + 1) }}
-              </span>
-              <code
-                class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pr-(--spacing-sm) group-data-[copyable]/code-block:pr-11"
-                :data-testid="`${testId}__line-content`"
-              >
-                <span
-                  v-for="(token, tokenIndex) in lineTokens"
-                  :key="tokenIndex"
-                  :class="getHighlightTokenClass(token.type)"
+              <template v-else>
+                <div
+                  v-for="(lineTokens, offset) in chunk.items"
+                  :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
+                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
+                  :class="getLineMotionClasses(chunk.start + offset)"
+                  :style="getLineMotionStyle(chunk.start + offset)"
+                  :data-testid="`${testId}__line`"
+                  :data-state="getLineState(chunk.start + offset + 1)"
                 >
-                  {{ token.text }}
-                </span>
-              </code>
-              <span
-                v-if="getLineState(lineIndex + 1) !== 'default'"
-                :class="
-                  cn(
-                    'pointer-events-none absolute bottom-0 left-0 top-0 z-2 w-[2px]',
-                    'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
-                  )
-                "
-                aria-hidden="true"
-                :data-testid="`${testId}__line-indicator`"
-              />
-            </div>
+                  <span
+                    class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                  <span
+                    v-if="showDiffGutter"
+                    class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
+                    :data-testid="`${testId}__diff-marker`"
+                    aria-hidden="true"
+                  >
+                    {{ getDiffMarker(getLineState(chunk.start + offset + 1)) }}
+                  </span>
+                  <span
+                    v-if="showLineNumbers"
+                    class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
+                    :data-testid="`${testId}__line-number`"
+                  >
+                    {{ formatLineNumber(chunk.start + offset + 1) }}
+                  </span>
+                  <code
+                    class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
+                    :data-testid="`${testId}__line-content`"
+                  >
+                    <span
+                      v-for="(token, tokenIndex) in lineTokens"
+                      :key="tokenIndex"
+                      :class="getHighlightTokenClass(token.type)"
+                    >
+                      {{ token.text }}
+                    </span>
+                  </code>
+                  <span
+                    v-if="getLineState(chunk.start + offset + 1) !== 'default'"
+                    :class="
+                      cn(
+                        'pointer-events-none absolute bottom-0 start-0 top-0 z-2 w-[2px]',
+                        'group-data-[state=added]:bg-(--success-border) group-data-[state=removed]:bg-(--danger-border) group-data-[state=highlighted]:bg-(--info-border)'
+                      )
+                    "
+                    aria-hidden="true"
+                    :data-testid="`${testId}__line-indicator`"
+                  />
+                </div>
+              </template>
+            </template>
           </div>
         </div>
       </ScrollArea>

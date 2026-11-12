@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Avatar from '../../avatar/avatar.vue'
+  import Avatar from '../../content/avatar/avatar.vue'
 
   defineOptions({
     name: 'Quote',
@@ -161,7 +161,7 @@
         >
           <span
             v-if="name"
-            class="px-(--spacing-xxs) text-(--primary)"
+            class="px-(--spacing-xxs) text-(--text-primary)"
             >{{ name }}</span
           >
           <span

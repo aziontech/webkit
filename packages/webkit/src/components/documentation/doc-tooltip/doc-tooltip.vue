@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement/index.js'
   import Link from '../../navigation/link/link.vue'
 
@@ -17,9 +18,9 @@
     /** The definition shown inside the panel. */
     tip?: string
     /** Bold lead-in above the definition — usually the term itself. */
-    headline?: string
+    title?: string
     /** Label for the panel's call-to-action link. Needs `href`. */
-    cta?: string
+    linkLabel?: string
     /** Destination for the call-to-action link. */
     href?: string
     /** Where the panel opens; `'auto'` picks the side with the most room. */
@@ -32,8 +33,8 @@
 
   const props = withDefaults(defineProps<Props>(), {
     tip: '',
-    headline: '',
-    cta: '',
+    title: '',
+    linkLabel: '',
     href: '',
     placement: 'top',
     delay: 150,
@@ -51,7 +52,7 @@
 
   const uid = useId()
   const panelId = `${uid}-tooltip`
-  const headlineId = `${uid}-headline`
+  const titleId = `${uid}-title`
   const tipId = `${uid}-tip`
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
@@ -61,12 +62,12 @@
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const open = ref(false)
 
-  const interactive = computed(() => props.cta.length > 0 && props.href.length > 0)
-  const hasContent = computed(() => props.tip.length > 0 || props.headline.length > 0)
+  const interactive = computed(() => props.linkLabel.length > 0 && props.href.length > 0)
+  const hasContent = computed(() => props.tip.length > 0 || props.title.length > 0)
 
   const isOpen = computed(() => open.value && hasContent.value)
 
-  const labelledBy = computed(() => (props.headline ? headlineId : tipId))
+  const labelledBy = computed(() => (props.title ? titleId : tipId))
   const placementRef = computed(() => props.placement)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
@@ -166,6 +167,8 @@
     clearTimers()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -180,7 +183,7 @@
     :aria-describedby="isOpen && !interactive ? panelId : undefined"
     :aria-expanded="interactive ? isOpen : undefined"
     :aria-controls="interactive && isOpen ? panelId : undefined"
-    class="m-0 cursor-help rounded-(--shape-flat) border-0 bg-transparent p-0 text-left text-(--text-default) underline decoration-dotted decoration-(--border-strong) underline-offset-4 transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) data-[state=open]:decoration-(--text-default) motion-reduce:transition-none"
+    class="m-0 cursor-help rounded-(--shape-flat) border-0 bg-transparent p-0 text-start text-(--text-default) underline decoration-dotted decoration-(--border-strong) underline-offset-4 transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) data-[state=open]:decoration-(--text-default) motion-reduce:transition-none"
     @mouseenter="scheduleOpen"
     @mouseleave="scheduleClose"
     @focusin="scheduleOpen"
@@ -198,6 +201,8 @@
     >
       <div
         v-if="isOpen"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="panelId"
         ref="panelRef"
         data-doc-chrome
@@ -215,23 +220,23 @@
         @keydown="onPanelKeydown"
       >
         <span
-          v-if="headline"
-          :id="headlineId"
+          v-if="title"
+          :id="titleId"
           class="text-body-sm text-(--text-default)"
         >
-          {{ headline }}
+          {{ title }}
         </span>
         <span
           v-if="tip"
           :id="tipId"
-          :data-headline="Boolean(headline) || null"
-          class="text-pretty text-body-sm text-(--text-muted) data-[headline]:pt-(--spacing-xxs)"
+          :data-title="Boolean(title) || null"
+          class="text-pretty text-body-sm text-(--text-muted) data-[title]:pt-(--spacing-xxs)"
         >
           {{ tip }}
         </span>
         <Link
           v-if="interactive"
-          :label="cta"
+          :label="linkLabel"
           :href="href"
           size="small"
           icon="pi pi-chevron-right"

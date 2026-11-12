@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Single control only — labels are supplied by the consumer (aria-label here for demo). Selecting it emits its `value`; share a `name` and one `v-model` across instances for a mutually exclusive group.",
+   "sfc": "<script setup>\n  import RadioButton from '@aziontech/webkit/radio-button'\n  import { ref } from 'vue'\n\n  const selected = ref('')\n</script>\n\n<template>\n  <RadioButton\n    v-model=\"selected\"\n    name=\"webkit-radio\"\n    value=\"a\"\n    input-id=\"webkit-radio-a\"\n    aria-label=\"Option A\"\n  />\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled selected and unselected controls sharing one group name, without label chrome.",
+   "sfc": "<script setup>\n  import RadioButton from '@aziontech/webkit/radio-button'\n  import { ref } from 'vue'\n\n  const selected = ref('a')\n</script>\n\n<template>\n  <fieldset class=\"flex items-center gap-(--spacing-4) border-0 p-0 m-0\">\n    <RadioButton\n      v-model=\"selected\"\n      name=\"webkit-radio-disabled\"\n      value=\"a\"\n      disabled\n      input-id=\"webkit-radio-disabled-a\"\n      aria-label=\"Disabled selected\"\n    />\n    <RadioButton\n      v-model=\"selected\"\n      name=\"webkit-radio-disabled\"\n      value=\"b\"\n      disabled\n      input-id=\"webkit-radio-disabled-b\"\n      aria-label=\"Disabled unselected\"\n    />\n  </fieldset>\n</template>"
+  }
+ ]
+}

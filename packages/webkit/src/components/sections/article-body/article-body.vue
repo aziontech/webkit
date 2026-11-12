@@ -6,8 +6,8 @@
   import SplitButton from '../../actions/split-button/split-button.vue'
   import DocOnThisPage from '../../documentation/doc-on-this-page/doc-on-this-page.vue'
   import DocProse from '../../documentation/doc-prose/doc-prose.vue'
-  import Divider from '../../layout/divider/divider.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import Separator from '../../layout/separator/separator.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import SectionContainer from '../../marketing/section-container/section-container.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -253,7 +253,7 @@
               </div>
             </header>
 
-            <Divider class="lg:col-start-2" />
+            <Separator class="lg:col-start-2" />
 
             <article
               class="min-w-0 lg:col-start-2 [&_h2]:scroll-mt-(--spacing-xxl) [&_h3]:scroll-mt-(--spacing-xxl)"

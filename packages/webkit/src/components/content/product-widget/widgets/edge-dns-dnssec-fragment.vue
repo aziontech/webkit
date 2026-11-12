@@ -2,8 +2,8 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
+  import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
   import Switch from '../../../inputs/switch/switch.vue'
   import Item from '../../item/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -186,7 +186,7 @@
                   </Item.Content>
                   <Item.Actions class="w-full justify-start">
                     <InputGroupRoot class="w-full">
-                      <InputText
+                      <Input
                         :model-value="key.value"
                         size="medium"
                         class="flex-1 font-code"

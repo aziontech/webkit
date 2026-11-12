@@ -1,0 +1,28 @@
+{
+ "purpose": "The side panel that shows one generated artifact in full next to the conversation: a SQL file, a configuration, a table of results, a document. A header names it (title, meta, Close), a toolbar pages through its versions with `ResponseBranches` and offers Copy and Download, and the body scrolls on its own. It is the full view behind `ArtifactPreview`'s Open: the preview sits in the message, the canvas beside the thread. The owner places it in a `Resizable` pane, so the reader can widen it, narrow it or collapse it from the keyboard; the canvas fills whatever the pane gives it. Benchmarks: the artifact or canvas panel of chat assistants (a document beside the thread with versions), Cloudscape's split panel (a resizable side region with its own header and close).",
+ "useWhen": [
+  "An assistant answer produced something longer than a message can show: a file, a long query, a table, a document the reader will copy or keep.",
+  "The reader asks for changes to that thing and each answer makes a new version to compare with the earlier ones.",
+  "The reader reads the artifact and keeps chatting at the same time."
+ ],
+ "avoidWhen": [
+  "A short snippet that fits the message → `CodeBlock` or `ArtifactPreview` inside `ChatMessage`.",
+  "A setting or a form the reader must fill → `Drawer` with the form.",
+  "Help text about the page → `HelpPanel`.",
+  "A narrow screen: show the same canvas in a full-height `Drawer` instead of a side pane (see Responsive)."
+ ],
+ "related": [
+  "artifact-preview` — the card in the message; its Open opens this canvas.",
+  "response-branches` — the version pager the toolbar reuses.",
+  "resizable` — the split the owner puts the canvas in (pane, handle, collapse).",
+  "chat-message`, `conversation` — the thread beside the canvas.",
+  "copy-button` — the Copy control."
+ ],
+ "bestPractices": [
+  "Open the canvas from `ArtifactPreview`'s Open, then call `focus()` so the reader lands on its title; on Close return focus to the Open that opened it.",
+  "Put it in a `Resizable.Pane` with a `min` that keeps the toolbar on one row (about 320 px) and a handle named after the canvas (`Resize the artifact`).",
+  "Show the newest version when a new one finishes (set `v-model:version` to the last index); while it is generated set `streaming`, which locks the pager and marks the body busy.",
+  "Keep Copy and Download about the version shown; `copyValue` and `downloadHref` change with `version`.",
+  "One canvas at a time. Opening another artifact replaces the content and keeps the pane width."
+ ]
+}

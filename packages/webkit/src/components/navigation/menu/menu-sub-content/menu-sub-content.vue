@@ -63,7 +63,7 @@
   const enterFromClass = computed(() =>
     wasRestored.value && !ctx.enterOnMount.value
       ? ''
-      : 'motion-safe:translate-x-full! motion-safe:opacity-0'
+      : 'motion-safe:translate-x-full! rtl:motion-safe:-translate-x-full! motion-safe:opacity-0'
   )
 
   const motion = computed(() => {
@@ -77,10 +77,10 @@
     'relative m-0 flex w-full list-none flex-col p-0 ' +
     '[--menu-indent:calc(var(--spacing-sm)+var(--spacing-xs))] ' +
     '[--menu-rail-x:var(--spacing-sm)] ' +
-    'pl-(--menu-indent) ' +
+    'ps-(--menu-indent) ' +
     '[&>li]:relative ' +
-    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--menu-indent)-var(--menu-rail-x))] [&>li]:before:rounded-bl-(--shape-elements) [&>li]:before:border-b [&>li]:before:border-l [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
-    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:left-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:after:w-0 [&>li]:after:border-l [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
+    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:start-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--menu-indent)-var(--menu-rail-x))] [&>li]:before:rounded-es-(--shape-elements) [&>li]:before:border-b [&>li]:before:border-s [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
+    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:start-[calc(var(--menu-rail-x)-var(--menu-indent))] [&>li]:after:w-0 [&>li]:after:border-s [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
     '[&>li:last-child]:after:hidden'
 
   const DRILL_CLASS =
@@ -92,6 +92,8 @@
     'data-[state=closed]:absolute data-[state=closed]:inset-x-0 data-[state=closed]:top-0 ' +
     'data-[state=closed]:-translate-x-full ' +
     'data-[state=closed]:data-[motion=pop]:translate-x-full ' +
+    'rtl:data-[state=closed]:translate-x-full ' +
+    'rtl:data-[state=closed]:data-[motion=pop]:-translate-x-full ' +
     'data-[state=closed]:opacity-0 ' +
     'data-[state=closed]:motion-reduce:hidden ' +
     'motion-reduce:transition-none motion-reduce:transform-none'

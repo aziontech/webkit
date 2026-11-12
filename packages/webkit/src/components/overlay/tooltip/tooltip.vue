@@ -2,7 +2,9 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
+  import { triggerControl } from '../../../utils/trigger-control'
 
   export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
   export type TooltipPlacementInput = TooltipPlacement | 'auto'
@@ -122,6 +124,22 @@
   }
 
   watch(
+    () => (isOpen.value && props.text ? tooltipId.value : ''),
+    (id) => {
+      const host = triggerRef.value
+      if (!host) return
+      const el = triggerControl(host)
+      const ids = (el.getAttribute('aria-describedby') ?? '')
+        .split(' ')
+        .filter((token) => token && token !== tooltipId.value)
+      if (id) ids.push(id)
+      if (ids.length) el.setAttribute('aria-describedby', ids.join(' '))
+      else el.removeAttribute('aria-describedby')
+    },
+    { flush: 'post' }
+  )
+
+  watch(
     () => props.text,
     () => {
       if (isOpen.value) updatePosition()
@@ -136,6 +154,8 @@
     clearHoverTimer()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -147,7 +167,6 @@
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="disabled || null"
     :data-placement="resolvedPlacementRef"
-    :aria-describedby="isOpen && text ? tooltipId : undefined"
     @mouseenter="scheduleOpen"
     @mouseleave="closeTooltip"
     @focusin="setOpen(true)"
@@ -165,6 +184,8 @@
     >
       <div
         v-if="isOpen && text"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :id="tooltipId"
         ref="panelRef"
         role="tooltip"

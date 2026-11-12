@@ -1,0 +1,26 @@
+{
+  "component": "logo-wall",
+  "title": "Components/Marketing/Primitives/LogoWall",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Web Apps band: six linked customer marks on the start edge, one of those customers speaking on the end edge. Each cell is a `card-grid` frame cell and a whole-square link to that customer’s success case — hover or `Tab` to one and a wash rises behind it, the mark lifts, and `Read story` slides in underneath. From `lg` up the band splits: the wall sits in half the width, two to a row until `xl` and three from it, and the quote is centred beside it in a panel that never sets the band’s height, so the cells stay perfect squares whatever the quotation’s length. Beside a quote the wall takes exactly six marks. iFood and Itaú carry `shape: 'compact'`, which sets a near-square mark taller so it reads at the same weight as the wordmarks. The wall assumes a surrounding `frame-box` draws its outer rules, which is why the snippet includes one.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Wall",
+      "summary": "With nothing in `aside` the wall spans the full width, six to a row from `lg` — the same cell size as the three-column wall beside a quote, so the two layouts share one rhythm. Twelve marks fill two full rows; give the wall a multiple of six here so the last row is never ragged. Empty the `items` control and the band renders nothing rather than an empty frame.",
+      "file": "wall.vue"
+    },
+    {
+      "name": "Rectangle",
+      "summary": "Nine customers beside one of them speaking. `kind: 'rectangle'` sets every cell at 3:2, and beside `aside` the wall holds three columns from `lg`, so three rows of rectangles take exactly the height two rows of squares do — the band grows by three names without growing taller. Below `sm` the wall keeps three columns, so nine marks never leave a ragged row. Every mark links to its story, so hover or `Tab` reveals `Read story` under it.",
+      "file": "rectangle.vue"
+    },
+    {
+      "name": "Unlinked",
+      "summary": "Without an `href` a cell is only its mark: no wash, no lift, no label, and no tab stop — `Tab` walks straight past the wall. Link a mark only when there is somewhere worth going; a wall of links to nowhere costs a reader a tab stop per cell and gives nothing back.",
+      "file": "unlinked.vue"
+    }
+  ]
+}

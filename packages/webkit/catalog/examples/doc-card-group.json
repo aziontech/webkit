@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Two linked cards on the default two-column grid. The frame belongs to the group; the hairline between the cells is the shared 1px gap, painted by the cells themselves.",
+   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n  import DocCardGroup from '@aziontech/webkit/doc-card-group'\n</script>\n\n<template>\n  <DocCardGroup :cols=\"2\">\n    <DocCard\n      title=\"Start from a template\"\n      icon=\"pi pi-th-large\"\n      href=\"#templates\"\n    >\n      Ready-made projects that go live in a few clicks. No local tooling.\n    </DocCard>\n    <DocCard\n      title=\"Import from GitHub\"\n      icon=\"pi pi-github\"\n      href=\"#github\"\n    >\n      Connect a repository and let Azion build it on every push.\n    </DocCard>\n  </DocCardGroup>\n</template>"
+  },
+  {
+   "name": "Columns",
+   "summary": "The `cols` axis at three: one column on a phone, two at the small breakpoint, three at the large one. The ring-per-cell rules stay correct at every width, and an incomplete last row is simply empty rather than a rule-coloured hole.",
+   "sfc": "<script setup>\n  import DocCard from '@aziontech/webkit/doc-card'\n  import DocCardGroup from '@aziontech/webkit/doc-card-group'\n</script>\n\n<template>\n  <DocCardGroup :cols=\"3\">\n    <DocCard\n      title=\"Start from a template\"\n      icon=\"pi pi-th-large\"\n      href=\"#templates\"\n    >\n      Ready-made projects that go live in a few clicks. No local tooling.\n    </DocCard>\n    <DocCard\n      title=\"Import from GitHub\"\n      icon=\"pi pi-github\"\n      href=\"#github\"\n    >\n      Connect a repository and let Azion build it on every push.\n    </DocCard>\n    <DocCard\n      title=\"Deploy with the CLI\"\n      icon=\"pi pi-desktop\"\n      href=\"#cli\"\n    >\n      Ship the project already open in your editor.\n    </DocCard>\n  </DocCardGroup>\n</template>"
+  }
+ ]
+}

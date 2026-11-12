@@ -2,14 +2,14 @@
 name: quote-tabs
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
-checksum: c637a814bbe9c49a87249efffa70c5439ef8fb38536111cea77a919361fc25a4
+checksum: c64bc4557e210a1ca8e9cb4c843cf74cbf2e412880a8fcc9b8a5e18e32ebe509
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Quote Tabs — Component Spec
@@ -31,7 +31,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - For several quotations read side by side or swiped through → use `quote-carousel`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `ticker`.
-- For switching a page's content between views → use `tab-view`.
+- For switching a page's content between views → use `tabs`.
 
 ## Related
 
@@ -48,14 +48,14 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.
 - Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.
 - Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.
-- Keep each quotation readable inside `autoPlayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoPlay` off when the band sits beside other moving content.
+- Keep each quotation readable inside `autoplayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoplay` off when the band sits beside other moving content.
 
 ## Usage
 
 ```vue
 <script setup>
-import Button from '@aziontech/webkit/button'
-import QuoteTabs from '@aziontech/webkit/quote-tabs'
+  import Button from '@aziontech/webkit/button'
+  import QuoteTabs from '@aziontech/webkit/quote-tabs'
 </script>
 
 <template>
@@ -101,19 +101,19 @@ import QuoteTabs from '@aziontech/webkit/quote-tabs'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `QuoteTabsItem[]` | `[]` | false | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the wall of client cards. |
-| `autoPlay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
-| `autoPlayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
-| `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
+| Prop               | Type              | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                            |
+| ------------------ | ----------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `QuoteTabsItem[]` | `[]`    | false    | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
+| `ariaLabel`        | `string`          | `''`    | false    | Accessible name for the wall of client cards.                                                                                                                                                                                                                                                                    |
+| `autoplay`         | `boolean`         | `true`  | false    | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion.                                                                                                                                                      |
+| `autoplayInterval` | `number`          | `5000`  | false    | Milliseconds each client is held before the band advances.                                                                                                                                                                                                                                                       |
+| `showProgress`     | `boolean`         | `true`  | false    | Advances a hairline along the quotation panel's bottom edge while the timer runs.                                                                                                                                                                                                                                |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                 |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected client, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first card. A click, an arrow key or the timer writes the new index back. |
 
 ## Events
 
@@ -121,9 +121,9 @@ _No plain events — selection flows through `v-model`._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `actions` | — | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
+| Slot      | Scope | Notes                                                                                                                                                                                    |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions` | —     | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
 
 ## States
 
@@ -135,7 +135,7 @@ _No plain events — selection flows through `v-model`._
 - The panel renders every item's `quote` with `kind="highlight"` in one shared grid cell; only the selected one is visible, and the others are transparent (`opacity-0`), `inert` and `aria-hidden`. The panel is therefore always as tall as the tallest quotation, so its height never changes between clients or during a change. They are hidden by opacity, never by `visibility: hidden`: a registry mark's SVG clip path is resolved by id from its first copy in the document, and a clip path inside a `visibility: hidden` subtree clips every copy of that mark to nothing
 - The visible quotation fills that held height, and `quote` gives the slack to the quotation itself, so the attribution and the `actions` control sit on the same line for every client and a change of client never moves them
 - `data-direction` on the panel is `forward` when the new card sits after the previous one in the wall and `back` when it sits before it; an arrow key that wraps keeps its own direction (`ArrowRight` from the last card to the first is `forward`, `ArrowLeft` from the first to the last is `back`). It decides which side the quotations travel to and from
-- `data-autoplay` marks the root while the timer runs. It runs when `autoPlay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
+- `data-autoplay` marks the root while the timer runs. It runs when `autoplay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
 - Every change of client restarts the count, whether the timer, a click, an arrow key or a bound `modelValue` made it; clicking the selected card restarts it too, and a click keeps the timer running with the pointer still on the band. The timer moves to the next card and wraps from the last to the first, travelling `forward`
 - While the timer runs and `showProgress` is on, a `--primary` hairline grows along the panel's bottom edge, across the panel's full width rather than the quotation's padded column, and reaches the right edge as the band advances; it is decorative and `aria-hidden`
 - During a change the leaving quotation travels out first and the entering one travels in once it has gone, both within that same cell, so two quotations never overlap and the wall below never moves
@@ -147,36 +147,36 @@ _No plain events — selection flows through `v-model`._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
-| selection change — quotation leaving | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity | `moderate-01` (150ms) + `productive-exit` | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly) |
-| selection change (card) | `transition-colors duration-moderate-01 ease-out` | `moderate-01` (150ms) | `motion-reduce:transition-none` |
-| autoplay progress | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoPlayInterval` | `fast-01` (70ms) + linear | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
-| hover (card) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer | `fast-02` (110ms) + `productive-entrance` | `motion-reduce:before:transition-none` |
+| Trigger                                                               | Animation / Transition                                                                                                                                            | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                  |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| selection change — quotation entering, after the leaving one has gone | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance`, from one `--spacing-xl` to the right (`forward`) or left (`back`) at zero opacity | `moderate-01` (150ms) + `productive-entrance`     | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
+| selection change — quotation leaving                                  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`, to one `--spacing-xl` to the left (`forward`) or right (`back`) at zero opacity       | `moderate-01` (150ms) + `productive-exit`         | `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` (swaps instantly)   |
+| selection change (card)                                               | `transition-colors duration-moderate-01 ease-out`                                                                                                                 | `moderate-01` (150ms)                             | `motion-reduce:transition-none`                                                                          |
+| autoplay progress                                                     | `transition-[width] duration-fast-01 ease-linear` on the hairline, its width set from the elapsed share of `autoplayInterval`                                     | `fast-01` (70ms) + linear                         | `motion-reduce:transition-none` (and the timer never runs under reduced motion, so no hairline is drawn) |
+| hover (card)                                                          | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` on the ghost layer                                                            | `fast-02` (110ms) + `productive-entrance`         | `motion-reduce:before:transition-none`                                                                   |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| panel surface | `var(--bg-canvas)` |
+| Region                                       | Token (DESIGN.md)       |
+| -------------------------------------------- | ----------------------- |
+| panel surface                                | `var(--bg-canvas)`      |
 | panel frame, corner marks and card hairlines | `var(--border-default)` |
-| resting card surface | `var(--bg-surface)` |
-| selected card surface | `var(--bg-selected)` |
-| hovered card surface (ghost layer) | `var(--bg-hover)` |
-| one-ink mark | `var(--text-default)` |
-| progress hairline | `var(--primary)` |
-| typography (mark fallback) | `.text-heading-xxs` |
-| spacing (card inset, x) | `var(--spacing-md)` |
-| spacing (panel inset, every side) | `var(--spacing-xl)` |
-| spacing (quotation travel) | `var(--spacing-xl)` |
-| ring | `var(--ring-color)` |
+| resting card surface                         | `var(--bg-surface)`     |
+| selected card surface                        | `var(--bg-selected)`    |
+| hovered card surface (ghost layer)           | `var(--bg-hover)`       |
+| one-ink mark                                 | `var(--text-default)`   |
+| progress hairline                            | `var(--primary)`        |
+| typography (mark fallback)                   | `.text-heading-xxs`     |
+| spacing (card inset, x)                      | `var(--spacing-md)`     |
+| spacing (panel inset, every side)            | `var(--spacing-xl)`     |
+| spacing (quotation travel)                   | `var(--spacing-xl)`     |
+| ring                                         | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -185,10 +185,18 @@ _No plain events — selection flows through `v-model`._
 - ARIA: only the selected quotation is exposed; the others in the panel's cell are `inert` (so never focusable or reachable) and `aria-hidden` (so never announced). The wall is a `role="tablist"` named by `ariaLabel`; each card is a native `<button role="tab">` named by the client's name through `aria-label`, with `aria-selected` and `aria-controls` pointing at the panel; the card's artwork is decorative (`alt=""` or `aria-hidden`), since the name is its label. The panel is `role="tabpanel"` with `tabindex="0"` and `aria-labelledby` pointing at the selected card; its colour logo carries the client name as its alternative text, and a one-ink mark is `aria-hidden` with the quotation's attribution naming the company. Ids come from `useId()`. The leaving quotation stays `aria-hidden` while it travels out, so a screen reader reads one quotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): colour logos are logotypes, exempt under WCAG 1.4.11, and are drawn as the consumer supplies them; the name fallback is `var(--text-default)` on both card surfaces.
 - `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` on the travelling quotation (the zero duration is what lets the out-in swap finish at once instead of waiting out the leave), `motion-reduce:transition-none` on the card surface and `motion-reduce:before:transition-none` on its ghost layer; under reduced motion the band never advances on its own.
-- Pause (WCAG 2.2.2): the timer stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoPlay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
+- Pause (WCAG 2.2.2): the timer stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoplay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
 - Touch target ≥40×40 px: each card is a full 3:2 cell of the wall, well above 40px on every breakpoint.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous quote, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Motion: the panel slides in from the end edge when moving forward and from the start edge when moving back (`rtl:` flips the `translate-x`).
+- User data: quotes and names in another script keep their own direction.
+
+## Examples
 
 - Default — with a secondary `Button` in the `actions` slot
 - Fallback — a client with neither a colour logo nor a registered mark, so its card and its panel write the client's name as the mark (justified: the wordmark is a rendered state no prop toggles, and it is what lets a page add a client before its artwork lands)
@@ -206,10 +214,8 @@ _No plain events — selection flows through `v-model`._
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

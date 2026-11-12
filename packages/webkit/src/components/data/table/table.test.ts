@@ -1,9 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { defineComponent, ref } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/data/table/Table.stories'
+import Composition from '../../../../examples/table/composition.vue'
+import Default from '../../../../examples/table/default.vue'
+import Empty from '../../../../examples/table/empty.vue'
+import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
+import { useCollection } from '../../../composables/use-collection'
+import { expectNoA11yViolations } from '../../../test/axe'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
@@ -15,8 +19,6 @@ import TableRow from './table-row/table-row.vue'
 import TableSearch from './table-search/table-search.vue'
 import TableSortButton from './table-sort-button/table-sort-button.vue'
 import TableToolbar from './table-toolbar/table-toolbar.vue'
-
-const { Default, Composition, WithCheckboxes, Empty } = composeStories(stories)
 
 // A small, stable dataset used across data-driven tests.
 const rows = [
@@ -135,11 +137,99 @@ describe('Table (composition + data-driven)', () => {
       expect(getByTestId('my-table__body')).toBeTruthy()
       expect(getByTestId('my-table__cell')).toBeTruthy()
     })
-    // NOTE: an axe pass on the composed tree is intentionally omitted — see the
-    // notes in the run summary. The component nests the ScrollArea viewport
-    // (a `div[tabindex]` with no ARIA role) directly inside `role="table"`,
-    // which axe flags as `aria-required-children` (critical). This is a real
-    // component defect, not a test artifact; the .vue is not edited here.
+    it('keeps the toolbar, scroll viewport, empty state and pagination outside role="table"', async () => {
+      const view = render(Table, {
+        attrs: { 'aria-label': 'Domains' },
+        props: {
+          data: Array.from({ length: 12 }, (_, i) => ({ id: String(i), name: `Row ${i}` })),
+          columns: [{ accessorKey: 'name', header: 'Name' }],
+          paginated: true,
+          pageSize: 5,
+          enableRowSelection: true
+        },
+        slots: { toolbar: '<button type="button">Refresh</button>' }
+      })
+      const table = view.getByRole('table')
+      expect(table.getAttribute('aria-label')).toBe('Domains')
+      expect(view.getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+      expect(table.contains(view.getByTestId('data-table__viewport'))).toBe(false)
+      expect(table.contains(view.getByRole('navigation'))).toBe(false)
+      expect(table.contains(view.getByText('Refresh'))).toBe(false)
+      await expectNoA11yViolations(view.container)
+
+      const empty = render(Table, {
+        props: { data: [], columns: [{ accessorKey: 'name', header: 'Name' }] }
+      })
+      const emptyTable = empty.getAllByRole('table').at(-1) as HTMLElement
+      expect(emptyTable.contains(empty.getByTestId('data-table__empty'))).toBe(false)
+      await expectNoA11yViolations(empty.container)
+    })
+
+    describe('accessibility — the table owns only its caption and row groups', () => {
+      it('keeps the toolbar, the focusable viewport and the footer outside role=table', () => {
+        const { getByRole, getByTestId } = render(Table, {
+          props: { data: rows, columns, paginated: true, pageSize: 2, 'aria-label': 'Domains' },
+          slots: { toolbar: '<button type="button">Refresh</button>', caption: 'Three domains' }
+        })
+
+        const table = getByRole('table', { name: 'Domains' })
+        expect(table).toBe(getByTestId('data-table__table'))
+        expect(getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+        expect(table.contains(getByTestId('data-table__viewport'))).toBe(false)
+        expect(table.contains(getByTestId('data-table__footer'))).toBe(false)
+        expect(table.contains(getByRole('button', { name: 'Refresh' }))).toBe(false)
+        expect(getByTestId('data-table__footer').getAttribute('role')).toBeNull()
+      })
+
+      it('is named by its caption unless the consumer names it', async () => {
+        // A composed caption registers while it mounts, after the table's
+        // first render; the data-driven caption names the table from the start.
+        const composed = render(CompositionTree)
+        const caption = composed.getByTestId('data-table__caption')
+        expect(caption.hasAttribute('role')).toBe(false)
+        expect(await composed.findByRole('table', { name: 'My caption' })).toBeTruthy()
+        composed.unmount()
+
+        const captioned = render(Table, {
+          props: { data: rows, columns },
+          slots: { caption: 'Three domains' }
+        })
+        expect(captioned.getByRole('table', { name: 'Three domains' })).toBeTruthy()
+        captioned.unmount()
+
+        const named = render(Table, {
+          props: { data: rows, columns, 'aria-label': 'Domains' },
+          slots: { caption: 'Three domains' }
+        })
+        expect(named.getByRole('table', { name: 'Domains' })).toBeTruthy()
+      })
+
+      it('has no a11y violations: composed, data-driven with toolbar, caption and pagination, and empty', async () => {
+        const composed = render(CompositionTree)
+        await expectNoA11yViolations(composed.container)
+        composed.unmount()
+
+        const narrow = render(
+          defineComponent({
+            components: { Table },
+            setup: () => ({ rows, columns }),
+            template: `
+            <div style="width: 240px">
+              <Table :data="rows" :columns="columns" paginated :page-size="2" aria-label="Domains">
+                <template #toolbar><button type="button">Refresh</button></template>
+                <template #caption>Three domains</template>
+              </Table>
+            </div>
+          `
+          })
+        )
+        await expectNoA11yViolations(narrow.container)
+        narrow.unmount()
+
+        const empty = render(Table, { props: { data: [], columns, 'aria-label': 'Domains' } })
+        await expectNoA11yViolations(empty.container)
+      })
+    })
   })
 
   describe('TableRow — selected state (composition)', () => {
@@ -252,6 +342,15 @@ describe('Table (composition + data-driven)', () => {
       const cellText = getAllByRole('cell').map((c) => c.textContent?.trim())
       expect(cellText).toContain('Charlie')
       expect(cellText).toContain('Inactive')
+    })
+
+    it('sets data-border only when bordered is true', () => {
+      const flush = render(Table, { props: { data: rows, columns } })
+      expect(flush.getByTestId('data-table').hasAttribute('data-border')).toBe(false)
+      flush.unmount()
+
+      const framed = render(Table, { props: { data: rows, columns, bordered: true } })
+      expect(framed.getByTestId('data-table').hasAttribute('data-border')).toBe(true)
     })
 
     it('renders the default empty state when data is empty', () => {
@@ -374,6 +473,29 @@ describe('Table (composition + data-driven)', () => {
       expect(selection[selection.length - 1][0]).toEqual({ '1': true })
       expect(emitted()['row-click']).toBeTruthy()
     })
+
+    it('rowSelectable leaves a rejected row without a checkbox, row click or select-all', async () => {
+      const { getAllByLabelText, getByLabelText, getAllByRole, emitted } = render(Table, {
+        props: {
+          data: rows,
+          columns,
+          enableRowSelection: true,
+          selectOnRowClick: true,
+          rowKey: 'id',
+          rowSelectable: (row: Record<string, unknown>) => row.id !== '1' && row.id !== 1
+        }
+      })
+
+      expect(getAllByLabelText('Select row')).toHaveLength(2)
+      await fireEvent.click(getAllByRole('row')[1])
+      expect(emitted()['update:rowSelection']).toBeUndefined()
+      expect(emitted()['row-click']).toBeTruthy()
+
+      await fireEvent.click(getByLabelText('Select all rows'))
+      const events = emitted()['update:rowSelection'] as unknown[][]
+      expect(events[events.length - 1][0]).toEqual({ '2': true, '3': true })
+      expect(getByLabelText('Select all rows')).toBeChecked()
+    })
   })
 
   describe('v-model round-trip (controlled rowSelection)', () => {
@@ -420,7 +542,7 @@ describe('Table (composition + data-driven)', () => {
       })
       const { getByTestId } = render(Tree)
 
-      // TableSearch forwards its testid down to the InputText native input.
+      // TableSearch forwards its testid down to the Input native input.
       const input = getByTestId('data-table__search') as HTMLInputElement
       expect(input.getAttribute('placeholder')).toBe('Find')
 
@@ -438,7 +560,7 @@ describe('Table (composition + data-driven)', () => {
       expect(bodyCells).not.toContain('Charlie')
     })
 
-    // `size` is bound BEFORE v-bind="$attrs" on the inner InputText, so the
+    // `size` is bound BEFORE v-bind="$attrs" on the inner Input, so the
     // default is a default rather than a hard-code. Bound after, it would
     // clobber the consumer's value and a search field could never sit level
     // with a row of large toolbar controls.
@@ -543,9 +665,9 @@ describe('Table (composition + data-driven)', () => {
     })
   })
 
-  describe('story fixtures (composeStories)', () => {
+  describe('documented examples', () => {
     it('renders the Composition story cleanly', () => {
-      const { getByTestId, getAllByRole } = render(Composition())
+      const { getByTestId, getAllByRole } = render(Composition)
 
       expect(getByTestId('data-table')).toBeTruthy()
       // 1 header row + 5 body rows (the story slices the first five records).
@@ -553,7 +675,7 @@ describe('Table (composition + data-driven)', () => {
     })
 
     it('renders the Default (data-driven) story with rows', () => {
-      const { getByTestId, getAllByRole } = render(Default())
+      const { getByTestId, getAllByRole } = render(Default)
 
       expect(getByTestId('data-table')).toBeTruthy()
       // Header row + at least one body row.
@@ -561,15 +683,435 @@ describe('Table (composition + data-driven)', () => {
     })
 
     it('renders the WithCheckboxes story with a selection column', () => {
-      const { getByLabelText } = render(WithCheckboxes())
+      const { getByLabelText } = render(WithCheckboxes)
 
       expect(getByLabelText('Select all rows')).toBeTruthy()
     })
 
     it('renders the Empty story with the empty state', () => {
-      const { getByTestId } = render(Empty())
+      const { getByTestId } = render(Empty)
 
       expect(getByTestId('data-table__empty')).toBeTruthy()
+    })
+  })
+
+  describe('stacked rows in a narrow box', () => {
+    const mountIn = (width: number, props: Record<string, unknown> = {}) => {
+      const host = document.createElement('div')
+      host.style.width = `${width}px`
+      document.body.appendChild(host)
+      return render(Table, { props: { columns, data: rows, ...props }, container: host })
+    }
+
+    it('renders each row as label and value pairs below --container-lg', async () => {
+      const view = mountIn(320)
+      const root = view.getByTestId('data-table')
+
+      await waitFor(() => expect(root.hasAttribute('data-stacked')).toBe(true))
+      const labels = view.getAllByTestId('data-table__stacked-label')
+      expect(labels).toHaveLength(rows.length)
+      expect(labels[0]?.textContent).toBe('Status')
+      expect(labels[0]?.getAttribute('aria-hidden')).toBe('true')
+      expect(view.getAllByRole('columnheader').map((cell) => cell.textContent?.trim())).toEqual([
+        'Name',
+        'Status'
+      ])
+    })
+
+    it('keeps the scrolling grid in a wide box', async () => {
+      const view = mountIn(1024)
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
+    })
+
+    it('keeps the scrolling grid at every width when stackable is false', async () => {
+      const view = mountIn(320, { stackable: false })
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
+    })
+
+    it('never stacks a hand-composed table', () => {
+      const { getByTestId } = render(Composition)
+
+      expect(getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+    })
+  })
+  describe('select-all above stacked rows', () => {
+    it('shows a labelled select-all that selects the page', async () => {
+      const host = document.createElement('div')
+      host.style.width = '320px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: rows, enableRowSelection: true },
+        container: host
+      })
+      const bar = await waitFor(() => view.getByTestId('data-table__stacked-select-all'))
+      const box = within(bar).getByLabelText('Select all rows')
+      expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
+      await fireEvent.click(box)
+      const emitted = view.emitted('update:rowSelection') as Record<string, boolean>[][]
+      expect(emitted.at(-1)?.[0]).toEqual({ '1': true, '2': true, '3': true })
+    })
+
+    it('keeps the select-all in the header of the grid', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: rows, enableRowSelection: true },
+        container: host
+      })
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+      expect(view.queryByTestId('data-table__stacked-select-all')).toBeNull()
+      expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
+    })
+  })
+
+  describe('density, wrapped lines and stripes', () => {
+    it('reflects the preferences on the root and the rows', () => {
+      const { getByTestId, getAllByRole } = render(Table, {
+        props: { columns, data: rows, density: 'compact', wrapLines: true, striped: true }
+      })
+      const root = getByTestId('data-table')
+      expect(root.getAttribute('data-density')).toBe('compact')
+      expect(root.hasAttribute('data-wrap')).toBe(true)
+      const bodyRows = getAllByRole('row').slice(1)
+      expect(bodyRows[1]?.className).toContain('[--table-row-bg:var(--bg-surface-raised)]')
+      expect(bodyRows[0]?.className).not.toContain('[--table-row-bg:var(--bg-surface-raised)]')
+    })
+  })
+
+  describe('virtual rows', () => {
+    const many = Array.from({ length: 10000 }, (_, i) => ({
+      id: String(i),
+      name: `row-${i}`,
+      status: i % 2 ? 'Active' : 'Inactive'
+    }))
+
+    it('mounts 10k rows fast and renders only the rows in view', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const started = performance.now()
+      const view = render(Table, {
+        props: { columns, data: many, virtual: true, maxHeight: '480px' },
+        container: host
+      })
+      const elapsed = performance.now() - started
+      expect(elapsed).toBeLessThan(1000)
+      const rendered = view.getAllByRole('row').length - 1
+      expect(rendered).toBeGreaterThan(5)
+      expect(rendered).toBeLessThan(60)
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
+
+      const viewport = view.getByTestId('data-table__viewport')
+      viewport.style.maxHeight = '480px'
+      viewport.style.overflow = 'auto'
+      viewport.scrollTop = 48 * 5000
+      viewport.dispatchEvent(new Event('scroll'))
+      await waitFor(() => expect(view.getByText('row-5000')).toBeTruthy())
+      const row = view.getByText('row-5000').closest('[role="row"]') as HTMLElement
+      expect(Number(row.getAttribute('aria-rowindex'))).toBe(5002)
+      expect(view.getAllByRole('row').length).toBeLessThan(60)
+    })
+
+    it('under manual sorting, filtering and pagination selects and exports every row while rendering only the window', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const selection = ref<Record<string, boolean>>({})
+      const exported = vi.fn()
+      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(Table, {
+              ref: tableRef,
+              columns,
+              data: many,
+              virtual: true,
+              maxHeight: '480px',
+              enableRowSelection: true,
+              manualSorting: true,
+              manualFiltering: true,
+              manualPagination: true,
+              rowSelection: selection.value,
+              'onUpdate:rowSelection': (value: Record<string, boolean>) =>
+                (selection.value = value),
+              onExport: exported
+            })
+        }),
+        { container: host }
+      )
+      expect(view.getAllByRole('row').length - 1).toBeLessThan(60)
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
+
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(10000)
+      expect(selection.value['9999']).toBe(true)
+
+      const { '42': _dropped, ...rest } = selection.value
+      selection.value = rest
+      await nextTick()
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(10000)
+
+      await fireEvent.click(view.getByLabelText('Select all rows'))
+      await nextTick()
+      expect(Object.keys(selection.value)).toHaveLength(0)
+
+      await tableRef.value?.exportCsv({ scope: 'all' })
+      expect(exported).toHaveBeenCalledTimes(1)
+      expect((exported.mock.calls[0][0] as unknown[]).length).toBe(10000)
+      view.unmount()
+      host.remove()
+    })
+
+    it('measures rows of mixed heights and keeps the rows in view still while scrolling', async () => {
+      const long = 'wrapped text that runs over several lines '.repeat(6)
+      const mixed = Array.from({ length: 2000 }, (_, i) => ({
+        id: String(i),
+        name: `row-${i}`,
+        status: i % 3 === 0 ? long : 'Active'
+      }))
+      const host = document.createElement('div')
+      host.style.width = '640px'
+      document.body.appendChild(host)
+      const view = render(Table, {
+        props: { columns, data: mixed, virtual: true, wrapLines: true, maxHeight: '480px' },
+        container: host
+      })
+      const viewport = view.getByTestId('data-table__viewport')
+      viewport.style.maxHeight = '480px'
+      viewport.style.overflow = 'auto'
+      const frames = async (n = 3) => {
+        for (let i = 0; i < n; i++) await new Promise((r) => requestAnimationFrame(() => r(null)))
+        await nextTick()
+      }
+      const bodyRows = () =>
+        Array.from(viewport.querySelectorAll<HTMLElement>('[role="row"][aria-rowindex]'))
+      await frames()
+      const heights = new Set(bodyRows().map((row) => row.offsetHeight))
+      expect(heights.size).toBeGreaterThan(1)
+
+      viewport.scrollTop = 30_000
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(6)
+      const top = viewport.getBoundingClientRect().top
+      const anchor = bodyRows().find((row) => row.getBoundingClientRect().top >= top) as HTMLElement
+      const anchorIndex = anchor.getAttribute('aria-rowindex')
+      const before = anchor.getBoundingClientRect().top
+
+      viewport.scrollTop -= 400
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(6)
+      const same = bodyRows().find((row) => row.getAttribute('aria-rowindex') === anchorIndex)
+      expect(same).toBeTruthy()
+      expect(
+        Math.abs((same as HTMLElement).getBoundingClientRect().top - (before + 400))
+      ).toBeLessThan(2)
+      const rendered = bodyRows()
+      expect(rendered[0].getBoundingClientRect().top).toBeLessThanOrEqual(top)
+      expect(rendered.at(-1)?.getBoundingClientRect().bottom).toBeGreaterThanOrEqual(top + 480)
+
+      viewport.scrollTop = viewport.scrollHeight
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(8)
+      viewport.scrollTop = viewport.scrollHeight
+      viewport.dispatchEvent(new Event('scroll'))
+      await frames(4)
+      const last = bodyRows().at(-1) as HTMLElement
+      expect(last.getAttribute('aria-rowindex')).toBe('2001')
+      expect(last.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+        viewport.getBoundingClientRect().bottom + 1
+      )
+    })
+  })
+
+  describe('long lists without virtual', () => {
+    const many = Array.from({ length: 1000 }, (_, i) => ({
+      id: String(i),
+      name: `row-${i}`,
+      status: 'Active'
+    }))
+
+    it('renders the first rows and mounts the rest as they near the viewport', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Table, { props: { columns, data: many }, container: host })
+      const rendered = () => view.getAllByRole('row').length - 1
+      expect(rendered()).toBeLessThan(100)
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('1001')
+      const gap = view.getByTestId('data-table__lazy-rows')
+      expect(gap.offsetHeight).toBeGreaterThan(40 * 900)
+      gap.scrollIntoView()
+      await waitFor(() => expect(rendered()).toBeGreaterThan(100))
+      window.scrollTo(0, document.documentElement.scrollHeight)
+      await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
+      await waitFor(() => expect(view.queryByTestId('data-table__lazy-rows')).toBeNull())
+      expect(view.getByTestId('data-table__table').hasAttribute('aria-rowcount')).toBe(false)
+      window.scrollTo(0, 0)
+    })
+
+    it('renders every row of a short list at once', () => {
+      const view = render(Table, { props: { columns, data: many.slice(0, 200) } })
+      expect(view.getAllByRole('row')).toHaveLength(201)
+      expect(view.queryByTestId('data-table__lazy-rows')).toBeNull()
+    })
+  })
+
+  describe('with useCollection', () => {
+    const Harness = (mode: 'client' | 'server') =>
+      defineComponent({
+        setup() {
+          const data = Array.from({ length: 30 }, (_, i) => ({
+            id: String(i + 1),
+            name: `item-${String(i + 1).padStart(2, '0')}`,
+            status: i % 2 ? 'Active' : 'Inactive'
+          }))
+          const collection = useCollection({
+            ...(mode === 'client'
+              ? { items: data }
+              : {
+                  fetch: async ({
+                    page,
+                    pageSize,
+                    sort
+                  }: {
+                    page: number
+                    pageSize: number
+                    sort: { id: string; desc: boolean }[]
+                  }) => {
+                    const sorted = sort[0]?.desc ? [...data].reverse() : data
+                    return {
+                      items: sorted.slice((page - 1) * pageSize, page * pageSize),
+                      total: data.length
+                    }
+                  }
+                }),
+            columns: [
+              { accessorKey: 'name', header: 'Name', enableSorting: true },
+              { accessorKey: 'status', header: 'Status' }
+            ],
+            pagination: { pageSize: 10 },
+            selection: {}
+          })
+          return () => h(Table, { ...collection.tableProps.value, 'data-testid': 'coll' })
+        }
+      })
+
+    it.each(['client', 'server'] as const)('pages and sorts in %s mode', async (mode) => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Harness(mode), { container: host })
+      await waitFor(() => expect(view.getByText('item-01')).toBeTruthy())
+      expect(view.getAllByRole('row')).toHaveLength(11)
+      await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
+      await waitFor(() => expect(view.getByText('item-11')).toBeTruthy())
+      expect(view.queryByText('item-01')).toBeNull()
+    })
+
+    const exportHarness = (mode: 'client' | 'server', onExport: (rows: unknown[]) => void) =>
+      defineComponent({
+        setup() {
+          const data = Array.from({ length: 30 }, (_, i) => ({
+            id: String(i + 1),
+            name: `item-${String(i + 1).padStart(2, '0')}`,
+            status: i % 2 ? 'Active' : 'Inactive'
+          }))
+          const matches = (text: string) => data.filter((item) => item.name.includes(text))
+          const collection = useCollection({
+            ...(mode === 'client'
+              ? { items: data }
+              : {
+                  fetch: async ({ page, pageSize, filteringText }) => {
+                    const found = matches(filteringText)
+                    return {
+                      items: found.slice((page - 1) * pageSize, page * pageSize),
+                      total: found.length
+                    }
+                  },
+                  exportAll: async ({ filteringText, scope }) =>
+                    scope === 'all' ? data : matches(filteringText)
+                }),
+            columns: [
+              { accessorKey: 'name', header: 'Name' },
+              { accessorKey: 'status', header: 'Status' }
+            ],
+            filtering: { debounce: 0 },
+            pagination: { pageSize: 10 }
+          })
+          collection.setFilteringText('1')
+          return () =>
+            h(
+              Table,
+              { ...collection.tableProps.value, onExport },
+              { toolbar: () => h(Table.Export) }
+            )
+        }
+      })
+
+    it.each(['client', 'server'] as const)(
+      'exports every match, not only the page, in %s mode',
+      async (mode) => {
+        const onExport = vi.fn()
+        const host = document.createElement('div')
+        host.style.width = '1024px'
+        document.body.appendChild(host)
+        const view = render(exportHarness(mode, onExport), { container: host })
+        await waitFor(() => expect(view.getByText('item-10')).toBeTruthy())
+        await fireEvent.click(view.getByTestId('data-table__export'))
+        await waitFor(() => expect(onExport).toHaveBeenCalled())
+        const exported = onExport.mock.calls[0][0] as { name: string }[]
+        expect(exported.map((row) => row.name)).toEqual([
+          'item-01',
+          ...Array.from({ length: 10 }, (_, i) => `item-1${i}`),
+          'item-21'
+        ])
+        expect(view.getAllByRole('row')).toHaveLength(11)
+      }
+    )
+  })
+
+  describe('export', () => {
+    it('downloads the rows the caller passes and the visible columns', async () => {
+      const created: string[] = []
+      const createObjectURL = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockImplementation((blob: Blob | MediaSource) => {
+          void (blob as Blob).text().then((text) => created.push(text))
+          return 'blob:test'
+        })
+      const revoke = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+      const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      render(
+        defineComponent({
+          setup: () => () =>
+            h(Table, {
+              ref: tableRef,
+              columns: [
+                { id: 'label', accessorKey: 'name', header: 'Name' },
+                { accessorKey: 'status', header: 'Status' }
+              ],
+              data: rows
+            })
+        })
+      )
+      await tableRef.value?.exportCsv({ rows: [{ id: '9', name: 'Zulu', status: 'Active' }] })
+      await waitFor(() => expect(created).toHaveLength(1))
+      expect(created[0]).toBe('Name,Status\r\nZulu,Active')
+      createObjectURL.mockRestore()
+      revoke.mockRestore()
+      click.mockRestore()
     })
   })
 })

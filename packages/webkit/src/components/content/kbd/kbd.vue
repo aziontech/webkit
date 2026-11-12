@@ -1,9 +1,14 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+
   defineOptions({ name: 'Kbd', inheritAttrs: false })
 
   export type KbdSize = 'small' | 'medium'
+
+  export type KbdKeyName = keyof typeof en.kbd
 
   interface Props {
     /** Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). */
@@ -16,6 +21,8 @@
     alt?: boolean
     /** Size token; `small` is a denser keycap for menus, command bars, and table cells. */
     size?: KbdSize
+    /** Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. */
+    keyName?: KbdKeyName
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -23,7 +30,8 @@
     ctrl: false,
     shift: false,
     alt: false,
-    size: 'medium'
+    size: 'medium',
+    keyName: undefined
   })
 
   defineSlots<{
@@ -31,6 +39,8 @@
   }>()
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ kbd: en.kbd })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-kbd')
 
@@ -42,16 +52,19 @@
 
   const modifierGlyphs = computed<{ id: string; glyph: string }[]>(() => {
     const list: { id: string; glyph: string }[] = []
-    if (props.meta) list.push({ id: 'meta', glyph: isMac.value ? '⌘' : 'Ctrl' })
-    if (props.ctrl) list.push({ id: 'ctrl', glyph: isMac.value ? '⌃' : 'Ctrl' })
-    if (props.alt) list.push({ id: 'alt', glyph: isMac.value ? '⌥' : 'Alt' })
+    if (props.meta) list.push({ id: 'meta', glyph: isMac.value ? '⌘' : t('kbd.ctrl') })
+    if (props.ctrl) list.push({ id: 'ctrl', glyph: isMac.value ? '⌃' : t('kbd.ctrl') })
+    if (props.alt) list.push({ id: 'alt', glyph: isMac.value ? '⌥' : t('kbd.alt') })
     if (props.shift) list.push({ id: 'shift', glyph: '⇧' })
     return list
   })
+
+  const keyLabel = computed(() => (props.keyName ? t(`kbd.${props.keyName}`) : ''))
 </script>
 
 <template>
   <kbd
+    dir="ltr"
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
@@ -63,6 +76,7 @@
       :key="modifier.id"
       >{{ modifier.glyph }}</span
     >
+    <span v-if="keyLabel">{{ keyLabel }}</span>
     <slot />
   </kbd>
 </template>

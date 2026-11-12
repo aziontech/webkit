@@ -1,0 +1,95 @@
+{
+  "_id": "hero-form",
+  "props": {
+    "eyebrow": "Under Cyberattack?",
+    "highlight": "",
+    "title": "Mitigating Cyberattacks",
+    "description": "Our digital security team is available to provide immediate assistance.",
+    "items": [
+      {
+        "icon": "ai ai-security-team",
+        "title": "Help before you become a customer",
+        "description": "Emergency mitigation for an attack in progress."
+      },
+      {
+        "icon": "ai ai-secure-pillar",
+        "title": "265B attacks blocked",
+        "description": "Stopped on the Azion network since 2022."
+      },
+      {
+        "icon": "ai ai-build-pillar",
+        "title": "35B functions a month",
+        "description": "Edge functions run every month for security controls."
+      },
+      {
+        "icon": "ai ai-app-accelerator",
+        "title": "+90% of requests served instantly",
+        "description": "Customer requests answered close to your users."
+      }
+    ],
+    "formAriaLabel": "Request immediate contact",
+    "fields": [
+      {
+        "name": "firstname",
+        "kind": "text",
+        "label": "Name",
+        "half": true,
+        "required": true
+      },
+      {
+        "name": "lastname",
+        "kind": "text",
+        "label": "Last name",
+        "half": true,
+        "required": true
+      },
+      {
+        "name": "email",
+        "kind": "email",
+        "label": "Business email",
+        "required": true
+      },
+      {
+        "name": "company",
+        "kind": "text",
+        "label": "Company",
+        "half": true,
+        "required": true
+      },
+      {
+        "name": "domain",
+        "kind": "text",
+        "label": "Website",
+        "half": true
+      },
+      {
+        "name": "mobilephone",
+        "kind": "phone",
+        "label": "Phone",
+        "country": "US",
+        "required": true
+      }
+    ],
+    "submitLabel": "Request immediate contact",
+    "messages": {
+      "missing": "This field is required.",
+      "invalidEmail": "Enter a valid email address.",
+      "success": "We will be in touch.",
+      "error": "We could not send your message. Try again."
+    },
+    "carouselLabel": "Trusted by teams running critical workloads",
+    "carouselMarks": [
+      "global-fashion-group",
+      "herospark",
+      "itau",
+      "nzn",
+      "netshoes",
+      "caixa",
+      "agibank",
+      "prime-video",
+      "america-movil",
+      "gpa",
+      "fourbank"
+    ]
+  }
+}

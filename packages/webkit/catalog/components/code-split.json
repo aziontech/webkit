@@ -1,0 +1,19 @@
+{
+ "purpose": "The claim-beside-its-code band of a product page: a framed media split whose copy states the claim, with one or two large buttons under it, and whose media is a code sample on the pixelate texture, cut off by the frame's bottom rule. It is a page section — the site places it from a `{ _id: 'code-split', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split`, `code-block` and `button`. One tab draws a filename bar; several draw a tab strip, and a tab that carries an `icon` shows that mark beside its label.",
+ "useWhen": [
+  "When the argument of a product page is a config file or a handler a developer can read, like Functions, Application Accelerator or AI Gateway."
+ ],
+ "avoidWhen": [
+  "For a terminal session under a headline → use `cli-terminal`.",
+  "For a run of capabilities, each with its own sample, pinned while the page scrolls → use `sticky-scroll-code`."
+ ],
+ "related": [
+  "media-split` — the copy-beside-media band this section renders through.",
+  "code-block` — the tabbed code sample in the media cell."
+ ],
+ "bestPractices": [
+  "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
+  "Give every tab a `code`; a tab without one is skipped.",
+  "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one."
+ ]
+}

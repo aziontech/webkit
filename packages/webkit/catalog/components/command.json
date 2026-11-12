@@ -1,0 +1,22 @@
+{
+ "purpose": "Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions. It wraps the `Dialog` primitive for its panel, backdrop, focus trap, scroll-lock, and Escape handling, and adds the palette chrome on top — a search `Input`, a scrollable `List` of `Item`s organized into optional `Group`s, an `Empty` state, and `Separator`s. The root owns open/closed state (controlled or uncontrolled), a global open shortcut (⌘K / Ctrl+K), the substring filter, and roving active-item navigation. It differs from `dropdown` (a small trigger-anchored menu) and `select` (a form value picker): Command Menu is a full-screen search-first launcher for actions, not a positioned menu or an input control.",
+ "useWhen": [
+  "Provide a global ⌘K launcher for navigating to pages or running actions across an app.",
+  "Let users filter a large, grouped list of commands by typing, then activate with the keyboard."
+ ],
+ "avoidWhen": [
+  "A small menu anchored to a trigger button → use `dropdown`.",
+  "Picking a value for a form field → use `select` / `multi-select`.",
+  "A confirmation or content modal without search/list semantics → use `dialog` directly."
+ ],
+ "related": [
+  "dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.",
+  "kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.",
+  "dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger."
+ ],
+ "bestPractices": [
+  "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
+  "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+  "Group related actions with `<Command.Group heading=\"…\">` and separate distinct sections with `<Command.Separator>`."
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material` and `button`.",
+ "useWhen": [
+  "To walk through four to six capabilities of one product, each with a picture of its own."
+ ],
+ "avoidWhen": [
+  "For three reasons with no scroll story → use `feature-tiles`.",
+  "For code-led steps → use `sticky-scroll-code`."
+ ],
+ "related": [
+  "sticky-stack` — the scroll engine the large layout runs on.",
+  "media-tile` — the cell the small layout renders each feature with."
+ ],
+ "bestPractices": [
+  "Four to six items; the stack needs enough steps to earn the scroll.",
+  "Give every item an `illustration`; it is the pinned picture on large screens and the tile media on small ones.",
+  "Keep `action` to a short label such as \"Docs\" — it sits under the step copy at the small size."
+ ]
+}

@@ -1,0 +1,124 @@
+{
+  "id": "platform/edit/edit-resource",
+  "name": "EditResource",
+  "title": "Templates/Platform/Edit/EditResource",
+  "surface": "product",
+  "summary": "The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "settings page",
+    "resource settings",
+    "settings tab",
+    "application settings",
+    "workload settings",
+    "firewall settings",
+    "edit settings",
+    "página de configurações",
+    "configurações do recurso",
+    "aba de configurações",
+    "save bar",
+    "unsaved changes bar",
+    "sticky save bar",
+    "discard and save",
+    "commit bar",
+    "barra de salvar",
+    "alterações não salvas",
+    "salvar alterações",
+    "edit resource",
+    "editar recurso",
+    "data stream",
+    "data stream settings",
+    "log streaming",
+    "stream destination",
+    "sampling",
+    "log template",
+    "configurações do data stream",
+    "envio de logs",
+    "streaming de logs",
+    "stale record",
+    "changed elsewhere",
+    "overwrite changes",
+    "conflict on save",
+    "danger zone",
+    "delete resource",
+    "type the name to confirm",
+    "zona de perigo",
+    "excluir recurso",
+    "alterado em outro lugar",
+    "leave page guard",
+    "unsaved changes dialog",
+    "cache settings",
+    "cache policy",
+    "browser cache",
+    "edge cache",
+    "tiered cache",
+    "configurações de cache",
+    "protocol settings",
+    "https ports",
+    "http/3",
+    "tls version",
+    "mutual authentication",
+    "mtls",
+    "autenticação mútua"
+  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
+  "primary": {
+    "name": "ProjectSettings",
+    "file": "edit-resource.vue"
+  },
+  "variants": [
+    {
+      "name": "DeployableSettings",
+      "summary": "A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.",
+      "file": "variants/deployable-settings.vue"
+    },
+    {
+      "name": "PolicySettings",
+      "summary": "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.",
+      "file": "variants/policy-settings.vue"
+    },
+    {
+      "name": "ResourceSettings",
+      "summary": "The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.",
+      "file": "variants/resource-settings.vue"
+    },
+    {
+      "name": "UnsavedChanges",
+      "summary": "The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.",
+      "file": "variants/unsaved-changes.vue"
+    },
+    {
+      "name": "Saving",
+      "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled.",
+      "file": "variants/saving.vue"
+    },
+    {
+      "name": "DataStream",
+      "summary": "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.",
+      "file": "variants/data-stream.vue"
+    },
+    {
+      "name": "StaleRecord",
+      "summary": "The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.",
+      "file": "variants/stale-record.vue"
+    },
+    {
+      "name": "DangerZone",
+      "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.",
+      "file": "variants/danger-zone.vue"
+    },
+    {
+      "name": "CacheSettings",
+      "summary": "One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.",
+      "file": "variants/cache-settings.vue"
+    },
+    {
+      "name": "Protocols",
+      "summary": "The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.",
+      "file": "variants/protocols.vue"
+    }
+  ]
+}

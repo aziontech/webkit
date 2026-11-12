@@ -1,6 +1,6 @@
 # Rule: compound API — composition first, props for data, names from anatomy
 
-Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Paginator.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every sub-component attached) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
+Composition (`structure: composition`) components in the webkit layer expose a **compound API**: every public sub-component is importable on its own **and** attached to the root for dot-notation (`<Table.Row>`, `<Pagination.Button>`). The root itself stays importable two ways — as the **compound** (`@aziontech/webkit/table`, every sub-component attached) and as a **standalone, tree-shakeable root** (`@aziontech/webkit/table-root`, nothing attached). This rule fixes how that API is shaped, named, and typed so every composition component reads the same way.
 
 It rests on three decisions, in priority order:
 
@@ -32,14 +32,16 @@ All forms stay available to the consumer:
 
 ```vue
 <script setup>
-import Table from '@aziontech/webkit/table'           // compound — leads the docs, dot-notation
-import TableRoot from '@aziontech/webkit/table-root'   // standalone root — tree-shaking (no sub-components attached)
-import TableRow from '@aziontech/webkit/table-row'     // standalone sub-component — tree-shaking
+  import Table from '@aziontech/webkit/table' // compound — leads the docs, dot-notation
+  import TableRoot from '@aziontech/webkit/table-root' // standalone root — tree-shaking (no sub-components attached)
+  import TableRow from '@aziontech/webkit/table-row' // standalone sub-component — tree-shaking
 </script>
 
 <template>
   <Table>
-    <Table.Header><Table.Row><Table.HeadCell>Name</Table.HeadCell></Table.Row></Table.Header>
+    <Table.Header
+      ><Table.Row><Table.HeadCell>Name</Table.HeadCell></Table.Row></Table.Header
+    >
   </Table>
 </template>
 ```
@@ -65,11 +67,11 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
 
 The members of the compound mirror **that component's** real anatomy. Do not copy a part name from another component because it exists there.
 
-| Concern | Correct | Wrong |
-|---|---|---|
-| A part that is structural | `Header`, `Body`, `Row`, `Cell` | — |
-| A control that toggles state but opens nothing | `SortButton` (says what it does) | `Trigger` (it opens no `Content`) |
-| A part that opens a paired overlay with `open`/`closed` + `aria-expanded` | `Trigger` + `Content` | naming it after the table/list it sits in |
+| Concern                                                                   | Correct                          | Wrong                                     |
+| ------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------- |
+| A part that is structural                                                 | `Header`, `Body`, `Row`, `Cell`  | —                                         |
+| A control that toggles state but opens nothing                            | `SortButton` (says what it does) | `Trigger` (it opens no `Content`)         |
+| A part that opens a paired overlay with `open`/`closed` + `aria-expanded` | `Trigger` + `Content`            | naming it after the table/list it sits in |
 
 `Trigger` / `Content` / `Portal` belong to **overlay / disclosure** components (dropdown, dialog, popover) — anything with `data-state="open|closed"`. A component with no open/close state has **no** `Trigger`. When a non-overlay component needs an overlay (row-action menu, filter popover), it **composes** the overlay component; the trigger comes from that overlay, not from the host's compound.
 

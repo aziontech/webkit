@@ -1,0 +1,25 @@
+{
+  "component": "pricing-plans",
+  "title": "Components/Marketing/Sections/PricingPlans",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Hobby, Pro and Enterprise with the Monthly / Annual toggle; only the Pro price changes with it. The Enterprise button points at the page contact band.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Plans",
+      "summary": "Hobby, Pro and Enterprise. Only the Pro price changes with the toggle: 25 a month billed monthly, 20 billed annually. The Enterprise button points at the page contact band.",
+      "file": "site-plans.vue",
+      "json": "site-plans.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Pricing/PricingPlans",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Plans", "PlansJson"]
+}

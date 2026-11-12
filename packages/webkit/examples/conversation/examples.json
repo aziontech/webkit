@@ -1,0 +1,21 @@
+{
+  "component": "conversation",
+  "title": "Components/Primitives/AI/Conversation",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A short thread in a fixed-height log: the reader's questions at the inline end, the assistant's responses at the start, and follow-up questions after the last one.",
+      "file": "default.vue"
+    },
+    {
+      "name": "StartAlignment",
+      "summary": "The same thread in a narrow panel with every message at the inline start, as a drawer or side panel shows it.",
+      "file": "start-alignment.vue"
+    },
+    {
+      "name": "LongThread",
+      "summary": "Twelve turns that overflow the log: it opens at the newest message, stops following when the reader scrolls up, and Scroll to the latest message brings them back.",
+      "file": "long-thread.vue"
+    }
+  ]
+}

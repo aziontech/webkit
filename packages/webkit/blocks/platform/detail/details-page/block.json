@@ -1,0 +1,108 @@
+{
+  "id": "platform/detail/details-page",
+  "name": "DetailsPage",
+  "title": "Templates/Platform/Detail/DetailsPage",
+  "surface": "product",
+  "summary": "The Overview tab of a resource detail page: the platform shell with the resource breadcrumb, the full-bleed tab bar, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview ends its breadcrumb on the environment picker and follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page sits in the same shell without tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The Application variant is a whole application page on the `AppLayout` shell with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Select`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "overview page",
+    "resource overview",
+    "detail page",
+    "summary page",
+    "deployment detail",
+    "application overview",
+    "deployment failed",
+    "página de visão geral",
+    "detalhe do recurso",
+    "página de resumo",
+    "details page with tabs",
+    "versions tab",
+    "build tab",
+    "detalhe com abas",
+    "resource summary",
+    "summary card",
+    "overview card",
+    "resource facts",
+    "status card",
+    "resumo do recurso",
+    "cartão de resumo",
+    "visão geral",
+    "details page",
+    "resource details",
+    "página de detalhes",
+    "application detail",
+    "application tabs",
+    "topology tab",
+    "deployment topology",
+    "detalhe da aplicação",
+    "topologia"
+  ],
+  "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
+  "primary": {
+    "name": "ResourceOverview",
+    "file": "details-page.vue"
+  },
+  "variants": [
+    {
+      "name": "Resource",
+      "summary": "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `Card`, `Button`, `IconButton`, `DropdownMenu`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Alert` and `Tooltip`.",
+      "file": "variants/resource.vue",
+      "preview": {
+        "layout": "padded",
+        "background": "dark"
+      }
+    },
+    {
+      "name": "Service",
+      "summary": "The service summary: the domain with its aliases in the overflow popover, the environment menu (shown below md only; from md up the breadcrumb carries the environment) and actions, the custom domains, status, service ID and creation, and the shared Deployment Settings band that expands into its policies.",
+      "file": "variants/service.vue",
+      "preview": {
+        "layout": "padded",
+        "background": "dark"
+      }
+    },
+    {
+      "name": "Policy",
+      "summary": "The policy summary: the resource it protects, a Rules shortcut and actions, then status, environment, rule count, last edit and the enabled modules, and what the policy inspects.",
+      "file": "variants/policy.vue",
+      "preview": {
+        "layout": "padded",
+        "background": "dark"
+      }
+    },
+    {
+      "name": "ResourceVersions",
+      "summary": "The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions.",
+      "file": "variants/resource-versions.vue"
+    },
+    {
+      "name": "ResourceBuild",
+      "summary": "The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect your repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar.",
+      "file": "variants/resource-build.vue"
+    },
+    {
+      "name": "ServiceOverview",
+      "summary": "A service: the breadcrumb ends on its environment picker, the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the breadcrumb is hidden), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.",
+      "file": "variants/service-overview.vue"
+    },
+    {
+      "name": "DeploymentDetail",
+      "summary": "A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps.",
+      "file": "variants/deployment-detail.vue"
+    },
+    {
+      "name": "DeploymentFailed",
+      "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.",
+      "file": "variants/deployment-failed.vue"
+    },
+    {
+      "name": "Application",
+      "summary": "An application on the `AppLayout` console shell with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.",
+      "file": "variants/application.vue"
+    }
+  ]
+}

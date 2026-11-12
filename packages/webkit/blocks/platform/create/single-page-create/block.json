@@ -1,0 +1,68 @@
+{
+  "id": "platform/create/single-page-create",
+  "name": "SinglePageCreate",
+  "title": "Templates/Platform/Create/SinglePageCreate",
+  "surface": "product",
+  "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a fixed bar under the scrolling form, the same bar Version Detail uses, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings and ends in a full-bleed sticky footer. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput` and `Button`. ImportFromGit is the same job inside the platform shell with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "create page",
+    "create resource page",
+    "create zone",
+    "full page create form",
+    "top-level create page",
+    "new resource form",
+    "creation page",
+    "página de criação",
+    "criar recurso",
+    "formulário de criação",
+    "single page create",
+    "create purge",
+    "create service page",
+    "criação em uma página",
+    "sectioned form",
+    "single column form",
+    "import from git form",
+    "form with sections",
+    "deploy form",
+    "acknowledgement checkbox",
+    "formulário em seções",
+    "formulário de uma coluna",
+    "importar do git"
+  ],
+  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors", "webkit-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "single-page-create.vue"
+  },
+  "variants": [
+    {
+      "name": "CreatePurge",
+      "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type.",
+      "file": "variants/create-purge.vue"
+    },
+    {
+      "name": "CreateService",
+      "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) over a full-bleed sticky footer with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.",
+      "file": "variants/create-service.vue"
+    },
+    {
+      "name": "RequiredFields",
+      "summary": "Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error.",
+      "file": "variants/required-fields.vue"
+    },
+    {
+      "name": "ImportFromGit",
+      "summary": "Standalone field stacks in one column: the platform shell with an unpadded scroll region, a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, the platform shell, `Label`, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent` and `FieldTitle` parts and choice cards), `Input`, `InputGroup`, `RadioButton`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`.",
+      "file": "variants/import-from-git.vue"
+    },
+    {
+      "name": "ImportFromGitSubmitted",
+      "summary": "After Deploy on the untouched form: the access token, deployment type, build command, deploy key, on-call number and the acknowledgement each show their required state and message.",
+      "file": "variants/import-from-git-submitted.vue"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default overline label without prefix or cursor.",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <Overline>OVERLINE TEXT</Overline>\n</template>"
+  },
+  {
+   "name": "Prefixes",
+   "summary": "All preset prefixes side by side: `//`, `<>`, and `</>`.",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Overline prefix=\"//\">COMMENT STYLE</Overline>\n    <Overline prefix=\"<>\">CODE LABEL</Overline>\n    <Overline prefix=\"</>\">CLOSING TAG</Overline>\n  </div>\n</template>"
+  },
+  {
+   "name": "Cursor",
+   "summary": "Blinking terminal-style cursor at the end of the text, shown with and without a prefix.",
+   "sfc": "<script setup>\n  import Overline from '@aziontech/webkit/overline'\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-4\">\n    <Overline\n      show-cursor\n      prefix=\"//\"\n      >OVERLINE TEXT</Overline\n    >\n    <Overline show-cursor>NO PREFIX</Overline>\n  </div>\n</template>"
+  }
+ ]
+}

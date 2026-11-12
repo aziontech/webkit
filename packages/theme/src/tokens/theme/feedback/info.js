@@ -2,9 +2,9 @@ import { tokenRef } from '../../../scripts/refs.js'
 
 export const info = {
   light: {
-    info: tokenRef('primitives.blue.100'),
+    info: tokenRef('primitives.blue.200'),
     'info-border': tokenRef('primitives.alpha.blue.400'),
-    'info-contrast': tokenRef('primitives.blue.700')
+    'info-contrast': tokenRef('primitives.blue.800')
   },
   dark: {
     info: tokenRef('primitives.blue.900'),

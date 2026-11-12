@@ -1,14 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/actions/split-button/SplitButton.stories'
+import Default from '../../../../examples/split-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { SplitButtonItem } from './split-button.vue'
 import SplitButton from './split-button.vue'
-
-const { Default } = composeStories(stories)
 
 /** Realistic deploy actions; the second row omits `value` (falls back to label),
  *  the third is disabled. */
@@ -18,7 +15,7 @@ const model: SplitButtonItem[] = [
   { label: 'Rollback release', value: 'rollback', disabled: true }
 ]
 
-/** The Dropdown panel Teleports to <body>; the SplitButton hands its menu the
+/** The DropdownMenu panel Teleports to <body>; the SplitButton hands its menu the
  *  `actions-split-button__menu` testid, so the panel derives from it. */
 const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="actions-split-button__menu__panel"]')
@@ -58,7 +55,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
 
     expect(getByTestId('actions-split-button__primary').textContent).toContain('Deploy')
     expect(getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Deploy — more actions'
+      'More actions for Deploy'
     )
     expect(panel()).toBeNull()
   })
@@ -213,7 +210,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
     const primary = view.getByTestId('actions-split-button__primary')
     await waitFor(() => expect(primary.textContent).toContain('Deploy to staging'))
     expect(view.getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Deploy to staging — more actions'
+      'More actions for Deploy to staging'
     )
 
     // The primary click now carries the mirrored item.
@@ -252,18 +249,23 @@ describe('SplitButton (joined command + menu overlay)', () => {
     const view = render(host())
     await openMenu(view)
 
-    // Scope to the Teleported menu panel (component-owned markup). The closed
-    // shell is skipped below — see the documented nested-interactive defect.
     await expectNoA11yViolations(panel() as HTMLElement)
   })
 
-  // Real component defect: Dropdown.Trigger renders a focusable role=button span
-  // and SplitButton nests the real IconButton <button> inside it — axe
-  // nested-interactive (focusable widget inside a widget). Suppressing the
-  // assertion would fake a pass; fixing it requires a component change.
-  it.skip('has no axe violations on the closed shell — BLOCKED by nested-interactive: Dropdown.Trigger[role=button] wraps IconButton <button> (split-button.vue:141-151)', async () => {
+  it('has no axe violations on the closed shell', async () => {
     const view = render(host())
     await expectNoA11yViolations(view.container)
+  })
+
+  it('puts the menu ARIA on the toggle button with a single tab stop', () => {
+    const view = render(host())
+    const toggle = view.getByTestId('actions-split-button__toggle')
+    const button = view.getByTestId('actions-split-button__toggle-button')
+    expect(toggle.hasAttribute('role')).toBe(false)
+    expect(toggle.hasAttribute('tabindex')).toBe(false)
+    expect(button.getAttribute('aria-haspopup')).toBe('menu')
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(button.getAttribute('aria-controls')).toBeTruthy()
   })
 
   // ---- Story fixture ---------------------------------------------------------------
@@ -274,7 +276,7 @@ describe('SplitButton (joined command + menu overlay)', () => {
       expect(view.getByTestId('actions-split-button__primary').textContent).toContain('Save')
     )
     expect(view.getByTestId('actions-split-button__toggle-button').getAttribute('aria-label')).toBe(
-      'Save — more actions'
+      'More actions for Save'
     )
   })
 })

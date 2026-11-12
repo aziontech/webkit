@@ -1,0 +1,31 @@
+{
+  "component": "stat-tile",
+  "title": "Components/Primitives/Chart/StatTile",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Blocked threats rose 12.4 percent. A rise in threats is bad, so the tile sets inverse and the delta reads as a regression.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Deltas",
+      "summary": "A good rise, a bad rise with inverse, a flat change, and no delta at all.",
+      "file": "deltas.vue"
+    },
+    {
+      "name": "CountUp",
+      "summary": "Press Refresh to count the figure up from its previous value. Timer driven, so it is excluded from visual regression; Default is its static sibling. Reduced motion renders the final value at once.",
+      "file": "count-up.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "A Skeleton line holds the place of the figure and the delta.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "No value for the range: a dash, announced as No value, over a muted placeholder line marked No data. Leave out the delta and the trend rather than showing a zero.",
+      "file": "empty.vue"
+    }
+  ]
+}

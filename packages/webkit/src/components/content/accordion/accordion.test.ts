@@ -1,16 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/accordion/Accordion.stories'
+import Default from '../../../../examples/accordion/default.vue'
+import Multiple from '../../../../examples/accordion/multiple.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Accordion, { AccordionContent, AccordionItem, AccordionTrigger } from './index'
 
-const { Default, Multiple } = composeStories(stories)
-
 /**
- * Realistic FAQ tree mirroring the Storybook Default: three items with real
+ * Realistic FAQ tree mirroring the Default example: three items with real
  * headings and body copy. The optional disabled middle item exercises the
  * roving-focus skip and the suppression paths.
  */
@@ -128,11 +126,11 @@ describe('Accordion (compound / provide-inject)', () => {
   })
 
   // ---- Toggle behavior: single mode --------------------------------------------
-  it('click opens an item and emits update:value with the item value', async () => {
+  it('click opens an item and emits update:modelValue with the item value', async () => {
     const updates: unknown[] = []
     const view = render(
       host({
-        'onUpdate:value': (v: unknown) => updates.push(v)
+        'onUpdate:modelValue': (v: unknown) => updates.push(v)
       })
     )
 
@@ -146,7 +144,7 @@ describe('Accordion (compound / provide-inject)', () => {
   it('single mode: opening a second item closes the first (value replaces)', async () => {
     const updates: unknown[] = []
     const view = render(
-      host({ defaultValue: 'overview', 'onUpdate:value': (v: unknown) => updates.push(v) })
+      host({ defaultValue: 'overview', 'onUpdate:modelValue': (v: unknown) => updates.push(v) })
     )
 
     await fireEvent.click(trigger(view, 'Enterprise support'))
@@ -161,7 +159,7 @@ describe('Accordion (compound / provide-inject)', () => {
   it('collapsible (default): clicking the open item collapses to none, emitting null', async () => {
     const updates: unknown[] = []
     const view = render(
-      host({ defaultValue: 'overview', 'onUpdate:value': (v: unknown) => updates.push(v) })
+      host({ defaultValue: 'overview', 'onUpdate:modelValue': (v: unknown) => updates.push(v) })
     )
 
     await fireEvent.click(trigger(view, 'What is Azion'))
@@ -177,7 +175,7 @@ describe('Accordion (compound / provide-inject)', () => {
       host({
         defaultValue: 'overview',
         collapsible: false,
-        'onUpdate:value': (v: unknown) => updates.push(v)
+        'onUpdate:modelValue': (v: unknown) => updates.push(v)
       })
     )
 
@@ -193,7 +191,7 @@ describe('Accordion (compound / provide-inject)', () => {
   it('multiple mode: items open independently and payloads are exact arrays', async () => {
     const updates: unknown[] = []
     const view = render(
-      host({ type: 'multiple', 'onUpdate:value': (v: unknown) => updates.push(v) })
+      host({ type: 'multiple', 'onUpdate:modelValue': (v: unknown) => updates.push(v) })
     )
 
     await fireEvent.click(trigger(view, 'What is Azion'))
@@ -209,9 +207,12 @@ describe('Accordion (compound / provide-inject)', () => {
   })
 
   // ---- Controlled / v-model -------------------------------------------------------
-  it('controlled: the value prop drives which region renders; clicks emit but do not mutate', async () => {
+  it('controlled: the modelValue prop drives which region renders; clicks emit but do not mutate', async () => {
     const updates: unknown[] = []
-    const Controlled = host({ value: 'pricing', 'onUpdate:value': (v: unknown) => updates.push(v) })
+    const Controlled = host({
+      modelValue: 'pricing',
+      'onUpdate:modelValue': (v: unknown) => updates.push(v)
+    })
     const view = render(Controlled)
 
     expect(regions()[0].textContent).toContain('Pay only for what you use')
@@ -225,7 +226,7 @@ describe('Accordion (compound / provide-inject)', () => {
     expect(regions()[0].textContent).toContain('Pay only for what you use')
   })
 
-  it('v-model:value round-trips: the view follows the model the accordion writes', async () => {
+  it('v-model round-trips: the view follows the model the accordion writes', async () => {
     const model = ref<string | null>(null)
     const Wrapper = defineComponent({
       components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
@@ -233,7 +234,7 @@ describe('Accordion (compound / provide-inject)', () => {
         return { model }
       },
       template: `
-        <Accordion v-model:value="model">
+        <Accordion v-model="model">
           <AccordionItem value="overview">
             <AccordionTrigger>What is Azion?</AccordionTrigger>
             <AccordionContent>Azion runs your code at the edge, close to users.</AccordionContent>
@@ -261,7 +262,7 @@ describe('Accordion (compound / provide-inject)', () => {
   // ---- Disabled suppression ----------------------------------------------------------
   it('a disabled item ignores clicks, emits nothing, and reflects disabled on aria + data', async () => {
     const onUpdate = vi.fn()
-    const view = render(host({ 'onUpdate:value': onUpdate }, { disablePricing: true }))
+    const view = render(host({ 'onUpdate:modelValue': onUpdate }, { disablePricing: true }))
 
     const pricingTrigger = trigger(view, 'How does pricing work')
     expect(pricingTrigger.hasAttribute('disabled')).toBe(true)
@@ -375,5 +376,14 @@ describe('Accordion (compound / provide-inject)', () => {
     const texts = regions().map((region) => region.textContent ?? '')
     expect(texts.join(' ')).toContain('Azion runs your code at the edge')
     expect(texts.join(' ')).toContain('Pay only for what you use')
+  })
+})
+
+describe('AccordionTrigger on devices', () => {
+  it('lets its label shrink so long trigger content truncates instead of overflowing', () => {
+    const view = render(Default)
+    const trigger = view.getAllByRole('button')[0]
+
+    expect(trigger?.firstElementChild?.className).toContain('min-w-0')
   })
 })

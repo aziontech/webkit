@@ -9,6 +9,8 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import unusedImports from 'eslint-plugin-unused-imports'
 import vuejsAccessibility from 'eslint-plugin-vuejs-accessibility'
 
+import noPhysicalDirection from './packages/webkit/src/eslint-plugin/rules/no-physical-direction.js'
+
 export default [
   {
     ignores: ['dist/**', 'node_modules/**', '**/*.d.ts', '**/*.d.ts.map']
@@ -67,11 +69,14 @@ export default [
           shallowOnly: false
         }
       ],
-      "vue/no-reserved-component-names": ['error', {
-        "disallowVueBuiltInComponents": true,
-        "disallowVue3BuiltInComponents": true,
-        "htmlElementCaseSensitive": true,
-      }],
+      'vue/no-reserved-component-names': [
+        'error',
+        {
+          disallowVueBuiltInComponents: true,
+          disallowVue3BuiltInComponents: true,
+          htmlElementCaseSensitive: true
+        }
+      ],
       'vue/no-restricted-syntax': 'error',
       'vue/no-reserved-keys': [
         'error',
@@ -136,5 +141,10 @@ export default [
         }
       }
     }
+  },
+  {
+    files: ['**/*.vue'],
+    plugins: { webkit: { rules: { 'no-physical-direction': noPhysicalDirection } } },
+    rules: { 'webkit/no-physical-direction': 'error' }
   }
 ]

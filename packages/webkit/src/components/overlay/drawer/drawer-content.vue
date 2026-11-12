@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener, useScrollLock } from '@vueuse/core'
+  import { defaultDocument, useEventListener, useScrollLock } from '@vueuse/core'
   import { computed, inject, nextTick, provide, ref, unref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
@@ -40,7 +40,7 @@
   const isMobileOverlay = useOverlayMobile()
   const isDesktopDrawer = computed(() => !isMobileOverlay.value)
 
-  const isScrollLocked = useScrollLock(document.body)
+  const isScrollLocked = useScrollLock(defaultDocument?.body)
 
   watch(
     isOpen,
@@ -51,7 +51,7 @@
   )
   useFocusTrap(contentRef, isOpen)
 
-  useEventListener(document, 'keydown', (event) => {
+  useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
     if (!ctx?.dismissible) return
     event.preventDefault()
@@ -61,7 +61,8 @@
   watch(isOpen, async (open, wasOpen) => {
     if (open || !wasOpen || !ctx) return
     await nextTick()
-    ctx.triggerRef.value?.focus()
+    const target = ctx.triggerRef.value ?? ctx.returnFocusRef.value
+    if (target?.isConnected) target.focus()
   })
 
   const isLeft = computed(() => ctx?.side === 'left')
@@ -74,7 +75,7 @@
     cn(
       'fixed z-1001 flex p-0',
       drawerShellPositionClasses,
-      isLeft.value ? 'md:left-0 md:justify-start' : 'md:right-0 md:justify-end',
+      isLeft.value ? 'md:start-0 md:justify-start' : 'md:end-0 md:justify-end',
       'pointer-events-none',
       drawerPanelTransitionClasses,
       drawerPanelStateClasses[sideKey.value],
@@ -92,8 +93,8 @@
       'pointer-events-auto flex min-h-0 h-full flex-col',
       drawerPanelPositionClasses,
       isLeft.value
-        ? 'md:rounded-r-(--shape-card) md:rounded-l-(--shape-flat)'
-        : 'md:rounded-l-(--shape-card) md:rounded-r-(--shape-flat)'
+        ? 'md:rounded-e-(--shape-card) md:rounded-s-(--shape-flat)'
+        : 'md:rounded-s-(--shape-card) md:rounded-e-(--shape-flat)'
     )
   )
 </script>

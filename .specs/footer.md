@@ -2,15 +2,16 @@
 name: footer
 category: layout
 structure: composition
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: dbca05e2764d0a6c2c1e3c52cecc09f1aef52bb454a1eb66ac8859472edd9595
+checksum: db1b8c9dfe84b350cbd64d4577b03ac282a4f9cbd86130cb508412a6643a1ffd
 created: 2026-08-10
-last_updated: 2026-10-13
+last_updated: 2026-11-12
 ---
+
 # Footer — Component Spec
 
 ## Purpose
@@ -66,14 +67,14 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 ```vue
 <script setup>
-import Brand from '@aziontech/webkit/brand'
-import Footer from '@aziontech/webkit/footer'
-import IconButton from '@aziontech/webkit/icon-button'
-import Select from '@aziontech/webkit/select'
-import StatusIndicator from '@aziontech/webkit/status-indicator'
-import { ref } from 'vue'
+  import Brand from '@aziontech/webkit/brand'
+  import Footer from '@aziontech/webkit/footer'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import Select from '@aziontech/webkit/select'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import { ref } from 'vue'
 
-const language = ref('en')
+  const language = ref('en')
 </script>
 
 <template>
@@ -92,18 +93,34 @@ const language = ref('en')
       <Footer.Link href="/careers">Careers</Footer.Link>
     </Footer.Column>
     <template #social>
-      <IconButton kind="transparent" size="small" icon="pi pi-github" ariaLabel="Azion on GitHub" href="https://github.com/aziontech" />
+      <IconButton
+        kind="transparent"
+        size="small"
+        icon="pi pi-github"
+        ariaLabel="Azion on GitHub"
+        href="https://github.com/aziontech"
+      />
     </template>
     <template #status>
-      <StatusIndicator severity="success" label="All Systems Operational" />
+      <StatusIndicator
+        severity="success"
+        label="All Systems Operational"
+      />
     </template>
     <template #language>
-      <Select v-model="language" placeholder="Language">
+      <Select
+        v-model="language"
+        placeholder="Language"
+      >
         <Select.Trigger ariaLabel="Language" />
       </Select>
     </template>
     <template #brand>
-      <a href="/" aria-label="Azion home"><Brand size="large" /></a>
+      <a
+        href="/"
+        aria-label="Azion home"
+        ><Brand size="large"
+      /></a>
     </template>
     <template #tagline>The web platform for modern workloads</template>
   </Footer>
@@ -114,9 +131,9 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ```vue
 <script setup>
-import Footer from '@aziontech/webkit/footer-root'
-import FooterColumn from '@aziontech/webkit/footer-column'
-import FooterLink from '@aziontech/webkit/footer-link'
+  import Footer from '@aziontech/webkit/footer-root'
+  import FooterColumn from '@aziontech/webkit/footer-column'
+  import FooterLink from '@aziontech/webkit/footer-link'
 </script>
 ```
 
@@ -127,10 +144,11 @@ import FooterLink from '@aziontech/webkit/footer-link'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `'Footer'` | false | Accessible name for the contentinfo landmark. |
-| `kind` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
+| Prop        | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------- | ----------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`                | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                      |
+| `signature` | `'always' \| 'compact'` | `'always'`  | false    | Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same.                                                                                                                         |
+| `kind`      | `'content' \| 'site'`   | `'content'` | false    | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Events
 
@@ -138,16 +156,16 @@ import FooterLink from '@aziontech/webkit/footer-link'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`. |
-| `social` | — | Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`. |
-| `status` | — | Root: the system status indicator. Shares the status band with `language`. |
-| `language` | — | Root: the language select. Rendered *before* `status` when stacked and *after* it from `md`, per the two Figma variants. |
-| `brand` | — | Root: the brand lockup of the signature band. |
-| `tagline` | — | Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure. |
-| `default` | — | `footer-column`: its `Footer.Link` items. |
-| `default` | — | `footer-link`: the link label. |
+| Slot       | Scope | Notes                                                                                                                    |
+| ---------- | ----- | ------------------------------------------------------------------------------------------------------------------------ |
+| `default`  | —     | Root: the `Footer.Column` items; laid out as a 2-column grid that becomes 4 columns at `md`.                             |
+| `social`   | —     | Root: the social icon buttons. Renders its own band; centered stacked, at the row's start from `md`.                     |
+| `status`   | —     | Root: the system status indicator. Shares the status band with `language`.                                               |
+| `language` | —     | Root: the language select. Rendered _before_ `status` when stacked and _after_ it from `md`, per the two Figma variants. |
+| `brand`    | —     | Root: the brand lockup of the signature band.                                                                            |
+| `tagline`  | —     | Root: the one-line tagline; the footer wraps it in the `.text-heading-xl` measure.                                       |
+| `default`  | —     | `footer-column`: its `Footer.Link` items.                                                                                |
+| `default`  | —     | `footer-link`: the link label.                                                                                           |
 
 > Every named slot is a single word, so the compliance parser reads all of them from `defineSlots` — the previous `social-start` / `social-end` pair needed a prose note here because hyphenated (quoted) keys are invisible to it. Each band renders only when at least one of its slots is filled: the status band on `status` or `language`, the signature band on `brand` or `tagline`, the social band on `social`.
 
@@ -155,52 +173,54 @@ import FooterLink from '@aziontech/webkit/footer-link'
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
+- Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| link hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| link hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shell surface | `var(--bg-canvas)` |
-| content column (`kind="site"`) | `layout-column-site` — caps at `--layout-measure-site`, insets by `--layout-boundary-inline` below it |
-| content max-width (`kind="content"`) | _none_ — full bleed across the zone |
-| band inset (`kind="content"`) | `var(--spacing-lg)`, carried inside each band — equal to `var(--layout-boundary-inline)` |
-| columns row gap (mobile 2-row wrap) | `var(--spacing-lg)` |
-| column padding | `var(--spacing-lg)` |
-| column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)` |
-| column internal gap (title → links) | `var(--spacing-md)` |
-| link stack gap | `var(--spacing-xs)` |
-| measure side rules | `var(--border-width-default)` / `var(--border-default)` |
-| band border (top, every band) | `var(--border-width-default)` / `var(--border-default)` |
-| band height floor (`md`+) | `min-h-14` (56px) |
-| band padding-y (stacked) | `var(--spacing-md)` |
-| band padding-x | `var(--spacing-lg)` |
-| social icon gap | `var(--spacing-xxs)` |
-| status ↔ language gap | `var(--spacing-lg)` |
-| signature box padding | `var(--spacing-sm)` inline / `var(--spacing-xl)` block |
-| signature inner padding | `var(--spacing-lg)` |
-| signature brand ↔ tagline gap | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md` |
-| tagline typography / color | `.text-heading-xl` / `var(--text-default)` |
-| gutter texture | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`) |
-| column title typography / color | `.text-label-sm` / `var(--text-muted)` |
-| link typography / color | `.text-label-sm` / `var(--text-default)` |
-| link hover color | `var(--text-muted)` |
-| ring (link focus) | `var(--ring-color)` |
+| Region                               | Token (DESIGN.md)                                                                                     |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| shell surface                        | `var(--bg-canvas)`                                                                                    |
+| content column (`kind="site"`)       | `layout-column-site` — caps at `--layout-measure-site`, insets by `--layout-boundary-inline` below it |
+| content max-width (`kind="content"`) | _none_ — full bleed across the zone                                                                   |
+| band inset (`kind="content"`)        | `var(--spacing-lg)`, carried inside each band — equal to `var(--layout-boundary-inline)`              |
+| columns row gap (mobile 2-row wrap)  | `var(--spacing-lg)`                                                                                   |
+| column padding                       | `var(--spacing-lg)`                                                                                   |
+| column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)`                                               |
+| column internal gap (title → links)  | `var(--spacing-md)`                                                                                   |
+| link stack gap                       | `var(--spacing-xs)`                                                                                   |
+| measure side rules                   | `var(--border-width-default)` / `var(--border-default)`                                               |
+| band border (top, every band)        | `var(--border-width-default)` / `var(--border-default)`                                               |
+| band height floor (`md`+)            | `min-h-14` (56px)                                                                                     |
+| band padding-y (stacked)             | `var(--spacing-md)`                                                                                   |
+| band padding-x                       | `var(--spacing-lg)`                                                                                   |
+| social icon gap                      | `var(--spacing-xxs)`                                                                                  |
+| status ↔ language gap                | `var(--spacing-lg)`                                                                                   |
+| signature box padding                | `var(--spacing-sm)` inline / `var(--spacing-xl)` block                                                |
+| signature inner padding              | `var(--spacing-lg)`                                                                                   |
+| signature brand ↔ tagline gap        | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md`                                           |
+| tagline typography / color           | `.text-heading-xl` / `var(--text-default)`                                                            |
+| gutter texture                       | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`)                                 |
+| column title typography / color      | `.text-label-sm` / `var(--text-muted)`                                                                |
+| link typography / color              | `.text-label-sm` / `var(--text-default)`                                                              |
+| link hover color                     | `var(--text-muted)`                                                                                   |
+| ring (link focus)                    | `var(--ring-color)`                                                                                   |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `--container-max-width` (1280px content measure) | `max-w-(--layout-measure-site)` (1388px) in the `site` placement | Closed. The footer no longer picks a rung to approximate the Figma number: it takes the marketing site's own measure, because the hero, the sections and this footer have to resolve to one width or the frame's side rules do not meet. The measure is the decision; 1280 was one band's reading of it |
-| Brand lockup at 44px (Default) / 16px (Mobile) | `Brand size="large"` (32px) at every width — `size` has no 44px step and is a prop, so it cannot be responsive | `TODO`: add a 44px step to `Brand`, or a responsive `size`. The consumer could pass two `Brand`s behind `hidden`/`md:block`, which the spec deliberately does not ask for |
-| social icon pitch 6px (Default) / 4px (Mobile) | `var(--spacing-xxs)` (4px) | `TODO`: 2px under Figma at desktop; no semantic step sits between 4 and 8 |
-| tagline weight 400 (`--font-weight-normal`) | `.text-heading-xl`, which renders 300 since #876 lightened the heading scale | None — the theme is the authority on weight; the Figma variable predates that change |
+| Figma variable                                   | Temporary primitive                                                                                            | Follow-up                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--container-max-width` (1280px content measure) | `max-w-(--layout-measure-site)` (1388px) in the `site` placement                                               | Closed. The footer no longer picks a rung to approximate the Figma number: it takes the marketing site's own measure, because the hero, the sections and this footer have to resolve to one width or the frame's side rules do not meet. The measure is the decision; 1280 was one band's reading of it |
+| Brand lockup at 44px (Default) / 16px (Mobile)   | `Brand size="large"` (32px) at every width — `size` has no 44px step and is a prop, so it cannot be responsive | `TODO`: add a 44px step to `Brand`, or a responsive `size`. The consumer could pass two `Brand`s behind `hidden`/`md:block`, which the spec deliberately does not ask for                                                                                                                               |
+| social icon pitch 6px (Default) / 4px (Mobile)   | `var(--spacing-xxs)` (4px)                                                                                     | `TODO`: 2px under Figma at desktop; no semantic step sits between 4 and 8                                                                                                                                                                                                                               |
+| tagline weight 400 (`--font-weight-normal`)      | `.text-heading-xl`, which renders 300 since #876 lightened the heading scale                                   | None — the theme is the authority on weight; the Figma variable predates that change                                                                                                                                                                                                                    |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -213,7 +233,7 @@ import FooterLink from '@aziontech/webkit/footer-link'
 - `motion-reduce:transition-none` on the link color transition.
 - Touch target: text links follow the platform convention for footer link lists (<40px height); justified deviation — targets are full-width-of-text with `--spacing-xs` separation.
 
-## Stories (Storybook)
+## Examples
 
 - Default — the `content` placement: the bands full bleed, opening on the page boundary.
 - SitePlacement — the `site` placement: the same bands capped at the site measure, with the side rules, the hatched gutters and the framed column whose bottom rule finishes a marketing page's frame.
@@ -231,10 +251,8 @@ import FooterLink from '@aziontech/webkit/footer-link'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

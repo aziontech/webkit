@@ -1,0 +1,11 @@
+{
+  "component": "closing-call-to-action-templates",
+  "title": "Components/Marketing/Sections/ClosingCallToActionTemplates",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The ask and its two actions on the start side over the waving texture, eight templates to deploy in a scrolling grid on the end side, then the closing frame. Marks flagged `invertInDark` invert under the dark theme.",
+      "file": "default.vue"
+    }
+  ]
+}

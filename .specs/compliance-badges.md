@@ -5,9 +5,10 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 72d09f3a979c3fb39ce305e1d2df2b47c1355236572873161559929598d819c9
+last_updated: 2026-11-11
+checksum: 109d4b60edc1533a50355957e3e21bb27557d0eaac7eb14fe71777cfa9643dcd
 ---
+
 # ComplianceBadges — Component Spec
 
 ## Purpose
@@ -35,7 +36,7 @@ The compliance band: a framed media split whose copy states the certifications a
 
 ```vue
 <script setup>
-import ComplianceBadges from '@aziontech/webkit/compliance-badges'
+  import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 </script>
 
 <template>
@@ -54,14 +55,14 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the headline. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
-| `certifications` | `ComplianceBadgesCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction` | `ComplianceBadgesAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| Prop             | Type                              | Default     | Required | JSDoc                                                                                                             |
+| ---------------- | --------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`        | `string`                          | `''`        | false    | Overline above the headline.                                                                                      |
+| `title`          | `string`                          | `''`        | false    | Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty.               |
+| `description`    | `string`                          | `''`        | false    | Supporting sentence under the headline.                                                                           |
+| `ariaLabel`      | `string`                          | `''`        | false    | Accessible name of the badge list.                                                                                |
+| `certifications` | `ComplianceBadgesCertification[]` | `[]`        | false    | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
+| `primaryAction`  | `ComplianceBadgesAction`          | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
 
 ## Events
 
@@ -78,34 +79,34 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover on the see-more chevron | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ---------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover / focus on the see-more cell | `transition-colors duration-moderate-02 ease-expressive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover on the see-more chevron      | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (pill) | `.text-overline-sm` |
-| typography (see more) | `.text-overline-md` |
-| pill text | `var(--text-default)` |
-| see-more text | `var(--text-muted)` |
-| pill border | `var(--border-muted)` |
-| pill fill | `var(--bg-surface-raised)` |
-| check bubble fill | `var(--success-contrast)` |
-| check glyph | `var(--success)` |
-| see-more hover fill | `var(--bg-hover)` |
-| focus ring | `var(--ring-color)` |
-| cell rhythm | `var(--spacing-lg)` |
-| cell inset | `var(--spacing-xl)` |
-| pill gap | `var(--spacing-xs)` |
+| Region                | Token (DESIGN.md)          |
+| --------------------- | -------------------------- |
+| typography (pill)     | `.text-overline-sm`        |
+| typography (see more) | `.text-overline-md`        |
+| pill text             | `var(--text-default)`      |
+| see-more text         | `var(--text-muted)`        |
+| pill border           | `var(--border-muted)`      |
+| pill fill             | `var(--bg-surface-raised)` |
+| check bubble fill     | `var(--success-contrast)`  |
+| check glyph           | `var(--success)`           |
+| see-more hover fill   | `var(--bg-hover)`          |
+| focus ring            | `var(--ring-color)`        |
+| cell rhythm           | `var(--spacing-lg)`        |
+| cell inset            | `var(--spacing-xl)`        |
+| pill gap              | `var(--spacing-xs)`        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -116,7 +117,14 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 - `motion-reduce:transition-none motion-reduce:transform-none` on both transitions above.
 - Touch target ≥40×40 px — the see-more cell is a full grid cell.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the "more" chevron mirrors (`rtl:-scale-x-100`) and its hover nudge moves toward the end edge.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 
@@ -133,10 +141,8 @@ import ComplianceBadges from '@aziontech/webkit/compliance-badges'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

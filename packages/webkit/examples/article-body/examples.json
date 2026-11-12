@@ -1,0 +1,25 @@
+{
+  "component": "article-body",
+  "title": "Components/Marketing/Sections/ArticleBody",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Magalu success story. Edit the `body` markdown in the Controls panel — its headings re-feed the outline; drop `share`, `community` and `copyPage` and the left rail goes away.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "SuccessStory",
+      "summary": "The Magalu success story under Success cases › Retail: the byline is the date and read time, and the outline lists the three sections of the prose.",
+      "file": "site-success-story.vue",
+      "json": "site-success-story.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Articles/ArticleBody",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["SuccessStory", "SuccessStoryJson"]
+}

@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/layout/frame-box/FrameBox.stories'
+import Borders from '../../../../examples/frame-box/borders.vue'
+import Default from '../../../../examples/frame-box/default.vue'
+import Flush from '../../../../examples/frame-box/flush.vue'
+import Hatch from '../../../../examples/frame-box/hatch.vue'
+import Marks from '../../../../examples/frame-box/marks.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FrameBox from './frame-box.vue'
-
-const { Default, Borders, Marks, Hatch, Flush } = composeStories(stories)
 
 const TESTID = 'layout-frame-box'
 
@@ -89,8 +90,8 @@ describe('FrameBox', () => {
   it.each([
     ['top', 'top-0'],
     ['bottom', 'bottom-0'],
-    ['left', 'left-0'],
-    ['right', 'right-0']
+    ['left', 'start-0'],
+    ['right', 'end-0']
   ] as const)('anchors the marks="%s" pair to its own edge', (marks, edgeClass) => {
     const { getByTestId } = render(FrameBox, { props: { marks } })
     const squares = [...getByTestId(TESTID).querySelectorAll('span[aria-hidden="true"]')]
@@ -187,7 +188,7 @@ describe('FrameBox', () => {
 
   describe('stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId, getByText } = render(Default())
+      const { getByTestId, getByText } = render(Default)
       const root = getByTestId(TESTID)
 
       expect(sides(root, 'data-borders')).toEqual(['bottom', 'left', 'right', 'top'])
@@ -195,7 +196,7 @@ describe('FrameBox', () => {
     })
 
     it('renders the Borders story with one frame per borders value', () => {
-      const { getAllByTestId } = render(Borders())
+      const { getAllByTestId } = render(Borders)
       const frames = getAllByTestId(TESTID)
 
       expect(frames.map((frame) => sides(frame, 'data-borders'))).toEqual([
@@ -209,13 +210,13 @@ describe('FrameBox', () => {
     })
 
     it('renders the Hatch story with the texture on', () => {
-      const { getByTestId } = render(Hatch())
+      const { getByTestId } = render(Hatch)
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-hatch', 'true')
     })
 
     it('renders the Marks story with one frame per marks value', () => {
-      const { getAllByTestId } = render(Marks())
+      const { getAllByTestId } = render(Marks)
       const frames = getAllByTestId(TESTID)
 
       expect(frames.map((frame) => sides(frame, 'data-marks'))).toEqual([
@@ -229,7 +230,7 @@ describe('FrameBox', () => {
     })
 
     it('renders the Flush story with a vertical and a horizontal shared edge', () => {
-      const { getAllByTestId } = render(Flush())
+      const { getAllByTestId } = render(Flush)
       const [stackTop, stackBottom, rowLeft, rowRight] = getAllByTestId(TESTID)
 
       expect(stackTop).not.toHaveAttribute('data-flush')

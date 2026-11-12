@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The cache figure at rest. Move the pointer over it, or focus the page and use the arrow keys over it, to see it answer; its accessible name is the figure's own description unless `aria-label` is set.",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-sm)\">\n    <LineFigure name=\"cache-ttl\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Play",
+   "summary": "`play` walks the figure through its answer on its own until a pointer or focus arrives, and `read` reports each reading so the page can show it. Under reduced motion the figure holds a still frame.",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n  import { ref } from 'vue'\n\n  const reading = ref('')\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-sm) flex-col gap-(--spacing-sm)\">\n    <LineFigure\n      name=\"lb-rotor\"\n      play\n      :intensity=\"0.8\"\n      @read=\"reading = $event\"\n    />\n    <p\n      class=\"m-0 text-body-sm text-(--text-muted)\"\n      aria-live=\"polite\"\n    >\n      {{ reading }}\n    </p>\n  </div>\n</template>"
+  },
+  {
+   "name": "Gallery",
+   "summary": "All 25 registered figures, one per product. Each loads on demand, so a page pays only for the figures it draws.",
+   "sfc": "<script setup>\n  import LineFigure from '@aziontech/webkit/line-figure'\n\n  const names = [\n    'azion-404',\n    'build-terminal',\n    'secure-shield',\n    'infra-workloads',\n    'ai-versioning',\n    'store-replicas',\n    'observe-stream',\n    'platform-edge',\n    'cache-ttl',\n    'lb-rotor',\n    'ddos-flood',\n    'bot-lineup',\n    'dns-lookup',\n    'metrics-gauge',\n    'image-variants',\n    'orchestrator-scale',\n    'functions-invoke',\n    'applications-rules',\n    'object-storage-bucket',\n    'deployments-release',\n    'variables-keys',\n    'connectors-link',\n    'custom-pages-status',\n    'certificates-chain',\n    'network-lists-gate'\n  ]\n</script>\n\n<template>\n  <ul class=\"m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 md:grid-cols-4\">\n    <li\n      v-for=\"name in names\"\n      :key=\"name\"\n      class=\"flex flex-col gap-(--spacing-xs)\"\n    >\n      <LineFigure :name=\"name\" />\n      <span class=\"text-label-code-sm text-(--text-muted)\">{{ name }}</span>\n    </li>\n  </ul>\n</template>"
+  }
+ ]
+}

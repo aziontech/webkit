@@ -1,0 +1,144 @@
+{
+ "name": "input",
+ "binding": "Input",
+ "import": "@aziontech/webkit/input",
+ "treeShakeableImport": "@aziontech/webkit/input",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).",
+ "setup": null,
+ "useWhen": [
+  "Capture a single line of free-form text (names, titles, search terms)."
+ ],
+ "avoidWhen": [
+  "The value spans multiple lines → use `textarea`.",
+  "The value is strictly numeric → use `number-input`.",
+  "The user must choose from a fixed set → use `select` / `multi-select`."
+ ],
+ "related": [
+  "textarea` — multi-line free text.",
+  "number-input` — numeric input with stepper semantics.",
+  "field` — wraps this input with label, description and error; the input reads its id, `aria-describedby` and state from it."
+ ],
+ "bestPractices": [
+  "Prefer the `field-*` wrapper when you need a label, helper text, or validation message.",
+  "Set an appropriate `type`/`inputmode` for the content (email, url, …)."
+ ],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way bound value of the field."
+  },
+  {
+   "name": "placeholder",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Placeholder shown when the field is empty."
+  },
+  {
+   "name": "type",
+   "type": "'text' | 'email' | 'number'",
+   "default": "'text'",
+   "required": "false",
+   "doc": "Native input type. Restricted to single-line variants the field treats identically."
+  },
+  {
+   "name": "maxLength",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `maxlength` — maximum number of characters allowed."
+  },
+  {
+   "name": "autocomplete",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `autocomplete` token on the `<input>` (e.g. `email`, `username`, `off`). Omitted when unset."
+  },
+  {
+   "name": "spellcheck",
+   "type": "boolean | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Native `spellcheck` on the `<input>`. Set `false` for slugs, IDs and domains. Omitted when unset: the default is an explicit `undefined`, because Vue would otherwise cast an absent boolean to `false` and render `spellcheck=\"false\"` on every field."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects height only — padding and typography are constant. Heights: small=28px, medium=32px, large=40px."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field read-only: value is visible, focusable and copyable but not editable. Renders transparent with a dashed border and no hover (`data-readonly`), distinct from both the editable and the disabled field."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Applies the invalid border + ring tokens and sets `aria-invalid`."
+  }
+ ],
+ "events": [
+  {
+   "name": "update:modelValue",
+   "payload": "string",
+   "notes": "Emitted on native `input` event with the new value."
+  }
+ ],
+ "slots": [
+  {
+   "name": "iconLeft",
+   "scope": "",
+   "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
+  },
+  {
+   "name": "iconRight",
+   "scope": "",
+   "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <Input\n    v-model=\"value\"\n    placeholder=\"Type something\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const small = ref('')\n  const medium = ref('')\n  const large = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"small\"\n      size=\"small\"\n      placeholder=\"Small (28px)\"\n    />\n    <Input\n      v-model=\"medium\"\n      size=\"medium\"\n      placeholder=\"Medium (32px)\"\n    />\n    <Input\n      v-model=\"large\"\n      size=\"large\"\n      placeholder=\"Large (40px)\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Icons",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const leading = ref('')\n  const trailing = ref('')\n  const both = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"leading\"\n      placeholder=\"Leading icon\"\n    >\n      <template #iconLeft>\n        <i class=\"pi pi-globe\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"trailing\"\n      placeholder=\"Trailing icon\"\n    >\n      <template #iconRight>\n        <i class=\"pi pi-search\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"both\"\n      placeholder=\"Both icons\"\n    >\n      <template #iconLeft>\n        <i class=\"pi pi-globe\" />\n      </template>\n      <template #iconRight>\n        <i class=\"pi pi-search\" />\n      </template>\n    </Input>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/input.md"
+}

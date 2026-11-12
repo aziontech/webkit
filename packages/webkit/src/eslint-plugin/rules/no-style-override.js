@@ -1,4 +1,5 @@
 import { loadCatalog } from '../catalog.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../layout-classes.js'
 import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
 
 const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
@@ -7,7 +8,8 @@ function styleAttr(attr) {
   if (!attr || attr.type !== 'VAttribute') return null
   if (!attr.directive) {
     const name = attr.key?.name
-    return name === 'class' || name === 'style' ? { attr: name, bound: false } : null
+    if (name !== 'class' && name !== 'style') return null
+    return { attr: name, bound: false, value: attr.value?.value ?? '' }
   }
   if (attr.key?.name?.name !== 'bind') return null
   const arg = attr.key?.argument
@@ -20,7 +22,7 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component.'
+        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component. A static class made only of layout utilities (w-full, max-w-*, self-*, shrink-0) is allowed.'
     },
     schema: [
       {
@@ -34,7 +36,9 @@ export default {
     ],
     messages: {
       override:
-        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam)."
+        "Avoid setting {{written}} on the webkit component '<{{tag}}>' — it overrides design-system styles. Compose inside its slots, or use a component built to be personalized (style_seam). Only a static class of layout utilities is allowed: {{allowed}}.",
+      overrideClasses:
+        "Avoid the class(es) {{classes}} on the webkit component '<{{tag}}>' — they override design-system styles. Only layout utilities are allowed on a webkit tag: {{allowed}}. Put the rest on a wrapper element or compose inside its slots."
     }
   },
   create(context) {
@@ -84,11 +88,22 @@ export default {
           const hit = styleAttr(attr)
           if (!hit) continue
           if (hit.attr === 'style' && !checkStyle) continue
+          const allowed = LAYOUT_CLASS_FAMILIES.join(', ')
+          if (hit.attr === 'class' && !hit.bound) {
+            const rejected = nonLayoutClasses(hit.value)
+            if (!rejected.length) continue
+            context.report({
+              node: attr,
+              messageId: 'overrideClasses',
+              data: { classes: rejected.join(' '), tag: rawName, allowed }
+            })
+            continue
+          }
           const written = hit.bound ? `:${hit.attr}` : hit.attr
           context.report({
             node: attr,
             messageId: 'override',
-            data: { written, tag: rawName }
+            data: { written, tag: rawName, allowed }
           })
         }
       }

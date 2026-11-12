@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
   import Spinner from '../../../utils/spinner/spinner.vue'
+  import { ToastInjectionKey } from '../injection-key'
   import type { ToastType } from '../use-toast-store'
 
   defineOptions({
@@ -31,9 +32,12 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__item'
   )
 
-  const role = computed(() =>
-    props.type === 'error' || props.type === 'warning' ? 'alert' : 'status'
-  )
+  const inToaster = inject(ToastInjectionKey, null) !== null
+
+  const role = computed(() => {
+    if (inToaster) return undefined
+    return props.type === 'error' || props.type === 'warning' ? 'alert' : 'status'
+  })
 
   const icons: Record<ToastType, string> = {
     default: '',
@@ -77,7 +81,7 @@
     </div>
     <div
       v-if="$slots['trailing']"
-      class="-my-(--spacing-xxs) -mr-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
+      class="-my-(--spacing-xxs) -me-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
     >
       <slot name="trailing" />
     </div>

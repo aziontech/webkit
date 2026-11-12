@@ -1,9 +1,9 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-frame/DocFrame.stories'
+import Default from '../../../../examples/doc-frame/default.vue'
+import Media from '../../../../examples/doc-frame/media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocFrame from './doc-frame.vue'
 
@@ -12,8 +12,6 @@ import DocFrame from './doc-frame.vue'
 // Lightbox tests emulate reduced motion (matchMedia override only): the close path
 // unmounts on `transitionend`, which never fires in an unstyled DOM, and the component
 // skips the FLIP under this preference — so the tested path is a real user path.
-
-const { Default, Media } = composeStories(stories)
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0))
 
@@ -237,12 +235,12 @@ describe('DocFrame', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across the media variants', async () => {
-      const { container } = render(Media())
+      const { container } = render(Media)
       await expectNoA11yViolations(container)
     })
 

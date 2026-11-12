@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Overline, headline and description centered inside the frame. The frame’s bottom rule is what divides the header from the section body, so no margin is needed below it.",
+   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <SectionTitle\n    eyebrow=\"Platform\"\n    title=\"Everything runs at the edge\"\n    description=\"One platform for applications, security and observability.\"\n  />\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "summary": "The three layouts stacked. `centered` and `left` share one column and differ only in alignment; `horizontal` puts the headline and its description in a three-column grid, which is what makes a wide band read as one row instead of a tall stack.",
+   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div>\n    <SectionTitle\n      kind=\"centered\"\n      eyebrow=\"Centered\"\n      title=\"A symmetric section opener\"\n      description=\"Copy capped at the reading width and centered in the frame — the default.\"\n    />\n    <SectionTitle\n      kind=\"left\"\n      eyebrow=\"Left\"\n      title=\"The same stack, at the start edge\"\n      description=\"Same anatomy, aligned to the start — for a section that reads rather than announces.\"\n    />\n    <SectionTitle\n      kind=\"horizontal\"\n      eyebrow=\"Horizontal\"\n      title=\"Headline in the first column\"\n      description=\"The description takes the third column, with the middle one left as air. Below the md breakpoint the grid collapses and this falls back under the headline.\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three steps of the headline scale, stacked. `size` moves the headline between `text-heading-lg`, `text-heading-xl` and `text-heading-2xl` — the description stays at reading size in all three, and the heading stays an `h2`, so the page outline is unaffected by how loud a header is.",
+   "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div>\n    <SectionTitle\n      size=\"small\"\n      kind=\"left\"\n      eyebrow=\"Small\"\n      title=\"A subsection inside a band\"\n      description=\"The headline drops a step so it opens a part of a section without competing with the section's own header.\"\n    />\n    <SectionTitle\n      size=\"medium\"\n      kind=\"left\"\n      eyebrow=\"Medium\"\n      title=\"An ordinary section opener\"\n      description=\"The default step, and the one nearly every section header wants.\"\n    />\n    <SectionTitle\n      size=\"large\"\n      kind=\"left\"\n      eyebrow=\"Large\"\n      title=\"The headline is the statement\"\n      description=\"For a band that carries one claim and little else — the copy under it stays at reading size.\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "purpose": "One panel inside `DocTabs`. It carries its title and its body only; `DocTabs` reads the title to build the strip. Rendered on its own it is a `display: contents` wrapper around its body.",
+ "useWhen": [
+  "As a direct child of `DocTabs`."
+ ],
+ "avoidWhen": [
+  "Outside `DocTabs` — it renders no tab of its own."
+ ],
+ "related": [
+  "DocTabs`."
+ ],
+ "bestPractices": [
+  "A short title: the platform or tool name."
+ ]
+}

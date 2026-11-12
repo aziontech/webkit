@@ -1,0 +1,48 @@
+{
+  "id": "platform/account/change-plan-drawer",
+  "name": "ChangePlanDrawer",
+  "title": "Templates/Platform/Account/ChangePlanDrawer",
+  "surface": "product",
+  "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "change plan",
+    "plan selection",
+    "pricing plans drawer",
+    "choose plan",
+    "switch plan",
+    "monthly or yearly plans",
+    "compare plans",
+    "mudar plano",
+    "trocar plano",
+    "escolher plano",
+    "upgrade to pro",
+    "upgrade plan",
+    "plan upgrade",
+    "checkout",
+    "checkout drawer",
+    "upgrade drawer",
+    "purchase plan",
+    "fazer upgrade",
+    "assinar plano",
+    "finalizar compra",
+    "upgrade checkout",
+    "accept terms",
+    "checkout de upgrade"
+  ],
+  "skills": ["webkit-microcopy", "webkit-ux-heuristics", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Default",
+    "file": "change-plan-drawer.vue"
+  },
+  "variants": [
+    {
+      "name": "Checkout",
+      "summary": "The Upgrade to Pro drawer opened at checkout: the charge with Due today and the renewal and tax note, the payment method, the billing address, and a required terms Checkbox with Terms of Service and Privacy Policy links; Upgrade without it marks the checkbox invalid and focuses it.",
+      "file": "variants/checkout.vue"
+    }
+  ]
+}

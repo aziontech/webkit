@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useLocale } from '../../../composables/use-locale'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
-  import Divider from '../../layout/divider/divider.vue'
+  import Separator from '../../layout/separator/separator.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -65,6 +67,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t, formatDate } = useLocale({ docPageHeader: en.docPageHeader })
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-page-header')
 
@@ -81,12 +84,12 @@
     if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
     const parsed = new Date(`${raw}T00:00:00Z`)
     if (Number.isNaN(parsed.getTime())) return raw
-    return new Intl.DateTimeFormat('en-US', {
+    return formatDate(parsed, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
       timeZone: 'UTC'
-    }).format(parsed)
+    })
   })
 </script>
 
@@ -124,7 +127,7 @@
     <div
       v-if="updatedLabel || metaActions.length"
       :data-undated="updatedLabel ? null : ''"
-      class="flex flex-wrap items-center gap-(--spacing-xxs) data-[undated]:-ml-(--spacing-xs)"
+      class="flex flex-wrap items-center gap-(--spacing-xxs) data-[undated]:-ms-(--spacing-xs)"
     >
       <p
         v-if="updatedLabel"
@@ -135,7 +138,7 @@
           aria-hidden="true"
         />
         <span>
-          Last updated
+          {{ t('docPageHeader.lastUpdated') }}
           <time :datetime="lastUpdated">{{ updatedLabel }}</time>
         </span>
       </p>
@@ -148,11 +151,11 @@
           aria-hidden="true"
           class="mx-(--spacing-xxs) hidden h-4 items-center md:flex"
         >
-          <Divider orientation="vertical" />
+          <Separator orientation="vertical" />
         </span>
         <Tooltip :text="action.tip ?? ''">
           <Button
-            kind="text"
+            kind="transparent"
             size="small"
             :label="action.label"
             :icon="action.icon ?? ''"

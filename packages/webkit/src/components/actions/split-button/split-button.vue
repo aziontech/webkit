@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import Dropdown from '../../navigation/dropdown'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+  import { directionalIconClass } from '../../../utils/directional-icons'
+  import DropdownMenu from '../../navigation/dropdown-menu'
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
@@ -60,6 +63,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ splitButton: en.splitButton })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-split-button'
@@ -87,7 +91,9 @@
   }
 
   const toggleAriaLabel = computed(() =>
-    displayLabel.value ? `${displayLabel.value} — more actions` : 'More actions'
+    displayLabel.value
+      ? t('splitButton.moreActionsFor', { label: displayLabel.value })
+      : t('splitButton.moreActions')
   )
 
   function onPrimaryClick(event: MouseEvent) {
@@ -116,7 +122,7 @@
     :data-loading="loading || null"
     class="relative inline-flex w-fit"
   >
-    <Dropdown
+    <DropdownMenu
       placement="bottom-end"
       :disabled="disabled || loading"
       :data-testid="`${testId}__menu`"
@@ -131,11 +137,11 @@
           :disabled="disabled"
           :loading="loading"
           :data-testid="`${testId}__primary`"
-          class="rounded-r-none! focus-visible:z-1"
+          class="rounded-e-none! focus-visible:z-1"
           @click="onPrimaryClick"
         />
 
-        <Dropdown.Trigger :data-testid="`${testId}__toggle`">
+        <DropdownMenu.Trigger :data-testid="`${testId}__toggle`">
           <IconButton
             icon="pi pi-chevron-down"
             :ariaLabel="toggleAriaLabel"
@@ -143,13 +149,13 @@
             :size="size"
             :disabled="disabled || loading"
             :data-testid="`${testId}__toggle-button`"
-            class="rounded-l-none! -ml-px border-l border-(--border-default) focus-visible:z-1"
+            class="rounded-s-none! -ms-px border-s border-(--border-default) focus-visible:z-1"
           />
-        </Dropdown.Trigger>
+        </DropdownMenu.Trigger>
       </div>
 
-      <Dropdown.Group>
-        <Dropdown.Option
+      <DropdownMenu.Group>
+        <DropdownMenu.Option
           v-for="(item, index) in model"
           :key="`${optionValue(item)}-${index}`"
           :value="optionValue(item)"
@@ -163,13 +169,13 @@
             #left
           >
             <i
-              :class="item.icon"
+              :class="[item.icon, directionalIconClass(item.icon)]"
               class="text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </template>
-        </Dropdown.Option>
-      </Dropdown.Group>
-    </Dropdown>
+        </DropdownMenu.Option>
+      </DropdownMenu.Group>
+    </DropdownMenu>
   </div>
 </template>

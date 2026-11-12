@@ -2,11 +2,11 @@
 name: topic
 category: marketing
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
-checksum: 586a23f51caba773675aa8f27617096323f683cc58cf4a5a1e5ff690eae061f6
+checksum: 18016ea7679fe1bf93c8bb6ea228e4f2d5c033e79bd849df82d211af310f52a4
 created: 2026-09-24
-last_updated: 2026-10-22
+last_updated: 2026-11-11
 ---
 
 # Topic — Component Spec
@@ -48,7 +48,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 ```vue
 <script setup>
-import Topic from '@aziontech/webkit/topic'
+  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -63,13 +63,13 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `—` | true | The claim, rendered as the topic's heading. |
-| `description` | `string` | `''` | false | One sentence explaining the claim; overridden by the default slot. |
-| `icon` | `string` | `''` | false | Icon class for the glyph that leads the headline. |
-| `href` | `string` | `''` | false | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow. |
-| `headingLevel` | `TopicHeadingLevel` | `2` | false | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
+| Prop           | Type                | Default | Required | JSDoc                                                                                                                                                                                          |
+| -------------- | ------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`        | `string`            | `—`     | true     | The claim, rendered as the topic's heading.                                                                                                                                                    |
+| `description`  | `string`            | `''`    | false    | One sentence explaining the claim; overridden by the default slot.                                                                                                                             |
+| `icon`         | `string`            | `''`    | false    | Icon class for the glyph that leads the headline.                                                                                                                                              |
+| `href`         | `string`            | `''`    | false    | When set, the whole claim renders as an anchor link to this URL and its headline closes on a trailing arrow.                                                                                   |
+| `headingLevel` | `TopicHeadingLevel` | `2`     | false    | Level of the heading element. Keep `2` when the band has no headline of its own; drop it to `3` when a `section-title` has already opened the section, so the document outline stays in order. |
 
 ## Events
 
@@ -77,9 +77,9 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Description body; replaces the `description` prop when provided. |
+| Slot      | Scope | Notes                                                            |
+| --------- | ----- | ---------------------------------------------------------------- |
+| `default` | —     | Description body; replaces the `description` prop when provided. |
 
 ## States
 
@@ -93,44 +93,51 @@ import Topic from '@aziontech/webkit/topic'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus on a linked claim | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                             | Animation / Transition                                                 | Token (see `.claude/docs/DESIGN.md` § Animations)      | Reduced-motion fallback         |
+| ----------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------ | ------------------------------- |
+| hover / focus on a linked claim     | `transition-colors duration-150 ease-out`                              | inline (matches catalog)                               | `motion-reduce:transition-none` |
 | hover on a linked claim (its arrow) | `transition-[translate] duration-moderate-02 ease-expressive-entrance` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (heading) | `.text-heading-xs` |
-| typography (description) | `.text-body-md` |
-| typography (glyph size) | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
-| typography (trailing arrow) | `.text-body-xs` |
-| glyph | `var(--primary)` |
-| heading ink | `var(--text-default)` |
-| heading ink (linked, hover) | `var(--primary)` |
-| description ink | `var(--text-muted)` |
-| focus ring | `var(--ring-color)` on `var(--bg-canvas)` |
-| spacing (headline row to sentence) | `var(--spacing-sm)` |
-| spacing (glyph to headline) | `var(--spacing-xs)` |
-| spacing (headline to arrow) | `var(--spacing-xxs)` |
+| Region                             | Token (DESIGN.md)                                                                           |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| typography (heading)               | `.text-heading-xs`                                                                          |
+| typography (description)           | `.text-body-md`                                                                             |
+| typography (glyph size)            | `.text-heading-xs` — the glyph sits on the headline's line, so it takes the headline's size |
+| typography (trailing arrow)        | `.text-body-xs`                                                                             |
+| glyph                              | `var(--primary)`                                                                            |
+| heading ink                        | `var(--text-default)`                                                                       |
+| heading ink (linked, hover)        | `var(--text-primary)`                                                                       |
+| description ink                    | `var(--text-muted)`                                                                         |
+| focus ring                         | `var(--ring-color)` on `var(--bg-canvas)`                                                   |
+| spacing (headline row to sentence) | `var(--spacing-sm)`                                                                         |
+| spacing (glyph to headline)        | `var(--spacing-xs)`                                                                         |
+| spacing (headline to arrow)        | `var(--spacing-xxs)`                                                                        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the linked root draws an inset `focus-visible` ring in `var(--ring-color)` on its `::after`, so the ring outlines the whole cell it covers. Without an `href` the topic holds no interactive control of its own.
 - Keyboard map: `Tab` reaches the linked claim and `Enter` follows it — the anchor's own behaviour, no handler of our own. Unlinked, the topic is static content and `Tab` passes through whatever the description slot contains.
 - ARIA: both glyphs are decorative and carry `aria-hidden="true"` — the leading icon and the trailing arrow — so the link's accessible name is the headline and the sentence, the copy a reader sees. `headingLevel` is what keeps the document outline in order (axe `heading-order`); the heading stays a heading inside the anchor.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and for the hovered headline — all against the fill the surrounding cell provides.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): `var(--text-default)` for the heading, `var(--text-muted)` for the description, `var(--primary)` for the glyph and `var(--text-primary)` for the hovered headline — all against the fill the surrounding cell provides.
 - `motion-reduce:transition-none` on both transitions a linked claim carries.
 - Touch target ≥40×40 px — the whole claim is the target, so it is the cell's own height; a topic is never smaller than its heading plus its sentence.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the external-link arrow does not mirror; its hover nudge moves toward the end edge (`rtl:` flips the `translate-x`).
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 - WithoutIcon — the glyph-less state (mutually-exclusive state of the `icon` prop)
@@ -150,10 +157,8 @@ import Topic from '@aziontech/webkit/topic'
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

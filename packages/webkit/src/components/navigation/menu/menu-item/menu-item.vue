@@ -2,7 +2,8 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { cn } from '../../../../utils/cn'
-  import Tag from '../../../tag/tag.vue'
+  import { directionalIconClass } from '../../../../utils/directional-icons'
+  import Tag from '../../../content/tag/tag.vue'
 
   export type MenuItemKind = 'option' | 'group'
   export type MenuItemTagSeverity =
@@ -87,8 +88,8 @@
     cn(
       'group relative flex h-8 w-full shrink-0 items-center',
       'gap-(--spacing-xs) rounded-(--shape-elements)',
-      'pr-(--spacing-xs) py-(--spacing-xxs)',
-      props.icon ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)',
+      'pe-(--spacing-xs) py-(--spacing-xxs)',
+      props.icon ? 'ps-(--spacing-xxs)' : 'ps-(--spacing-sm)',
       'transition-colors motion-reduce:transition-none',
       focusRingClasses,
       props.selected
@@ -102,7 +103,7 @@
   const groupRowClasses = computed(() =>
     cn(
       'relative flex h-7 w-full shrink-0 items-center',
-      'rounded-(--shape-elements) pl-(--spacing-xxs) pr-(--spacing-xs) py-(--spacing-xxs)',
+      'rounded-(--shape-elements) ps-(--spacing-xxs) pe-(--spacing-xs) py-(--spacing-xxs)',
       'text-(--text-muted)',
       attrs.class
     )
@@ -159,7 +160,7 @@
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, iconClasses]"
+          :class="[icon, directionalIconClass(icon), iconClasses]"
           aria-hidden="true"
         />
       </span>
@@ -200,12 +201,12 @@
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, iconClasses]"
+          :class="[icon, directionalIconClass(icon), iconClasses]"
           aria-hidden="true"
         />
       </span>
       <span
-        class="min-w-0 flex-1 truncate text-left text-label-md"
+        class="min-w-0 flex-1 truncate text-start text-label-md"
         :data-testid="`${testId}__label`"
       >
         <slot>{{ label }}</slot>

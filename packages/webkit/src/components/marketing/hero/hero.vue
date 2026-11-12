@@ -102,8 +102,8 @@
   const attrs = useAttrs()
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-hero')
 
-  const hasBackdrop = computed(() => Boolean(slots.background) || props.texture !== 'none')
-  const hasMedia = computed(() => Boolean(slots.media))
+  const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
+  const hasMedia = () => Boolean(slots.media)
   const hasFloorTexture = computed(() => props.floorTexture !== 'none')
 </script>
 
@@ -116,8 +116,8 @@
     :data-bordered="props.bordered || null"
     :data-padded="props.padded || null"
     :data-size="size"
-    :data-media="hasMedia || null"
-    :data-media-align="hasMedia ? mediaAlign : null"
+    :data-media="hasMedia() || null"
+    :data-media-align="hasMedia() ? mediaAlign : null"
     :data-align="align"
     :style="{
       '--banner-offset': offset || undefined,
@@ -126,7 +126,7 @@
     class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[kind=screen]:flex data-[kind=screen]:min-h-[calc(100dvh-var(--banner-offset,0rem))] data-[kind=screen]:flex-col"
   >
     <div
-      v-if="hasBackdrop"
+      v-if="hasBackdrop()"
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 overflow-hidden [z-index:var(--banner-z-background,0)]"
     >
@@ -163,7 +163,7 @@
       class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=top]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=bottom]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-xxl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-xxl)*2)]"
     >
       <div
-        v-if="hasMedia"
+        v-if="hasMedia()"
         class="grid items-center gap-(--spacing-xxl) md:grid-cols-2 md:gap-(--spacing-xl)"
       >
         <div class="min-w-0">

@@ -1,6 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+  import { directionalIconClass } from '../../../utils/directional-icons'
+
   export type LinkSize = 'small' | 'medium' | 'large'
   export type LinkTarget = '_self' | '_blank'
 
@@ -10,7 +14,7 @@
   })
 
   interface Props {
-    /** Visible label rendered inside the link. */
+    /** Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`). */
     label?: string
     /** Size token. Affects height, gap, and typography. */
     size?: LinkSize
@@ -27,7 +31,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: 'Learn More',
+    label: '',
     size: 'large',
     disabled: false,
     showIcon: true,
@@ -41,11 +45,12 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ link: en.link })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
 
   const rootClasses = computed(() => [
-    'group relative inline-flex shrink-0 items-center whitespace-nowrap',
+    'group inline-flex shrink-0 items-center whitespace-nowrap',
     'rounded-(--shape-button) text-(--text-link)',
     'transition-colors duration-150 ease-out motion-reduce:transition-none',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
@@ -54,7 +59,7 @@
     'data-[size=medium]:h-8 data-[size=medium]:min-h-8 data-[size=medium]:text-button-md',
     'data-[size=small]:h-7 data-[size=small]:min-h-7 data-[size=small]:text-button-md',
     'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
-    'data-[disabled]:text-(--text-disabled)! data-[disabled]:[&_.link-ghost]:hidden',
+    'data-[disabled]:text-(--text-disabled)!',
     attrs['class']
   ])
 
@@ -82,23 +87,18 @@
     @click="handleClick"
   >
     <span
-      class="link-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-(--spacing-xs) -right-(--spacing-xs) group-data-[size=large]:h-8 group-data-[size=medium]:h-6 group-data-[size=small]:h-5 rounded-(--shape-button) bg-(--bg-surface-raised) opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 before:bg-(--bg-hover) group-active:before:bg-(--bg-active)"
-      aria-hidden="true"
-      :data-testid="`${testId}__ghost`"
-    />
-    <span
-      class="relative z-1 inline-flex flex-nowrap items-center gap-(--spacing-xs)"
+      class="inline-flex flex-nowrap items-center gap-(--spacing-xs)"
       :data-testid="`${testId}__content`"
     >
       <span
-        class="inline leading-none"
+        class="inline leading-none underline-offset-4 group-hover:underline group-focus-visible:underline"
         :data-testid="`${testId}__label`"
       >
-        {{ label }}
+        {{ label || t('link.label') }}
       </span>
       <i
         v-if="showIcon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="inline-flex size-(--spacing-sm) shrink-0 items-center justify-center text-[length:inherit] leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The titled shape: a row naming what the block is, above the prompt and its copy control.",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <DocPrompt title=\"AI Assistant\">\n    Deploy this repository to Azion and show me the edge URL when it is live.\n  </DocPrompt>\n</template>"
+  },
+  {
+   "name": "Kinds",
+   "summary": "The two lengths, and they want opposite things. `block` wraps at the measure; `line` refuses to wrap — a single instruction broken across three lines reads as three instructions — and scrolls sideways instead, fading whichever edge has text behind it. It is also why the copy control sits at the top of a `block` and centred against a `line`: the control is 28px and one line of the prompt face is 19.5px, so a shape that never grows downward has nothing to top-align to.",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <DocPrompt\n      kind=\"block\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live.\n    </DocPrompt>\n    <DocPrompt\n      kind=\"line\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live. Then open the\n      deployment log, find the cold-start figure, and summarise it for me.\n    </DocPrompt>\n  </div>\n</template>"
+  },
+  {
+   "name": "Capped",
+   "summary": "Past four lines a `block` prompt is capped rather than shown whole — a nine-line prompt above the step it belongs to pushes that step off the screen. The cut is a fade into the block own surface plus a Show more control, never an ellipsis: an ellipsis says text was removed, and nothing here was. The cap is measured, so a prompt that fits earns no control, and the full text is in the DOM either way.",
+   "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <DocPrompt title=\"Priming prompt\">\n    You are working in an Azion Web Platform project. Read the repository, identify the framework\n    and its build output directory, then create the edge application, bind a domain to it, and\n    deploy. Before you deploy, tell me which framework you detected and which build command you are\n    about to run, and wait for me to confirm. After the deploy succeeds, report the edge URL and the\n    propagation time, and leave the build artifacts in place so I can inspect them.\n  </DocPrompt>\n</template>"
+  }
+ ]
+}

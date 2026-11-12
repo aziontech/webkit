@@ -1,0 +1,36 @@
+{
+  "component": "flow",
+  "title": "Components/Primitives/Data/Flow",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A sequential flow of nodes joined by connectors.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Parallel",
+      "summary": "A parallel group fans out from the previous node and back into the next.",
+      "file": "parallel.vue"
+    },
+    {
+      "name": "Branches",
+      "summary": "A leading parallel fans in and a trailing parallel fans out — connectors route correctly at the edges of the sequence.",
+      "file": "branches.vue"
+    },
+    {
+      "name": "CustomNodes",
+      "summary": "Unstyled nodes whose slot content defines the appearance: a start dot, the default box, and a taller custom node.",
+      "file": "custom-nodes.vue"
+    },
+    {
+      "name": "AnchoredNode",
+      "summary": "A multi-row card: the incoming connector attaches at the `end` anchor (my-worker) and the outgoing connectors leave from the `start` anchor (Bindings).",
+      "file": "anchored-node.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "A disabled node with reduced-opacity connectors.",
+      "file": "disabled.vue"
+    }
+  ]
+}

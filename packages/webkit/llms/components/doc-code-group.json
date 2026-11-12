@@ -1,0 +1,83 @@
+{
+ "name": "doc-code-group",
+ "binding": "DocCodeGroup",
+ "import": "@aziontech/webkit/doc-code-group",
+ "treeShakeableImport": "@aziontech/webkit/doc-code-group",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface. One sample renders a block titled by a label header (the sample label, else the language's readable name: Shell, JavaScript, JSON); several render the joined tab strip. A sample's `output` — what its command prints — renders as a separate muted \"Output\" block under it, with no copy control, so the command block holds only what the reader runs.",
+ "setup": null,
+ "useWhen": [
+  "The same install command for npm, pnpm and yarn.",
+  "The same request in cURL, JavaScript and Python."
+ ],
+ "avoidWhen": [
+  "For unrelated snippets — use one `CodeBlock` each.",
+  "For prose that differs per platform — use `DocTabs`."
+ ],
+ "related": [
+  "CodeBlock` — the surface it renders on.",
+  "DocTabs` — alternatives that are prose, not code."
+ ],
+ "bestPractices": [
+  "Label each sample with what differs (the language or the tool), not with \"Example\". With one sample, leave `label` empty: the header names the language.",
+  "Keep the same order across a page.",
+  "Do: set `language` on every sample, so the header reads \"Shell\" or \"JavaScript\" and the code is highlighted.",
+  "Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.",
+  "Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.",
+  "Do: show a standalone printout (a deploy log) with `kind=\"output\"`.",
+  "Don't: write output into `code` — never `curl -I https://example.com\\n# HTTP/2 200`, never `$ azion version\\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.",
+  "Don't: turn the label header off on a docs page."
+ ],
+ "props": [
+  {
+   "name": "samples",
+   "type": "DocCodeSample[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing."
+  },
+  {
+   "name": "showLineNumbers",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the line-number gutter."
+  },
+  {
+   "name": "showLabel",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Shows the label header (the sample label or the language name) on a single sample."
+  },
+  {
+   "name": "kind",
+   "type": "'code' | 'output'",
+   "default": "'code'",
+   "required": "false",
+   "doc": "What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an \"Output\" label, without a copy control."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"[{ language: 'bash', code: 'azion link --preset vue' }]\" />\n</template>"
+  },
+  {
+   "name": "Group",
+   "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n\n  const samples = [\n    { label: 'npm', language: 'bash', code: 'npm install @aziontech/webkit' },\n    { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/webkit' },\n    { label: 'yarn', language: 'bash', code: 'yarn add @aziontech/webkit' }\n  ]\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"samples\" />\n</template>"
+  },
+  {
+   "name": "WithOutput",
+   "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n\n  const samples = [\n    {\n      language: 'bash',\n      code: 'curl -I https://<your-azion-domain>',\n      output: 'HTTP/2 200'\n    }\n  ]\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"samples\" />\n</template>"
+  }
+ ],
+ "docs": "components/doc-code-group.md"
+}

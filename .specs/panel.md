@@ -3,16 +3,77 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
-checksum: e43932adb94c9ff2d1d1557c897336b8973c63ecc0f95d86e02c1b6011a10f4c
+spec_version: 2
+checksum: 3e542bf8614a154398d2860f62bb171ff0b375ee30bd47e8f8b5287bcfbdf422
 created: 2026-05-22
-last_updated: 2026-05-29
+last_updated: 2026-11-11
 ---
+
 # Panel — Component Spec
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Migrated from the existing implementation at `packages/webkit/src/components/webkit/overlay/panel/`.
+Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/panel/`.
+
+## When to use
+
+- Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title and close control, `PanelContent` for the body that scrolls, `PanelFooter` for the actions.
+- A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page.
+
+## When NOT to use
+
+- The surface has to open over the page and trap focus → use `dialog`.
+- The surface slides in from a screen edge → use `drawer`.
+- Rich content anchored to a trigger that leaves the page interactive → use `popover`.
+- A card in the page layout, with header, content and footer slots → use `card`.
+
+## Related
+
+- `dialog` — renders a `Panel` inside `DialogContent`; compose the `Panel*` regions directly in it.
+- `drawer` — renders a `Panel` inside `DrawerContent`; there `PanelContent` scrolls through a `ScrollArea`.
+- `card` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets.
+
+## Best practices
+
+- Inside a dialog or drawer, use only `PanelHeader`, `PanelContent` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.
+- Put long content in `PanelContent`. It is the only region that scrolls; the header and footer stay in place.
+- `size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.
+- `Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal.
+
+## Usage
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import Panel from '@aziontech/webkit/panel'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+</script>
+
+<template>
+  <Panel size="medium">
+    <PanelHeader>
+      <h2 class="text-heading-sm text-(--text-default)">Cache settings</h2>
+    </PanelHeader>
+    <PanelContent>
+      <p class="text-body-sm text-(--text-muted)">
+        Objects are cached at the edge for the TTL set on each rule.
+      </p>
+    </PanelContent>
+    <PanelFooter>
+      <Button
+        label="Cancel"
+        kind="outlined"
+      />
+      <Button
+        label="Save"
+        kind="primary"
+      />
+    </PanelFooter>
+  </Panel>
+</template>
+```
 
 ## Sub-components
 
@@ -22,9 +83,10 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `size` | `PanelSize` | `undefined` | false | Max width of the panel shell. |
+| Prop       | Type        | Default    | Required | JSDoc                                                                                   |
+| ---------- | ----------- | ---------- | -------- | --------------------------------------------------------------------------------------- |
+| `size`     | `PanelSize` | `'medium'` | false    | Max width of the panel shell.                                                           |
+| `sizeAtMd` | `boolean`   | `false`    | false    | When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet). |
 
 ## Events
 
@@ -32,14 +94,15 @@ Layered surface above the page (modal, drawer, menu). Migrated from the existing
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | — |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | —     |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- Responsive: `PanelContent` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`.
 
 ## Motion & Animations
 
@@ -47,20 +110,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| surface    | `var(--bg-surface)`     |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -70,8 +133,9 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -88,9 +152,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

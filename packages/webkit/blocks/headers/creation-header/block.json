@@ -1,0 +1,48 @@
+{
+  "id": "headers/creation-header",
+  "name": "CreationHeader",
+  "title": "Templates/Headers/CreationHeader",
+  "surface": "product",
+  "summary": "The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back button, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate), the creation wizards (SourceWizard, ProvisionWizard), the deploy flows and the CreateHub render it. The back button returns to the list the flow started from; the wizards drop it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Avatar` and `Brand`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "creation header",
+    "focused shell header",
+    "create flow header",
+    "flow header with back button",
+    "header without sidebar",
+    "edit flow header",
+    "deploy flow header",
+    "cabeçalho de criação",
+    "cabeçalho de fluxo",
+    "barra com botão voltar",
+    "create page header",
+    "create zone header",
+    "wizard header",
+    "header with back and breadcrumb",
+    "creation flow top bar",
+    "focused page header",
+    "cabeçalho da página de criação",
+    "cabeçalho do assistente"
+  ],
+  "skills": ["webkit-navigation", "webkit-layout"],
+  "primary": {
+    "name": "Default",
+    "file": "creation-header.vue"
+  },
+  "variants": [
+    {
+      "name": "CreateHub",
+      "summary": "The Creation Center header: the back control returns Home and the crumb is the single current page.",
+      "file": "variants/create-hub.vue"
+    },
+    {
+      "name": "Terminal",
+      "summary": "A creation wizard once the last step is submitted: the provisioning and success screens keep only the brand and the avatar, with no back control and no crumb.",
+      "file": "variants/terminal.vue"
+    }
+  ]
+}

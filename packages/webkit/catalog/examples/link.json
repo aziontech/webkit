@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default large link with a trailing icon.",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    size=\"large\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "All size variants side by side.",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Link\n      size=\"large\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"medium\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"small\"\n      label=\"Learn more\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "Disabled state; interaction is blocked and the disabled tokens apply.",
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    disabled\n  />\n</template>"
+  }
+ ]
+}

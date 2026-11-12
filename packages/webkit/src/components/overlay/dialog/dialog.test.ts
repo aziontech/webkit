@@ -1,9 +1,9 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/dialog/Dialog.stories'
+import Default from '../../../../examples/dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Dialog from './dialog.vue'
 import DialogClose from './dialog-close.vue'
@@ -13,8 +13,6 @@ import DialogOverlay from './dialog-overlay.vue'
 import DialogPortal from './dialog-portal.vue'
 import DialogTitle from './dialog-title.vue'
 import DialogTrigger from './dialog-trigger.vue'
-
-const { Default } = composeStories(stories)
 
 // The panel + backdrop are Teleported to <body> by DialogPortal, so they escape
 // the render container. Query them from document.body, not the utils container.
@@ -30,7 +28,7 @@ const panel = () => byTestId('overlay-dialog__panel')
 const backdrop = () => byTestId('overlay-dialog__backdrop')
 
 /**
- * A realistic composed tree wired exactly like the Storybook Default: Root >
+ * A realistic composed tree wired exactly like the Default example: Root >
  * Trigger (Button-like) + Portal > Overlay + Content (Title / Description /
  * Close). Slots take strings so we don't pull in Panel/Button, keeping the
  * assertions grounded purely in the dialog sub-components under test.
@@ -81,8 +79,11 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       // The Root + Trigger render in-place; DialogPortal renders nothing until open.
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
       const trigger = getByTestId('overlay-dialog__trigger')
-      expect(trigger.getAttribute('role')).toBe('button')
-      expect(trigger.getAttribute('tabindex')).toBe('0')
+      expect(trigger.hasAttribute('role')).toBe(false)
+      expect(trigger.hasAttribute('tabindex')).toBe(false)
+      const button = trigger.querySelector('button') as HTMLElement
+      expect(button.getAttribute('aria-haspopup')).toBe('dialog')
+      expect(button.getAttribute('aria-expanded')).toBe('false')
 
       expect(panel()).toBeNull()
       expect(backdrop()).toBeNull()
@@ -200,7 +201,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
       // Focus is restored to the trigger element (watch on isOpen -> triggerRef.focus()).
       await vi.waitFor(() => {
-        expect(document.activeElement).toBe(trigger)
+        expect(document.activeElement).toBe(trigger.querySelector('button'))
       })
     })
 
@@ -294,7 +295,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     // DialogContent locks the page behind the overlay via useScrollLock(body).
     // Asserted through the inline style the lock writes, which is real in this
     // env — unlike the panel's own scrolling, which is Tailwind layout and so
-    // lives in the Storybook / visual layer (see LongContentMobile).
+    // lives in the styled visual suite (see LongContentMobile).
     it('locks body scroll while open and restores it on close', async () => {
       const before = document.body.style.overflow
 
@@ -353,9 +354,9 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     })
   })
 
-  describe('Storybook Default story composes and opens', () => {
+  describe('Default fixture composes and opens', () => {
     it('renders the composed Default and opens via its trigger', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       await fireEvent.click(getByTestId('overlay-dialog__trigger'))
@@ -365,6 +366,129 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       expect(dialog).not.toBeNull()
       expect(dialog!.getAttribute('role')).toBe('dialog')
       expect(byTestId('overlay-dialog__title')!.textContent).toContain('Dialog Title')
+    })
+  })
+})
+
+describe('Dialog on phones', () => {
+  it('opens as a full-height, full-width sheet below sm', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+
+    const shell = byTestId('overlay-dialog__panel-shell')
+    expect(shell?.className).toContain('max-sm:h-dvh')
+    expect(shell?.className).toContain('max-sm:rounded-none')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const twoActions = defineComponent({
+    components: {
+      Dialog,
+      DialogTrigger,
+      DialogPortal,
+      DialogOverlay,
+      DialogContent,
+      DialogTitle
+    },
+    setup() {
+      const open = ref(false)
+      return { open }
+    },
+    template: `
+      <Dialog v-model:open="open">
+        <DialogTrigger>
+          <button type="button">Open dialog</button>
+        </DialogTrigger>
+        <DialogPortal>
+          <DialogOverlay />
+          <DialogContent>
+            <DialogTitle>Rename</DialogTitle>
+            <button type="button" data-testid="first-action">First</button>
+            <button type="button" data-testid="last-action">Last</button>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+    `
+  })
+
+  const openWithKey = async (key: string) => {
+    const { getByTestId } = render(twoActions)
+    await settle()
+    const trigger = getByTestId('overlay-dialog__trigger').querySelector('button')!
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    return { trigger, getByTestId }
+  }
+
+  it.each(['{Enter}', ' '])(
+    '%s on the trigger opens and focuses the first control',
+    async (key) => {
+      await openWithKey(key)
+      expect(panel()).not.toBeNull()
+      await vi.waitFor(() => {
+        expect(document.activeElement).toBe(byTestId('first-action'))
+      })
+    }
+  )
+
+  it('Tab on the last control wraps to the first (focus is trapped)', async () => {
+    await openWithKey('{Enter}')
+    byTestId('last-action')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('first-action'))
+  })
+
+  it('Shift+Tab on the first control wraps to the last', async () => {
+    await openWithKey('{Enter}')
+    byTestId('first-action')!.focus()
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(byTestId('last-action'))
+  })
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger, getByTestId } = await openWithKey('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(trigger)
+    })
+  })
+
+  it('returns focus to the previously focused element when opened without a trigger', async () => {
+    const controlled = defineComponent({
+      components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+      setup() {
+        const open = ref(false)
+        return { open }
+      },
+      template: `
+        <div>
+          <button type="button" data-testid="opener" @click="open = true">Open</button>
+          <Dialog v-model:open="open">
+            <DialogPortal>
+              <DialogContent>
+                <DialogTitle>Controlled</DialogTitle>
+                <button type="button">Inside</button>
+              </DialogContent>
+            </DialogPortal>
+          </Dialog>
+        </div>
+      `
+    })
+    const { getByTestId } = render(controlled)
+    await settle()
+    const opener = getByTestId('opener')
+    opener.focus()
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(panel()).not.toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(opener)
     })
   })
 })

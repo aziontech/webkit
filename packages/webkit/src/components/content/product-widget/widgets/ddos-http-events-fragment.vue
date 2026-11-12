@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
@@ -105,7 +105,7 @@
               ariaLabel="Filter"
             />
             <span class="min-w-0 flex-1">
-              <InputText
+              <Input
                 placeholder="Filter using Azion Query Language syntax..."
                 size="small"
                 readonly
@@ -130,7 +130,7 @@
               size="small"
             />
             <span
-              class="ml-auto flex h-7 items-center rounded-(--shape-button) border border-(--border-default) px-(--spacing-sm) text-body-xs text-(--text-default)"
+              class="ms-auto flex h-7 items-center rounded-(--shape-button) border border-(--border-default) px-(--spacing-sm) text-body-xs text-(--text-default)"
             >
               1000 records found
             </span>
@@ -165,10 +165,10 @@
                     <span
                       v-for="field in summary(index)"
                       :key="field.key"
-                      class="mr-(--spacing-sm)"
+                      class="me-(--spacing-sm)"
                     >
                       <span class="bg-(--bg-surface-raised)">{{ field.key }}:</span>
-                      <span class="ml-(--spacing-xxs)">{{ field.value }}</span>
+                      <span class="ms-(--spacing-xxs)">{{ field.value }}</span>
                     </span>
                   </span>
                 </div>

@@ -54,7 +54,7 @@
     :data-icon="icon ? true : null"
     :data-described="hasDescription || null"
     :data-linked="isLink || null"
-    class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--primary) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)"
+    class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--text-primary) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)"
   >
     <div class="flex items-start gap-(--spacing-xs)">
       <span
@@ -74,7 +74,7 @@
         <i
           v-if="isLink"
           aria-hidden="true"
-          class="pi pi-arrow-up-right ml-(--spacing-xxs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          class="pi pi-arrow-up-right ms-(--spacing-xxs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
         />
       </component>
     </div>

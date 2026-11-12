@@ -1,0 +1,25 @@
+{
+  "component": "contact-hub",
+  "title": "Components/Marketing/Sections/ContactHub",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. Edit the props in the Controls panel — a band with no lanes and no channels renders nothing.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "Sales and Support lanes over three self-serve channels: emergency attack mitigation, the Discord community and the documentation.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Content/ContactHub",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

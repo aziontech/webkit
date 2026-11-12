@@ -1,0 +1,26 @@
+{
+  "component": "doc-page-header",
+  "title": "Components/Documentation/DocPageHeader",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The full masthead: trail, title, deck, and the meta line. The ISO date is formatted for reading and rendered in UTC, so a bare `2026-06-30` does not become the 29th west of Greenwich.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Actions",
+      "summary": "The controls are DATA, not anatomy: one array of same-shaped entries, so a site adds, drops or reorders them without touching a component. An entry with an `href` renders as a real anchor — middle-click, copy link and open-in-a-tab all work — and one without renders as a button; both report back through `meta-action`, so an app that routes in-page calls `preventDefault()` on the click it already has. Each entry carries a `tip` because the label cannot: two or three words name the control, and the sentence saying what it does appears on hover and on focus. The rules between entries are drawn only from `md` up — below that the line wraps, and a rule at the end of a wrapped line has nothing after it.",
+      "file": "actions.vue"
+    },
+    {
+      "name": "Regions",
+      "summary": "Every region is independently optional, and an absent one closes up instead of leaving an empty row. The second example shows that `lastUpdated` accepts a ready-made string when the author would rather write it themselves; the third is the undated line and its one-step compensation; the fourth has no meta line at all.",
+      "file": "regions.vue"
+    },
+    {
+      "name": "Slots",
+      "summary": "Four regions are slots over their built-ins. **`breadcrumb`** over the `breadcrumb` prop — the built-in renders the same component, but an application's trail must push a route instead of loading the document. **`title`** over the `title` prop — a prose page's name is a string, while a page ABOUT something is an identity: a mark beside the name and the maker above it. That is a title, so it goes where the `h1` goes rather than into a band of its own. **`details`** — the rows a page carries between its deck and its meta line, the subject's facts as tags or the references a reader might want instead of the body. **`actions`** — a control on the title's line, empty by default, because a masthead's built-in action region is the meta line below. Everything the slots do not replace stays shared: the order, the rhythm, the type scale, and the one column every row starts on.",
+      "file": "slots.vue"
+    }
+  ]
+}

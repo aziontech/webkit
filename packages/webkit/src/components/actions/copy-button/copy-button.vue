@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -13,9 +15,9 @@
   interface Props {
     /** Text copied to the clipboard on activation. */
     value: string
-    /** Accessible name while idle. */
+    /** Accessible name while idle. Empty uses the locale catalog (`Copy`). */
     ariaLabel?: string
-    /** Accessible name while the copied state is shown. */
+    /** Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). */
     copiedLabel?: string
     /** Visual variant forwarded to `IconButton`. */
     kind?: IconButtonKind
@@ -26,8 +28,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    ariaLabel: 'Copy',
-    copiedLabel: 'Copied',
+    ariaLabel: '',
+    copiedLabel: '',
     kind: 'transparent',
     size: 'small',
     disabled: false
@@ -38,6 +40,13 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ copyButton: en.copyButton })
+
+  const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
+
+  const root = ref<globalThis.HTMLElement | null>(null)
+  const fallbackRequested = ref(false)
+  const fallbackOpen = ref(false)
 
   const copied = ref(false)
   let copiedTimeoutId: ReturnType<typeof setTimeout> | null = null
@@ -48,7 +57,11 @@
 
   const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
 
-  const label = computed(() => (copied.value ? props.copiedLabel : props.ariaLabel))
+  const label = computed(() =>
+    copied.value
+      ? props.copiedLabel || t('copyButton.copied')
+      : props.ariaLabel || t('copyButton.copy')
+  )
 
   async function handleCopy(event: MouseEvent) {
     event.stopPropagation()
@@ -58,6 +71,8 @@
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
     } catch {
+      fallbackRequested.value = true
+      fallbackOpen.value = true
       return
     }
 
@@ -83,6 +98,7 @@
 
 <template>
   <span
+    ref="root"
     class="inline-flex"
     :data-state="copied ? 'copied' : 'default'"
     :data-disabled="disabled ? '' : undefined"
@@ -103,5 +119,12 @@
         @click="handleCopy"
       />
     </Tooltip>
+    <CopyButtonFallback
+      v-if="fallbackRequested"
+      v-model:open="fallbackOpen"
+      :value="value"
+      :anchor="root?.querySelector('button') ?? root"
+      :test-id="testId"
+    />
   </span>
 </template>

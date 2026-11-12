@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -113,7 +113,7 @@
               label="Key"
               required
             />
-            <InputText
+            <Input
               id="kv-key"
               model-value="session:user-123"
               size="medium"
@@ -165,7 +165,7 @@
                       for="kv-expiration-value"
                       label="Seconds"
                     />
-                    <InputNumber
+                    <NumberInput
                       id="kv-expiration-value"
                       :model-value="3600"
                       size="medium"

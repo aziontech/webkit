@@ -1,0 +1,25 @@
+{
+  "component": "listing-table",
+  "title": "Components/Marketing/Sections/ListingTable",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Careers page's latest roles, with the button into the full list in the table footer. Edit the props in the Controls panel — a band with no rows renders nothing, and one with no `primaryAction` drops its button.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "LatestRoles",
+      "summary": "The Careers page's six latest roles: role, team and location, and work type aligned to the end, with the button into all 23 roles in the table's footer.",
+      "file": "site-latest-roles.vue",
+      "json": "site-latest-roles.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Listings/ListingTable",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["LatestRoles", "LatestRolesJson"]
+}

@@ -181,7 +181,7 @@
             class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
           >
             <i
-              class="pi pi-chevron-right text-body-xs text-(--text-default)"
+              class="pi pi-chevron-right text-body-xs text-(--text-default) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="flex min-w-0 flex-col">

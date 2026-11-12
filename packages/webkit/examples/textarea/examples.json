@@ -1,0 +1,31 @@
+{
+  "component": "textarea",
+  "title": "Components/Primitives/Inputs/Textarea",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "default.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "",
+      "file": "required.vue"
+    },
+    {
+      "name": "Resizable",
+      "summary": "",
+      "file": "resizable.vue"
+    }
+  ]
+}

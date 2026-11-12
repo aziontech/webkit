@@ -1,0 +1,39 @@
+{
+  "id": "platform/detail/production-checklist",
+  "name": "ProductionChecklist",
+  "title": "Templates/Platform/Detail/ProductionChecklist",
+  "surface": "product",
+  "summary": "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.",
+  "preview": {
+    "layout": "padded",
+    "background": "dark"
+  },
+  "intents": [
+    "production checklist",
+    "go-live checklist",
+    "checklist",
+    "setup progress",
+    "launch steps",
+    "onboarding checklist",
+    "checklist de produção",
+    "lista de verificação",
+    "passos para produção"
+  ],
+  "skills": ["webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Card",
+    "file": "production-checklist.vue"
+  },
+  "variants": [
+    {
+      "name": "Complete",
+      "summary": "Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.",
+      "file": "variants/complete.vue"
+    },
+    {
+      "name": "DrawerDetail",
+      "summary": "The expand button opens a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer.",
+      "file": "variants/drawer-detail.vue"
+    }
+  ]
+}

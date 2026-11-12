@@ -161,7 +161,7 @@
       data-sticky-stack-anchor
       aria-hidden="true"
       :style="{ '--sticky-stack-slot': index }"
-      class="pointer-events-none absolute left-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot)+var(--sticky-stack-top,0rem))]"
+      class="pointer-events-none absolute start-0 hidden w-px lg:block lg:scroll-mt-[var(--sticky-stack-top,0)] lg:top-[calc(100dvh*var(--sticky-stack-dwell)*var(--sticky-stack-slot)+var(--sticky-stack-top,0rem))]"
     />
 
     <div
@@ -193,7 +193,7 @@
               <button
                 type="button"
                 :aria-current="isActive(index) ? 'true' : undefined"
-                class="m-0 cursor-pointer p-0 text-left after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                 @click="goTo(index)"
                 @focus="goTo(index)"
               >
@@ -245,13 +245,13 @@
               v-if="showProgress && isActive(index)"
               aria-hidden="true"
               :style="{ width: `${sliceProgress * 100}%` }"
-              class="absolute -bottom-px left-0 hidden h-px bg-(--primary) lg:block"
+              class="absolute -bottom-px start-0 hidden h-px bg-(--primary) lg:block"
             />
           </li>
         </ol>
 
         <div
-          class="relative hidden bg-(--bg-canvas) lg:block lg:h-full lg:min-w-0 lg:border-l lg:border-(--border-default)"
+          class="relative hidden bg-(--bg-canvas) lg:block lg:h-full lg:min-w-0 lg:border-s lg:border-(--border-default)"
         >
           <div
             v-if="$slots['backdrop']"

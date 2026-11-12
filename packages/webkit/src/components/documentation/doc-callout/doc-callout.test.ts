@@ -1,17 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-callout/DocCallout.stories'
+import Default from '../../../../examples/doc-callout/default.vue'
+import Kinds from '../../../../examples/doc-callout/kinds.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCallout from './doc-callout.vue'
 
 // Browser mode loads no Tailwind, so per-kind colours are unverifiable here;
 // asserted instead: the severity/glyph each kind resolves to, testid, and copy.
-
-const { Default, Kinds } = composeStories(stories)
 
 const KINDS = [
   { kind: 'note', severity: 'info', icon: 'pi pi-info-circle', neutral: false },
@@ -50,7 +48,7 @@ describe('DocCallout', () => {
   describe('block content', () => {
     it('keeps a paragraph and a list inside the copy once the server markup is parsed as HTML', async () => {
       // MDX asides arrive as server-rendered markup; a copy region that is a p would be
-      // closed by the parser at the ul, pushing the list beside the text (see Message).
+      // closed by the parser at the ul, pushing the list beside the text (see Alert).
       const app = createSSRApp({
         render: () =>
           h(DocCallout, { kind: 'note' }, () => [
@@ -114,12 +112,12 @@ describe('DocCallout', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across all six kinds', async () => {
-      const { container } = render(Kinds())
+      const { container } = render(Kinds)
       await expectNoA11yViolations(container)
     })
   })

@@ -1,0 +1,25 @@
+{
+  "component": "photo-marquee",
+  "title": "Components/Marketing/Sections/PhotoMarquee",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. Edit the props in the Controls panel — a band with no photos renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The six office photos Careers runs, at ten seconds per photo.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Social Proof/PhotoMarquee",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

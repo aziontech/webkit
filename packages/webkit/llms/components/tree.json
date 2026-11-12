@@ -1,0 +1,122 @@
+{
+ "name": "tree",
+ "binding": "Tree",
+ "import": "@aziontech/webkit/tree",
+ "treeShakeableImport": "@aziontech/webkit/tree",
+ "category": "data",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.",
+ "setup": null,
+ "useWhen": [
+  "Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.",
+  "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree.",
+  "A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after."
+ ],
+ "avoidWhen": [
+  "Navigation between views of the app → use `menu` inside `sidebar`.",
+  "Flat records with several attributes each → use `table`.",
+  "A few sections of free content that open and close → use `accordion`.",
+  "A two- or three-level directory of destinations on a marketing page → use `column-navigation`."
+ ],
+ "related": [
+  "table` — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.",
+  "menu` — the hierarchical list for app navigation, with routes and active state instead of selection.",
+  "accordion` — disclosure of free content panels rather than rows of one kind.",
+  "empty-state` — what the tree renders when `items` is empty.",
+  "skeleton` — the rows the tree renders while `loading`."
+ ],
+ "bestPractices": [
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:expanded`, `v-model:selected` and focus are keyed by it.",
+  "Seed `v-model:expanded` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
+  "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
+  "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
+  "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "TreeItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent."
+  },
+  {
+   "name": "selectable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Enables single selection: activating a node writes its id to `v-model:selected` and marks it `aria-selected`."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders Skeleton rows in place of the tree and sets `aria-busy`."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the tree."
+  }
+ ],
+ "events": [
+  {
+   "name": "item-click",
+   "payload": "(event: MouseEvent | KeyboardEvent, item: TreeItem)",
+   "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron or inside the `actions` region."
+  }
+ ],
+ "slots": [
+  {
+   "name": "item",
+   "scope": "{ item: TreeItem; level: number; expanded: boolean }",
+   "notes": "Replaces the label region of every row (glyph + label + description). The fallback inside the slot renders `item.icon`, `item.label` and `item.description`. `level` is 1 for top-level nodes; `expanded` is false for leaves. The chevron, indentation, row states and the `actions` region stay owned by the tree."
+  },
+  {
+   "name": "actions",
+   "scope": "{ item: TreeItem; level: number }",
+   "notes": "Trailing per-row controls, end-aligned in the row (e.g. an `IconButton` that opens a `dropdown`). Clicks and keys inside it do not activate the row nor move tree focus. No fallback; when unused, the region is not rendered."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default empty state. The fallback inside the slot is `EmptyState` titled by `emptyTitle` with `emptyDescription`."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Tree from '@aziontech/webkit/tree'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      id: 'assets',\n      label: 'assets',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'assets/images',\n          label: 'images',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/images/hero.webp',\n              label: 'hero.webp',\n              icon: 'pi pi-file',\n              description: '248 KB'\n            },\n            {\n              id: 'assets/images/logo.svg',\n              label: 'logo.svg',\n              icon: 'pi pi-file',\n              description: '12 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/fonts',\n          label: 'fonts',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/fonts/rubik.woff2',\n              label: 'rubik.woff2',\n              icon: 'pi pi-file',\n              description: '64 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/styles.css',\n          label: 'styles.css',\n          icon: 'pi pi-file',\n          description: '18 KB'\n        }\n      ]\n    },\n    {\n      id: 'reports',\n      label: 'reports',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'reports/2026-10.csv',\n          label: '2026-10.csv',\n          icon: 'pi pi-file',\n          description: '1.2 MB'\n        },\n        {\n          id: 'reports/2026-11.csv',\n          label: '2026-11.csv',\n          icon: 'pi pi-file',\n          description: '840 KB'\n        }\n      ]\n    },\n    {\n      id: 'index.html',\n      label: 'index.html',\n      icon: 'pi pi-file',\n      description: '4 KB'\n    },\n    {\n      id: 'robots.txt',\n      label: 'robots.txt',\n      icon: 'pi pi-file',\n      description: '1 KB'\n    }\n  ]\n\n  const expanded = ref(['assets', 'assets/images'])\n</script>\n\n<template>\n  <div class=\"max-w-(--container-sm)\">\n    <Tree\n      v-model:expanded=\"expanded\"\n      :items=\"items\"\n      aria-label=\"Bucket objects\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Selectable",
+   "sfc": "<script setup>\n  import Tree from '@aziontech/webkit/tree'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      id: 'assets',\n      label: 'assets',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'assets/images',\n          label: 'images',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/images/hero.webp',\n              label: 'hero.webp',\n              icon: 'pi pi-file',\n              description: '248 KB'\n            },\n            {\n              id: 'assets/images/logo.svg',\n              label: 'logo.svg',\n              icon: 'pi pi-file',\n              description: '12 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/fonts',\n          label: 'fonts',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/fonts/rubik.woff2',\n              label: 'rubik.woff2',\n              icon: 'pi pi-file',\n              description: '64 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/styles.css',\n          label: 'styles.css',\n          icon: 'pi pi-file',\n          description: '18 KB'\n        }\n      ]\n    },\n    {\n      id: 'reports',\n      label: 'reports',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'reports/2026-10.csv',\n          label: '2026-10.csv',\n          icon: 'pi pi-file',\n          description: '1.2 MB'\n        },\n        {\n          id: 'reports/2026-11.csv',\n          label: '2026-11.csv',\n          icon: 'pi pi-file',\n          description: '840 KB'\n        }\n      ]\n    },\n    {\n      id: 'index.html',\n      label: 'index.html',\n      icon: 'pi pi-file',\n      description: '4 KB'\n    },\n    {\n      id: 'robots.txt',\n      label: 'robots.txt',\n      icon: 'pi pi-file',\n      description: '1 KB'\n    }\n  ]\n\n  const expanded = ref(['assets', 'assets/images'])\n  const selected = ref('assets/images/hero.webp')\n</script>\n\n<template>\n  <div class=\"flex max-w-(--container-sm) flex-col gap-(--spacing-md)\">\n    <Tree\n      v-model:expanded=\"expanded\"\n      v-model:selected=\"selected\"\n      :items=\"items\"\n      selectable\n      aria-label=\"Bucket objects\"\n    />\n    <p class=\"text-body-sm text-(--text-muted)\">Selected: {{ selected || 'none' }}</p>\n  </div>\n</template>"
+  },
+  {
+   "name": "CustomItem",
+   "sfc": "<script setup>\n  import Tree from '@aziontech/webkit/tree'\n  import Tag from '@aziontech/webkit/tag'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import { ref } from 'vue'\n\n  const items = [\n    {\n      id: 'assets',\n      label: 'assets',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'assets/images',\n          label: 'images',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/images/hero.webp',\n              label: 'hero.webp',\n              icon: 'pi pi-file',\n              description: '248 KB'\n            },\n            {\n              id: 'assets/images/logo.svg',\n              label: 'logo.svg',\n              icon: 'pi pi-file',\n              description: '12 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/fonts',\n          label: 'fonts',\n          icon: 'pi pi-folder',\n          children: [\n            {\n              id: 'assets/fonts/rubik.woff2',\n              label: 'rubik.woff2',\n              icon: 'pi pi-file',\n              description: '64 KB'\n            }\n          ]\n        },\n        {\n          id: 'assets/styles.css',\n          label: 'styles.css',\n          icon: 'pi pi-file',\n          description: '18 KB'\n        }\n      ]\n    },\n    {\n      id: 'reports',\n      label: 'reports',\n      icon: 'pi pi-folder',\n      children: [\n        {\n          id: 'reports/2026-10.csv',\n          label: '2026-10.csv',\n          icon: 'pi pi-file',\n          description: '1.2 MB'\n        },\n        {\n          id: 'reports/2026-11.csv',\n          label: '2026-11.csv',\n          icon: 'pi pi-file',\n          description: '840 KB'\n        }\n      ]\n    },\n    {\n      id: 'index.html',\n      label: 'index.html',\n      icon: 'pi pi-file',\n      description: '4 KB'\n    },\n    {\n      id: 'robots.txt',\n      label: 'robots.txt',\n      icon: 'pi pi-file',\n      description: '1 KB'\n    }\n  ]\n\n  const expanded = ref(['assets', 'assets/images'])\n\n  const statuses = {\n    'assets/styles.css': {\n      label: 'Modified',\n      severity: 'warning'\n    },\n    'index.html': {\n      label: 'Published',\n      severity: 'success'\n    },\n    'robots.txt': {\n      label: 'Draft',\n      severity: 'secondary'\n    }\n  }\n</script>\n\n<template>\n  <div class=\"max-w-(--container-sm)\">\n    <Tree\n      v-model:expanded=\"expanded\"\n      :items=\"items\"\n      aria-label=\"Bucket objects\"\n    >\n      <template #item=\"{ item }\">\n        <span class=\"flex min-w-0 flex-1 items-center gap-(--spacing-xs)\">\n          <i\n            :class=\"item.icon\"\n            aria-hidden=\"true\"\n          />\n          <span class=\"min-w-0 truncate text-label-md text-(--text-default)\">{{ item.label }}</span>\n          <Tag\n            v-if=\"statuses[item.id]\"\n            :label=\"statuses[item.id].label\"\n            :severity=\"statuses[item.id].severity\"\n            size=\"small\"\n          />\n        </span>\n      </template>\n      <template #actions=\"{ item }\">\n        <IconButton\n          icon=\"pi pi-ellipsis-h\"\n          kind=\"transparent\"\n          size=\"small\"\n          :aria-label=\"'More actions for ' + item.label\"\n        />\n      </template>\n    </Tree>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/tree.md"
+}

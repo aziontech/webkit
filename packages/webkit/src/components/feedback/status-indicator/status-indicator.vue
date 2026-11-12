@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Spinner from '../../utils/spinner/spinner.vue'
 
   export type StatusIndicatorSeverity =
@@ -16,17 +18,19 @@
     severity?: StatusIndicatorSeverity
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** Visible label text. */
+    /** Visible label text. Empty uses the locale catalog (`Status`). */
     label?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     severity: 'success',
     loading: false,
-    label: 'Status'
+    label: ''
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ statusIndicator: en.statusIndicator })
+  const text = computed(() => props.label || t('statusIndicator.label'))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-status-indicator'
@@ -53,13 +57,13 @@
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
       :data-severity="severity"
-      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-contrast) data-[severity=info]:bg-(--info-contrast) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-contrast) data-[severity=alt]:bg-(--primary) data-[severity=danger]:bg-(--danger-contrast)"
+      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-contrast) data-[severity=info]:bg-(--info-contrast) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-contrast) data-[severity=alt]:bg-(--primary) data-[severity=danger]:bg-(--danger-contrast) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
     />
     <span
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
-      {{ loading ? `${label}...` : label }}
+      {{ loading ? `${text}…` : text }}
     </span>
   </div>
 </template>

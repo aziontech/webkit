@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import Overline from '../../content/overline/overline.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
   import SectionTitle from '../section-title/section-title.vue'
 
   defineOptions({
@@ -110,7 +110,7 @@
         </div>
 
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-l"
+          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
         >
           <p
             v-if="hasDescription"

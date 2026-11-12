@@ -1,0 +1,47 @@
+{
+  "id": "platform/account/activity-history",
+  "name": "ActivityHistory",
+  "title": "Templates/Platform/Account/ActivityHistory",
+  "surface": "product",
+  "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "activity history",
+    "audit log",
+    "audit trail",
+    "account activity",
+    "security log",
+    "who did what",
+    "user activity",
+    "event history",
+    "histórico de atividades",
+    "log de auditoria",
+    "trilha de auditoria",
+    "atividade da conta"
+  ],
+  "skills": ["webkit-lists", "webkit-tables", "webkit-ui-states", "webkit-microcopy"],
+  "primary": {
+    "name": "Default",
+    "file": "activity-history.vue"
+  },
+  "variants": [
+    {
+      "name": "Empty",
+      "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "The first load: the controls and the table's loading rows.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

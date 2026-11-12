@@ -1,0 +1,71 @@
+{
+  "component": "code-block",
+  "title": "Components/Primitives/Code/CodeBlock",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Language switcher: two tabs with a filename bar, syntax highlighting, and copy.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithoutLineNumbers",
+      "summary": "Same language switcher with the line-number gutter hidden.",
+      "file": "without-line-numbers.vue"
+    },
+    {
+      "name": "WithoutCopy",
+      "summary": "Same language switcher with the copy control removed via `:copyable=\"false\"`, for a decorative block nobody copies from.",
+      "file": "without-copy.vue"
+    },
+    {
+      "name": "WithFileName",
+      "summary": "Single snippet with a raised filename bar and no tab header.",
+      "file": "with-file-name.vue"
+    },
+    {
+      "name": "WithDiff",
+      "summary": "Per-line added/removed markers driven by the active tab’s `lineChanges`.",
+      "file": "with-diff.vue"
+    },
+    {
+      "name": "WithHighlightedLine",
+      "summary": "One active line with an info background and leading bar via `highlightedLine`.",
+      "file": "with-highlighted-line.vue"
+    },
+    {
+      "name": "WithAnimatedLines",
+      "summary": "Staggered line entrance for website layouts via `animateLines`.",
+      "file": "with-animated-lines.vue"
+    },
+    {
+      "name": "Shell",
+      "summary": "A CLI snippet under `language: \"bash\"`. A command line has a different shape from an expression, so it is read as one: the first word is the program being run, flags modify it, an operator hands off to the next program, and the rest is data — mapped onto the same code-sintax palette JavaScript uses, with no new syntax token. `sh`, `shell`, `zsh` and `console` resolve here too.",
+      "file": "shell.vue"
+    },
+    {
+      "name": "Borderless",
+      "summary": "The outer card border dropped via `:bordered=\"false\"` — for embedding inside a surface that already frames the block. Internal dividers are unaffected.",
+      "file": "borderless.vue"
+    },
+    {
+      "name": "SingleLine",
+      "summary": "The smallest block there is: one line, no tabs, no filename bar. The copy control is centred on that single row instead of pinned to a top inset it would overshoot, and the line reserves the control its own width so a long command scrolls under nothing.",
+      "file": "single-line.vue"
+    },
+    {
+      "name": "UnevenTabs",
+      "summary": "Two tabs holding a different number of lines — the only geometry where the shell changes height on a swap. It animates between the two heights while the new snippet enters line by line, so neither the block nor the page under it jumps a whole row set in one frame.",
+      "file": "uneven-tabs.vue"
+    },
+    {
+      "name": "WithTabIcons",
+      "summary": "One tab per coding agent, each opening its own config file with the agent mark beside its name. The `tab-icon` slot receives the tab, so the mark is chosen from `tab.value`; the marks are drawn as a mask so they take the tab text color in both themes.",
+      "file": "with-tab-icons.vue"
+    },
+    {
+      "name": "CommandAndOutput",
+      "summary": "A docs command and what it prints, as two blocks. The command block is titled \"Shell\" by its label header and copies only the command (the `$ ` prompt is drawn, not copied); the printout sits in a second, muted block with `kind=\"output\"`, labelled \"Output\" and without a copy control.",
+      "file": "command-and-output.vue"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 6b1bfae5f1f00f6b4f9b463764799a4c24d11c1d825b5e65874c8c54f2e1964e
+checksum: a29ab810591bbae99acad8a7bcb9d7650b542d142a9bb3e285341bc4bf78778a
 created: 2026-08-22
 last_updated: 2026-09-25
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-09-25
 
 ## Purpose
 
-The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Message` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
+The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 ## When to use
 
@@ -23,12 +23,12 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 ## When NOT to use
 
 - For a block that needs its own box — a fenced sample, a table, a card grid. Those belong outside the callout; its body is prose, at most a short list.
-- For an application-screen banner or a form error — use `Message` directly, which is what this composes.
+- For an application-screen banner or a form error — use `Alert` directly, which is what this composes.
 - As a section heading. A callout is an interruption, not structure.
 
 ## Related
 
-- `Message` — the webkit surface this renders on; reach for it directly outside documentation prose.
+- `Alert` — the webkit surface this renders on; reach for it directly outside documentation prose.
 - `DocProse` — the contract around it. A callout marks itself `data-doc-chrome`, so prose rules stop at its edge, and `data-doc-block`, so it takes the block rung of the ladder.
 
 ## Best practices
@@ -89,7 +89,7 @@ _none_
 | surface (neutral kind)            | `var(--bg-surface)`                                                                               |
 | border (neutral kind)             | `var(--border-default)`                                                                           |
 | glyph (neutral kind)              | `var(--primary)`                                                                                  |
-| surface + border (severity kinds) | `Message`'s own `data-severity` tokens                                                            |
+| surface + border (severity kinds) | `Alert`'s own `data-severity` tokens                                                              |
 | surface (inline code, neutral)    | `var(--bg-hover)`                                                                                 |
 | border (inline code, severity)    | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
 | shape (inline code)               | `var(--shape-flat)`                                                                               |
@@ -105,12 +105,12 @@ _none_
 
 - Visible focus: the callout is not focusable; a link inside it inherits the prose focus ring.
 - Keyboard map: none of its own — `Tab` reaches only a link in the copy.
-- ARIA: the role comes from `Message`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
+- ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
 - Contrast ≥4.5:1: the copy is `--text-default` in every kind, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: not applicable; the component is not interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default — a single callout with the default `kind`.
 - Kinds — composite story rendering all six kinds side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
@@ -128,10 +128,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

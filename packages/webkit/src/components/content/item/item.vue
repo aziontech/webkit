@@ -11,6 +11,7 @@
     ItemContainerInjectionKey,
     ItemInjectionKey,
     type ItemKind,
+    ItemListMemberInjectionKey,
     type ItemSize
   } from './injection-key'
   import { mergeAsChildSlot } from './merge-as-child'
@@ -44,6 +45,7 @@
   const attrs = useAttrs()
   const slots = useSlots()
   const container = inject(ItemContainerInjectionKey, null)
+  const isListMember = inject(ItemListMemberInjectionKey, false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item')
 
@@ -55,6 +57,7 @@
     delete rest.class
 
     return {
+      role: isListMember && !props.asChild ? 'listitem' : undefined,
       ...rest,
       'data-slot': 'item',
       'data-testid': testId.value,
@@ -73,12 +76,20 @@
     kind: kind.value,
     size: props.size
   })
+  provide(ItemListMemberInjectionKey, false)
 
   const ItemAsChild = () => mergeAsChildSlot(rootBindings.value, slots['default'])
 </script>
 
 <template>
-  <ItemAsChild v-if="asChild" />
+  <div
+    v-if="asChild && isListMember"
+    role="listitem"
+    data-slot="item-listitem"
+  >
+    <ItemAsChild />
+  </div>
+  <ItemAsChild v-else-if="asChild" />
   <div
     v-else
     v-bind="rootBindings"

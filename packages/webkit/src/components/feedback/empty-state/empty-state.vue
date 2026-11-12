@@ -47,7 +47,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-bordered="bordered || null"
-    class="flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-(--shape-button) data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-(--border-default) data-[bordered]:bg-(--bg-surface) data-[size=small]:gap-(--spacing-4) data-[size=small]:px-(--spacing-6) data-[size=small]:py-(--spacing-8) data-[size=medium]:gap-(--spacing-6) data-[size=medium]:px-(--spacing-8) data-[size=medium]:py-(--spacing-12)"
+    class="@container/empty-state flex w-full flex-col items-center justify-center text-center data-[bordered]:rounded-(--shape-button) data-[bordered]:border data-[bordered]:border-dashed data-[bordered]:border-[length:var(--border-width-default,1px)] data-[bordered]:border-(--border-default) data-[bordered]:bg-(--bg-surface) data-[size=small]:gap-(--spacing-4) data-[size=small]:px-(--spacing-6) data-[size=small]:py-(--spacing-8) data-[size=medium]:gap-(--spacing-6) data-[size=medium]:px-(--spacing-8) data-[size=medium]:py-(--spacing-12)"
   >
     <div
       v-if="$slots['icon'] || icon"
@@ -97,7 +97,7 @@
     <div
       v-if="$slots['actions']"
       :data-testid="`${testId}__actions`"
-      class="flex flex-col items-center gap-(--spacing-xs)"
+      class="flex max-w-full flex-col items-center gap-(--spacing-xs) @max-xs/empty-state:w-full @max-xs/empty-state:items-stretch"
     >
       <slot name="actions" />
     </div>

@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Both neighbours present. Hover either side and the chevron travels outward.",
+   "sfc": "<script setup>\n  import DocPagination from '@aziontech/webkit/doc-pagination'\n</script>\n\n<template>\n  <DocPagination\n    :previous=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    :next=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    @navigate=\"(event, page) => router.push(page.href)\"\n  />\n</template>"
+  },
+  {
+   "name": "Ends",
+   "summary": "The first and last pages of a series. The one remaining link stays anchored to its own edge — an absent side leaves a placeholder rather than collapsing, so a lone \"Next\" never drifts into the middle of the row. Each is given its own `aria-label` here because two nav landmarks may not share an accessible name; a real page carries one pagination and takes the default.",
+   "sfc": "<script setup>\n  import DocPagination from '@aziontech/webkit/doc-pagination'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DocPagination\n      aria-label=\"First page navigation\"\n      :next=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    />\n    <DocPagination\n      aria-label=\"Last page navigation\"\n      :previous=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

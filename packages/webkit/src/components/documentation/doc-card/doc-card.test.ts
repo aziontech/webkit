@@ -1,8 +1,8 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/documentation/doc-card/DocCard.stories'
+import Default from '../../../../examples/doc-card/default.vue'
+import Variants from '../../../../examples/doc-card/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCard from './doc-card.vue'
 
@@ -11,8 +11,6 @@ import DocCard from './doc-card.vue'
 // visual gate. What is real without CSS is the part that decides the card's semantics: which
 // ROOT ELEMENT it renders (anchor vs block, driven by `href`), the link attributes, the
 // external-destination affordance, and the testid contract.
-
-const { Default, Variants } = composeStories(stories)
 
 describe('DocCard', () => {
   describe('rendering & testid', () => {
@@ -40,11 +38,11 @@ describe('DocCard', () => {
       expect(getByText('Fallback copy.')).toBeInTheDocument()
     })
 
-    it('renders the overline only when one is given', () => {
+    it('renders the eyebrow only when one is given', () => {
       const without = render(DocCard, { props: { title: 'T' } })
       expect(without.queryByText('Azion CLI')).not.toBeInTheDocument()
-      const withOverline = render(DocCard, { props: { title: 'T', overline: 'Azion CLI' } })
-      expect(withOverline.getByText('Azion CLI')).toBeInTheDocument()
+      const withEyebrow = render(DocCard, { props: { title: 'T', eyebrow: 'Azion CLI' } })
+      expect(withEyebrow.getByText('Azion CLI')).toBeInTheDocument()
     })
   })
 
@@ -83,11 +81,11 @@ describe('DocCard', () => {
   })
 
   describe('call to action', () => {
-    it('renders the link row only when link is set', () => {
+    it('renders the link row only when linkLabel is set', () => {
       const without = render(DocCard, { props: { title: 'T', href: '/x' } })
       expect(without.queryByText('Read the guide')).not.toBeInTheDocument()
       const withLink = render(DocCard, {
-        props: { title: 'T', href: '/x', link: 'Read the guide' }
+        props: { title: 'T', href: '/x', linkLabel: 'Read the guide' }
       })
       expect(withLink.getByText('Read the guide')).toBeInTheDocument()
     })
@@ -95,12 +93,12 @@ describe('DocCard', () => {
 
   describe('accessibility', () => {
     it('has no violations on the default render', async () => {
-      const { container } = render(Default())
+      const { container } = render(Default)
       await expectNoA11yViolations(container)
     })
 
     it('has no violations across the anatomy variants', async () => {
-      const { container } = render(Variants())
+      const { container } = render(Variants)
       await expectNoA11yViolations(container)
     })
   })

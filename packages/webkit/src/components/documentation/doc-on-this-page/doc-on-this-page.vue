@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
   /**
@@ -43,7 +45,7 @@
     items?: DocTocItem[]
     /** The id of the heading currently in view. */
     activeId?: string
-    /** The rail's own heading. */
+    /** The rail's own heading. Empty uses the locale catalog (`On this page`). */
     title?: string
     /** Complementary groups rendered below the outline, in order. */
     groups?: DocTocGroup[]
@@ -52,7 +54,7 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     activeId: '',
-    title: 'On this page',
+    title: '',
     groups: () => []
   })
 
@@ -62,6 +64,8 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ docOnThisPage: en.docOnThisPage })
+  const railTitle = computed(() => props.title || t('docOnThisPage.title'))
 
   const testId = computed(
     () => (attrs['data-testid'] as string) ?? 'documentation-doc-on-this-page'
@@ -186,20 +190,20 @@
     class="flex w-full flex-col gap-(--spacing-lg)"
   >
     <nav
-      :aria-label="title"
+      :aria-label="railTitle"
       class="flex flex-col gap-(--spacing-xs)"
     >
       <p
         data-toc-title
         class="m-0 text-overline-xs text-(--text-muted)"
       >
-        {{ title }}
+        {{ railTitle }}
       </p>
 
       <div class="relative">
         <svg
           v-show="path"
-          class="pointer-events-none absolute top-0 left-0 overflow-visible"
+          class="pointer-events-none absolute top-0 start-0 overflow-visible rtl:-scale-x-100"
           :width="railWidth"
           :height="height"
           aria-hidden="true"
@@ -233,7 +237,7 @@
 
         <ul
           ref="listRef"
-          class="relative m-0 flex list-none flex-col p-0 pl-[17px]"
+          class="relative m-0 flex list-none flex-col p-0 ps-[17px]"
           @pointerleave="handleListLeave"
         >
           <li
@@ -246,7 +250,7 @@
             "
             :data-depth="item.depth"
             :data-active="item.id === activeId || null"
-            class="flex data-[depth=3]:pl-(--spacing-xs)"
+            class="flex data-[depth=3]:ps-(--spacing-xs)"
             @pointerenter="moveHighlight(index)"
             @focusin="moveHighlight(index)"
           >

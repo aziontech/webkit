@@ -4,6 +4,24 @@ export const isVue = (rel) => rel.endsWith('.vue')
 export const isComposable = (rel) => /(^|\/)use-[^/]*\.(ts|js)$/.test(rel)
 export const isJsComposable = (rel) => /(^|\/)use-[^/]*\.js$/.test(rel)
 
+const SLOT_PRESENCE = /\b\$?slots(?:\.[\w$]+(?![\w$])|\[[^\]]+\])(?!\s*(?:\?\.)?\()/
+
+function computedBodies(text) {
+  const bodies = []
+  const re = /\bcomputed\s*\(/g
+  while (re.exec(text)) {
+    let depth = 1
+    let i = re.lastIndex
+    while (i < text.length && depth > 0) {
+      if (text[i] === '(') depth++
+      else if (text[i] === ')') depth--
+      i++
+    }
+    bodies.push(text.slice(re.lastIndex, i - 1))
+  }
+  return bodies
+}
+
 export const CONTENT_CHECKS = [
   {
     id: 'manual-v-model',
@@ -32,6 +50,13 @@ export const CONTENT_CHECKS = [
     violated: (t) => /<slot[\s/>]/.test(t) && !/defineSlots/.test(t),
     message:
       'Template renders `<slot>` but declares no typed `defineSlots<{ ... }>()`. Declare every slot.'
+  },
+  {
+    id: 'computed-slot-presence',
+    applies: isVue,
+    violated: (t) => computedBodies(t).some((body) => SLOT_PRESENCE.test(body)),
+    message:
+      'Slot presence read inside `computed()`. `slots` is not reactive, so the cached value never sees a slot appear or disappear (a `v-if` slot, a server render that differs from the client) and leaves an empty band behind. Read it at render: `const hasX = () => Boolean(slots.x)` and `v-if="hasX()"`.'
   },
   {
     id: 'composable-return-reactive',
@@ -82,6 +107,7 @@ export const STANDARD_BY_CHECK = {
   'runtime-define-props': 'props',
   'runtime-define-emits': 'emits',
   'slot-without-defineslots': 'slots',
+  'computed-slot-presence': 'slots',
   'composable-return-reactive': 'composables',
   'composable-js': 'composables',
   'deprecated-without-replacement': 'deprecation',

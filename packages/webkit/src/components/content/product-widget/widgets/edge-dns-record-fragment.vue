@@ -2,11 +2,11 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
   import InputGroupAddon from '../../../inputs/input-group/input-group-addon/input-group-addon.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import Link from '../../../navigation/link/link.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -162,7 +162,7 @@
               label="Name"
             />
             <InputGroupRoot>
-              <InputText
+              <Input
                 id="edge-dns-record-name"
                 model-value="www"
                 size="medium"
@@ -215,7 +215,7 @@
               for="edge-dns-record-ttl"
               label="TTL (seconds)"
             />
-            <InputNumber
+            <NumberInput
               id="edge-dns-record-ttl"
               :model-value="3600"
               size="medium"

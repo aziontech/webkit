@@ -1,9 +1,12 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
-  import Dropdown from '../dropdown'
+  import DropdownMenu from '../dropdown-menu'
   import BreadcrumbList from './breadcrumb-list.vue'
   import BreadcrumbSeparator from './breadcrumb-separator.vue'
   import { useBreadcrumbCollapse } from './composables/use-breadcrumb-collapse'
@@ -39,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ breadcrumb: en.breadcrumb })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
@@ -89,7 +93,7 @@
   <nav
     v-bind="attrs"
     :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
-    aria-label="Breadcrumb"
+    :aria-label="t('breadcrumb.label')"
     :data-testid="testId"
   >
     <template v-if="items.length">
@@ -147,12 +151,12 @@
               class="inline-flex items-center"
               :data-testid="`${testId}__segment-overflow`"
             >
-              <Dropdown
+              <DropdownMenu
                 :data-testid="`${testId}__overflow-menu`"
                 @select="onOverflowSelect"
               >
-                <Dropdown.Trigger
-                  aria-label="Show pages in between"
+                <DropdownMenu.Trigger
+                  :aria-label="t('breadcrumb.showHidden')"
                   :data-testid="`${testId}__overflow-trigger`"
                   class="h-7 min-w-7 items-center justify-center rounded-(--shape-button) px-(--spacing-xs) text-button-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-mask) active:bg-(--bg-active) motion-reduce:transition-none"
                 >
@@ -160,9 +164,9 @@
                     class="pi pi-ellipsis-h size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                     aria-hidden="true"
                   />
-                </Dropdown.Trigger>
-                <Dropdown.Group>
-                  <Dropdown.Option
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Group>
+                  <DropdownMenu.Option
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
                     :value="item.href ?? '#'"
@@ -174,14 +178,14 @@
                       #left
                     >
                       <i
-                        :class="item.icon"
+                        :class="[item.icon, directionalIconClass(item.icon)]"
                         class="size-[0.875rem]! shrink-0 text-[0.875rem]! leading-none"
                         aria-hidden="true"
                       />
                     </template>
-                  </Dropdown.Option>
-                </Dropdown.Group>
-              </Dropdown>
+                  </DropdownMenu.Option>
+                </DropdownMenu.Group>
+              </DropdownMenu>
             </li>
           </template>
 

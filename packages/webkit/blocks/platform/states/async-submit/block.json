@@ -1,0 +1,44 @@
+{
+  "id": "platform/states/async-submit",
+  "name": "AsyncSubmit",
+  "title": "Templates/Platform/States/AsyncSubmit",
+  "surface": "product",
+  "summary": "The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "async submit",
+    "long running action",
+    "background job status",
+    "deploy in progress",
+    "async deploy result",
+    "operation status",
+    "envio assíncrono",
+    "ação demorada",
+    "status da operação"
+  ],
+  "skills": ["webkit-errors", "webkit-ui-states", "webkit-form"],
+  "primary": {
+    "name": "Idle",
+    "file": "async-submit.vue"
+  },
+  "variants": [
+    {
+      "name": "Running",
+      "summary": "Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status.",
+      "file": "variants/running.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch.",
+      "file": "variants/failed.vue"
+    },
+    {
+      "name": "Succeeded",
+      "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.",
+      "file": "variants/succeeded.vue"
+    }
+  ]
+}

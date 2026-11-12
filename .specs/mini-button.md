@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: cd1c2d8be58133cabc3e908c3e07c4d0b6b045549aec4b94128e778748c00e2f
+checksum: 56741ef40669a3e62518073192e670b3e286208acfb898a5195545dc318abba8
 created: 2026-06-01
-last_updated: 2026-06-01
+last_updated: 2026-11-11
 ---
 
 # Mini Button — Component Spec
@@ -17,6 +17,29 @@ last_updated: 2026-06-01
 ## Purpose
 
 Compact text action with an optional trailing external-link icon and a ghost hover surface. Use for secondary CTAs in dense layouts (cards, tables, toolbars) where a full `Button` is too heavy. Differs from `navigation/link` by using default body text color and a brand-colored icon.
+
+## When to use
+
+- A short secondary CTA ("Learn more") inside a card, feature tile or table where a full `button` is too heavy.
+- A marketing link that reads in body text color with a brand-colored icon.
+
+## When NOT to use
+
+- A standalone navigation link in product UI (a domain, a repository, a docs page) → use `link`.
+- The main action of a section → use `button`.
+- A link inside a sentence → use a plain anchor with the text-link class.
+
+## Related
+
+- `link` — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.
+- `button` — full action control with kinds, loading and a button element.
+
+## Best practices
+
+- Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.
+- Replace the `'Learn more'` default `label` with text that says where the link goes.
+- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `showIcon` to false otherwise.
+- Only `large` and `medium` sizes exist.
 
 ## Usage
 
@@ -27,7 +50,7 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 <template>
   <MiniButton
-    label="Learn More"
+    label="Learn more"
     href="#"
     target="_blank"
   />
@@ -36,15 +59,15 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 ## Props
 
-| Prop       | Type                  | Default                 | Required | JSDoc                                             |
-| ---------- | --------------------- | ----------------------- | -------- | ------------------------------------------------- |
-| `label`    | `string`              | `'Learn More'`          | false    | Visible label rendered inside the control.        |
-| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.  |
-| `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.             |
-| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.           |
-| `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                   |
-| `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                      |
+| Prop       | Type                  | Default                 | Required | JSDoc                                                                                    |
+| ---------- | --------------------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `label`    | `string`              | `''`                    | false    | Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). |
+| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.                                         |
+| `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens.                                        |
+| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.                                                    |
+| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.                                                  |
+| `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                                                          |
+| `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                                                             |
 
 ## Events
 
@@ -103,7 +126,14 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 - `motion-reduce:transition-none` on animated states.
 - Touch target ≥40×40 px at `size: 'large'`; medium is for dense layouts.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value side-by-side.
@@ -121,10 +151,8 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

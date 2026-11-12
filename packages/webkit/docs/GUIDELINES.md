@@ -3,7 +3,7 @@
 > This is the one-page digest. The **complete styleguide** — every code standard in full
 > detail, with the gate that blocks each one — is [`STYLEGUIDE.md`](./STYLEGUIDE.md). The
 > **end-to-end process map** (creation → release, adoption → enforcement) is
-> [`PROCESS.md`](./PROCESS.md).
+> [`PROCESS.md`](https://github.com/aziontech/webkit/blob/main/.claude/docs/PROCESS.md) (in the repository).
 
 One page to **see every pattern** you need, whether you are:
 
@@ -19,7 +19,7 @@ lives in [`.claude/rules/`](../../../.claude/rules/).
 
 > **General vs. webkit.** The patterns in **Part A** are `scope: general` — they ship to your
 > project and apply to any Vue component. The rules that are `scope: webkit` (spec-first
-> pipeline, the exports map, Storybook "Show code", releases) live only inside the design
+> pipeline, the exports map, examples and visual baselines, releases) live only inside the design
 > system and are **not** on this page.
 
 New to the design system? Start with the [Getting started](../README.md#getting-started)
@@ -43,8 +43,8 @@ typography) are **blocked** by lint and hooks — the token is always the answer
 | **Motion**     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                  | local `@keyframes` · `duration-[…]` · animation libraries |
 
 Tokens are light/dark aware — using them is what makes a component theme correctly for free.
-The full catalog lives in the theme package (`@aziontech/theme`) and renders in the
-Storybook **Foundations** section.
+The full catalog lives in the theme package (`@aziontech/theme`) and renders on the docs
+site's **Foundations** pages (`pnpm docs:dev`).
 
 ---
 

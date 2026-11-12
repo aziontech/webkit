@@ -1,0 +1,36 @@
+{
+  "component": "accordion",
+  "title": "Components/Primitives/Content/Accordion",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single-mode accordion with one item open via `default-value`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "`medium` and `large` sizes side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "ArrowPosition",
+      "summary": "`right` and `left` chevron placement side by side.",
+      "file": "arrow-position.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "The middle item carries the per-item `disabled` prop and cannot toggle.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "WithLogView",
+      "summary": "Composição real: o slot `Accordion.Content` aceita qualquer componente. Aqui, cada item de deploy encapsula um `LogView` completo (header + content) sobre um log de deploy real.",
+      "file": "with-log-view.vue"
+    },
+    {
+      "name": "Multiple",
+      "summary": "`type=\"multiple\"` with two items open at once via an array `default-value`.",
+      "file": "multiple.vue"
+    }
+  ]
+}

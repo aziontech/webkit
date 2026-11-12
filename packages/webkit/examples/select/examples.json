@@ -1,0 +1,61 @@
+{
+  "component": "select",
+  "title": "Components/Primitives/Inputs/Select",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Single-select with four flat options at large size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All three trigger sizes side by side, sharing one bound value.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Multiple",
+      "summary": "Multi-select mode: options toggle on click and `modelValue` is an array.",
+      "file": "multiple.vue"
+    },
+    {
+      "name": "WithGroups",
+      "summary": "`<Select.Group label=\"…\">` renders an uppercase heading above each set of options.",
+      "file": "with-groups.vue"
+    },
+    {
+      "name": "WithSearchAndFooter",
+      "summary": "The `#search` and `#footer` slots on `<Select.Content>` host a filter input and a \"Create new\" action; the option list scrolls between them.",
+      "file": "with-search-and-footer.vue"
+    },
+    {
+      "name": "WithOptionExtras",
+      "summary": "Per-option affordances on `<Select.Option>`: the `icon` prop, the `#left` slot, and the trailing `#tag` slot.",
+      "file": "with-option-extras.vue"
+    },
+    {
+      "name": "LongList",
+      "summary": "A long option list; the panel caps its height and scrolls internally.",
+      "file": "long-list.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-selected value shows the filled trigger treatment.",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state (danger border + ring); it clears once a value is selected.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "Required state (warning border + `aria-required`). It is a submit state: bind `required` to `submitted && !value` so the field is flagged only after a submit attempt and clears once a value is selected. Press Submit with nothing selected to see it.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled trigger; the dropdown cannot open.",
+      "file": "disabled.vue"
+    }
+  ]
+}

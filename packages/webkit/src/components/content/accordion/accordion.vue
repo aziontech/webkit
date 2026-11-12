@@ -20,8 +20,6 @@
   interface Props {
     /** Whether one or multiple items can be open at the same time. */
     type?: AccordionType
-    /** Controlled open item(s): a single value string in single mode, an array of values in multiple mode. Use with `v-model:value`. */
-    value?: AccordionValue
     /** Initial open item(s) when uncontrolled. */
     defaultValue?: AccordionValue
     /** In single mode, lets the open item collapse so that no item is open. */
@@ -34,16 +32,13 @@
 
   const props = withDefaults(defineProps<Props>(), {
     type: 'single',
-    value: undefined,
     defaultValue: null,
     collapsible: true,
     size: 'medium',
     arrowPosition: 'right'
   })
 
-  const emit = defineEmits<{
-    'update:value': [value: AccordionValue]
-  }>()
+  const model = defineModel<AccordionValue | undefined>({ default: undefined })
 
   defineSlots<{
     default(): unknown
@@ -55,10 +50,10 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-accordion')
 
   const openValue = useControllable<AccordionValue>({
-    prop: computed(() => props.value),
+    prop: computed(() => model.value),
     defaultProp: props.defaultValue,
     onChange: (next) => {
-      emit('update:value', next)
+      model.value = next
     }
   })
 

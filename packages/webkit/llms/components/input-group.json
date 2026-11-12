@@ -1,0 +1,90 @@
+{
+ "name": "input-group",
+ "binding": "InputGroup",
+ "import": "@aziontech/webkit/input-group",
+ "treeShakeableImport": "@aziontech/webkit/input-group-root",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/input-group-addon",
+  "@aziontech/webkit/input-group-input"
+ ],
+ "purpose": "Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.",
+ "setup": null,
+ "useWhen": [
+  "A text input that needs static prefix or suffix content inside the same border (`https://`, `.com`, a currency symbol).",
+  "An input joined to a control: a search field with a trailing `button`, an amount with a leading currency `select`."
+ ],
+ "avoidWhen": [
+  "A phone number with a dial code → use `phone-input`.",
+  "A single input with only a decorative icon → use `input` and its `iconLeft` / `iconRight` slots."
+ ],
+ "related": [
+  "field` — wrap the group in a `Field` for a label and description/error; `InputGroup.Input` takes the field's id, `aria-describedby` and state, and the root takes `invalid` / `disabled` / `required` from it.",
+  "phone-input` — input group with a dial-code select and a per-country mask.",
+  "input` — the single-field primitive with icon slots."
+ ],
+ "bestPractices": [
+  "Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.",
+  "Set the same `size` on the group and on its child controls so heights line up.",
+  "disabled`, `invalid`, and `required` style the group only; also set them on every child control they should affect. Inside a `Field`, put them on the `Field` instead: the root and `InputGroup.Input` both read them.",
+  "Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string.",
+  "The root is `role=\"group\"`; label the inner input itself, or give the group an `aria-label`."
+ ],
+ "props": [
+  {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders the error border and sets `aria-invalid=\"true\"` on the root."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders the required (warning) border. `aria-required` is not allowed on `role=\"group\"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field)."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled=\"true\"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (inside a `Field`, the Field's `disabled` reaches both the root and `InputGroup.Input`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import InputGroup from '@aziontech/webkit/input-group'\n  import Button from '@aziontech/webkit/button'\n  import Select from '@aziontech/webkit/select'\n</script>\n\n<template>\n  <InputGroup>\n    <input\n      placeholder=\"domain\"\n      class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n    />\n  </InputGroup>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import InputGroup from '@aziontech/webkit/input-group'\n  import Button from '@aziontech/webkit/button'\n  import Select from '@aziontech/webkit/select'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4\">\n    <InputGroup size=\"small\">\n      <InputGroup.Addon>https://</InputGroup.Addon>\n      <input\n        placeholder=\"domain\"\n        class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n      />\n      <InputGroup.Addon>.com</InputGroup.Addon>\n    </InputGroup>\n    <InputGroup size=\"medium\">\n      <InputGroup.Addon>https://</InputGroup.Addon>\n      <input\n        placeholder=\"domain\"\n        class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n      />\n      <InputGroup.Addon>.com</InputGroup.Addon>\n    </InputGroup>\n    <InputGroup size=\"large\">\n      <InputGroup.Addon>https://</InputGroup.Addon>\n      <input\n        placeholder=\"domain\"\n        class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n      />\n      <InputGroup.Addon>.com</InputGroup.Addon>\n    </InputGroup>\n  </div>\n</template>"
+  },
+  {
+   "name": "WithAddonLeft",
+   "sfc": "<script setup>\n  import InputGroup from '@aziontech/webkit/input-group'\n  import Button from '@aziontech/webkit/button'\n  import Select from '@aziontech/webkit/select'\n</script>\n\n<template>\n  <InputGroup>\n    <InputGroup.Addon>https://</InputGroup.Addon>\n    <input\n      placeholder=\"domain\"\n      class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n    />\n  </InputGroup>\n</template>"
+  }
+ ],
+ "docs": "components/input-group.md"
+}

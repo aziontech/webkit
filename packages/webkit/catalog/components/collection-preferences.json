@@ -1,0 +1,22 @@
+{
+ "purpose": "The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`.",
+ "useWhen": [
+  "A table or card collection whose people choose how many items a page shows and which fields they see.",
+  "Any collection driven by `useCollection`, which saves the result per collection."
+ ],
+ "avoidWhen": [
+  "A single column-visibility toggle inside a table toolbar → use `table-column-selector`.",
+  "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
+ ],
+ "related": [
+  "use-collection` — saves the preferences; `preferencesProps` is the binding.",
+  "table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order.",
+  "cards` — takes the page size and the visible fields.",
+  "property-filter` — sits beside it in the controls row."
+ ],
+ "bestPractices": [
+  "Lock the column that names the item (`locked: true`): a row without its name is unreadable.",
+  "Show only the sections the collection uses (`sections`): cards have no striped rows.",
+  "Keep the trigger at the end of the controls row, after Refresh and Download."
+ ]
+}

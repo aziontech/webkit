@@ -1,0 +1,44 @@
+<!doctype html>
+<html
+  lang="en"
+  class="azion azion-dark"
+  data-theme="dark"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="color-scheme"
+      content="dark light"
+    />
+    <link
+      rel="icon"
+      href="data:,"
+    />
+    <script>
+      ;(function () {
+        try {
+          var params = new URLSearchParams(location.search)
+          var stored = params.get('theme') || localStorage.getItem('webkit-docs:theme') || 'dark'
+          var dark =
+            stored === 'dark' ||
+            (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+          var root = document.documentElement
+          root.classList.remove('azion-dark', 'azion-light')
+          root.classList.add(dark ? 'azion-dark' : 'azion-light')
+          root.dataset.theme = dark ? 'dark' : 'light'
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script
+      type="module"
+      src="/src/main.ts"
+    ></script>
+  </body>
+</html>

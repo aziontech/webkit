@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -72,7 +72,7 @@
   >
     <div class="flex flex-col gap-(--spacing-md) py-(--spacing-xs)">
       <ShellMockupPart :order="0">
-        <SegmentedButton
+        <ToggleGroup
           :model-value="dashboard"
           :options="DASHBOARDS"
           size="medium"
@@ -87,7 +87,7 @@
             :data-shown="dashboard === 'overview' || null"
             class="col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-shown:translate-y-0 data-shown:opacity-100 motion-reduce:transition-none"
           >
-            <CardBox
+            <Card
               v-for="metric in BIG_NUMBERS"
               :key="metric.label"
             >
@@ -106,14 +106,14 @@
                   <span class="text-body-xs text-(--text-muted)">{{ metric.description }}</span>
                 </div>
               </template>
-            </CardBox>
+            </Card>
           </div>
 
           <div
             :data-shown="dashboard === 'breakdown' || null"
             class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-shown:translate-y-0 data-shown:opacity-100 motion-reduce:transition-none"
           >
-            <CardBox>
+            <Card>
               <template #content>
                 <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                   <span class="text-label-sm text-(--text-default)">Impacted URLs</span>
@@ -123,8 +123,8 @@
                   </span>
                 </div>
               </template>
-            </CardBox>
-            <CardBox>
+            </Card>
+            <Card>
               <template #content>
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <span class="text-label-sm text-(--text-default)">Top Impacted URLs</span>
@@ -152,7 +152,7 @@
                   </ul>
                 </div>
               </template>
-            </CardBox>
+            </Card>
           </div>
         </div>
       </ShellMockupPart>

@@ -1,0 +1,3871 @@
+{
+  "exports": [
+    "accordion",
+    "accordion-content",
+    "accordion-item",
+    "accordion-root",
+    "accordion-trigger",
+    "action-confirmation",
+    "ai-loading",
+    "alert",
+    "app-layout",
+    "architecture-tabs",
+    "article-body",
+    "article-cards",
+    "article-highlight",
+    "article-index-blog",
+    "article-index-resource-hub",
+    "artifact-preview",
+    "assets/agi-extended-color.svg",
+    "assets/agibank-extended-color.svg",
+    "assets/agibank-extended-mono.svg",
+    "assets/agibank-extended-reversed.svg",
+    "assets/ai-gateway.svg",
+    "assets/akamai-extended-color.svg",
+    "assets/akamai-extended-mono.svg",
+    "assets/akamai-extended-reversed.svg",
+    "assets/akamai-symbol-color.svg",
+    "assets/akamai-symbol-mono.svg",
+    "assets/akamai-symbol-reversed.svg",
+    "assets/alpargatas-extended-color.svg",
+    "assets/alpargatas-extended-mono.svg",
+    "assets/americamovil-extended-color.svg",
+    "assets/americanas-extended-color.svg",
+    "assets/americanas-extended-mono.svg",
+    "assets/americanas-extended-reversed.svg",
+    "assets/angeloni-extended-color.svg",
+    "assets/angular-symbol-mono.svg",
+    "assets/anthropic-extended-mono.svg",
+    "assets/arezzo-extended-color.svg",
+    "assets/arezzo-extended-mono.svg",
+    "assets/arezzo-extended-reversed.svg",
+    "assets/astro-symbol-mono.svg",
+    "assets/aws-extended-color.svg",
+    "assets/aws-extended-mono.svg",
+    "assets/aws-extended-reversed.svg",
+    "assets/axur-extended-color.svg",
+    "assets/axur-extended-mono.svg",
+    "assets/axur-extended-reversed.svg",
+    "assets/ayko-extended-mono.svg",
+    "assets/azion-highlight.svg",
+    "assets/azion-rest-api.svg",
+    "assets/azure-symbol-mono.svg",
+    "assets/b2w-extended-color.svg",
+    "assets/b2w-extended-mono.svg",
+    "assets/b2w-extended-reversed.svg",
+    "assets/banco-de-la-nacion-extended-mono.svg",
+    "assets/branches.svg",
+    "assets/brand-globe-scene",
+    "assets/browserless-symbol-mono.svg",
+    "assets/browserless-symbol-reversed.svg",
+    "assets/caixa-extended-color.svg",
+    "assets/caixa-extended-mono.svg",
+    "assets/caixa-extended-reversed.svg",
+    "assets/caixa-symbol-color.svg",
+    "assets/calvinklein-extended-mono.svg",
+    "assets/calvinklein-extended-reversed.svg",
+    "assets/ccpa-symbol-color.svg",
+    "assets/claude-symbol-color.svg",
+    "assets/client-registry",
+    "assets/cloudflare-extended-color.svg",
+    "assets/cloudflare-extended-reversed.svg",
+    "assets/cloudflare-symbol-color.svg",
+    "assets/cloudflare-symbol-mono.svg",
+    "assets/cloudflare-symbol-reversed.svg",
+    "assets/cobasi-extended-color.svg",
+    "assets/cocacola-extended-color.svg",
+    "assets/cocacola-extended-mono.svg",
+    "assets/cocacola-extended-reversed.svg",
+    "assets/codex-symbol-mono.svg",
+    "assets/combine-data-and-vector-search.svg",
+    "assets/competitor-registry",
+    "assets/contabilizei-extended-color.svg",
+    "assets/contabilizei-extended-mono.svg",
+    "assets/contabilizei-extended-reversed.svg",
+    "assets/contabilizei-symbol-color.png",
+    "assets/copilot-symbol-color.svg",
+    "assets/cpra-symbol-color.svg",
+    "assets/crateandbarrel-extended-mono.svg",
+    "assets/crateandbarrel-extended-reversed.svg",
+    "assets/crefisa-extended-color.svg",
+    "assets/crefisa-extended-mono.svg",
+    "assets/crefisa-extended-reversed.svg",
+    "assets/csu-digital-extended-color.svg",
+    "assets/cursor-symbol-mono.svg",
+    "assets/dafiti-extended-mono.svg",
+    "assets/dafiti-extended-reversed.svg",
+    "assets/datadog-symbol-color.svg",
+    "assets/datadome-extended-mono.svg",
+    "assets/datadome-extended-reversed.svg",
+    "assets/ddos-protection.svg",
+    "assets/digiplus-extended-color.svg",
+    "assets/digiplus-extended-mono.svg",
+    "assets/digiplus-extended-reversed.svg",
+    "assets/distributed-apis-tile.svg",
+    "assets/docusaurus-symbol-mono.svg",
+    "assets/drizzle-extended-color.svg",
+    "assets/elastic-symbol-mono.svg",
+    "assets/eleventy-symbol-mono.svg",
+    "assets/embratel-extended-color.svg",
+    "assets/embratel-extended-mono.svg",
+    "assets/embratel-extended-reversed.svg",
+    "assets/equinix-extended-color.svg",
+    "assets/exame-extended-color.svg",
+    "assets/exame-extended-mono.svg",
+    "assets/exame-extended-reversed.svg",
+    "assets/fam-extended-color.svg",
+    "assets/fam-extended-mono.svg",
+    "assets/fam-extended-reversed.svg",
+    "assets/fastly-extended-color.svg",
+    "assets/fastly-extended-mono.svg",
+    "assets/fastly-extended-reversed.svg",
+    "assets/fastly-symbol-color.svg",
+    "assets/fastly-symbol-mono.svg",
+    "assets/fastly-symbol-reversed.svg",
+    "assets/fauna-extended-color.svg",
+    "assets/fauna-extended-mono.svg",
+    "assets/fauna-extended-reversed.svg",
+    "assets/forrester-extended-color.svg",
+    "assets/forrester-extended-mono.svg",
+    "assets/forrester-extended-reversed.svg",
+    "assets/fourbank-extended-color.svg",
+    "assets/fourbank-extended-mono.svg",
+    "assets/fourbank-extended-reversed.svg",
+    "assets/frost-and-sullivan-extended-color.svg",
+    "assets/frost-and-sullivan-extended-mono.svg",
+    "assets/frost-and-sullivan-extended-reversed.svg",
+    "assets/g2-symbol-color.svg",
+    "assets/gartner-extended-color.svg",
+    "assets/gartner-extended-mono.svg",
+    "assets/gartner-extended-reversed.svg",
+    "assets/gatsby-symbol-mono.svg",
+    "assets/gcp-symbol-mono.svg",
+    "assets/gdpr-symbol-color.svg",
+    "assets/gemini-symbol-color.svg",
+    "assets/getninjas-extended-mono.svg",
+    "assets/getninjas-extended-reversed.svg",
+    "assets/gfg-extended-mono.svg",
+    "assets/gfg-extended-reversed.svg",
+    "assets/gigaom-extended-color.svg",
+    "assets/gigaom-extended-mono.svg",
+    "assets/gigaom-extended-reversed.svg",
+    "assets/github-symbol-mono.svg",
+    "assets/google-symbol-color.svg",
+    "assets/gpa-extended-color.svg",
+    "assets/gpa-extended-mono.svg",
+    "assets/gpa-extended-reversed.svg",
+    "assets/gpa-photo.jpg",
+    "assets/gpa-symbol-color.svg",
+    "assets/grafana-symbol-mono.svg",
+    "assets/graphql-symbol-mono.svg",
+    "assets/grendene-extended-color.svg",
+    "assets/groq-extended-mono.svg",
+    "assets/gru-airport-extended-color.svg",
+    "assets/gruposabemi-extended-color.svg",
+    "assets/gruposabemi-extended-mono.svg",
+    "assets/gruposabemi-extended-reversed.svg",
+    "assets/hdi-extended-color.svg",
+    "assets/hdi-extended-mono.svg",
+    "assets/hdi-extended-reversed.svg",
+    "assets/herospark-extended-color.svg",
+    "assets/herospark-extended-reversed.svg",
+    "assets/herospark-symbol-reversed.svg",
+    "assets/hexo-symbol-mono.svg",
+    "assets/hono-symbol-mono.svg",
+    "assets/hugo-symbol-mono.svg",
+    "assets/ibero-extended-color.svg",
+    "assets/ibero-extended-mono.svg",
+    "assets/ibero-extended-reversed.svg",
+    "assets/ietf-extended-color.svg",
+    "assets/ifood-extended-color.svg",
+    "assets/ifood-extended-reversed.svg",
+    "assets/ifood-symbol-color.svg",
+    "assets/incognia-extended-color.png",
+    "assets/infoblox-extended-mono.svg",
+    "assets/ipiranga-extended-color.svg",
+    "assets/ipiranga-extended-mono.svg",
+    "assets/ipiranga-extended-reversed.svg",
+    "assets/itau-extended-color.svg",
+    "assets/itau-extended-reversed.webp",
+    "assets/itau-symbol-color.svg",
+    "assets/jamstack-symbol-color.svg",
+    "assets/javascript-symbol-mono.svg",
+    "assets/jekyll-symbol-mono.svg",
+    "assets/kafka-extended-mono.svg",
+    "assets/kalunga-extended-mono.svg",
+    "assets/kalunga-extended-reversed.svg",
+    "assets/kroton-extended-color.png",
+    "assets/lendico-extended-color.svg",
+    "assets/lendico-extended-mono.svg",
+    "assets/lendico-extended-reversed.svg",
+    "assets/lgpd-symbol-color.svg",
+    "assets/locaweb-extended-color.svg",
+    "assets/lojadomecanico-extended-color.svg",
+    "assets/lojadomecanico-extended-mono.svg",
+    "assets/lojadomecanico-extended-reversed.svg",
+    "assets/lojaintegrada-extended-color.svg",
+    "assets/lojaintegrada-extended-reversed.svg",
+    "assets/madeiramadeira-extended-color.svg",
+    "assets/madeiramadeira-extended-mono.svg",
+    "assets/madeiramadeira-extended-reversed.svg",
+    "assets/madeiramadeira-symbol-color.svg",
+    "assets/madeiramadeira-symbol-reversed.svg",
+    "assets/magalu-extended-color.svg",
+    "assets/magalu-extended-mono.svg",
+    "assets/magalu-extended-reversed.svg",
+    "assets/magalu-symbol-color.png",
+    "assets/marisa-extended-color.svg",
+    "assets/marisa-extended-mono.svg",
+    "assets/marisa-extended-reversed.svg",
+    "assets/meliuz-extended-color.svg",
+    "assets/mobiauto-extended-color.svg",
+    "assets/mobiauto-extended-mono.svg",
+    "assets/mobiauto-extended-reversed.svg",
+    "assets/monashees-extended-mono.svg",
+    "assets/monashees-extended-reversed.svg",
+    "assets/mongodb-symbol-color.svg",
+    "assets/motorola-extended-color.svg",
+    "assets/motorola-extended-mono.svg",
+    "assets/motorola-extended-reversed.svg",
+    "assets/mysql-symbol-reversed.svg",
+    "assets/neogrid-extended-color.svg",
+    "assets/neon-extended-color.svg",
+    "assets/neon-extended-mono.svg",
+    "assets/neon-extended-reversed.svg",
+    "assets/netshoes-extended-color.svg",
+    "assets/netshoes-extended-reversed.svg",
+    "assets/netshoes-photo.jpg",
+    "assets/newbalance-extended-color.svg",
+    "assets/newbalance-extended-mono.svg",
+    "assets/newbalance-extended-reversed.svg",
+    "assets/nextjs-symbol-mono.svg",
+    "assets/nodejs-symbol-color.svg",
+    "assets/nuxt-extended-mono.svg",
+    "assets/nzn-extended-color.svg",
+    "assets/nzn-extended-mono.svg",
+    "assets/nzn-extended-reversed.svg",
+    "assets/omelete-extended-color.svg",
+    "assets/omelete-extended-mono.svg",
+    "assets/omelete-extended-reversed.svg",
+    "assets/omeleteco-extended-mono.svg",
+    "assets/omeleteco-extended-reversed.svg",
+    "assets/onnx-symbol-mono.svg",
+    "assets/openai-symbol-mono.svg",
+    "assets/opencode-symbol-mono.svg",
+    "assets/panasonic-extended-color.svg",
+    "assets/panasonic-extended-mono.svg",
+    "assets/panasonic-extended-reversed.svg",
+    "assets/panvel-extended-color.svg",
+    "assets/panvel-extended-mono.svg",
+    "assets/panvel-extended-reversed.svg",
+    "assets/pci-dss-symbol-color.svg",
+    "assets/pernambucanas-extended-color.svg",
+    "assets/pernambucanas-extended-mono.svg",
+    "assets/pernambucanas-extended-reversed.svg",
+    "assets/personal-tokens.svg",
+    "assets/petz-extended-color.png",
+    "assets/petz-extended-mono.svg",
+    "assets/petz-extended-reversed.svg",
+    "assets/planetscale-symbol-mono.svg",
+    "assets/portobello-extended-mono.svg",
+    "assets/portocred-extended-color.svg",
+    "assets/portocred-extended-mono.svg",
+    "assets/portocred-extended-reversed.svg",
+    "assets/postgresql-symbol-color.svg",
+    "assets/preact-symbol-mono.svg",
+    "assets/primevideo-extended-color.svg",
+    "assets/primevideo-extended-mono.svg",
+    "assets/primevideo-extended-reversed.svg",
+    "assets/prisma-symbol-reversed.svg",
+    "assets/provu-extended-color.svg",
+    "assets/provu-extended-mono.svg",
+    "assets/provu-extended-reversed.svg",
+    "assets/qualcomm-extended-mono.svg",
+    "assets/qualcomm-extended-reversed.svg",
+    "assets/queroquero-extended-color.svg",
+    "assets/queroquero-extended-mono.svg",
+    "assets/queroquero-extended-reversed.svg",
+    "assets/quick-start-with-templates.svg",
+    "assets/qwik-symbol-mono.svg",
+    "assets/radware-extended-color.svg",
+    "assets/radware-extended-mono.svg",
+    "assets/radware-extended-reversed.svg",
+    "assets/rbs-extended-color.svg",
+    "assets/rbs-extended-mono.svg",
+    "assets/rbs-extended-reversed.svg",
+    "assets/react-symbol-mono.svg",
+    "assets/real-time-metrics-error-rate.svg",
+    "assets/real-time-metrics-status-codes.svg",
+    "assets/redis-symbol-color.svg",
+    "assets/remix-symbol-mono.svg",
+    "assets/renner-extended-color.svg",
+    "assets/renner-extended-mono.svg",
+    "assets/renner-extended-reversed.svg",
+    "assets/renner-symbol-reversed.svg",
+    "assets/resend-extended-mono.svg",
+    "assets/resend-extended-reversed.svg",
+    "assets/rico-extended-color.svg",
+    "assets/rico-extended-mono.svg",
+    "assets/rico-extended-reversed.svg",
+    "assets/rocketchat-extended-color.svg",
+    "assets/rocketchat-extended-mono.svg",
+    "assets/rocketchat-extended-reversed.svg",
+    "assets/saffe-extended-color.svg",
+    "assets/saffe-extended-mono.svg",
+    "assets/saffe-extended-reversed.svg",
+    "assets/samsung-extended-color.svg",
+    "assets/samsung-extended-mono.svg",
+    "assets/samsung-extended-reversed.svg",
+    "assets/saraiva-extended-color.svg",
+    "assets/saraiva-extended-mono.svg",
+    "assets/saraiva-extended-reversed.svg",
+    "assets/serverless-symbol-color.svg",
+    "assets/shoptime-extended-color.svg",
+    "assets/shoptime-extended-mono.svg",
+    "assets/shoptime-extended-reversed.svg",
+    "assets/sky-extended-color.svg",
+    "assets/sky-extended-mono.svg",
+    "assets/sky-extended-reversed.svg",
+    "assets/soc-symbol-color.svg",
+    "assets/spinning-globe",
+    "assets/sqlite-symbol-mono.svg",
+    "assets/stone-extended-color.svg",
+    "assets/stripe-extended-color.svg",
+    "assets/stripe-extended-reversed.svg",
+    "assets/submarino-extended-color.svg",
+    "assets/submarino-extended-mono.svg",
+    "assets/submarino-extended-reversed.svg",
+    "assets/supabase-symbol-color.svg",
+    "assets/svelte-symbol-mono.svg",
+    "assets/tc39-symbol-mono.svg",
+    "assets/telefonica-extended-color.svg",
+    "assets/telefonica-extended-mono.svg",
+    "assets/telefonica-extended-reversed.svg",
+    "assets/terraform-symbol-mono.svg",
+    "assets/todocartoes-extended-mono.svg",
+    "assets/todocartoes-extended-reversed.svg",
+    "assets/topazio-extended-color.svg",
+    "assets/topazio-extended-mono.svg",
+    "assets/topazio-extended-reversed.svg",
+    "assets/tray-symbol-color.svg",
+    "assets/turso-symbol-mono.svg",
+    "assets/unicesumar-extended-color.svg",
+    "assets/unicesumar-extended-mono.svg",
+    "assets/unicesumar-extended-reversed.svg",
+    "assets/unicred-extended-color.svg",
+    "assets/unicred-extended-mono.svg",
+    "assets/unicred-extended-reversed.svg",
+    "assets/uninter-extended-color.svg",
+    "assets/uninter-extended-reversed.svg",
+    "assets/upstash-symbol-mono.svg",
+    "assets/usage-chart.svg",
+    "assets/vercel-extended-mono.svg",
+    "assets/vercel-extended-reversed.svg",
+    "assets/vite-symbol-mono.svg",
+    "assets/vitepress-symbol-mono.svg",
+    "assets/vtex-extended-color.svg",
+    "assets/vtex-extended-mono.svg",
+    "assets/vtex-extended-reversed.svg",
+    "assets/vue-symbol-mono.svg",
+    "assets/vuepress-symbol-mono.svg",
+    "assets/w3c-symbol-mono.svg",
+    "assets/walmart-extended-color.svg",
+    "assets/walmart-extended-mono.svg",
+    "assets/walmart-extended-reversed.svg",
+    "assets/webassembly-symbol-mono.svg",
+    "assets/windsurf-symbol-mono.svg",
+    "assets/workers-cf-symbol-color.svg",
+    "assets/zoop-extended-color.svg",
+    "attribute-editor",
+    "avatar",
+    "badge",
+    "band-stack",
+    "banner",
+    "bar-list",
+    "bento-grid",
+    "bento-grid-cell",
+    "bento-grid-root",
+    "big-numbers",
+    "board",
+    "board-item",
+    "board-root",
+    "brand",
+    "breadcrumb",
+    "breadcrumb-item",
+    "browser-frame",
+    "button",
+    "button-group",
+    "button-highlight",
+    "calendar",
+    "calendar-clear",
+    "calendar-preset",
+    "calendar-root",
+    "call-to-action",
+    "card",
+    "card-grid",
+    "card-grid-cell",
+    "card-grid-root",
+    "card-pricing",
+    "cards",
+    "carousel",
+    "carousel-item",
+    "carousel-next",
+    "carousel-previous",
+    "carousel-root",
+    "catalog.json",
+    "chart",
+    "chart-area",
+    "chart-axis",
+    "chart-bar",
+    "chart-brush",
+    "chart-card",
+    "chart-card-content",
+    "chart-card-controls",
+    "chart-card-description",
+    "chart-card-drag-handle",
+    "chart-card-footer",
+    "chart-card-header",
+    "chart-card-resize-handle",
+    "chart-card-root",
+    "chart-card-title",
+    "chart-crosshair",
+    "chart-grid",
+    "chart-legend",
+    "chart-line",
+    "chart-root",
+    "chart-scatter",
+    "chart-tooltip",
+    "chat-message",
+    "chat-message-actions",
+    "chat-message-feedback",
+    "chat-message-root",
+    "checkbox",
+    "chip",
+    "citation",
+    "cli-terminal",
+    "client-mosaic",
+    "client-mosaic-columns",
+    "client-quotes",
+    "closing-call-to-action",
+    "closing-call-to-action-agents",
+    "closing-call-to-action-newsletter",
+    "code-block",
+    "code-editor",
+    "code-split",
+    "collection-preferences",
+    "column-navigation",
+    "column-navigation-column",
+    "column-navigation-item",
+    "column-navigation-root",
+    "combobox",
+    "command",
+    "command-empty",
+    "command-group",
+    "command-input",
+    "command-item",
+    "command-list",
+    "command-root",
+    "command-separator",
+    "compare-plans",
+    "compare-support-tiers",
+    "comparison-table",
+    "compliance-badges",
+    "confirm-dialog",
+    "contact-hub",
+    "content-columns",
+    "conversation",
+    "copy-button",
+    "currency",
+    "date-range-picker",
+    "diagram",
+    "dialog",
+    "dialog-close",
+    "dialog-content",
+    "dialog-description",
+    "dialog-overlay",
+    "dialog-portal",
+    "dialog-title",
+    "dialog-trigger",
+    "doc-callout",
+    "doc-card",
+    "doc-card-group",
+    "doc-frame",
+    "doc-item",
+    "doc-on-this-page",
+    "doc-page-header",
+    "doc-pagination",
+    "doc-prompt",
+    "doc-prose",
+    "doc-step",
+    "doc-steps",
+    "doc-tooltip",
+    "doc-update",
+    "docs/STYLEGUIDE.md",
+    "donut-chart",
+    "drawer",
+    "drawer-close",
+    "drawer-content",
+    "drawer-description",
+    "drawer-overlay",
+    "drawer-portal",
+    "drawer-title",
+    "drawer-trigger",
+    "dropdown-menu",
+    "dropdown-menu-group",
+    "dropdown-menu-option",
+    "dropdown-menu-root",
+    "dropdown-menu-trigger",
+    "embed",
+    "empty-state",
+    "error-boundary",
+    "eslint-plugin",
+    "faq",
+    "faq-section",
+    "feature-scroll",
+    "feature-tabs",
+    "feature-tiles",
+    "feature-widgets",
+    "field",
+    "field-content",
+    "field-description",
+    "field-error",
+    "field-group",
+    "field-label",
+    "field-legend",
+    "field-root",
+    "field-separator",
+    "field-set",
+    "field-title",
+    "file-dropzone",
+    "file-token-group",
+    "flow",
+    "flow-anchor",
+    "flow-node",
+    "flow-parallel",
+    "flow-root",
+    "footer",
+    "footer-column",
+    "footer-link",
+    "footer-root",
+    "frame-box",
+    "gauge-chart",
+    "global-header",
+    "help-panel",
+    "help-panel-header",
+    "help-panel-links",
+    "help-panel-root",
+    "help-panel-section",
+    "help-panel-task",
+    "help-panel-tutorial",
+    "helper-text",
+    "hero",
+    "hero-band",
+    "hero-copy-on-top-art",
+    "hero-form",
+    "hero-root",
+    "hero-title",
+    "hero-with-opening",
+    "hint",
+    "hotspot",
+    "icon-button",
+    "illustration",
+    "input",
+    "input-group",
+    "input-group-addon",
+    "input-group-input",
+    "input-group-root",
+    "investor-marks",
+    "item",
+    "item-actions",
+    "item-content",
+    "item-description",
+    "item-footer",
+    "item-group",
+    "item-header",
+    "item-list",
+    "item-media",
+    "item-root",
+    "item-separator",
+    "item-title",
+    "kbd",
+    "key-value-pairs",
+    "key-value-pairs-group",
+    "key-value-pairs-item",
+    "key-value-pairs-root",
+    "label",
+    "link",
+    "listing-browser",
+    "listing-table",
+    "locales/es",
+    "locales/pt-BR",
+    "log-view",
+    "log-view-content",
+    "log-view-footer",
+    "log-view-header",
+    "logo-wall",
+    "logo-wall-quote",
+    "map-chart",
+    "media-split",
+    "media-split-band",
+    "media-split-stack",
+    "media-tabs",
+    "media-tile",
+    "menu",
+    "menu-back",
+    "menu-group",
+    "menu-item",
+    "menu-root",
+    "menu-sub",
+    "menu-sub-content",
+    "menu-sub-trigger",
+    "mini-button",
+    "multi-select",
+    "multi-select-content",
+    "multi-select-group",
+    "multi-select-option",
+    "multi-select-root",
+    "multi-select-trigger",
+    "navigation-menu",
+    "network-map",
+    "network-section",
+    "number-input",
+    "outcome-mark",
+    "overflow-count",
+    "overline",
+    "package.json",
+    "page-header",
+    "page-tabs",
+    "pagination",
+    "pagination-button",
+    "pagination-info",
+    "pagination-page-size",
+    "pagination-root",
+    "panel",
+    "panel-content",
+    "panel-footer",
+    "panel-header",
+    "password-input",
+    "password-requirements",
+    "phone-input",
+    "photo-marquee",
+    "pick-list",
+    "pick-list-controls",
+    "pick-list-root",
+    "pick-list-source",
+    "pick-list-target",
+    "platform-directory",
+    "popover",
+    "popover-close",
+    "popover-content",
+    "popover-description",
+    "popover-footer",
+    "popover-header",
+    "popover-root",
+    "popover-title",
+    "popover-trigger",
+    "pricing-plans",
+    "product-widget",
+    "progress",
+    "prompt-input",
+    "property-filter",
+    "quote",
+    "quote-carousel",
+    "quote-tabs",
+    "radio-button",
+    "radio-cards",
+    "reasoning",
+    "recognition-marquee",
+    "resizable",
+    "resizable-handle",
+    "resizable-pane",
+    "resizable-root",
+    "resource-grid",
+    "save-bar",
+    "schema-form",
+    "scroll-area",
+    "section-container",
+    "section-gap",
+    "section-header",
+    "section-module",
+    "section-title",
+    "select",
+    "select-content",
+    "select-group",
+    "select-option",
+    "select-root",
+    "select-trigger",
+    "separator",
+    "setting-row",
+    "settings-section",
+    "severity-tag",
+    "shell-mockup",
+    "shell-mockup-part",
+    "shell-mockup-root",
+    "sidebar",
+    "sidebar-footer",
+    "sidebar-group",
+    "sidebar-header",
+    "site-footer",
+    "site-nav",
+    "skeleton",
+    "slider",
+    "sources",
+    "spark-chart",
+    "spinner",
+    "split-button",
+    "stat-tile",
+    "stats-band",
+    "status-indicator",
+    "stepper",
+    "stepper-root",
+    "stepper-step",
+    "sticky-scroll-code",
+    "sticky-stack",
+    "story-library",
+    "streaming-response",
+    "stylelint-config",
+    "styles",
+    "styles/country-flags",
+    "subject-library",
+    "suggestion-group",
+    "svg/azion/default",
+    "svg/azion/full",
+    "svg/azion/min",
+    "svg/azion/move-to-the-edge",
+    "svg/azion/technologies",
+    "svg/error-403",
+    "svg/error-404",
+    "svg/illustration-layers",
+    "switch",
+    "table",
+    "table-applied-filters",
+    "table-body",
+    "table-caption",
+    "table-cell",
+    "table-cell-actions",
+    "table-cell-id",
+    "table-cell-link",
+    "table-cell-status",
+    "table-cell-tags",
+    "table-cell-time",
+    "table-column-selector",
+    "table-export",
+    "table-filter",
+    "table-footer",
+    "table-head-cell",
+    "table-header",
+    "table-refresh-button",
+    "table-root",
+    "table-row",
+    "table-search",
+    "table-sort-button",
+    "table-toolbar",
+    "tabs",
+    "tag",
+    "tag-editor",
+    "template-gallery",
+    "textarea",
+    "texture-material",
+    "theme-switcher",
+    "ticker",
+    "toast",
+    "toast-action",
+    "toast-close",
+    "toast-description",
+    "toast-item",
+    "toast-root",
+    "toast-title",
+    "toggle-group",
+    "tool-call",
+    "tooltip",
+    "topic",
+    "topology-diagram",
+    "trace",
+    "tracker",
+    "tree",
+    "tutorial-panel",
+    "tutorial-panel-provider",
+    "tutorial-panel-root",
+    "upload-progress",
+    "use-case-links",
+    "use-cases",
+    "use-collection",
+    "use-controllable",
+    "use-direction",
+    "use-focus-trap",
+    "use-heading-nav",
+    "use-locale",
+    "use-placement",
+    "use-unsaved-changes",
+    "utils/cn",
+    "utils/csv",
+    "vite",
+    "webkit-provider",
+    "wizard",
+    "wizard-root",
+    "wizard-step"
+  ],
+  "patterns": [
+    "headers/auth-header",
+    "headers/creation-header",
+    "headers/docs-header",
+    "headers/resource-header",
+    "headers/site-header",
+    "platform/account/change-plan-drawer",
+    "platform/account/onboarding-form",
+    "platform/account/payment-method-card",
+    "platform/account/profile",
+    "platform/ai/ai-action-approval",
+    "platform/ai/ai-chat",
+    "platform/ai/ai-chat-drawer",
+    "platform/auth",
+    "platform/create/create-hub",
+    "platform/create/create-in-drawer",
+    "platform/create/deploy-drawer",
+    "platform/create/deploy-progress-dialog",
+    "platform/create/deploy-success",
+    "platform/create/deploy-template",
+    "platform/create/deployment-flow",
+    "platform/create/multipage-create",
+    "platform/create/provision-wizard",
+    "platform/create/release-impact",
+    "platform/create/resource-picker",
+    "platform/create/single-page-create",
+    "platform/create/source-wizard",
+    "platform/dashboard/activity-outcomes-dashboard",
+    "platform/dashboard/alerts-dashboard",
+    "platform/dashboard/analytics-dashboard",
+    "platform/dashboard/composition-dashboard",
+    "platform/dashboard/configurable-dashboard",
+    "platform/dashboard/data-dashboard",
+    "platform/dashboard/executive-summary-dashboard",
+    "platform/dashboard/funnel-cohort-dashboard",
+    "platform/dashboard/health-score-dashboard",
+    "platform/dashboard/home-dashboard",
+    "platform/dashboard/project-status-dashboard",
+    "platform/dashboard/scan-results-dashboard",
+    "platform/dashboard/security-dashboard",
+    "platform/dashboard/service-monitoring-dashboard",
+    "platform/delete/delete-with-confirmation",
+    "platform/detail/attached-resources",
+    "platform/detail/deployment-logs",
+    "platform/detail/details-page",
+    "platform/detail/get-started",
+    "platform/detail/production-checklist",
+    "platform/detail/record-table",
+    "platform/detail/version-detail",
+    "platform/edit/attribute-editor",
+    "platform/edit/code-editor",
+    "platform/edit/edit-resource",
+    "platform/edit/rule-builder",
+    "platform/edit/schema-editor",
+    "platform/settings/settings-form",
+    "platform/states/async-submit",
+    "platform/states/first-use",
+    "platform/states/form-error",
+    "platform/states/form-validation",
+    "platform/states/not-found",
+    "platform/states/page-wires",
+    "platform/states/project-intake",
+    "platform/view/card-view",
+    "platform/view/file-browser",
+    "platform/view/marketplace",
+    "platform/view/query-editor",
+    "platform/view/rules-list",
+    "platform/view/split-view",
+    "platform/view/table-view",
+    "platform/view/template-browser",
+    "platform/view/waf-tuning",
+    "shells/console",
+    "shells/documentation",
+    "shells/website"
+  ],
+  "props": {
+    "overline": {
+      "prefix": [
+        "",
+        "//",
+        "</>",
+        "<>"
+      ],
+      "showCursor": null,
+      "singleLine": null
+    },
+    "action-confirmation": {
+      "approveLabel": null,
+      "confirmationPhrase": null,
+      "denyLabel": null,
+      "description": null,
+      "kind": [
+        "danger",
+        "default"
+      ],
+      "loading": null,
+      "state": [
+        "approved",
+        "denied",
+        "expired",
+        "pending"
+      ],
+      "title": null
+    },
+    "ai-loading": {
+      "delay": null,
+      "kind": [
+        "bar",
+        "inline"
+      ],
+      "label": null
+    },
+    "artifact-preview": {
+      "copyValue": null,
+      "description": null,
+      "downloadHref": null,
+      "icon": null,
+      "meta": null,
+      "openable": null,
+      "title": null
+    },
+    "chat-message": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "state": [
+        "complete",
+        "error",
+        "pending",
+        "streaming"
+      ],
+      "timestamp": null
+    },
+    "chat-message-root": {
+      "author": null,
+      "errorMessage": null,
+      "from": [
+        "assistant",
+        "system",
+        "user"
+      ],
+      "grouped": null,
+      "loadingLabel": null,
+      "state": [
+        "complete",
+        "error",
+        "pending",
+        "streaming"
+      ],
+      "timestamp": null
+    },
+    "citation": {
+      "href": null,
+      "index": null,
+      "title": null
+    },
+    "conversation": {
+      "alignment": [
+        "split",
+        "start"
+      ],
+      "ariaLabel": null
+    },
+    "prompt-input": {
+      "ariaLabel": null,
+      "disabled": null,
+      "maxLength": null,
+      "maxRows": null,
+      "minRows": null,
+      "placeholder": null,
+      "state": [
+        "ready",
+        "streaming",
+        "submitted"
+      ]
+    },
+    "reasoning": {
+      "defaultOpen": null,
+      "duration": null,
+      "open": null,
+      "skippable": null,
+      "streaming": null
+    },
+    "sources": {
+      "anchor": null,
+      "defaultOpen": null,
+      "items": null,
+      "open": null,
+      "title": null
+    },
+    "streaming-response": {
+      "anchor": null,
+      "content": null,
+      "sources": null,
+      "streaming": null
+    },
+    "suggestion-group": {
+      "ariaLabel": null,
+      "disabled": null,
+      "items": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "tool-call": {
+      "defaultOpen": null,
+      "name": null,
+      "open": null,
+      "state": [
+        "denied",
+        "error",
+        "pending",
+        "running",
+        "success"
+      ],
+      "title": null
+    },
+    "button": {
+      "animated": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "iconPosition": [
+        "leading",
+        "trailing"
+      ],
+      "kind": [
+        "danger",
+        "outlined",
+        "primary",
+        "secondary",
+        "transparent"
+      ],
+      "label": null,
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "type": [
+        "button",
+        "reset",
+        "submit"
+      ]
+    },
+    "button-highlight": {
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "mini-button": {
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "showIcon": null,
+      "size": [
+        "large",
+        "medium"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "copy-button": {
+      "ariaLabel": null,
+      "copiedLabel": null,
+      "disabled": null,
+      "kind": [
+        "danger",
+        "outlined",
+        "primary",
+        "secondary",
+        "transparent"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null
+    },
+    "toggle-group": {
+      "ariaLabel": null,
+      "defaultValue": null,
+      "fluid": null,
+      "options": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "icon-button": {
+      "ariaLabel": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "iconClass": null,
+      "iconTransition": null,
+      "kind": [
+        "danger",
+        "outlined",
+        "primary",
+        "secondary",
+        "transparent"
+      ],
+      "loading": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "split-button": {
+      "disabled": null,
+      "icon": null,
+      "kind": [
+        "outlined",
+        "primary",
+        "secondary"
+      ],
+      "label": null,
+      "loading": null,
+      "model": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "updateLabelOnSelect": null
+    },
+    "chart": {
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatLabel": null,
+      "formatValue": null,
+      "height": null,
+      "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
+      "loading": null,
+      "max": null,
+      "min": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "otherLabel": null,
+      "refetching": null,
+      "series": null,
+      "tableView": null,
+      "timeZone": null
+    },
+    "chart-root": {
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatLabel": null,
+      "formatValue": null,
+      "height": null,
+      "labels": null,
+      "labelScale": [
+        "category",
+        "linear"
+      ],
+      "loading": null,
+      "max": null,
+      "min": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ],
+      "otherLabel": null,
+      "refetching": null,
+      "series": null,
+      "tableView": null,
+      "timeZone": null
+    },
+    "chart-card": {
+      "ariaLabel": null,
+      "draggable": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null,
+      "resizable": null
+    },
+    "chart-card-root": {
+      "ariaLabel": null,
+      "draggable": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null,
+      "resizable": null
+    },
+    "donut-chart": {
+      "ariaLabel": null,
+      "cap": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "kind": [
+        "donut",
+        "pie"
+      ],
+      "loading": null,
+      "otherLabel": null,
+      "refetching": null,
+      "series": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "tableView": null,
+      "totalLabel": null
+    },
+    "gauge-chart": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "label": null,
+      "loading": null,
+      "max": null,
+      "min": null,
+      "refetching": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "thresholds": null,
+      "value": null
+    },
+    "map-chart": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "error": null,
+      "formatValue": null,
+      "loading": null,
+      "points": null,
+      "refetching": null,
+      "regions": null,
+      "tableView": null,
+      "view": [
+        "africa",
+        "americas",
+        "asia",
+        "europe",
+        "north-america",
+        "oceania",
+        "south-america",
+        "world"
+      ]
+    },
+    "stat-tile": {
+      "delta": null,
+      "deltaLabel": null,
+      "formatValue": null,
+      "inverse": null,
+      "label": null,
+      "loading": null,
+      "trend": null,
+      "unit": null,
+      "value": null
+    },
+    "bar-list": {
+      "ariaLabel": null,
+      "clickable": null,
+      "color": null,
+      "emptyTitle": null,
+      "formatValue": null,
+      "items": null,
+      "loading": null,
+      "sort": [
+        "ascending",
+        "descending",
+        "none"
+      ]
+    },
+    "spark-chart": {
+      "ariaLabel": null,
+      "color": null,
+      "fromZero": null,
+      "kind": [
+        "area",
+        "bar",
+        "line"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "values": null
+    },
+    "tracker": {
+      "ariaLabel": null,
+      "items": null,
+      "loading": null
+    },
+    "tag": {
+      "icon": null,
+      "label": null,
+      "rounded": null,
+      "severity": [
+        "accent",
+        "contrast",
+        "danger",
+        "info",
+        "primary",
+        "secondary",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "severity-tag": {
+      "label": null,
+      "severity": [
+        "critical",
+        "high",
+        "info",
+        "low",
+        "medium"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "avatar": {
+      "alt": null,
+      "icon": null,
+      "kind": null,
+      "label": null,
+      "size": null,
+      "src": null
+    },
+    "badge": {
+      "label": null,
+      "severity": [
+        "danger",
+        "default",
+        "primary",
+        "secondary",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "brand": {
+      "kind": [
+        "default",
+        "extended",
+        "reduced"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "browser-frame": {
+      "address": null,
+      "ariaLabel": null,
+      "copyAriaLabel": null,
+      "heightHandleAriaLabel": null,
+      "maxHeight": null,
+      "maxWidth": null,
+      "minHeight": null,
+      "minWidth": null,
+      "widthHandleAriaLabel": null
+    },
+    "accordion": {
+      "arrowPosition": [
+        "left",
+        "right"
+      ],
+      "collapsible": null,
+      "defaultValue": null,
+      "size": [
+        "large",
+        "medium"
+      ],
+      "type": [
+        "multiple",
+        "single"
+      ]
+    },
+    "accordion-root": {
+      "arrowPosition": [
+        "left",
+        "right"
+      ],
+      "collapsible": null,
+      "defaultValue": null,
+      "size": [
+        "large",
+        "medium"
+      ],
+      "type": [
+        "multiple",
+        "single"
+      ]
+    },
+    "card": {
+      "badges": null,
+      "description": null,
+      "href": null,
+      "installed": null,
+      "kind": [
+        "default",
+        "integration"
+      ],
+      "logo": null,
+      "padded": null,
+      "title": null,
+      "vendor": null
+    },
+    "card-pricing": {
+      "actionLabel": null,
+      "aligned": null,
+      "kind": [
+        "contained",
+        "transparent"
+      ],
+      "planTitle": null,
+      "prefix": null,
+      "pricingDetails": null,
+      "showPrefix": null,
+      "showPricingDetails": null,
+      "showSuffix": null,
+      "showTag": null,
+      "slotPosition": [
+        "bottom",
+        "middle"
+      ],
+      "suffix": null,
+      "tagLabel": null,
+      "value": null
+    },
+    "help-panel": {
+      "ariaLabel": null,
+      "loading": null
+    },
+    "help-panel-root": {
+      "ariaLabel": null,
+      "loading": null
+    },
+    "hotspot": {
+      "hotspotId": null,
+      "side": [
+        "end",
+        "start"
+      ]
+    },
+    "tutorial-panel": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
+    },
+    "tutorial-panel-root": {
+      "ariaLabel": null,
+      "description": null,
+      "loading": null,
+      "title": null
+    },
+    "section-title": {
+      "description": null,
+      "descriptionWidth": [
+        "narrow",
+        "wide"
+      ],
+      "eyebrow": null,
+      "framed": null,
+      "kind": [
+        "centered",
+        "horizontal",
+        "left"
+      ],
+      "padding": [
+        "medium",
+        "small"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "item": {
+      "asChild": null,
+      "kind": [
+        "default",
+        "inline",
+        "muted",
+        "outlined"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "item-root": {
+      "asChild": null,
+      "kind": [
+        "default",
+        "inline",
+        "muted",
+        "outlined"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "currency": {
+      "prefix": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "suffix": null,
+      "value": null
+    },
+    "illustration": {
+      "ariaLabel": null,
+      "name": null
+    },
+    "product-widget": {
+      "active": null,
+      "chrome": null,
+      "fade": [
+        "bottom",
+        "left",
+        "none",
+        "right",
+        "top",
+        "y"
+      ],
+      "hover": null,
+      "interval": null,
+      "kind": [
+        "bare",
+        "window"
+      ],
+      "name": [
+        "ai-inference-function",
+        "ai-inference-model",
+        "ai-inference-template",
+        "application-accelerator-cookie",
+        "application-accelerator-method",
+        "application-accelerator-query-string",
+        "application-cache",
+        "application-function",
+        "application-rule",
+        "application-version",
+        "applications-create-method",
+        "applications-device-group",
+        "applications-rule-phases",
+        "bot-manager-metrics",
+        "bot-manager-rule",
+        "bot-manager-traffic",
+        "cli-terminal-deploy",
+        "cli-terminal-start",
+        "data-stream-connector",
+        "data-stream-sampling",
+        "data-stream-source",
+        "ddos-firewall-modules",
+        "ddos-http-events",
+        "ddos-requests-metric",
+        "edge-dns-dnssec",
+        "edge-dns-nameserver",
+        "edge-dns-record",
+        "firewall-function",
+        "firewall-modules",
+        "firewall-rules-order",
+        "function-code",
+        "functions-start",
+        "image-processor-events",
+        "image-processor-module",
+        "image-processor-rule",
+        "kv-store-function",
+        "kv-store-key",
+        "kv-store-security-list",
+        "load-balancer-address",
+        "load-balancer-method",
+        "load-balancer-origins",
+        "network-shield-ip-list",
+        "network-shield-lists",
+        "network-shield-rule",
+        "object-storage-access",
+        "object-storage-browser",
+        "object-storage-buckets",
+        "real-time-events-filter",
+        "real-time-events-log",
+        "real-time-events-volume",
+        "real-time-metrics-dashboard",
+        "real-time-metrics-filter",
+        "real-time-metrics-panel",
+        "sql-database-query",
+        "sql-database-row",
+        "sql-database-table",
+        "waf-allowed-rule",
+        "waf-firewall-rule",
+        "waf-threat",
+        "workload-deploy",
+        "workload-deploy-logs",
+        "workload-deployments",
+        "workload-domain",
+        "workload-domains",
+        "workload-overview",
+        "workload-rollout-rows",
+        "workload-topology",
+        "workload-topology-chain",
+        "workload-topology-flow",
+        "workloads-list"
+      ],
+      "tab": [
+        "agents",
+        "cache-settings",
+        "cli",
+        "console",
+        "deploy",
+        "device-groups",
+        "functions",
+        "main-settings",
+        "overview",
+        "rules-engine",
+        "topology"
+      ],
+      "texture": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ],
+      "width": null
+    },
+    "shell-mockup": {
+      "active": null,
+      "animated": null,
+      "beat": [
+        "fast-01",
+        "fast-02",
+        "moderate-01",
+        "moderate-02",
+        "slow-01",
+        "slow-02"
+      ],
+      "chrome": null,
+      "fade": [
+        "bottom",
+        "left",
+        "none",
+        "right",
+        "top",
+        "y"
+      ],
+      "interactive": null,
+      "kind": [
+        "bare",
+        "window"
+      ],
+      "mobileWidth": null,
+      "rail": null,
+      "shell": [
+        "console",
+        "legacy"
+      ],
+      "texture": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ],
+      "textureFade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "title": null,
+      "travel": [
+        "fast-01",
+        "fast-02",
+        "moderate-01",
+        "moderate-02",
+        "slow-01",
+        "slow-02"
+      ],
+      "width": null
+    },
+    "shell-mockup-root": {
+      "active": null,
+      "animated": null,
+      "beat": [
+        "fast-01",
+        "fast-02",
+        "moderate-01",
+        "moderate-02",
+        "slow-01",
+        "slow-02"
+      ],
+      "chrome": null,
+      "fade": [
+        "bottom",
+        "left",
+        "none",
+        "right",
+        "top",
+        "y"
+      ],
+      "interactive": null,
+      "kind": [
+        "bare",
+        "window"
+      ],
+      "mobileWidth": null,
+      "rail": null,
+      "shell": [
+        "console",
+        "legacy"
+      ],
+      "texture": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ],
+      "textureFade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "title": null,
+      "travel": [
+        "fast-01",
+        "fast-02",
+        "moderate-01",
+        "moderate-02",
+        "slow-01",
+        "slow-02"
+      ],
+      "width": null
+    },
+    "kbd": {
+      "alt": null,
+      "ctrl": null,
+      "keyName": [
+        "alt",
+        "backspace",
+        "ctrl",
+        "delete",
+        "enter",
+        "escape",
+        "shift",
+        "space",
+        "tab"
+      ],
+      "meta": null,
+      "shift": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "key-value-pairs": {
+      "ariaLabel": null,
+      "columns": null,
+      "loading": null
+    },
+    "overflow-count": {
+      "items": null,
+      "noun": null
+    },
+    "key-value-pairs-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "loading": null
+    },
+    "network-map": {
+      "animated": null,
+      "density": [
+        "high",
+        "low",
+        "medium",
+        "none"
+      ],
+      "fade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "offsetX": null,
+      "offsetY": null,
+      "opacity": null,
+      "position": [
+        "bottom",
+        "bottom-left",
+        "bottom-right",
+        "center",
+        "left",
+        "right",
+        "top",
+        "top-left",
+        "top-right"
+      ],
+      "region": [
+        "africa",
+        "americas",
+        "asia",
+        "atlantic",
+        "europe",
+        "north-america",
+        "oceania",
+        "south-america",
+        "world"
+      ],
+      "scale": null
+    },
+    "trace": {
+      "ariaLabel": null,
+      "selected": null,
+      "spans": null
+    },
+    "log-view": {
+      "bordered": null,
+      "copyable": null,
+      "disabled": null,
+      "lines": null,
+      "loading": null,
+      "loadingLabel": null,
+      "searchPlaceholder": null
+    },
+    "code-block": {
+      "animateLines": null,
+      "bordered": null,
+      "copyable": null,
+      "copyAriaLabel": null,
+      "defaultValue": null,
+      "showLineNumbers": null,
+      "tabs": null
+    },
+    "table": {
+      "bordered": null,
+      "columns": null,
+      "columnVisibility": null,
+      "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
+      "enableRowSelection": null,
+      "enableSorting": null,
+      "estimateRowHeight": null,
+      "exportFilename": null,
+      "exportRows": null,
+      "filterFields": null,
+      "filters": null,
+      "globalFilter": null,
+      "headerKind": [
+        "compact",
+        "default"
+      ],
+      "initialState": null,
+      "loading": null,
+      "manualFiltering": null,
+      "manualPagination": null,
+      "manualSorting": null,
+      "maxHeight": null,
+      "pageSize": null,
+      "paginated": null,
+      "pagination": null,
+      "reorderable": null,
+      "rowCount": null,
+      "rowKey": null,
+      "rowSelection": null,
+      "rowsPerPageOptions": null,
+      "selectOnRowClick": null,
+      "sorting": null,
+      "stackable": null,
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
+    },
+    "table-root": {
+      "bordered": null,
+      "columns": null,
+      "columnVisibility": null,
+      "data": null,
+      "density": [
+        "comfortable",
+        "compact"
+      ],
+      "enableRowSelection": null,
+      "enableSorting": null,
+      "estimateRowHeight": null,
+      "exportFilename": null,
+      "exportRows": null,
+      "filterFields": null,
+      "filters": null,
+      "globalFilter": null,
+      "headerKind": [
+        "compact",
+        "default"
+      ],
+      "initialState": null,
+      "loading": null,
+      "manualFiltering": null,
+      "manualPagination": null,
+      "manualSorting": null,
+      "maxHeight": null,
+      "pageSize": null,
+      "paginated": null,
+      "pagination": null,
+      "reorderable": null,
+      "rowCount": null,
+      "rowKey": null,
+      "rowSelection": null,
+      "rowsPerPageOptions": null,
+      "selectOnRowClick": null,
+      "sorting": null,
+      "stackable": null,
+      "state": null,
+      "striped": null,
+      "virtual": null,
+      "wrapLines": null
+    },
+    "property-filter": {
+      "ariaLabel": null,
+      "disabled": null,
+      "freeText": null,
+      "mode": [
+        "query",
+        "tokens"
+      ],
+      "placeholder": null,
+      "properties": null,
+      "query": null,
+      "suggest": null,
+      "text": null,
+      "totalCount": null,
+      "validate": null
+    },
+    "collection-preferences": {
+      "columns": null,
+      "container": [
+        "dialog",
+        "drawer"
+      ],
+      "disabled": null,
+      "pageSizeOptions": null,
+      "preferences": null,
+      "sections": null,
+      "title": null
+    },
+    "cards": {
+      "ariaLabel": null,
+      "items": null,
+      "loading": null,
+      "selectionMode": [
+        "multi",
+        "none",
+        "single"
+      ],
+      "trackBy": null
+    },
+    "pagination": {
+      "ariaLabel": null,
+      "page": null,
+      "pageSize": null,
+      "pageSizeOptions": null,
+      "siblingCount": null,
+      "total": null
+    },
+    "pagination-root": {
+      "ariaLabel": null,
+      "page": null,
+      "pageSize": null,
+      "pageSizeOptions": null,
+      "siblingCount": null,
+      "total": null
+    },
+    "pagination-button": {
+      "disabled": null,
+      "kind": [
+        "more",
+        "next",
+        "number",
+        "previous"
+      ],
+      "selected": null
+    },
+    "flow": {
+      "align": [
+        "center",
+        "start"
+      ]
+    },
+    "topology-diagram": {
+      "ariaLabel": null,
+      "levels": null,
+      "loading": null
+    },
+    "flow-root": {
+      "align": [
+        "center",
+        "start"
+      ]
+    },
+    "pick-list": {
+      "dataKey": null,
+      "disabled": null,
+      "modelValue": null,
+      "moveOnDoubleClick": null
+    },
+    "pick-list-root": {
+      "dataKey": null,
+      "disabled": null,
+      "modelValue": null,
+      "moveOnDoubleClick": null
+    },
+    "tree": {
+      "ariaLabel": null,
+      "emptyDescription": null,
+      "emptyTitle": null,
+      "items": null,
+      "loading": null,
+      "selectable": null
+    },
+    "doc-callout": {
+      "kind": [
+        "check",
+        "danger",
+        "info",
+        "note",
+        "tip",
+        "warning"
+      ],
+      "label": null
+    },
+    "doc-card": {
+      "eyebrow": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "linkLabel": null,
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "title": null
+    },
+    "doc-card-group": {
+      "cols": null,
+      "mobileColumns": null
+    },
+    "doc-frame": {
+      "alt": null,
+      "autoplay": null,
+      "caption": null,
+      "hint": null,
+      "src": null
+    },
+    "doc-item": {
+      "href": null,
+      "icon": null,
+      "label": null,
+      "target": [
+        "_blank",
+        "_self"
+      ],
+      "title": null
+    },
+    "doc-on-this-page": {
+      "activeId": null,
+      "groups": null,
+      "items": null,
+      "title": null
+    },
+    "doc-page-header": {
+      "breadcrumb": null,
+      "description": null,
+      "lastUpdated": null,
+      "metaActions": null,
+      "title": null
+    },
+    "doc-pagination": {
+      "next": null,
+      "nextLabel": null,
+      "previous": null,
+      "previousLabel": null
+    },
+    "doc-prompt": {
+      "icon": null,
+      "kind": [
+        "block",
+        "line"
+      ],
+      "label": null,
+      "title": null
+    },
+    "doc-step": {
+      "title": null
+    },
+    "doc-tooltip": {
+      "delay": null,
+      "href": null,
+      "label": null,
+      "linkLabel": null,
+      "placement": [
+        "auto",
+        "bottom",
+        "top"
+      ],
+      "tip": null,
+      "title": null
+    },
+    "doc-update": {
+      "anchor": null,
+      "description": null,
+      "label": null,
+      "tags": null,
+      "title": null
+    },
+    "alert": {
+      "actionLabel": null,
+      "closable": null,
+      "icon": null,
+      "label": null,
+      "life": null,
+      "severity": [
+        "danger",
+        "info",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "empty-state": {
+      "bordered": null,
+      "description": null,
+      "icon": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "error-boundary": {
+      "description": null,
+      "propagate": null,
+      "resetKey": null,
+      "retryLabel": null,
+      "title": null
+    },
+    "status-indicator": {
+      "label": null,
+      "loading": null,
+      "severity": [
+        "alt",
+        "danger",
+        "info",
+        "neutral",
+        "success",
+        "warning"
+      ]
+    },
+    "toast": {
+      "closable": null,
+      "duration": null,
+      "expand": null,
+      "max": null,
+      "position": [
+        "bottom-center",
+        "bottom-left",
+        "bottom-right",
+        "top-center",
+        "top-left",
+        "top-right"
+      ]
+    },
+    "toast-root": {
+      "closable": null,
+      "duration": null,
+      "expand": null,
+      "max": null,
+      "position": [
+        "bottom-center",
+        "bottom-left",
+        "bottom-right",
+        "top-center",
+        "top-left",
+        "top-right"
+      ]
+    },
+    "skeleton": {
+      "animated": null,
+      "height": null,
+      "kind": [
+        "circle",
+        "shape"
+      ],
+      "width": null
+    },
+    "outcome-mark": {
+      "animated": null,
+      "ariaLabel": null,
+      "severity": [
+        "danger",
+        "neutral",
+        "success",
+        "warning"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "upload-progress": {
+      "cancelable": null,
+      "floating": null,
+      "items": null,
+      "operation": [
+        "delete",
+        "move",
+        "upload"
+      ],
+      "title": null
+    },
+    "progress": {
+      "indeterminate": null,
+      "max": null,
+      "shape": [
+        "flat",
+        "rounded"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null
+    },
+    "date-range-picker": {
+      "ariaLabel": null,
+      "disabled": null,
+      "max": null,
+      "min": null,
+      "now": null,
+      "placeholder": null,
+      "rangeSelectorMode": [
+        "absolute-only",
+        "default",
+        "relative-only"
+      ],
+      "relativeOptions": null,
+      "showStep": null,
+      "showTimeZone": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "timeZones": null
+    },
+    "calendar": {
+      "clearable": null,
+      "disabled": null,
+      "horizontal": null,
+      "max": null,
+      "min": null,
+      "mode": [
+        "range",
+        "single"
+      ],
+      "modelValue": null,
+      "open": null,
+      "period": null,
+      "placeholder": null,
+      "presets": null,
+      "showApply": null,
+      "showFields": null,
+      "showTime": null,
+      "showTimezone": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "split": null,
+      "timezone": null,
+      "timezones": null
+    },
+    "calendar-root": {
+      "clearable": null,
+      "disabled": null,
+      "horizontal": null,
+      "max": null,
+      "min": null,
+      "mode": [
+        "range",
+        "single"
+      ],
+      "modelValue": null,
+      "open": null,
+      "period": null,
+      "placeholder": null,
+      "presets": null,
+      "showApply": null,
+      "showFields": null,
+      "showTime": null,
+      "showTimezone": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "split": null,
+      "timezone": null,
+      "timezones": null
+    },
+    "input": {
+      "autocomplete": null,
+      "disabled": null,
+      "invalid": null,
+      "maxLength": null,
+      "modelValue": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "spellcheck": null,
+      "type": [
+        "email",
+        "number",
+        "text"
+      ]
+    },
+    "input-group": {
+      "disabled": null,
+      "invalid": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "input-group-root": {
+      "disabled": null,
+      "invalid": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "number-input": {
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "modelValue": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "showButtons": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "step": null
+    },
+    "field": {
+      "disabled": null,
+      "invalid": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "required": null
+    },
+    "field-root": {
+      "disabled": null,
+      "invalid": null,
+      "orientation": [
+        "horizontal",
+        "responsive",
+        "vertical"
+      ],
+      "required": null
+    },
+    "phone-input": {
+      "countries": null,
+      "disabled": null,
+      "invalid": null,
+      "name": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "searchEmptyLabel": null,
+      "searchPlaceholder": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "helper-text": {
+      "kind": [
+        "disabled",
+        "helper",
+        "invalid",
+        "required"
+      ],
+      "label": null
+    },
+    "hint": {
+      "placement": [
+        "auto",
+        "bottom",
+        "left",
+        "right",
+        "top"
+      ],
+      "text": null
+    },
+    "label": {
+      "hint": null,
+      "label": null,
+      "required": null
+    },
+    "password-input": {
+      "autocomplete": [
+        "current-password",
+        "new-password",
+        "off"
+      ],
+      "disabled": null,
+      "invalid": null,
+      "maxLength": null,
+      "modelValue": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "toggleable": null
+    },
+    "file-dropzone": {
+      "accept": null,
+      "description": null,
+      "disabled": null,
+      "icon": null,
+      "invalid": null,
+      "kind": [
+        "inline",
+        "overlay"
+      ],
+      "multiple": null,
+      "title": null
+    },
+    "file-token-group": {
+      "alignment": [
+        "horizontal",
+        "vertical"
+      ],
+      "ariaLabel": null,
+      "items": null,
+      "limit": null,
+      "readonly": null,
+      "showFileLastModified": null,
+      "showFileSize": null
+    },
+    "password-requirements": {
+      "requirements": null,
+      "title": null,
+      "value": null
+    },
+    "radio-cards": {
+      "disabled": null,
+      "items": null,
+      "modelValue": null
+    },
+    "chip": {
+      "clickable": null,
+      "disabled": null,
+      "kind": [
+        "dashed",
+        "filled",
+        "outlined"
+      ],
+      "label": null,
+      "removable": null,
+      "selectable": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "checkbox": {
+      "binary": null,
+      "disabled": null,
+      "indeterminate": null,
+      "inputId": null,
+      "modelValue": null,
+      "name": null,
+      "readonly": null,
+      "tabindex": null,
+      "value": null
+    },
+    "radio-button": {
+      "disabled": null,
+      "inputId": null,
+      "modelValue": null,
+      "name": null,
+      "value": null
+    },
+    "switch": {
+      "disabled": null,
+      "focused": null,
+      "kind": [
+        "default",
+        "privacy"
+      ],
+      "modelValue": null
+    },
+    "slider": {
+      "ariaLabel": null,
+      "disabled": null,
+      "invalid": null,
+      "max": null,
+      "min": null,
+      "readonly": null,
+      "referenceValues": null,
+      "step": null,
+      "ticks": null,
+      "unit": null
+    },
+    "theme-switcher": {
+      "ariaLabel": null,
+      "disabled": null
+    },
+    "textarea": {
+      "disabled": null,
+      "invalid": null,
+      "modelValue": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "resizable": [
+        "both",
+        "horizontal",
+        "none",
+        "vertical"
+      ]
+    },
+    "dropdown-menu": {
+      "disabled": null,
+      "offset": null,
+      "open": null,
+      "placement": [
+        "auto",
+        "bottom-end",
+        "bottom-start",
+        "top-end",
+        "top-start"
+      ]
+    },
+    "dropdown-menu-root": {
+      "disabled": null,
+      "offset": null,
+      "open": null,
+      "placement": [
+        "auto",
+        "bottom-end",
+        "bottom-start",
+        "top-end",
+        "top-start"
+      ]
+    },
+    "multi-select": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "multi-select-root": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "select": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "multiple": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "select-root": {
+      "defaultOpen": null,
+      "disabled": null,
+      "displayValue": null,
+      "invalid": null,
+      "modelValue": null,
+      "multiple": null,
+      "open": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "separator": {
+      "label": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "footer": {
+      "ariaLabel": null,
+      "kind": [
+        "content",
+        "site"
+      ]
+    },
+    "footer-root": {
+      "ariaLabel": null,
+      "kind": [
+        "content",
+        "site"
+      ]
+    },
+    "frame-box": {
+      "borders": null,
+      "flush": null,
+      "hatch": null,
+      "marks": null
+    },
+    "section-gap": {
+      "hatch": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "app-layout": {
+      "compactBelow": null,
+      "navigationLabel": null,
+      "navigationOpen": null,
+      "splitPanelOpen": null,
+      "splitPanelPosition": [
+        "bottom",
+        "side"
+      ],
+      "splitPanelSize": null,
+      "splitPanelTitle": null,
+      "storageKey": null,
+      "toolsLabel": null,
+      "toolsOpen": null,
+      "toolsWidth": null
+    },
+    "board": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
+    },
+    "board-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "editing": null,
+      "maxHeight": null,
+      "maxSpan": null,
+      "minHeight": null,
+      "minSpan": null
+    },
+    "resizable": {
+      "ariaLabel": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "resizable-root": {
+      "ariaLabel": null,
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "scroll-area": {
+      "ariaLabel": null,
+      "fade": null,
+      "orientation": [
+        "both",
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "page-header": {
+      "description": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "title": null,
+      "titleId": null
+    },
+    "section-header": {
+      "anchor": null,
+      "description": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "settings-section": {
+      "anchor": null,
+      "collapsible": null,
+      "hint": null,
+      "icon": null,
+      "title": null
+    },
+    "setting-row": {
+      "description": null,
+      "kind": [
+        "compact",
+        "field",
+        "stacked"
+      ],
+      "level": null,
+      "title": null
+    },
+    "save-bar": {
+      "kind": [
+        "docked",
+        "fade",
+        "floating",
+        "plain"
+      ]
+    },
+    "global-header": {
+      "ariaLabel": null,
+      "kind": [
+        "content",
+        "site"
+      ]
+    },
+    "sidebar": {
+      "ariaLabel": null,
+      "collapseAriaLabel": null,
+      "collapsible": null,
+      "expandAriaLabel": null,
+      "maxWidthToken": null,
+      "minWidthToken": null,
+      "resizable": null,
+      "resizeAriaLabel": null
+    },
+    "band-stack": {
+      "flush": null,
+      "sticky": null
+    },
+    "logo-wall": {
+      "ariaLabel": null,
+      "items": null,
+      "kind": null,
+      "linkLabel": null
+    },
+    "media-split": {
+      "align": null,
+      "alt": null,
+      "description": null,
+      "divided": null,
+      "eyebrow": null,
+      "fill": null,
+      "framed": null,
+      "headingLevel": null,
+      "kind": null,
+      "mediaFill": null,
+      "mediaHref": null,
+      "mediaPadded": null,
+      "orientation": null,
+      "size": null,
+      "src": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null,
+      "title": null
+    },
+    "ticker": {
+      "ariaLabel": null,
+      "duration": null,
+      "items": null,
+      "kind": [
+        "band",
+        "plain"
+      ],
+      "label": null,
+      "marks": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "bento-grid": {
+      "ariaLabel": null,
+      "columns": null,
+      "flush": null,
+      "mobileColumns": null
+    },
+    "bento-grid-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "flush": null,
+      "mobileColumns": null
+    },
+    "call-to-action": {
+      "description": null,
+      "eyebrow": null,
+      "framed": null,
+      "kind": null,
+      "title": null,
+      "titleMuted": null
+    },
+    "diagram": {
+      "ariaLabel": null,
+      "name": [
+        "ai-gateway",
+        "ai-gateway-latency-routing",
+        "ai-gateway-model-routing",
+        "ai-gateway-provider-failover",
+        "ai-gateway-response-cache",
+        "ai-inference",
+        "application-accelerator",
+        "applications",
+        "bot-manager",
+        "cache",
+        "data-stream",
+        "ddos-protection",
+        "edge-dns",
+        "firewall",
+        "functions",
+        "image-processor",
+        "kv-store",
+        "load-balancer",
+        "network-shield",
+        "object-storage",
+        "real-time-events",
+        "real-time-metrics",
+        "sql-database",
+        "web-application-firewall",
+        "workloads",
+        "workloads-gradual-rollout",
+        "workloads-isolate-per-request",
+        "workloads-security"
+      ],
+      "spec": null
+    },
+    "big-numbers": {
+      "items": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "carousel": {
+      "ariaLabel": null
+    },
+    "carousel-root": {
+      "ariaLabel": null
+    },
+    "banner": {
+      "description": null,
+      "eyebrow": null,
+      "title": null
+    },
+    "hero": {
+      "align": null,
+      "bordered": null,
+      "bottomHeight": null,
+      "carousel": null,
+      "carouselLabel": null,
+      "carouselMarks": null,
+      "floorTexture": null,
+      "floorTextureSize": null,
+      "kind": null,
+      "maxWidth": null,
+      "mediaAlign": null,
+      "offset": null,
+      "padded": null,
+      "size": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null
+    },
+    "hero-root": {
+      "align": null,
+      "bordered": null,
+      "bottomHeight": null,
+      "carousel": null,
+      "carouselLabel": null,
+      "carouselMarks": null,
+      "floorTexture": null,
+      "floorTextureSize": null,
+      "kind": null,
+      "maxWidth": null,
+      "mediaAlign": null,
+      "offset": null,
+      "padded": null,
+      "size": null,
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null
+    },
+    "sticky-stack": {
+      "dwell": null,
+      "items": null,
+      "showProgress": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "quote-carousel": {
+      "ariaLabel": null,
+      "items": null
+    },
+    "quote": {
+      "highlights": null,
+      "jobTitle": null,
+      "kind": null,
+      "logo": null,
+      "logoAlt": null,
+      "name": null,
+      "photo": null,
+      "text": null
+    },
+    "media-tabs": {
+      "autoplay": null,
+      "autoplayInterval": null,
+      "items": null,
+      "position": [
+        "bottom",
+        "left",
+        "right",
+        "top"
+      ],
+      "selectOn": [
+        "click",
+        "hover"
+      ],
+      "showProgress": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "texture": null,
+      "textureFade": null,
+      "textureSize": null
+    },
+    "embed": {
+      "ratio": [
+        "square",
+        "video",
+        "wide"
+      ],
+      "src": null,
+      "title": null
+    },
+    "faq": {
+      "framed": null,
+      "items": null,
+      "title": null
+    },
+    "content-columns": {
+      "columns": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "column-navigation": {
+      "ariaLabel": null,
+      "columns": null,
+      "mobileColumns": null
+    },
+    "column-navigation-root": {
+      "ariaLabel": null,
+      "columns": null,
+      "mobileColumns": null
+    },
+    "breadcrumb": {
+      "items": null
+    },
+    "breadcrumb-item": {
+      "current": null,
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "showIcon": null
+    },
+    "link": {
+      "disabled": null,
+      "href": null,
+      "icon": null,
+      "label": null,
+      "showIcon": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "target": [
+        "_blank",
+        "_self"
+      ]
+    },
+    "menu": {
+      "activeId": null,
+      "ariaLabel": null,
+      "enterOnMount": null,
+      "groups": null
+    },
+    "menu-root": {
+      "activeId": null,
+      "ariaLabel": null,
+      "enterOnMount": null,
+      "groups": null
+    },
+    "tabs": {
+      "defaultValue": null
+    },
+    "stepper": {
+      "ariaLabel": null
+    },
+    "stepper-root": {
+      "ariaLabel": null
+    },
+    "wizard": {
+      "ariaLabel": null,
+      "loading": null,
+      "submitLabel": null
+    },
+    "wizard-root": {
+      "ariaLabel": null,
+      "loading": null,
+      "submitLabel": null
+    },
+    "navigation-menu": {
+      "ariaLabel": null,
+      "as": null,
+      "closeDelay": null,
+      "defaultValue": null,
+      "delay": null,
+      "orientation": null
+    },
+    "tooltip": {
+      "defaultOpen": null,
+      "delay": null,
+      "disabled": null,
+      "open": null,
+      "placement": [
+        "auto",
+        "bottom",
+        "left",
+        "right",
+        "top"
+      ],
+      "text": null
+    },
+    "command": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "shortcut": null
+    },
+    "command-root": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "shortcut": null
+    },
+    "dialog": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "size": null
+    },
+    "confirm-dialog": {
+      "cancelLabel": null,
+      "confirmLabel": null,
+      "description": null,
+      "disabled": null,
+      "kind": [
+        "danger",
+        "primary"
+      ],
+      "loading": null,
+      "size": [
+        "medium",
+        "small"
+      ],
+      "title": null
+    },
+    "drawer": {
+      "defaultOpen": null,
+      "dismissible": null,
+      "open": null,
+      "side": null,
+      "size": null
+    },
+    "panel": {
+      "size": null,
+      "sizeAtMd": null
+    },
+    "popover": {
+      "disabled": null,
+      "dismissible": null,
+      "offset": null,
+      "open": null,
+      "placement": [
+        "auto",
+        "bottom-end",
+        "bottom-start",
+        "top-end",
+        "top-start"
+      ],
+      "width": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "popover-root": {
+      "disabled": null,
+      "dismissible": null,
+      "offset": null,
+      "open": null,
+      "placement": [
+        "auto",
+        "bottom-end",
+        "bottom-start",
+        "top-end",
+        "top-start"
+      ],
+      "width": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "webkit-provider": {
+      "catalogs": null,
+      "dir": [
+        "auto",
+        "ltr",
+        "rtl"
+      ],
+      "locale": null,
+      "messages": null
+    },
+    "architecture-tabs": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "position": null,
+      "primaryAction": null,
+      "tabs": null,
+      "title": null
+    },
+    "article-body": {
+      "article": null,
+      "banner": null,
+      "body": null,
+      "community": null,
+      "copyPage": null,
+      "eyebrow": null,
+      "share": null,
+      "trail": null
+    },
+    "article-cards": {
+      "ariaLabel": null,
+      "eyebrow": null,
+      "items": null,
+      "kind": null,
+      "title": null
+    },
+    "article-highlight": {
+      "actionLabel": null,
+      "anchor": null,
+      "ariaLabel": null,
+      "items": null
+    },
+    "article-index-blog": {
+      "allLabel": null,
+      "anchor": null,
+      "ariaLabel": null,
+      "categories": null,
+      "categoryLabel": null,
+      "items": null,
+      "moreLabel": null,
+      "rowLabel": null,
+      "search": null
+    },
+    "article-index-resource-hub": {
+      "anchor": null,
+      "ariaLabel": null,
+      "facets": null,
+      "items": null,
+      "moreLabel": null,
+      "rowLabel": null,
+      "title": null
+    },
+    "cli-terminal": {
+      "copyAriaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "session": null,
+      "title": null
+    },
+    "client-mosaic": {
+      "ariaLabel": null,
+      "linkLabel": null,
+      "logos": null,
+      "stories": null
+    },
+    "client-mosaic-columns": {
+      "ariaLabel": null,
+      "cells": null,
+      "linkLabel": null
+    },
+    "client-quotes": {
+      "ariaLabel": null,
+      "items": null,
+      "primaryAction": null
+    },
+    "closing-call-to-action": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "kind": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null,
+      "titleMuted": null
+    },
+    "closing-call-to-action-agents": {
+      "anchor": null,
+      "audiences": null,
+      "audiencesAriaLabel": null,
+      "description": null,
+      "lineAriaLabel": null,
+      "title": null,
+      "typedLead": null,
+      "typedWords": null
+    },
+    "closing-call-to-action-newsletter": {
+      "anchor": null,
+      "description": null,
+      "error": null,
+      "eyebrow": null,
+      "form": null,
+      "loading": null,
+      "submitted": null,
+      "title": null
+    },
+    "code-split": {
+      "codeTabs": null,
+      "copyAriaLabel": null,
+      "description": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null
+    },
+    "compare-plans": {
+      "anchor": null,
+      "caption": null,
+      "columnLabel": null,
+      "excludedLabel": null,
+      "includedLabel": null,
+      "pickerAriaLabel": null,
+      "plans": null,
+      "primaryAction": null,
+      "sections": null
+    },
+    "compare-support-tiers": {
+      "anchor": null,
+      "caption": null,
+      "columnLabel": null,
+      "excludedLabel": null,
+      "includedLabel": null,
+      "pickerAriaLabel": null,
+      "sections": null,
+      "tiers": null
+    },
+    "comparison-table": {
+      "caption": null,
+      "columnLabel": null,
+      "competitor": null,
+      "eyebrow": null,
+      "fullLabel": null,
+      "groups": null,
+      "noneLabel": null,
+      "partialLabel": null,
+      "title": null
+    },
+    "compliance-badges": {
+      "ariaLabel": null,
+      "certifications": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "contact-hub": {
+      "channels": null,
+      "lanes": null
+    },
+    "faq-section": {
+      "anchor": null,
+      "items": null,
+      "title": null
+    },
+    "feature-scroll": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "feature-tabs": {
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "tabs": null,
+      "title": null
+    },
+    "feature-tiles": {
+      "anchor": null,
+      "description": null,
+      "eyebrow": null,
+      "kind": null,
+      "tiles": null,
+      "title": null
+    },
+    "feature-widgets": {
+      "anchor": null,
+      "columns": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null
+    },
+    "hero-band": {
+      "carouselLabel": null,
+      "carouselMarks": null,
+      "description": null,
+      "eyebrow": null,
+      "headerOffset": null,
+      "highlight": null,
+      "illustration": null,
+      "illustrationAriaLabel": null,
+      "kind": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "size": null,
+      "title": null
+    },
+    "hero-copy-on-top-art": {
+      "description": null,
+      "eyebrow": null,
+      "highlight": null,
+      "levels": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null
+    },
+    "hero-form": {
+      "carouselLabel": null,
+      "carouselMarks": null,
+      "description": null,
+      "error": null,
+      "eyebrow": null,
+      "fields": null,
+      "formAriaLabel": null,
+      "highlight": null,
+      "items": null,
+      "loading": null,
+      "messages": null,
+      "submitLabel": null,
+      "submitted": null,
+      "title": null
+    },
+    "hero-with-opening": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "title": null
+    },
+    "investor-marks": {
+      "eyebrow": null,
+      "items": null,
+      "linkLabel": null,
+      "title": null
+    },
+    "listing-browser": {
+      "anchor": null,
+      "columns": null,
+      "empty": null,
+      "facets": null,
+      "groups": null,
+      "rows": null,
+      "search": null,
+      "sortAriaLabel": null,
+      "sorts": null,
+      "title": null
+    },
+    "listing-table": {
+      "anchor": null,
+      "columns": null,
+      "primaryAction": null,
+      "rows": null,
+      "title": null
+    },
+    "logo-wall-quote": {
+      "ariaLabel": null,
+      "eyebrow": null,
+      "logos": null,
+      "primaryAction": null,
+      "quote": null,
+      "title": null
+    },
+    "media-split-band": {
+      "description": null,
+      "eyebrow": null,
+      "illustration": null,
+      "illustrationAriaLabel": null,
+      "image": null,
+      "primaryAction": null,
+      "scene": null,
+      "secondaryAction": null,
+      "size": null,
+      "title": null
+    },
+    "media-split-stack": {
+      "bands": null,
+      "eyebrow": null,
+      "kind": null,
+      "title": null
+    },
+    "network-section": {
+      "benefits": null,
+      "claims": null,
+      "eyebrow": null,
+      "kind": null,
+      "lead": null,
+      "outcomes": null,
+      "title": null
+    },
+    "photo-marquee": {
+      "ariaLabel": null,
+      "description": null,
+      "descriptionWidth": null,
+      "duration": null,
+      "photos": null,
+      "title": null
+    },
+    "platform-directory": {
+      "ariaLabel": null,
+      "groups": null,
+      "title": null
+    },
+    "pricing-plans": {
+      "anchor": null,
+      "periods": null,
+      "periodsAriaLabel": null,
+      "plans": null
+    },
+    "recognition-marquee": {
+      "ariaLabel": null,
+      "duration": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "resource-grid": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "site-footer": {
+      "ariaLabel": null,
+      "columns": null,
+      "home": null,
+      "homeAriaLabel": null,
+      "kind": null,
+      "languageAriaLabel": null,
+      "languages": null,
+      "socials": null,
+      "statusLabel": null
+    },
+    "site-nav": {
+      "contact": null,
+      "home": null,
+      "links": null,
+      "menus": null,
+      "primaryAction": null,
+      "secondaryAction": null
+    },
+    "stats-band": {
+      "items": null
+    },
+    "sticky-scroll-code": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "story-library": {
+      "anchor": null,
+      "ariaLabel": null,
+      "empty": null,
+      "facets": null,
+      "items": null,
+      "linkLabel": null,
+      "moreLabel": null,
+      "search": null,
+      "title": null
+    },
+    "subject-library": {
+      "anchor": null,
+      "closing": null,
+      "subjects": null
+    },
+    "template-gallery": {
+      "deployLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "templates": null,
+      "templatesAriaLabel": null,
+      "tickerLabel": null,
+      "tickerMarks": null,
+      "title": null
+    },
+    "use-case-links": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
+    },
+    "use-cases": {
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "primaryAction": null,
+      "title": null
+    },
+    "card-grid": {
+      "columns": null,
+      "dividerColor": null,
+      "flush": null,
+      "kind": null,
+      "mobileColumns": null
+    },
+    "card-grid-root": {
+      "columns": null,
+      "dividerColor": null,
+      "flush": null,
+      "kind": null,
+      "mobileColumns": null
+    },
+    "texture-material": {
+      "fade": [
+        "bottom",
+        "edges",
+        "left",
+        "none",
+        "right",
+        "top",
+        "vignette"
+      ],
+      "kind": [
+        "dither",
+        "dots",
+        "grid",
+        "lines",
+        "none",
+        "pixelate"
+      ],
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "topic": {
+      "description": null,
+      "headingLevel": null,
+      "href": null,
+      "icon": null,
+      "title": null
+    },
+    "section-module": {
+      "description": null,
+      "divided": null,
+      "eyebrow": null,
+      "kind": null,
+      "padded": null,
+      "title": null
+    },
+    "section-container": {
+      "bordered": null,
+      "maxWidth": null,
+      "padded": null
+    },
+    "media-tile": {
+      "alt": null,
+      "description": null,
+      "fluid": null,
+      "kind": null,
+      "mediaScale": null,
+      "padded": null,
+      "src": null,
+      "title": null
+    },
+    "quote-tabs": {
+      "ariaLabel": null,
+      "autoplay": null,
+      "autoplayInterval": null,
+      "items": null,
+      "showProgress": null
+    },
+    "attribute-editor": {
+      "addButtonLabel": null,
+      "addDisabled": null,
+      "addGroupLabel": null,
+      "ariaLabel": null,
+      "definition": null,
+      "disabled": null,
+      "empty": null,
+      "errors": null,
+      "groupLimit": null,
+      "groups": null,
+      "itemRemovable": null,
+      "items": null,
+      "limit": null,
+      "minItems": null,
+      "newItem": null,
+      "removeButtonLabel": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "button-group": {
+      "ariaLabel": null,
+      "items": null,
+      "kind": [
+        "outlined",
+        "transparent"
+      ],
+      "overflowLabel": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "visibleCount": null
+    },
+    "combobox": {
+      "allowCustom": null,
+      "ariaLabel": null,
+      "clearable": null,
+      "disabled": null,
+      "emptyText": null,
+      "filter": null,
+      "invalid": null,
+      "loading": null,
+      "options": null,
+      "placeholder": null,
+      "readonly": null,
+      "required": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ]
+    },
+    "code-editor": {
+      "ariaLabel": null,
+      "diff": null,
+      "disabled": null,
+      "fill": null,
+      "height": null,
+      "invalid": null,
+      "language": null,
+      "lineNumbers": null,
+      "loader": null,
+      "markers": null,
+      "original": null,
+      "path": null,
+      "readonly": null
+    },
+    "tag-editor": {
+      "ariaLabel": null,
+      "disabled": null,
+      "errors": null,
+      "keyMaxLength": null,
+      "keySuggestions": null,
+      "limit": null,
+      "reservedPrefix": null,
+      "tags": null,
+      "valueMaxLength": null,
+      "valueSuggestions": null
+    },
+    "schema-form": {
+      "disabled": null,
+      "errors": null,
+      "readonly": null,
+      "schema": null,
+      "ui": null,
+      "validateOn": [
+        "blur",
+        "submit"
+      ]
+    }
+  }
+}

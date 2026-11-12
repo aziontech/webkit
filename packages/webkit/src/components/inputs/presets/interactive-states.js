@@ -76,7 +76,7 @@ export const selectableBlockCardClasses = [
 
 export const listOptionItemClasses = [
   'relative flex w-full cursor-pointer items-center rounded-(--shape-button)',
-  'px-(--spacing-xs) py-(--spacing-xs) text-left text-label-md',
+  'px-(--spacing-xs) py-(--spacing-xs) text-start text-label-md',
   ...ghostLayerClasses,
   ...focusVisibleRingClasses,
   'focus-visible:before:opacity-100',
@@ -86,7 +86,7 @@ export const listOptionItemClasses = [
 export const itemRowShellClasses = [
   'group/item relative flex w-full flex-wrap items-center',
   'rounded-(--shape-button) border border-transparent text-body-sm text-(--text-default)',
-  'data-[kind=outline]:border-(--border-muted) data-[kind=outline]:bg-(--bg-surface)',
+  'data-[kind=outlined]:border-(--border-muted) data-[kind=outlined]:bg-(--bg-surface)',
   'data-[kind=muted]:bg-(--bg-hover)',
   'data-[size=medium]:gap-(--spacing-md) [&:not([data-kind=inline])]:data-[size=medium]:p-(--spacing-md)',
   'data-[size=small]:gap-(--spacing-xs) [&:not([data-kind=inline])]:data-[size=small]:px-(--spacing-md) [&:not([data-kind=inline])]:data-[size=small]:py-(--spacing-sm)'

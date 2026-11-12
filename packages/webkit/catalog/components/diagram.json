@@ -1,0 +1,30 @@
+{
+ "purpose": "A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked column — centred on one axis, or an indented tree where the row branches — and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.",
+ "useWhen": [
+  "Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.",
+  "Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.",
+  "Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture."
+ ],
+ "avoidWhen": [
+  "For decorative product art → use `illustration`.",
+  "For a world map of points of presence → use `network-map`.",
+  "For a sequence of steps the reader follows in order → use `stepper` or an ordered list.",
+  "For live data or anything the reader operates — a diagram is a figure, not a control."
+ ],
+ "related": [
+  "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
+  "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
+  "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
+  "tag` — the status chip a card or item node carries."
+ ],
+ "bestPractices": [
+  "Keep a diagram to about four columns in the wide layout so it fits a band's media cell; split a larger story into several diagrams.",
+  "Light exactly one node with `lit` — the product the diagram is about — and mark the request path with `active` on its nodes and edges.",
+  "Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.",
+  "Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.",
+  "Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.",
+  "Do: for a vertical flow in a docs column (a command → the CLI → the API → the resources), use one `row`. In the column it stacks centred, every connector runs through the horizontal centre of both nodes and an edge label sits centred on its line.",
+  "Don't: nudge nodes or labels with wrappers, margins or spacer nodes to centre a flow; the layout does it.",
+  "Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application."
+ ]
+}

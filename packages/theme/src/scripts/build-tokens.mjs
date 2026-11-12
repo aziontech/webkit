@@ -138,6 +138,8 @@ const AXIS_BY_PREFIX = {
 
 const isCodeSintax = (key) => key.startsWith('code-sintax-');
 const isIllustration = (key) => key.startsWith('illustration-');
+const isChart = (key) => key.startsWith('chart-');
+const isSeverity = (key) => key.startsWith('severity-');
 
 const emitSemanticColorUtilities = () => {
   const { light } = compileThemeVars();
@@ -146,7 +148,7 @@ const emitSemanticColorUtilities = () => {
   const emitted = new Set(Object.keys(textsData));
 
   for (const key of keys) {
-    if (isCodeSintax(key) || isIllustration(key)) continue;
+    if (isCodeSintax(key) || isIllustration(key) || isChart(key) || isSeverity(key)) continue;
     const prefixEntry = Object.entries(AXIS_BY_PREFIX).find(([prefix]) =>
       key.startsWith(prefix),
     );
@@ -197,6 +199,42 @@ const emitBaseLayer = () =>
     '  [role="button"]:not([aria-disabled="true"]),',
     '  summary {',
     '    cursor: pointer;',
+    '  }',
+    '}',
+  ].join('\n');
+
+const FORCED_COLORS_SELECTED = [
+  '[role="option"][aria-selected="true"]',
+  '[role="tab"][aria-selected="true"]',
+  '[role="row"][aria-selected="true"]',
+  '[role="gridcell"][aria-selected="true"]',
+  '[role="treeitem"][aria-selected="true"]',
+  '[role="menuitemradio"][aria-checked="true"]',
+  '[role="menuitemcheckbox"][aria-checked="true"]',
+  '[aria-current]:not([aria-current="false"])',
+  '[aria-pressed="true"]',
+];
+
+const emitAccessibilityMedia = () =>
+  [
+    '@media (forced-colors: active) {',
+    '  :focus-visible {',
+    '    outline: 2px solid Highlight !important;',
+    '    outline-offset: 2px !important;',
+    '  }',
+    '',
+    `  :is(${FORCED_COLORS_SELECTED.join(', ')}) {`,
+    '    outline: 2px solid SelectedItem;',
+    '    outline-offset: -2px;',
+    '  }',
+    '}',
+    '',
+    '@media (prefers-reduced-motion: reduce) {',
+    '  *, *::before, *::after {',
+    '    animation-duration: 0.01ms !important;',
+    '    animation-iteration-count: 1 !important;',
+    '    transition-duration: 0.01ms !important;',
+    '    scroll-behavior: auto !important;',
     '  }',
     '}',
   ].join('\n');
@@ -304,6 +342,8 @@ const emitCssV4 = () => {
     emitSemanticColorUtilities(),
     '',
     emitBaseLayer(),
+    '',
+    emitAccessibilityMedia(),
     '',
   ].join('\n');
 };

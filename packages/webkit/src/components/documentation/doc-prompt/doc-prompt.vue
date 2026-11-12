@@ -10,6 +10,8 @@
     useSlots
   } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
@@ -42,6 +44,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ docPrompt: en.docPrompt })
   const slots = useSlots()
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-prompt')
@@ -220,12 +223,12 @@
           />
           <div
             v-if="kind === 'line' && (overflow === 'start' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 left-0 w-(--spacing-lg) bg-gradient-to-r from-(--prompt-bg) to-transparent"
+            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--prompt-bg) to-transparent rtl:bg-gradient-to-l"
             aria-hidden="true"
           />
           <div
             v-if="kind === 'line' && (overflow === 'end' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 right-0 w-(--spacing-lg) bg-gradient-to-l from-(--prompt-bg) to-transparent"
+            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--prompt-bg) to-transparent rtl:bg-gradient-to-r"
             aria-hidden="true"
           />
         </div>
@@ -235,7 +238,7 @@
           class="flex justify-center pt-(--spacing-sm)"
         >
           <Button
-            :label="expanded ? 'Show less' : 'Show more'"
+            :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
             :icon="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
             kind="outlined"
             size="small"
@@ -250,8 +253,8 @@
       >
         <CopyButton
           :value="promptText"
-          aria-label="Copy prompt"
-          copied-label="Prompt copied"
+          :aria-label="t('docPrompt.copy')"
+          :copied-label="t('docPrompt.copied')"
           kind="outlined"
           size="small"
         />

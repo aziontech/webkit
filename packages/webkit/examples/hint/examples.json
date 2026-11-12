@@ -1,0 +1,16 @@
+{
+  "component": "hint",
+  "title": "Components/Primitives/Inputs/Hint",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Hover or focus the glyph to reveal the hint.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Placements",
+      "summary": "The four anchors. Hover each glyph to see where its tooltip opens.",
+      "file": "placements.vue"
+    }
+  ]
+}

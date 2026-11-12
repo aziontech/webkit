@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
   import Switch from '../../../inputs/switch/switch.vue'
-  import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
   } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadDomainsWidget' })
 
@@ -72,13 +72,13 @@
   >
     <div class="flex h-full flex-col justify-center p-(--spacing-lg)">
       <ShellMockupPart :order="0">
-        <CardBox
+        <Card
           :padded="false"
           class="w-full overflow-hidden"
         >
           <template #header>
             <h3 class="m-0 truncate text-heading-xs text-(--text-default)">Domains</h3>
-            <span class="ml-auto inline-flex shrink-0">
+            <span class="ms-auto inline-flex shrink-0">
               <Button
                 label="Add Domain"
                 kind="outlined"
@@ -105,7 +105,7 @@
                   <span class="truncate text-body-sm text-(--text-default)">{{ row.domain }}</span>
                   <span class="truncate text-label-sm text-(--text-muted)">{{ row.kind }}</span>
                 </span>
-                <span class="ml-auto hidden shrink-0 items-center gap-(--spacing-xs) md:flex">
+                <span class="ms-auto hidden shrink-0 items-center gap-(--spacing-xs) md:flex">
                   <Tag
                     :label="row.environment"
                     severity="secondary"
@@ -135,7 +135,7 @@
                     Require a client certificate verified against a Trusted CA.
                   </span>
                 </span>
-                <span class="ml-auto inline-flex shrink-0">
+                <span class="ms-auto inline-flex shrink-0">
                   <Switch
                     :model-value="true"
                     aria-label="Mutual authentication"
@@ -144,7 +144,7 @@
               </div>
             </ShellMockupPart>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

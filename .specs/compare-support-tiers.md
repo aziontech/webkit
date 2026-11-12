@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 4f5354c9f34ed8cd08d7d3aa8e1349a9b86b5f403976154c5ec8b754ffd3b8f4
+last_updated: 2026-11-11
+checksum: a7fb47b2787e0338bbbba813e52b426097d8e81bc4106c081eb15b270c4de7c5
 ---
 
 # CompareSupportTiers — Component Spec
@@ -38,7 +38,7 @@ The tier-by-tier comparison on the Support page: one column per support tier wit
 
 ```vue
 <script setup>
-import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
+  import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 </script>
 
 <template>
@@ -50,17 +50,26 @@ import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
     included-label="Included"
     excluded-label="Not included"
     :tiers="[
-      { id: 'developer', name: 'Developer', description: 'Ideal for exploring the platform.', action: { label: 'Start for free', href: '/signup' } },
-      { id: 'enterprise', name: 'Enterprise', description: 'Ideal for advanced support.', highlighted: true, action: { label: 'Talk to a specialist', href: '/contact' } }
+      {
+        id: 'developer',
+        name: 'Developer',
+        description: 'Ideal for exploring the platform.',
+        action: { label: 'Start for free', href: '/signup' }
+      },
+      {
+        id: 'enterprise',
+        name: 'Enterprise',
+        description: 'Ideal for advanced support.',
+        highlighted: true,
+        action: { label: 'Talk to a specialist', href: '/contact' }
+      }
     ]"
     :sections="[
       {
         eyebrow: 'Support',
         title: 'Get help when it matters most',
         action: { label: 'See pricing', href: '/docs/pricing#support' },
-        rows: [
-          { label: 'Phone and video support', values: ['—', true] }
-        ]
+        rows: [{ label: 'Phone and video support', values: ['—', true] }]
       }
     ]"
   />
@@ -69,16 +78,16 @@ import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
-| `columnLabel` | `string` | `''` | false | Heading of the service column, shown from the large breakpoint up. |
-| `pickerAriaLabel` | `string` | `''` | false | Accessible name of the tier picker shown below the large breakpoint. |
-| `includedLabel` | `string` | `''` | false | Screen-reader text of a ticked cell. |
-| `excludedLabel` | `string` | `''` | false | Screen-reader text of a dashed cell. |
-| `tiers` | `CompareSupportTiersTier[]` | `[]` | false | The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped. |
-| `sections` | `CompareSupportTiersSection[]` | `[]` | false | The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
+| Prop              | Type                           | Default | Required | JSDoc                                                                                                                                                                                                                                                                          |
+| ----------------- | ------------------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`          | `string`                       | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                       |
+| `caption`         | `string`                       | `''`    | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                        |
+| `columnLabel`     | `string`                       | `''`    | false    | Heading of the service column, shown from the large breakpoint up.                                                                                                                                                                                                             |
+| `pickerAriaLabel` | `string`                       | `''`    | false    | Accessible name of the tier picker shown below the large breakpoint.                                                                                                                                                                                                           |
+| `includedLabel`   | `string`                       | `''`    | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                                                           |
+| `excludedLabel`   | `string`                       | `''`    | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                                                           |
+| `tiers`           | `CompareSupportTiersTier[]`    | `[]`    | false    | The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped.                                                                                                                    |
+| `sections`        | `CompareSupportTiersSection[]` | `[]`    | false    | The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
 
 ## Events
 
@@ -102,26 +111,26 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (band title) | `.text-heading-lg` |
-| typography (tier name) | `.text-heading-md` |
-| typography (tier description) | `.text-body-sm` |
-| typography (rows and cells) | `.text-label-md` |
-| typography (column head) | `.text-overline-md` |
-| header fill | `var(--bg-canvas)` |
-| accent bar | `var(--border-selected)` |
-| tick | `var(--success-contrast)` |
-| muted text | `var(--text-muted)` |
-| default text | `var(--text-default)` |
-| rules | `var(--border-default)` |
-| cell padding | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
+| Region                        | Token (DESIGN.md)                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------- |
+| typography (band title)       | `.text-heading-lg`                                                                    |
+| typography (tier name)        | `.text-heading-md`                                                                    |
+| typography (tier description) | `.text-body-sm`                                                                       |
+| typography (rows and cells)   | `.text-label-md`                                                                      |
+| typography (column head)      | `.text-overline-md`                                                                   |
+| header fill                   | `var(--bg-canvas)`                                                                    |
+| accent bar                    | `var(--border-selected)`                                                              |
+| tick                          | `var(--success-contrast)`                                                             |
+| muted text                    | `var(--text-muted)`                                                                   |
+| default text                  | `var(--text-default)`                                                                 |
+| rules                         | `var(--border-default)`                                                               |
+| cell padding                  | `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` / `var(--spacing-xl)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -131,8 +140,9 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the tier buttons and the picker are `large`.
+- Reflow: below `lg` (one tier column beside the row labels) the header cells, the section headings and the row labels use `var(--spacing-sm)` side padding instead of `var(--spacing-lg)`, so the two columns fit a 640px box at 200% zoom; from `lg` the padding is unchanged.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -149,10 +159,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

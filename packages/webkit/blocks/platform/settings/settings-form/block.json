@@ -1,0 +1,72 @@
+{
+  "id": "platform/settings/settings-form",
+  "name": "SettingsForm",
+  "title": "Templates/Platform/Settings/SettingsForm",
+  "surface": "product",
+  "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Label`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "save all",
+    "single save for the page",
+    "sticky footer save",
+    "account settings form",
+    "save as one unit",
+    "cancel and save footer",
+    "salvar tudo",
+    "rodapé fixo com salvar",
+    "formulário de conta",
+    "save per group",
+    "save per section",
+    "preferences page",
+    "grouped settings save",
+    "section save button",
+    "independent groups",
+    "salvar por grupo",
+    "preferências",
+    "salvar por seção",
+    "save per card",
+    "card with its own save",
+    "project settings",
+    "configuration cards",
+    "independent saves",
+    "long settings page",
+    "salvar por card",
+    "configurações do projeto",
+    "salvar cada seção"
+  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-ux-heuristics"],
+  "primary": {
+    "name": "SaveAll",
+    "file": "settings-form.vue"
+  },
+  "variants": [
+    {
+      "name": "Saving",
+      "summary": "While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state.",
+      "file": "variants/saving.vue"
+    },
+    {
+      "name": "SavePerGroup",
+      "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.",
+      "file": "variants/save-per-group.vue"
+    },
+    {
+      "name": "SavingOneGroup",
+      "summary": "General is saving: its Save shows the loading state and its rows are disabled, while Notifications stays editable and can be saved on its own.",
+      "file": "variants/saving-one-group.vue"
+    },
+    {
+      "name": "SavePerCard",
+      "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Label`, `Select`, `Switch`, `Link` and `Button`.",
+      "file": "variants/save-per-card.vue"
+    },
+    {
+      "name": "SavingOneCard",
+      "summary": "Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable.",
+      "file": "variants/saving-one-card.vue"
+    }
+  ]
+}

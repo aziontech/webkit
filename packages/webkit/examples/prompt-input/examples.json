@@ -1,0 +1,36 @@
+{
+  "component": "prompt-input",
+  "title": "Components/Primitives/AI/PromptInput",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The composer with its disclaimer under it: Enter submits, Shift+Enter adds a line, and the text area grows up to six rows before it scrolls.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Streaming",
+      "summary": "After a submit the Submit control becomes Stop while the response is generated; the reader can keep typing but cannot send until it ends or they stop it.",
+      "file": "streaming.vue"
+    },
+    {
+      "name": "CharacterLimit",
+      "summary": "A 280-character limit: the counter shows how many are used, and over the limit the frame and counter turn danger and Submit disables.",
+      "file": "character-limit.vue"
+    },
+    {
+      "name": "AttachmentsAndActions",
+      "summary": "An attach control in the toolbar and an attached file shown as a removable chip above the text.",
+      "file": "attachments-and-actions.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "The composer while the assistant is unavailable: text area, Submit and the toolbar controls are all disabled.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "ShortcutMenus",
+      "summary": "`menus` with `/` for commands and `@` for resources: typing a trigger at the start of a word opens a filtered list above the input (arrows, Enter or Tab, Escape); a choice inserts `@checkout-web` and adds it to `v-model:references`, shown as removable chips; `submit` receives the text and the references still in it.",
+      "file": "shortcut-menus.vue"
+    }
+  ]
+}

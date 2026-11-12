@@ -18,6 +18,10 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-trigger'
   )
+  const triggerId = computed(() => (attrs['id'] as string | undefined) ?? ctx.controlId.value)
+  const describedBy = computed(
+    () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value
+  )
 
   const onClick = () => {
     if (ctx.disabled.value || ctx.readonly.value) return
@@ -45,6 +49,10 @@
     "
     v-bind="$attrs"
     type="button"
+    :id="triggerId"
+    :aria-describedby="describedBy"
+    :aria-label="(attrs['aria-label'] as string | undefined) ?? ctx.ariaLabel.value"
+    :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
     role="combobox"
     aria-haspopup="listbox"
     :aria-expanded="ctx.open.value"
@@ -68,7 +76,7 @@
   >
     <slot name="iconLeft" />
     <span
-      class="flex-1 truncate text-left data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
+      class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
       :data-testid="`${testId}__value`"
     >

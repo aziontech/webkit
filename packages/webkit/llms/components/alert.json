@@ -1,0 +1,127 @@
+{
+ "name": "alert",
+ "binding": "Alert",
+ "import": "@aziontech/webkit/alert",
+ "treeShakeableImport": "@aziontech/webkit/alert",
+ "category": "feedback",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.",
+ "setup": null,
+ "useWhen": [
+  "A status, warning or error that belongs to a page, section or form and should stay visible in context.",
+  "A notice with an inline link, or with one follow-up action (`actionLabel` or the `action` slot)."
+ ],
+ "avoidWhen": [
+  "A transient confirmation of an action → use `toast`.",
+  "Validation feedback under one form field → use `helper-text`.",
+  "An admonition inside documentation prose → use `doc-callout`.",
+  "A promotional band between page sections → use `banner`."
+ ],
+ "related": [
+  "toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",
+  "helper-text` — field-level guidance and errors below an input.",
+  "doc-callout` — docs admonition rendered on the `Alert` surface.",
+  "empty-state` — a full zero-data block, not a status banner."
+ ],
+ "bestPractices": [
+  "Pick `severity` by meaning. `danger` and `warning` render with `role=\"alert\"`.",
+  "Use `label` for plain copy and the default slot when the copy needs inline links.",
+  "Use either the built-in action (`actionLabel` with `@action`) or the `action` slot, not both. The slot replaces the button.",
+  "Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.",
+  "Use `size=\"small\"` inside dense surfaces such as cards and drawers."
+ ],
+ "props": [
+  {
+   "name": "severity",
+   "type": "'info' | 'success' | 'warning' | 'danger'",
+   "default": "'info'",
+   "required": "false",
+   "doc": "Visual severity variant."
+  },
+  {
+   "name": "size",
+   "type": "'small' | 'medium'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback message copy when the default slot is empty."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "PrimeIcons class override for the leading icon."
+  },
+  {
+   "name": "actionLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label for the built-in secondary action button; hidden when empty."
+  },
+  {
+   "name": "closable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, shows a close control that dismisses the message."
+  },
+  {
+   "name": "life",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss."
+  }
+ ],
+ "events": [
+  {
+   "name": "action",
+   "payload": "MouseEvent",
+   "notes": "Emitted when the built-in action button is clicked."
+  },
+  {
+   "name": "close",
+   "payload": "void",
+   "notes": "Emitted when the message is dismissed manually or after `life` expires."
+  }
+ ],
+ "slots": [
+  {
+   "name": "action",
+   "scope": "—",
+   "notes": "Custom action control; replaces the built-in Button when provided."
+  },
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "Alert copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list. The copy region is a flow container (a `div`, not a `p`), so block markup arriving from a server render stays inside it instead of being closed out beside the copy. Falls back to `label` when empty."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <Alert\n    severity=\"info\"\n    label=\"Your workload finished deploying in 42 seconds.\"\n    action-label=\"Label\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      label=\"Your workload finished deploying in 42 seconds.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"success\"\n      label=\"The certificate was issued and is now serving traffic.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"warning\"\n      label=\"This edge function is close to its execution time limit.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"danger\"\n      label=\"The last deploy failed before reaching the edge.\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      size=\"small\"\n      label=\"A small note.\"\n    />\n    <Alert\n      severity=\"info\"\n      size=\"medium\"\n      label=\"A medium note.\"\n    />\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/alert.md"
+}

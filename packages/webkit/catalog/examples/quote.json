@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One statement, its attribution, and the company mark above it. Both are real: the mark is Magalu's, served from the docs site's public folder, and the sentence is quoted from the published success case the attribution names — point `logo` at your own asset. The wordmark ships in the brand blue rather than in one ink, so it reads on both themes; `logo` is a single URL with no per-theme swap, which a white-on-dark mark would need. `logoAlt` is empty here, so the mark takes its accessible name from `jobTitle`.",
+   "sfc": "<script setup>\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <Quote\n    text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n    name=\"Allan Monteiro\"\n    job-title=\"CISO & Head of Technology at Magalu\"\n    :logo=\"magaluLogo\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "The three registers, on one quotation. `inline` is the quiet unit inside a cell of a larger band — the mark on a fixed band, the quotation at the smallest heading size, and no glyph. `signed` is the card a client sentence or an analyst report takes: the mark, the glyph, the quotation in body type. `highlight` is the featured one: the quotation largest, with the mark in its own column at the quotation's first line. Every register attributes the same way — the name in the accent over the role in the muted ink — and `text` is quoted verbatim, never carrying punctuation of its own.",
+   "sfc": "<script setup>\n  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <Quote\n      kind=\"inline\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      :logo=\"magaluLogo\"\n    />\n    <Quote\n      kind=\"signed\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      :logo=\"magaluLogo\"\n    />\n    <Quote\n      kind=\"highlight\"\n      text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n      name=\"Allan Monteiro\"\n      job-title=\"CISO & Head of Technology at Magalu\"\n      photo=\"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&crop=face\"\n      :logo=\"magaluLogo\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "WithoutLogo",
+   "summary": "The same quote with `logo` empty: no mark is rendered and the quotation moves up to lead the block. This is the shape to reach for when the surrounding section already names the customer, or when the quote sits in a grid whose cells would otherwise repeat the same mark.",
+   "sfc": "<script setup>\n  import Quote from '@aziontech/webkit/quote'\n</script>\n\n<template>\n  <Quote\n    text=\"Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks.\"\n    name=\"Allan Monteiro\"\n    job-title=\"CISO & Head of Technology at Magalu\"\n  />\n</template>"
+  }
+ ]
+}

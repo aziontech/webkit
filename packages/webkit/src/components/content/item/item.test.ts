@@ -1,12 +1,13 @@
-import { composeStories } from '@storybook/vue3'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/item/Item.stories'
+import Default from '../../../../examples/item/default.vue'
+import Muted from '../../../../examples/item/muted.vue'
+import Outline from '../../../../examples/item/outline.vue'
+import Small from '../../../../examples/item/small.vue'
+import WithGroup from '../../../../examples/item/with-group.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Item from './index'
-
-const { Default, Outline, Muted, Small, WithGroup } = composeStories(stories)
 
 describe('Item (composition)', () => {
   describe('compound dot-notation resolves (index.ts Object.assign)', () => {
@@ -41,11 +42,11 @@ describe('Item (composition)', () => {
 
     it('reflects kind and size props on the root data-* attributes', () => {
       const { getByTestId } = render(Item, {
-        props: { kind: 'outline', size: 'small' },
+        props: { kind: 'outlined', size: 'small' },
         slots: { default: '<span>y</span>' }
       })
       const root = getByTestId('content-item')
-      expect(root.getAttribute('data-kind')).toBe('outline')
+      expect(root.getAttribute('data-kind')).toBe('outlined')
       expect(root.getAttribute('data-size')).toBe('small')
     })
 
@@ -181,13 +182,13 @@ describe('Item (composition)', () => {
   describe('asChild — merges root bindings onto the single slotted child (merge-as-child.js)', () => {
     it('renders no wrapper div and merges data-slot/data-kind/data-size onto the child', () => {
       const { getByTestId } = render(Item, {
-        props: { asChild: true, kind: 'outline', size: 'small' },
+        props: { asChild: true, kind: 'outlined', size: 'small' },
         slots: { default: '<a href="#" data-testid="link">Docs</a>' }
       })
       const link = getByTestId('link')
       expect(link.tagName).toBe('A')
       expect(link.getAttribute('data-slot')).toBe('item')
-      expect(link.getAttribute('data-kind')).toBe('outline')
+      expect(link.getAttribute('data-kind')).toBe('outlined')
       expect(link.getAttribute('data-size')).toBe('small')
       expect(link.getAttribute('href')).toBe('#')
     })
@@ -204,7 +205,7 @@ describe('Item (composition)', () => {
     })
   })
 
-  describe('composeStories (the real fixtures run in-test)', () => {
+  describe('documented example (the real fixtures run in-test)', () => {
     it('Default story renders a titled row with a trailing action through the sub-components', () => {
       const { getByTestId, getByText } = render(Default)
       expect(getByTestId('content-item').getAttribute('data-slot')).toBe('item')
@@ -215,9 +216,9 @@ describe('Item (composition)', () => {
     })
 
     it.each([
-      ['Outline', Outline, 'outline', 'medium'],
+      ['Outline', Outline, 'outlined', 'medium'],
       ['Muted', Muted, 'muted', 'medium'],
-      ['Small', Small, 'outline', 'small']
+      ['Small', Small, 'outlined', 'small']
     ])('%s story sets the root kind/size from its args', (_name, Story, kind, size) => {
       const { getByTestId } = render(Story)
       const root = getByTestId('content-item')
@@ -243,7 +244,7 @@ describe('Item (composition)', () => {
           IActions: Item.Actions
         },
         template: `
-          <Item kind="outline">
+          <Item kind="outlined">
             <IContent>
               <ITitle>Accessible Item</ITitle>
               <IDescription>A row with a title, description and an action.</IDescription>
@@ -256,8 +257,64 @@ describe('Item (composition)', () => {
       await expectNoA11yViolations(container)
     })
 
-    // OMITTED: axe on ItemGroup wrapping Item rows fails aria-required-children —
-    // ItemGroup hardcodes role="list" but Item rows carry no role="listitem" (and a bare
-    // separator is a disallowed child of list). Real component a11y gap, not a test artifact.
+    it('WithGroup example has no violations', async () => {
+      const { container } = render(WithGroup)
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('list structure (Item.List and Item.Group own the listitem role)', () => {
+    it('exposes Item.Group rows as listitems and hides its separators from the list', () => {
+      const { getByRole } = render(WithGroup)
+      const list = getByRole('list')
+      Array.from(list.children).forEach((child) => {
+        const expected = child.getAttribute('data-slot') === 'item-separator' ? 'none' : 'listitem'
+        expect(child.getAttribute('role')).toBe(expected)
+      })
+    })
+
+    it('wraps an asChild row of Item.List in a listitem and keeps the link a link', () => {
+      const Tree = {
+        components: { Item, ItemList: Item.List },
+        template: `
+          <ItemList>
+            <Item as-child><a href="#one">One</a></Item>
+            <Item as-child><a href="#two">Two</a></Item>
+          </ItemList>
+        `
+      }
+      const { getByRole } = render(Tree)
+      const rows = Array.from(getByRole('list').children)
+      expect(rows.length).toBe(2)
+      rows.forEach((row) => {
+        expect(row.getAttribute('role')).toBe('listitem')
+        expect(row.firstElementChild?.tagName).toBe('A')
+        expect(row.firstElementChild?.hasAttribute('role')).toBe(false)
+      })
+    })
+
+    it('gives an Item outside a list no listitem role', () => {
+      const { getByTestId } = render(Item, { slots: { default: '<span>row</span>' } })
+      expect(getByTestId('content-item').hasAttribute('role')).toBe(false)
+    })
+
+    it('gives an Item nested inside a list row no listitem role', () => {
+      const Nested = {
+        components: { Item, ItemList: Item.List },
+        template: `
+          <ItemList>
+            <Item data-testid="outer"><Item data-testid="inner">Nested</Item></Item>
+          </ItemList>
+        `
+      }
+      const { getByTestId } = render(Nested)
+      expect(getByTestId('outer').getAttribute('role')).toBe('listitem')
+      expect(getByTestId('inner').hasAttribute('role')).toBe(false)
+    })
+
+    it('keeps role="separator" on a separator outside a list', () => {
+      const { getByRole } = render(Item.Separator)
+      expect(getByRole('separator')).toBeTruthy()
+    })
   })
 })

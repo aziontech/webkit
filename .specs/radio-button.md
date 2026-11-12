@@ -7,30 +7,88 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: db250d52942ba1c85e8a9025985d9740f8d01fc4424b930531cc9e733751de13
+checksum: b3e4337fcc4f871d4329f912adbd16a17f3d0ccd42eb76915a683daa7779b81e
 created: 2026-05-22
-last_updated: 2026-05-23
+last_updated: 2026-11-11
 ---
+
 # Radio Button — Component Spec
 
 ## Purpose
 
-Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Use `FieldRadio` or `FieldRadioBlock` for labeled layouts.
+Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper). Wrap it in a horizontal `Field`, or a `Field.Label` choice card, for labeled layouts.
+
+## When to use
+
+- One choice from a small set of mutually exclusive options whose labels are laid out separately (a table row, a custom option row).
+- A custom radio layout that the horizontal `Field` and the `Field.Label` choice card do not cover.
+
+## When NOT to use
+
+- A radio option in a form that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
+- Options that need visual weight, such as plans or tiers → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`), or `radio-cards` for a horizontal grid of cards.
+- More than one option may be selected → use `checkbox`.
+- The options are many or loaded from data → use `select`.
+
+## Related
+
+- `field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
+- `radio-cards` — horizontal grid of selectable cards with its own model.
+- `checkbox` — the multi-pick counterpart.
+- `select` — single choice from a dropdown when the options do not fit inline.
+
+## Best practices
+
+- Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.
+- `value` and `modelValue` are strings; map numeric or object ids to strings before binding.
+- Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.
+- Wrap the group in a `fieldset` with a `legend` so the question itself is announced.
+
+## Usage
+
+```vue
+<script setup>
+  import RadioButton from '@aziontech/webkit/radio-button'
+  import { ref } from 'vue'
+
+  const billing = ref('monthly')
+</script>
+
+<template>
+  <fieldset>
+    <legend>Billing cycle</legend>
+    <RadioButton
+      v-model="billing"
+      name="billing"
+      value="monthly"
+      input-id="billing-monthly"
+      aria-label="Monthly"
+    />
+    <RadioButton
+      v-model="billing"
+      name="billing"
+      value="yearly"
+      input-id="billing-yearly"
+      aria-label="Yearly"
+    />
+  </fieldset>
+</template>
+```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `modelValue` | `string` | `undefined` | false | Selected value for v-model. |
-| `value` | `string` | `undefined` | false | Option value for this radio instance. |
-| `name` | `string` | `undefined` | false | HTML name shared across a mutually exclusive group. |
-| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | false | id for the native input; links label to control. |
+| Prop         | Type      | Default     | Required | JSDoc                                               |
+| ------------ | --------- | ----------- | -------- | --------------------------------------------------- |
+| `modelValue` | `string`  | `undefined` | false    | Selected value for v-model.                         |
+| `value`      | `string`  | `undefined` | false    | Option value for this radio instance.               |
+| `name`       | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
+| `disabled`   | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
+| `inputId`    | `string`  | `undefined` | false    | id for the native input; links label to control.    |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event               | Payload  | Notes    |
+| ------------------- | -------- | -------- |
 | `update:modelValue` | `string` | v-model. |
 
 ## Slots
@@ -42,31 +100,32 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors selected state
+- Touch: the native input that receives the click extends past the 20 px circle to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn circle does not change.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
+| Trigger      | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ------------ | ----------------------------------------- | ------ | ------------------------------- |
 | state change | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| surface | `var(--bg-surface)` |
-| primary | `var(--primary)` |
-| primary contrast | `var(--primary-contrast)` |
-| disabled surface | `var(--bg-disabled)` |
-| text (disabled indicator) | `var(--text-disabled)` |
-| border | `var(--border-default)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region                    | Token (DESIGN.md)         |
+| ------------------------- | ------------------------- |
+| surface                   | `var(--bg-surface)`       |
+| primary                   | `var(--primary)`          |
+| primary contrast          | `var(--primary-contrast)` |
+| disabled surface          | `var(--bg-disabled)`      |
+| text (disabled indicator) | `var(--text-disabled)`    |
+| border                    | `var(--border-default)`   |
+| shape                     | `var(--shape-elements)`   |
+| ring                      | `var(--ring-color)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -77,7 +136,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Disabled
@@ -95,9 +154,8 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

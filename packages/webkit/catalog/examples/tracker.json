@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Ninety days of uptime for an Edge Application: one degraded day, one partial outage, and a last day with no data yet. Hover a block, or focus the strip and use the arrow keys, to read its day.",
+   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n\n  const DAYS = 90\n  const DEGRADED_DAY = 52\n  const OUTAGE_DAY = 73\n\n  const days = Array.from({ length: DAYS }, (_, index) => {\n    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))\n    const id = date.toISOString().slice(0, 10)\n    const day = date.toLocaleDateString('en-US', {\n      month: 'short',\n      day: 'numeric',\n      timeZone: 'UTC'\n    })\n    if (index === DAYS - 1) return { id, label: `${day} · No data` }\n    if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }\n    if (index === DEGRADED_DAY)\n      return { id, severity: 'warning', label: `${day} · Degraded performance` }\n    return { id, severity: 'success', label: `${day} · Operational` }\n  })\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"days\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "A Skeleton strip holds the place of the blocks while the history loads.",
+   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      loading\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Empty",
+   "summary": "No periods for the range: the strip renders one neutral block and is announced as No data.",
+   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"[]\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

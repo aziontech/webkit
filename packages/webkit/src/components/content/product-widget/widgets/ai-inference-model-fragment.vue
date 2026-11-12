@@ -3,9 +3,9 @@
 
   import Button from '../../../actions/button/button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
   import InputGroupAddon from '../../../inputs/input-group/input-group-addon/input-group-addon.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
   import Label from '../../../inputs/label/label.vue'
   import Select from '../../../inputs/select/index'
   import Switch from '../../../inputs/switch/switch.vue'
@@ -143,7 +143,7 @@
                 for="ai-inference-repo"
               />
               <InputGroupRoot size="large">
-                <InputText
+                <Input
                   id="ai-inference-repo"
                   model-value="ai-inference-starter-kit"
                   size="large"
@@ -178,7 +178,7 @@
               data-cursor="model"
               class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
             >
-              <InputText
+              <Input
                 id="ai-inference-model"
                 :model-value="model"
                 size="large"

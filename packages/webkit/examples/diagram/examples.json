@@ -1,0 +1,31 @@
+{
+  "component": "diagram",
+  "title": "Components/Marketing/Primitives/Diagram",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An official diagram picked by `name`: the AI Gateway cost routing. It carries its own description, so it needs no `aria-label`. Switch `name` in Controls to see every registered diagram.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Spec",
+      "summary": "A one-off diagram passed as `spec`. The request path of a workload. The workload is the one `lit` node, the path the request takes is `active` on its nodes and edges, and the row is `wide` so the `hit` and `miss` chips have room. Narrow the canvas and the row stacks, the branches indent under the workload, and the connectors follow.",
+      "file": "spec.vue"
+    },
+    {
+      "name": "NodeKinds",
+      "summary": "One node of each kind: `app`, the quiet window of the consumer application; `pill`, the client; `card`, a platform piece with its eyebrow, icon and status; `item`, a model or provider with a mono line under its title; and `tile`, an icon-only cell whose name shows on hover.",
+      "file": "node-kinds.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "Groups frame part of the layout under a small label, and edges can reach a group as a whole. The platform group holds a `grid` of tiles; the backend group is `dashed` and tinted with the secondary mask to mark it as outside the platform.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "Flow",
+      "summary": "A vertical flow in a docs column: one `row` that stacks below the wide breakpoint. The nodes sit centred on one axis, each connector runs from the bottom centre of a node to the top centre of the next, and the `azion deploy` chip sits centred on its line.",
+      "file": "flow.vue"
+    }
+  ]
+}

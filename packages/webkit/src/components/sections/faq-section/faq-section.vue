@@ -173,7 +173,7 @@
               :key="blockIndex"
               :role="block.list ? 'list' : undefined"
               :data-list="block.list || null"
-              class="block data-[list]:space-y-(--spacing-xxs) data-[list]:pl-(--spacing-lg)"
+              class="block data-[list]:space-y-(--spacing-xxs) data-[list]:ps-(--spacing-lg)"
             >
               <span
                 v-for="(entry, entryIndex) in block.entries"

@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 61f0bfa3dd66961de163959526fd4905c25f762d2e35f5e7501c205b62eda98d
+checksum: ad00f6e415f7e2d5997dd002c01bb50f6dbdd1dbb34041dc2dc3bba7dfcc263e
 created: 2026-05-22
-last_updated: 2026-08-28
+last_updated: 2026-11-09
 ---
 
 # Card Pricing — Component Spec
@@ -26,6 +26,73 @@ The card carries **one** prose region — the pricing caveat, below the amount. 
 `aligned` makes a ROW of cards read as one comparison. Every region is content-sized by default, which is right for a single card and wrong for three side by side — a tier with a two-line caveat and a tier with none put their feature lists on different lines, and the reader has to re-find the row in every column. It reserves **three** lines for the caveat, in `lh` so the reservation follows the type token rather than a hard-coded height. Three is the design's 64px band expressed in whole lines of the region's own token (`body-md` is a 22px line box, so `3lh` is 66px; `2lh` is 44px and twenty short) — it shipped as `2lh`, and the shortfall stayed invisible until a tier's caveat ran to three lines at the region's then-256px measure, overflowed the band, and pushed that column's feature list 22px below the other two. Opt-in, because reserving empty lines is wrong for a lone card; set it on every card in the row. A caveat past three lines still pushes the row down, like any overflow.
 
 The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token carries the display face, the uppercase transform and the widest tracking step, so the tier reads as a label on the card rather than as a title competing with the price beneath it. It stays an `<h3>` for the document outline — the tier is the section heading — while looking like an overline.
+
+## When to use
+
+- One tier in a row of plans: plan name, price, billing caveat, one action and the tier's feature list.
+- A compact tier sized by its content (`slot-position="bottom"`), or a full tier whose action is pinned to the bottom so a row's buttons line up (`slot-position="middle"`).
+- A tier set on the surface behind it (`kind="transparent"`) inside a section that already draws the frame.
+
+## When NOT to use
+
+- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
+- You need a feature-by-feature comparison across plans → use `compare-plans`.
+- You only need to show an amount, in a table cell or a summary → use `currency`.
+- The card holds general content rather than a price → use `card`.
+
+## Related
+
+- `currency` — typesets the amount inside the card; use it directly for prices outside a tier card.
+- `pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.
+- `compare-plans` — the matrix that sits under the plan cards.
+- `card` — generic bordered card with header, content and footer regions.
+
+## Best practices
+
+- In a row of tiers, set `aligned` on every card so each caveat reserves the same band and the feature lists start on one line.
+- Keep `pricing-details` to the billing caveat. A tier's positioning sentence goes in the default slot with the feature list.
+- The card emits no events, and the built-in button has no handler. To act on the click, fill the `actions` slot with your own `Button`.
+- Hide the symbol or the period with `:show-prefix="false"` / `:show-suffix="false"` (for example on a custom-quote tier) instead of clearing `prefix` / `suffix`.
+- Mark at most one card in a row with `show-tag` and `tag-label`.
+
+## Usage
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import CardPricing from '@aziontech/webkit/card-pricing'
+
+  const upgrade = () => {}
+</script>
+
+<template>
+  <CardPricing
+    plan-title="Pro"
+    value="20"
+    prefix="$"
+    suffix="/ mon"
+    pricing-details="Billed annually or $25/mo billed monthly."
+    slot-position="middle"
+    kind="contained"
+    tag-label="Popular"
+    show-tag
+    aligned
+  >
+    <ul>
+      <li>Unlimited applications</li>
+      <li>Real-time metrics</li>
+    </ul>
+    <template #actions>
+      <Button
+        label="Upgrade to Pro"
+        kind="secondary"
+        size="large"
+        @click="upgrade"
+      />
+    </template>
+  </CardPricing>
+</template>
+```
 
 ## Props
 
@@ -67,22 +134,22 @@ _none_
 
 ## Tokens
 
-| Region                     | Token (DESIGN.md)                                                                 |
-| -------------------------- | --------------------------------------------------------------------------------- |
-| plan title typography      | `.text-overline-md` (carries the display face, `uppercase` and `tracking-widest`) |
+| Region                     | Token (DESIGN.md)                                                                   |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| plan title typography      | `.text-overline-md` (carries the display face, `uppercase` and `tracking-widest`)   |
 | caveat band (`aligned`)    | `3lh` of the region's own line box — 66px, the whole-line form of the design's 64px |
-| amount                     | `Currency` at `medium` (`bottom`) / `large` (`middle`)                            |
-| pricing details typography | `.text-body-sm` (`bottom`) / `.text-body-md` (`middle`)                           |
-| surface (`contained`)      | `var(--bg-surface)`                                                               |
-| border (`contained`)       | `var(--border-default)` @ `var(--border-width-default)`                           |
-| shape                      | `var(--shape-card)`                                                               |
-| inset                      | `var(--spacing-lg)`                                                               |
-| stack gap                  | `var(--spacing-lg)`                                                               |
-| header gap                 | `var(--spacing-xs)` (`bottom`) / `var(--spacing-md)` (`middle`)                   |
-| title↔tag gap              | `var(--spacing-xs)`                                                               |
-| action row gap             | `var(--spacing-md)`                                                               |
-| text                       | `var(--text-default)`                                                             |
-| muted text                 | `var(--text-muted)`                                                               |
+| amount                     | `Currency` at `medium` (`bottom`) / `large` (`middle`)                              |
+| pricing details typography | `.text-body-sm` (`bottom`) / `.text-body-md` (`middle`)                             |
+| surface (`contained`)      | `var(--bg-surface)`                                                                 |
+| border (`contained`)       | `var(--border-default)` @ `var(--border-width-default)`                             |
+| shape                      | `var(--shape-card)`                                                                 |
+| inset                      | `var(--spacing-lg)`                                                                 |
+| stack gap                  | `var(--spacing-lg)`                                                                 |
+| header gap                 | `var(--spacing-xs)` (`bottom`) / `var(--spacing-md)` (`middle`)                     |
+| title↔tag gap              | `var(--spacing-xs)`                                                                 |
+| action row gap             | `var(--spacing-md)`                                                                 |
+| text                       | `var(--text-default)`                                                               |
+| muted text                 | `var(--text-muted)`                                                                 |
 
 ## Theme gaps
 
@@ -97,7 +164,7 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Variants (`slotPosition` × `kind`)
@@ -118,9 +185,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

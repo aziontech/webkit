@@ -8,6 +8,9 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { useMenuSubContext } from '../composables/use-menu-sub-context'
@@ -49,6 +52,8 @@
 
   const sub = useMenuSubContext()
   const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ menu: en.menu })
   const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 
@@ -64,19 +69,19 @@
 
   const arrowAriaLabel = computed(() => {
     const name = props.label
-    if (!isInline.value) return name ? `Open ${name} menu` : 'Open submenu'
-    if (sub.open.value) return name ? `Collapse ${name}` : 'Collapse'
-    return name ? `Expand ${name}` : 'Expand'
+    if (!isInline.value) return name ? t('menu.openNamed', { label: name }) : t('menu.open')
+    if (sub.open.value) return name ? t('menu.collapseNamed', { label: name }) : t('menu.collapse')
+    return name ? t('menu.expandNamed', { label: name }) : t('menu.expand')
   })
 
   const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))
 
   const ROW_CLASS =
-    'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pr-(--spacing-xxs)'
+    'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pe-(--spacing-xxs)'
 
   const CONTROL_CLASS =
     'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
-    'rounded-(--shape-elements) pr-(--spacing-xs) py-(--spacing-xxs) text-left ' +
+    'rounded-(--shape-elements) pe-(--spacing-xs) py-(--spacing-xxs) text-start ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
     "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
@@ -117,7 +122,7 @@
   )
 
   const contentColumnClass = computed(() =>
-    showIcon.value ? 'pl-(--spacing-xxs)' : 'pl-(--spacing-sm)'
+    showIcon.value ? 'ps-(--spacing-xxs)' : 'ps-(--spacing-sm)'
   )
 
   const rowClass = computed(() => cn(ROW_CLASS, attrs.class as string | undefined))
@@ -148,7 +153,9 @@
   const onKeydown = (event: globalThis.KeyboardEvent) => {
     if (props.disabled) return
 
-    if (event.key === 'ArrowRight') {
+    const key = logicalArrowKey(event.key, dir.value)
+
+    if (key === 'ArrowRight') {
       if (!isInline.value) {
         event.preventDefault()
         sub.push()
@@ -161,7 +168,7 @@
       return
     }
 
-    if (event.key === 'ArrowLeft' && isInline.value && sub.open.value) {
+    if (key === 'ArrowLeft' && isInline.value && sub.open.value) {
       event.preventDefault()
       event.stopPropagation()
       sub.setOpen(false)
@@ -207,7 +214,7 @@
         />
       </span>
       <span
-        class="min-w-0 flex-1 truncate text-left text-label-md"
+        class="min-w-0 flex-1 truncate text-start text-label-md"
         :data-testid="`${testId}__label`"
       >
         <slot>{{ label }}</slot>

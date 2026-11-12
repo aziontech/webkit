@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6660
   node_id: 562:6660
-checksum: 9c8c2ce8e1bda9a5c7d2af95001fdc7073aa206b5f5a55c3910f1125258b3f45
+checksum: ec214a81aefb4b6acd921550db0428f35e0b46be90677bcff606341b615949b4
 created: 2026-06-15
-last_updated: 2026-08-10
+last_updated: 2026-11-10
 ---
 
 # Label — Component Spec
@@ -18,12 +18,37 @@ last_updated: 2026-08-10
 
 Form-field label that pairs descriptive text with an optional required indicator and an optional hint. Renders a native `<label>` element so consumers can associate it with any input via the standard `for` attribute. Use it above (or beside) any input control in the `inputs` category to communicate the field name and whether it must be filled. The required indicator is rendered inline as `* (Required)` — the `*` in the primary orange followed by the parenthesized word "(Required)" in muted text — replacing the older `Tag` badge for a lighter typographic signal. Setting `hint` appends a `Hint` glyph after the text, so a field name and its one-sentence explanation stay one component instead of a hand-built row.
 
+## When to use
+
+- Naming a bare input when you compose a field layout yourself.
+- Marking a field as required with the inline `* (Required)` indicator.
+- Attaching a one-sentence explanation to a field name with `hint`.
+
+## When NOT to use
+
+- A standard text, password, select, or textarea field → use `field`, whose `Field.Label` targets the control and shows the Required marker for you.
+- Guidance, error, or required messages under the input → use `helper-text`.
+- An info glyph with no field name next to it → use `hint`.
+
+## Related
+
+- `helper-text` — the line under the input; pairs with the label above it.
+- `hint` — the glyph the `hint` prop renders; use it alone when there is no label.
+- `field` — composes label, any control, and description/error with the wiring done.
+
+## Best practices
+
+- Always set `for` to the input's id (`inputId` on the bare inputs) so clicking the label focuses the control.
+- `required` is visual only; also set `required` on the input so it carries `aria-required`.
+- Keep `hint` to one short sentence; it is revealed in a tooltip on hover or focus.
+- Pass the text through `label` or the default slot, not both; the slot wins.
+
 ## Usage
 
 ```vue
 <script setup>
   import Label from '@aziontech/webkit/label'
-  import InputText from '@aziontech/webkit/input-text'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
@@ -33,7 +58,7 @@ Form-field label that pairs descriptive text with an optional required indicator
     required
     hint="We only use it for deploy notifications."
   />
-  <InputText id="email" />
+  <Input id="email" />
 </template>
 ```
 
@@ -77,9 +102,9 @@ _none_
 
 ## Theme gaps
 
-| Figma variable                                                | Temporary primitive                           | Follow-up                                                                           |
-| ------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `Components/Form Field/Label` (Sora 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
+| Figma variable                                                 | Temporary primitive                           | Follow-up                                                                           |
+| -------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `Components/Form Field/Label` (Rubik 12 / weight 400 / lh 1.3) | `.text-label-sm` (12px / lh 1.5 / weight 500) | `TODO: tokenizar text-form-label semantic class to match Figma weight 400 + lh 1.3` |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -91,7 +116,7 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: label itself is non-interactive; the associated input owns the ≥40×40 px target.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Required — args delta is `{ required: true }`; justified because the `required` prop is the only variant axis (the spec declares no `kind` and no `size`) and the Default vs Required side-by-side comparison is the component's primary documentation surface.
@@ -110,10 +135,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

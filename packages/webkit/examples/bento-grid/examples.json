@@ -1,0 +1,21 @@
+{
+  "component": "bento-grid",
+  "title": "Components/Marketing/Primitives/BentoGrid",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Four cells at the default single-column span in the default two-column grid, so the mosaic reads as a two-by-two block. The grid draws the rules between cells once — nothing inside a cell carries a border of its own. Below the medium breakpoint every cell goes full width and the grid becomes a single column in DOM order.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Spans",
+      "summary": "A `full` cell leading two pairs of single-column ones — the shape the component exists for. `span` is the only thing that changes between the cells; the frame, the padding and the shared rules stay the same, so an unequal set of claims still reads as one surface.",
+      "file": "spans.vue"
+    },
+    {
+      "name": "Mosaic",
+      "summary": "The four-column mosaic, where the cells claim both axes: one cell takes two columns and two rows, another takes two rows in one column, and the rest take a single track each. The spans add up to the rectangle, which is what keeps the block from ending on bare canvas. `kind` picks each cell's fill — `none` on the link cell, whose content paints the tile and pads itself, so the whole cell is the target.",
+      "file": "mosaic.vue"
+    }
+  ]
+}

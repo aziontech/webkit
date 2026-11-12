@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "An area spark of twelve points. It fills the width of its container, so the frame sets the width.",
+   "sfc": "<script setup>\n  import SparkChart from '@aziontech/webkit/spark-chart'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xs)\">\n    <SparkChart :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "The same series drawn as an area, a line and bars.",
+   "sfc": "<script setup>\n  import SparkChart from '@aziontech/webkit/spark-chart'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-(--spacing-lg)\">\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"area\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"line\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"bar\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Small, medium and large: 32, 48 and 64 pixels tall.",
+   "sfc": "<script setup>\n  import SparkChart from '@aziontech/webkit/spark-chart'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        size=\"small\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        size=\"medium\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        size=\"large\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ]
+}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, Transition, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
   import {
     iconTransitionEnterActiveClasses,
@@ -196,16 +197,27 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          :class="[
+            icon,
+            directionalIconClass(icon),
+            iconClasses,
+            iconTransitionIconClasses,
+            iconClass
+          ]"
           aria-hidden="true"
         />
       </Transition>
       <i
         v-else
-        :class="[icon, iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </a>
 
   <button
@@ -245,15 +257,26 @@
       >
         <i
           :key="icon"
-          :class="[icon, iconClasses, iconTransitionIconClasses, iconClass]"
+          :class="[
+            icon,
+            directionalIconClass(icon),
+            iconClasses,
+            iconTransitionIconClasses,
+            iconClass
+          ]"
           aria-hidden="true"
         />
       </Transition>
       <i
         v-else
-        :class="[icon, iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
         aria-hidden="true"
       />
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </button>
 </template>

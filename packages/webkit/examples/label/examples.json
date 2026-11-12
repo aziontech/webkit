@@ -1,0 +1,21 @@
+{
+  "component": "label",
+  "title": "Components/Primitives/Inputs/Label",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default label without the required indicator.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Required",
+      "summary": "Required label — appends the inline `* (Required)` indicator.",
+      "file": "required.vue"
+    },
+    {
+      "name": "Hinted",
+      "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation.",
+      "file": "hinted.vue"
+    }
+  ]
+}

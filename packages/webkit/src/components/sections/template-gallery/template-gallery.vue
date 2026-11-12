@@ -159,7 +159,7 @@
                       icon-position="trailing"
                       animated
                       :href="template.href"
-                      class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5"
+                      class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
                     >
                       <template #prefix>
                         <i

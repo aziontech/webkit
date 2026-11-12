@@ -11,7 +11,9 @@ This repository is a `pnpm` workspace with two top-level domains:
 
 Current main workspaces:
 
-- `apps/storybook`: visual documentation and component development environment
+- `apps/docs`: the docs site (components, blocks, foundations rendered from the files)
+- `apps/demos`: routed flows assembled from blocks with `webkit add`, on mock data
+- `apps/visual`: the styled visual suite (Playwright over examples, blocks and demos)
 - `apps/icons-gallery`: icon browsing/validation app
 - `packages/webkit`: reusable Vue component library (`@aziontech/webkit`)
 - `packages/theme`: tokens, theme, and styling foundations (`@aziontech/theme`)
@@ -21,7 +23,7 @@ Current main workspaces:
 
 1. Preserve consistency with existing patterns before introducing new ones.
 2. Make the smallest safe change that solves the problem.
-3. Keep docs and stories updated when behavior or API changes.
+3. Keep docs and examples updated when behavior or API changes.
 4. Prefer semantic design tokens over hardcoded visual values.
 5. Keep workspace commands reproducible from repository root.
 
@@ -38,9 +40,10 @@ pnpm install
 Prefer root scripts when available:
 
 ```bash
-pnpm storybook:dev
-pnpm storybook:build
-pnpm storybook:preview
+pnpm docs:dev
+pnpm docs:build
+pnpm demos:dev
+pnpm visual:test
 pnpm icons:build
 ```
 
@@ -49,13 +52,18 @@ pnpm icons:build
 - Webkit components: `packages/webkit/src/**`
 - Theme tokens/styles: `packages/theme/**`
 - Icons and generation pipeline: `packages/icons/**`
-- Storybook stories/docs: `apps/storybook/src/stories/**`
+- Component examples: `packages/webkit/examples/<name>/` (`examples.json` + one `.vue` each)
+- Docs site, demos, visual suite: `apps/docs`, `apps/demos`, `apps/visual`
 
-When changing UI components in `packages/webkit`, update or add stories in Storybook in the same branch.
+When changing UI components in `packages/webkit`, update or add examples in the same branch. An
+example is enough: the docs page (`/components/<name>`, `/example?path=<name>/<file>`) and the styled
+visual test of the first example follow from the files; refresh baselines with `/regen-baselines`.
+
+Changed a block in `packages/webkit/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/webkit/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/webkit catalog:build`, then commit `catalog.json` and `catalog/` (`catalog:check` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `.claude/` is for people who maintain WebKit. The full table is in CONTRIBUTING, "What to update when WebKit changes".
 
 ## 5) Component and styling standards
 
-For `@aziontech/webkit` and Storybook content:
+For `@aziontech/webkit`, its examples and blocks:
 
 - Reuse established component patterns and naming conventions.
 - Keep props semantic and explicit (avoid cryptic booleans when possible).
@@ -64,12 +72,11 @@ For `@aziontech/webkit` and Storybook content:
 - Avoid hardcoded hex colors in components when semantic tokens exist.
 - Keep accessibility in mind (labels, states, disabled/readability, keyboard behavior).
 
-## 6) Storybook standards
+## 6) Examples and docs standards
 
-- Storybook is the source of truth for component behavior.
-- Add clear examples for new states/props.
-- Prefer docs-first pages for onboarding and conceptual guidance.
-- Keep story titles and grouping consistent with existing sidebar taxonomy.
+- The spec is the source of truth for component behavior; examples show it.
+- Add clear examples for new states/props (`packages/webkit/examples/<name>/`).
+- Keep the `title` in `examples.json` consistent with the docs taxonomy (`Components/<Category>/<Name>`).
 - For foundations docs, keep content practical and copy-paste friendly.
 
 ## 7) Git workflow and commits
@@ -87,15 +94,15 @@ For `@aziontech/webkit` and Storybook content:
 
 Run the minimum relevant validations for the scope of your change.
 
-- Storybook/docs change:
-  - `pnpm storybook:build`
+- Docs, examples or demos change:
+  - `pnpm docs:build`, `pnpm demos:build`, `pnpm visual:test`
 - Icons change:
   - `pnpm icons:build`
 - Any change in `packages/webkit/src/components/webkit/**` (canonical webkit layer):
   - `pnpm webkit:lint`
   - `pnpm webkit:type-check`
   - `pnpm webkit:type-coverage`
-  - `pnpm storybook:build`
+  - `pnpm --filter @aziontech/webkit test:ssr`
 
 If a full validation is too expensive, run targeted checks and document what was/was not validated.
 
@@ -104,10 +111,10 @@ If a full validation is too expensive, run targeted checks and document what was
 When behavior changes, update docs close to the code:
 
 - Root overview: `README.md`
-- Storybook app docs: `apps/storybook/README.md`
+- Docs site, demos and visual suite: `apps/docs/README.md`, `apps/demos/README.md`, `apps/visual/README.md`
 - Package-level docs in each `packages/*/README.md`
 
-For onboarding content, prioritize Storybook docs pages under `Foundations`.
+For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 10) Safety rules
 
@@ -122,7 +129,7 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 ### 11.1) Sources of truth (read first)
 
 - `.claude/docs/DESIGN.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)` from `spacings.data.js` only), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **DESIGN.md wins**.
-- `.claude/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, Storybook.
+- `.claude/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, examples.
 - Canonical components: `packages/webkit/src/components/webkit/actions/button/button.vue`, `packages/webkit/src/components/webkit/actions/icon-button/icon-button.vue`, `packages/webkit/src/components/webkit/content/card-pricing/card-pricing.vue`.
 - External reference for Composition Pattern: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
@@ -130,7 +137,18 @@ For onboarding content, prioritize Storybook docs pages under `Foundations`.
 
 The legacy monolithic skill `skills/component-create.md` has been **removed**. New components follow a spec-first pipeline with isolated sub-agents per phase.
 
-**Two-step entry point:**
+**Entry point — the AI flow (M1.3).** A new component or block starts from a GitHub issue
+(`.github/ISSUE_TEMPLATE/new-component.yml`, `new-block.yml`) and is built end to end by
+[`/webkit-new`](commands/webkit-new.md) or [`/webkit-new-block`](commands/webkit-new-block.md):
+read the issue → research benchmarks and reuse → `spec-create` (draft, `template: 2`) →
+`spec-reviewer` (second agent, fixed checklist) → `spec-validate` (approved + checksum) →
+`/component-create` (component, test, examples) → machine gates
+(`pnpm --filter @aziontech/webkit run gates`, the same commands as the `toolkit` CI job) →
+`ui-craft` review → usage check (`packages/webkit/scripts/usage-check.mjs`) → PR from
+`.github/pull_request_template.md`. Any failure stops the run. The two commands below are the
+building blocks it calls.
+
+**Two-step entry point (building blocks):**
 
 ```text
 /spec-create <name> [--category <category>] [--figma <url>]
@@ -140,17 +158,17 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 
 **What lives where:**
 
-| Concern | Location |
-|---|---|
-| Per-component contract | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code) |
-| Frontmatter schema | [`.specs/_schema.json`](.specs/_schema.json) |
-| Spec template | [`.specs/_template.md`](.specs/_template.md) |
-| Slash commands | [`.claude/commands/`](.claude/commands/) (`spec-create`, `component-create`, `component-verify`) |
-| Focused skills (one per phase) | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `storybook-write`, `code-connect-write`, `validate-component`, `echo-report` |
-| Isolated sub-agent prompts | [`.claude/agents/`](.claude/agents/) — one per skill, no chat history, no cross-talk |
-| Immutable rules (injected verbatim) | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies` |
-| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + Storybook discipline) |
-| Run logs (audit trail) | [`.claude/logs/<run-id>.jsonl`](.claude/logs/) |
+| Concern                                    | Location                                                                                                                                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Per-component contract                     | [`.specs/<name>.md`](.specs/) (one file per component, reviewed BEFORE code)                                                                                                                                             |
+| Frontmatter schema                         | [`.specs/_schema.json`](.specs/_schema.json)                                                                                                                                                                             |
+| Spec template                              | [`.specs/_template.md`](.specs/_template.md)                                                                                                                                                                             |
+| Slash commands                             | [`.claude/commands/`](.claude/commands/) (`webkit-new`, `webkit-new-block`, `spec-create`, `component-create`, `component-verify`)                                                                                       |
+| Focused skills (one per phase)             | [`.claude/skills/`](.claude/skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `code-connect-write`, `validate-component`, `echo-report` |
+| Isolated sub-agent prompts                 | [`.claude/agents/`](.claude/agents/) — one per skill, plus `spec-reviewer` (second-agent spec review); no chat history, no cross-talk                                                                                    |
+| Immutable rules (injected verbatim)        | [`.claude/rules/`](.claude/rules/) — `no-invention`, `migration`, `dependencies`                                                                                                                                         |
+| Centralized design docs (sources of truth) | [`.claude/docs/`](.claude/docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + examples discipline)                                                             |
+| Run logs (audit trail)                     | [`.claude/logs/<run-id>.jsonl`](.claude/logs/)                                                                                                                                                                           |
 
 **How `/component-create` runs:**
 
@@ -159,10 +177,10 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
 4. **Reconciliation** (blocking) — every token in spec exists in DESIGN.md; every Figma region is covered by the spec.
 5. **scaffolder** — writes `.vue` + `package.json` + exports entry. Hooks fire on each Write.
-6. **storybook-writer** — minimal stories only (Default + per kind + per size + Disabled).
+6. **examples** — `examples/<name>/` with the examples the spec lists (Default + per kind + per size + Disabled).
 7. **code-connect-writer** — skips if `@figma/code-connect` missing.
 8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
-9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && storybook:build`.
+9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && test:ssr`.
 10. **Finalize** — `status: approved → implemented`, refresh checksum, close log.
 
 **Why this is mandatory:** the previous workflow gave a single 749-line skill creative latitude — it sometimes added props, variants, or imports the user did not request. The new pipeline removes that latitude structurally: sub-agents see only the spec + their narrow rules; two hooks (`enforce-spec-exists`, `validate-spec-compliance`) verify the `.vue` matches the spec 1-to-1.
@@ -174,7 +192,7 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
   - `packages/webkit/src/components/webkit/**/*.vue`
   - `packages/webkit/src/components/webkit/**/package.json`
   - new entries in `packages/webkit/package.json#exports` mapping `./<category>/<name>` to `src/components/webkit/`
-  - new stories under `apps/storybook/src/stories/webkit/<category>/`
+  - new examples under `packages/webkit/examples/<name>/`
 
 When any trigger matches, the agent must (a) announce that the trigger fired and which skill will run; (b) collect missing inputs (name, category, Figma URL, monolithic vs composition) before writing any file; (c) execute the skill's workflow from the top.
 
@@ -196,15 +214,18 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
 - `data-testid` hierarchical, BEM-style: root with fallback `'<category>-<name>'`, children with `${testId}__<part>` (two underscores).
 - Composition Pattern only when the consumer needs to swap the order or omit parts (Dialog, Card composto, Tabs, Accordion, DropdownMenu, Sheet/Drawer, Form). When in doubt, stay monolithic. When applying it, ship the complete shadcn-vue anatomy (e.g. Dialog = Root + Trigger + Portal + Overlay + Content + Title + Description + Close).
 - **shadcn-vue patterns** (see COMPONENT_REQUIREMENTS § 2.5-2.9):
-  - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; `VariantProps` exported as named exports (`export type ButtonKind = ...`); `cn` helper from `@aziontech/webkit/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/webkit/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); Storybook `play` functions via `@storybook/test`.
+  - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; `VariantProps` exported as named exports (`export type ButtonKind = ...`); `cn` helper from `@aziontech/webkit/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/webkit/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); `userEvent` from `@testing-library/user-event` in browser tests.
   - **Pending — Slot helper missing** (do NOT emulate; `validate-references.mjs` blocks fake imports): `asChild` prop on trigger-like sub-components. Propose a Slot composable under `packages/webkit/src/composables/` in a dedicated PR before adopting.
 - WCAG 2.1 AA: visible focus, full keyboard navigation, minimum ARIA, contrast >=4.5:1 / >=3:1, `motion-reduce:*` on animated components, touch target >=40x40px.
-- Light/dark validated via the `LightDark` Storybook story.
-- Each new public component (including each Composition Pattern sub-component) receives its own entry in `packages/webkit/package.json#exports` and its own Storybook story.
+- Light/dark validated by the styled visual suite (`apps/visual`) and the docs site's theme switch.
+- Each new public component (including each Composition Pattern sub-component) receives its own entry in `packages/webkit/package.json#exports` and appears in an example.
 
-### 11.5) Storybook story
+### 11.5) Examples
 
-Uses Storybook features fully: `argTypes` (with `control`, `description`, `table.defaultValue`) for every prop and `{ action: '...' }` for every event, `args`, `parameters.actions`/`a11y`/`docs`/`backgrounds`/`layout`, `decorators` when needed; stories Default + per `kind` + per `size` + Disabled + Loading + WithSlots/WithComposition + Controlled + Uncontrolled + **LightDark** + Accessibility (with `play` function via `@storybook/test`) + Playground.
+`packages/webkit/examples/<name>/examples.json` lists the examples (`name`, `summary`, `file`) and
+each `.vue` is a copyable SFC with real `@aziontech/webkit/*` imports: Default + per `kind` + per
+`size` + Disabled + Loading + composition / controlled when the spec lists them. The docs site
+renders each beside its source; the first is screenshotted in light and dark by `apps/visual`.
 
 ### 11.6) Validation gate (must pass before reporting done)
 
@@ -212,7 +233,7 @@ Uses Storybook features fully: `argTypes` (with `control`, `description`, `table
 pnpm webkit:lint
 pnpm webkit:type-check
 pnpm webkit:type-coverage
-pnpm storybook:build
+pnpm --filter @aziontech/webkit test:ssr
 ```
 
 ### 11.7) Forbidden shortcuts
@@ -237,7 +258,7 @@ Five hooks in [`.claude/hooks/`](.claude/hooks/) act as physical guard rails on 
 
 ### 12.2) New — spec-driven enforcement
 
-- **[`.claude/hooks/enforce-spec-exists.mjs`](.claude/hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
+- **[`.claude/hooks/enforce-spec-exists.mjs`](.claude/hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, misses a template-2 section (`Internationalization`, `Right-to-left`, `Responsive`, `Performance` — required with `template: 2` and on every spec created on or after 2026-11-12), or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
 - **[`.claude/hooks/validate-spec-compliance.mjs`](.claude/hooks/validate-spec-compliance.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — re-reads the just-written `.vue`, parses `defineProps`/`defineEmits`/`defineSlots`/`defineOptions.name`/animation classes, and diffs them against `.specs/<name>.md`. Blocks on any divergence: missing prop, extra event, slot not in spec, animation class outside the Motion & Animations table, missing `motion-reduce:*` escape.
 
 Shared parser library: [`.claude/hooks/_lib/spec.mjs`](.claude/hooks/_lib/spec.mjs). Legacy whitelist: [`.claude/hooks/_lib/legacy-components.json`](.claude/hooks/_lib/legacy-components.json).

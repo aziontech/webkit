@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default info message: leading icon, one line of copy, and an action.",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <Alert\n    severity=\"info\"\n    label=\"Your workload finished deploying in 42 seconds.\"\n    action-label=\"Label\"\n  />\n</template>"
+  },
+  {
+   "name": "Types",
+   "summary": "All severity variants stacked.",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      label=\"Your workload finished deploying in 42 seconds.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"success\"\n      label=\"The certificate was issued and is now serving traffic.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"warning\"\n      label=\"This edge function is close to its execution time limit.\"\n      action-label=\"Label\"\n    />\n    <Alert\n      severity=\"danger\"\n      label=\"The last deploy failed before reaching the edge.\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both size tokens. `small` is a 32px banner with 8px inline padding and `.text-label-sm` copy; `medium` (the default) is 36px with 12px inline padding and `.text-label-md`. Block padding stays 6px in both, and the leading icon is 14px at either size. A trailing action or close control tightens the end edge to 8px, takes the matching Button/IconButton size, and lets the banner grow past the floor.",
+   "sfc": "<script setup>\n  import Alert from '@aziontech/webkit/alert'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-4\">\n    <Alert\n      severity=\"info\"\n      size=\"small\"\n      label=\"A small note.\"\n    />\n    <Alert\n      severity=\"info\"\n      size=\"medium\"\n      label=\"A medium note.\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

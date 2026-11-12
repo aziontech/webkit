@@ -43,9 +43,9 @@
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
     /** Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
-    autoPlay?: boolean
+    autoplay?: boolean
     /** Milliseconds each tab is held before the band advances. */
-    autoPlayInterval?: number
+    autoplayInterval?: number
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
     /** Texture the media column is grounded with; `none` leaves it bare. */
@@ -61,8 +61,8 @@
     position: 'left',
     size: 'medium',
     selectOn: 'hover',
-    autoPlay: true,
-    autoPlayInterval: 5000,
+    autoplay: true,
+    autoplayInterval: 5000,
     showProgress: true,
     texture: 'none',
     textureSize: 'medium',
@@ -103,19 +103,19 @@
 
   const hasItems = computed(() => tabs.value.length > 0)
 
-  const autoPlayEnabled = computed(
-    () => props.autoPlay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
+  const autoplayEnabled = computed(
+    () => props.autoplay && tabs.value.length > 1 && reducedMotion.value !== 'reduce'
   )
 
-  const autoPlayRunning = computed(
-    () => autoPlayEnabled.value && !pointerInside.value && !focusInside.value
+  const autoplayRunning = computed(
+    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
   )
 
   const progress = computed(() =>
-    Math.min(100, Math.max(0, (elapsed.value / props.autoPlayInterval) * 100))
+    Math.min(100, Math.max(0, (elapsed.value / props.autoplayInterval) * 100))
   )
 
-  watch(autoPlayRunning, (running) => (running ? start() : stop()))
+  watch(autoplayRunning, (running) => (running ? start() : stop()))
 
   watch(
     () => tabs.value.length,
@@ -127,7 +127,7 @@
   )
 
   onMounted(() => {
-    if (autoPlayRunning.value) start()
+    if (autoplayRunning.value) start()
   })
 
   onScopeDispose(stop)
@@ -149,7 +149,7 @@
 
   function tick(): void {
     elapsed.value += PROGRESS_TICK_MS
-    if (elapsed.value < props.autoPlayInterval) return
+    if (elapsed.value < props.autoplayInterval) return
     elapsed.value = 0
     activeIndex.value = (activeIndex.value + 1) % tabs.value.length
   }
@@ -197,7 +197,7 @@
     :data-orientation="orientation"
     :data-size="size"
     :data-select-on="selectOn"
-    :data-autoplay="autoPlayRunning || null"
+    :data-autoplay="autoplayRunning || null"
     class="group/media-tabs [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
@@ -215,7 +215,7 @@
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-l-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-l-0"
+          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
           @pointerenter="point($event, index)"
         >
           <FrameBox
@@ -233,7 +233,7 @@
                 <button
                   type="button"
                   :aria-current="isActive(index) ? 'true' : undefined"
-                  class="m-0 cursor-pointer p-0 text-left after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+                  class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
                   @click="select($event, index)"
                   @focus="point($event, index)"
                 >
@@ -268,11 +268,11 @@
             </div>
 
             <span
-              v-if="isActive(index) && showProgress && autoPlayEnabled"
+              v-if="isActive(index) && showProgress && autoplayEnabled"
               aria-hidden="true"
               data-progress
               :style="{ width: `${progress}%` }"
-              class="absolute bottom-0 left-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
+              class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
             />
           </FrameBox>
         </li>

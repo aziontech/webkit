@@ -1,6 +1,6 @@
 # Rule: authoring docs — skills and agents carry conforming frontmatter, name no files as examples
 
-The `.claude` bundle that steers the AI — the **skills** and **agents**, both the DS-internal set and the consumer-facing set shipped in `packages/webkit/cli-templates/claude/` — is a public interface as much as a component is. A skill whose `name` disagrees with its folder, an agent with an empty `description`, a doc missing its `scope`, or a skill that hardcodes a component **source path** as an example are all the same class of drift the component standards already forbid in code. This rule fixes the frontmatter shape and bans the file-as-example anti-pattern, and it is enforced write-time and in CI exactly like every other standard.
+The `.claude` bundle that steers the AI — the **skills** and **agents**, both the DS-internal set and the consumer-facing set kept at the repo root (`skills/`, `rules/`, `adapters/claude/agents/`) and shipped in the package by its `prepack` — is a public interface as much as a component is. A skill whose `name` disagrees with its folder, an agent with an empty `description`, a doc missing its `scope`, or a skill that hardcodes a component **source path** as an example are all the same class of drift the component standards already forbid in code. This rule fixes the frontmatter shape and bans the file-as-example anti-pattern, and it is enforced write-time and in CI exactly like every other standard.
 
 ## The populations and their scope
 
@@ -10,8 +10,8 @@ The `.claude` bundle that steers the AI — the **skills** and **agents**, both 
 |---|---|---|
 | Internal skills | `.claude/skills/<name>/SKILL.md` | `webkit` |
 | Internal agents | `.claude/agents/<name>.md` (except `_README.md`) | `webkit` |
-| Consumer skills | `packages/webkit/cli-templates/claude/skills/<name>/SKILL.md` | `general` |
-| Consumer agents | `packages/webkit/cli-templates/claude/agents/<name>.md` | `general` |
+| Consumer skills | `skills/<name>/SKILL.md` (repo root) | `general` |
+| Consumer agents | `adapters/claude/agents/<name>.md` (repo root) | `general` |
 
 A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `.claude/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/_lib/standards.mjs) and the invariant test).
 
@@ -42,7 +42,7 @@ A skill is *guidance*, not a mechanical invariant — so on its own it is adviso
 
 Each entry is one of three arms (mirroring a rule's `enforce[]` surfaces):
 
-- a **rule id** — a mechanical claim is backed by that rule, which itself carries a write-time / lint / CI gate. Internal skills reference internal rule ids (`.claude/rules/<id>.md`); consumer skills reference the shipped rule ids (`webkit-<id>`, from `packages/webkit/cli-templates/claude/rules/`).
+- a **rule id** — a mechanical claim is backed by that rule, which itself carries a write-time / lint / CI gate. Internal skills reference internal rule ids (`.claude/rules/<id>.md`); consumer skills reference the shipped rule ids (`webkit-<id>`, from `rules/`).
 - **`ui-verify`** — a runtime UI behaviour the real-browser gate checks (both themes, loading/empty/error states, axe, focus trap + restore). Consumer/UI skills only.
 - **`review`** — pure taste/judgment with no mechanical or runtime backing (heuristics, earned delight, microcopy tone). The honest floor, not an escape hatch: prefer a specific rule or `ui-verify` whenever one applies.
 
@@ -69,7 +69,7 @@ The current tree carries 7 pre-existing file-as-example references (component-sc
 ## Hard prohibitions
 
 - Do not ship a skill/agent without conforming frontmatter (name == folder/filename, non-empty description, correct `scope`).
-- Do not set `scope` to anything but `general` (cli-templates) / `webkit` (`.claude`).
+- Do not set `scope` to anything but `general` (`skills/`, `adapters/`) / `webkit` (`.claude`).
 - Do not ship a consumer skill without a `webkit-` name prefix, a `status:`, and a `last_updated:`.
 - Do not ship a skill without a non-empty `enforced_by:`, and do not name an enforcer that does not resolve (a non-existent rule, the wrong population's rule, or anything other than `ui-verify` / `review`).
 - Do not name a component source file (`.vue`/`.ts`) as an example in a skill, or use `#exports` / a `../src/components/` climb as a component lookup — find components via the MCP/catalog.
@@ -80,7 +80,7 @@ The current tree carries 7 pre-existing file-as-example references (component-sc
 - **[`check-authoring-docs.mjs`](../../packages/webkit/scripts/check-authoring-docs.mjs)** is the CI ratchet (the `toolkit` job of [`governance.yml`](../../.github/workflows/governance.yml)) over all four populations; it fails on any introduced key even from an editor that never ran the hook.
 - Both share the single engine **[`_lib/authoring-docs-checks.mjs`](../hooks/_lib/authoring-docs-checks.mjs)** — one definition, two surfaces, so a push cannot bypass the hook.
 - The standard is registered in [`standards.mjs`](../hooks/_lib/standards.mjs) (`authoring-docs`), paired to these gates, and the pairing is checked by [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
-- **`enforced_by` resolution** is enforced by that same [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs): it reads both rule populations (`.claude/rules/` and `packages/webkit/cli-templates/claude/rules/`), and fails the build if any skill's `enforced_by` entry is not a rule id of its own population, `ui-verify`, or `review`. Presence (`enforced-by-missing`) is caught earlier, write-time and in the ratchet, by the shared engine.
+- **`enforced_by` resolution** is enforced by that same [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs): it reads both rule populations (`.claude/rules/` and `rules/`), and fails the build if any skill's `enforced_by` entry is not a rule id of its own population, `ui-verify`, or `review`. Presence (`enforced-by-missing`) is caught earlier, write-time and in the ratchet, by the shared engine.
 
 ## Why this rule exists
 

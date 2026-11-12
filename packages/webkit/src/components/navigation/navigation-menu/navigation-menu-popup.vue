@@ -96,6 +96,7 @@
     role="navigation"
     @pointerenter="onPointerEnter"
     @pointerleave="onPointerLeave"
+    @keydown="root.onPopupKeydown"
   >
     <slot />
   </component>

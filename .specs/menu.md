@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 8423e16d0f9e7f78e779848368bf14f0fcf9d181bbe6887df8aaaadd0b390dd1
+checksum: c3f18660f6c439255e11ae8304ea93f76739aa7f7c15678877d334152d3a626b
 created: 2026-08-03
-last_updated: 2026-10-01
+last_updated: 2026-11-11
 ---
 
 # Menu — Component Spec
@@ -26,9 +26,9 @@ megamenu — this menu is vertical, recursive, and owns a view stack.
 Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>):
 full-width rows, padding inside the row rather than on the list, and indentation carried by the
 nested list's `padding-left`. Per [`migration.md`](../.claude/rules/migration.md) only that
-*structure* is adopted — every *value* is expressed in our own tokens per
-[`DESIGN.md`](../.claude/docs/DESIGN.md). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
-`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things DESIGN.md forbids outright; the
+_structure_ is adopted — every _value_ is expressed in our own tokens (see
+[`styling.md`](../.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`,
+`gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the
 mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
 
 ## When to use
@@ -42,9 +42,9 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 
 - Horizontal top-of-page navigation with hover-opened panels → use `navigation-menu` instead.
 - A menu that floats over the page from a trigger → use `dropdown` (rows + selection) or `popover` (arbitrary content) instead.
-- A searchable flat command palette → use `command-menu` instead.
+- A searchable flat command palette → use `command` instead.
 - A single collapsible content region that is not navigation → use `accordion` instead.
-- Mutually exclusive in-page view switching → use `tab-view` (or `segmented-button` for a compact control) instead.
+- Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.
 - The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it.
 
 ## Related
@@ -53,7 +53,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - `menu-item` — **is** `Menu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
 - `sidebar-group` — functionally **superseded by `Menu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.
 - `navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
-- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the *shape* of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates DESIGN.md § Forbidden in animations).
+- `accordion` — a **reference only**, for content disclosure rather than navigation. `Menu` borrows the _shape_ of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `Menu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - `tag` — renders the optional trailing badge on a row via `menu-item`'s `tagValue`.
 
 ## Best practices
@@ -68,7 +68,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - **One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-xxs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.
 - **The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.
 - **A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.
-- Hover and active are `::before` / `::after` **ghost layers** per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
+- Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.
@@ -81,13 +81,13 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 `Sidebar` already renders the `<nav>` landmark, so the menu inside it gives up **both** halves of
 its own: `role="presentation"` suppresses the nested landmark, and the accessible name goes with it
 (the component drops `aria-label` on its own — a presentational element takes no name). In a host
-that is *not* a landmark — a drawer, a plain `<div>` — drop the `role` and keep `aria-label`, which
+that is _not_ a landmark — a drawer, a plain `<div>` — drop the `role` and keep `aria-label`, which
 is the shape every story below uses.
 
 ```vue
 <script setup>
-import Menu from '@aziontech/webkit/menu'
-import Sidebar from '@aziontech/webkit/sidebar'
+  import Menu from '@aziontech/webkit/menu'
+  import Sidebar from '@aziontech/webkit/sidebar'
 </script>
 
 <template>
@@ -95,9 +95,7 @@ import Sidebar from '@aziontech/webkit/sidebar'
     <Menu role="presentation">
       <Menu.Back />
 
-      <Menu.Group
-        label="User agents"
-      >
+      <Menu.Group label="User agents">
         <Menu.Item
           label="End User"
           icon="pi pi-user"
@@ -150,9 +148,9 @@ Tree-shaking alternative — the standalone root plus each sub-component from it
 
 ```vue
 <script setup>
-import Menu from '@aziontech/webkit/menu-root'
-import MenuGroup from '@aziontech/webkit/menu-group'
-import MenuItem from '@aziontech/webkit/menu-item'
+  import Menu from '@aziontech/webkit/menu-root'
+  import MenuGroup from '@aziontech/webkit/menu-group'
+  import MenuItem from '@aziontech/webkit/menu-item'
 </script>
 ```
 
@@ -173,16 +171,16 @@ element instead of three.
 - `menu-item/menu-item.vue` — `Menu.Item`, the leaf navigation row. **Moved into this component's folder** (from `navigation/menu-item/`) so it is a real sub-component rather than a sibling reached across folders: it is a part of `Menu`'s anatomy, and keeping it outside meant its typography and its icon box could drift from the rows it sits beside — which is exactly what happened. Its `./menu-item` export path is unchanged for consumers (the key now points at the new location), as are its props, events, slots and **every default**.
   - **Two changes made to it**, both fixing drift against the rows around it:
     1. The leading icon box renders **only when `icon` is set**. An empty `size-8` box reserved a column the row did not use, pushing an icon-less row's label off the column its siblings hold and leaving the rail anchored to blank space.
-    2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out *smaller than their parents*. Both are now `.text-label-md`.
+    2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out _smaller than their parents_. Both are now `.text-label-md`.
   - Props: `kind?: 'option' | 'group'` (default `'option'` — navigable row or section overline label), `label?: string` (default `'Option 1'` — visible text for the row or group header), `selected?: boolean` (default `false` — applies the selected surface on option rows), `disabled?: boolean` (default `false` — blocks interaction on option rows), `icon?: string` (default `'pi pi-home'` — PrimeIcons class for the leading glyph, option kind only; an empty string renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled option row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `undefined` — short text rendered in a trailing `Tag`), `tagSeverity?: MenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | secondary | success | info | warning | danger | accent`).
   - Events: `click` — `(event: MouseEvent, item: { label: string; href: string })`. `item` carries the row's `label` and `href`, identifying which row was activated (event-first per `event-payloads.md`).
   - Slots: `default` — replaces the label text; `tag` — replaces the trailing `Tag` (its presence alone renders the tag region, with or without `tagValue`).
   - **This spec is menu-item's only spec.** It previously carried its own `.specs/menu-item.md`, which is removed with this change: a sub-component of a compound is documented in the compound's spec, the way `menu-sub` and `menu-group` already are. The `./menu-item` export path stays public, so its API lives here (that is what `build-catalog.mjs` reads to give the path an entry in `catalog.json`).
-  - **Deliberately deferred — this release is additive only.** The redesigned row (a `size-3` icon, `var(--primary)` on the selected icon, `var(--border-default)` on the selected surface, the box model below, and `::before` / `::after` ghost layers replacing its root `transition-colors`) is a **visual breaking change** and is therefore **out of scope here**. It lands later as a `spec_version: 2` revision of *this* spec, on a major. Until then `Menu` renders today's row: correct behaviour, old visuals.
+  - **Deliberately deferred — this release is additive only.** The redesigned row (a `size-3` icon, `var(--primary)` on the selected icon, `var(--border-default)` on the selected surface, the box model below, and `::before` / `::after` ghost layers replacing its root `transition-colors`) is a **visual breaking change** and is therefore **out of scope here**. It lands later as a `spec_version: 2` revision of _this_ spec, on a major. Until then `Menu` renders today's row: correct behaviour, old visuals.
 - `menu-group/menu-group.vue` — A section that separates rows under a title. Renders a `<section>` (`flex flex-col`) holding a **static** title row — no toggle, no hover surface, not a control — plus the bare `<ul>` that holds the rows. The label is `.text-label-sm` in `var(--text-muted)` — **not** an overline: no uppercasing and no baked-in tracking, so `.text-overline-xs` is deliberately not used. It takes `my-(--spacing-sm)`, dropped to `0` on the first group so the menu does not start with a gap. **It draws no connector rail and applies no indent** — its rows sit flush with an ungrouped row's, because the label already separates the section and the rail means something else (see Best practices).
   - Props: `label?: string` (default `''` — the title text; omit for an unlabeled block), `ariaLabel?: string` (default `''` — accessible name when there is no visible `label`).
   - No `open` model and no `collapsible`: a section is not a disclosure.
-  - **A root group plays the rail's own entrance** when the menu mounts with an empty stack and the root's `enterOnMount` is set — the case where the reader travelled *back out* of a level and the host remounted, leaving the group no rendered off-canvas position to slide from. A group behind a *pushed* level does not (it should stay put, not animate in behind the level), and a **nested** group never travels on its own: the level carries it.
+  - **A root group plays the rail's own entrance** when the menu mounts with an empty stack and the root's `enterOnMount` is set — the case where the reader travelled _back out_ of a level and the host remounted, leaving the group no rendered off-canvas position to slide from. A group behind a _pushed_ level does not (it should stay put, not animate in behind the level), and a **nested** group never travels on its own: the level carries it.
   - Slots: `default` — the group's rows; `label` — replaces the header text.
 - `menu-sub/menu-sub.vue` — The `<li>` that owns a row plus that row's children. Provides the sub context (open state, generated trigger/content ids, nesting level derived from any ancestor sub) so its trigger and content need no wiring.
   - Props: `defaultOpen?: boolean` (default `false` — initial state when uncontrolled; ignored for `kind="drill"`, whose visibility is the root's stack).
@@ -201,7 +199,7 @@ element instead of three.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
-  - **An inline trigger carries no icon; a drill trigger may.** An inline row is a separator for the rows it expands *beneath itself*, in their own column — a glyph there competes with the rows it owns, so the column belongs to them and only the arrow sits on the trailing edge. A drill row has nothing beneath it (it **replaces** the menu), so it is read as one of the destinations it is listed among and takes an icon for the same reason they do. The component **enforces** this rather than trusting the caller: `showIcon` is `icon && kind === 'drill'`, so an inline trigger handed an `icon` still renders none. When shown, the glyph uses `Menu.Item`'s own box (32 px, `pl-(--spacing-xxs)`, `size-4` glyph, muted → default on hover) so it lands on the same content column as the leaves around it.
+  - **An inline trigger carries no icon; a drill trigger may.** An inline row is a separator for the rows it expands _beneath itself_, in their own column — a glyph there competes with the rows it owns, so the column belongs to them and only the arrow sits on the trailing edge. A drill row has nothing beneath it (it **replaces** the menu), so it is read as one of the destinations it is listed among and takes an icon for the same reason they do. The component **enforces** this rather than trusting the caller: `showIcon` is `icon && kind === 'drill'`, so an inline trigger handed an `icon` still renders none. When shown, the glyph uses `Menu.Item`'s own box (32 px, `pl-(--spacing-xxs)`, `size-4` glyph, muted → default on hover) so it lands on the same content column as the leaves around it.
   - **A trigger announces a navigation only when it has one to announce.** In data-driven mode a node with children emits `navigate` `(event, node)` from its **link**, which exists only when the node carries an `href` — so a container that is not a destination emits nothing at all, of either kind. Revealing the children never emits: that is a move inside the menu, not a navigation.
   - Props: `label?: string` (default `''` — visible row text), `kind?: 'inline' | 'drill'` (default `'inline'` — whether children expand in place or replace the menu), `icon?: string` (default `''` — leading glyph; honoured for `kind="drill"` only, see above), `href?: string` (default `''` — the row's own destination, and the switch between the split and unsplit shapes above), `disabled?: boolean` (default `false` — blocks revealing and navigating; suppresses **every** control of the row).
   - Events: `click` `(event: MouseEvent)` — the **link** was activated, so it cannot fire on a row with nowhere to go. Declared rather than left to `$attrs` fallthrough: in the split shape the root is a box holding two controls, so a fallthrough listener would sit on that box and fire for the arrow too, making "reveal the children" also trigger the consumer's navigation.
@@ -209,12 +207,12 @@ element instead of three.
 - `menu-sub-content/menu-sub-content.vue` — The children of a sub, in one of two shapes depending on its trigger's `kind`.
   - `kind="inline"` — a nested bare `<ul>` (`relative m-0 list-none p-0 flex flex-col`) whose `padding-left` is `calc(var(--spacing-sm) * 2)`, with the connector rail drawn on its `li` children. **Kumo indents with padding alone and draws no rail; we keep the rail** — the one place this component deliberately adds to the reference, because the Figma frame specifies it and it is what makes a three-level docs tree readable.
   - It renders the anchor `Menu.Back` teleports into, at the top of its own box (see `menu-back`).
-  - `kind="drill"` — **a second-level menu with the same anatomy as the root**, not a flat row list: a `<div role="group">` labelled by its trigger, so it holds `Menu.Group`s exactly like the root does. It therefore follows the root's composition rule — rows live inside a `Menu.Group` (an unlabeled one for a flat level), because a `<ul>` here could never contain a group's `<section>`. It mounts only while its sub is on the stack, draws no rail (a pushed level is not indented), and its own mount is the one phase CSS cannot tween, so a `<Transition>` supplies the from-frame. **That Transition must always exist before its child does**, so the level is withheld for one tick after its Teleport becomes renderable and every arrival — a live push and a restored stack alike — takes the same `enter` path. `appear` is deliberately **not** used: the Teleport's target is the root's level host, a ref the root sets in *its* `onMounted`, which runs after this component's (children mount first) — so on a restored stack the Transition and its child would first render together and the appear hooks would not play, making the entrance depend on where the reader happened to come from.
+  - `kind="drill"` — **a second-level menu with the same anatomy as the root**, not a flat row list: a `<div role="group">` labelled by its trigger, so it holds `Menu.Group`s exactly like the root does. It therefore follows the root's composition rule — rows live inside a `Menu.Group` (an unlabeled one for a flat level), because a `<ul>` here could never contain a group's `<section>`. It mounts only while its sub is on the stack, draws no rail (a pushed level is not indented), and its own mount is the one phase CSS cannot tween, so a `<Transition>` supplies the from-frame. **That Transition must always exist before its child does**, so the level is withheld for one tick after its Teleport becomes renderable and every arrival — a live push and a restored stack alike — takes the same `enter` path. `appear` is deliberately **not** used: the Teleport's target is the root's level host, a ref the root sets in _its_ `onMounted`, which runs after this component's (children mount first) — so on a restored stack the Transition and its child would first render together and the appear hooks would not play, making the entrance depend on where the reader happened to come from.
   - A `Menu.Group` nested inside a drilled level is part of that level and never steps aside on its own — the level slides as one piece. Only a **root-level** group translates out on a push.
   - Slots: `default` — the nested rows.
 - `menu-back/menu-back.vue` — The way out of a drill level. **It renders inside the current level, not where it is declared:** the level exposes an anchor through the root context and Back teleports into it. That placement is load-bearing on two counts — the level's own slide animates Back for free (no second transition to keep in sync), and Back never occupies the root's flow, so popping cannot shift the menu it returns to. Held in the root's flow it reserved a 32 px row plus its margin for the whole exit, pushing the returning menu down and snapping it back at the end. A level claims the anchor when it becomes current and releases it only when it **unmounts**, so a level still sliding out keeps its Back; a pop between levels hands the button to the level it landed on. It carries `mb-(--spacing-sm)` so it reads as heading the level rather than as the first row of the level's first group. Context-aware: it reads the root's stack and **renders nothing at the root level**, so it can be declared unconditionally.
   - **It is a button, not a row** — the one shape rule that separates it from everything beneath it. It hugs its label (`w-fit`, `max-w-full`, `px-(--spacing-sm)`, left-aligned) instead of spanning the rail with a centred label, so its hover surface is the size of the control rather than the width of a nav row. A full-width row with a centred label is exactly the shape of the rows below it, and reading as one of them makes the single control that leaves the level the hardest thing in it to find. Its chevron sits on the menu's content column (`--spacing-sm`), so it lines up with where a row's 32 px icon box centres its glyph — but it does **not** borrow that box: the chevron is tight against the label (`--spacing-xxs`), which is what keeps the label off the rows' label column. It still uses the same label class as every row, so it reads at the rows' size rather than shrinking into chrome.
-  - **Its text names the destination, not the level the reader is in** — `Back to Settings`, the way a back button always reads. Naming the current level is what a *header* does; on a left-aligned button beside a back chevron it would read as travelling to the place you are already standing. The destination is the level below the current one on the stack; when that is the menu **root** there is no trigger to name it, so the text falls back to a bare `Back` and `label` is how a consumer supplies the name (`Back to app`). The stack is read **live**, with no hold across the slide-out: naming the current level needed one (the stack empties the instant a pop begins), naming the destination never does — a pop to the root leaves the text unchanged, and a pop between levels hands the button to the incoming level, whose own destination is what the live stack now reports. The visible text is also the **accessible name** (there is no `aria-label`), so the two cannot disagree.
+  - **Its text names the destination, not the level the reader is in** — `Back to Settings`, the way a back button always reads. Naming the current level is what a _header_ does; on a left-aligned button beside a back chevron it would read as travelling to the place you are already standing. The destination is the level below the current one on the stack; when that is the menu **root** there is no trigger to name it, so the text falls back to a bare `Back` and `label` is how a consumer supplies the name (`Back to app`). The stack is read **live**, with no hold across the slide-out: naming the current level needed one (the stack empties the instant a pop begins), naming the destination never does — a pop to the root leaves the text unchanged, and a pop between levels hands the button to the incoming level, whose own destination is what the live stack now reports. The visible text is also the **accessible name** (there is no `aria-label`), so the two cannot disagree.
   - Props: `label?: string` (default `''` — names the destination, overriding the level below on the stack; set it to name the menu root, which has no trigger to name itself).
   - Slots: `default` — replaces the label text.
 
@@ -310,12 +308,12 @@ export type MenuGroupNode = {
 }
 ```
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `groups` | `MenuGroupNode[]` | `[]` | false | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it. |
-| `activeId` | `string` | `''` | false | Id of the node rendered as selected in data-driven mode. |
-| `enterOnMount` | `boolean` | `false` | false | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
-| `ariaLabel` | `string` | `'Menu'` | false | Accessible name for the navigation region. |
+| Prop           | Type              | Default | Required | JSDoc                                                                                                                                                                               |
+| -------------- | ----------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `groups`       | `MenuGroupNode[]` | `[]`    | false    | Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it.     |
+| `activeId`     | `string`          | `''`    | false    | Id of the node rendered as selected in data-driven mode.                                                                                                                            |
+| `enterOnMount` | `boolean`         | `false` | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
+| `ariaLabel`    | `string`          | `''`    | false    | Accessible name for the navigation region. Empty uses the locale catalog (`Menu`).                                                                                                  |
 
 The root also owns **`v-model:expanded`** — `string[]`, default `[]` — the ids of the inline subs
 currently open. Expansion belongs to the root, not to each sub, for two reasons: one sub opening
@@ -325,22 +323,22 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `navigate` | `(event: MouseEvent, node: MenuNode)` | A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check. |
-| `update:path` | `string[]` | `v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `Menu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level *arrives* rather than simply being there — see the restored-level row in Motion. |
-| `update:expanded` | `string[]` | `v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another. |
+| Event             | Payload                               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigate`        | `(event: MouseEvent, node: MenuNode)` | A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check.                                                                                                                                                                                                                                                                                                                                              |
+| `update:path`     | `string[]`                            | `v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `Menu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level _arrives_ rather than simply being there — see the restored-level row in Motion. |
+| `update:expanded` | `string[]`                            | `v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back). |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                          |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back). |
 
 ## Exposed
 
-| Method | Notes |
-|---|---|
+| Method  | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pop()` | Leaves the current level exactly as `Menu.Back` does — the leave motion, the stack update through `update:path`, and focus returned to the trigger that owns the level. For a host that renders its own way back outside a level: a server-rendered page that draws its tree at the root (a drill level renders through a Teleport only the client has) and mounts the stack it sits on only when the reader leaves, then pops it. No-op at the root level. |
 
 ## States
@@ -360,8 +358,8 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 ## Motion & Animations
 
 Every piece of this component's motion is **per-phase, open-vs-close, driven by `data-state`** —
-which DESIGN.md § Motion ("When to use which pattern") routes through a **`presets/transitions.ts`**
-module, *not* through the catalogued `animate-*` utilities. So `menu/presets/transitions.ts` imports
+which the motion standard ("When to use which pattern") routes through a **`presets/transitions.ts`**
+module, _not_ through the catalogued `animate-*` utilities. So `menu/presets/transitions.ts` imports
 `duration` / `curve` from the theme and returns the inline `transition`; the transform / height /
 opacity themselves stay in Tailwind classes on `data-[…]` variants.
 
@@ -379,24 +377,24 @@ nested `<ul>` — as a local `:css="false"` `<Transition>` whose `enter` / `leav
 and short-circuit on `prefers-reduced-motion`. A `Group` has no collapse at all. Do not import `accordion` (or any of its
 sub-components) to get this — see Related.
 
-| Trigger | Animation / Transition | Token (from `presets/transitions.ts`) | Reduced-motion fallback |
-|---|---|---|---|
-| inline sub expands | `height` 0 → content, local `:css="false"` `<Transition>` | `duration['moderate-01']` · `curve['productive-entrance']` | `prefers-reduced-motion` short-circuit — `done()` immediately, no transition set |
-| inline sub collapses | `height` content → 0, same `<Transition>` | `duration['moderate-01']` · `curve['productive-exit']` | same short-circuit in the `leave` hook |
-| drill push — level enters | `translate-x` 100% → 0 **and `opacity` 0 → 1** | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none motion-reduce:transform-none` |
-| drill push — level leaves | `translate-x` 0 → -100% **and `opacity` 1 → 0** on `data-motion="push"` | `duration['moderate-01']` · `curve['productive-exit']` | `motion-reduce:transition-none motion-reduce:transform-none` |
-| drill pop — level enters | `translate-x` -100% → 0 on `data-motion="pop"`, **fully opaque** — the arriving surface must cover what leaves behind it, so the enter phase transitions `translate` only | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none motion-reduce:transform-none` |
-| drill pop — level leaves | `translate-x` 0 → 100% **and `opacity` 1 → 0** on `data-motion="pop"` | `duration['moderate-01']` · `curve['productive-exit']` | `motion-reduce:transition-none motion-reduce:transform-none` |
-| **level** restored from `v-model:path`, **with `enterOnMount`** (a level on the stack at first render) | same as *drill push — level enters*: `SubContent` withholds the level for one tick after its Teleport becomes renderable, so it arrives through the ordinary **enter** transition rather than `appear`; the root sets `data-motion="push"` on mount so the surfaces and timing match a real push | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class, so the reduced-motion render never gets the off-canvas frame |
-| **root** restored with `enterOnMount` (an *empty* stack at first render) | `translate-x` -100% → 0, opaque, played by `appear` on the `<Transition>` in `Group`; the root sets `data-motion="pop"` on mount. The rail arriving is an entrance too — coming back out of a level, the groups have no rendered off-canvas position to tween from, because the host remounted. `Group` **can** use `appear` (unlike `SubContent`) because it is not teleported: it renders in the component's own first render, which is exactly what `appear` covers. It is bound through `v-bind` of an object that carries `appear` only while it applies, **never as a declared `:appear`**: the SSR compiler wraps any Transition that declares `appear` — whatever its runtime value — in a `<template>`, so the served markup of every group would be inert and a server-rendered menu would paint empty until hydration | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class |
-| either, restored **without** `enterOnMount` (the default) | none — the menu renders in place | — | — |
+| Trigger                                                                                                | Animation / Transition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Token (from `presets/transitions.ts`)                      | Reduced-motion fallback                                                                        |
+| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| inline sub expands                                                                                     | `height` 0 → content, local `:css="false"` `<Transition>`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `duration['moderate-01']` · `curve['productive-entrance']` | `prefers-reduced-motion` short-circuit — `done()` immediately, no transition set               |
+| inline sub collapses                                                                                   | `height` content → 0, same `<Transition>`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `duration['moderate-01']` · `curve['productive-exit']`     | same short-circuit in the `leave` hook                                                         |
+| drill push — level enters                                                                              | `translate-x` 100% → 0 **and `opacity` 0 → 1**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none motion-reduce:transform-none`                                   |
+| drill push — level leaves                                                                              | `translate-x` 0 → -100% **and `opacity` 1 → 0** on `data-motion="push"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `duration['moderate-01']` · `curve['productive-exit']`     | `motion-reduce:transition-none motion-reduce:transform-none`                                   |
+| drill pop — level enters                                                                               | `translate-x` -100% → 0 on `data-motion="pop"`, **fully opaque** — the arriving surface must cover what leaves behind it, so the enter phase transitions `translate` only                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-reduce:transition-none motion-reduce:transform-none`                                   |
+| drill pop — level leaves                                                                               | `translate-x` 0 → 100% **and `opacity` 1 → 0** on `data-motion="pop"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `duration['moderate-01']` · `curve['productive-exit']`     | `motion-reduce:transition-none motion-reduce:transform-none`                                   |
+| **level** restored from `v-model:path`, **with `enterOnMount`** (a level on the stack at first render) | same as _drill push — level enters_: `SubContent` withholds the level for one tick after its Teleport becomes renderable, so it arrives through the ordinary **enter** transition rather than `appear`; the root sets `data-motion="push"` on mount so the surfaces and timing match a real push                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class, so the reduced-motion render never gets the off-canvas frame |
+| **root** restored with `enterOnMount` (an _empty_ stack at first render)                               | `translate-x` -100% → 0, opaque, played by `appear` on the `<Transition>` in `Group`; the root sets `data-motion="pop"` on mount. The rail arriving is an entrance too — coming back out of a level, the groups have no rendered off-canvas position to tween from, because the host remounted. `Group` **can** use `appear` (unlike `SubContent`) because it is not teleported: it renders in the component's own first render, which is exactly what `appear` covers. It is bound through `v-bind` of an object that carries `appear` only while it applies, **never as a declared `:appear`**: the SSR compiler wraps any Transition that declares `appear` — whatever its runtime value — in a `<template>`, so the served markup of every group would be inert and a server-rendered menu would paint empty until hydration | `duration['moderate-02']` · `curve['productive-entrance']` | `motion-safe:` on the from-class                                                               |
+| either, restored **without** `enterOnMount` (the default)                                              | none — the menu renders in place                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | —                                                          | —                                                                                              |
 
-**The direction is derived, not passed.** A menu that mounts inside a level was travelled *into*
-(`push`); one that mounts at the root was travelled *back to* (`pop`). So `enterOnMount` stays a
-single boolean — the consumer says only *whether* this arrival was a journey, never which way.
+**The direction is derived, not passed.** A menu that mounts inside a level was travelled _into_
+(`push`); one that mounts at the root was travelled _back to_ (`pop`). So `enterOnMount` stays a
+single boolean — the consumer says only _whether_ this arrival was a journey, never which way.
 
 **A restored entrance is opt-in, and that is not a default chosen for caution.** Only the owner of
-the persisted stack can tell the arrivals apart: travelling between levels and moving *within* the
+the persisted stack can tell the arrivals apart: travelling between levels and moving _within_ the
 level the reader is already in both remount the host and both hand back the same `path`, so from
 inside this component they are identical. Animating on mount unconditionally replays the entrance
 on every navigation inside the level, which reads as the menu re-opening under a reader who never
@@ -420,59 +418,59 @@ Two structural details are what make the cross-fade read as a push instead of as
 both are load-bearing:
 
 1. **The level host is not positioned.** It sits after the groups, so an out-of-flow level would
-   resolve its `top` against the host and trail *below* the menu that replaced it — the outgoing
+   resolve its `top` against the host and trail _below_ the menu that replaced it — the outgoing
    level showing under the incoming one was this, not the fade.
 2. **The current level carries `z-10` against the leaving level's `z-0`.** An out-of-flow element
    paints above an in-flow sibling by default, which would otherwise put the level being replaced
    on top of the one replacing it.
-| row hover | `::before` ghost layer, `before:transition-opacity` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:before:transition-none` |
-| row active | `::after` ghost layer, `after:transition-opacity` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:after:transition-none` |
-| inline chevron rotates on open | `transition-transform` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none motion-reduce:transform-none` |
+   | row hover | `::before` ghost layer, `before:transition-opacity` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:before:transition-none` |
+   | row active | `::after` ghost layer, `after:transition-opacity` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:after:transition-none` |
+   | inline chevron rotates on open | `transition-transform` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none motion-reduce:transform-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (first-level group title) | `.text-label-sm` |
-| typography (every row: Item, SubTrigger, Back) | `.text-label-md` |
-| surface (row hover) | `var(--bg-hover)` |
-| surface (row selected) | `var(--bg-selected)` |
-| border (selected row, connector rail) | `var(--border-default)` |
-| text (row label) | `var(--text-default)` |
-| text (group label, idle icon) | `var(--text-muted)` |
-| text (disabled row) | `var(--text-disabled)` |
-| icon (selected row) | `var(--primary)` |
-| shape (row, rail elbow) | `var(--shape-elements)` |
-| spacing (row padding-x, icon-to-label gap, group-label margin-y, rail column) | `var(--spacing-sm)` |
-| surface (row pressed, `::after` ghost) | `var(--bg-active)` |
-| ring | `var(--ring-color)` |
-| ring offset | `var(--bg-canvas)` (host-overridable, see below) |
-| surface while sliding | `var(--menu-slide-surface, var(--bg-surface))` |
+| Region                                                                        | Token                                            |
+| ----------------------------------------------------------------------------- | ------------------------------------------------ |
+| typography (first-level group title)                                          | `.text-label-sm`                                 |
+| typography (every row: Item, SubTrigger, Back)                                | `.text-label-md`                                 |
+| surface (row hover)                                                           | `var(--bg-hover)`                                |
+| surface (row selected)                                                        | `var(--bg-selected)`                             |
+| border (selected row, connector rail)                                         | `var(--border-default)`                          |
+| text (row label)                                                              | `var(--text-default)`                            |
+| text (group label, idle icon)                                                 | `var(--text-muted)`                              |
+| text (disabled row)                                                           | `var(--text-disabled)`                           |
+| icon (selected row)                                                           | `var(--primary)`                                 |
+| shape (row, rail elbow)                                                       | `var(--shape-elements)`                          |
+| spacing (row padding-x, icon-to-label gap, group-label margin-y, rail column) | `var(--spacing-sm)`                              |
+| surface (row pressed, `::after` ghost)                                        | `var(--bg-active)`                               |
+| ring                                                                          | `var(--ring-color)`                              |
+| ring offset                                                                   | `var(--bg-canvas)` (host-overridable, see below) |
+| surface while sliding                                                         | `var(--menu-slide-surface, var(--bg-surface))`   |
 
 Geometry — the Kumo box model re-expressed in our tokens. Every Kumo value in the middle column is
-something DESIGN.md forbids in a webkit component (arbitrary `p-*`/`gap-*` where a
+something the token rules forbid in a webkit component (arbitrary `p-*`/`gap-*` where a
 `spacings.data.js` token applies, `rounded-lg`, Tailwind default durations, `cubic-bezier`
 literals), so the right column is the contract:
 
-| Region | Kumo | Ours (DESIGN.md) |
-|---|---|---|
-| list reset | `m-0 list-none p-0 flex flex-col` | adopted as-is — structure, no values |
-| row padding-x | `px-3` (12 px) | `px-(--spacing-sm)` — exact match |
-| icon-to-label gap | `gap-2.5` (10 px) | `gap-(--spacing-sm)` (12 px) — the Figma value; no 10 px spacing token exists |
-| group-label margin-y | `my-3` (12 px) | `my-(--spacing-sm)`, `0` on the first group — exact match |
-| row min-height | `min-h-8.5` (34 px) | `min-h-8` — the theme size scale (checklist § Sizing), and the Figma frame's row height |
-| icon size | — | `size-3` — theme size scale, matches the Figma 12 px glyph |
-| row radius | `rounded-lg` (8 px) | `rounded-(--shape-elements)` — DESIGN.md forbids `rounded-lg` and every numeric radius |
-| rail connector column | — (Kumo draws no rail) | `var(--spacing-sm)` (12 px) — the elbow's width and its negative offset |
-| rail elbow height | — | `h-4` — half the row, so the horizontal leg meets the row's centre line |
-| nested indent | `pl-7` (28 px) | `pl-[calc(var(--spacing-sm)+var(--spacing-md))]` (**28 px — matched to the reference**); narrower than our own 40 px icon column, so children sit slightly left of the parent's label rather than on it. Both tokens are breakpoint-fixed, unlike `--spacing-lg` / `--spacing-xl` |
-| hover / active | `hover:bg-*` on the root | `::before` / `::after` ghost layers on `var(--bg-hover)` / `var(--bg-active)` — DESIGN.md § Interactive states |
-| focus | `focus-visible:bg-*`, no ring | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — DESIGN.md § Interactive states; a visible ring is required by [`accessibility.md`](../.claude/rules/accessibility.md), so our standard wins over the reference |
-| motion | `250ms cubic-bezier(0.77, 0, 0.175, 1)` | `duration` / `curve` from `animate.js` only — see Motion |
+| Region                | Kumo                                    | Ours (tokens)                                                                                                                                                                                                                                                                     |
+| --------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| list reset            | `m-0 list-none p-0 flex flex-col`       | adopted as-is — structure, no values                                                                                                                                                                                                                                              |
+| row padding-x         | `px-3` (12 px)                          | `px-(--spacing-sm)` — exact match                                                                                                                                                                                                                                                 |
+| icon-to-label gap     | `gap-2.5` (10 px)                       | `gap-(--spacing-sm)` (12 px) — the Figma value; no 10 px spacing token exists                                                                                                                                                                                                     |
+| group-label margin-y  | `my-3` (12 px)                          | `my-(--spacing-sm)`, `0` on the first group — exact match                                                                                                                                                                                                                         |
+| row min-height        | `min-h-8.5` (34 px)                     | `min-h-8` — the theme size scale (checklist § Sizing), and the Figma frame's row height                                                                                                                                                                                           |
+| icon size             | —                                       | `size-3` — theme size scale, matches the Figma 12 px glyph                                                                                                                                                                                                                        |
+| row radius            | `rounded-lg` (8 px)                     | `rounded-(--shape-elements)` — the token rules forbid `rounded-lg` and every numeric radius                                                                                                                                                                                       |
+| rail connector column | — (Kumo draws no rail)                  | `var(--spacing-sm)` (12 px) — the elbow's width and its negative offset                                                                                                                                                                                                           |
+| rail elbow height     | —                                       | `h-4` — half the row, so the horizontal leg meets the row's centre line                                                                                                                                                                                                           |
+| nested indent         | `pl-7` (28 px)                          | `pl-[calc(var(--spacing-sm)+var(--spacing-md))]` (**28 px — matched to the reference**); narrower than our own 40 px icon column, so children sit slightly left of the parent's label rather than on it. Both tokens are breakpoint-fixed, unlike `--spacing-lg` / `--spacing-xl` |
+| hover / active        | `hover:bg-*` on the root                | `::before` / `::after` ghost layers on `var(--bg-hover)` / `var(--bg-active)` — the interactive-states standard                                                                                                                                                                   |
+| focus                 | `focus-visible:bg-*`, no ring           | `focus-visible:ring-2` + `ring-offset-1` on `var(--ring-color)` — the interactive-states standard; a visible ring is required by [`accessibility.md`](../.claude/rules/accessibility.md), so our standard wins over the reference                                                 |
+| motion                | `250ms cubic-bezier(0.77, 0, 0.175, 1)` | `duration` / `curve` from `animate.js` only — see Motion                                                                                                                                                                                                                          |
 
 **A sliding surface carries a fill, and only while it slides.** Backgroundless layers cannot
 occlude one another: cross-sliding two of them through one viewport, you read the leaving layer
-through the gaps between the arriving layer's rows — opacity does not help, because opaque *text*
+through the gaps between the arriving layer's rows — opacity does not help, because opaque _text_
 hides nothing. So a surface in motion (`data-motion="push"` or `"pop"`) takes
 `var(--menu-slide-surface, var(--bg-surface))`, and drops it again at rest. A host on a different
 fill sets `--menu-slide-surface` to match; at rest the menu is as transparent as it ever was.
@@ -490,18 +488,18 @@ The rail is **not** a gap: its column is `var(--spacing-sm)` and its indent is
 breakpoint-responsive `--spacing-lg` / `--spacing-xl`. Only one external value has no token behind
 it.
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| Kumo row-to-row gap `1px` (`gap-y-px`) — a hairline that makes adjacent hover surfaces read as separate rows | **None.** Rows are flush (`flex flex-col`, no `gap-y`). DESIGN.md forbids arbitrary spacing utilities and directs new values to `spacings.data.js`; the smallest token is `--spacing-xxs` (4 px), which is 4× too large. Kumo's paired `before:-inset-y-px` hit-area bleed is dropped with it — with no gap there is no dead strip to cover. | `TODO: tokenizar` — add a `spacing-hairline` (`1px`) entry to `spacings.data.js`, then set `gap-y-(--spacing-hairline)` on every list and restore the bleed. Purely cosmetic; the menu is correct without it. |
+| Figma variable                                                                                               | Temporary primitive                                                                                                                                                                                                                                                                                                                               | Follow-up                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kumo row-to-row gap `1px` (`gap-y-px`) — a hairline that makes adjacent hover surfaces read as separate rows | **None.** Rows are flush (`flex flex-col`, no `gap-y`). The token rules forbid arbitrary spacing utilities and directs new values to `spacings.data.js`; the smallest token is `--spacing-xxs` (4 px), which is 4× too large. Kumo's paired `before:-inset-y-px` hit-area bleed is dropped with it — with no gap there is no dead strip to cover. | `TODO: tokenizar` — add a `spacing-hairline` (`1px`) entry to `spacings.data.js`, then set `gap-y-(--spacing-hairline)` on every list and restore the bleed. Purely cosmetic; the menu is correct without it. |
 
-Two further reference values are **conscious mappings, not gaps** — DESIGN.md already dictates the
+Two further reference values are **conscious mappings, not gaps** — the token rules already dictate the
 answer, so no token is missing: Kumo's `min-h-8.5` (34 px) becomes `min-h-8` (the theme size scale,
 and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elements)`, since
 `rounded-lg` and every numeric radius are forbidden outright.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per [`DESIGN.md`](../.claude/docs/DESIGN.md) § Interactive states, with the offset colour handed down by the host (`Sidebar` sets `--menu-ring-offset` to its own surface, mirroring the existing `--menu-item-ring-offset` pattern).
+- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)), with the offset colour handed down by the host (`Sidebar` sets `--menu-ring-offset` to its own surface, mirroring the existing `--menu-item-ring-offset` pattern).
 - Keyboard map: `Tab` / `Shift+Tab` move between rows; `Enter`/`Space` activates a row, toggles an inline `Sub`, or pushes a drill level; `ArrowRight` expands a collapsed inline `Sub` or pushes a drill level; `ArrowLeft` collapses an expanded inline `Sub`, or pops one drill level when the current level is not the root; `Escape` pops one drill level.
 - ARIA:
   - The root renders a plain container with `role="navigation"` and `aria-label` from `ariaLabel`. It does **not** render `<nav>`: the menu is injected into a host that may already be a `<nav>` landmark (`Sidebar` is), and nesting landmarks duplicates them in the landmark list. When the host provides the landmark, the consumer suppresses the role by passing `role="presentation"` — and **the name goes with the role**: the root renders no `aria-label` under `role="presentation"` / `"none"`, because ARIA prohibits naming a presentational element and the a11y tree drops the name anyway. The consumer therefore suppresses the landmark with one attribute rather than remembering to unset `ariaLabel` as well.
@@ -515,7 +513,15 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elem
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target — **justified deviation from ≥40×40 px.** Rows are 32 px tall, matching the Figma frame's `h-button-md` and the density a product navigation needs. Every target is full-row width (≥252 px), so all clear WCAG 2.5.8's 24×24 minimum. The Figma frame's 16×16 group toggle would have failed that minimum; it is moot here, because a group title is not a control at all.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: directional item icons mirror (`directionalIconClass`); the sub-trigger chevron and the `MenuBack` chevron mirror (`rtl:-scale-x-100`).
+- Keyboard: `ArrowRight` opens a submenu and `ArrowLeft` closes it (and goes back from a drilled-in panel), swapped under `dir="rtl"` (`logicalArrowKey`).
+- Motion: drill-in panels and pop-out submenus slide toward the end (`rtl:` variants flip every `translate-x`).
+- User data: none.
+
+## Examples
 
 - Default — a console-style menu inside a `Sidebar` host: two titled `Group`s with a selected row.
 - Types — composite story rendering both `SubTrigger` `kind` values side-by-side, so the `chevron-down` and `chevron-right` affordances are directly comparable.
@@ -539,10 +545,8 @@ frame's 32 px.
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

@@ -1,0 +1,43 @@
+{
+  "id": "platform/create/deploy-progress-dialog",
+  "name": "DeployProgressDialog",
+  "title": "Templates/Platform/Create/DeployProgressDialog",
+  "surface": "product",
+  "summary": "The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "deploy progress",
+    "deploy progress dialog",
+    "drop to deploy",
+    "deploy a folder",
+    "multi deploy progress",
+    "progresso do deploy",
+    "arrastar e implantar",
+    "progreso del despliegue"
+  ],
+  "skills": ["webkit-ui-states", "webkit-errors", "webkit-microcopy"],
+  "primary": {
+    "name": "Running",
+    "file": "deploy-progress-dialog.vue"
+  },
+  "variants": [
+    {
+      "name": "Drop",
+      "summary": "The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of paths with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.",
+      "file": "variants/drop.vue"
+    },
+    {
+      "name": "PartialFailure",
+      "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeMark`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.",
+      "file": "variants/partial-failure.vue"
+    },
+    {
+      "name": "Succeeded",
+      "summary": "Every Deployment Setting deployed: a large animated success `OutcomeMark` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.",
+      "file": "variants/succeeded.vue"
+    }
+  ]
+}

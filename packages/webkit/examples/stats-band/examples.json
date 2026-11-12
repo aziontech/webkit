@@ -1,0 +1,31 @@
+{
+  "component": "stats-band",
+  "title": "Components/Marketing/Sections/StatsBand",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the reach section of a marketing page places it: three figures, each with its unit as suffix and a caption beneath. Edit the items in the Controls panel — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Reach",
+      "summary": "The Products page figures: each value has a unit beside it and no qualifier.",
+      "file": "site-reach.vue",
+      "json": "site-reach.json"
+    },
+    {
+      "name": "Partners",
+      "summary": "The Partners page figures: two values open with a + qualifier and the third ends with a % unit.",
+      "file": "site-partners.vue",
+      "json": "site-partners.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Network/StatsBand",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Reach", "ReachJson", "Partners", "PartnersJson"]
+}

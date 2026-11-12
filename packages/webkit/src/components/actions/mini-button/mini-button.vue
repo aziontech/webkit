@@ -1,6 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+  import { directionalIconClass } from '../../../utils/directional-icons'
+
   export type MiniButtonSize = 'large' | 'medium'
   export type MiniButtonTarget = '_self' | '_blank'
 
@@ -10,7 +14,7 @@
   })
 
   interface Props {
-    /** Visible label rendered inside the control. */
+    /** Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). */
     label?: string
     /** Size token; affects height, gap, and typography. */
     size?: MiniButtonSize
@@ -27,7 +31,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    label: 'Learn More',
+    label: '',
     size: 'large',
     disabled: false,
     showIcon: true,
@@ -41,6 +45,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ miniButton: en.miniButton })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-mini-button'
@@ -85,7 +90,7 @@
     @click="handleClick"
   >
     <span
-      class="mini-button-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -left-(--spacing-xs) -right-(--spacing-xs) group-data-[size=large]:h-8 group-data-[size=medium]:h-6 rounded-(--shape-button) bg-(--bg-hover) opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-mask) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 group-active:before:bg-(--bg-active)"
+      class="mini-button-ghost pointer-events-none absolute top-1/2 -translate-y-1/2 -start-(--spacing-xs) -end-(--spacing-xs) group-data-[size=large]:h-8 group-data-[size=medium]:h-6 rounded-(--shape-button) bg-(--bg-hover) opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover:opacity-100 group-focus-visible:opacity-100 before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-mask) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] motion-reduce:before:transition-none group-hover:before:opacity-100 group-focus-visible:before:opacity-100 group-active:before:bg-(--bg-active)"
       aria-hidden="true"
       :data-testid="`${testId}__ghost`"
     />
@@ -97,11 +102,11 @@
         class="inline leading-none"
         :data-testid="`${testId}__label`"
       >
-        {{ label }}
+        {{ label || t('miniButton.label') }}
       </span>
       <i
         v-if="showIcon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         class="mini-button-icon inline-flex size-(--spacing-sm) shrink-0 items-center justify-center text-(--primary) leading-none"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"

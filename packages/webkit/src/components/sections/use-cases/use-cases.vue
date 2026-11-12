@@ -2,12 +2,12 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Overline from '../../content/overline/overline.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import Topic from '../../marketing/topic/topic.vue'
-  import Overline from '../../overline/overline.vue'
 
   defineOptions({
     name: 'UseCases',
@@ -86,6 +86,7 @@
         <CardGrid
           flush
           kind="frame"
+          layout="fixed"
           :columns="3"
         >
           <CardGridCell

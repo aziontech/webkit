@@ -3,8 +3,8 @@
   import FlowAnchor from '../../../data/flow/flow-anchor/flow-anchor.vue'
   import FlowNode from '../../../data/flow/flow-node/flow-node.vue'
   import FlowParallel from '../../../data/flow/flow-parallel/flow-parallel.vue'
-  import Tag, { type TagSeverity } from '../../../tag/tag.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
+  import Tag, { type TagSeverity } from '../../tag/tag.vue'
 
   defineOptions({ name: 'WorkloadTopologyFlowWidget' })
 
@@ -91,7 +91,7 @@
       :active="active"
       :width="876"
       :mobile-width="876"
-      still
+      :animated="false"
     >
       <FlowRoot
         align="center"
@@ -124,7 +124,7 @@
                   />
                   <span class="truncate text-label-sm text-(--text-muted)">{{ node.eyebrow }}</span>
                   <Tag
-                    class="ml-auto shrink-0"
+                    class="ms-auto shrink-0"
                     :severity="node.severity"
                     :label="node.label"
                     size="small"

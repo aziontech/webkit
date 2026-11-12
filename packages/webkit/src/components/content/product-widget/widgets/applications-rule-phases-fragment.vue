@@ -3,11 +3,11 @@
 
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Table from '../../../data/table/index'
-  import InputText from '../../../inputs/input-text/input-text.vue'
-  import Tag from '../../../tag/tag.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Accordion from '../../accordion/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
@@ -126,7 +126,7 @@
     >
       <ShellMockupPart :order="0">
         <div class="overflow-hidden rounded-(--shape-card) border border-(--border-default)">
-          <Table :border="false">
+          <Table :bordered="false">
             <Table.Header>
               <Table.Row>
                 <Table.HeadCell class="w-24 flex-none!">
@@ -139,7 +139,7 @@
 
             <Table.Body>
               <Accordion
-                :value="frame.open"
+                :model-value="frame.open"
                 type="multiple"
                 size="large"
                 arrow-position="left"
@@ -175,7 +175,7 @@
                       >
                         <Table.Cell class="w-24 flex-none! gap-(--spacing-xxs)">
                           <span class="w-12 shrink-0 [&>span]:w-full">
-                            <InputText
+                            <Input
                               :model-value="String(index + 1)"
                               size="small"
                               :disabled="index === 0"

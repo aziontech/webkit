@@ -1,0 +1,26 @@
+{
+  "component": "skeleton",
+  "title": "Components/Primitives/Feedback/Skeleton",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default rectangular placeholder with a shimmer.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "Both geometries side by side: a rectangular `shape` and a `circle`.",
+      "file": "types.vue"
+    },
+    {
+      "name": "OnSurfaces",
+      "summary": "The same placeholder on all four surface layers. The fill is `var(--bg-placeholder)`, a translucent role rather than an opaque surface, so it composites over whatever sits behind it and holds its contrast on every layer — in both themes. Built from a surface token instead, a placeholder is only legible on the one surface it was picked against.",
+      "file": "on-surfaces.vue"
+    },
+    {
+      "name": "Static",
+      "summary": "Non-shimmering placeholder when `animated: false` (also the reduced-motion fallback).",
+      "file": "static.vue"
+    }
+  ]
+}

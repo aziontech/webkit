@@ -1,6 +1,6 @@
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, provide } from 'vue'
+import { defineComponent, h, nextTick, provide, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
@@ -149,8 +149,45 @@ describe('Panel', () => {
     expect(getByTestId('overlay-panel').tagName).toBe('DIV')
   })
 
+  it('makes an overflowing content region focusable only when nothing inside is', async () => {
+    const lines = ref(1)
+    const withButton = ref(false)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(Panel, null, () =>
+            h(PanelContent, null, () => [
+              ...Array.from({ length: lines.value }, (_, i) => h('p', { key: i }, `Line ${i}`)),
+              withButton.value ? h('button', { type: 'button' }, 'Act') : null
+            ])
+          )
+      })
+    )
+    const content = view.getByTestId('overlay-panel__content')
+    content.style.height = '40px'
+    content.style.overflowY = 'auto'
+    await nextTick()
+    expect(content).not.toHaveAttribute('tabindex')
+
+    lines.value = 30
+    await waitFor(() => expect(content).toHaveAttribute('tabindex', '0'))
+
+    withButton.value = true
+    await waitFor(() => expect(content).not.toHaveAttribute('tabindex'))
+  })
+
   it('has no accessibility violations on the composed tree', async () => {
     const { getByTestId } = render(composed())
     await expectNoA11yViolations(getByTestId('overlay-panel'))
+  })
+})
+
+describe('Panel on devices', () => {
+  it('makes the content a named container and stretches footer actions on phones', () => {
+    const { getByTestId } = render(composed())
+
+    expect(getByTestId('overlay-panel__content').className).toContain('@container/panel')
+    expect(getByTestId('overlay-panel__footer').className).toContain('max-sm:*:flex-1')
+    expect(getByTestId('overlay-panel__footer').className).toContain('safe-area-inset-bottom')
   })
 })

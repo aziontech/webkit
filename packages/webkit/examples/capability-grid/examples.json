@@ -1,0 +1,16 @@
+{
+  "component": "capability-grid",
+  "title": "Components/Marketing/Sections/CapabilityGrid",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three capabilities in a framed grid under a section title with one action. A grid with no items renders nothing.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Points",
+      "summary": "Four capabilities at four columns, each with two bullet points under its sentence.",
+      "file": "points.vue"
+    }
+  ]
+}

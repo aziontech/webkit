@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
@@ -84,6 +86,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ comparisonTable: en.comparisonTable })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-comparison-table'
@@ -136,7 +139,7 @@
         marks="all"
       >
         <table
-          class="w-full table-fixed border-separate border-spacing-0 text-left [--compare-head:3.5rem] sm:[--compare-head:5rem]"
+          class="w-full table-fixed border-separate border-spacing-0 text-start [--compare-head:3.5rem] sm:[--compare-head:5rem]"
         >
           <caption
             v-if="caption"
@@ -162,7 +165,7 @@
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   kind="default"
@@ -174,7 +177,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-l border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
                 <template v-if="competitor.logo && competitor.logoLight">
                   <img
@@ -214,9 +217,9 @@
               <th
                 scope="colgroup"
                 colspan="3"
-                class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-left font-normal"
+                class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
               >
-                <span class="text-overline-md text-(--primary)">{{ group.title }}</span>
+                <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
               </th>
             </tr>
             <tr
@@ -227,7 +230,7 @@
             >
               <th
                 scope="row"
-                class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-left align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
+                class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <span class="min-w-0 max-sm:truncate">{{ item.capability }}</span>
@@ -241,7 +244,7 @@
                           kind="transparent"
                           size="small"
                           icon="pi pi-info-circle"
-                          :ariaLabel="`About ${item.capability}`"
+                          :ariaLabel="t('comparisonTable.about', { capability: item.capability })"
                         />
                       </PopoverTrigger>
                       <PopoverContent>
@@ -257,7 +260,7 @@
               <td
                 v-for="platform in platforms"
                 :key="platform"
-                class="border-b border-l border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
+                class="border-b border-s border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
               >
                 <Tooltip :text="labelOf(item[platform])">
                   <i

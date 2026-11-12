@@ -1,0 +1,16 @@
+{
+  "component": "doc-item",
+  "title": "Components/Documentation/DocItem",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three linked rows in the documented composition — a `FrameBox` holding an `ItemList`. The link wraps the name and stretches over the row, so the whole row is the hit area with one tab stop per entry, and the trailing chevron says it travels.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "The axes that change the anatomy: an external destination (diagonal arrow, `rel=\"noreferrer\"`), an inert row with no `href` — whose title is plain text and whose trailing glyph region disappears — and a row with no glyph at all.",
+      "file": "variants.vue"
+    }
+  ]
+}

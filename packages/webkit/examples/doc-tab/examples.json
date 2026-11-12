@@ -1,0 +1,11 @@
+{
+  "component": "doc-tab",
+  "title": "Components/Documentation/DocTab",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Each DocTab gives DocTabs its title and its panel body; it has no appearance of its own.",
+      "file": "default.vue"
+    }
+  ]
+}

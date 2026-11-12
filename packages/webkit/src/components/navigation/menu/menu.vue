@@ -12,6 +12,9 @@
     type VNode
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import {
     type MenuGroupNode,
@@ -43,7 +46,7 @@
     groups: () => [],
     activeId: '',
     enterOnMount: false,
-    ariaLabel: 'Menu'
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -61,16 +64,20 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ menu: en.menu })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')
 
   const ariaLabelAttr = computed(() =>
-    role.value === 'presentation' || role.value === 'none' ? undefined : props.ariaLabel
+    role.value === 'presentation' || role.value === 'none'
+      ? undefined
+      : props.ariaLabel || t('menu.label')
   )
 
   const hasGroups = computed(() => props.groups.length > 0)
-  const hasContent = computed(() => hasGroups.value || Boolean(slots.default))
+  const hasContent = () => hasGroups.value || Boolean(slots.default)
 
   const rootClass = computed(() =>
     cn('relative flex w-full flex-col', attrs.class as string | undefined)
@@ -187,7 +194,8 @@
   })
 
   const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.key !== 'Escape' && event.key !== 'ArrowLeft') return
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key !== 'Escape' && key !== 'ArrowLeft') return
     if (path.value.length === 0) return
     event.preventDefault()
     pop()
@@ -256,7 +264,7 @@
 
 <template>
   <div
-    v-if="hasContent"
+    v-if="hasContent()"
     v-bind="$attrs"
     :role="role"
     :aria-label="ariaLabelAttr"

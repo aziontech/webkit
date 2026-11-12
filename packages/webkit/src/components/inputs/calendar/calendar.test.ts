@@ -1,14 +1,15 @@
-import { userEvent } from '@storybook/test'
-import { composeStories } from '@storybook/vue3'
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/calendar/Calendar.stories'
+import Default from '../../../../examples/calendar/default.vue'
+import Open from '../../../../examples/calendar/open.vue'
+import Single from '../../../../examples/calendar/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import Calendar from './calendar.vue'
-
-const { Default, Single, Open } = composeStories(stories)
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -86,7 +87,7 @@ describe('Calendar', () => {
     const trigger = getByTestId('input-calendar__trigger')
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
-    expect(trigger.textContent).toContain('Select a Date Range')
+    expect(trigger.textContent).toContain('Select a date range')
 
     expect(getPopover()).toBeNull()
     expect(document.body.querySelector('[data-testid="input-calendar__grid"]')).toBeNull()
@@ -584,7 +585,7 @@ describe('Calendar', () => {
 
     const presetsTrigger = getByTestId('input-calendar__presets-trigger')
     expect(presetsTrigger.getAttribute('aria-haspopup')).toBe('menu')
-    expect(presetsTrigger.textContent).toContain('Select Period')
+    expect(presetsTrigger.textContent).toContain('Select period')
 
     await fireEvent.click(presetsTrigger)
     const menu = await waitFor(() => {
@@ -752,16 +753,16 @@ describe('Calendar', () => {
   // ---- Story fixtures ------------------------------------------------------------------
 
   it('renders the Default story fixture cleanly', async () => {
-    const { getByTestId } = render(Default())
+    const { getByTestId } = render(Default)
 
-    expect(getByTestId('input-calendar__trigger').textContent).toContain('Select a Date Range')
+    expect(getByTestId('input-calendar__trigger').textContent).toContain('Select a date range')
 
     await openCalendar(getByTestId)
     await expectNoA11yViolations(document.body)
   })
 
   it('renders the Single story fixture cleanly', async () => {
-    const { getByTestId } = render(Single())
+    const { getByTestId } = render(Single)
 
     await openCalendar(getByTestId)
     await expectNoA11yViolations(document.body)
@@ -773,7 +774,7 @@ describe('Calendar', () => {
   // asserted here so a fixture that silently stops opening fails a test rather than
   // quietly shooting an empty canvas.
   it('renders the Open story fixture with the popover already mounted and labelled', async () => {
-    render(Open())
+    render(Open)
 
     const popover = await waitFor(() => {
       const el = getPopover()
@@ -787,5 +788,80 @@ describe('Calendar', () => {
     expect(within(popover).getByRole('grid').getAttribute('aria-label')).toBe(OCT_2026_LABEL)
 
     await expectNoA11yViolations(document.body)
+  })
+})
+
+describe('Calendar on devices', () => {
+  it('never grows past its container', () => {
+    const view = render(Calendar)
+
+    expect(view.getByTestId('input-calendar').className).toContain('max-w-full')
+  })
+})
+
+describe('Calendar in another locale', () => {
+  const inLocale = (locale: string, props: Record<string, unknown>) => {
+    const model = ref<unknown>(props['modelValue'] ?? null)
+    const component = defineComponent({
+      setup: () => () =>
+        h(
+          WebkitProvider,
+          { locale, catalogs: LOCALES },
+          {
+            default: () =>
+              h(Calendar, {
+                ...props,
+                modelValue: model.value,
+                'onUpdate:modelValue': (value: unknown) => (model.value = value)
+              })
+          }
+        )
+    })
+    return Object.assign(component, { model })
+  }
+
+  it('pt-BR: period chips use Portuguese words and apply what they print', async () => {
+    const view = inLocale('pt-BR', { mode: 'range', period: true })
+    const { getByTestId } = render(view)
+    const popover = await openCalendar(getByTestId)
+
+    expect(within(popover).getByRole('button', { name: '12 horas' })).toBeTruthy()
+    await fireEvent.click(within(popover).getByRole('button', { name: 'ontem' }))
+
+    const yesterday = new Date(Date.now() - 86_400_000)
+    const applied = view.model.value as { start: Date }
+    expect(applied.start.getDate()).toBe(yesterday.getDate())
+    await waitFor(() =>
+      expect(getByTestId('input-calendar__trigger').textContent).toContain('ontem')
+    )
+  })
+
+  it('pt-BR: date fields print, hint and parse day-first dates', async () => {
+    const { getByTestId } = render(
+      inLocale('pt-BR', { mode: 'range', modelValue: { start: OCT_8, end: null } })
+    )
+    const popover = await openCalendar(getByTestId)
+
+    const start = within(popover).getByLabelText('Início') as HTMLInputElement
+    const end = within(popover).getByLabelText('Fim') as HTMLInputElement
+    expect(start.value).toBe('8 de out. de 2026')
+    expect(end.placeholder).toMatch(/^30 de jun\. de \d{4}$/)
+
+    await fireEvent.update(end, '12/10/2026')
+    await fireEvent.change(end)
+    await waitFor(() => expect(end.value).toBe('12 de out. de 2026'))
+  })
+
+  it('en: date fields keep month-first parsing', async () => {
+    const { getByTestId } = render(
+      inLocale('en', { mode: 'range', modelValue: { start: OCT_8, end: null } })
+    )
+    const popover = await openCalendar(getByTestId)
+
+    const end = within(popover).getByLabelText('End') as HTMLInputElement
+    expect(end.placeholder).toMatch(/^Jun 30, \d{4}$/)
+    await fireEvent.update(end, '10/12/2026')
+    await fireEvent.change(end)
+    await waitFor(() => expect(end.value).toBe('Oct 12, 2026'))
   })
 })

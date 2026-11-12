@@ -1,0 +1,53 @@
+{
+  "id": "platform/view/waf-tuning",
+  "name": "WafTuning",
+  "title": "Templates/Platform/View/WafTuning",
+  "surface": "product",
+  "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "waf tuning",
+    "web application firewall",
+    "allow rules",
+    "false positives",
+    "attacks table",
+    "matched requests",
+    "waf allowed rules",
+    "threshold",
+    "ajuste do waf",
+    "falsos positivos",
+    "permitir regras",
+    "ajuste de waf",
+    "falsos positivos waf"
+  ],
+  "skills": ["webkit-tables", "webkit-lists", "webkit-form", "webkit-errors"],
+  "primary": {
+    "name": "Default",
+    "file": "waf-tuning.vue"
+  },
+  "variants": [
+    {
+      "name": "Allow",
+      "summary": "Two rules checked and the Allow 2 rules dialog open: rule 1005 (SQL injection on 3 paths) and 1201 (Cross-site scripting on 3 paths), 6 allowed rules in all, and an empty Reason.",
+      "file": "variants/allow.vue"
+    },
+    {
+      "name": "AllowFailed",
+      "summary": "The same dialog after the allowed rules could not be created: a danger Alert says nothing changed in the rule set, and the submit button reads Try again.",
+      "file": "variants/allow-failed.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A rule set that has not matched any request: no threshold settings, and an EmptyState saying matches appear as traffic arrives.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the matches load: the settings and actions are disabled and the table shows skeleton rows.",
+      "file": "variants/loading.vue"
+    }
+  ]
+}

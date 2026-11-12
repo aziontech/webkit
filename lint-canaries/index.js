@@ -18,7 +18,7 @@
  * Runs in CI (governance.yml → lint-canary job).  Locally:
  *   node lint-canaries/index.js
  *
- * Docs: lint-canaries/README.md · packages/webkit/docs/DOC_LINTS.md
+ * Docs: lint-canaries/README.md · .claude/docs/DOC_LINTS.md
  */
 
 import { spawnSync } from 'node:child_process'
@@ -33,7 +33,7 @@ console.log('[CANARY_DIR]: ', CANARY_DIR)
 
 // ---------------------------------------------------------------------------
 // Manifest — one entry per guarded rule. Paths are relative to lint-canaries/.
-// Sections mirror packages/webkit/docs/DOC_LINTS.md.
+// Sections mirror .claude/docs/DOC_LINTS.md.
 // ---------------------------------------------------------------------------
 
 /**  every entry must be reported by ESLint as an ERROR (severity 2). */
@@ -117,7 +117,16 @@ const ESLINT_CANARIES = [
   // ESLint — Clean code
   { file: 'eslint/clean-code/no-console.ts', rule: 'no-console' },
   { file: 'eslint/clean-code/no-debugger.ts', rule: 'no-debugger' },
-  { file: 'eslint/clean-code/prefer-const.ts', rule: 'prefer-const' }
+  { file: 'eslint/clean-code/prefer-const.ts', rule: 'prefer-const' },
+  // ESLint — webkit plugin
+  {
+    file: 'eslint/webkit/no-physical-direction.vue',
+    rule: 'webkit/no-physical-direction'
+  },
+  {
+    file: 'eslint/webkit/no-physical-direction-gradient.vue',
+    rule: 'webkit/no-physical-direction'
+  }
 ]
 
 /**
@@ -429,7 +438,7 @@ A canary that "passes" its lint means the rule was weakened, removed, or its
 behavior changed with a dependency bump. If the relaxation is INTENTIONAL,
 update or delete the fixture and its manifest entry in
 lint-canaries/index.js, and update
-packages/webkit/docs/DOC_LINTS.md in the same PR.`)
+.claude/docs/DOC_LINTS.md in the same PR.`)
   process.exit(1)
 }
 

@@ -1,3 +1,4 @@
+import { intlLocale } from '../../../composables/use-locale/use-translate'
 import type { CalendarMode, CalendarRange, CalendarValue } from './injection-key'
 
 export const startOfDay = (date: Date): Date =>
@@ -38,38 +39,38 @@ export const withTime = (date: Date, source: Date | null, isEnd: boolean): Date 
 
 const tzOption = (timezone: string): string | undefined => timezone || undefined
 
-export const formatDate = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+export const formatDate = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
     timeZone: tzOption(timezone)
   }).format(date)
 
-export const formatTime = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+export const formatTime = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
     timeZone: tzOption(timezone)
   }).format(date)
 
-const monthDay = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+const monthDay = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'short',
     day: 'numeric',
     timeZone: tzOption(timezone)
   }).format(date)
 
-const monthYear = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+const monthYear = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     month: 'long',
     year: 'numeric',
     timeZone: tzOption(timezone)
   }).format(date)
 
-const labelClock = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+const labelClock = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: 'numeric',
     minute: '2-digit',
     hourCycle: 'h23',
@@ -93,15 +94,16 @@ const isWholeMonth = (start: Date, end: Date): boolean =>
 export const formatValueLabel = (
   value: CalendarValue,
   mode: CalendarMode,
-  timezone = ''
+  timezone = '',
+  locale = 'en-US'
 ): string => {
   if (mode !== 'range') {
     const single = asSingle(value)
     if (!single) {
       return ''
     }
-    const time = isDefaultStartTime(single) ? '' : `, ${labelClock(single, timezone)}`
-    return `${formatDate(single, timezone)}${time}`
+    const time = isDefaultStartTime(single) ? '' : `, ${labelClock(single, timezone, locale)}`
+    return `${formatDate(single, timezone, locale)}${time}`
   }
 
   const { start, end } = asRange(value)
@@ -110,21 +112,22 @@ export const formatValueLabel = (
     return ''
   }
 
-  const startTime = start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone)}` : ''
-  const endTime = end && !isDefaultEndTime(end) ? `, ${labelClock(end, timezone)}` : ''
+  const startTime =
+    start && !isDefaultStartTime(start) ? `, ${labelClock(start, timezone, locale)}` : ''
+  const endTime = end && !isDefaultEndTime(end) ? `, ${labelClock(end, timezone, locale)}` : ''
 
   if (start && !end) {
-    return `${formatDate(start, timezone)}${startTime} –`
+    return `${formatDate(start, timezone, locale)}${startTime} –`
   }
   if (!start && end) {
-    return `– ${formatDate(end, timezone)}${endTime}`
+    return `– ${formatDate(end, timezone, locale)}${endTime}`
   }
 
   const s = start as Date
   const e = end as Date
 
   if (isWholeMonth(s, e)) {
-    return monthYear(s, timezone)
+    return monthYear(s, timezone, locale)
   }
 
   const sameYear = s.getFullYear() === e.getFullYear()
@@ -132,17 +135,17 @@ export const formatValueLabel = (
   const hasTime = startTime !== '' || endTime !== ''
 
   if (sameMonth && !hasTime) {
-    return `${monthDay(s, timezone)} – ${e.getDate()}`
+    return `${monthDay(s, timezone, locale)} – ${e.getDate()}`
   }
   if (sameYear) {
-    return `${monthDay(s, timezone)}${startTime} – ${monthDay(e, timezone)}${endTime}`
+    return `${monthDay(s, timezone, locale)}${startTime} – ${monthDay(e, timezone, locale)}${endTime}`
   }
 
-  return `${formatDate(s, timezone)}${startTime} – ${formatDate(e, timezone)}${endTime}`
+  return `${formatDate(s, timezone, locale)}${startTime} – ${formatDate(e, timezone, locale)}${endTime}`
 }
 
-const formatClock = (date: Date, timezone = ''): string =>
-  new Intl.DateTimeFormat('en-US', {
+const formatClock = (date: Date, timezone = '', locale = 'en-US'): string =>
+  new Intl.DateTimeFormat(intlLocale(locale), {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
@@ -152,19 +155,22 @@ const formatClock = (date: Date, timezone = ''): string =>
 export const formatWindowLabel = (
   value: CalendarValue,
   mode: CalendarMode,
-  timezone = ''
+  timezone = '',
+  locale = 'en-US'
 ): string => {
   if (mode !== 'range') {
     const single = asSingle(value)
-    return single ? `${formatDate(single, timezone)}, ${formatClock(single, timezone)}` : ''
+    return single
+      ? `${formatDate(single, timezone, locale)}, ${formatClock(single, timezone, locale)}`
+      : ''
   }
 
   const { start, end } = asRange(value)
   if (start && end && sameDay(start, end)) {
-    return `${formatClock(start, timezone)} – ${formatClock(end, timezone)}`
+    return `${formatClock(start, timezone, locale)} – ${formatClock(end, timezone, locale)}`
   }
 
-  return formatValueLabel(value, mode, timezone)
+  return formatValueLabel(value, mode, timezone, locale)
 }
 
 export const localTimezone = (): string => {
@@ -175,7 +181,7 @@ export const localTimezone = (): string => {
   }
 }
 
-const cityName = (timezone: string): string =>
+export const cityName = (timezone: string): string =>
   timezone.split('/').pop()?.replace(/_/g, ' ') ?? timezone
 
 const offsetAndAbbr = (timezone: string): string => {
@@ -195,9 +201,9 @@ const offsetAndAbbr = (timezone: string): string => {
   return hasAbbr ? `${offset} (${abbr})` : offset
 }
 
-export const formatTimezoneLabel = (timezone: string): string => {
+export const formatTimezoneLabel = (timezone: string, localLabel = 'Local'): string => {
   const resolved = timezone || localTimezone()
-  const prefix = resolved === localTimezone() ? 'Local' : cityName(resolved)
+  const prefix = resolved === localTimezone() ? localLabel : cityName(resolved)
 
   return `${prefix} (${offsetAndAbbr(resolved)})`
 }

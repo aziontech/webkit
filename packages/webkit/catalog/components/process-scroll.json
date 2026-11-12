@@ -1,0 +1,18 @@
+{
+ "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.",
+ "useWhen": [
+  "How something works in three to five ordered stages (build, deploy, observe)."
+ ],
+ "avoidWhen": [
+  "For more than five stages or stages with art — use `FeatureScroll`.",
+  "For a row that pins while the page scrolls — use `StickyCarousel`."
+ ],
+ "related": [
+  "StickyCarousel` — the same cards, pinned while the row travels.",
+  "TextureMaterial`, `FrameBox`, `SectionTitle`."
+ ],
+ "bestPractices": [
+  "Name each stage with a verb.",
+  "Keep descriptions to two lines."
+ ]
+}

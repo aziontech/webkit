@@ -1,0 +1,21 @@
+{
+  "component": "brand",
+  "title": "Components/Primitives/Content/Brand",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The default AZION wordmark lockup.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark with the \"move to the edge technologies®\" tagline).",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The lockup at each size token — small (16px), medium (24px), and large (32px) tall — with width scaling to preserve the aspect ratio.",
+      "file": "sizes.vue"
+    }
+  ]
+}

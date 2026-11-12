@@ -1,0 +1,37 @@
+{
+ "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
+ "useWhen": [
+  "A measure over time — requests, threats, bandwidth per bucket — as one or more lines or areas.",
+  "Comparing magnitudes across ordered categories — top countries, attack families — as vertical or horizontal bars.",
+  "Parts of a total over time — allowed / blocked / logged — as stacked areas or stacked bars.",
+  "Any chart that must read the same as Azion Console Real-Time Metrics: crosshair, one tooltip listing every series, legend toggles, totals.",
+  "Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).",
+  "How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.",
+  "A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`."
+ ],
+ "avoidWhen": [
+  "A single headline number with a delta → use `stat-tile`.",
+  "Share of a small whole (six slices or fewer) with the total in the center → use `donut-chart`.",
+  "More than about seven classes that all carry meaning → use `table`; color stops separating past the six series slots.",
+  "Two measures on different scales → two charts side by side; this component never draws a second value axis.",
+  "One reading against its range (CPU, cache hit ratio) → use `gauge-chart`.",
+  "Values by country or location → use `map-chart`."
+ ],
+ "related": [
+  "chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.",
+  "donut-chart` — part-to-whole at a glance, sharing this chart's palette, legend and states.",
+  "stat-tile` — one figure with a delta and a sparkline, for a KPI row above the charts.",
+  "table` — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface."
+ ],
+ "bestPractices": [
+  "Pass series in a stable order: the slot follows the series position, so color follows the entity. A filter that hides a series keeps the others' colors.",
+  "Keep one value axis. Index two measures to a common base or split them into two charts.",
+  "Let the legend carry identity for two or more series; a single series needs no legend, its title names it.",
+  "Mark a series whose color means a state (blocked, error rate) with `color: 'danger'` and never reuse a status color as series 4.",
+  "Color a series that counts one severity level with `color: 'severity-critical'` (`-high`, `-medium`, `-low`, `-info`) so stacked bars and legends match the `SeverityTag` in the table below the chart.",
+  "Keep filters and the time range in one row above the dashboard, never inside a chart.",
+  "While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).",
+  "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
+  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
+ ]
+}

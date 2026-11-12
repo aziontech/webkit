@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 8db4bc617c759c43801c81fc48b971d82998b02e507e61b303c5c6e7f7320d58
+checksum: c43aea76281b3105b9699748910046fc4b955b07be8012781d5332bb490374eb
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-11
 ---
 
 # DocTooltip — Component Spec
@@ -35,8 +35,8 @@ The inline gloss: a term in running prose that carries its own definition, shown
 ## Best practices
 
 - Gloss the term where the reader first meets it, not every time it appears.
-- Give `headline` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.
-- Add `cta` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter.
+- Give `title` the term itself and `tip` the definition; that pairing is also what names the panel for assistive tech.
+- Add `link-label` only with an `href`. A call to action needs somewhere to go, and its presence is what turns the panel into a dialog the reader can enter.
 
 ## Usage
 
@@ -49,9 +49,9 @@ The inline gloss: a term in running prose that carries its own definition, shown
   <p>
     Deploys run on an
     <DocTooltip
-      headline="Edge Application"
+      title="Edge Application"
       tip="The build that runs at the edge, close to the people using it."
-      cta="Read the guide"
+      link-label="Read the guide"
       href="/docs/edge-application"
     >
       edge application
@@ -66,8 +66,8 @@ The inline gloss: a term in running prose that carries its own definition, shown
 | Prop        | Type                          | Default | Required | JSDoc                                                              |
 | ----------- | ----------------------------- | ------- | -------- | ------------------------------------------------------------------ |
 | `tip`       | `string`                      | `''`    | false    | The definition shown inside the panel.                             |
-| `headline`  | `string`                      | `''`    | false    | Bold lead-in above the definition — usually the term itself.       |
-| `cta`       | `string`                      | `''`    | false    | Label for the panel's call-to-action link. Needs `href`.           |
+| `title`     | `string`                      | `''`    | false    | Bold lead-in above the definition — usually the term itself.       |
+| `linkLabel` | `string`                      | `''`    | false    | Label for the panel's call-to-action link. Needs `href`.           |
 | `href`      | `string`                      | `''`    | false    | Destination for the call-to-action link.                           |
 | `placement` | `'top' \| 'bottom' \| 'auto'` | `'top'` | false    | Where the panel opens; `'auto'` picks the side with the most room. |
 | `delay`     | `number`                      | `150`   | false    | Hover-open delay in milliseconds.                                  |
@@ -101,21 +101,21 @@ The inline gloss: a term in running prose that carries its own definition, shown
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                |
-| --------------------------------- | ---------------------------------------------------------------- |
-| typography (headline, definition) | `.text-body-sm`                                                  |
-| text (trigger, headline)          | `var(--text-default)`                                            |
-| text (definition)                 | `var(--text-muted)`                                              |
-| underline (rest)                  | `var(--border-strong)`                                           |
-| underline (hover, open)           | `var(--text-default)`                                            |
-| surface (panel)                   | `var(--bg-surface-raised)`                                       |
-| border (panel)                    | `var(--border-default)`                                          |
-| shadow (panel)                    | `var(--shadow-sm)`                                               |
-| shape (panel)                     | `var(--shape-elements)`                                          |
-| shape (trigger)                   | `var(--shape-flat)`                                              |
-| measure (panel)                   | `var(--container-2xs)`                                           |
-| spacing                           | `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
-| ring                              | `var(--ring-color)`                                              |
+| Region                         | Token (DESIGN.md)                                                |
+| ------------------------------ | ---------------------------------------------------------------- |
+| typography (title, definition) | `.text-body-sm`                                                  |
+| text (trigger, title)          | `var(--text-default)`                                            |
+| text (definition)              | `var(--text-muted)`                                              |
+| underline (rest)               | `var(--border-strong)`                                           |
+| underline (hover, open)        | `var(--text-default)`                                            |
+| surface (panel)                | `var(--bg-surface-raised)`                                       |
+| border (panel)                 | `var(--border-default)`                                          |
+| shadow (panel)                 | `var(--shadow-sm)`                                               |
+| shape (panel)                  | `var(--shape-elements)`                                          |
+| shape (trigger)                | `var(--shape-flat)`                                              |
+| measure (panel)                | `var(--container-2xs)`                                           |
+| spacing                        | `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| ring                           | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
@@ -132,8 +132,9 @@ The inline gloss: a term in running prose that carries its own definition, shown
 - Leaving an interactive panel is deferred by one short beat, because the pointer has to cross the offset gap to reach the CTA; closing on the first `mouseleave` makes that link unclickable. A passive panel has nothing to travel to and closes at once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: the trigger is inline text, sized by the prose around it; tapping toggles rather than hovers.
+- Teleported content: the teleported panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 - Default — one glossed term in a sentence, closed. The reader opens it.
 - Kinds — the passive gloss and the interactive one side by side, which is the only way to see the two a11y contracts (`tooltip` vs `dialog`) against each other. Justified in writing here because the role change is the component's central decision and is invisible in a single story.
@@ -151,10 +152,8 @@ The inline gloss: a term in running prose that carries its own definition, shown
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

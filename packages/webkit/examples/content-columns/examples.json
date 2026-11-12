@@ -1,0 +1,16 @@
+{
+  "component": "content-columns",
+  "title": "Components/Marketing/Primitives/ContentColumns",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A header band over three peer points. The column titles are written in parallel grammar because they are read across, not down, and each description stays at one sentence so the grid does not stretch to a single long column. Edit `items` in the Controls panel to see the band grow or shrink — with `items` emptied the band renders its header and no grid at all.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Columns",
+      "summary": "Both `columns` values, one band under the other, each filled to its own count: two columns for a contrast, three for three peers. The grid only splits from the medium breakpoint up — narrow the canvas and both bands collapse to a single column in DOM order, so the points keep the order they were written in.",
+      "file": "columns.vue"
+    }
+  ]
+}

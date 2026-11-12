@@ -2,7 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -170,7 +170,7 @@
                 value="starts with"
                 aria-label="Operator"
               />
-              <InputText
+              <Input
                 model-value="/login"
                 size="medium"
                 aria-label="Argument"

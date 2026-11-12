@@ -196,7 +196,7 @@
         class="flex-1"
         :tabs="[tab]"
         :show-line-numbers="false"
-        :border="!flush"
+        :bordered="!flush"
         :copyable="copyable"
         :animateLines="true"
         copy-aria-label="Copy the terminal session"

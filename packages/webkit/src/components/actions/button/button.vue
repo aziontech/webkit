@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger'
+  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
@@ -65,6 +66,12 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
 
+  const forwardedAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest['class']
+    return rest
+  })
+
   const isInactive = computed(() => props.disabled || props.loading)
 
   const isAnchor = computed(() => Boolean(props.href))
@@ -84,6 +91,7 @@
   const sharedClasses = [
     'group/button relative inline-flex items-center justify-center whitespace-nowrap',
     'rounded-(--shape-button)',
+    'forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
     ...ghostLayerClasses
@@ -96,7 +104,8 @@
       'bg-(--secondary) text-(--secondary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
     outlined:
       'border border-(--border-default) bg-(--bg-surface) text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
-    text: 'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
+    transparent:
+      'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
     danger:
       'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }
@@ -144,6 +153,7 @@
 <template>
   <a
     v-if="isAnchor"
+    v-bind="forwardedAttrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
@@ -166,18 +176,24 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         :data-icon-position="iconPosition"
         :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
-        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </a>
 
   <button
     v-else
+    v-bind="forwardedAttrs"
     :type="type"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"
@@ -198,13 +214,18 @@
       />
       <i
         v-else-if="icon"
-        :class="icon"
+        :class="[icon, directionalIconClass(icon)]"
         :data-icon-position="iconPosition"
         :data-animated="animated && iconPosition === 'trailing' ? '' : undefined"
-        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
+        class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
       {{ label }}
     </span>
+    <span
+      aria-hidden="true"
+      data-slot="touch-target"
+      class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+    />
   </button>
 </template>

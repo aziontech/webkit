@@ -8,6 +8,13 @@
     inheritAttrs: false
   })
 
+  interface Props {
+    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+55`) that have none. */
+    valueDir?: 'ltr' | 'rtl' | 'auto'
+  }
+
+  const props = defineProps<Props>()
+
   const ctx = inject(selectContextKey)
   if (!ctx) {
     throw new Error('SelectTrigger must be used inside <Select>.')
@@ -16,6 +23,10 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-trigger')
+  const triggerId = computed(() => (attrs['id'] as string | undefined) ?? ctx.controlId.value)
+  const describedBy = computed(
+    () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value
+  )
 
   const onClick = () => {
     if (ctx.disabled.value || ctx.readonly.value) return
@@ -42,6 +53,10 @@
       }
     "
     v-bind="$attrs"
+    :id="triggerId"
+    :aria-describedby="describedBy"
+    :aria-label="(attrs['aria-label'] as string | undefined) ?? ctx.ariaLabel.value"
+    :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
     type="button"
     role="combobox"
     :aria-haspopup="ctx.multiple.value ? 'listbox' : 'listbox'"
@@ -66,11 +81,15 @@
   >
     <slot name="iconLeft" />
     <span
-      class="flex-1 truncate text-left data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
+      class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
       :data-testid="`${testId}__value`"
     >
-      <template v-if="ctx.filled.value">{{ ctx.displayValue.value }}</template>
+      <bdi
+        v-if="ctx.filled.value"
+        :dir="props.valueDir"
+        >{{ ctx.displayValue.value }}</bdi
+      >
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
     <i

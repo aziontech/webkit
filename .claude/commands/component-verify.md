@@ -14,11 +14,11 @@ You are running `/component-verify <name>`. **You do not write anything.** You r
 3. Recompute `sha256(body)` and compare to frontmatter `checksum`. Mismatch → surface and exit.
 4. Resolve the existing component dir at `packages/webkit/src/components/webkit/<category>/<name>/`. Missing → exit.
 5. Spawn `echo-reporter` against the disk files. Surface its verdict (parity / mismatch / degraded).
-6. Spawn `validate-component` (`pnpm webkit:lint`, type-check, type-coverage, dts build, storybook build).
+6. Spawn `validate-component` (`pnpm webkit:lint`, type-check, type-coverage, dts build, server render of every example).
 7. Print a one-table summary: spec status, hook verdict, echo verdict, validation pass/fail.
 
 ## Rules
 
 - **Read-only.** This command writes nothing — no specs, no `.vue`, no logs (other than a one-line summary in `.claude/logs/<run-id>.jsonl`).
 - **No retries on failure.** Surface and exit. The user fixes the divergence (in the spec or in the `.vue`) and re-runs.
-- **No sub-agent spawned that writes.** Forbidden: `scaffolder`, `storybook-writer`, `code-connect-writer`, `spec-author`, `spec-validator` (which writes the checksum — exception: run it in dry-mode where it returns the verdict without flipping `status`).
+- **No sub-agent spawned that writes.** Forbidden: `scaffolder`, `code-connect-writer`, `spec-author`, `spec-validator` (which writes the checksum — exception: run it in dry-mode where it returns the verdict without flipping `status`).

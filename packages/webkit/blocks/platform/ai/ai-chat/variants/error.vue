@@ -1,0 +1,339 @@
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import ChatMessage from '@aziontech/webkit/chat-message'
+  import Conversation from '@aziontech/webkit/conversation'
+  import CopyButton from '@aziontech/webkit/copy-button'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
+  import PromptInput from '@aziontech/webkit/prompt-input'
+  import Reasoning from '@aziontech/webkit/reasoning'
+  import Sources from '@aziontech/webkit/sources'
+  import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import Tag from '@aziontech/webkit/tag'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  const supportPrompts = [
+    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'pi pi-bolt' },
+    {
+      id: 'errors',
+      label: 'Why is storefront answering with 502 errors?',
+      icon: 'pi pi-exclamation-triangle'
+    },
+    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'pi pi-github' },
+    { id: 'waf', label: 'Protect my site with a WAF', icon: 'pi pi-shield' }
+  ]
+
+  const turns = ref([
+    { id: 1, from: 'user', text: 'How do I purge the cache of one URL?', time: '10:41' }
+  ])
+  const state = ref('ready')
+  const prompt = ref('')
+  const composer = ref(null)
+
+  const knowledge = {
+    cache: {
+      reasoning:
+        'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
+      content: [
+        'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
+        '',
+        '1. Open Real-Time Purge from the products menu.',
+        '2. Choose **URL** and paste the address.',
+        '3. Select Purge.',
+        '',
+        'The same purge from the Azion CLI [2]:',
+        '',
+        '```bash',
+        'azion purge urls --urls https://www.example.com/styles.css',
+        '```'
+      ].join('\n'),
+      sources: [
+        {
+          title: 'Real-Time Purge',
+          href: 'https://www.azion.com/en/documentation/',
+          description: 'Azion documentation · Cache'
+        },
+        {
+          title: 'Azion CLI: purge',
+          href: 'https://www.azion.com/en/documentation/',
+          description: 'Azion documentation · CLI'
+        }
+      ],
+      followUps: [
+        { id: 'wildcard', label: 'How do I purge a whole folder?' },
+        { id: 'ttl', label: 'What TTL should my images use?' },
+        { id: 'origin', label: 'Why does my origin still get requests?' }
+      ]
+    },
+    errors: {
+      reasoning:
+        'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
+      content: [
+        'The **502** responses on storefront started at 14:05, when the TLS certificate of the origin `api.example.com` expired [1].',
+        '',
+        '| Time | 5xx rate | Cause |',
+        '| --- | --- | --- |',
+        '| 14:00 | 0.1% | — |',
+        '| 14:05 | 38% | Origin certificate expired |',
+        '',
+        'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
+      ].join('\n'),
+      sources: [
+        {
+          title: 'Troubleshooting 502 responses',
+          href: 'https://www.azion.com/en/documentation/',
+          description: 'Azion documentation · Observe'
+        }
+      ],
+      followUps: [
+        { id: 'renew', label: 'How do I renew the origin certificate?' },
+        { id: 'alert', label: 'Alert me when the error rate goes over 5%' }
+      ]
+    }
+  }
+
+  function answerFor(text) {
+    return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
+  }
+
+  function clock() {
+    return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
+      new Date()
+    )
+  }
+
+  let nextId = turns.value.length + 1
+  let timer
+
+  function stopTimers() {
+    clearTimeout(timer)
+    clearInterval(timer)
+  }
+
+  function stream(turn) {
+    const full = turn.answer.content
+    turn.state = 'streaming'
+    state.value = 'streaming'
+    let index = turn.content.length
+    timer = setInterval(() => {
+      index = Math.min(full.length, index + 6)
+      turn.content = full.slice(0, index)
+      if (index >= full.length) finish(turn)
+    }, 30)
+  }
+
+  function finish(turn) {
+    stopTimers()
+    turn.state = 'complete'
+    turn.thinking = false
+    state.value = 'ready'
+    composer.value?.focus()
+  }
+
+  function respond(turn) {
+    turn.state = 'pending'
+    turn.thinking = true
+    turn.content = ''
+    state.value = 'submitted'
+    timer = setTimeout(() => {
+      turn.thinking = false
+      stream(turn)
+    }, 1400)
+  }
+
+  function send(text) {
+    if (!text.trim() || state.value !== 'ready') return
+    prompt.value = ''
+    turns.value.push({ id: nextId++, from: 'user', text, time: clock() })
+    const turn = reactive({
+      id: nextId++,
+      from: 'assistant',
+      state: 'pending',
+      content: '',
+      thinking: true,
+      answer: answerFor(text),
+      feedback: null,
+      time: clock()
+    })
+    turns.value.push(turn)
+    respond(turn)
+  }
+
+  function stop() {
+    stopTimers()
+    const turn = turns.value[turns.value.length - 1]
+    if (turn?.from === 'assistant') {
+      turn.state = 'complete'
+      turn.thinking = false
+      turn.stopped = true
+    }
+    state.value = 'ready'
+  }
+
+  function retry(turn) {
+    turn.stopped = false
+    respond(turn)
+  }
+
+  function newChat() {
+    stopTimers()
+    turns.value = []
+    state.value = 'ready'
+    prompt.value = ''
+  }
+
+  const lastAnswer = computed(() => {
+    const turn = turns.value[turns.value.length - 1]
+    return turn?.from === 'assistant' && turn.state === 'complete' && !turn.stopped ? turn : null
+  })
+
+  onBeforeUnmount(stopTimers)
+
+  turns.value.push(
+    reactive({
+      id: 2,
+      from: 'assistant',
+      state: 'error',
+      content: knowledge.cache.content.slice(0, 104),
+      thinking: false,
+      answer: knowledge.cache,
+      feedback: null,
+      error: 'The connection was interrupted before the response finished.',
+      time: '10:41'
+    })
+  )
+  nextId = 3
+</script>
+
+<template>
+  <section
+    aria-labelledby="ai-chat-title"
+    class="flex h-dvh w-full flex-col bg-(--bg-canvas)"
+  >
+    <header
+      class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+    >
+      <div class="flex items-center gap-(--spacing-xs)">
+        <h1
+          id="ai-chat-title"
+          class="text-heading-xs text-(--text-default)"
+        >
+          AI assistant
+        </h1>
+        <Tag
+          label="Preview"
+          severity="info"
+          size="small"
+        />
+      </div>
+      <Button
+        label="New chat"
+        kind="transparent"
+        size="small"
+        icon="pi pi-plus"
+        :disabled="!turns.length"
+        @click="newChat"
+      />
+    </header>
+    <div class="flex min-h-0 flex-1 flex-col">
+      <div
+        v-if="!turns.length"
+        class="layout-column-content layout-boundary-inline flex flex-1 flex-col justify-center gap-(--spacing-lg) py-(--spacing-md)"
+      >
+        <EmptyState
+          title="How can I help with your Azion account?"
+          description="Ask about your workloads, cache, security rules and deployments. Answers cite the documentation they come from."
+          icon="ai ai-ask-azion"
+        />
+        <SuggestionGroup
+          :items="supportPrompts"
+          orientation="vertical"
+          @select="(item) => send(item.label)"
+        />
+      </div>
+      <Conversation
+        v-else
+        aria-label="Conversation with the AI assistant"
+      >
+        <ChatMessage
+          v-for="turn in turns"
+          :key="turn.id"
+          :from="turn.from"
+          :state="turn.from === 'user' ? 'complete' : turn.state"
+          :timestamp="turn.time"
+          :error-message="turn.error"
+          @retry="retry(turn)"
+        >
+          <template v-if="turn.from === 'user'">{{ turn.text }}</template>
+          <template v-else>
+            <Reasoning
+              :streaming="turn.thinking"
+              :duration="turn.thinking ? undefined : 2"
+            >
+              <p>{{ turn.answer.reasoning }}</p>
+            </Reasoning>
+            <StreamingResponse
+              :content="turn.content"
+              :streaming="turn.state === 'streaming'"
+              :sources="turn.answer.sources"
+              :anchor="`answer-${turn.id}`"
+            />
+            <p
+              v-if="turn.stopped"
+              class="text-body-sm text-(--text-muted)"
+            >
+              You stopped this response.
+            </p>
+            <Sources
+              v-if="turn.state === 'complete' && !turn.stopped"
+              :items="turn.answer.sources"
+              :anchor="`answer-${turn.id}`"
+            />
+          </template>
+          <template
+            v-if="turn.from === 'assistant'"
+            #actions
+          >
+            <ChatMessage.Actions>
+              <CopyButton :value="turn.content" />
+              <IconButton
+                icon="pi pi-refresh"
+                aria-label="Regenerate response"
+                kind="transparent"
+                size="small"
+                :disabled="state !== 'ready'"
+                @click="retry(turn)"
+              />
+              <ChatMessage.Feedback v-model="turn.feedback" />
+            </ChatMessage.Actions>
+          </template>
+        </ChatMessage>
+        <div
+          v-if="lastAnswer"
+          class="ps-[calc(2rem+var(--spacing-sm))]"
+        >
+          <SuggestionGroup
+            :items="lastAnswer.answer.followUps"
+            aria-label="Follow-up questions"
+            @select="(item) => send(item.label)"
+          />
+        </div>
+      </Conversation>
+    </div>
+    <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
+      <PromptInput
+        ref="composer"
+        v-model="prompt"
+        :state="state"
+        :max-length="4000"
+        @submit="send"
+        @stop="stop"
+      >
+        <template #hint>
+          The AI assistant can make mistakes. Check important information before you act on it.
+        </template>
+      </PromptInput>
+    </footer>
+  </section>
+</template>

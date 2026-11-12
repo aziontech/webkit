@@ -2,11 +2,11 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import TableRoot from '../../../data/table/table.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
-  import Tag from '../../../tag/tag.vue'
-  import CardBox from '../../card-box/card-box.vue'
+  import Input from '../../../inputs/input/input.vue'
+  import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
 
   defineOptions({ name: 'ObjectStorageBucketsFragment' })
 
@@ -31,8 +31,8 @@
 
   const BUCKETS = [
     {
-      id: 'webkit-storybook-dev',
-      name: 'webkit-storybook-dev',
+      id: 'webkit-docs-dev',
+      name: 'webkit-docs-dev',
       access: 'Public',
       objects: 128,
       size: '412.6 MB'
@@ -131,7 +131,7 @@
           :data-focused="frame.focused || null"
           class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
         >
-          <InputText
+          <Input
             :model-value="frame.search"
             size="medium"
             placeholder="Search buckets"
@@ -144,12 +144,12 @@
                 aria-hidden="true"
               />
             </template>
-          </InputText>
+          </Input>
         </span>
       </ShellMockupPart>
 
       <ShellMockupPart :order="1">
-        <CardBox :padded="false">
+        <Card :padded="false">
           <template #content>
             <TableRoot
               :data="rows"
@@ -157,7 +157,7 @@
               row-key="id"
               paginated
               :page-size="8"
-              :border="false"
+              :bordered="false"
             >
               <template #cell-name="cell">
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -178,7 +178,7 @@
               </template>
             </TableRoot>
           </template>
-        </CardBox>
+        </Card>
       </ShellMockupPart>
     </div>
   </ShellMockup>

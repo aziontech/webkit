@@ -1,0 +1,44 @@
+{
+  "id": "platform/dashboard/executive-summary-dashboard",
+  "name": "ExecutiveSummaryDashboard",
+  "title": "Templates/Platform/Dashboard/ExecutiveSummaryDashboard",
+  "surface": "product",
+  "summary": "An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Its page-level parts are `PageHeader`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "executive summary",
+    "executive dashboard",
+    "scorecard",
+    "quarterly report",
+    "business kpis",
+    "leadership dashboard",
+    "resumo executivo",
+    "painel executivo",
+    "indicadores do trimestre"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "executive-summary-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

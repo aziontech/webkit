@@ -1,0 +1,31 @@
+{
+  "component": "file-dropzone",
+  "title": "Components/Primitives/Inputs/FileDropzone",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An inline drop region with a \"Browse files\" button wired to a hidden file input, the keyboard path to the same outcome.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Folders",
+      "summary": "With `directories`, a dropped folder is walked and every file inside arrives in `drop` with its `webkitRelativePath`; Browse folder opens the folder picker (`<input webkitdirectory>`). `FileTokenGroup` names each file by its path.",
+      "file": "folders.vue"
+    },
+    {
+      "name": "Overlay",
+      "summary": "Hidden at rest. Drag a file over the window and the overlay fades in over its nearest positioned ancestor, here the wrapper around the card.",
+      "file": "overlay.vue"
+    },
+    {
+      "name": "Accept",
+      "summary": "With `accept=\"image/*\"`, image files arrive in `drop` and every other file arrives in `reject`. Drop a mix of files to see both lists fill.",
+      "file": "accept.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Ignores drags and drops and emits nothing. The slotted button is disabled by the consumer.",
+      "file": "disabled.vue"
+    }
+  ]
+}

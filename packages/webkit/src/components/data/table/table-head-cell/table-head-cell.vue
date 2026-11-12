@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
@@ -60,6 +62,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ tableHeadCell: en.tableHeadCell })
   const ctx = inject(TableInjectionKey, null)
   const group = inject(TableRowGroupKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
@@ -107,14 +110,14 @@
     @click="toggleSort"
     @keydown.enter.prevent="toggleSort"
     @keydown.space.prevent="toggleSort"
-    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[sortable]:focus-visible:outline-none data-[sortable]:focus-visible:ring-2 data-[sortable]:focus-visible:ring-inset data-[sortable]:focus-visible:ring-(--ring-color) data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ml-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:left-0 data-[frozen=end]:sticky data-[frozen=end]:right-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-right-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] data-[frozen=start]:after:bg-gradient-to-l data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-left-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] data-[frozen=end]:before:bg-gradient-to-r data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
+    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[sortable]:focus-visible:outline-none data-[sortable]:focus-visible:ring-2 data-[sortable]:focus-visible:ring-inset data-[sortable]:focus-visible:ring-(--ring-color) data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ms-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
   >
     <slot v-if="kind === 'checkbox' || kind === 'action'" />
     <template v-else>
       <span class="min-w-0 flex-1 truncate text-[length:inherit]"><slot /></span>
       <span
         v-if="sortable"
-        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 group-focus-visible/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100"
+        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 group-focus-visible/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100 [@media(hover:none)]:opacity-100"
         @click.stop
         @keydown.stop
       >
@@ -128,9 +131,9 @@
       v-if="resizable"
       role="separator"
       aria-orientation="vertical"
-      aria-label="Resize column"
+      :aria-label="t('tableHeadCell.resize')"
       :data-resizing="resizing || null"
-      class="absolute inset-y-0 right-0 z-20 w-2 shrink-0 cursor-col-resize touch-none select-none before:absolute before:inset-y-2 before:right-0 before:w-[2px] before:rounded-full before:bg-transparent before:content-[''] before:transition-colors before:duration-150 before:ease-out motion-reduce:before:transition-none hover:before:bg-(--border-strong) data-[resizing]:before:bg-(--ring-color)"
+      class="absolute inset-y-0 end-0 z-20 w-2 shrink-0 cursor-col-resize touch-none select-none before:absolute before:inset-y-2 before:end-0 before:w-[2px] before:rounded-full before:bg-transparent before:content-[''] before:transition-colors before:duration-150 before:ease-out motion-reduce:before:transition-none hover:before:bg-(--border-strong) data-[resizing]:before:bg-(--ring-color)"
       @mousedown.stop="resizeHandler"
       @touchstart.stop="resizeHandler"
       @click.stop

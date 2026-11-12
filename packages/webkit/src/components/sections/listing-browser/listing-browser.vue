@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useMediaQuery } from '@vueuse/core'
+  import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
@@ -15,7 +15,7 @@
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import InputText from '../../inputs/input-text/input-text.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
@@ -151,7 +151,9 @@
     Object.fromEntries(props.facets.map((facet) => [facet.key, '']))
   )
 
-  const wide = useMediaQuery('(min-width: 64rem)')
+  const wideQuery = useMediaQuery('(min-width: 64rem)')
+  const mounted = useMounted()
+  const wide = computed(() => mounted.value && wideQuery.value)
 
   onMounted(() => {
     const params = new URLSearchParams(globalThis.location?.search ?? '')
@@ -255,7 +257,7 @@
           :data-testid="`${testId}__toolbar`"
           class="grid gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] lg:items-center"
         >
-          <InputText
+          <Input
             v-if="search"
             v-model="query"
             size="large"
@@ -266,7 +268,7 @@
             <template #iconLeft>
               <i class="pi pi-search text-(--text-muted)" />
             </template>
-          </InputText>
+          </Input>
           <Select
             v-for="facet in facets"
             :key="facet.key"
@@ -364,7 +366,7 @@
                   :grow="column.grow ?? 1"
                   :align="column.align ?? 'start'"
                   :data-edge="edge(index)"
-                  class="data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
+                  class="data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <span class="text-overline-md text-(--text-muted)">{{ column.label }}</span>
                 </TableHeadCell>
@@ -381,7 +383,7 @@
               >
                 <TableCell
                   :grow="3"
-                  class="pl-(--spacing-xl)!"
+                  class="ps-(--spacing-xl)!"
                 >
                   <h3 class="m-0 text-overline-md text-(--text-default)">{{ entry.group }}</h3>
                 </TableCell>
@@ -398,7 +400,7 @@
                   :align="column.align ?? 'start'"
                   :principal="cellIndex === 0"
                   :data-edge="edge(cellIndex)"
-                  class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pr-(--spacing-xl)! data-[edge=start]:pl-(--spacing-xl)!"
+                  class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
                   <a
                     v-if="cellIndex === 0"

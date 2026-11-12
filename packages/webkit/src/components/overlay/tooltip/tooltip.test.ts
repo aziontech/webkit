@@ -1,13 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/overlay/tooltip/Tooltip.stories'
+import Default from '../../../../examples/tooltip/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tooltip from './tooltip.vue'
-
-const { Default } = composeStories(stories)
 
 // The tooltip panel is Teleported to <body> (escapes the render container), so
 // it must be queried from document.body — not the utils container. A frame or
@@ -22,7 +20,7 @@ const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data
 const panel = () => byTestId('overlay-tooltip__panel')
 
 // The trigger slot is a plain <button> so the trigger has something focusable
-// and interactive to hover/focus, exactly like the Storybook default.
+// and interactive to hover/focus, exactly like the Default example.
 const composed = (props: Record<string, unknown> = {}) =>
   defineComponent({
     components: { Tooltip },
@@ -72,8 +70,8 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(tip!.getAttribute('role')).toBe('tooltip')
       expect(tip!.textContent).toContain('Delete domain')
 
-      // The trigger's aria-describedby points at the panel's id (tooltipId).
-      const describedBy = trigger.getAttribute('aria-describedby')
+      expect(trigger.hasAttribute('aria-describedby')).toBe(false)
+      const describedBy = trigger.querySelector('button')!.getAttribute('aria-describedby')
       expect(describedBy).not.toBeNull()
       expect(tip!.getAttribute('id')).toBe(describedBy)
       expect(tip!.getAttribute('aria-hidden')).toBe('false')
@@ -319,9 +317,9 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
     })
   })
 
-  describe('Storybook Default story renders and opens', () => {
+  describe('Default fixture renders and opens', () => {
     it('composes the Default trigger and opens on focus', async () => {
-      const { getByTestId } = render(Default())
+      const { getByTestId } = render(Default)
       await settle()
 
       const trigger = getByTestId('overlay-tooltip')
@@ -333,5 +331,51 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(tip!.getAttribute('role')).toBe('tooltip')
       expect(tip!.textContent).toContain('This is a Tooltip')
     })
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const sandwich = defineComponent({
+    components: { Tooltip },
+    template: `
+      <div>
+        <button type="button" data-testid="before">Before</button>
+        <Tooltip text="Delete domain">
+          <button type="button" data-testid="target">Trigger</button>
+        </Tooltip>
+        <button type="button" data-testid="after">After</button>
+      </div>
+    `
+  })
+
+  const focusTarget = async () => {
+    const view = render(sandwich)
+    await settle()
+    view.getByTestId('before').focus()
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    return view
+  }
+
+  it('Tab onto the trigger opens the tooltip at once', async () => {
+    const { getByTestId } = await focusTarget()
+    expect(document.activeElement).toBe(getByTestId('target'))
+    expect(panel()).not.toBeNull()
+  })
+
+  it('Escape closes the tooltip and keeps focus on the trigger', async () => {
+    const { getByTestId } = await focusTarget()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    await vi.waitFor(() => expect(panel()).toBeNull())
+    expect(document.activeElement).toBe(getByTestId('target'))
+  })
+
+  it('Tab away from the trigger closes the tooltip', async () => {
+    const { getByTestId } = await focusTarget()
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    expect(document.activeElement).toBe(getByTestId('after'))
+    await vi.waitFor(() => expect(panel()).toBeNull())
   })
 })

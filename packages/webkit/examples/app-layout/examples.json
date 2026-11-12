@@ -1,0 +1,21 @@
+{
+  "component": "app-layout",
+  "title": "Components/Primitives/Layout/AppLayout",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Every region at once: the navigation rail, the global header with a help button, a flash message, the breadcrumbs, the page, the split panel under it with the selected service, and the help panel in the tools region.",
+      "file": "default.vue"
+    },
+    {
+      "name": "SplitPanelSide",
+      "summary": "A list whose selected row opens the split panel beside it. Its position and size are kept under a storage key, so the reader finds the panel where they left it after a reload.",
+      "file": "split-panel-side.vue"
+    },
+    {
+      "name": "Compact",
+      "summary": "The same frame inside a narrow host: the layout measures its own width, so the navigation and the help turn into drawers opened from the header, and the split panel stays at the bottom.",
+      "file": "compact.vue"
+    }
+  ]
+}

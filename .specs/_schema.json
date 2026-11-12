@@ -24,6 +24,8 @@
       "type": "string",
       "enum": [
         "actions",
+        "ai",
+        "chart",
         "code",
         "content",
         "data",
@@ -50,6 +52,11 @@
     "spec_version": {
       "type": "integer",
       "minimum": 1
+    },
+    "template": {
+      "type": "integer",
+      "enum": [1, 2],
+      "description": "Version of .specs/_template.md the spec follows. Absent means 1. spec-create writes 2, which requires the Internationalization, Right-to-left, Responsive and Performance sections (checked by spec-template:check and enforce-spec-exists). Every spec created on or after 2026-11-12 must be on 2."
     },
     "figma": {
       "type": "object",

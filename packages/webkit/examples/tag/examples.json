@@ -1,0 +1,26 @@
+{
+  "component": "tag",
+  "title": "Components/Primitives/Content/Tag",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default primary tag at medium size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All severity variants side by side.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Medium row (24px, `--spacing-xs` padding and gap) and small row (20px, `--spacing-xxs` padding and gap), each with default shape, pill, icon, and icon + pill.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithIcon",
+      "summary": "Leading icon via the `icon` prop (PrimeIcons class) across severity variants.",
+      "file": "with-icon.vue"
+    }
+  ]
+}

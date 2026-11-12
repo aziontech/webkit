@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: fae8447c685d8b651ee36f2670fa36535f91eca2b232c5118108baf549a03c6b
+checksum: c4da1c7a64e3f7d40c438f339e7a6c9de4684e6929b210d2f372893f33e3edd2
 created: 2026-05-22
-last_updated: 2026-07-30
+last_updated: 2026-11-11
 ---
 
 # Dialog — Component Spec
@@ -38,6 +38,67 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 - Trap focus, restore it on close, and close on Escape and overlay click.
 - One clear primary action; keep the body scannable.
 
+## Usage
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+  import Button from '@aziontech/webkit/button'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+
+  const open = ref(false)
+</script>
+
+<template>
+  <Dialog
+    v-model:open="open"
+    size="medium"
+  >
+    <DialogTrigger>
+      <Button
+        label="Delete domain"
+        kind="outlined"
+      />
+    </DialogTrigger>
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogContent>
+        <PanelHeader>
+          <DialogTitle>Delete domain</DialogTitle>
+          <DialogClose />
+        </PanelHeader>
+        <PanelContent>
+          <DialogDescription>
+            The domain stops serving traffic immediately. This action cannot be undone.
+          </DialogDescription>
+        </PanelContent>
+        <PanelFooter>
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Delete"
+            kind="danger"
+          />
+        </PanelFooter>
+      </DialogContent>
+    </DialogPortal>
+  </Dialog>
+</template>
+```
+
 ## Sub-components
 
 - `dialog-close.vue` — Public sub-component `dialog-close`.
@@ -46,7 +107,7 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 - `dialog-overlay.vue` — Public sub-component `dialog-overlay`.
 - `dialog-portal.vue` — Public sub-component `dialog-portal`.
 - `dialog-title.vue` — Public sub-component `dialog-title`.
-- `dialog-trigger.vue` — Public sub-component `dialog-trigger`.
+- `dialog-trigger.vue` — Public sub-component `dialog-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the dialog on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 ## Props
 
@@ -79,15 +140,16 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
+- Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
+- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a dialog rendered open on the server hydrates with the desktop layout and switches to the bottom sheet in the same tick as mount, before paint.
 
 ## Motion & Animations
 
-| Trigger      | Animation / Transition                    | Token    | Reduced-motion fallback         |
-| ------------ | ----------------------------------------- | -------- | ------------------------------- |
-| open/close   | `animate-fade-in`                         | semantic | `motion-reduce:animate-none`    |
-| open/close   | `animate-none`                            | semantic | `motion-reduce:animate-none`    |
-| open/close   | `animate-fade-out`                        | semantic | `motion-reduce:animate-none`    |
-| state change | `transition-colors duration-150 ease-out` | inline   | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                                                                                | Token                                                                                                                      | Reduced-motion fallback         |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| panel open / close   | `translate`, `scale` and `opacity` transition, set inline per motion state (`presets/transitions.ts`) | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']` from `@aziontech/theme/animations` | `motion-reduce:transition-none` |
+| overlay open / close | `opacity` transition, set inline per motion state                                                     | `duration['moderate-01']` + `curve['productive-entrance']` / `curve['productive-exit']`                                    | `motion-reduce:transition-none` |
+| below `md`           | the panel enters as a bottom sheet with the drawer's transition                                       | `overlay/presets/bottom-sheet-transitions.js`                                                                              | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -109,13 +171,14 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
+- Keyboard map: `Enter`/`Space` on the trigger opens the dialog and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it (unless the consumer blocks dismissal) and focus returns to the trigger; when the dialog was opened without a `Dialog.Trigger` (controlled `v-model:open`), focus returns to whatever element held it when the dialog opened. Tests: `dialog.test.ts` › keyboard map (spec).
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Sizes — the `size` axis (`small` | `medium` | `large`), one composite story.
@@ -135,9 +198,8 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

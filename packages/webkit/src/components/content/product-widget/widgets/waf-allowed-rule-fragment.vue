@@ -3,7 +3,7 @@
 
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import InputText from '../../../inputs/input-text/input-text.vue'
+  import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import Select from '../../../inputs/select/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -202,7 +202,7 @@
               for="waf-allowed-path"
               label="Path"
             />
-            <InputText
+            <Input
               id="waf-allowed-path"
               model-value="/search"
               size="medium"
@@ -221,7 +221,7 @@
                 class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
               >
                 <i
-                  class="pi pi-chevron-right text-body-xs text-(--text-muted)"
+                  class="pi pi-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <span class="flex min-w-0 flex-1 flex-col">

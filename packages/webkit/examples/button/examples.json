@@ -1,0 +1,41 @@
+{
+  "component": "button",
+  "title": "Components/Primitives/Actions/Button",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default primary button at large size.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "All kind variants side by side.",
+      "file": "types.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "All size variants side by side.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Icon",
+      "summary": "Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `icon-position` picks the side: leading names the action, trailing points at where it goes. Add `animated` (third row) to nudge a trailing glyph along its axis on hover — off by default so product UI stays still; marketing CTAs opt in. The `prefix` slot (last row) draws a mark before the label that stays first when the icon trails, so a brand mark and a chevron can share one control. `label` is required — for icon-only controls use `IconButton`.",
+      "file": "icon.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "Loading adopts the disabled visual treatment for clarity: a spinner replaces the icon and activation is blocked while the async action runs.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "FormSubmit",
+      "summary": "`type=\"submit\"` makes the Button its form's submit control, so a click or Enter inside a field submits it; `type=\"reset\"` clears the form. The default `type=\"button\"` never submits.",
+      "file": "form-submit.vue"
+    }
+  ]
+}

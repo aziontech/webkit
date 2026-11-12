@@ -1,0 +1,25 @@
+{
+  "component": "use-case-links",
+  "title": "Components/Marketing/Sections/UseCaseLinks",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Application Accelerator page places it: the overline, the left-aligned headline and its supporting sentence, then six icon-led use cases in a three-column divider grid, each linking out to the page that explains it. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Topics",
+      "summary": "Six linked cells from the Application Accelerator page. Each cell shows an arrow on its headline because it has a link.",
+      "file": "site-topics.vue",
+      "json": "site-topics.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Use Cases/UseCaseLinks",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Topics", "TopicsJson"]
+}

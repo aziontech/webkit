@@ -1,0 +1,25 @@
+{
+  "component": "sticky-scroll-code",
+  "title": "Components/Marketing/Sections/StickyScrollCode",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Web Apps page places it: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file sample and a docs button shown while it is open. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Web Apps band: five capabilities, each with a one-file code sample and a docs button under the open one.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/StickyScrollCode",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

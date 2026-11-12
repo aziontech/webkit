@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A band heading with an anchor: the h2 takes the id, a copy-link button appears when the heading is hovered or focused, and the band's action sits on the right.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment information\"\n    description=\"Where invoices are sent, and whether the plan renews on its own.\"\n    anchor=\"payment-information\"\n  >\n    <template #actions>\n      <Button\n        label=\"Update\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
+  },
+  {
+   "name": "WithActions",
+   "summary": "The Billing payment-methods heading, with the outlined Add payment method action and its plus glyph on the right.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment methods\"\n    description=\"Every card on the account. Invoices are charged to the default one.\"\n    anchor=\"payment-methods\"\n  >\n    <template #actions>\n      <Button\n        label=\"Add payment method\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"pi pi-plus\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Medium, the band heading, and small, a muted label-sized heading.",
+   "sfc": "<script setup>\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <SectionHeader\n      title=\"Delivery Settings\"\n      description=\"How the service answers requests at the edge.\"\n    />\n    <SectionHeader\n      title=\"Recent activity\"\n      size=\"small\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

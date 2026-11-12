@@ -1,0 +1,36 @@
+{
+  "component": "ticker",
+  "title": "Components/Marketing/Primitives/Ticker",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Eleven client marks looping under an overline. Every mark is an inline SVG drawn in `currentColor`, so the row takes one ink from the surface it sits on and follows the theme without a second asset or a filter — flip the toolbar between light and dark and the marks come with it. The track holds the row twice and travels exactly -50%, which is why the seam never shows; the second copy is `aria-hidden`, so a screen reader hears each company once. Hover anywhere on the strip to pause it. Leave `duration` at 0 and the pass is derived from the mark count, so this strip and a thirty-mark one advance at the same speed rather than in the same time.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The two scales, one above the other. `medium` is a responsive ladder rather than one height — 32 px on a phone, 40 px from `md`, 48 px from `lg` — because the same 48 px mark that reads as a row on a desktop is one logo drifting past on a 375 px viewport. `small` is a flat 24 px for a column that is asking for a form field, where the strip is proof rather than a feature. The cell width moves with the height (150/200/240, and 120 for small), so every mark advances on one constant pitch instead of on its own artwork width.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "Frameworks",
+      "summary": "The same component making a different claim: frameworks, clouds and tooling rather than customers. The registry holds both populations, so a framework mark resolves exactly as a client mark does and the two strips on one page are one component with two lists. Twenty marks derive a longer pass than eleven do, which is the point of deriving it — the row advances at the same rate either way. Marks load on demand, so a page carries only the ones it names.",
+      "file": "frameworks.vue"
+    },
+    {
+      "name": "Benefits",
+      "summary": "The same loop carrying short claims instead of marks: `items` replaces `marks`, and each item is a label with an optional leading icon. A cell sizes to its text rather than to a fixed pitch, so the row gap is the only rhythm, and the labels rest at full ink because they are real text a reader has to read. It floors the closing band of `CallToAction`, and it is slow on purpose: a claim is read, so each item gets six seconds of the pass where a mark gets two.",
+      "file": "benefits.vue"
+    },
+    {
+      "name": "Fallback",
+      "summary": "Two of these six have no entry in the registry, and they render as their own name set in the heading scale rather than as a gap. That is what lets a page state the list it means to state before every asset has landed — a company is named either way, and the row keeps its pitch because the cell is a fixed width regardless of what sits in it. An unregistered name is never an error; adding the artwork later changes nothing at the call site.",
+      "file": "fallback.vue"
+    },
+    {
+      "name": "Band",
+      "summary": "On the floor of a textured band the strip needs a ground of its own, or the marks read through the lattice behind them. `kind=\"band\"` gives it its own fill and vertical rhythm so it lands as a band, which is how a page composes it into `Hero`’s `bottom` slot.",
+      "file": "band.vue"
+    }
+  ]
+}

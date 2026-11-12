@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
-  import SegmentedButton from '../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import InputGroup from '../../inputs/input-group/input-group.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
@@ -172,7 +173,7 @@
             <div
               class="flex w-[min(var(--container-xl),calc(100vw_-_var(--spacing-xxl)*3))] flex-col items-center gap-(--spacing-md)"
             >
-              <SegmentedButton
+              <ToggleGroup
                 v-if="options.length > 1"
                 v-model="audience"
                 size="large"
@@ -195,6 +196,7 @@
                     <InputGroup size="large">
                       <input
                         readonly
+                        v-bind="PASSWORD_MANAGER_IGNORE"
                         :value="current.copy.text"
                         :aria-label="lineAriaLabel || undefined"
                         class="h-full min-w-0 flex-1 border-0 bg-(--bg-surface) px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none"
@@ -243,7 +245,7 @@
                           >{{ char }}</span
                         ></TransitionGroup
                       ><span
-                        class="ml-px inline-block h-4 w-1 animate-blink bg-(--accent) align-text-bottom motion-reduce:hidden"
+                        class="ms-px inline-block h-4 w-1 animate-blink bg-(--accent) align-text-bottom motion-reduce:hidden"
                     /></span>
                   </span>
                 </span>

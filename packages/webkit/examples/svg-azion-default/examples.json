@@ -1,0 +1,21 @@
+{
+  "component": "svg/azion/default",
+  "title": "Components/Primitives/Content/AzionLogo",
+  "examples": [
+    {
+      "name": "DefaultLogo",
+      "summary": "The default horizontal Azion logo.",
+      "file": "default-logo.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "All logo variants side by side: default, full, and minimal.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Illustrations",
+      "summary": "The \"Move to the Edge\" and \"Technologies\" brand illustrations.",
+      "file": "illustrations.vue"
+    }
+  ]
+}

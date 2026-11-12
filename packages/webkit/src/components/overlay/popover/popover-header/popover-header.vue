@@ -23,11 +23,12 @@
 <template>
   <header
     v-bind="attrs"
+    role="none"
     :data-testid="testId"
     class="relative border-b border-(--border-default) py-(--spacing-sm) px-(--spacing-md)"
   >
     <div
-      class="flex min-h-7 flex-col gap-(--spacing-xxs) pr-(--spacing-xxl) [&>button]:absolute [&>button]:right-(--spacing-md) [&>button]:top-(--spacing-sm)"
+      class="flex min-h-7 flex-col gap-(--spacing-xxs) pe-(--spacing-xxl) [&>button]:absolute [&>button]:end-(--spacing-md) [&>button]:top-(--spacing-sm)"
     >
       <slot />
     </div>

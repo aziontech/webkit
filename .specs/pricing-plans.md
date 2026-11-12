@@ -6,14 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: f72a44423323afc439eb49780ea6468299a77e01bb71ab21004df804c4a5dffb
+checksum: 7829935e66ff3e39444374853ccabd73c945a368c7fd4a16fdd0b9bcc52a9b1a
 ---
 
 # PricingPlans — Component Spec
 
 ## Purpose
 
-The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `segmented-button`, `card-grid`, `card-pricing` and `button`; the picked period is local state.
+The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state.
 
 ## When to use
 
@@ -38,7 +38,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 
 ```vue
 <script setup>
-import PricingPlans from '@aziontech/webkit/pricing-plans'
+  import PricingPlans from '@aziontech/webkit/pricing-plans'
 </script>
 
 <template>
@@ -55,7 +55,13 @@ import PricingPlans from '@aziontech/webkit/pricing-plans'
         highlighted: true,
         tagLabel: 'Popular',
         prices: [
-          { period: 'monthly', value: '25', prefix: '$', suffix: '/mo', details: 'Billed monthly.' },
+          {
+            period: 'monthly',
+            value: '25',
+            prefix: '$',
+            suffix: '/mo',
+            details: 'Billed monthly.'
+          },
           { period: 'annual', value: '20', prefix: '$', suffix: '/mo', details: 'Billed annually.' }
         ],
         featuresTitle: 'All Hobby features, plus:',
@@ -69,12 +75,12 @@ import PricingPlans from '@aziontech/webkit/pricing-plans'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `periods` | `PricingPlansPeriod[]` | `[]` | false | The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first. |
-| `periodsAriaLabel` | `string` | `''` | false | Accessible name of the billing-period toggle. |
-| `plans` | `PricingPlansPlan[]` | `[]` | false | The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. |
+| Prop               | Type                   | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ---------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`           | `string`               | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                   |
+| `periods`          | `PricingPlansPeriod[]` | `[]`    | false    | The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first.                                                                                                                                                                                                         |
+| `periodsAriaLabel` | `string`               | `''`    | false    | Accessible name of the billing-period toggle.                                                                                                                                                                                                                                                                                              |
+| `plans`            | `PricingPlansPlan[]`   | `[]`    | false    | The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. |
 
 ## Events
 
@@ -97,33 +103,33 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (features) | `.text-body-sm` |
-| features title text | `var(--text-muted)` |
-| feature text | `var(--text-default)` |
-| feature glyph | `var(--primary)` |
-| raised card fill | `var(--bg-surface)` |
-| card fill | `var(--bg-canvas)` |
-| toggle rule | `var(--border-default)` |
-| rhythm | `var(--spacing-sm)` / `var(--spacing-md)` |
+| Region                | Token (DESIGN.md)                         |
+| --------------------- | ----------------------------------------- |
+| typography (features) | `.text-body-sm`                           |
+| features title text   | `var(--text-muted)`                       |
+| feature text          | `var(--text-default)`                     |
+| feature glyph         | `var(--primary)`                          |
+| raised card fill      | `var(--bg-surface)`                       |
+| card fill             | `var(--bg-canvas)`                        |
+| toggle rule           | `var(--border-default)`                   |
+| rhythm                | `var(--spacing-sm)` / `var(--spacing-md)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by the composed `segmented-button` and `button`.
-- Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `segmented-button`'s.
+- Visible focus: owned by the composed `toggle-group` and `button`.
+- Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `toggle-group`'s.
 - ARIA: the toggle is named by `periodsAriaLabel`; each plan is a `card-pricing` article with its name as `h3`; the features are a list and their glyphs are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `segmented-button`, which carries its own fallback; this band adds no motion.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 
@@ -140,10 +146,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

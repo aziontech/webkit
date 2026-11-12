@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import Tag from '../../../tag/tag.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
 
   defineOptions({ name: 'KvStoreSecurityListFragment' })
@@ -58,7 +58,7 @@
               <span class="truncate text-body-sm text-(--text-default)">
                 {{ ROWS[index].key }}
               </span>
-              <span class="ml-auto flex shrink-0 items-center gap-(--spacing-xs)">
+              <span class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tag
                   :label="ROWS[index].type"
                   severity="secondary"

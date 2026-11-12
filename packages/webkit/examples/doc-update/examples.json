@@ -1,0 +1,21 @@
+{
+  "component": "doc-update",
+  "title": "Components/Documentation/DocUpdate",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A single entry: label, version, tags, notes. Hover the label to reveal the chain glyph — it links to the entry's own id, slugified from the label.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Changelog",
+      "summary": "Three entries in a row, newest first. The rule between the columns runs through the 24px block gap, so consecutive entries read as one continuous timeline; the first entry does not extend upward, which is what keeps the line from starting above the changelog. Below `md` the layout stacks and the rule drops — a phone has no room for a second column.",
+      "file": "changelog.vue"
+    },
+    {
+      "name": "Releases",
+      "summary": "Titled entries, one per release. The date sits beside a node on the rule, centred on the first line of the title; the title carries the tags and is sized above every heading in the notes. Two entries share a date and still get distinct anchors, because a titled entry slugifies its label and title together.",
+      "file": "releases.vue"
+    }
+  ]
+}

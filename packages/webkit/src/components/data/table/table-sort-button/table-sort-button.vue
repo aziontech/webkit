@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -28,6 +30,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ tableSortButton: en.tableSortButton })
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -43,9 +46,9 @@
   })
 
   const ariaLabel = computed<string>(() => {
-    if (props.direction === 'ascending') return 'Sorted ascending'
-    if (props.direction === 'descending') return 'Sorted descending'
-    return 'Sort column'
+    if (props.direction === 'ascending') return t('tableSortButton.ascending')
+    if (props.direction === 'descending') return t('tableSortButton.descending')
+    return t('tableSortButton.unsorted')
   })
 
   const handleClick = () => {

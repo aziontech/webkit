@@ -1,0 +1,125 @@
+{
+  "id": "platform/auth",
+  "name": "Auth",
+  "title": "Templates/Platform/Auth",
+  "surface": "product",
+  "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a required `Label` over `Input` or a `Field` with `PasswordInput` and `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Label`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "login",
+    "log in",
+    "sign in",
+    "signin",
+    "login page",
+    "authentication",
+    "auth",
+    "forgot password",
+    "reset password",
+    "new password",
+    "entrar",
+    "tela de login",
+    "acessar conta",
+    "esqueci a senha",
+    "redefinir senha",
+    "signup",
+    "sign up",
+    "register",
+    "registration",
+    "create account",
+    "new account",
+    "free account",
+    "cadastro",
+    "cadastrar",
+    "criar conta",
+    "tela de cadastro",
+    "registrar",
+    "check inbox",
+    "check your email",
+    "verify email",
+    "email verification",
+    "confirm email",
+    "verification sent",
+    "resend email",
+    "verificar e-mail",
+    "confirmar e-mail",
+    "confira seu e-mail",
+    "session expired",
+    "auth errors",
+    "sessão expirada",
+    "erro de login",
+    "mfa",
+    "multi-factor authentication",
+    "two-factor authentication",
+    "2fa",
+    "authenticator app",
+    "one-time code",
+    "verification code",
+    "totp",
+    "recovery code",
+    "autenticação em dois fatores",
+    "autenticação multifator",
+    "código de verificação",
+    "código de autenticação"
+  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-microcopy"],
+  "steps": ["email", "password", "reset", "sent", "new-password"],
+  "primary": {
+    "name": "Login",
+    "file": "auth.vue"
+  },
+  "variants": [
+    {
+      "name": "SignUp",
+      "summary": "The sign-up screen: create an account with a work email, Google or GitHub.",
+      "file": "variants/sign-up.vue"
+    },
+    {
+      "name": "SessionExpired",
+      "summary": "The /login screen after a session expires: it opens on the password step for the same email, with an info Alert that clears on the next action.",
+      "file": "variants/session-expired.vue"
+    },
+    {
+      "name": "CheckInbox",
+      "summary": "The /signup/verify screen: where the verification link went, the resend prompt, and a secondary Return to sign in action.",
+      "file": "variants/check-inbox.vue"
+    },
+    {
+      "name": "IncorrectCredentials",
+      "summary": "401 on Sign in: a danger message above both fields with no action, and the password cleared.",
+      "file": "variants/incorrect-credentials.vue"
+    },
+    {
+      "name": "ServiceUnavailable",
+      "summary": "503 on Sign in: a warning message that keeps the credentials and carries Retry, the only move left.",
+      "file": "variants/service-unavailable.vue"
+    },
+    {
+      "name": "ServerError",
+      "summary": "500 on the POST: tied to no field, so where the console would toast, the card keeps a danger message with Retry.",
+      "file": "variants/server-error.vue"
+    },
+    {
+      "name": "Timeout",
+      "summary": "No response: the same message as the 500 but warning, because the request may still have gone through, with Retry.",
+      "file": "variants/timeout.vue"
+    },
+    {
+      "name": "EmailAlreadyRegistered",
+      "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.",
+      "file": "variants/email-already-registered.vue"
+    },
+    {
+      "name": "MfaSetup",
+      "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.",
+      "file": "variants/mfa-setup.vue"
+    },
+    {
+      "name": "MfaCode",
+      "summary": "The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.",
+      "file": "variants/mfa-code.vue"
+    }
+  ]
+}

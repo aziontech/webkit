@@ -12,7 +12,7 @@
     /** Card heading. */
     title?: string
     /** Small muted line above the title — who makes the thing, when the title does not say. */
-    overline?: string
+    eyebrow?: string
     /** PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled. */
     icon?: string
     /** Destination; when set the whole card becomes the link. */
@@ -22,17 +22,17 @@
     /** Fallback copy when the default slot is empty. */
     label?: string
     /** Call-to-action text; when set the card closes on a link row. */
-    link?: string
+    linkLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: '',
-    overline: '',
+    eyebrow: '',
     icon: '',
     href: '',
     target: '_self',
     label: '',
-    link: ''
+    linkLabel: ''
   })
 
   const attrs = useAttrs()
@@ -77,9 +77,9 @@
       aria-hidden="true"
     />
     <span
-      v-if="overline"
+      v-if="eyebrow"
       class="text-overline-sm text-(--text-muted)"
-      >{{ overline }}</span
+      >{{ eyebrow }}</span
     >
     <span class="text-heading-xs text-(--text-default)">{{ title }}</span>
     <span
@@ -89,15 +89,15 @@
       <slot>{{ label }}</slot>
     </span>
     <span
-      v-if="link"
+      v-if="linkLabel"
       class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-label-md text-(--text-link)"
     >
-      {{ link }}
+      {{ linkLabel }}
       <i
         :class="
           isExternal
-            ? 'pi-arrow-up-right group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
-            : 'pi-chevron-right group-hover:translate-x-0.5'
+            ? 'pi-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
+            : 'pi-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
         "
         class="pi text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
         aria-hidden="true"

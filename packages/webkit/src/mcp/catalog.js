@@ -51,8 +51,22 @@ function levenshtein(a, b) {
   return prev[n]
 }
 
-function build(json) {
+function readPart(baseDir, file) {
+  if (!baseDir || !file) return null
+  try {
+    return JSON.parse(readFileSync(join(baseDir, file), 'utf-8'))
+  } catch (err) {
+    warnOnce(`failed to read ${file} next to the webkit catalog (${err.message}).`)
+    return null
+  }
+}
+
+function build(json, baseDir) {
   const imports = json.imports || {}
+  const patterns = json.patterns || {}
+  const patternCache = new Map()
+  const exampleCache = new Map()
+  const detailCache = new Map()
   const subpaths = Object.keys(imports)
   const set = new Set(subpaths)
   const tokenRules = (json.tokenRules || []).map((r) => ({
@@ -73,10 +87,42 @@ function build(json) {
     tokenRules,
     tokens: json.tokens || { cssVars: [], typography: [], groups: {} },
     vocabulary: json.vocabulary || null,
+    aliases: json.aliases || {},
     subpaths,
     imports,
+    patterns,
+    patternAliases: json.patternAliases || {},
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
+    getDetails(sub) {
+      const e = imports[sub]
+      if (!e) return null
+      if (!e.docsFile) return e
+      if (!detailCache.has(sub)) {
+        const { docsFile, ...rest } = e
+        detailCache.set(sub, { ...rest, ...(readPart(baseDir, docsFile) || {}) })
+      }
+      return detailCache.get(sub)
+    },
+    pattern(id) {
+      const meta = patterns[id]
+      if (!meta) return null
+      if (!meta.file) return meta
+      if (!patternCache.has(id)) {
+        const { file, ...rest } = meta
+        patternCache.set(id, { ...rest, ...(readPart(baseDir, file) || {}) })
+      }
+      return patternCache.get(id)
+    },
+    examples(sub) {
+      const e = imports[sub]
+      if (!e) return []
+      if (!e.examplesFile) return e.examples || []
+      if (!exampleCache.has(sub)) {
+        exampleCache.set(sub, readPart(baseDir, e.examplesFile)?.examples || [])
+      }
+      return exampleCache.get(sub)
+    },
     nearestPublishedPrefix(sub) {
       if (!sub.includes('/')) return null
       const parts = sub.split('/')
@@ -110,10 +156,16 @@ function empty() {
     deniedPrefixes: [],
     tokenRules: [],
     tokens: { cssVars: [], typography: [], groups: {} },
+    aliases: {},
     subpaths: [],
     imports: {},
+    patterns: {},
+    patternAliases: {},
     has: () => false,
     getEntry: () => null,
+    getDetails: () => null,
+    pattern: () => null,
+    examples: () => [],
     nearestPublishedPrefix: () => null,
     suggestSubpaths: () => []
   }
@@ -131,7 +183,7 @@ export function loadCatalog(cwd) {
     )
   } else {
     try {
-      value = build(JSON.parse(readFileSync(path, 'utf-8')))
+      value = build(JSON.parse(readFileSync(path, 'utf-8')), dirname(path))
     } catch (err) {
       value = empty()
       warnOnce(
@@ -141,6 +193,10 @@ export function loadCatalog(cwd) {
   }
   cache = { path, value }
   return value
+}
+
+export function loadCatalogFrom(path) {
+  return build(JSON.parse(readFileSync(path, 'utf-8')), dirname(path))
 }
 
 export function _resetCatalogCache() {

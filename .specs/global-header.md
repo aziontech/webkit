@@ -7,10 +7,11 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: fd6395bbdd0464bab36b19ec372bd6a109422bfe3ba35f7cae6201dcace5aef6
+checksum: cc06653928f9d95ad19fe08fed9e60e13712d32515aa2106c27d638a26b29501
 created: 2026-05-23
-last_updated: 2026-08-28
+last_updated: 2026-11-11
 ---
+
 # Global Header — Component Spec
 
 ## Purpose
@@ -25,6 +26,78 @@ A third placement, `app`, was removed in favour of that default. It insetted by 
 
 The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), one rung wider than the page frame (`--layout-measure-site`, 1388px) that the hero, the sections and the footer share. A bar carries the brand at one end of the window and the account actions at the other, held apart by a navigation region in the middle: it wants the room a reading frame refuses, and held to the page's measure that middle region ran out of room on a laptop long before the page did. The two share one inset up to 1280 and part company only above the caps, by a fixed 92px from 1668 — half the 232px between the measures, less the boundary the bar keeps. It is the one band deliberately outside the frame, and the separate token is what keeps that exception reviewable in both directions.
 
+## When to use
+
+- The top bar of a console-style app: menu trigger and brand at the start, an optional nav or breadcrumb region, and trailing actions (create, help, account) at the end.
+- A bar above a content zone that sits beside a navigation rail — `kind="content"` insets its regions by the page boundary so they line up with the page below.
+- The bar of a framed marketing page — `kind="site"` keeps the surface full bleed but caps and centres the regions.
+
+## When NOT to use
+
+- The marketing site's complete navigation bar with mega-menus and a mobile sheet → use `site-nav`, which composes this header.
+- The navigation column at the side of the app → use `sidebar`.
+- An action row above a list of records → use the `toolbar` slot of `table`.
+
+## Related
+
+- `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
+- `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Middle`.
+- `brand` — the Azion lockup to place inside `GlobalHeader.Brand`.
+- `platform-shell` — the console layout template that composes the header with the sidebar and the page.
+
+## Best practices
+
+- Keep the default `kind="content"` for app shells; use `kind="site"` only on framed marketing pages.
+- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.
+- Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
+- Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
+- Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
+
+## Usage
+
+```vue
+<script setup>
+  import Brand from '@aziontech/webkit/brand'
+  import Button from '@aziontech/webkit/button'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import IconButton from '@aziontech/webkit/icon-button'
+</script>
+
+<template>
+  <GlobalHeader aria-label="Console header">
+    <GlobalHeader.Container>
+      <GlobalHeader.Left>
+        <IconButton
+          icon="pi pi-bars"
+          aria-label="Open navigation"
+          kind="transparent"
+        />
+      </GlobalHeader.Left>
+      <GlobalHeader.Brand>
+        <a
+          href="/"
+          aria-label="Azion home"
+        >
+          <Brand
+            kind="default"
+            size="small"
+          />
+        </a>
+      </GlobalHeader.Brand>
+    </GlobalHeader.Container>
+    <GlobalHeader.Middle />
+    <GlobalHeader.Right>
+      <Button
+        label="Create"
+        kind="secondary"
+        size="medium"
+        icon="pi pi-plus-circle"
+      />
+    </GlobalHeader.Right>
+  </GlobalHeader>
+</template>
+```
+
 ## Sub-components
 
 - `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Left`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Left`/`Brand` directly in the root.
@@ -35,10 +108,10 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `'Global header'` | false | Accessible name for the header landmark. |
-| `kind` | `'content' \| 'site'` | `'content'` | false | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
+| Prop        | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string`              | `''`        | false    | Accessible name for the header landmark. Empty uses the locale catalog (`Global header`).                                                                                                                                                                                                                                                                                                                                                       |
+| `kind`      | `'content' \| 'site'` | `'content'` | false    | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
 
 ## Events
 
@@ -46,11 +119,11 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
-| `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
-| `default` | — | `global-header-brand` exposes `default` for logo markup. |
+| Slot      | Scope | Notes                                                                                        |
+| --------- | ----- | -------------------------------------------------------------------------------------------- |
+| `default` | —     | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
+| `default` | —     | Each sub-component (incl. `Container`) exposes `default` for region content.                 |
+| `default` | —     | `global-header-brand` exposes `default` for logo markup.                                     |
 
 ## States
 
@@ -64,25 +137,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shell height | `h-14` (56px) |
-| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)` |
-| shell padding-x (`kind="site"`) | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
-| shell region gap | `var(--spacing-md)` |
-| start cluster (container) gap | `var(--spacing-md)` |
-| start (left) region gap | `var(--spacing-xs)` |
-| end (right) region gap | `var(--spacing-sm)` |
-| brand logo height | `18px` |
-| surface | `var(--bg-surface)` |
-| border (bottom) | `var(--border-default)` |
-| ring (focus on children) | `var(--ring-color)` |
+| Region                             | Token (DESIGN.md)                                                                                                          |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| shell height                       | `h-14` (56px)                                                                                                              |
+| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)`                                                                                            |
+| shell padding-x (`kind="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
+| shell region gap                   | `var(--spacing-md)`                                                                                                        |
+| start cluster (container) gap      | `var(--spacing-md)`                                                                                                        |
+| start (left) region gap            | `var(--spacing-xs)`                                                                                                        |
+| end (right) region gap             | `var(--spacing-sm)`                                                                                                        |
+| brand logo height                  | `18px`                                                                                                                     |
+| surface                            | `var(--bg-surface)`                                                                                                        |
+| border (bottom)                    | `var(--border-default)`                                                                                                    |
+| ring (focus on children)           | `var(--ring-color)`                                                                                                        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -93,7 +166,7 @@ _none_
 - `motion-reduce:*` on any animated slotted controls (owned by children).
 - Touch target ≥40×40 px on slotted buttons (owned by children).
 
-## Stories (Storybook)
+## Examples
 
 - Default — the bar's anatomy: brand cluster, centre region, trailing actions.
 - ContentZone — the default placement shown against a mock page, for the one claim the anatomy cannot show: the first region and the page heading on one vertical.
@@ -112,9 +185,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

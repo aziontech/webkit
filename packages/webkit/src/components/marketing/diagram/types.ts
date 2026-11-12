@@ -1,4 +1,4 @@
-import type { TagSeverity } from '../../tag/tag.vue'
+import type { TagSeverity } from '../../content/tag/tag.vue'
 
 /** How a leaf of the diagram is drawn. */
 export type DiagramNodeKind = 'card' | 'pill' | 'tile' | 'app' | 'item'

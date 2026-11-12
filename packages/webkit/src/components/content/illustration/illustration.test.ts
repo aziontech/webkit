@@ -1,8 +1,10 @@
-import { composeStories } from '@storybook/vue3'
 import { render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/content/illustration/Illustration.stories'
+import Assets from '../../../../examples/illustration/assets.vue'
+import Default from '../../../../examples/illustration/default.vue'
+import Labeled from '../../../../examples/illustration/labeled.vue'
+import Placeholder from '../../../../examples/illustration/placeholder.vue'
 import {
   illustrationPalette,
   normalizeIllustrationColor
@@ -15,8 +17,6 @@ import {
 import { loadIllustrationScene } from '../../../assets/illustrations/scene'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Illustration from './illustration.vue'
-
-const { Default, Assets, Labeled, Placeholder } = composeStories(stories)
 
 const at = (view: ReturnType<typeof render>) => within(view.container)
 
@@ -66,7 +66,7 @@ const UNPAINTED = 'mask, clipPath, filter'
 
 describe('Illustration', () => {
   it('renders the story with the derived testid', async () => {
-    expect(await root(render(Default()))).toBeTruthy()
+    expect(await root(render(Default))).toBeTruthy()
   })
 
   it('lets a consumer-supplied data-testid win over the derived fallback', async () => {
@@ -202,7 +202,7 @@ describe('Illustration', () => {
   })
 
   it('renders the placeholder story', async () => {
-    await drawsScene(render(Placeholder()), await placeholderScene())
+    await drawsScene(render(Placeholder), await placeholderScene())
   })
 
   it('warns and falls back to the placeholder for a name that is not registered', async () => {
@@ -254,37 +254,37 @@ describe('Illustration', () => {
   })
 
   it('carries the ariaLabel as the accessible name of an image when one is given', async () => {
-    const el = await root(render(Labeled()))
+    const el = await root(render(Labeled))
     expect(el.getAttribute('role')).toBe('img')
     expect(el.getAttribute('aria-label')).toBe('An MCP server deployed behind the edge firewall')
     expect(el.getAttribute('aria-hidden')).toBeNull()
   })
 
   it('has no a11y violations when decorative', async () => {
-    const view = render(Default())
+    const view = render(Default)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations when labeled', async () => {
-    const view = render(Labeled())
+    const view = render(Labeled)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations showing the placeholder', async () => {
-    const view = render(Placeholder())
+    const view = render(Placeholder)
     await root(view)
     await expectNoA11yViolations(view.container)
   })
 
   it('has no a11y violations rendering every registered scene', async () => {
-    const view = render(Assets())
+    const view = render(Assets)
     await waitFor(() =>
       expect(at(view).getAllByTestId('content-illustration')).toHaveLength(
         illustrationAssetNames.length
       )
     )
     await expectNoA11yViolations(view.container)
-  })
+  }, 60_000)
 })

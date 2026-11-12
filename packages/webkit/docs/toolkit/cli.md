@@ -1,4 +1,4 @@
-# webkit CLI — `init` + `doctor` + `report` + `canary` + `sync`
+# webkit CLI — `init` + `add` / `diff` / `search` / `view` / `check` + `doctor` + `report` + `canary` + `sync`
 
 One command to adopt the [`@aziontech/webkit`](https://github.com/aziontech/webkit) design system in an existing project — correctly and performantly by construction. The CLI ships **inside** `@aziontech/webkit` (the `webkit` bin) — there is no separate CLI package.
 
@@ -39,6 +39,63 @@ Feature-scoped setup is deliberately **not** part of `init`. A component that ne
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
+## `add`, `diff`, `search`, `view` — start a screen from a block
+
+```bash
+npx @aziontech/webkit search delete confirmation          # blocks, components, examples
+npx @aziontech/webkit view platform/delete/delete-with-confirmation   # guidelines, variants, SFC
+npx @aziontech/webkit add platform/delete/delete-with-confirmation [--variant LabelledField]
+npx @aziontech/webkit diff delete-with-confirmation       # your copy vs the canonical block
+```
+
+- **`search <query>`** runs the MCP queries (`search_patterns`, `search_components`, plus the
+  component examples) in the terminal. **`view <id>`** prints a component's API (props, events,
+  slots, parts, the first example or `--example <name>`) or a block's summary, variants, imports,
+  guidelines and SFC (`--variant <name>`). Both take `--json`.
+- **`add <block-id>`** takes a full id, a short name (`create-hub`) or a pre-v6 id (it resolves and
+  says so). It copies the block's primary SFC from the installed webkit's `blocks/` to
+  `<views>/<Name>.vue`, and with `--variant <state>` that state as `<Name><State>.vue`. `<views>` is
+  the directory the router (`src/router/index.*`, `src/router.*`) imports its views from, else
+  `src/views`, else `src/pages`; `--dest <dir|file.vue>` overrides it. Every
+  `@aziontech/webkit/*` import of the copy is checked against the installed package's `exports`
+  (an import it does not export is an error, and nothing is written), and every other package it
+  imports is checked as installed. `--with-guidelines` also writes the block guidelines, without
+  their heading, as `<Name>.guidelines.md`. It records the copy in `webkit.blocks.json` (block id,
+  webkit version, source file, variant, `sha256` checksum) and prints the route entry to add, with
+  the `@/` alias when the project has one. It never overwrites a file without `--force`;
+  `--dry-run` writes nothing. Commit `webkit.blocks.json`.
+- **`diff <block-id|path>`** finds the copy through `webkit.blocks.json` and prints a unified diff
+  from the canonical block of the installed version to your file (coloured on a TTY, `NO_COLOR`
+  respected; `--json` for tools). It also says when the canonical block changed since the copy was
+  made. Exit 0 when identical, 1 when different, 2 when the target is not recorded.
+
+The blocks, `catalog.json` and `catalog/` ship in the npm package, so these commands work offline
+from the installed version. Without webkit installed (a bare `npx`), they read the package `npx`
+fetched and say so.
+
+## `check` — one CI gate
+
+```bash
+npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint]
+```
+
+`check` runs, in one pass:
+
+- **doctor** — every check below; `FAIL` is an error, `WARN` a warning;
+- **v5 names** — every source file through the `migrate v6` map: a renamed import, component or
+  prop is an error naming `migrate v6`, a removed component one to replace by hand;
+- **imports** — an `@aziontech/webkit/*` subpath the installed version does not export, with its
+  line;
+- **lint** — the project's own ESLint on `src/` (or `.`), keeping the `webkit/*` rule hits as
+  errors with file and line. When ESLint is not installed or not configured (or `--no-lint`), a
+  built-in scan of `.vue` files covers raw hex and palette colours and physical direction
+  utilities (the `no-physical-direction` helper), and a warning says the full rule set did not run;
+- **blocks** — every copy in `webkit.blocks.json` whose canonical block changed since it was
+  copied, whose file is gone, or whose source the installed version no longer ships (warnings).
+
+It exits 1 on any error, or when there are more warnings than `--max-warnings`; `--json` prints
+`{ errors, warnings, findings: [{ source, severity, file, line, rule, message }] }`.
+
 ## `report` and `canary` — measure and verify webkit adoption
 
 ```bash
@@ -56,6 +113,10 @@ npx @aziontech/webkit doctor
 
 The toolkit is fail-open by design (a missing catalog disables the lint rules rather than crashing), so a half-broken install is otherwise silent. `doctor` reads the project and reports each check as `OK` / `WARN` / `FAIL`:
 
+- **vue / tailwind version** — vue ^3.5 and Tailwind v4 installed (`WARN` when not installed, `FAIL` on another major);
+- **theme import** — `src/webkit.css` imports `@aziontech/theme` (`FAIL` = no tokens);
+- **lint plugin** — the ESLint config loads `@aziontech/webkit/eslint-plugin`;
+- **webkit provider** — a `WebkitProvider` is mounted somewhere in `src/` (`WARN`: locale and direction fall back to English, left to right);
 - **webkit catalog** resolvable (`FAIL` = lint rules are disabled — install webkit or set `WEBKIT_CATALOG_PATH`);
 - **eslint / stylelint config** present;
 - **webkit.css** registers webkit with Tailwind (`@import '@aziontech/webkit/styles'`, or a legacy inline `@source`) — `FAIL` = unstyled components;

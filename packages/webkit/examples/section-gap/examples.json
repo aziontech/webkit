@@ -1,0 +1,21 @@
+{
+  "component": "section-gap",
+  "title": "Components/Marketing/Primitives/SectionGap",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One gap between two stub sections. The gap renders `flush`, so the rule it shares with the section above is drawn once — every junction on the page stays a single hairline. Switch `size` to see the three steps.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Hatch",
+      "summary": "The diagonal hatch drawn in the gap itself. This is the texture’s home on a framed page: the gap holds no copy, so the hatch gives the break its own identity without sitting behind a headline.",
+      "file": "hatch.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` value in one stack, each gap labelled by the band above it: `small` keeps two related bands close, `medium` is the ordinary break between sections, `large` opens a new part of the page. The 1 : 2 : 3 ratio is what keeps the three weights unmistakable at every viewport width.",
+      "file": "sizes.vue"
+    }
+  ]
+}

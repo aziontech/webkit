@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import { useMenuContext } from '../composables/use-menu-context'
 
@@ -24,6 +26,7 @@
 
   const ctx = useMenuContext()
   const attrs = useAttrs()
+  const { t } = useTranslate({ menu: en.menu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-back'
@@ -36,7 +39,9 @@
     return props.label || (levels.length > 1 ? levels[levels.length - 2].label : '')
   })
 
-  const text = computed(() => (destination.value ? `Back to ${destination.value}` : 'Back'))
+  const text = computed(() =>
+    destination.value ? t('menu.backTo', { label: destination.value }) : t('menu.back')
+  )
 
   const ROOT_CLASS =
     'group relative flex h-8 w-fit max-w-full shrink-0 items-center gap-(--spacing-xxs) ' +
@@ -70,7 +75,7 @@
       @click="ctx.pop()"
     >
       <i
-        class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted)"
+        class="pi pi-chevron-left size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) rtl:-scale-x-100"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       />

@@ -2,11 +2,11 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
-  import Tag from '../../../tag/tag.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Badge from '../../badge/badge.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
@@ -147,7 +147,7 @@
                 class="flex w-24"
                 :data-cursor="name === 'qa-qc-fw-waf' ? 'raise' : undefined"
               >
-                <InputNumber
+                <NumberInput
                   :model-value="index + 1"
                   :min="1"
                   :max="SAVED.length"
@@ -184,7 +184,7 @@
             label="Review Changes"
             size="small"
           />
-          <span class="absolute -top-2 -right-2 flex">
+          <span class="absolute -top-2 -end-2 flex">
             <Badge
               :label="String(alteredCount)"
               severity="secondary"

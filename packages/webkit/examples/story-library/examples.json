@@ -1,0 +1,36 @@
+{
+  "component": "story-library",
+  "title": "Components/Marketing/Sections/StoryLibrary",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The library at rest: type in the search field or pick a facet to narrow the grid; when nothing matches, the empty state clears every filter.",
+      "file": "default.vue"
+    },
+    {
+      "name": "NoResults",
+      "summary": "No story matches: the grid gives way to the empty state and its clear-filters action.",
+      "file": "no-results.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The library at rest: no search and no facet applied, six stories in a three-column grid and the load-more button.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    },
+    {
+      "name": "NoResults",
+      "summary": "Nothing matches: the grid gives way to the empty state, whose action clears every filter.",
+      "file": "site-no-results.vue",
+      "json": "site-no-results.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Listings/StoryLibrary",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "NoResults", "StoryLibraryJson"]
+}

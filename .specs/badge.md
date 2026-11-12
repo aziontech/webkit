@@ -2,15 +2,16 @@
 name: badge
 category: content
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 5b8184d8032f2b8b7d0ddb59fb16f70aac6340c048c5e0ec3cea229e73fa4304
+checksum: 30b524661d9a77a40632b1b11e1f1731a4309f58188c71d226fcedb97dccd4fa
 created: 2026-06-23
-last_updated: 2026-06-25
+last_updated: 2026-11-11
 ---
+
 # Badge — Component Spec
 
 ## Purpose
@@ -41,21 +42,25 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 ```vue
 <script setup>
-import Badge from '@aziontech/webkit/badge'
+  import Badge from '@aziontech/webkit/badge'
 </script>
 
 <template>
-  <Badge label="99" severity="primary" size="medium" />
+  <Badge
+    label="99"
+    severity="primary"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
+| Prop       | Type                                                                          | Default     | Required | JSDoc                                                                                                                        |
+| ---------- | ----------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                                      | `''`        | false    | Fallback text when the default slot is empty.                                                                                |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false    | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
+| `size`     | `'small' \| 'medium' \| 'large'`                                              | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                         |
 
 ## Events
 
@@ -63,9 +68,9 @@ import Badge from '@aziontech/webkit/badge'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Main content; falls back to `label` when empty. |
+| Slot      | Scope | Notes                                           |
+| --------- | ----- | ----------------------------------------------- |
+| `default` | —     | Main content; falls back to `label` when empty. |
 
 ## States
 
@@ -80,19 +85,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                     | Token (DESIGN.md)                                                   |
+| -------------------------- | ------------------------------------------------------------------- |
 | typography (medium, large) | `.text-label-md` + `leading-none` (Figma Typography/Label/md, 14px) |
-| typography (small) | `.text-label-sm` + `leading-none` (Figma Typography/Label/sm, 12px) |
-| spacing (medium, large) | `var(--spacing-xs)` horizontal padding |
-| spacing (small) | `var(--spacing-xxs)` horizontal padding |
-| shape (all severities) | `var(--shape-elements)` |
-| surface (primary) | `var(--primary)` / `var(--primary-contrast)` |
-| surface (secondary) | `var(--secondary)` / `var(--secondary-contrast)` |
-| surface (success) | `var(--success)` / `var(--success-contrast)` |
-| surface (warning) | `var(--warning)` / `var(--warning-contrast)` |
-| surface (danger) | `var(--danger)` / `var(--danger-contrast)` |
-| surface (default) | `var(--bg-surface)` / `var(--text-default)` |
+| typography (small)         | `.text-label-sm` + `leading-none` (Figma Typography/Label/sm, 12px) |
+| spacing (medium, large)    | `var(--spacing-xs)` horizontal padding                              |
+| spacing (small)            | `var(--spacing-xxs)` horizontal padding                             |
+| shape (all severities)     | `var(--shape-elements)`                                             |
+| surface (primary)          | `var(--primary)` / `var(--primary-contrast)`                        |
+| surface (secondary)        | `var(--secondary)` / `var(--secondary-contrast)`                    |
+| surface (success)          | `var(--success)` / `var(--success-contrast)`                        |
+| surface (warning)          | `var(--warning)` / `var(--warning-contrast)`                        |
+| surface (danger)           | `var(--danger)` / `var(--danger-contrast)`                          |
+| surface (default)          | `var(--bg-surface)` / `var(--text-default)`                         |
 
 ## Theme gaps
 
@@ -107,7 +112,14 @@ _none_
 - `motion-reduce:*`: not applicable — Badge is static (no motion).
 - Touch target: not applicable — Badge is non-interactive.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: no horizontal arrow-key logic.
+- Isolation: the label renders `dir="auto"`, so a count or value in another script keeps its own direction.
+
+## Examples
 
 - Default
 - Types — composite story rendering every `severity` label side-by-side.
@@ -128,10 +140,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

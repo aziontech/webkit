@@ -65,7 +65,9 @@ function normalizeDefault(raw) {
 /** inputs category: `input-<name>`, except when name already starts with `input-`. */
 export function testIdFallback(category, name) {
   if (category === 'inputs') {
-    return name.startsWith('input-') ? name : `input-${name}`
+    return name === 'input' || name.startsWith('input-') || name.endsWith('-input')
+      ? name
+      : `input-${name}`
   }
   return `${category}-${name}`
 }
@@ -98,7 +100,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
 
   // Root vs sub-component: the shared componentRootName predicate (spec.mjs) — the
   // same definition check-tests.mjs and enforce-test-exists.mjs use, so `<name>-root.vue`
-  // compositions (tab-view, navigation-menu) count as roots on every surface.
+  // compositions (tabs, navigation-menu) count as roots on every surface.
   const isRoot = componentRootName(abs.split('/src/components/').pop()) === info.name
 
   if (isRoot) {

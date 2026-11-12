@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  import SegmentedButton from '../../../actions/segmented-button/segmented-button.vue'
+  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import type { LogViewLine } from '../../../code/log-view/injection-key'
   import LogView from '../../../code/log-view/log-view.vue'
   import LogViewContent from '../../../code/log-view/log-view-content.vue'
-  import ProgressBar from '../../../feedback/progress-bar/progress-bar.vue'
-  import Tag from '../../../tag/tag.vue'
+  import Progress from '../../../feedback/progress/progress.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import Accordion from '../../accordion/index'
+  import Tag from '../../tag/tag.vue'
   import {
     DEFAULT_DEPLOYMENT_STEPS,
     type DeploymentLogTuple,
@@ -309,7 +309,7 @@
         {{ label }}
       </p>
 
-      <div class="ml-auto flex min-w-0 items-center gap-(--spacing-sm)">
+      <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <template v-if="!settled">
           <span class="shrink-0 text-label-sm text-(--text-default)">{{ progressLabel }}</span>
           <span
@@ -335,7 +335,7 @@
 
         <template v-if="controls && settled">
           <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
-          <SegmentedButton
+          <ToggleGroup
             v-model="view"
             :options="views"
             size="medium"
@@ -347,7 +347,7 @@
 
     <Accordion
       v-if="view === 'phased'"
-      v-model:value="openStep"
+      v-model="openStep"
       type="single"
       collapsible
     >
@@ -387,7 +387,7 @@
 
             <span
               :data-state="stepStatus(i)"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-left data-[state=failed]:flex-wrap"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
             >
               <span
                 :data-state="stepStatus(i)"
@@ -409,7 +409,7 @@
               </span>
             </span>
 
-            <span class="ml-auto flex shrink-0 items-center">
+            <span class="ms-auto flex shrink-0 items-center">
               <span
                 v-if="durationLabel(i)"
                 class="text-label-code-md text-(--text-muted)"
@@ -422,8 +422,8 @@
         <Accordion.Content>
           <LogView
             :lines="linesByStep[i]"
-            :border="false"
-            :show-copy="copyable && settled"
+            :bordered="false"
+            :copyable="copyable && settled"
             :loading="stepStatus(i) === 'pending'"
             loading-label="Waiting to start…"
           >
@@ -444,8 +444,8 @@
     <LogView
       v-else
       :lines="allLines"
-      :border="false"
-      :show-copy="settled"
+      :bordered="false"
+      :copyable="settled"
       :loading="!settled && !allLines.length"
       loading-label="Waiting to start…"
     >
@@ -454,7 +454,7 @@
       </LogViewContent>
     </LogView>
 
-    <ProgressBar
+    <Progress
       v-if="progressBar && !settled"
       :value="progress"
       :max="100"

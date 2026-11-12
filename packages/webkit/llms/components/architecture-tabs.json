@@ -1,0 +1,89 @@
+{
+ "name": "architecture-tabs",
+ "binding": "ArchitectureTabs",
+ "import": "@aziontech/webkit/architecture-tabs",
+ "treeShakeableImport": "@aziontech/webkit/architecture-tabs",
+ "category": "sections",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+ "setup": null,
+ "useWhen": [
+  "To plot several architectures of one product, or one request across the platform, one diagram at a time."
+ ],
+ "avoidWhen": [
+  "For features shown by an illustration each → use `feature-tabs`.",
+  "For a scroll-driven walkthrough → use `feature-scroll`."
+ ],
+ "related": [
+  "media-tabs` — the timed tab row this section renders through.",
+  "diagram` — the named architecture diagram each tab draws."
+ ],
+ "bestPractices": [
+  "Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.",
+  "Give every tab a `diagram` from the diagram library and a stable `value`."
+ ],
+ "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
+   "name": "eyebrow",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the section title."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence beside the headline."
+  },
+  {
+   "name": "position",
+   "type": "ArchitectureTabsPosition",
+   "default": "'top'",
+   "required": "false",
+   "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs."
+  },
+  {
+   "name": "tabs",
+   "type": "ArchitectureTabsTab[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active."
+  },
+  {
+   "name": "primaryAction",
+   "type": "ArchitectureTabsAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'\n\n  const tabs = [\n    {\n      value: 'request-path',\n      title: 'Request path',\n      description:\n        'A call crosses Firewall, the application and the function before it reaches a model.',\n      diagram: 'ai-gateway'\n    },\n    {\n      value: 'failover',\n      title: 'Provider failover',\n      description: 'When a provider degrades, the gateway moves to the next model on the alias.',\n      diagram: 'ai-gateway-provider-failover'\n    },\n    {\n      value: 'costs',\n      title: 'Cost routing',\n      description: 'Premium tokens go only where they pay off; everyone else gets a lighter model.',\n      diagram: 'ai-gateway-model-routing'\n    },\n    {\n      value: 'latency',\n      title: 'Latency routing',\n      description: 'Real-time tasks run on AI Inference, close to the user, in under 30 ms.',\n      diagram: 'ai-gateway-latency-routing'\n    },\n    {\n      value: 'cache',\n      title: 'Response cache',\n      description:\n        'A repeated prompt is answered from cache, with no model call and no tokens spent.',\n      diagram: 'ai-gateway-response-cache'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Docs',\n    href: '/product-preview',\n    trailing: true\n  }\n</script>\n\n<template>\n  <ArchitectureTabs\n    eyebrow=\"Routing\"\n    title=\"Every AI request through one control point\"\n    description=\"Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it.\"\n    position=\"bottom\"\n    :tabs=\"tabs\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/architecture-tabs.md"
+}

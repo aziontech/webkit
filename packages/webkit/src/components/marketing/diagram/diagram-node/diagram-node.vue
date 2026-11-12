@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import Tag from '../../../content/tag/tag.vue'
   import FrameBox from '../../../layout/frame-box/frame-box.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import Tag from '../../../tag/tag.vue'
   import type { DiagramNode } from '../types'
 
   defineOptions({ name: 'DiagramNode', inheritAttrs: false })
@@ -155,7 +155,7 @@
         :label="node.status.label"
         :severity="node.status.severity"
         size="small"
-        class="ml-auto shrink-0"
+        class="ms-auto shrink-0"
       />
     </span>
     <span

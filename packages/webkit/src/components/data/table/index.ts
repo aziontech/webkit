@@ -3,6 +3,12 @@ import TableAppliedFilters from './table-applied-filters/table-applied-filters.v
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
 import TableCell from './table-cell/table-cell.vue'
+import TableCellActions from './table-cell-actions/table-cell-actions.vue'
+import TableCellId from './table-cell-id/table-cell-id.vue'
+import TableCellLink from './table-cell-link/table-cell-link.vue'
+import TableCellStatus from './table-cell-status/table-cell-status.vue'
+import TableCellTags from './table-cell-tags/table-cell-tags.vue'
+import TableCellTime from './table-cell-time/table-cell-time.vue'
 import TableColumnSelector from './table-column-selector/table-column-selector.vue'
 import TableExport from './table-export/table-export.vue'
 import TableFilter from './table-filter/table-filter.vue'
@@ -23,6 +29,12 @@ type CompoundTable = typeof Table & {
   Row: typeof TableRow
   HeadCell: typeof TableHeadCell
   Cell: typeof TableCell
+  CellStatus: typeof TableCellStatus
+  CellLink: typeof TableCellLink
+  CellId: typeof TableCellId
+  CellTime: typeof TableCellTime
+  CellTags: typeof TableCellTags
+  CellActions: typeof TableCellActions
   SortButton: typeof TableSortButton
   Toolbar: typeof TableToolbar
   Search: typeof TableSearch
@@ -41,6 +53,12 @@ const TableRoot = Object.assign(Table, {
   Row: TableRow,
   HeadCell: TableHeadCell,
   Cell: TableCell,
+  CellStatus: TableCellStatus,
+  CellLink: TableCellLink,
+  CellId: TableCellId,
+  CellTime: TableCellTime,
+  CellTags: TableCellTags,
+  CellActions: TableCellActions,
   SortButton: TableSortButton,
   Toolbar: TableToolbar,
   Search: TableSearch,

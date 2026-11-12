@@ -13,12 +13,7 @@ import {
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
 const BASELINE = join(SCRIPT_DIR, 'doc-standards-baseline.json')
-const DIRS = [
-  '.claude/skills',
-  '.claude/agents',
-  'packages/webkit/cli-templates/claude/skills',
-  'packages/webkit/cli-templates/claude/agents'
-]
+const DIRS = ['.claude/skills', '.claude/agents', 'skills', 'adapters/claude/agents']
 
 function walk(dir) {
   const out = []

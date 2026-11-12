@@ -1,0 +1,25 @@
+{
+ "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
+ "useWhen": [
+  "Confirming the result of an action that finished out of view or in the background: saved, deployed, copied.",
+  "Following an async operation from start to finish with `toast.promise`, or `toast.loading` plus a dismiss by id.",
+  "A short notice that is not tied to one place on the page and can disappear on its own."
+ ],
+ "avoidWhen": [
+  "The message must stay visible next to the content it concerns → use `message`.",
+  "The user must decide something before continuing → use `dialog`.",
+  "Validation feedback for a single field → use `helper-text`."
+ ],
+ "related": [
+  "message` — inline severity banner placed in the page flow; it stays until it is closed.",
+  "dialog` — blocking modal for decisions and confirmations.",
+  "spinner` — rendered by the `loading` toast type."
+ ],
+ "bestPractices": [
+  "Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.",
+  "Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon; every type is announced once and politely by the Toaster's single live region (an error interrupting what the user is doing is worse than hearing it a moment later, and switching the region between polite and assertive made screen readers drop or repeat the stack).",
+  "Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).",
+  "duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.",
+  "Don't make a toast the only path to an important action. It auto-dismisses and never takes focus."
+ ]
+}

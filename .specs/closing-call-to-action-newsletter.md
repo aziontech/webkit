@@ -5,14 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: a8a81b4f9472e45f745839e37af45f9d15b8c7f4cec3a2ada3730b683bd49515
+last_updated: 2026-11-11
+checksum: 376e1563494f014945beffd14b5483a49effa1ab40f09d277c9161f0caa3bdee
 ---
+
 # ClosingCallToActionNewsletter — Component Spec
 
 ## Purpose
 
-The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field-text`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.
+The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.
 
 ## When to use
 
@@ -26,7 +27,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 ## Related
 
 - `closing-call-to-action` — the closing band whose ask is a link action.
-- `message` — renders the success and failure messages.
+- `alert` — renders the success and failure messages.
 
 ## Best practices
 
@@ -38,25 +39,25 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ```vue
 <script setup>
-import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
-import { ref } from 'vue'
+  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+  import { ref } from 'vue'
 
-const loading = ref(false)
-const submitted = ref(false)
-const error = ref(false)
+  const loading = ref(false)
+  const submitted = ref(false)
+  const error = ref(false)
 
-const onSubmit = async (event, values) => {
-  loading.value = true
-  error.value = false
-  try {
-    await fetch('/newsletter', { method: 'POST', body: JSON.stringify(values) })
-    submitted.value = true
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
+  const onSubmit = async (event, values) => {
+    loading.value = true
+    error.value = false
+    try {
+      await fetch('/newsletter', { method: 'POST', body: JSON.stringify(values) })
+      submitted.value = true
+    } catch {
+      error.value = true
+    } finally {
+      loading.value = false
+    }
   }
-}
 </script>
 
 <template>
@@ -83,21 +84,21 @@ const onSubmit = async (event, values) => {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `form` | `ClosingCallToActionNewsletterForm` | `—` | true | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. |
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline on the lead side, closed by the blinking cursor. |
-| `title` | `string` | `''` | false | The ask, rendered as the label of the email field; it also names the band. |
-| `description` | `string` | `''` | false | The pitch, rendered as the band's large `h2` on the lead side. |
-| `loading` | `boolean` | `false` | false | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored. |
-| `submitted` | `boolean` | `false` | false | The site sent the address: the form gives way to `form.successMessage`. |
-| `error` | `boolean` | `false` | false | The site could not send the address: `form.errorMessage` shows under the form. |
+| Prop          | Type                                | Default | Required | JSDoc                                                                                                                      |
+| ------------- | ----------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `form`        | `ClosingCallToActionNewsletterForm` | `—`     | true     | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. |
+| `anchor`      | `string`                            | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                             |
+| `eyebrow`     | `string`                            | `''`    | false    | Overline on the lead side, closed by the blinking cursor.                                                                  |
+| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band.                                                 |
+| `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                             |
+| `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.        |
+| `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                    |
+| `error`       | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                             |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event    | Payload                                                | Notes                                                                                                                     |
+| -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | `submit` | `(event: SubmitEvent, values: Record<string, string>)` | Fired on a valid submit, not while `loading`; `values` is `{ email }` with the trimmed address. The block never sends it. |
 
 ## Slots
@@ -107,10 +108,10 @@ const onSubmit = async (event, values) => {
 ## States
 
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
-- `invalid`: an empty field shows `form.requiredMessage`, a malformed address `form.invalidMessage`, under the field; typing clears it; nothing is emitted
+- `invalid`: an empty field takes the amber `required` state with `form.requiredMessage`, a malformed address the red `invalid` state with `form.invalidMessage`, under the field (never both at once); focus returns to the field; typing clears it; nothing is emitted
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
-- `submitted` (prop): the form is replaced by a success `Message` with `form.successMessage`
-- `error` (prop): a danger `Message` with `form.errorMessage` shows under the form, which stays editable
+- `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
+- `error` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 
 ## Motion & Animations
 
@@ -118,30 +119,30 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| form surface | `var(--bg-surface)` |
-| headline | `.text-heading-lg`, `var(--text-default)` |
-| ask | `.text-heading-sm`, `var(--text-default)` |
-| texture strip | `var(--bg-canvas)`, `var(--border-default)` |
-| rhythm | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
+| Region        | Token (DESIGN.md)                                                                                        |
+| ------------- | -------------------------------------------------------------------------------------------------------- |
+| form surface  | `var(--bg-surface)`                                                                                      |
+| headline      | `.text-heading-lg`, `var(--text-default)`                                                                |
+| ask           | `.text-heading-sm`, `var(--text-default)`                                                                |
+| texture strip | `var(--bg-canvas)`, `var(--border-default)`                                                              |
+| rhythm        | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by `field-text` and `button`.
+- Visible focus: owned by `input` and `button`.
 - Keyboard map: `Tab` reaches the field then the button; `Enter` in the field or on the button submits.
-- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`; the validation message is the field's helper text and `invalid` sets `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`; the field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; the validation message is the field's helper text, an empty submit sets `aria-required` and a malformed address `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline and ask `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the button carry their own fallback.
 - Touch target ≥40×40 px — the field and the button are large.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Loading
@@ -161,10 +162,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

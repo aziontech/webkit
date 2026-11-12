@@ -1,0 +1,108 @@
+{
+ "name": "wizard",
+ "binding": "Wizard",
+ "import": "@aziontech/webkit/wizard",
+ "treeShakeableImport": "@aziontech/webkit/wizard-root",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/wizard-step"
+ ],
+ "purpose": "A multi-step create flow in one surface. It puts the step rail on the start side, the current step's header and fields in the content column, and a fixed footer with Cancel, Previous and Next. On the last step, Next becomes the submit action. It owns the order, which steps can be reached and where focus goes. The consumer owns the fields, the validation and the request. It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout, actions and gating to the caller. `tabs` switches between peer views that have no order and no completion.",
+ "setup": null,
+ "useWhen": [
+  "Creating a resource takes several ordered decisions, and showing them all at once would overwhelm the",
+  "The reader has to finish a step before moving on. Validation runs on Next and can stop the move.",
+  "The flow needs a review step before the final submit, and earlier steps must stay reachable to fix"
+ ],
+ "avoidWhen": [
+  "A short form that fits one screen. A wizard adds clicks without adding clarity → use a plain form",
+  "A confirmation or a single decision → use `dialog`.",
+  "Peer views with no order and no completion → use `tabs`.",
+  "A custom multi-step layout where the caller needs its own actions or a different arrangement → compose",
+  "Numbered instructions inside documentation → use `doc-steps` + `doc-step`."
+ ],
+ "related": [
+  "stepper` — the rail this component composes. Reach for it alone when the footer and gating must be",
+  "tabs` — unordered peer views with no completion state.",
+  "dialog` — a single, short decision on an overlay.",
+  "drawer` — a single-step create or edit form beside the page.",
+  "message` — the inline error to show inside a step when Next is blocked."
+ ],
+ "bestPractices": [
+  "Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a",
+  "Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For",
+  "Show why Next was blocked inside the step (an inline `message` or the field's `invalid` +",
+  "Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same",
+  "Make the last step a review of the answers when the resource is costly to change after creation, and",
+  "Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no",
+  "Mark a step `optional` only when Next works with every field in it empty.",
+  "Always pass `ariaLabel` naming the task (`Create edge application`). Without it, the root is an",
+  "The wizard sets no page width. Place it inside the page's create container"
+ ],
+ "props": [
+  {
+   "name": "submitLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`)."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+  }
+ ],
+ "events": [
+  {
+   "name": "next",
+   "payload": "(event: MouseEvent, step: number)",
+   "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back."
+  },
+  {
+   "name": "submit",
+   "payload": "(event: MouseEvent)",
+   "notes": "Fired when the primary action is activated on the last step. The wizard changes no state. The consumer starts the request and binds `loading`. Not fired while `loading`."
+  },
+  {
+   "name": "cancel",
+   "payload": "(event: MouseEvent)",
+   "notes": "Fired when Cancel is activated. The wizard changes no state, and the consumer decides where to go. Not fired while `loading`."
+  }
+ ],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `Wizard.Step` children, in the order they are numbered and navigated."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import Input from '@aziontech/webkit/input'\n  import Select from '@aziontech/webkit/select'\n  import Switch from '@aziontech/webkit/switch'\n  import Wizard from '@aziontech/webkit/wizard'\n  import { ref } from 'vue'\n\n  const step = ref(0)\n  const name = ref('storefront-api')\n  const region = ref('south-america')\n  const environment = ref('production')\n  const logging = ref(true)\n  const path = ref('/api/*')\n  const behavior = ref('deliver')\n\n  const regions = [\n    { value: 'north-america', label: 'North America' },\n    { value: 'south-america', label: 'South America' },\n    { value: 'europe', label: 'Europe' }\n  ]\n  const environments = [\n    { value: 'production', label: 'Production' },\n    { value: 'staging', label: 'Staging' },\n    { value: 'development', label: 'Development' }\n  ]\n  const behaviors = [\n    { value: 'deliver', label: 'Deliver' },\n    { value: 'redirect', label: 'Redirect' },\n    { value: 'deny', label: 'Deny' }\n  ]\n  const labelOf = (options, value) =>\n    options.find((option) => option.value === value)?.label ?? 'Not set'\n</script>\n\n<template>\n  <Wizard\n    v-model:active-step=\"step\"\n    aria-label=\"Create resource\"\n    submit-label=\"Create\"\n  >\n    <Wizard.Step\n      title=\"Configure\"\n      description=\"Name the resource and choose where it runs.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field required>\n          <Field.Label> Name </Field.Label>\n          <Input v-model=\"name\" />\n        </Field>\n        <Field>\n          <Field.Label> Region </Field.Label>\n          <Select v-model=\"region\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in regions\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Settings\"\n      description=\"Fine-tune the defaults.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field>\n          <Field.Label> Environment </Field.Label>\n          <Select v-model=\"environment\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in environments\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n        <Field orientation=\"horizontal\">\n          <Switch v-model=\"logging\" />\n          <Field.Content>\n            <Field.Label> Enable logging </Field.Label>\n            <Field.Description>\n              Keep a record of every request this resource handles.\n            </Field.Description>\n          </Field.Content>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Rules\"\n      description=\"Decide what happens to matching requests.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field>\n          <Field.Label> Path pattern </Field.Label>\n          <Input v-model=\"path\" />\n          <Field.Description>\n            Requests whose path matches this pattern follow the behavior below.\n          </Field.Description>\n        </Field>\n        <Field>\n          <Field.Label> Behavior </Field.Label>\n          <Select v-model=\"behavior\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in behaviors\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Review\"\n      description=\"Check every answer before creating.\"\n    >\n      <dl class=\"grid grid-cols-2 gap-(--spacing-xs) text-body-sm\">\n        <dt class=\"text-(--text-muted)\">Name</dt>\n        <dd class=\"text-(--text-default)\">{{ name }}</dd>\n        <dt class=\"text-(--text-muted)\">Region</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(regions, region) }}</dd>\n        <dt class=\"text-(--text-muted)\">Environment</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(environments, environment) }}</dd>\n        <dt class=\"text-(--text-muted)\">Logging</dt>\n        <dd class=\"text-(--text-default)\">{{ logging ? 'On' : 'Off' }}</dd>\n        <dt class=\"text-(--text-muted)\">Path pattern</dt>\n        <dd class=\"text-(--text-default)\">{{ path }}</dd>\n        <dt class=\"text-(--text-muted)\">Behavior</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(behaviors, behavior) }}</dd>\n      </dl>\n    </Wizard.Step>\n  </Wizard>\n</template>"
+  },
+  {
+   "name": "Optional",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import Input from '@aziontech/webkit/input'\n  import Select from '@aziontech/webkit/select'\n  import Switch from '@aziontech/webkit/switch'\n  import Wizard from '@aziontech/webkit/wizard'\n  import { ref } from 'vue'\n\n  const step = ref(0)\n  const name = ref('storefront-api')\n  const region = ref('south-america')\n  const logging = ref(true)\n\n  const regions = [\n    { value: 'north-america', label: 'North America' },\n    { value: 'south-america', label: 'South America' },\n    { value: 'europe', label: 'Europe' }\n  ]\n  const labelOf = (options, value) =>\n    options.find((option) => option.value === value)?.label ?? 'Not set'\n</script>\n\n<template>\n  <Wizard\n    v-model:active-step=\"step\"\n    aria-label=\"Create resource\"\n    submit-label=\"Create\"\n  >\n    <Wizard.Step\n      title=\"Configure\"\n      description=\"Name the resource and choose where it runs.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field required>\n          <Field.Label> Name </Field.Label>\n          <Input v-model=\"name\" />\n        </Field>\n        <Field>\n          <Field.Label> Region </Field.Label>\n          <Select v-model=\"region\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in regions\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Settings\"\n      description=\"Fine-tune the defaults, or skip to keep them.\"\n      optional\n    >\n      <Field orientation=\"horizontal\">\n        <Switch v-model=\"logging\" />\n        <Field.Content>\n          <Field.Label> Enable logging </Field.Label>\n          <Field.Description>\n            Keep a record of every request this resource handles.\n          </Field.Description>\n        </Field.Content>\n      </Field>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Review\"\n      description=\"Check every answer before creating.\"\n    >\n      <dl class=\"grid grid-cols-2 gap-(--spacing-xs) text-body-sm\">\n        <dt class=\"text-(--text-muted)\">Name</dt>\n        <dd class=\"text-(--text-default)\">{{ name }}</dd>\n        <dt class=\"text-(--text-muted)\">Region</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(regions, region) }}</dd>\n        <dt class=\"text-(--text-muted)\">Logging</dt>\n        <dd class=\"text-(--text-default)\">{{ logging ? 'On' : 'Off' }}</dd>\n      </dl>\n    </Wizard.Step>\n  </Wizard>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import Input from '@aziontech/webkit/input'\n  import Select from '@aziontech/webkit/select'\n  import Switch from '@aziontech/webkit/switch'\n  import Wizard from '@aziontech/webkit/wizard'\n  import { ref } from 'vue'\n\n  const step = ref(3)\n  const name = ref('storefront-api')\n  const region = ref('south-america')\n  const environment = ref('production')\n  const logging = ref(true)\n  const path = ref('/api/*')\n  const behavior = ref('deliver')\n\n  const regions = [\n    { value: 'north-america', label: 'North America' },\n    { value: 'south-america', label: 'South America' },\n    { value: 'europe', label: 'Europe' }\n  ]\n  const environments = [\n    { value: 'production', label: 'Production' },\n    { value: 'staging', label: 'Staging' },\n    { value: 'development', label: 'Development' }\n  ]\n  const behaviors = [\n    { value: 'deliver', label: 'Deliver' },\n    { value: 'redirect', label: 'Redirect' },\n    { value: 'deny', label: 'Deny' }\n  ]\n  const labelOf = (options, value) =>\n    options.find((option) => option.value === value)?.label ?? 'Not set'\n</script>\n\n<template>\n  <Wizard\n    v-model:active-step=\"step\"\n    aria-label=\"Create resource\"\n    submit-label=\"Create\"\n    loading\n  >\n    <Wizard.Step\n      title=\"Configure\"\n      description=\"Name the resource and choose where it runs.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field required>\n          <Field.Label> Name </Field.Label>\n          <Input v-model=\"name\" />\n        </Field>\n        <Field>\n          <Field.Label> Region </Field.Label>\n          <Select v-model=\"region\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in regions\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Settings\"\n      description=\"Fine-tune the defaults.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field>\n          <Field.Label> Environment </Field.Label>\n          <Select v-model=\"environment\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in environments\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n        <Field orientation=\"horizontal\">\n          <Switch v-model=\"logging\" />\n          <Field.Content>\n            <Field.Label> Enable logging </Field.Label>\n            <Field.Description>\n              Keep a record of every request this resource handles.\n            </Field.Description>\n          </Field.Content>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Rules\"\n      description=\"Decide what happens to matching requests.\"\n    >\n      <div class=\"flex flex-col gap-(--spacing-md)\">\n        <Field>\n          <Field.Label> Path pattern </Field.Label>\n          <Input v-model=\"path\" />\n          <Field.Description>\n            Requests whose path matches this pattern follow the behavior below.\n          </Field.Description>\n        </Field>\n        <Field>\n          <Field.Label> Behavior </Field.Label>\n          <Select v-model=\"behavior\">\n            <Select.Trigger />\n            <Select.Content>\n              <Select.Option\n                v-for=\"option in behaviors\"\n                :key=\"String(option.value)\"\n                :value=\"option.value\"\n                :disabled=\"option.disabled\"\n              >\n                {{ option.label }}\n              </Select.Option>\n            </Select.Content>\n          </Select>\n        </Field>\n      </div>\n    </Wizard.Step>\n    <Wizard.Step\n      title=\"Review\"\n      description=\"Check every answer before creating.\"\n    >\n      <dl class=\"grid grid-cols-2 gap-(--spacing-xs) text-body-sm\">\n        <dt class=\"text-(--text-muted)\">Name</dt>\n        <dd class=\"text-(--text-default)\">{{ name }}</dd>\n        <dt class=\"text-(--text-muted)\">Region</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(regions, region) }}</dd>\n        <dt class=\"text-(--text-muted)\">Environment</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(environments, environment) }}</dd>\n        <dt class=\"text-(--text-muted)\">Logging</dt>\n        <dd class=\"text-(--text-default)\">{{ logging ? 'On' : 'Off' }}</dd>\n        <dt class=\"text-(--text-muted)\">Path pattern</dt>\n        <dd class=\"text-(--text-default)\">{{ path }}</dd>\n        <dt class=\"text-(--text-muted)\">Behavior</dt>\n        <dd class=\"text-(--text-default)\">{{ labelOf(behaviors, behavior) }}</dd>\n      </dl>\n    </Wizard.Step>\n  </Wizard>\n</template>"
+  }
+ ],
+ "docs": "components/wizard.md"
+}

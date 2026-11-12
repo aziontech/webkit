@@ -2,8 +2,8 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import InputNumber from '../../../inputs/input-number/input-number.vue'
   import Label from '../../../inputs/label/label.vue'
+  import NumberInput from '../../../inputs/number-input/number-input.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -188,7 +188,7 @@
             :for="field.id"
             :label="field.label"
           />
-          <InputNumber
+          <NumberInput
             :id="field.id"
             :model-value="field.value"
             size="medium"

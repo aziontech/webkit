@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { ToastInjectionKey } from './injection-key'
   import {
     getRegionTransitionStyle,
@@ -73,6 +74,9 @@
   const attrs = useAttrs()
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast')
 
+  const actionsOf = (entry: ToastEntry) =>
+    (entry.actions?.length ? entry.actions : entry.action ? [entry.action] : []).slice(0, 2)
+
   const GAP = 14
   const PEEK = 14
 
@@ -118,6 +122,7 @@
         message: t.message,
         description: t.description,
         action: t.action,
+        actions: t.actions,
         duration: t.duration,
         position: t.position,
         closable: t.closable
@@ -177,7 +182,7 @@
   }
 
   const regions = computed<Region[]>(() => {
-    const map = new Map<ToastPosition, ToastView[]>()
+    const map = new Map<ToastPosition, ToastView[]>([[props.position, []]])
     items.value.forEach((item) => {
       const pos = item.entry.position ?? props.position
       const bucket = map.get(pos)
@@ -304,6 +309,8 @@
       ...getToastTransitionStyle(false)
     }
   }
+
+  const portalLocale = usePortalLocale()
 </script>
 
 <template>
@@ -312,10 +319,13 @@
       <div
         v-for="region in regions"
         :key="region.position"
+        :dir="portalLocale.dir"
+        :lang="portalLocale.lang"
         :data-testid="`${testId}-${region.position}`"
         :data-position="region.position"
         :data-expanded="isExpanded(region) || null"
-        :aria-live="region.all.some((i) => i.entry.type === 'error') ? 'assertive' : 'polite'"
+        aria-live="polite"
+        aria-relevant="additions text"
         aria-atomic="false"
         :style="regionStyle(region)"
         class="motion-reduce:transition-none"
@@ -342,9 +352,10 @@
                 }}</ToastDescription>
                 <template #trailing>
                   <ToastAction
-                    v-if="item.entry.action"
-                    :label="item.entry.action.label"
-                    @click="(event) => item.entry.action?.onClick(event)"
+                    v-for="(entryAction, actionIndex) in actionsOf(item.entry)"
+                    :key="actionIndex"
+                    :label="entryAction.label"
+                    @click="(event) => entryAction.onClick(event)"
                   />
                   <ToastClose
                     v-if="item.entry.closable ?? closable"

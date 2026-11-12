@@ -1,0 +1,11 @@
+{
+  "component": "client-mosaic-columns",
+  "title": "Components/Marketing/Sections/ClientMosaicColumns",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Three success stories in equal columns, each mark on its client brand colour with the story line beneath. Hover a column to reveal its link line; edit the cells in the Controls panel — a band with no cells renders nothing at all.",
+      "file": "default.vue"
+    }
+  ]
+}

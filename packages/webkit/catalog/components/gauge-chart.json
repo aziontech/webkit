@@ -1,0 +1,25 @@
+{
+ "purpose": "One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+ "useWhen": [
+  "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
+  "A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.",
+  "A headline reading on a detail page or in a dashboard card, beside the time series that explains it."
+ ],
+ "avoidWhen": [
+  "A number with a change against a period and a trend → use `stat-tile`.",
+  "A value over time → use `chart` (line or area).",
+  "Progress of a task toward done → use `progress-bar`.",
+  "Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly."
+ ],
+ "related": [
+  "stat-tile` — one figure with a delta and a sparkline, for a KPI row.",
+  "chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.",
+  "progress-bar` — completion of a task, not a reading."
+ ],
+ "bestPractices": [
+  "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
+  "Name every band (`label`) so the value is read with its meaning, not only with a color.",
+  "Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.",
+  "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
+ ]
+}

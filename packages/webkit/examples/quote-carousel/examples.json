@@ -1,0 +1,21 @@
+{
+  "component": "quote-carousel",
+  "title": "Components/Marketing/Primitives/QuoteCarousel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five testimonials under a section headline. Drag the row, swipe it, or focus it and use the arrow keys — the track is native scrolling with CSS snap points, so every card lands flush at the start edge and nothing advances on its own. The cards carry no gutter: the band sets the track gap to zero and every card pulls a pixel left, so two hairlines land as one and the strip reads as a single ruled band. The fade at either end is one spacing step wide, so it softens the cut without ever reaching the words inside a card. On a mouse the row takes a grab cursor and drags directly; touch keeps the browser’s own momentum scrolling. Each card is a `Quote` in its `inline` register — the speaker’s likeness beside their company mark, then the quotation, then the attribution — and the mark is drawn in `currentColor`, so it takes the card’s ink and follows the theme without a second asset.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Fallback",
+      "summary": "Two of these three companies have no artwork in the mark registry, so their cards write the company name in the heading scale instead of leaving a gap. That is what lets a page state the testimonials it means to state before every asset has landed — the card keeps its header row, its measure and its rhythm either way, and adding the artwork later changes nothing at the call site. None of the three speakers has a `photo`, so each likeness falls back to that person’s initials.",
+      "file": "fallback.vue"
+    },
+    {
+      "name": "Recognitions",
+      "summary": "The second register: the source is a firm, not a person. Leave `name` out and the card draws no likeness — the analyst mark leads it alone, and `jobTitle` carries the report the claim comes from. The firm is named in that line as well as by its mark, because the mark is decorative and a screen reader never reaches it. This is the shape a \"Recognized as a market leader\" band takes, and the reason the component is not called TestimonialCarousel: a quotation is a quotation whoever signed it.",
+      "file": "recognitions.vue"
+    }
+  ]
+}

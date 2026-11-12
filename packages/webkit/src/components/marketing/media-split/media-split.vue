@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
+  import Overline from '../../content/overline/overline.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import Overline from '../../overline/overline.vue'
   import { BandStackInjectionKey } from '../band-stack/injection-key'
   import TextureMaterial, {
     type TextureMaterialFade,
@@ -261,9 +261,9 @@
               v-if="isMediaLink"
               aria-hidden="true"
               :data-testid="`${testId}__media-affordance`"
-              class="pointer-events-none absolute right-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 motion-reduce:transition-none"
+              class="pointer-events-none absolute end-(--spacing-xl) bottom-(--spacing-xl) z-20 inline-flex h-7 min-w-7 translate-x-1 items-center justify-center rounded-(--shape-button) bg-(--secondary) px-(--spacing-xs) text-button-md text-(--secondary-contrast) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance group-hover/split:translate-x-0 group-hover/split:opacity-100 group-focus-visible/media:translate-x-0 group-focus-visible/media:opacity-100 rtl:-translate-x-1 rtl:group-hover/split:translate-x-0 rtl:group-focus-visible/media:translate-x-0 motion-reduce:transition-none"
             >
-              <i class="pi pi-chevron-right text-[length:inherit] leading-none" />
+              <i class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100" />
             </span>
           </component>
         </component>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, toRef, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { DrawerInjectionKey, type DrawerSide, type DrawerSize } from './injection-key'
@@ -44,6 +44,7 @@
   const attrs = useAttrs()
   const uid = useId()
   const triggerRef = ref<HTMLElement | null>(null)
+  const returnFocusRef = ref<HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
 
@@ -67,6 +68,16 @@
     isOpen.set(false)
   }
 
+  watch(
+    () => isOpen.value,
+    (open) => {
+      if (open && typeof document !== 'undefined') {
+        returnFocusRef.value = document.activeElement as HTMLElement | null
+      }
+    },
+    { flush: 'sync' }
+  )
+
   provide(DrawerInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
@@ -77,6 +88,7 @@
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
     triggerRef,
+    returnFocusRef,
     side: props.side
   })
 </script>

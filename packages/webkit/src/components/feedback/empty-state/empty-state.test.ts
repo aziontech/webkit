@@ -1,12 +1,11 @@
-import { composeStories } from '@storybook/vue3'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/feedback/empty-state/EmptyState.stories'
+import Bordered from '../../../../examples/empty-state/bordered.vue'
+import Default from '../../../../examples/empty-state/default.vue'
+import Sizes from '../../../../examples/empty-state/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import EmptyState from './empty-state.vue'
-
-const { Default, Bordered, Sizes } = composeStories(stories)
 
 describe('EmptyState', () => {
   it('renders the title and defaults the testid to feedback-empty-state', () => {
@@ -165,5 +164,19 @@ describe('EmptyState', () => {
       const roots = getAllByTestId('feedback-empty-state')
       expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
+  })
+})
+
+describe('EmptyState on devices', () => {
+  it('is a named container that stretches its actions in a narrow box', () => {
+    const view = render(EmptyState, {
+      props: { title: 'No domains' },
+      slots: { actions: '<button type="button">Add domain</button>' }
+    })
+
+    expect(view.getByTestId('feedback-empty-state').className).toContain('@container/empty-state')
+    expect(view.getByTestId('feedback-empty-state__actions').className).toContain(
+      '@max-xs/empty-state:w-full'
+    )
   })
 })

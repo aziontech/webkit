@@ -1,0 +1,15 @@
+{
+  "_id": "cli-terminal",
+  "props": {
+    "eyebrow": "Azion CLI",
+    "title": "Deploy your first function in two commands",
+    "description": "Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion.",
+    "session": "azion link --preset javascript --name auth-handler --auto\n# Project successfully configured\n\nazion deploy --auto\n# Upload completed successfully!\n# Your Application was deployed successfully\n# Domain: https://k7q2fmx4ze.map.azionedge.net\n\ncurl https://k7q2fmx4ze.map.azionedge.net/\n# Hello World",
+    "copyAriaLabel": "Copy the deploy session",
+    "primaryAction": {
+      "label": "Install the CLI",
+      "href": "https://www.azion.com/en/documentation/products/azion-cli/overview/",
+      "trailing": true
+    }
+  }
+}

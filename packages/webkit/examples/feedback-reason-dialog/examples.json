@@ -1,0 +1,11 @@
+{
+  "component": "feedback-reason-dialog",
+  "title": "Components/Primitives/AI/FeedbackReasonDialog",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A response with its thumbs: thumbs-down records the vote and opens the dialog; a reason is required, details are optional, Send feedback stays open with a spinner while the request runs and then closes, returning focus to the thumbs.",
+      "file": "default.vue"
+    }
+  ]
+}

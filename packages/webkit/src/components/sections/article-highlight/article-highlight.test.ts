@@ -1,4 +1,4 @@
-import { userEvent } from '@storybook/test'
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -165,5 +165,14 @@ describe('ArticleHighlight', () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('ArticleHighlight on phones', () => {
+  it('keeps the layout sizer from widening the panel', () => {
+    const view = render(ArticleHighlight, { props: { items } })
+    const sizer = view.container.querySelector('[inert]')
+
+    expect(sizer?.className).toContain('min-w-0')
   })
 })

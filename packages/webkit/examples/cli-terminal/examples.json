@@ -1,0 +1,25 @@
+{
+  "component": "cli-terminal",
+  "title": "Components/Marketing/Sections/CliTerminal",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Functions page places it: the two-command deploy, then a curl to the domain the CLI hands back, under the headline and its install button. Edit the props in the Controls panel — an empty `session` renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Terminal",
+      "summary": "The Functions band: the two-command deploy session under the headline, with the outlined install button.",
+      "file": "site-terminal.vue",
+      "json": "site-terminal.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/CLI/CliTerminal",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Terminal", "TerminalJson"]
+}

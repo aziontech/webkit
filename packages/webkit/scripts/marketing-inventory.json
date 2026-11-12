@@ -1,0 +1,1997 @@
+{
+  "renamed": {
+    "sample:shared/ui/banners/GlobeBanner": "banner-art (art=\"globe\")",
+    "sample:shared/ui/banners/GlobeDisc": "banner-art (art=\"globe\") on assets/spinning-globe",
+    "sample:shared/ui/banners/MapBanner": "banner-art (art=\"map\") on network-map",
+    "sample:shared/ui/banners/NetworkBanner": "banner-art (art=\"network\") on network-map",
+    "sample:shared/ui/line-figure/LineFigure": "line-figure",
+    "sample:shared/ui/line-figure/figures/ai-versioning": "line-figure (name=\"ai-versioning\")",
+    "sample:shared/ui/line-figure/figures/applications-rules": "line-figure (name=\"applications-rules\")",
+    "sample:shared/ui/line-figure/figures/azion-404": "line-figure (name=\"azion-404\")",
+    "sample:shared/ui/line-figure/figures/bot-lineup": "line-figure (name=\"bot-lineup\")",
+    "sample:shared/ui/line-figure/figures/build-terminal": "line-figure (name=\"build-terminal\")",
+    "sample:shared/ui/line-figure/figures/cache-ttl": "line-figure (name=\"cache-ttl\")",
+    "sample:shared/ui/line-figure/figures/certificates-chain": "line-figure (name=\"certificates-chain\")",
+    "sample:shared/ui/line-figure/figures/connectors-link": "line-figure (name=\"connectors-link\")",
+    "sample:shared/ui/line-figure/figures/custom-pages-status": "line-figure (name=\"custom-pages-status\")",
+    "sample:shared/ui/line-figure/figures/ddos-flood": "line-figure (name=\"ddos-flood\")",
+    "sample:shared/ui/line-figure/figures/deployments-release": "line-figure (name=\"deployments-release\")",
+    "sample:shared/ui/line-figure/figures/dns-lookup": "line-figure (name=\"dns-lookup\")",
+    "sample:shared/ui/line-figure/figures/functions-invoke": "line-figure (name=\"functions-invoke\")",
+    "sample:shared/ui/line-figure/figures/image-variants": "line-figure (name=\"image-variants\")",
+    "sample:shared/ui/line-figure/figures/infra-workloads": "line-figure (name=\"infra-workloads\")",
+    "sample:shared/ui/line-figure/figures/lb-rotor": "line-figure (name=\"lb-rotor\")",
+    "sample:shared/ui/line-figure/figures/metrics-gauge": "line-figure (name=\"metrics-gauge\")",
+    "sample:shared/ui/line-figure/figures/network-lists-gate": "line-figure (name=\"network-lists-gate\")",
+    "sample:shared/ui/line-figure/figures/object-storage-bucket": "line-figure (name=\"object-storage-bucket\")",
+    "sample:shared/ui/line-figure/figures/observe-stream": "line-figure (name=\"observe-stream\")",
+    "sample:shared/ui/line-figure/figures/orchestrator-scale": "line-figure (name=\"orchestrator-scale\")",
+    "sample:shared/ui/line-figure/figures/platform-edge": "line-figure (name=\"platform-edge\")",
+    "sample:shared/ui/line-figure/figures/secure-shield": "line-figure (name=\"secure-shield\")",
+    "sample:shared/ui/line-figure/figures/store-replicas": "line-figure (name=\"store-replicas\")",
+    "sample:shared/ui/line-figure/figures/variables-keys": "line-figure (name=\"variables-keys\")",
+    "sample:site/docs/ui/DocAccordionGroup": "doc-accordion-group",
+    "sample:site/docs/ui/DocAccordionItem": "doc-accordion-item",
+    "sample:site/docs/ui/DocCodeGroup": "doc-code-group",
+    "sample:site/docs/ui/DocCta": "doc-cta",
+    "sample:site/docs/ui/DocHeading": "doc-heading",
+    "sample:site/docs/ui/DocTab": "doc-tab",
+    "sample:site/docs/ui/DocTabs": "doc-tabs",
+    "sample:site/ui/BrandGlobeScene": "assets/brand-globe-scene",
+    "sample:site/ui/FrameworkStackScene": "illustration (name=\"modern-frontends\") in a scene slot",
+    "sample:site/ui/RecognitionSealScene": "an <img> of the badge in a scene slot (hero-band #bottom or console-panel #scene)",
+    "sample:site/ui/SpinningGlobe": "assets/spinning-globe",
+    "sample:site/ui/WorkloadTopologyScene": "product-widget (name=\"workload-topology-flow\") in hero-band #bottom",
+    "sample:site/ui/diagram/DiagramSet": "diagram in console-panel kind=\"diagram\", picked by the #scene slot tab",
+    "sample:site/ui/sections/ArticleIndex": "article-index-blog (categories and search) and article-index-resource-hub (facets)",
+    "sample:site/ui/sections/CapabilityGrid": "capability-grid",
+    "sample:site/ui/sections/CompareCompetitors": "comparison-table",
+    "sample:site/ui/sections/ConsolePanel": "console-panel",
+    "sample:site/ui/sections/CustomerSpotlight": "customer-spotlight",
+    "sample:site/ui/sections/Heroes": "hero-band (kinds centered, title-band, centered-band, compact-band, pixel-floor, copy-beside-art; top and bottom scene slots) and hero-copy-on-top-art",
+    "sample:site/ui/sections/PlanMatrix": "compare-plans",
+    "sample:site/ui/sections/ProcessScroll": "process-scroll",
+    "sample:site/ui/sections/QuoteBand": "logo-wall-quote (kind=\"quote\")",
+    "sample:site/ui/sections/SectionAction": "button (label, href, kind, size, trailing chevron)",
+    "sample:site/ui/sections/SectionCommand": "section-command",
+    "sample:site/ui/sections/StickyCarousel": "sticky-carousel"
+  },
+  "removed": {
+    "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
+    "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"
+  },
+  "items": [
+    {
+      "id": "architecture-tabs",
+      "surface": "marketing"
+    },
+    {
+      "id": "article-body",
+      "surface": "marketing"
+    },
+    {
+      "id": "article-cards",
+      "surface": "marketing"
+    },
+    {
+      "id": "article-highlight",
+      "surface": "marketing"
+    },
+    {
+      "id": "article-index-blog",
+      "surface": "marketing"
+    },
+    {
+      "id": "article-index-resource-hub",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/agi-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/agibank-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/agibank-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/agibank-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ai-gateway.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/akamai-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/alpargatas-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/alpargatas-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/americamovil-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/americanas-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/americanas-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/americanas-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/angeloni-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/angular-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/anthropic-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/arezzo-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/arezzo-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/arezzo-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/astro-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/aws-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/aws-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/aws-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/axur-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/axur-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/axur-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ayko-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/azion-highlight.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/azion-rest-api.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/azure-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/b2w-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/b2w-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/b2w-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/banco-de-la-nacion-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/branches.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/brand-globe-scene",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/browserless-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/browserless-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/caixa-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/caixa-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/caixa-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/caixa-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/calvinklein-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/calvinklein-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ccpa-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/claude-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/client-registry",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cloudflare-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cloudflare-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cloudflare-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cloudflare-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cloudflare-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cobasi-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cocacola-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cocacola-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cocacola-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/codex-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/combine-data-and-vector-search.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/competitor-registry",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/contabilizei-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/contabilizei-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/contabilizei-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/contabilizei-symbol-color.png",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/copilot-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cpra-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/crateandbarrel-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/crateandbarrel-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/crefisa-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/crefisa-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/crefisa-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/csu-digital-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/cursor-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/dafiti-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/dafiti-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/datadog-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/datadome-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/datadome-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ddos-protection.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/digiplus-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/digiplus-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/digiplus-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/distributed-apis-tile.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/docusaurus-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/drizzle-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/elastic-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/eleventy-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/embratel-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/embratel-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/embratel-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/equinix-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/exame-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/exame-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/exame-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fam-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fam-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fam-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fastly-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fauna-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fauna-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fauna-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/forrester-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/forrester-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/forrester-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fourbank-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fourbank-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/fourbank-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/frost-and-sullivan-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/frost-and-sullivan-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/frost-and-sullivan-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/g2-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gartner-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gartner-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gartner-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gatsby-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gcp-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gdpr-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gemini-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/getninjas-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/getninjas-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gfg-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gfg-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gigaom-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gigaom-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gigaom-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/github-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/google-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gpa-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gpa-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gpa-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gpa-photo.jpg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gpa-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/grafana-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/graphql-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/grendene-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/groq-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gru-airport-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gruposabemi-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gruposabemi-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/gruposabemi-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hdi-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hdi-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hdi-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/herospark-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/herospark-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/herospark-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hexo-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hono-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/hugo-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ibero-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ibero-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ibero-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ietf-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ifood-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ifood-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ifood-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/incognia-extended-color.png",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/infoblox-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ipiranga-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ipiranga-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/ipiranga-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/itau-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/itau-extended-reversed.webp",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/itau-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/jamstack-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/javascript-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/jekyll-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/kafka-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/kalunga-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/kalunga-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/kroton-extended-color.png",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lendico-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lendico-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lendico-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lgpd-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/locaweb-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lojadomecanico-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lojadomecanico-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lojadomecanico-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lojaintegrada-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/lojaintegrada-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/madeiramadeira-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/madeiramadeira-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/madeiramadeira-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/madeiramadeira-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/madeiramadeira-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/magalu-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/magalu-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/magalu-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/magalu-symbol-color.png",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/marisa-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/marisa-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/marisa-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/meliuz-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/mobiauto-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/mobiauto-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/mobiauto-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/monashees-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/monashees-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/mongodb-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/motorola-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/motorola-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/motorola-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/mysql-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/neogrid-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/neon-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/neon-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/neon-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/netshoes-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/netshoes-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/netshoes-photo.jpg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/newbalance-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/newbalance-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/newbalance-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nextjs-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nodejs-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nuxt-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nzn-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nzn-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/nzn-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/omelete-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/omelete-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/omelete-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/omeleteco-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/omeleteco-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/onnx-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/openai-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/opencode-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panasonic-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panasonic-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panasonic-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panvel-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panvel-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/panvel-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/pci-dss-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/pernambucanas-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/pernambucanas-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/pernambucanas-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/personal-tokens.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/petz-extended-color.png",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/petz-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/petz-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/planetscale-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/portobello-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/portocred-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/portocred-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/portocred-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/postgresql-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/preact-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/primevideo-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/primevideo-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/primevideo-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/prisma-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/provu-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/provu-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/provu-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/qualcomm-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/qualcomm-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/queroquero-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/queroquero-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/queroquero-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/quick-start-with-templates.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/qwik-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/radware-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/radware-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/radware-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rbs-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rbs-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rbs-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/react-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/real-time-metrics-error-rate.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/real-time-metrics-status-codes.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/redis-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/remix-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/renner-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/renner-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/renner-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/renner-symbol-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/resend-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/resend-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rico-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rico-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rico-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rocketchat-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rocketchat-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/rocketchat-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saffe-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saffe-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saffe-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/samsung-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/samsung-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/samsung-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saraiva-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saraiva-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/saraiva-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/serverless-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/shoptime-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/shoptime-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/shoptime-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/sky-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/sky-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/sky-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/soc-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/spinning-globe",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/sqlite-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/stone-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/stripe-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/stripe-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/submarino-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/submarino-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/submarino-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/supabase-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/svelte-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/tc39-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/telefonica-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/telefonica-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/telefonica-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/terraform-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/todocartoes-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/todocartoes-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/topazio-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/topazio-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/topazio-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/tray-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/turso-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicesumar-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicesumar-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicesumar-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicred-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicred-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/unicred-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/uninter-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/uninter-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/upstash-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/usage-chart.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vercel-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vercel-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vite-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vitepress-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vtex-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vtex-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vtex-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vue-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/vuepress-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/w3c-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/walmart-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/walmart-extended-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/walmart-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/webassembly-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/windsurf-symbol-mono.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/workers-cf-symbol-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/zoop-extended-color.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "band-stack",
+      "surface": "marketing"
+    },
+    {
+      "id": "banner",
+      "surface": "marketing"
+    },
+    {
+      "id": "banner-art",
+      "surface": "marketing"
+    },
+    {
+      "id": "bento-grid",
+      "surface": "marketing"
+    },
+    {
+      "id": "bento-grid-cell",
+      "surface": "marketing"
+    },
+    {
+      "id": "bento-grid-root",
+      "surface": "marketing"
+    },
+    {
+      "id": "big-numbers",
+      "surface": "marketing"
+    },
+    {
+      "id": "call-to-action",
+      "surface": "marketing"
+    },
+    {
+      "id": "capability-grid",
+      "surface": "marketing"
+    },
+    {
+      "id": "card-grid",
+      "surface": "marketing"
+    },
+    {
+      "id": "card-grid-cell",
+      "surface": "marketing"
+    },
+    {
+      "id": "card-grid-root",
+      "surface": "marketing"
+    },
+    {
+      "id": "carousel",
+      "surface": "marketing"
+    },
+    {
+      "id": "carousel-item",
+      "surface": "marketing"
+    },
+    {
+      "id": "carousel-next",
+      "surface": "marketing"
+    },
+    {
+      "id": "carousel-previous",
+      "surface": "marketing"
+    },
+    {
+      "id": "carousel-root",
+      "surface": "marketing"
+    },
+    {
+      "id": "cli-terminal",
+      "surface": "marketing"
+    },
+    {
+      "id": "client-mosaic",
+      "surface": "marketing"
+    },
+    {
+      "id": "client-mosaic-columns",
+      "surface": "marketing"
+    },
+    {
+      "id": "client-quotes",
+      "surface": "marketing"
+    },
+    {
+      "id": "closing-call-to-action",
+      "surface": "marketing"
+    },
+    {
+      "id": "closing-call-to-action-agents",
+      "surface": "marketing"
+    },
+    {
+      "id": "closing-call-to-action-newsletter",
+      "surface": "marketing"
+    },
+    {
+      "id": "closing-call-to-action-templates",
+      "surface": "marketing"
+    },
+    {
+      "id": "code-split",
+      "surface": "marketing"
+    },
+    {
+      "id": "column-navigation",
+      "surface": "marketing"
+    },
+    {
+      "id": "column-navigation-column",
+      "surface": "marketing"
+    },
+    {
+      "id": "column-navigation-item",
+      "surface": "marketing"
+    },
+    {
+      "id": "column-navigation-root",
+      "surface": "marketing"
+    },
+    {
+      "id": "compare-plans",
+      "surface": "marketing"
+    },
+    {
+      "id": "compare-support-tiers",
+      "surface": "marketing"
+    },
+    {
+      "id": "comparison-table",
+      "surface": "marketing"
+    },
+    {
+      "id": "compliance-badges",
+      "surface": "marketing"
+    },
+    {
+      "id": "console-panel",
+      "surface": "marketing"
+    },
+    {
+      "id": "contact-hub",
+      "surface": "marketing"
+    },
+    {
+      "id": "content-columns",
+      "surface": "marketing"
+    },
+    {
+      "id": "customer-spotlight",
+      "surface": "marketing"
+    },
+    {
+      "id": "diagram",
+      "surface": "marketing"
+    },
+    {
+      "id": "doc-accordion-group",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-accordion-item",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-callout",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-card",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-card-group",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-code-group",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-cta",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-frame",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-heading",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-item",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-on-this-page",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-page-header",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-pagination",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-prompt",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-prose",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-step",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-steps",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-tab",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-tabs",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-tooltip",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-update",
+      "surface": "docs"
+    },
+    {
+      "id": "embed",
+      "surface": "marketing"
+    },
+    {
+      "id": "faq",
+      "surface": "marketing"
+    },
+    {
+      "id": "faq-section",
+      "surface": "marketing"
+    },
+    {
+      "id": "feature-scroll",
+      "surface": "marketing"
+    },
+    {
+      "id": "feature-tabs",
+      "surface": "marketing"
+    },
+    {
+      "id": "feature-tiles",
+      "surface": "marketing"
+    },
+    {
+      "id": "feature-widgets",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-band",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-copy-on-top-art",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-form",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-root",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-title",
+      "surface": "marketing"
+    },
+    {
+      "id": "hero-with-opening",
+      "surface": "marketing"
+    },
+    {
+      "id": "investor-marks",
+      "surface": "marketing"
+    },
+    {
+      "id": "listing-browser",
+      "surface": "marketing"
+    },
+    {
+      "id": "listing-table",
+      "surface": "marketing"
+    },
+    {
+      "id": "logo-wall",
+      "surface": "marketing"
+    },
+    {
+      "id": "logo-wall-quote",
+      "surface": "marketing"
+    },
+    {
+      "id": "media-split",
+      "surface": "marketing"
+    },
+    {
+      "id": "media-split-band",
+      "surface": "marketing"
+    },
+    {
+      "id": "media-split-stack",
+      "surface": "marketing"
+    },
+    {
+      "id": "media-tabs",
+      "surface": "marketing"
+    },
+    {
+      "id": "media-tile",
+      "surface": "marketing"
+    },
+    {
+      "id": "network-section",
+      "surface": "marketing"
+    },
+    {
+      "id": "pattern:headers/docs-header",
+      "surface": "docs"
+    },
+    {
+      "id": "pattern:headers/site-header",
+      "surface": "marketing"
+    },
+    {
+      "id": "pattern:shells/documentation",
+      "surface": "docs"
+    },
+    {
+      "id": "pattern:shells/website",
+      "surface": "marketing"
+    },
+    {
+      "id": "photo-marquee",
+      "surface": "marketing"
+    },
+    {
+      "id": "platform-directory",
+      "surface": "marketing"
+    },
+    {
+      "id": "pricing-plans",
+      "surface": "marketing"
+    },
+    {
+      "id": "process-scroll",
+      "surface": "marketing"
+    },
+    {
+      "id": "quote",
+      "surface": "marketing"
+    },
+    {
+      "id": "quote-carousel",
+      "surface": "marketing"
+    },
+    {
+      "id": "quote-tabs",
+      "surface": "marketing"
+    },
+    {
+      "id": "recognition-marquee",
+      "surface": "marketing"
+    },
+    {
+      "id": "resource-grid",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-command",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-container",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-gap",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-module",
+      "surface": "marketing"
+    },
+    {
+      "id": "section-title",
+      "surface": "marketing"
+    },
+    {
+      "id": "site-footer",
+      "surface": "marketing"
+    },
+    {
+      "id": "site-nav",
+      "surface": "marketing"
+    },
+    {
+      "id": "stats-band",
+      "surface": "marketing"
+    },
+    {
+      "id": "sticky-carousel",
+      "surface": "marketing"
+    },
+    {
+      "id": "sticky-scroll-code",
+      "surface": "marketing"
+    },
+    {
+      "id": "sticky-stack",
+      "surface": "marketing"
+    },
+    {
+      "id": "story-library",
+      "surface": "marketing"
+    },
+    {
+      "id": "subject-library",
+      "surface": "marketing"
+    },
+    {
+      "id": "template-gallery",
+      "surface": "marketing"
+    },
+    {
+      "id": "texture-material",
+      "surface": "marketing"
+    },
+    {
+      "id": "ticker",
+      "surface": "marketing"
+    },
+    {
+      "id": "topic",
+      "surface": "marketing"
+    },
+    {
+      "id": "use-case-links",
+      "surface": "marketing"
+    },
+    {
+      "id": "use-cases",
+      "surface": "marketing"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "platform/dashboard/configurable-dashboard",
+  "name": "ConfigurableDashboard",
+  "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
+  "surface": "product",
+  "summary": "A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "configurable dashboard",
+    "custom dashboard",
+    "drag and drop dashboard",
+    "resizable cards",
+    "edit layout",
+    "board",
+    "dashboard grid",
+    "dashboard builder",
+    "painel configurável",
+    "painel personalizado",
+    "reorganizar cards"
+  ],
+  "skills": ["webkit-data-viz", "webkit-layout", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "configurable-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Editing",
+      "summary": "Edit mode. Drag a card by its handle onto another to swap their order, or drag its corner to change the span and the height. Focus the handle and use the arrow keys to move a card, or focus the corner and use Left and Right for the span, Up and Down for the height.",
+      "file": "variants/editing.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the data loads, every chart renders its own Skeleton inside its card, so the layout holds its shape.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

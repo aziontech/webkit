@@ -1,0 +1,24 @@
+{
+ "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
+ "useWhen": [
+  "One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).",
+  "A \"repeat the last choice\" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked."
+ ],
+ "avoidWhen": [
+  "A single action → use `button`.",
+  "A menu with no default action → use `dropdown-menu`.",
+  "Picking one of a few visible, mutually exclusive options → use `toggle-group`."
+ ],
+ "related": [
+  "button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.",
+  "dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.",
+  "icon-button` — the chevron toggle segment."
+ ],
+ "bestPractices": [
+  "Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.",
+  "Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.",
+  "With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.",
+  "Set `loading` while the action runs: it disables both segments and keeps the menu closed.",
+  "Disable a single action with `disabled: true` on its model entry instead of removing it, so the menu does not shift."
+ ]
+}

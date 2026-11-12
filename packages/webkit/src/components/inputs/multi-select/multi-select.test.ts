@@ -1,17 +1,15 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/multi-select/MultiSelect.stories'
+import Default from '../../../../examples/multi-select/default.vue'
 import MultiSelect, {
   MultiSelectContent,
   MultiSelectGroup,
   MultiSelectOption,
   MultiSelectTrigger
 } from './index'
-
-const { Default } = composeStories(stories)
 
 // Content Teleports to body, escaping the render container — query it from
 // document.body and remove lingering listbox nodes between tests for isolation.
@@ -95,6 +93,37 @@ const Harness = defineComponent({
 })
 
 describe('MultiSelect (composition / overlay)', () => {
+  it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
+    cleanupTeleported()
+    render({
+      render: () =>
+        h(
+          MultiSelect,
+          { modelValue: [], defaultOpen: true },
+          {
+            default: () => [
+              h(MultiSelectTrigger, { 'aria-label': 'Options' }),
+              h(MultiSelectContent, null, {
+                default: () =>
+                  Array.from({ length: 1000 }, (_, i) =>
+                    h(MultiSelectOption, { key: i, value: i }, { default: () => `Option ${i}` })
+                  )
+              })
+            ]
+          }
+        )
+    })
+    await nextTick()
+    const options = () => listbox()?.querySelectorAll('[role="option"]').length ?? 0
+    expect(options()).toBeGreaterThan(0)
+    expect(options()).toBeLessThan(1000)
+    await fireEvent.keyDown(listbox() as HTMLElement, { key: 'ArrowDown' })
+    await nextTick()
+    await nextTick()
+    expect(options()).toBe(1000)
+    cleanupTeleported()
+  })
+
   it('exposes every sub-component on the compound root via dot-notation', () => {
     expect(MultiSelect.Trigger).toBe(MultiSelectTrigger)
     expect(MultiSelect.Content).toBe(MultiSelectContent)
@@ -103,8 +132,8 @@ describe('MultiSelect (composition / overlay)', () => {
   })
 
   // A transform on an ancestor of the Teleport target becomes the fixed panel's
-  // containing block, re-scaling its viewport top/left — Storybook's zoom control
-  // does exactly this to the preview body.
+  // containing block, re-scaling its viewport top/left — a zoomed preview container
+  // does exactly this.
   it('anchors the panel to the trigger when the Teleport target is scaled', async () => {
     const previousTransform = document.body.style.transform
     const previousOrigin = document.body.style.transformOrigin
@@ -302,7 +331,7 @@ describe('MultiSelect (composition / overlay)', () => {
     cleanupTeleported()
   })
 
-  it('shows placeholder when empty and joined values once options are selected', async () => {
+  it('shows placeholder when empty and joined labels once options are selected', async () => {
     const { getByTestId } = render(Harness, {
       props: { initial: [], open: true, placeholder: 'Pick options' }
     })
@@ -311,16 +340,30 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(label.textContent?.trim()).toBe('Pick options')
     expect(getByTestId('multi-select-trigger').getAttribute('data-filled')).toBeNull()
 
-    // The default formatter joins selected values with a comma and flips data-filled.
     const options = listbox()!.querySelectorAll<HTMLElement>('[role="option"]')
-    await fireEvent.click(options[0]) // opt-1
-    await fireEvent.click(options[1]) // opt-2
+    await fireEvent.click(options[0])
+    await fireEvent.click(options[1])
 
-    expect(label.textContent).toContain('opt-1')
-    expect(label.textContent).toContain('opt-2')
+    expect(label.textContent?.trim()).toBe('Option 1, Option 2')
     expect(getByTestId('multi-select-trigger').getAttribute('data-filled')).toBe('true')
 
     cleanupTeleported()
+  })
+
+  it('names the selection by option labels before the panel first opens', async () => {
+    const { getByTestId } = render(Harness, { props: { initial: ['opt-2'], open: false } })
+    await nextTick()
+    await nextTick()
+    expect(getByTestId('multi-select-trigger__value').textContent?.trim()).toBe('Option 2')
+    expect(document.querySelector('[data-testid="multi-select-content__labels"]')).toBeNull()
+    expect(listbox()).toBeNull()
+  })
+
+  it('renders no hidden options while closed with nothing selected', async () => {
+    const { getByTestId } = render(Harness, { props: { initial: [], open: false } })
+    expect(document.querySelector('[data-testid="multi-select-content__labels"]')).toBeNull()
+    expect(document.querySelectorAll('[role="option"]').length).toBe(0)
+    expect(getByTestId('multi-select-trigger__value').textContent?.trim()).toBe('Pick options')
   })
 
   it('closes the panel on Escape fired inside the listbox', async () => {
@@ -399,8 +442,8 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(getByTestId('multi-select-trigger').getAttribute('data-size')).toBe(size)
   })
 
-  it('renders the Default story (composeStories) through the compound tree', async () => {
-    const { getByTestId } = render(Default())
+  it('renders the Default example through the compound tree', async () => {
+    const { getByTestId } = render(Default)
     cleanupTeleported()
     const trigger = getByTestId('multi-select-trigger')
     expect(trigger.getAttribute('role')).toBe('combobox')
@@ -499,5 +542,96 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(trigger.getAttribute('aria-haspopup')).toBe('listbox')
     expect(trigger.getAttribute('aria-controls')).toBeTruthy()
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  })
+})
+
+describe('keyboard map (spec)', () => {
+  const settle = async () => {
+    await nextTick()
+    await nextTick()
+  }
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+  const openWith = async (key: string) => {
+    cleanupTeleported()
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', [
+            h(Harness, { open: false }),
+            h('button', { type: 'button', 'data-testid': 'after' }, 'After')
+          ])
+      })
+    )
+    const trigger = view.getByTestId('multi-select-trigger')
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    expect(listbox()).not.toBeNull()
+    return { trigger, view }
+  }
+
+  it.each(['{Enter}', ' ', '{ArrowDown}'])(
+    '%s on the trigger opens the list and focuses the first option',
+    async (key) => {
+      await openWith(key)
+      expect(focusedText()).toBe('Option 1')
+    }
+  )
+
+  it('ArrowDown and ArrowUp move between enabled options and wrap', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(focusedText()).toBe('Option 2')
+    await userEvent.keyboard('{ArrowUp}{ArrowUp}')
+    expect(focusedText()).not.toBe('Option 3 (disabled)')
+  })
+
+  it('Home and End jump to the first and last enabled options', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{End}')
+    const last = focusedText()
+    await userEvent.keyboard('{Home}')
+    expect(focusedText()).toBe('Option 1')
+    expect(last).not.toBe('Option 1')
+  })
+
+  it.each(['{Enter}', ' '])(
+    '%s toggles the focused option and keeps the list open',
+    async (key) => {
+      await openWith('{Enter}')
+      await userEvent.keyboard(key)
+      await settle()
+      expect(listbox()).not.toBeNull()
+      const option = document.activeElement as HTMLElement
+      expect(option.getAttribute('aria-selected')).toBe('true')
+      await userEvent.keyboard(key)
+      await settle()
+      expect(option.getAttribute('aria-selected')).toBe('false')
+    }
+  )
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('Tab closes and moves focus on to the control after the trigger', async () => {
+    const { view } = await openWith('{Enter}')
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(view.getByTestId('after'))
+  })
+
+  it('Shift+Tab closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    await settle()
+    expect(listbox()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
   })
 })

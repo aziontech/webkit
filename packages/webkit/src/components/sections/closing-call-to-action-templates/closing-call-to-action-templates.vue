@@ -104,7 +104,7 @@
         >
           <section
             :aria-label="title"
-            class="grid lg:grid-cols-2"
+            class="grid grid-cols-1 lg:grid-cols-2"
           >
             <div class="relative isolate flex items-center overflow-clip bg-(--bg-canvas)">
               <div
@@ -158,7 +158,7 @@
             </div>
             <div
               v-if="hasCards"
-              class="relative min-h-[32rem] border-t border-(--border-default) lg:min-h-[38rem] lg:border-t-0 lg:border-l"
+              class="relative min-h-[32rem] border-t border-(--border-default) lg:min-h-[38rem] lg:border-t-0 lg:border-s"
             >
               <ScrollArea
                 :aria-label="templatesAriaLabel || undefined"
@@ -207,7 +207,7 @@
                         icon-position="trailing"
                         animated
                         :href="template.href"
-                        class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5"
+                        class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
                       >
                         <template #prefix>
                           <i

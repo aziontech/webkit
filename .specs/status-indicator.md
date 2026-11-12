@@ -4,35 +4,65 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 4ab2ac82b585199d71ca5890a5b70e84a68aaed136cd35dd62eb9d34d691e5aa
+checksum: dd82a2723d1a161beaa3cbcf39b6b0c43a5cf58e52c49d4220989adec8d8a76e
 created: 2026-05-22
-last_updated: 2026-07-28
+last_updated: 2026-11-11
 ---
+
 # Status Indicator — Component Spec
 
 ## Purpose
 
-Communicates status, alerts, or progress to the user. Migrated from the existing implementation at `packages/webkit/src/components/webkit/feedback/status-indicator/`.
+Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.
+
+## When to use
+
+- The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.
+- A transitional state such as Deploying or Propagating, with `loading`.
+
+## When NOT to use
+
+- A count or a very short label attached to another element → use `badge`.
+- A category or status chip with an optional icon → use `tag`.
+- A page or section notice with copy and actions → use `message`.
+- Measurable progress → use `progress`.
+
+## Related
+
+- `badge` — filled count indicator, usually overlaid on an icon or avatar.
+- `tag` — labelled chip for categories and statuses.
+- `spinner` — replaces the dot while `loading` is true.
+- `progress` — continuous progress instead of a discrete state.
+
+## Best practices
+
+- Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
+- Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
+- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.
+- It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
 
 ## Usage
 
 ```vue
 <script setup>
-import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <StatusIndicator severity="success" label="Status" />
+  <StatusIndicator
+    severity="success"
+    label="Status"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `label` | `string` | `'Status'` | false | Visible label text. |
+| Prop       | Type                                                                 | Default     | Required | JSDoc                                                         |
+| ---------- | -------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------- |
+| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false    | Severity token driving the status dot color.                  |
+| `loading`  | `boolean`                                                            | `false`     | false    | Shows loading state and disables activation.                  |
+| `label`    | `string`                                                             | `''`        | false    | Visible label text. Empty uses the locale catalog (`Status`). |
 
 ## Events
 
@@ -52,19 +82,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography | .text-body-sm |
-| text | `var(--text-default)` |
-| spacing | `var(--spacing-3)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region     | Token (DESIGN.md)       |
+| ---------- | ----------------------- |
+| typography | .text-body-sm           |
+| text       | `var(--text-default)`   |
+| spacing    | `var(--spacing-3)`      |
+| shape      | `var(--shape-elements)` |
+| ring       | `var(--ring-color)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -74,8 +104,9 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
+- Forced colors: the dot opts out of forced colour adjustment and paints `CanvasText`, so it stays visible when backgrounds are forced to `Canvas`; the severity is still carried by the label text, never by the dot's colour alone. Tests: `src/test/forced-colors.test.ts`.
 
-## Stories (Storybook)
+## Examples
 
 - Default
 - Status
@@ -94,9 +125,8 @@ _none_
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Stories (Storybook)" section explicitly justifies the addition.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

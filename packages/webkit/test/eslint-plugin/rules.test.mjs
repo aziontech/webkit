@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { RuleTester } from 'eslint'
@@ -19,6 +20,10 @@ const noHardcodedColor = (await import('../../src/eslint-plugin/rules/no-hardcod
   .default
 const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardcoded-motion.js'))
   .default
+const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
+  .default
+const { logicalClass, mirroredGradient, physicalDirectionClasses } =
+  await import('../../src/eslint-plugin/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -32,6 +37,13 @@ const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-ov
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
 const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
+  .default
+const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
+  .default
+const noWrappedPageChrome = (
+  await import('../../src/eslint-plugin/rules/no-wrapped-page-chrome.js')
+).default
+const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
   .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
@@ -277,6 +289,231 @@ test('no-hardcoded-motion (script + template)', () => {
   })
 })
 
+test('direction classes: physical → logical mapping', () => {
+  const cases = {
+    'ml-2': 'ms-2',
+    '-mr-px': '-me-px',
+    'pl-4': 'ps-4',
+    'md:pr-[12px]': 'md:pe-[12px]',
+    'left-0': 'start-0',
+    '-right-2': '-end-2',
+    'text-left': 'text-start',
+    'hover:text-right': 'hover:text-end',
+    'border-l': 'border-s',
+    'border-r-2': 'border-e-2',
+    'border-l-(--border-default)': 'border-s-(--border-default)',
+    'rounded-l-md': 'rounded-s-md',
+    'rounded-tr-lg': 'rounded-se-lg',
+    'rounded-bl': 'rounded-es',
+    'float-right': 'float-end',
+    'scroll-pl-4': 'scroll-ps-4',
+    '!pl-2': '!ps-2',
+    'pl-2!': 'ps-2!'
+  }
+  for (const [from, to] of Object.entries(cases)) assert.equal(logicalClass(from), to, from)
+  for (const fine of [
+    'ms-2',
+    'px-4',
+    'inset-x-0',
+    'text-center',
+    'border-x',
+    'rounded-md',
+    'start-0'
+  ]) {
+    assert.equal(logicalClass(fine), null, fine)
+  }
+  assert.deepEqual(physicalDirectionClasses('absolute left-1/2 -translate-x-1/2 top-0'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('absolute left-1/2 top-0').map((h) => h.fix),
+    ['start-1/2']
+  )
+})
+
+test('physical gradients need an rtl: pair', () => {
+  assert.equal(mirroredGradient('bg-gradient-to-r'), 'rtl:bg-gradient-to-l')
+  assert.equal(mirroredGradient('bg-linear-to-tl'), 'rtl:bg-linear-to-tr')
+  assert.equal(mirroredGradient('after:bg-gradient-to-l'), 'rtl:after:bg-gradient-to-r')
+  assert.equal(mirroredGradient('bg-gradient-to-b'), null)
+  assert.equal(mirroredGradient('rtl:bg-gradient-to-l'), null)
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r from-(--a) rtl:bg-gradient-to-l'), [])
+  assert.deepEqual(physicalDirectionClasses('ltr:bg-linear-to-r rtl:bg-linear-to-l'), [])
+  assert.deepEqual(
+    physicalDirectionClasses('bg-linear-to-l to-transparent').map((h) => h.fix),
+    ['bg-linear-to-l rtl:bg-linear-to-r']
+  )
+  assert.deepEqual(physicalDirectionClasses('bg-gradient-to-r', { gradients: false }), [])
+})
+
+test('no-physical-direction (template + script + fix)', () => {
+  vue.run('no-physical-direction', noPhysicalDirection, {
+    valid: [
+      {
+        code: '<template><div class="ms-2 pe-4 text-start border-s">x</div></template>',
+        filename: 'a.vue'
+      },
+      {
+        code: '<template><span class="absolute left-1/2 -translate-x-1/2">x</span></template>',
+        filename: 'b.vue'
+      },
+      { code: '<template><Tooltip placement="right-start" /></template>', filename: 'c.vue' },
+      {
+        code: "<script setup>const side = 'left-edge'</script><template><i /></template>",
+        filename: 'd.vue'
+      },
+      {
+        code: '<template><span class="bg-gradient-to-r rtl:bg-gradient-to-l">x</span></template>',
+        filename: 'j.vue'
+      },
+      { code: '<template><span class="bg-linear-to-b">x</span></template>', filename: 'k.vue' },
+      {
+        code: '<template><span class="bg-gradient-to-r">x</span></template>',
+        filename: 'l.vue',
+        options: [{ gradients: false }]
+      }
+    ],
+    invalid: [
+      {
+        code: '<template><div class="ml-2 p-4 text-right">x</div></template>',
+        output: '<template><div class="ms-2 p-4 text-end">x</div></template>',
+        filename: 'e.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="['pl-4', open && 'border-r']">x</div></template>`,
+        output: `<template><div :class="['ps-4', open && 'border-e']">x</div></template>`,
+        filename: 'f.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      },
+      {
+        code: '<template><div class="bg-gradient-to-r from-(--bg-canvas)">x</div></template>',
+        output:
+          '<template><div class="bg-gradient-to-r rtl:bg-gradient-to-l from-(--bg-canvas)">x</div></template>',
+        filename: 'h.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<template><div :class="open ? 'bg-linear-to-l' : ''">x</div></template>`,
+        output: `<template><div :class="open ? 'bg-linear-to-l rtl:bg-linear-to-r' : ''">x</div></template>`,
+        filename: 'i.vue',
+        errors: [{ messageId: 'physical' }]
+      },
+      {
+        code: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-l-md', { 'mr-1': true })</script><template><i :class="c" /></template>`,
+        output: `<script setup>import { cn } from '@aziontech/webkit/utils/cn'\nconst c = cn('rounded-s-md', { 'me-1': true })</script><template><i :class="c" /></template>`,
+        filename: 'g.vue',
+        errors: [{ messageId: 'physical' }, { messageId: 'physical' }]
+      }
+    ]
+  })
+})
+
+test('no-wrapped-page-chrome', () => {
+  const sfc = (template, from = '@aziontech/webkit/site-footer', name = 'SiteFooter') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
+    valid: [
+      { code: sfc('<div class="flex flex-col"><main /><SiteFooter /></div>'), filename: 'a.vue' },
+      {
+        code: sfc(
+          '<div class="sticky top-0 z-40"><SiteNav /></div>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'b.vue'
+      },
+      {
+        code: '<template><div class="border-t"><SiteFooter /></div></template>',
+        filename: 'c.vue'
+      },
+      { code: sfc('<div class="border-t"><Footer /></div>'), filename: 'd.vue' }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="w-full border-t border-(--border-default)"><SiteFooter /></div>'),
+        filename: 'e.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc('<div class="md:py-8"><site-footer /></div>'),
+        filename: 'f.vue',
+        errors: [{ messageId: 'wrapped' }]
+      },
+      {
+        code: sfc(
+          '<header class="border-b"><SiteNav /></header>',
+          '@aziontech/webkit/site-nav',
+          'SiteNav'
+        ),
+        filename: 'g.vue',
+        errors: [{ messageId: 'wrapped' }]
+      }
+    ]
+  })
+})
+
+test('container-needs-width', () => {
+  const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
+    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  vue.run('container-needs-width', containerNeedsWidth, {
+    valid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card class="w-full">a</Card></div>'),
+        filename: 'a.vue'
+      },
+      {
+        code: sfc('<div class="flex"><div class="flex-1"><Card>a</Card></div></div>'),
+        filename: 'b.vue'
+      },
+      { code: sfc('<div class="flex flex-col gap-4"><Card>a</Card></div>'), filename: 'c.vue' },
+      { code: sfc('<div class="grid grid-cols-2"><Card>a</Card></div>'), filename: 'd.vue' },
+      { code: sfc('<div class="flex"><Card :class="width">a</Card></div>'), filename: 'e.vue' },
+      {
+        code: sfc('<div class="flex"><Card class="md:basis-1/2">a</Card></div>'),
+        filename: 'f.vue'
+      },
+      { code: '<template><div class="flex"><Card>a</Card></div></template>', filename: 'g.vue' },
+      {
+        code: sfc(
+          '<div class="flex"><StatTile class="grow" /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'h.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: sfc('<div class="flex gap-4"><Card>a</Card><Card>b</Card></div>'),
+        filename: 'i.vue',
+        errors: [{ messageId: 'collapses' }, { messageId: 'collapses' }]
+      },
+      {
+        code: sfc('<div class="flex flex-col items-start"><Card>a</Card></div>'),
+        filename: 'j.vue',
+        errors: [{ messageId: 'collapses' }]
+      },
+      {
+        code: sfc(
+          '<div class="inline-flex"><stat-tile /></div>',
+          '@aziontech/webkit/stat-tile',
+          'StatTile'
+        ),
+        filename: 'k.vue',
+        errors: [{ messageId: 'collapses', data: { tag: 'StatTile' } }]
+      },
+      {
+        code: sfc(
+          '<section class="flex"><ChartCard class="shrink-0" /></section>',
+          '../chart-card/chart-card.vue',
+          'ChartCard'
+        ),
+        filename: 'l.vue',
+        errors: [{ messageId: 'collapses' }]
+      }
+    ]
+  })
+})
+
 test('prefer-tree-shakeable-root', () => {
   vue.run('prefer-tree-shakeable-root', preferTreeShakeableRoot, {
     valid: [
@@ -347,9 +584,9 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><div class="p-4"><Button /></div></template>`,
         filename: 'b.vue'
       },
-      // styleSeam component (card-box) is exempt
+      // styleSeam component (card) is exempt
       {
-        code: `${imp('CardBox', 'card-box')}<template><CardBox class="bg-[var(--bg-canvas)]" /></template>`,
+        code: `${imp('Card', 'card')}<template><Card class="bg-[var(--bg-canvas)]" /></template>`,
         filename: 'c.vue'
       },
       // allow-listed via options (binding name)
@@ -363,13 +600,30 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><Button style="color:red" /></template>`,
         filename: 'e.vue',
         options: [{ checkStyle: false }]
+      },
+      // layout utilities only: the four families, arbitrary values included
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full" /></template>`,
+        filename: 'l1.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full max-w-(--container-sm) self-start shrink-0" /></template>`,
+        filename: 'l2.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="max-w-[320px] self-center" /></template>`,
+        filename: 'l3.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table><Table.Row class="shrink-0" /></Table></template>`,
+        filename: 'l4.vue'
       }
     ],
     invalid: [
       {
         code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`,
         filename: 'f.vue',
-        errors: [{ messageId: 'override' }]
+        errors: [{ messageId: 'overrideClasses' }]
       },
       {
         code: `${imp('Button', 'button')}<template><Button :class="cls" /></template>`,
@@ -385,6 +639,35 @@ test('no-style-override', () => {
       {
         code: `${imp('Table', 'table')}<template><Table><Table.Row class="x" /></Table></template>`,
         filename: 'i.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // one non-layout class next to allowed ones still fails
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-full mt-4" /></template>`,
+        filename: 'l5.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'mt-4', tag: 'Button', allowed: 'w-full, max-w-*, self-*, shrink-0' }
+          }
+        ]
+      },
+      // look-alikes of the families are not layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button class="w-1/2 shrink" /></template>`,
+        filename: 'l6.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // a variant prefix is not in the list
+      {
+        code: `${imp('Button', 'button')}<template><Button class="lg:w-full" /></template>`,
+        filename: 'l7.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
+      // a bound :class stays barred even when it holds layout utilities
+      {
+        code: `${imp('Button', 'button')}<template><Button :class="'w-full'" /></template>`,
+        filename: 'l8.vue',
         errors: [{ messageId: 'override' }]
       }
     ]
@@ -482,6 +765,14 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         errors: [{ messageId: 'slot-without-defineslots' }]
       },
       {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = computed(() => Boolean(slots.aside))",
+          '<div><slot name="aside" /></div>'
+        ),
+        filename: 'h.vue',
+        errors: [{ messageId: 'computed-slot-presence' }]
+      },
+      {
         code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),
         filename: 'f.vue',
         errors: [{ messageId: 'prose-comment' }, { messageId: 'prose-comment' }]
@@ -558,6 +849,74 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         code: '/**\n * Explains the value.\n * @param {string} v\n */\nexport const f = (v) => v',
         filename: 'src/typed.js',
         errors: [{ messageId: 'prose-comment' }]
+      }
+    ]
+  })
+})
+
+test('layout class families: shared constant used by the rule and the MCP', async () => {
+  const { LAYOUT_CLASS_FAMILIES, isLayoutClass, nonLayoutClasses } =
+    await import('../../src/eslint-plugin/index.js')
+  assert.deepEqual([...LAYOUT_CLASS_FAMILIES], ['w-full', 'max-w-*', 'self-*', 'shrink-0'])
+  for (const ok of [
+    'w-full',
+    'max-w-sm',
+    'max-w-(--container-sm)',
+    'max-w-[320px]',
+    'self-end',
+    'shrink-0'
+  ]) {
+    assert.equal(isLayoutClass(ok), true, ok)
+  }
+  for (const bad of ['w-1/2', 'max-w-', 'self-', 'shrink', 'shrink-1', 'p-4', 'lg:w-full', '']) {
+    assert.equal(isLayoutClass(bad), false, bad)
+  }
+  assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])
+})
+
+test('no-output-in-command', () => {
+  const sample = (code, language = 'bash') =>
+    `const samples = [{ label: 'Shell', language: '${language}', code: ${JSON.stringify(code)} }]`
+  js.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      sample('curl -I https://example.com'),
+      sample('# Install the CLI\ncurl -fsSL https://cli.azion.app/install.sh | bash'),
+      sample('# Install\nnpm install\n# Build\nnpm run build'),
+      sample('#!/bin/sh\nazion deploy'),
+      sample('$ azion login\n$ azion deploy'),
+      sample('$ azion deploy \\\n  --local'),
+      sample('curl -I https://example.com\n# HTTP/2 200', 'text'),
+      'const tab = { language: "bash", code: someCode }'
+    ],
+    invalid: [
+      {
+        code: sample('curl -I https://<your-azion-domain>\n# HTTP/2 200'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('azion version\n# Azion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: sample('azion deploy\n# => https://my-site.azion.app'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('$ azion version\nAzion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: 'const t = { lang: `sh`, code: `npm test\n# returns 0` }',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+  vue.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x', output: 'HTTP/2 200' }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x\\n# HTTP/2 200' }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'output' }]
       }
     ]
   })

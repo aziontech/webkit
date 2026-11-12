@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <Calendar\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
+  },
+  {
+   "name": "Open",
+   "summary": "The popover pinned open, so the surfaces inside it are documented and visually compared: the Start/End date + time fields (each bound to its visible label), the month strip with its static header, the timezone selector, and the Apply/Clear footer. Every field here follows the same contract as a standalone `input` — same heights, same `.text-label-sm` value, same hover and disabled treatment.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"min-h-[640px] w-full max-w-[560px]\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      :open=\"true\"\n      show-time\n      show-timezone\n      clearable\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The three trigger sizes — `small`, `medium`, and `large`.",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"small\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"medium\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

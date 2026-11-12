@@ -1,0 +1,39 @@
+{
+  "name": "@aziontech/webkit-docs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WebKit documentation site: components, blocks and foundations rendered from the real files",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node --max-old-space-size=8192 node_modules/vite-ssg/bin/vite-ssg.js build",
+    "preview": "node scripts/serve.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "lint": "eslint . --max-warnings 0",
+    "type-check": "vue-tsc --noEmit",
+    "format": "prettier --write \"**/*.{js,mjs,ts,vue,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
+  },
+  "dependencies": {
+    "@aziontech/icons": "workspace:*",
+    "@aziontech/theme": "workspace:*",
+    "@aziontech/webkit": "workspace:*",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@unhead/vue": "^2.1.17",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "axe-core": "^4.12.1",
+    "markdown-it": "^15.0.3",
+    "playwright": "^1.62.0",
+    "shiki": "^4.6.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4",
+    "vite-ssg": "^28.3.0",
+    "vue-tsc": "^3.2.5",
+    "vue-router": "^4.6.4"
+  }
+}

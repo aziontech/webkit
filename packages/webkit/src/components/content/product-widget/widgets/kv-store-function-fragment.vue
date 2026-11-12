@@ -129,7 +129,7 @@ await client.incr('api:calls:today', 1);`
           >
             <CodeBlock
               :tabs="FILES"
-              :border="false"
+              :bordered="false"
               show-line-numbers
               copy-aria-label="Copy the function code"
             />

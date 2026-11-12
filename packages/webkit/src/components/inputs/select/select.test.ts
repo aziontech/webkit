@@ -1,13 +1,14 @@
-import { composeStories } from '@storybook/vue3'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import * as stories from '../../../../../../apps/storybook/src/stories/components/inputs/select/Select.stories'
+import Default from '../../../../examples/select/default.vue'
+import Disabled from '../../../../examples/select/disabled.vue'
+import Multiple from '../../../../examples/select/multiple.vue'
+import WithGroups from '../../../../examples/select/with-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
-
-const { Default, Multiple, WithGroups, Disabled } = composeStories(stories)
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },
@@ -93,6 +94,19 @@ afterEach(() => {
 })
 
 describe('Select (compound / overlay)', () => {
+  it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
+    render(Host, { props: { startOpen: true, extraOptions: 997 } })
+    await nextTick()
+    const mountedAtOpen = getOptions().length
+    expect(mountedAtOpen).toBeGreaterThan(0)
+    expect(mountedAtOpen).toBeLessThan(1000)
+    await fireEvent.keyDown(getContent() as HTMLElement, { key: 'End' })
+    await nextTick()
+    await nextTick()
+    expect(getOptions()).toHaveLength(1000)
+    expect(document.activeElement?.textContent).toContain('Extra option 996')
+  })
+
   // ---- Compound API: dot-notation resolves ----------------------------------
   it('attaches every sub-component to the compound root for dot-notation', () => {
     expect(Select.Trigger).toBe(SelectTrigger)
@@ -391,7 +405,7 @@ describe('Select (compound / overlay)', () => {
     ['WithGroups', WithGroups],
     ['Disabled', Disabled]
   ] as const)('mounts the %s story fixture and renders a role=combobox trigger', (_name, Story) => {
-    const { getByTestId } = render(Story())
+    const { getByTestId } = render(Story)
     const trigger = getByTestId('select-trigger')
     expect(trigger.tagName).toBe('BUTTON')
     expect(trigger.getAttribute('role')).toBe('combobox')
@@ -520,8 +534,8 @@ describe('Select (compound / overlay)', () => {
   // The panel is `position: fixed` inside its Teleport target (document.body).
   // A transform on an ancestor of that target makes it the panel's containing
   // block, so viewport coordinates written to top/left get scaled a second time
-  // and the panel lands away from the trigger. Storybook's zoom control does
-  // exactly this — it scales the preview body.
+  // and the panel lands away from the trigger. A zoomed preview container does
+  // exactly this — it scales the body.
   it('anchors the panel to the trigger when the Teleport target is scaled', async () => {
     const previousTransform = document.body.style.transform
     const previousOrigin = document.body.style.transformOrigin
@@ -638,4 +652,97 @@ describe('Select (compound / overlay)', () => {
       expect(getByTestId('select-trigger').getAttribute('data-size')).toBe(size)
     }
   )
+})
+
+describe('keyboard map (spec)', () => {
+  const settle = async () => {
+    await nextTick()
+    await nextTick()
+  }
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+  const openWith = async (key: string, props: Record<string, unknown> = {}) => {
+    const view = render(Host, { props })
+    const trigger = view.getByTestId('select-trigger')
+    trigger.focus()
+    await userEvent.keyboard(key)
+    await settle()
+    expect(getContent()).not.toBeNull()
+    return { trigger }
+  }
+
+  it.each(['{Enter}', ' ', '{ArrowDown}'])(
+    '%s on the trigger opens the list and focuses the first option',
+    async (key) => {
+      await openWith(key)
+      expect(focusedText()).toBe('Option 1')
+    }
+  )
+
+  it('opening focuses the selected option when there is one', async () => {
+    await openWith('{Enter}', { initial: 'opt-2' })
+    expect(focusedText()).toBe('Option 2')
+  })
+
+  it('ArrowDown and ArrowUp move between options and wrap', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(focusedText()).toBe('Option 2')
+    await userEvent.keyboard('{ArrowUp}{ArrowUp}')
+    expect(focusedText()).toBe('Option 3')
+  })
+
+  it('Home and End jump to the first and last options', async () => {
+    await openWith('{Enter}')
+    await userEvent.keyboard('{End}')
+    expect(focusedText()).toBe('Option 3')
+    await userEvent.keyboard('{Home}')
+    expect(focusedText()).toBe('Option 1')
+  })
+
+  it.each(['{Enter}', ' '])(
+    '%s on an option selects it, closes and returns focus to the trigger',
+    async (key) => {
+      const { trigger } = await openWith('{Enter}')
+      await userEvent.keyboard('{ArrowDown}')
+      await userEvent.keyboard(key)
+      await settle()
+      expect(getContent()).toBeNull()
+      expect(trigger.textContent).toContain('opt-2')
+      expect(document.activeElement).toBe(trigger)
+    }
+  )
+
+  it('Escape closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(getContent()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
+
+  it('Tab closes and moves focus on to the control after the trigger', async () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h('div', [h(Host), h('button', { type: 'button', 'data-testid': 'after' }, 'After')])
+      })
+    )
+    view.getByTestId('select-trigger').focus()
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(focusedText()).toBe('Option 1')
+    await userEvent.keyboard('{Tab}')
+    await settle()
+    expect(getContent()).toBeNull()
+    expect(document.activeElement).toBe(view.getByTestId('after'))
+  })
+
+  it('Shift+Tab closes and returns focus to the trigger', async () => {
+    const { trigger } = await openWith('{Enter}')
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    await settle()
+    expect(getContent()).toBeNull()
+    expect(document.activeElement).toBe(trigger)
+  })
 })

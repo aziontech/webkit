@@ -1,0 +1,25 @@
+{
+  "component": "use-cases",
+  "title": "Components/Marketing/Sections/UseCases",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the SQL Database page places it: the product name as overline, the headline and lead in the title cell with a link out to the documentation, and four icon-led use cases filling the rest of the three-column frame. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Use Cases/UseCases",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

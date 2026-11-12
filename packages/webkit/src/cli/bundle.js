@@ -4,8 +4,29 @@ import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const TEMPLATES = join(__dirname, '../../cli-templates')
-export const CLAUDE_TEMPLATES = join(TEMPLATES, 'claude')
+const PACKAGE_ROOT = join(__dirname, '../..')
+const REPO_ROOT = join(PACKAGE_ROOT, '../..')
+function resolveTemplatesRoot() {
+  return existsSync(join(PACKAGE_ROOT, 'skills')) && existsSync(join(PACKAGE_ROOT, 'rules'))
+    ? PACKAGE_ROOT
+    : REPO_ROOT
+}
+
+export const AI_TEMPLATES = resolveTemplatesRoot()
+export const CLAUDE_TEMPLATES = AI_TEMPLATES
+
+export function agentsDir(templatesDir = AI_TEMPLATES) {
+  return join(templatesDir, 'adapters/claude/agents')
+}
+
+export function fragmentFile(templatesDir = AI_TEMPLATES) {
+  return join(templatesDir, 'adapters/AGENTS.fragment.md')
+}
+
+export function templateFile(templatesDir, rel) {
+  if (rel.startsWith('agents/')) return join(agentsDir(templatesDir), rel.slice('agents/'.length))
+  return join(templatesDir, rel)
+}
 
 function resolveWebkitVersion() {
   try {
@@ -41,11 +62,11 @@ function skillFiles(dir) {
     .map((e) => `${e.name}/SKILL.md`)
 }
 
-export function listBundle(templatesDir = CLAUDE_TEMPLATES) {
+export function listBundle(templatesDir = AI_TEMPLATES) {
   const rels = [
     ...flatMarkdown(join(templatesDir, 'rules')).map((name) => `rules/${name}`),
     ...skillFiles(join(templatesDir, 'skills')).map((rel) => `skills/${rel}`),
-    ...flatMarkdown(join(templatesDir, 'agents')).map((name) => `agents/${name}`)
+    ...flatMarkdown(agentsDir(templatesDir)).map((name) => `agents/${name}`)
   ]
   return rels.map(toPosix).sort()
 }

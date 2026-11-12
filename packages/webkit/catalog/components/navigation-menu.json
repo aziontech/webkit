@@ -1,0 +1,28 @@
+{
+ "purpose": "Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.",
+ "useWhen": [
+  "A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).",
+  "A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.",
+  "Panel entries need a title plus a muted description line, a leading icon, or a featured \"see all\" link."
+ ],
+ "avoidWhen": [
+  "It is the persistent vertical navigation of an app → use `sidebar` with `menu`.",
+  "It is a list of actions or options opened from a button → use `dropdown`.",
+  "It shows where the current page sits in a hierarchy → use `breadcrumb`.",
+  "It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu."
+ ],
+ "related": [
+  "site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.",
+  "global-header` — the bar layout this menu usually sits in.",
+  "dropdown` — a single-trigger option menu, not a site-wide navigation bar.",
+  "menu` — vertical, hierarchical navigation rows for a sidebar."
+ ],
+ "bestPractices": [
+  "Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.",
+  "A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout=\"entry\"`, an `href`, an optional `description` and `close-on-click`.",
+  "Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.",
+  "Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.",
+  "Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.",
+  "Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark."
+ ]
+}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, provide, ref, watch } from 'vue'
 
+  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useDialogMotionState } from './composables/use-dialog-motion-state'
   import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
   import { DIALOG_EXIT_MS } from './presets/transitions'
@@ -17,6 +18,8 @@
   const ctx = inject(DialogInjectionKey)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const { motionState } = useDialogMotionState(isOpen)
+
+  const portalLocale = usePortalLocale()
 
   provide(DialogMotionInjectionKey, { motionState })
 
@@ -52,6 +55,12 @@
     v-if="isPresent"
     to="body"
   >
-    <slot />
+    <div
+      class="contents"
+      :dir="portalLocale.dir"
+      :lang="portalLocale.lang"
+    >
+      <slot />
+    </div>
   </Teleport>
 </template>

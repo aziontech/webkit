@@ -1,0 +1,44 @@
+{
+  "id": "platform/dashboard/funnel-cohort-dashboard",
+  "name": "FunnelCohortDashboard",
+  "title": "Templates/Platform/Dashboard/FunnelCohortDashboard",
+  "surface": "product",
+  "summary": "A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `TableRoot` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `TableRoot` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "funnel dashboard",
+    "conversion funnel",
+    "cohort retention",
+    "retention heatmap",
+    "signup to paid",
+    "growth dashboard",
+    "funil de conversão",
+    "retenção por coorte",
+    "painel de funil"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "funnel-cohort-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the first response loads, every tile, both charts and both tables hold their place with a Skeleton, so the grid does not reflow when data arrives. The filter bar stays usable.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "The filters match nothing. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that names the filters as the reason and offers Clear filters, which resets the period and the segment.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "platform/view/split-view",
+  "name": "SplitView",
+  "title": "Templates/Platform/View/SplitView",
+  "surface": "product",
+  "summary": "The events explorer placed in the platform shell, with its navigation entry active: the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "real-time events",
+    "events visualizer",
+    "event explorer",
+    "log explorer",
+    "logs viewer",
+    "request logs",
+    "events search",
+    "eventos em tempo real",
+    "visualizador de eventos",
+    "explorador de logs",
+    "split view",
+    "master detail",
+    "list and detail panes",
+    "visão dividida",
+    "query language",
+    "events query",
+    "saved searches",
+    "saved queries",
+    "query history",
+    "date range",
+    "time range picker",
+    "investigation tabs",
+    "event document",
+    "consulta de eventos",
+    "buscas salvas",
+    "intervalo de datas"
+  ],
+  "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "split-view.vue"
+  },
+  "variants": [
+    {
+      "name": "Filtered",
+      "summary": "Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the popover on that field or removes it.",
+      "file": "variants/filtered.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    },
+    {
+      "name": "Query",
+      "summary": "The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.",
+      "file": "variants/query.vue"
+    },
+    {
+      "name": "Sessions",
+      "summary": "Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab).",
+      "file": "variants/sessions.vue"
+    },
+    {
+      "name": "EventDocument",
+      "summary": "An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows.",
+      "file": "variants/event-document.vue"
+    }
+  ]
+}

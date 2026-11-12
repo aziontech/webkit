@@ -1,0 +1,41 @@
+{
+  "component": "password-input",
+  "title": "Components/Primitives/Inputs/PasswordInput",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Default empty password input with the visibility toggle enabled.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Toggle",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `iconRight` slot.",
+      "file": "toggle.vue"
+    },
+    {
+      "name": "IconLeft",
+      "summary": "Leading `iconLeft` slot — the only icon slot honored when `toggleable=true`.",
+      "file": "icon-left.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated `modelValue` shows the filled visual state and the masked rendering (driven by `:not(:placeholder-shown)`).",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state — applies danger border/ring tokens and `aria-invalid`.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "MaxLength",
+      "summary": "Hard character cap of 8 enforced by the native `maxlength` attribute.",
+      "file": "max-length.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled state — the toggle button inherits the disabled state.",
+      "file": "disabled.vue"
+    }
+  ]
+}

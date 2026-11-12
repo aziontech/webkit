@@ -1,0 +1,51 @@
+{
+  "component": "multi-select",
+  "title": "Components/Primitives/Inputs/MultiSelect",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Multi-select over a flat option list; one option is pre-selected through v-model.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "The three trigger sizes (small, medium, large) matching Input.",
+      "file": "sizes.vue"
+    },
+    {
+      "name": "WithGroups",
+      "summary": "Options organised into labelled sections via MultiSelectGroup.",
+      "file": "with-groups.vue"
+    },
+    {
+      "name": "WithSearchAndFooter",
+      "summary": "The search and footer slots on MultiSelectContent: a filterable list with a footer action that appends a new option.",
+      "file": "with-search-and-footer.vue"
+    },
+    {
+      "name": "WithOptionExtras",
+      "summary": "Per-option extras on MultiSelectOption: a leading icon, a custom left slot, and a trailing tag.",
+      "file": "with-option-extras.vue"
+    },
+    {
+      "name": "LongList",
+      "summary": "A long option list; the panel scrolls internally once it exceeds its max height.",
+      "file": "long-list.vue"
+    },
+    {
+      "name": "Filled",
+      "summary": "Pre-populated selection showing the filled trigger label and the checked indicators.",
+      "file": "filled.vue"
+    },
+    {
+      "name": "Invalid",
+      "summary": "Invalid state applying the danger border and ring tokens.",
+      "file": "invalid.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "Disabled trigger; the dropdown cannot open.",
+      "file": "disabled.vue"
+    }
+  ]
+}

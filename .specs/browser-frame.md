@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-10-20
-checksum: cc5002be8796c7fd33aaa629c4a59db8ad15996ff27a934a74704ee90563a9a2
+last_updated: 2026-11-11
+checksum: 549b10821455ec995d4a5c1c1fac531354b7f006209e75a45f96c8c6c0c8e7fb
 ---
 
 # BrowserFrame — Component Spec
@@ -18,7 +18,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 ## When to use
 
 - Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
-- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, in Storybook or on a documentation page.
+- Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.
 - Showing that a result lives at a URL — a deployed site, a preview link — by setting `address`.
 
@@ -49,13 +49,13 @@ A browser window that renders live webkit components inside a viewport of its ow
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import BrowserFrame from '@aziontech/webkit/browser-frame'
-import SectionTitle from '@aziontech/webkit/section-title'
-import Button from '@aziontech/webkit/button'
+  import { ref } from 'vue'
+  import BrowserFrame from '@aziontech/webkit/browser-frame'
+  import SectionTitle from '@aziontech/webkit/section-title'
+  import Button from '@aziontech/webkit/button'
 
-const width = ref(768)
-const height = ref(1024)
+  const width = ref(768)
+  const height = ref(1024)
 </script>
 
 <template>
@@ -73,24 +73,24 @@ const height = ref(1024)
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `address` | `string` | `''` | false | Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty. |
-| `minWidth` | `number` | `320` | false | Smallest viewport width the resize handles can reach, in pixels. |
-| `maxWidth` | `number` | `1920` | false | Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit. |
-| `minHeight` | `number` | `320` | false | Smallest viewport height the resize handles can reach, in pixels. |
-| `maxHeight` | `number` | `1440` | false | Largest viewport height the resize handles can reach, in pixels. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`. |
-| `copyAriaLabel` | `string` | `'Copy address'` | false | Accessible name of the address bar's copy button. |
-| `widthHandleAriaLabel` | `string` | `'Resize preview width'` | false | Accessible name of the right-edge width handle. |
-| `heightHandleAriaLabel` | `string` | `'Resize preview height'` | false | Accessible name of the bottom-edge height handle. |
+| Prop                    | Type     | Default | Required | JSDoc                                                                                                                   |
+| ----------------------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `address`               | `string` | `''`    | false    | Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty.                            |
+| `minWidth`              | `number` | `320`   | false    | Smallest viewport width the resize handles can reach, in pixels.                                                        |
+| `maxWidth`              | `number` | `1920`  | false    | Largest viewport width the resize handles can reach, in pixels; widths wider than the container are scaled down to fit. |
+| `minHeight`             | `number` | `320`   | false    | Smallest viewport height the resize handles can reach, in pixels.                                                       |
+| `maxHeight`             | `number` | `1440`  | false    | Largest viewport height the resize handles can reach, in pixels.                                                        |
+| `ariaLabel`             | `string` | `''`    | false    | Accessible name of the viewport; when empty it falls back to `address`, then to `Preview`.                              |
+| `copyAriaLabel`         | `string` | `''`    | false    | Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`).                       |
+| `widthHandleAriaLabel`  | `string` | `''`    | false    | Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`).                 |
+| `heightHandleAriaLabel` | `string` | `''`    | false    | Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`).              |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model:width` | `number` | `undefined` | `update:width` | Simulated viewport width in pixels via `defineModel('width')`. Undefined fills the container; the width and corner handles write a number, clamped to `minWidth`…`maxWidth`, on every resize step. Works controlled or uncontrolled. |
-| `v-model:height` | `number` | `800` | `update:height` | Simulated viewport height in pixels via `defineModel('height', { default: 800 })`. The height and corner handles write a number, clamped to `minHeight`…`maxHeight`, on every resize step. Works controlled or uncontrolled. |
+| Model            | Type     | Default     | Emits           | Notes                                                                                                                                                                                                                                |
+| ---------------- | -------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:width`  | `number` | `undefined` | `update:width`  | Simulated viewport width in pixels via `defineModel('width')`. Undefined fills the container; the width and corner handles write a number, clamped to `minWidth`…`maxWidth`, on every resize step. Works controlled or uncontrolled. |
+| `v-model:height` | `number` | `800`       | `update:height` | Simulated viewport height in pixels via `defineModel('height', { default: 800 })`. The height and corner handles write a number, clamped to `minHeight`…`maxHeight`, on every resize step. Works controlled or uncontrolled.         |
 
 ## Events
 
@@ -98,9 +98,9 @@ _No plain events — the size flows through `v-model:width` and `v-model:height`
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only. |
+| Slot      | Scope | Notes                                                                                                       |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The live content, teleported into the frame's viewport `iframe` once it is ready. Renders client-side only. |
 
 ## States
 
@@ -114,7 +114,7 @@ The frame is static apart from its resize handles.
   - the **width handle** on the right edge writes `width`;
   - the **height handle** on the bottom edge writes `height`;
   - the **corner handle** at the bottom-right writes both at once.
-  Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
+    Pointer drags use pointer capture. A width drag moves the right edge under the pointer (the frame is centered, so the width changes by twice the pointer's travel) and is clamped to `minWidth` and the container width; a height drag follows the pointer's travel divided by the current scale and is clamped to `minHeight`…`maxHeight`. The keyboard reaches up to `maxWidth` / `maxHeight`. While any handle is dragged the root sets `data-resizing` and the content ignores the pointer.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
@@ -124,40 +124,40 @@ The frame is static apart from its resize handles.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                         | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| handle hover/focus color change | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 Resizing itself is not animated — the size follows the pointer or key press immediately.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| shape (root + viewport clip) | `var(--shape-card)` |
-| edge (root hairline) | `var(--border-default)` |
-| viewport surface | `var(--bg-canvas)` |
-| chrome surface | `var(--bg-surface)` |
+| Region                                  | Token (DESIGN.md)       |
+| --------------------------------------- | ----------------------- |
+| shape (root + viewport clip)            | `var(--shape-card)`     |
+| edge (root hairline)                    | `var(--border-default)` |
+| viewport surface                        | `var(--bg-canvas)`      |
+| chrome surface                          | `var(--bg-surface)`     |
 | chrome divider (bottom edge of the bar) | `var(--border-default)` |
-| window dots fill | `var(--border-strong)` |
-| address bar surface (skeleton fill) | `var(--bg-placeholder)` |
-| address bar edge | `var(--border-muted)` |
-| address bar max width | `var(--container-xs)` |
-| address typography | `.text-label-code-sm` |
-| size readout typography | `.text-label-sm` |
-| address + size readout color | `var(--text-muted)` |
-| chrome spacing (bar padding x) | `var(--spacing-sm)` |
-| dot gap | `var(--spacing-xs)` |
-| address padding (leading) | `var(--spacing-sm)` |
-| handle grip (rest) | `var(--border-strong)` |
-| handle grip (hover, focus, resizing) | `var(--text-default)` |
-| handle shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| window dots fill                        | `var(--border-strong)`  |
+| address bar surface (skeleton fill)     | `var(--bg-placeholder)` |
+| address bar edge                        | `var(--border-muted)`   |
+| address bar max width                   | `var(--container-xs)`   |
+| address typography                      | `.text-label-code-sm`   |
+| size readout typography                 | `.text-label-sm`        |
+| address + size readout color            | `var(--text-muted)`     |
+| chrome spacing (bar padding x)          | `var(--spacing-sm)`     |
+| dot gap                                 | `var(--spacing-xs)`     |
+| address padding (leading)               | `var(--spacing-sm)`     |
+| handle grip (rest)                      | `var(--border-strong)`  |
+| handle grip (hover, focus, resizing)    | `var(--text-default)`   |
+| handle shape                            | `var(--shape-elements)` |
+| ring                                    | `var(--ring-color)`     |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                                  | Temporary primitive                                                                                   | Follow-up                                                                                   |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | — (documentation gap, not a token gap): address bar shape, a fully rounded pill | `var(--radius-full)` — ships in the theme as `9999px`, the same temporary primitive `stepper` records | `TODO: document --radius-full in DESIGN.md § Shape; there is no --shape-* alias for a pill` |
 
 ## Accessibility (WCAG 2.1 AA)
@@ -178,7 +178,15 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - `motion-reduce:transition-none` on the handles' color transition; nothing else moves.
 - Touch target: the edge handles' hit areas are 24px deep and run the frame's full width or height, and the corner handle is 24×24 — a justified deviation from 40×40: a deeper strip would cover more of the content's edge, and 24px meets WCAG 2.5.8.
 
-## Stories (Storybook)
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: none mirror.
+- Keyboard: the width handle grows with `ArrowRight` and shrinks with `ArrowLeft` in reading order, swapped under `dir="rtl"` (`logicalArrowKey`).
+- Pointer: the width drag delta is inverted under `rtl`.
+- User data: the address bar renders `dir="ltr"`: a URL always reads left to right.
+
+## Examples
 
 - Default — a composed screen of real components filling the container width at the default height, with an address.
 - Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `kind`/`size` axis that would otherwise demonstrate it.
@@ -199,10 +207,8 @@ Resizing itself is not animated — the size follows the pointer or key press im
 - Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
-- Do not add Figma references to Storybook stories. No `parameters.design`, no `parameters.figma`, no Figma URLs in `docs.description.*`, no `@storybook/addon-designs` import. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not use `parameters.actions.argTypesRegex` (deprecated in Storybook 8 and silently misroutes Vue 3 emits) or `parameters.actions.handles` (DOM-only). Declare every event explicitly in `argTypes` with a camelCase `on<Event>` key and `{ action: '<emitted-name>' }`. Do not use the legacy CSF2 `Name.args = {...}` form — always object-style CSF3.
-- Do not add bespoke Storybook stories beyond Default + Types + Sizes + state stories (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Stories (Storybook)" section explicitly justifies the addition. Do not split Types/Sizes into one-story-per-variant — the composite stories are the canonical pattern.
-- Do not duplicate the `## Usage` block from the spec inside the Storybook story body. The block is injected once into `parameters.docs.description.component` by the storybook-write skill; copy it nowhere else.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

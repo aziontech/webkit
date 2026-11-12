@@ -1,0 +1,44 @@
+{
+  "id": "platform/dashboard/health-score-dashboard",
+  "name": "HealthScoreDashboard",
+  "title": "Templates/Platform/Dashboard/HealthScoreDashboard",
+  "surface": "product",
+  "summary": "A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "health score",
+    "health dashboard",
+    "performance score",
+    "web vitals",
+    "score bands",
+    "quality score",
+    "pontuação de saúde",
+    "painel de saúde",
+    "nota de desempenho"
+  ],
+  "skills": ["webkit-data-viz", "webkit-ui-states"],
+  "primary": {
+    "name": "Default",
+    "file": "health-score-dashboard.vue"
+  },
+  "variants": [
+    {
+      "name": "Loading",
+      "summary": "While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives.",
+      "file": "variants/loading.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.",
+      "file": "variants/empty.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
+      "file": "variants/failed.vue"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "component": "big-numbers",
+  "title": "Components/Marketing/Primitives/BigNumbers",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Four measured facts at the default `medium` scale. The unit rides in `suffix` and the qualifier in `prefix`, so the figure itself stays the largest, highest-contrast thing in each cell. Edit `items` in the Controls panel to see the band grow or shrink — a band with no items renders nothing at all.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Sizes",
+      "summary": "Every `size` value, one band under the other. Only the figure moves up the big-number scale — the caption stays at overline scale and the cell keeps its frame, so a denser section can drop to `small` and a page hero can reach for `large` without the band changing shape.",
+      "file": "sizes.vue"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useHeadingNav } from '../../../composables/use-heading-nav/index'
-  import Tag from '../../tag/tag.vue'
+  import Tag from '../../content/tag/tag.vue'
   import { slugify } from './slugify'
 
   /**
@@ -84,7 +84,7 @@
             class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
             >{{ label }}</span
           >
-          <span class="ml-(--spacing-xs) inline-flex h-lh items-center align-top">
+          <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
             <i
               class="pi pi-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
               aria-hidden="true"
@@ -113,7 +113,7 @@
     </div>
     <div
       :data-titled="title ? '' : null"
-      class="relative min-w-0 flex-1 md:border-l md:border-(--border-default) md:pl-(--spacing-lg) md:data-titled:pl-(--spacing-xl) md:[[data-doc-update]+[data-doc-update]_&]:-mt-6 md:[[data-doc-update]+[data-doc-update]_&]:pt-6 data-titled:[[data-doc-update]:has(+[data-doc-update])_&]:pb-(--spacing-xl) [&>*:first-child]:pt-0!"
+      class="relative min-w-0 flex-1 md:border-s md:border-(--border-default) md:ps-(--spacing-lg) md:data-titled:ps-(--spacing-xl) md:[[data-doc-update]+[data-doc-update]_&]:-mt-6 md:[[data-doc-update]+[data-doc-update]_&]:pt-6 data-titled:[[data-doc-update]:has(+[data-doc-update])_&]:pb-(--spacing-xl) [&>*:first-child]:pt-0!"
     >
       <div
         v-if="title"
@@ -123,7 +123,7 @@
         <span
           aria-hidden="true"
           :data-testid="`${testId}__node`"
-          class="absolute top-[0.5lh] left-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md md:block"
+          class="absolute top-[0.5lh] start-[calc(var(--spacing-xl)*-1)] hidden size-3 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-strong) bg-(--bg-canvas) text-heading-md md:block"
         />
         <h2
           :id="`${anchorId}-label`"
@@ -139,7 +139,7 @@
               class="underline-offset-4 decoration-(--border-strong) group-hover/anchor:underline"
               >{{ title }}</span
             >
-            <span class="ml-(--spacing-xs) inline-flex h-lh items-center align-top">
+            <span class="ms-(--spacing-xs) inline-flex h-lh items-center align-top">
               <i
                 class="pi pi-link text-label-md text-(--text-muted) opacity-0 transition-opacity duration-150 ease-out group-hover/anchor:opacity-100 group-focus-visible/anchor:opacity-100 motion-reduce:transition-none"
                 aria-hidden="true"

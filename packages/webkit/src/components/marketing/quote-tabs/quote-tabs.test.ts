@@ -44,8 +44,18 @@ const LIVE_TRANSITION = { stubs: { transition: false } }
 
 const INTERVAL = 5000
 
+// The out-in swap is over once one quote layer is left and it carries no
+// transition class; a fixed wait raced the transition on a loaded machine.
 function settle(): Promise<void> {
-  return new Promise((resolve) => globalThis.setTimeout(resolve, 400))
+  return vi.waitFor(
+    () => {
+      const layers = document.querySelectorAll(`[data-testid="${TESTID}__quote"]`)
+      expect(layers).toHaveLength(1)
+      expect(layers[0]!.getAttribute('aria-hidden')).toBeNull()
+      expect(layers[0]!.className).not.toContain('transition-')
+    },
+    { timeout: 5000 }
+  )
 }
 
 function tabsOf(container: Element): globalThis.HTMLButtonElement[] {
@@ -422,7 +432,7 @@ describe('QuoteTabs', () => {
   it('advances to the next client once the interval elapses', async () => {
     vi.useFakeTimers()
     const { container, emitted } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL / 2)
@@ -442,7 +452,7 @@ describe('QuoteTabs', () => {
   it('wraps from the last client to the first, travelling forward', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
     vi.advanceTimersByTime(INTERVAL * ITEMS.length)
@@ -452,10 +462,10 @@ describe('QuoteTabs', () => {
     expect(panelOf(container)).toHaveAttribute('data-direction', 'forward')
   })
 
-  it('never moves on its own and draws no hairline when autoPlay is off', async () => {
+  it('never moves on its own and draws no hairline when autoplay is off', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlay: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplay: false, autoplayInterval: INTERVAL }
     })
 
     expect(getByTestId(TESTID).getAttribute('data-autoplay')).toBeNull()
@@ -470,7 +480,7 @@ describe('QuoteTabs', () => {
   it('draws no hairline when showProgress is off, while the band still advances', async () => {
     vi.useFakeTimers()
     const { container } = render(QuoteTabs, {
-      props: { items: ITEMS, showProgress: false, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, showProgress: false, autoplayInterval: INTERVAL }
     })
 
     expect(progressOf(container)).toBeNull()
@@ -484,7 +494,7 @@ describe('QuoteTabs', () => {
   it('pauses while the pointer rests on the band, and resumes on leave', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 
@@ -502,7 +512,7 @@ describe('QuoteTabs', () => {
   it('restarts the count on a click and keeps running with the pointer on the band', async () => {
     vi.useFakeTimers()
     const { container, getByTestId } = render(QuoteTabs, {
-      props: { items: ITEMS, autoPlayInterval: INTERVAL }
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
     const root = getByTestId(TESTID)
 
