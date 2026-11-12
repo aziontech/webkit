@@ -263,6 +263,40 @@ describe('ConsoleLayout', () => {
     expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
   })
 
+  it('renders a header-start switcher and a composed breadcrumb trail', () => {
+    const { getByRole } = mount(
+      { breadcrumbs: [{ label: 'Ignored' }] },
+      {},
+      {
+        'header-start': () => h('button', { type: 'button' }, 'Switch account'),
+        breadcrumbs: () => h('span', 'Composed trail')
+      }
+    )
+    const header = within(getByRole('banner'))
+    expect(header.getByRole('button', { name: 'Switch account' })).toBeTruthy()
+    expect(header.getByText('Composed trail')).toBeTruthy()
+    expect(header.queryByText('Ignored')).toBeNull()
+  })
+
+  it('shows flash notifications and toggles the tools region from an action', async () => {
+    const onTools = vi.fn()
+    const { getByRole, getByText } = mount(
+      { toolsLabel: 'Notifications', 'onUpdate:toolsOpen': onTools },
+      {},
+      {
+        notifications: () => h('div', { role: 'status' }, 'Deploy failed'),
+        actions: ({ toggleTools }: { toggleTools: () => void }) =>
+          h('button', { type: 'button', onClick: toggleTools }, 'Bell'),
+        tools: () => h('p', 'You are all caught up')
+      }
+    )
+    expect(getByRole('status').textContent).toContain('Deploy failed')
+    await userEvent.click(within(getByRole('banner')).getByRole('button', { name: 'Bell' }))
+    expect(onTools).toHaveBeenCalledWith(true)
+    await waitFor(() => expect(getByText('You are all caught up')).toBeTruthy())
+    expect(getByRole('region', { name: 'Notifications' })).toBeTruthy()
+  })
+
   it('has no axe violations', async () => {
     const { container } = mount({
       breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }],

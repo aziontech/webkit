@@ -5,7 +5,7 @@ structure: monolithic
 status: approved
 spec_version: 1
 template: 2
-checksum: 16be9db58e99c984a083c6ce43617e9384794b090db59ffe1754107dec94ca7d
+checksum: b6e8299a8af5b68b02cd9f360f75310e27c520b2bcf33b79de5252fe17f4db4f
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -25,7 +25,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 - A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.
 - Public marketing pages → `SiteLayout`. Documentation → `DocLayout`.
-- When the frame needs the tools (help) region or the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header and content regions.
+- When the page needs the split panel → compose `AppLayout` directly; `ConsoleLayout` covers the navigation, header, notifications, tools and content regions.
 
 ## Related
 
@@ -42,6 +42,8 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
+- Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
+- Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
 
@@ -83,19 +85,21 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 | `account`           | `ConsoleLayoutAccount`    | `undefined` | false    | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent.                              |
 | `ariaLabel`         | `string`                  | `''`        | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`).                                                                         |
 | `searchPlaceholder` | `string`                  | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`).                                                                       |
+| `toolsLabel`        | `string`                  | `''`        | false    | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`).                                                                            |
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                                   |
-| --------------------- | --------- | ------- | ------------------- | --------------------------------------------------------------------------------------- |
-| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it. |
+| Model                 | Type      | Default | Emits               | Notes                                                                                                |
+| --------------------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.              |
+| `v-model:tools-open`  | `boolean` | `false` | `update:toolsOpen`  | Whether the tools region (help or notifications) is open beside the content; a drawer while compact. |
 
 ## Events
 
-| Event           | Payload                                                            | Notes                                                                                                                                                                                     |
-| --------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event           | Payload                                                            | Notes                                                                                                                                                                                   |
+| --------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `navigate`      | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows it (`to` with the app's router, else `href`). A row with neither is left to this handler. Event first. |
-| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)`    | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first.                                                                                    |
+| `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)`    | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first.                                                                                  |
 
 ## Slots
 

@@ -15,6 +15,7 @@
   } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -88,6 +89,8 @@
     ariaLabel?: string
     /** Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`). */
     searchPlaceholder?: string
+    /** Title of the tools region (help, notifications). Empty uses the AppLayout catalog (`Help`). */
+    toolsLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -97,7 +100,8 @@
     home: '/',
     account: undefined,
     ariaLabel: '',
-    searchPlaceholder: ''
+    searchPlaceholder: '',
+    toolsLabel: ''
   })
 
   const emit = defineEmits<{
@@ -113,11 +117,22 @@
   /** Whether the search palette is open. Use with `v-model:search-open`. */
   const searchOpen = defineModel<boolean>('searchOpen', { default: false })
 
+  /** Whether the tools region is open. Use with `v-model:tools-open`. */
+  const toolsOpen = defineModel<boolean>('toolsOpen', { default: false })
+
   defineSlots<{
     /** The page body, rendered inside the layout's main landmark. */
     default(): unknown
     /** The app's header actions; render them icon-only while compact. */
-    actions(props: { compact: boolean }): unknown
+    actions(props: { compact: boolean; toggleTools: () => void }): unknown
+    /** Content at the start of the header, before the breadcrumbs. */
+    'header-start'(props: { compact: boolean }): unknown
+    /** A composed trail that replaces the one built from the breadcrumbs prop. */
+    breadcrumbs(): unknown
+    /** Flash messages above the page. */
+    notifications(): unknown
+    /** The tools region's body. */
+    tools(): unknown
     /** Extra palette groups listed before the navigation pages. */
     search(props: { query: string }): unknown
     /** Groups of the account menu. */
@@ -242,9 +257,15 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="h-dvh [--sidebar-width:var(--container-2xs)]"
+    :class="
+      cn('h-dvh [--sidebar-width:var(--container-2xs)]', attrs['class'] as string | undefined)
+    "
   >
-    <AppLayout :navigation-label="ariaLabel || t('consoleLayout.navigation')">
+    <AppLayout
+      v-model:tools-open="toolsOpen"
+      :navigation-label="ariaLabel || t('consoleLayout.navigation')"
+      :tools-label="toolsLabel"
+    >
       <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
           v-model:width="railWidth"
@@ -325,7 +346,7 @@
         </Sidebar>
       </template>
 
-      <template #header="{ compact, openNavigation }">
+      <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container">
           <GlobalHeader :data-testid="`${testId}__header`">
             <GlobalHeaderLeft>
@@ -354,8 +375,18 @@
                     />
                   </a>
                 </template>
+                <slot
+                  name="header-start"
+                  :compact="compact"
+                />
                 <div
-                  v-else-if="crumbItems.length"
+                  v-if="!compact && $slots['breadcrumbs']"
+                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
+                >
+                  <slot name="breadcrumbs" />
+                </div>
+                <div
+                  v-else-if="!compact && crumbItems.length"
                   class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
                 >
                   <Breadcrumb
@@ -375,6 +406,7 @@
               <slot
                 name="actions"
                 :compact="compact"
+                :toggle-tools="toggleTools"
               />
               <DropdownMenu
                 v-if="account && $slots['account-menu']"
@@ -407,6 +439,20 @@
             </GlobalHeaderRight>
           </GlobalHeader>
         </div>
+      </template>
+
+      <template
+        v-if="$slots['notifications']"
+        #notifications
+      >
+        <slot name="notifications" />
+      </template>
+
+      <template
+        v-if="$slots['tools']"
+        #tools
+      >
+        <slot name="tools" />
       </template>
 
       <main
