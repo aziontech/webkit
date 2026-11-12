@@ -70,7 +70,7 @@ export function guidelinesSummary(md) {
 
 function namedWebkitImports(sfc) {
   const names = []
-  const re = /import\s+[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
+  const re = /import\s+(?!type\s)[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
   for (const m of String(sfc).matchAll(re)) {
     for (const part of m[1].split(',')) {
       const local = part
