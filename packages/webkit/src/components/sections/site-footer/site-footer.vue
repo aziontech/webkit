@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -83,10 +83,18 @@
     languageAriaLabel: ''
   })
 
+  /** The chosen option of the language select; empty shows the first option. Use with `v-model:language`. */
+  const language = defineModel<string>('language', { default: '' })
+
   const attrs = useAttrs()
   const { t } = useTranslate({ siteFooter: en.siteFooter })
 
-  const language = ref<string>(props.languages[0] ?? '')
+  const selectedLanguage = computed({
+    get: () => language.value || props.languages[0] || '',
+    set: (value: string) => {
+      language.value = value
+    }
+  })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-site-footer'
@@ -167,7 +175,7 @@
       >
         <div class="w-28">
           <Select
-            v-model="language"
+            v-model="selectedLanguage"
             :placeholder="languageAriaLabel || t('siteFooter.language')"
           >
             <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">

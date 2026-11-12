@@ -6,14 +6,14 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: 39448da707f642d15a72199a4004096e8fb874b76b646c1251a073f59f75ddb2
+checksum: 0f4d113b5c11b693fa0771adb64b55e9b145780e452be881383727fe028b21bc
 ---
 
 # SiteFooter — Component Spec
 
 ## Purpose
 
-The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.
+The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select is two-way bound through `v-model:language` (it keeps its own value when unbound); its options are the labels the reader sees.
 
 ## When to use
 
@@ -61,17 +61,23 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ## Props
 
-| Prop                | Type                 | Default  | Required | JSDoc                                                                                                                                          |
-| ------------------- | -------------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`              | `SiteFooterKind`     | `'site'` | false    | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed.                         |
-| `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                              |
-| `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                            |
-| `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                          |
-| `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph.                                                  |
-| `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
-| `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                 |
-| `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty.                     |
-| `languageAriaLabel` | `string`             | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                      |
+| Prop                | Type                 | Default  | Required | JSDoc                                                                                                                                                                                 |
+| ------------------- | -------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`              | `SiteFooterKind`     | `'site'` | false    | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed.                                                                |
+| `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                                                                     |
+| `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                                                                   |
+| `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                                                                 |
+| `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph. |
+| `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab.                                        |
+| `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                                                        |
+| `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty.                     |
+| `languageAriaLabel` | `string`             | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                                                             |
+
+## v-model
+
+| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                              |
+| ------------------ | -------- | ------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:language` | `string` | `''`    | `update:language` | The chosen option of the language select, one of `languages`. Empty shows the first option; choosing one emits it, so the page can switch its locale. Unbound, the select keeps its value locally. |
 
 ## Events
 
@@ -123,6 +129,7 @@ The footer under every marketing page: the link columns, then the social row bes
 ## Examples
 
 - Default — four link columns, one of them with an external link.
+- Language — justification: `v-model:language` is behaviour no other example shows; the page reads the chosen language and names it under the footer.
 
 ## Constraints — DO NOT
 
