@@ -17709,7 +17709,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
 # Code Editor
 
-> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
+> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
 - Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
 - Category: code · Surface: product · Structure: monolithic
@@ -17725,7 +17725,9 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 ## Do
 
 - Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
-- Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.
+- Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
+- Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
+- Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
 - Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
 - Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
@@ -17763,6 +17765,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 | `height` | `string` | `'16rem'` | false | CSS height of the editing area. |
 | `fill` | `boolean` | `false` | false | Fills a flex column instead of using `height`. |
 | `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
+| `padLineNumbers` | `boolean` | `false` | false | Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. |
 | `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
@@ -22951,6 +22954,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Mark a staged change `dashed` with a warning status and a message that says the deploy applies it.
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
+- Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`pi pi-external-link`), as every resource name in the console does.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`pi pi-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.key`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Don’t
 
@@ -29753,6 +29758,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
 - With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
+- A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
+- Keep `kind="transparent"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`.
 
 ## Don’t
 
@@ -29779,6 +29786,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `placeholder` | `string` | `undefined` | false | Trigger placeholder shown when no option is selected. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`. |
+| `kind` | `'outlined' \| 'transparent'` | `'outlined'` | false | Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
 | `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
@@ -29817,6 +29825,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `required`, `opened`
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
+- `data-kind` on the root, the trigger and the panel mirrors `kind` (`outlined` | `transparent`)
+- `kind="transparent"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection

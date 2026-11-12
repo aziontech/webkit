@@ -13947,6 +13947,13 @@
      "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
     },
     {
+     "name": "kind",
+     "type": "'outlined' | 'transparent'",
+     "default": "'outlined'",
+     "required": "false",
+     "doc": "Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
+    },
+    {
      "name": "disabled",
      "type": "boolean",
      "default": "false",
@@ -14055,6 +14062,13 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
+    },
+    {
+     "name": "kind",
+     "type": "'outlined' | 'transparent'",
+     "default": "'outlined'",
+     "required": "false",
+     "doc": "Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
     },
     {
      "name": "disabled",
@@ -25598,6 +25612,13 @@
      "default": "true",
      "required": "false",
      "doc": "Shows the line-number gutter."
+    },
+    {
+     "name": "padLineNumbers",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do."
     },
     {
      "name": "path",

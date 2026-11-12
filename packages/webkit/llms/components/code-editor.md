@@ -1,6 +1,6 @@
 # Code Editor
 
-> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (for example `() => import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
+> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
 - Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
 - Category: code · Surface: product · Structure: monolithic
@@ -16,7 +16,9 @@
 ## Do
 
 - Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
-- Pass `loader` from the app (`() => import('monaco-editor')`) so Monaco is code-split and never part of the WebKit bundle; set up Monaco's workers in that module.
+- Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
+- Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
+- Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
 - Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
 - Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
@@ -54,6 +56,7 @@
 | `height` | `string` | `'16rem'` | false | CSS height of the editing area. |
 | `fill` | `boolean` | `false` | false | Fills a flex column instead of using `height`. |
 | `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
+| `padLineNumbers` | `boolean` | `false` | false | Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. |
 | `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
@@ -166,12 +169,41 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 </template>
 ```
 
-### Diff
+### Monaco
 
 ```vue
 <script setup>
   import CodeEditor from '@aziontech/webkit/code-editor'
+  import Field from '@aziontech/webkit/field'
   import { ref } from 'vue'
+
+  const loadMonaco = async () => {
+    const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
+      await Promise.all([
+        import('monaco-editor/editor/editor.worker?worker'),
+        import('monaco-editor/languages/features/json/json.worker?worker'),
+        import('monaco-editor/languages/features/typescript/ts.worker?worker')
+      ])
+    globalThis.MonacoEnvironment = {
+      getWorker: (_id, label) => {
+        if (label === 'json') return new JsonWorker()
+        if (label === 'typescript' || label === 'javascript') return new TsWorker()
+        return new EditorWorker()
+      }
+    }
+    return import('monaco-editor')
+  }
+
+  const handler = ref(`async function handleRequest(request) {
+  const token = request.headers.get('authorization')
+  if (!token) return new Response('Unauthorized', { status: 401 })
+  return fetch(request)
+}
+
+addEventListener('fetch', (event) => {
+  event.respondWith(handleRequest(event.request))
+})
+`)
 
   const original = `{
   "cache": {
@@ -181,7 +213,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 }
 `
 
-  const next = ref(`{
+  const code = ref(`{
   "cache": {
     "ttl": 300,
     "bypass": false,
@@ -189,42 +221,116 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
   }
 }
 `)
+
+  const markers = [
+    {
+      line: 5,
+      column: 5,
+      endColumn: 12,
+      severity: 'warning',
+      message: '"stale" serves expired content while the cache revalidates.'
+    }
+  ]
 </script>
 
 <template>
-  <CodeEditor
-    v-model="next"
-    :original="original"
-    language="json"
-    diff
-    height="12rem"
-    aria-label="Cache settings"
-  />
+  <div class="flex flex-col gap-(--spacing-lg)">
+    <Field>
+      <Field.Label>Cache settings</Field.Label>
+      <CodeEditor
+        v-model="code"
+        :loader="loadMonaco"
+        language="json"
+        path="cache.json"
+        :markers="markers"
+        height="12rem"
+      />
+    </Field>
+    <CodeEditor
+      v-model="code"
+      :original="original"
+      :loader="loadMonaco"
+      language="json"
+      diff
+      height="12rem"
+      aria-label="Cache settings, compared with the saved version"
+    />
+    <CodeEditor
+      v-model="handler"
+      :loader="loadMonaco"
+      language="javascript"
+      path="handler.js"
+      pad-line-numbers
+      height="12rem"
+      aria-label="Function code"
+    />
+  </div>
 </template>
 ```
 
-### ReadOnly
+### WithToolbar
 
 ```vue
 <script setup>
+  import Button from '@aziontech/webkit/button'
   import CodeEditor from '@aziontech/webkit/code-editor'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { computed, ref } from 'vue'
 
-  const query = `SELECT country, count(*) AS requests
-FROM events
-WHERE status >= 500
-GROUP BY country
-ORDER BY requests DESC
-LIMIT 10;
+  const documents = [
+    { label: 'Code', value: 'code' },
+    { label: 'Arguments', value: 'arguments' }
+  ]
+  const active = ref('code')
+  const files = ref({
+    code: `export default function handler(request, args) {
+  return new Response(args.greeting)
+}
+`,
+    arguments: `{
+  "greeting": "Hello"
+}
 `
+  })
+  const value = computed({
+    get: () => files.value[active.value],
+    set: (next) => {
+      files.value[active.value] = next
+    }
+  })
+  const markers = computed(() =>
+    active.value === 'arguments' && !value.value.includes('"greeting"')
+      ? [{ line: 1, severity: 'error', message: 'Add the greeting argument.' }]
+      : []
+  )
 </script>
 
 <template>
   <CodeEditor
-    :model-value="query"
-    language="sql"
-    readonly
-    height="10rem"
-    aria-label="Saved query"
-  />
+    v-model="value"
+    :language="active === 'code' ? 'javascript' : 'json'"
+    :markers="markers"
+    pad-line-numbers
+    height="12rem"
+    aria-label="Function editor"
+  >
+    <template #toolbar>
+      <ToggleGroup
+        v-model="active"
+        :options="documents"
+        size="small"
+        aria-label="Editor document"
+      />
+      <span class="min-w-0 flex-1 truncate text-body-xs text-(--text-muted)">
+        {{ active === 'code' ? 'JavaScript, running on request' : 'Defaults for each instance' }}
+      </span>
+      <Button
+        label="Run"
+        kind="secondary"
+        size="small"
+        icon="pi pi-play"
+      />
+    </template>
+  </CodeEditor>
 </template>
 ```

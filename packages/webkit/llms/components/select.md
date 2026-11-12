@@ -19,6 +19,8 @@
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
 - With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
+- A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
+- Keep `kind="transparent"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`.
 
 ## Don’t
 
@@ -45,6 +47,7 @@
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `placeholder` | `string` | `undefined` | false | Trigger placeholder shown when no option is selected. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`. |
+| `kind` | `'outlined' \| 'transparent'` | `'outlined'` | false | Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and prevents opening; applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
 | `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
@@ -83,6 +86,8 @@
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `required`, `opened`
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
+- `data-kind` on the root, the trigger and the panel mirrors `kind` (`outlined` | `transparent`)
+- `kind="transparent"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-mode` on the root: `single` | `multiple`
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection
@@ -177,38 +182,55 @@
 </template>
 ```
 
-### Multiple
+### Transparent
 
 ```vue
 <script setup>
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Select from '@aziontech/webkit/select'
   import { ref } from 'vue'
 
-  const value = ref([])
-  const options = [
-    { value: 'opt-1', label: 'Option 1' },
-    { value: 'opt-2', label: 'Option 2' },
-    { value: 'opt-3', label: 'Option 3' },
-    { value: 'opt-4', label: 'Option 4' }
-  ]
+  const environment = ref('Production')
+  const environments = ['Production', 'Staging', 'Preview']
 </script>
 
 <template>
-  <Select
-    aria-label="Options"
-    v-model="value"
-    multiple
-    placeholder="Select an option"
-  >
-    <Select.Trigger />
-    <Select.Content>
-      <Select.Option
-        v-for="o in options"
-        :key="o.value"
-        :value="o.value"
-        >{{ o.label }}</Select.Option
-      >
-    </Select.Content>
-  </Select>
+  <Breadcrumb>
+    <Breadcrumb.List>
+      <li class="inline-flex items-center">
+        <Breadcrumb.Item
+          label="Workloads"
+          href="#"
+        />
+      </li>
+      <Breadcrumb.Separator />
+      <li class="inline-flex items-center">
+        <Breadcrumb.Item
+          label="workload_01"
+          href="#"
+        />
+      </li>
+      <Breadcrumb.Separator />
+      <li class="inline-flex min-w-0 items-center">
+        <Select
+          v-model="environment"
+          kind="transparent"
+          size="small"
+        >
+          <Select.Trigger aria-label="Switch environment" />
+          <Select.Content>
+            <Select.Group label="Environments">
+              <Select.Option
+                v-for="name in environments"
+                :key="name"
+                :value="name"
+                >{{ name }}</Select.Option
+              >
+            </Select.Group>
+          </Select.Content>
+        </Select>
+      </li>
+    </Breadcrumb.List>
+  </Breadcrumb>
 </template>
 ```

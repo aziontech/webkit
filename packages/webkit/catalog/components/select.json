@@ -21,6 +21,8 @@
   "Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.",
   "Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.",
   "With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.",
-  "Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel."
+  "Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.",
+  "A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind=\"transparent\"` with `size=\"small\"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.",
+  "Keep `kind=\"transparent\"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`."
  ]
 }
