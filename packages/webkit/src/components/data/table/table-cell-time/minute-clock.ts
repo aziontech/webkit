@@ -1,4 +1,6 @@
-import { onBeforeUnmount, onMounted, type Ref, ref } from 'vue'
+import { computed, type ComputedRef, inject, onBeforeUnmount, onMounted, ref } from 'vue'
+
+import { LocaleInjectionKey } from '../../../../composables/use-locale/use-translate'
 
 const TICK_MS = 60_000
 const now = ref<number>(Date.now())
@@ -18,9 +20,10 @@ function unsubscribe(): void {
   timer = undefined
 }
 
-export function useMinuteClock(): Readonly<Ref<number>> {
+export function useMinuteClock(): ComputedRef<number> {
+  const provided = inject(LocaleInjectionKey, null)?.now
   if (subscribers === 0) now.value = Date.now()
   onMounted(subscribe)
   onBeforeUnmount(unsubscribe)
-  return now
+  return computed(() => provided?.value ?? now.value)
 }

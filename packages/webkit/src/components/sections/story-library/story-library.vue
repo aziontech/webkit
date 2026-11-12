@@ -289,7 +289,7 @@
                   <img
                     :src="item.client.logo"
                     alt=""
-                    class="brightness-0 [[data-theme=dark]_&]:invert h-full w-auto max-w-36 object-contain object-left"
+                    class="brightness-0 [[data-theme=dark]_&]:invert h-full w-auto min-w-0 max-w-36 object-contain object-left"
                   />
                 </span>
                 <span class="text-overline-sm text-(--text-muted)">{{ item.category }}</span>

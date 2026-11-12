@@ -102,6 +102,20 @@ describe('useLocale', () => {
       expect(l.t('dialog.close')).toBe('Close')
     })
 
+    it('counts relative times from the provided now, and from the real clock without one', () => {
+      const NOW = Date.UTC(2026, 10, 10, 12)
+      const fixed = probe(() => provideLocale({ locale: 'en', catalogs: ALL, now: NOW }))
+      expect(fixed.formatRelativeTime(new Date(NOW - 3 * 86_400_000))).toBe('3 days ago')
+      const iso = probe(() =>
+        provideLocale({ locale: 'en', catalogs: ALL, now: new Date(NOW).toISOString() })
+      )
+      expect(iso.formatRelativeTime(new Date(NOW + 2 * 3_600_000))).toBe('in 2 hours')
+      const unparseable = probe(() => provideLocale({ locale: 'en', catalogs: ALL, now: 'soon' }))
+      expect(unparseable.formatRelativeTime(new Date(Date.now() - 3 * 86_400_000))).toBe(
+        '3 days ago'
+      )
+    })
+
     it('reads Portuguese for pt-BR', () => {
       const l = probe(() => provideLocale({ locale: 'pt-BR', catalogs: ALL }))
       expect(l.t('dialog.close')).toBe('Fechar')

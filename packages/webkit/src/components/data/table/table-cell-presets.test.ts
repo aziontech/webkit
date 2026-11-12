@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { createApp, defineComponent, h } from 'vue'
+import { createApp, createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
+import { renderToString } from 'vue/server-renderer'
 
 import CellPresets from '../../../../examples/table/cell-presets.vue'
 import Refresh from '../../../../examples/table/refresh.vue'
@@ -159,6 +160,54 @@ describe('Table cell presets', () => {
     })
     const view = render(Host)
     expect(view.container.querySelector('time')!.textContent).toContain('há 2 horas')
+  })
+
+  it('CellTime counts from the provider now, not the real clock, and follows it', async () => {
+    const NOW = Date.UTC(2026, 10, 10, 12)
+    const now = ref<number | string>(NOW)
+    const Host = defineComponent({
+      render: () =>
+        h(
+          WebkitProvider,
+          { now: now.value },
+          {
+            default: () => [
+              h(TableCellTime, { value: new Date(NOW - 2 * 3_600_000), 'data-testid': 'hours' }),
+              h(TableCellTime, { value: new Date(NOW - 50_000), 'data-testid': 'minutes' })
+            ]
+          }
+        )
+    })
+    const view = render(Host)
+    const text = (id: string) => view.getByTestId(id).querySelector('time')!.textContent
+    expect(text('hours')).toContain('2 hours ago')
+    expect(text('minutes')).toContain('1 minute ago')
+    now.value = NOW + 24 * 3_600_000
+    await nextTick()
+    expect(text('hours')).toContain('yesterday')
+    now.value = new Date(NOW).toISOString()
+    await nextTick()
+    expect(text('hours')).toContain('2 hours ago')
+  })
+
+  it('CellTime under a fixed provider now renders that reference on the server', async () => {
+    const NOW = Date.UTC(2026, 10, 10, 12)
+    const App = defineComponent({
+      render: () =>
+        h(
+          WebkitProvider,
+          { now: NOW },
+          { default: () => h(TableCellTime, { value: new Date(NOW - 26 * 3_600_000) }) }
+        )
+    })
+    const html = await renderToString(createSSRApp(App))
+    expect(html).toContain('yesterday')
+  })
+
+  it('the cell presets example prints the same relative times whenever it renders', () => {
+    const view = render(CellPresets)
+    const times = [...view.container.querySelectorAll('time')].map((t) => t.firstChild!.textContent)
+    expect(times).toEqual(['2 hours ago', 'yesterday', 'last week'])
   })
 
   it('CellTags shows every tag when there is room, and a dash when empty', async () => {

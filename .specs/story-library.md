@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 9dfd8f3a46e9c79d8d959a2756cc6448575ded56bf3f6ac2304df91a5b5f6778
+last_updated: 2026-11-12
+checksum: bc736e445493f8be908655b4db330ca4864c775ae9128158ffd1ce373a20c154
 ---
 
 # StoryLibrary — Component Spec
@@ -33,6 +33,7 @@ Every success story of a company as one filterable library. A left-aligned title
 
 - Derive each facet's `options` from the values the items carry, so every option matches at least one story.
 - Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet.
+- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
 
 ## Usage
 
@@ -100,6 +101,7 @@ Every success story of a company as one filterable library. A left-aligned title
 - Filtered: the search matches the client name and the description; each facet keeps the stories whose `facets[key]` holds the selected value; all filters combine
 - Empty: when no story matches, the grid and the load-more button give way to `empty-state`, whose action clears the search and every facet; it renders only when `empty` is set
 - `data-last-row-sm` / `data-last-row-lg` mark the cards on the grid's last row so it drops its bottom rule
+- Client mark: drawn at the mark row's height, at most `9rem` wide, keeping its aspect ratio; when the card is narrower than that (two columns at 200% zoom) the mark shrinks to the card's width (`min-w-0`) and stays start-aligned, so a mark of any size or aspect ratio never pushes the card past its column
 
 ## Motion & Animations
 

@@ -241,6 +241,33 @@ describe('WebkitProvider', () => {
     })
   })
 
+  describe('now', () => {
+    it('gives every relative time below it one reference time, reactively', async () => {
+      const NOW = Date.UTC(2026, 10, 10, 12)
+      const now = ref<number | undefined>(NOW)
+      let helpers: ReturnType<typeof useLocale> | null = null
+      const Probe = defineComponent({
+        setup() {
+          helpers = useLocale()
+          return () => h('span')
+        }
+      })
+      const Host = defineComponent({
+        setup: () => () => h(WebkitProvider, { now: now.value }, { default: () => h(Probe) })
+      })
+      render(Host)
+      const l = helpers as unknown as ReturnType<typeof useLocale>
+      const target = new Date(NOW - 3 * 86_400_000)
+      expect(l.formatRelativeTime(target)).toBe('3 days ago')
+      now.value = NOW + 4 * 86_400_000
+      await nextTick()
+      expect(l.formatRelativeTime(target)).toBe('last week')
+      now.value = undefined
+      await nextTick()
+      expect(l.formatRelativeTime(new Date(Date.now() - 86_400_000))).toBe('yesterday')
+    })
+  })
+
   describe('examples', () => {
     it('Default renders Pagination and ConfirmDialog in Portuguese', () => {
       const { getByLabelText } = render(Default)

@@ -33,6 +33,8 @@ export interface ProvideLocaleOptions {
   dir?: MaybeRefOrGetter<DirectionSetting | undefined>
   /** Catalogs the provider can pick from, keyed by locale tag; English must be one of them. */
   catalogs: MaybeRefOrGetter<Record<string, Messages>>
+  /** Reference time for relative times below the provider; undefined reads the real clock. */
+  now?: MaybeRefOrGetter<string | number | Date | undefined>
 }
 
 /** Plural forms passed to `plural`; `{count}` in a form is replaced by the formatted count. */
@@ -53,7 +55,7 @@ export interface UseLocaleReturn {
   formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string
   /** Formats a date with `Intl.DateTimeFormat`. */
   formatDate: (value: Date | number | string, options?: Intl.DateTimeFormatOptions) => string
-  /** Formats a relative time; a `Date` picks the unit from its distance to now. */
+  /** Formats a relative time; a `Date` picks the unit from its distance to now (the provider's `now`, else the real clock). */
   formatRelativeTime: (
     value: number | Date,
     unit?: Intl.RelativeTimeFormatUnit,
@@ -127,7 +129,8 @@ const FILE_SIZE_UNITS: FileSizeUnit[] = ['byte', 'kilobyte', 'megabyte', 'gigaby
 export function createTranslator(
   locale: () => string,
   messages: () => PartialMessages,
-  fallback: PartialMessages = {}
+  fallback: PartialMessages = {},
+  now: () => number = () => Date.now()
 ): Omit<UseLocaleReturn, 'locale' | 'dir'> {
   const { t, fill, selectForm, formatNumber } = createMessageHelpers(locale, messages, fallback)
 
@@ -157,7 +160,7 @@ export function createTranslator(
       () => new Intl.RelativeTimeFormat(intlLocale(locale()), options)
     )
     if (!(value instanceof Date)) return format.format(value, unit)
-    let amount = (value.getTime() - Date.now()) / 1000
+    let amount = (value.getTime() - now()) / 1000
     for (const [step, size] of RELATIVE_STEPS) {
       if (Math.abs(amount) < size) return format.format(Math.round(amount), step)
       amount /= size
@@ -187,6 +190,12 @@ export function createTranslator(
   return { t, formatNumber, formatDate, formatRelativeTime, formatList, formatFileSize, plural }
 }
 
+function epochOf(value: string | number | Date | undefined | null): number | undefined {
+  if (value === undefined || value === null || value === '') return undefined
+  const time = value instanceof Date ? value.getTime() : new Date(value).getTime()
+  return Number.isNaN(time) ? undefined : time
+}
+
 export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
   const locale = computed(() => toValue(options.locale) || DEFAULT_LOCALE)
   const dir = computed<Direction>(() => {
@@ -199,7 +208,8 @@ export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
     if (!found) warnMissingCatalog(locale.value)
     return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
   })
-  const context: LocaleContext = { locale, dir, messages }
+  const now = computed<number | undefined>(() => epochOf(toValue(options.now)))
+  const context: LocaleContext = { locale, dir, messages, now }
   provide(LocaleInjectionKey, context)
   return context
 }
@@ -209,7 +219,8 @@ export function useLocale(fallback: PartialMessages = {}): UseLocaleReturn {
   const helpers = createTranslator(
     () => locale.value,
     () => context?.messages.value ?? fallback,
-    fallback
+    fallback,
+    () => context?.now?.value ?? Date.now()
   )
   return { locale, dir, ...helpers }
 }

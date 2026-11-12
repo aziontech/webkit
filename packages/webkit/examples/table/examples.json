@@ -69,7 +69,7 @@
     },
     {
       "name": "CellPresets",
-      "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination), for a repository with its provider glyph before the name (`icon=\"ai ai-github\"`, muted and outside the link) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
+      "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination), for a repository with its provider glyph before the name (`icon=\"ai ai-github\"`, muted and outside the link) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time counted from the `WebkitProvider`'s fixed `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
       "file": "cell-presets.vue"
     },
     {

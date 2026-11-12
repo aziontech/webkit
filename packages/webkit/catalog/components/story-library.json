@@ -13,6 +13,7 @@
  ],
  "bestPractices": [
   "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
-  "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet."
+  "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet.",
+  "Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it."
  ]
 }

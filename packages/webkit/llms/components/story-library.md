@@ -14,6 +14,7 @@
 
 - Derive each facet's `options` from the values the items carry, so every option matches at least one story.
 - Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet.
+- Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it.
 
 ## Don’t
 
@@ -46,6 +47,7 @@
 - Filtered: the search matches the client name and the description; each facet keeps the stories whose `facets[key]` holds the selected value; all filters combine
 - Empty: when no story matches, the grid and the load-more button give way to `empty-state`, whose action clears the search and every facet; it renders only when `empty` is set
 - `data-last-row-sm` / `data-last-row-lg` mark the cards on the grid's last row so it drops its bottom rule
+- Client mark: drawn at the mark row's height, at most `9rem` wide, keeping its aspect ratio; when the card is narrower than that (two columns at 200% zoom) the mark shrinks to the card's width (`min-w-0`) and stays start-aligned, so a mark of any size or aspect ratio never pushes the card past its column
 
 ## Accessibility
 
