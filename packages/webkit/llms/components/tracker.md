@@ -30,7 +30,7 @@
 
 - [status-indicator](status-indicator.md) — the current state; a Tracker is that state's history.
 - [spark-chart](spark-chart.md) — a measured trend rather than a sequence of states.
-- chart-card` — the box a Tracker sits in, with the uptime figure in its header.
+- [chart-card](chart-card.md) — the box a Tracker sits in, with the uptime figure in its header.
 
 ## Props
 

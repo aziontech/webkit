@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as

@@ -49,6 +49,10 @@
 | `icon` | — | Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders. |
 | `actions` | — | Action area below the description; consumer composes buttons and the documentation link. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`

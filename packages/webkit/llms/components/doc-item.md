@@ -46,6 +46,10 @@
 | --- | --- | --- |
 | `default` | — | The row's copy: one or two sentences of inline prose. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` — the last two exist only when the row is a link, and both are driven off the single title anchor via the shell's `has-[a:hover]` / `has-[a:focus-visible]` variants; a row with no `href` is inert

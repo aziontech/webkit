@@ -16,6 +16,8 @@
 - One figure per view; two figures answering the pointer compete.
 - Pass `aria-label` when the page says something more specific than the figure's own description.
 - Use `play` only where nothing else moves.
+- Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: "lineFigures" })`; an unknown name draws nothing.
+- In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class="w-60 max-w-full">`) when the art should be smaller.
 
 ## Don’t
 
@@ -34,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `name` | `LineFigureName \ \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
+| `name` | `LineFigureName \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
 | `intensity` | `number` | `0.5` | false | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). |
 | `play` | `boolean` | `false` | false | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
 | `ariaLabel` | `string` | `''` | false | Accessible name; falls back to the figure's own English description. |
@@ -44,6 +46,10 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `read` | `caption: string` | The figure's current reading each time it changes (the first reading on mount). |
+
+## Assets
+
+- Line figures: every valid name is in [line-figures.md](../foundations/line-figures.md) (MCP `list_assets({ kind: "lineFigures" })`). An unknown or empty name draws nothing.
 
 ## States
 
@@ -68,6 +74,7 @@
 ## Responsive
 
 - Fills its width at a 5:4 aspect; strokes stay 1px at every size (`vector-effect: non-scaling-stroke`).
+- The SVG is in flow with a natural 400×320 size, so a parent that sizes to its content (a flex column with centred items, the `EmptyState` `icon` slot) gets a 400 px wide figure, never a 0 px one; a narrower container shrinks it, and a sized wrapper sets another size.
 
 ## Examples
 

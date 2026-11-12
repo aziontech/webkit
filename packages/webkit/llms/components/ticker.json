@@ -90,6 +90,12 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "assets": [
+  {
+   "kind": "brandMarks",
+   "page": "foundations/brand-marks.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

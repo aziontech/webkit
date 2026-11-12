@@ -38,6 +38,10 @@
 | `secondaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `levels` | `HeroCopyOnTopArtLevel[]` | `[]` | false | The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`

@@ -43,6 +43,10 @@
 | --- | --- | --- |
 | `default` | — | Main content. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`

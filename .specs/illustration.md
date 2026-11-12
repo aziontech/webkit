@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 5d3a5981575e2acc425218336e4abe5da106d9f583c8709e1032b1d49d1c5046
+checksum: 0a48a628992cbe97631c53b32069fd389825ef26345fc1ccd93c2987f1ee2eb5
 created: 2026-08-05
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 ---
 
 # Illustration — Component Spec
@@ -53,7 +53,8 @@ export follows light and dark like the rest of the page.
 - Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.
 - Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.
 - Pick the scene that draws the claim next to it, not the one whose filename matches the page title.
-- To add a scene, export the frame from the Figma assets library at 592×300, drop the `.svg` into `src/assets/illustrations/`, and register it. Never hand-draw one.
+- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/webkit/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
+- To add a scene, export the frame from the Figma assets library (592×300 for a scene, the tile's own size for a tile or crop), drop the `.svg` into `src/assets/illustrations/`, and register it in `registry.ts`. The test fails while a drawing in the folder is unregistered. Never hand-draw one.
 - Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices.
 
 ## Usage
@@ -78,9 +79,10 @@ export follows light and dark like the rest of the page.
 </template>
 ```
 
-A drawing that is not a registered scene — a hero crop, a card visual — ships as a file. Import it by
-its final name: the folder it lives in is not part of the path, so the file can move without
-breaking the import.
+Every drawing in the illustration folder is a registered scene, so any name in the list below works
+with `name`. The drawings a section shows as a picture also ship as files; import one by its final
+name (the folder it lives in is not part of the path, so the file can move without breaking the
+import) when an image, not an inline themed scene, is wanted.
 
 ```vue
 <script setup>
@@ -110,8 +112,8 @@ breaking the import.
 ## States
 
 - Visual states: `default` — an illustration is decorative and has no `hover`, `focus-visible`, `disabled`, `loading`, or `active` state, and is never interactive.
-- Every scene is drawn on the one 592×300 canvas, so scenes line up with each other in a grid. The root declares that frame as its intrinsic `width`/`height`, which reserves the box before the SVG loads, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
-- A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`. An unregistered `name` also warns in development; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
+- Most scenes are drawn on the one 592×300 canvas, so they line up with each other in a grid; a few tiles and crops (`ai-gateway`, `azion-highlight`, `azion-rest-api`, `branches`, `ddos-protection`, `distributed-apis-tile`, `personal-tokens`, `real-time-metrics-error-rate`, `real-time-metrics-status-codes`, `usage-chart`) keep the canvas they were drawn on. The root declares 592×300 as its intrinsic `width`/`height` until the SVG loads, which reserves the box, then the scene's own canvas, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
+- A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
@@ -128,8 +130,8 @@ breaking the import.
 |---|---|
 | _none_ | — |
 
-The component declares no utility that resolves a token, and the 592×300 canvas the library
-is drawn on reaches the root as the intrinsic `width`/`height` the frame already carries.
+The component declares no utility that resolves a token, and the canvas each scene is drawn on
+reaches the root as the intrinsic `width`/`height` the frame already carries.
 
 The scene's own paint resolves through the `illustration` theme foundation, keyed by the
 export palette in `src/assets/illustrations/palette.ts`. Each role aliases a global token:
@@ -156,6 +158,7 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 | `--bg-surface-overlay` / `--surface-700` (`#4D4D4D`) | `--illustration-line-strong` → `--text-disabled` | The export binds thin strokes to the overlay fill, whose light value (`#FAFAFA`) would erase them; the role follows the stroke's reading weight instead. |
 | `Global/textColor` (`#EDEDED`) | `--illustration-ink` | An off-token ink from an older library; folded into the ink role, which moves that path to `#FAFAFA` in dark. |
 | `--surface-600` (`#666666`) | stays as drawn | The dot map is bound to a fixed ramp step; it reads in both themes, so it has no role until design asks for one. |
+| `#5B0B0B` (the error band of `real-time-metrics-error-rate`) | stays as drawn | The illustration foundation has no danger-surface role; add `--illustration-danger-surface` when design binds it, then map this colour to it. |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -168,10 +171,10 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 ## Examples
 
 - Default — the `name`-driven form with Controls.
-- Assets — composite story rendering every registered scene side-by-side. **Justified addition:** `name` is the whole public API and its valid values are a closed registry, so the story is the only place a consumer can see what `name` accepts. A Controls dropdown alone would not show them together.
+- Assets — composite story rendering every registered scene side-by-side, one per drawing in the folder. **Justified addition:** `name` is the whole public API and its valid values are a closed registry, so the story is the only place a consumer can see what `name` accepts. A Controls dropdown alone would not show them together.
 - Labeled — the accessible-name form (an args delta of `ariaLabel`).
 - Placeholder — the fallback frame, rendered by an unnamed `Illustration`. **Justified addition:** it is a rendered state of the component (see § States), not a variant, and it is the one thing in the component a consumer cannot reach from the `name` dropdown — every option in that list resolves to a scene.
-- Files — the illustration files outside the registry, each imported by its final name from `@aziontech/webkit/assets/`. **Justified addition:** these drawings are not values of `name`, so neither Controls nor `Assets` can show them, and the import path is the one thing a consumer has to know to use one.
+- Files — the drawings that also ship as files, each imported by its final name from `@aziontech/webkit/assets/` and rendered as an image. **Justified addition:** the file import is a second way to use a drawing that neither Controls nor `Assets` shows, and the import path is the one thing a consumer has to know to use one.
 
 There is no `Types` or `Sizes` story: the root declares neither `kind` nor `size`. There are no `Loading` / `Disabled` stories: the component declares neither prop (see § States).
 

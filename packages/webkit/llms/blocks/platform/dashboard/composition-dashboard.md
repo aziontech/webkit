@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/composition-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as

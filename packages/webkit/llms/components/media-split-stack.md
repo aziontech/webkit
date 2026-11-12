@@ -35,6 +35,10 @@
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
 | `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`; hovering a linked band reveals its link affordance (owned by `media-split`)

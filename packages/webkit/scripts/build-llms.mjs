@@ -158,6 +158,7 @@ function specLinks(md, names) {
     const resolved = posix.normalize(posix.join('.specs', path))
     const spec = resolved.match(/^\.specs\/([a-z0-9-]+)\.md$/)
     if (spec && names.has(spec[1])) return `](${spec[1]}.md${hash ? `#${hash}` : ''})`
+    if (/^\.\.\/(foundations|blocks)\/[^/].*\.md$/.test(path)) return m
     if (resolved.startsWith('..')) return m
     return `](${REPO_URL}/${resolved}${hash ? `#${hash}` : ''})`
   })
@@ -168,8 +169,12 @@ function link(from, to) {
 }
 
 function loadCatalog() {
-  const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
-  const part = (file) => JSON.parse(readFileSync(resolve(PKG_ROOT, file), 'utf-8'))
+  return catalogView(JSON.parse(readFileSync(CATALOG_PATH, 'utf-8')), (file) =>
+    JSON.parse(readFileSync(resolve(PKG_ROOT, file), 'utf-8'))
+  )
+}
+
+export function catalogView(catalog, part) {
   const imports = Object.fromEntries(
     Object.entries(catalog.imports).map(([name, e]) => {
       const { docsFile, ...meta } = e
@@ -182,6 +187,11 @@ function loadCatalog() {
     pattern(id) {
       const { file, ...meta } = catalog.patterns[id]
       return file ? { ...meta, ...part(file) } : meta
+    },
+    assetItems(kind) {
+      const meta = catalog.assets?.[kind]
+      if (!meta) return []
+      return meta.file ? part(meta.file).items || [] : meta.items || []
     },
     examples(name) {
       const e = catalog.imports[name]
@@ -205,16 +215,137 @@ function specSections(name) {
   return out
 }
 
+const ASSET_PAGES = {
+  illustrations: 'illustrations',
+  diagrams: 'diagrams',
+  lineFigures: 'line-figures',
+  brandMarks: 'brand-marks',
+  icons: 'icons'
+}
+
+export function assetPagePath(kind) {
+  return `foundations/${ASSET_PAGES[kind] ?? kind}.md`
+}
+
+function assetUsage(kind) {
+  if (kind === 'illustrations')
+    return code(
+      '<script setup>\n  import Illustration from \'@aziontech/webkit/illustration\'\n</script>\n\n<template>\n  <Illustration name="ddos-protection" />\n</template>'
+    )
+  if (kind === 'diagrams')
+    return code(
+      '<script setup>\n  import Diagram from \'@aziontech/webkit/diagram\'\n</script>\n\n<template>\n  <Diagram name="cache" />\n</template>'
+    )
+  if (kind === 'lineFigures')
+    return code(
+      '<script setup>\n  import LineFigure from \'@aziontech/webkit/line-figure\'\n</script>\n\n<template>\n  <LineFigure name="cache-ttl" />\n</template>'
+    )
+  if (kind === 'brandMarks')
+    return code(
+      "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <Ticker :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
+    )
+  if (kind === 'icons')
+    return code(
+      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="ai ai-edge-firewall" aria-hidden="true"></i>\n  <i class="pi pi-trash" aria-hidden="true"></i>\n  <i class="ai-cor ai-react" aria-hidden="true"></i>\n  <Button icon="pi pi-plus">Create</Button>\n</template>'
+    )
+  return ''
+}
+
+function assetRows(kind, items) {
+  if (kind === 'illustrations')
+    return table(
+      ['Name', 'Canvas'],
+      items.map((i) => [`\`${i.name}\``, i.canvas ?? ''])
+    )
+  if (kind === 'icons')
+    return table(
+      ['Class', 'Set', 'Keywords'],
+      items.map((i) => [`\`${i.class}\``, i.set, (i.keywords || []).join(', ')])
+    )
+  return table(
+    ['Name', 'Description'],
+    items.map((i) => [`\`${i.name}\``, i.label ?? ''])
+  )
+}
+
+function assetPages(catalog) {
+  const names = new Set(componentNames(catalog))
+  return Object.entries(catalog.assets || {}).map(([kind, meta]) => {
+    const path = assetPagePath(kind)
+    const items = catalog.assetItems(kind)
+    const usedBy = (meta.usedBy || []).map((n) =>
+      names.has(n) ? `[${binding(n)}](${link(path, `components/${n}.md`)})` : `\`${n}\``
+    )
+    const intro = [
+      meta.summary.slice(firstSentence(meta.summary).length).trim(),
+      `${items.length} names. These are the only values the components accept. ${meta.unknown} The MCP tool \`list_assets({ kind: "${kind}" })\` returns the same list (with a \`query\` to filter), and \`catalog.json#assets.${kind}\` points at it as data.`,
+      usedBy.length ? `Used by: ${usedBy.join(', ')}.` : ''
+    ]
+    return {
+      slug: ASSET_PAGES[kind] ?? kind,
+      title: meta.title,
+      summary: firstSentence(meta.summary),
+      compact: [
+        ...intro,
+        `## Names\n\n${items.map((i) => `\`${i.class ?? i.name}\``).join(' · ')}\n\nDescriptions${kind === 'icons' ? ' and keywords' : ''}: [${path}](${path.split('/').pop()}).`
+      ],
+      body: [...intro, '## Usage', assetUsage(kind), '## Names', assetRows(kind, items)]
+    }
+  })
+}
+
+function assetSection(catalog, name, path) {
+  const kinds = Object.entries(catalog.assets || {}).filter(([, meta]) =>
+    (meta.usedBy || []).includes(name)
+  )
+  if (!kinds.length) return []
+  return [
+    '## Assets',
+    '',
+    bullets(
+      kinds.map(
+        ([kind, meta]) =>
+          `${meta.title}: every valid name is in [${assetPagePath(kind).split('/').pop()}](${link(path, assetPagePath(kind))}) (MCP \`list_assets({ kind: "${kind}" })\`). ${meta.unknown}`
+      )
+    ),
+    ''
+  ]
+}
+
 function allowedClasses(e) {
   return e.styleSeam
     ? 'Built to be personalized (style seam): any class is accepted on the tag.'
     : 'Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.'
 }
 
+function hasOwnPage(e) {
+  return e.kind === 'component' || (e.kind === 'subcomponent' && Boolean(e.purpose))
+}
+
 function componentNames(catalog) {
   return Object.keys(catalog.imports)
-    .filter((n) => catalog.imports[n].kind === 'component')
+    .filter((n) => hasOwnPage(catalog.imports[n]))
     .sort()
+}
+
+export function undocumentedExports(catalog, files) {
+  const missing = []
+  const page = (n) => files[`components/${n}.md`]
+  const listed = (n, on) => Boolean(page(on)?.includes(`@aziontech/webkit/${n}`))
+  for (const [n, e] of Object.entries(catalog.imports)) {
+    if (!['component', 'subcomponent', 'root'].includes(e.kind)) continue
+    const barrel = /\/index\.(ts|js)$/.test(e.target || '')
+    if (hasOwnPage(e)) {
+      if (!page(n)) missing.push(`${n} (${e.kind}): no components/${n}.md`)
+    } else if (e.kind === 'subcomponent' && barrel) {
+      missing.push(`${n}: a compound (${e.target}) classified as a sub-component of ${e.parent}`)
+    } else if (e.kind === 'subcomponent' && !listed(n, e.parent)) {
+      missing.push(`${n}: not listed on components/${e.parent}.md`)
+    } else if (e.kind === 'root' && !listed(n, e.rootOf)) {
+      missing.push(`${n}: not listed on components/${e.rootOf}.md`)
+    }
+  }
+  return missing.sort()
 }
 
 function componentApi(catalog, name) {
@@ -239,6 +370,9 @@ function componentApi(catalog, name) {
     events: e.events ?? [],
     slots: e.slots ?? [],
     styleSeam: e.styleSeam === true,
+    assets: Object.entries(catalog.assets || {})
+      .filter(([, meta]) => (meta.usedBy || []).includes(name))
+      .map(([kind]) => ({ kind, page: assetPagePath(kind) })),
     examples: catalog.examples(name).map((x) => ({ name: x.name, sfc: x.sfc })),
     docs: `components/${name}.md`
   }
@@ -315,6 +449,7 @@ function componentPage(catalog, name, { full = true } = {}) {
       ''
     )
   }
+  out.push(...assetSection(catalog, name, path))
   if (api.subcomponents.length) {
     out.push('## Sub-component imports', '', bullets(api.subcomponents.map((s) => `\`${s}\``)), '')
   }
@@ -576,13 +711,16 @@ function foundations(catalog) {
       body: [withoutTitle(usage ?? ''), withoutTitle(section(guidelines, /^## Part B/))]
     }
   ]
+  pages.push(...assetPages(catalog))
+  const render = (p, body) =>
+    [`# ${p.title}`, '', `> ${p.summary}`, '', ...body.filter(Boolean).flatMap((b) => [b, ''])]
+      .join('\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trimEnd() + '\n'
   return pages.map((p) => ({
     ...p,
-    md:
-      [`# ${p.title}`, '', `> ${p.summary}`, '', ...p.body.filter(Boolean).flatMap((b) => [b, ''])]
-        .join('\n')
-        .replace(/\n{3,}/g, '\n\n')
-        .trimEnd() + '\n'
+    md: render(p, p.body),
+    ...(p.compact ? { compact: render(p, p.compact) } : {})
   }))
 }
 
@@ -592,7 +730,7 @@ function header(catalog) {
     '',
     `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.webkitVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
     '',
-    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`).',
+    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
     '',
     `Installed copy: \`node_modules/${catalog.package}/llms/\`. Every component also has a JSON API next to its page (\`components/<name>.json\`).`,
     ''
@@ -609,7 +747,7 @@ export function buildLlms(catalog = loadCatalog()) {
   for (const f of found) {
     files[`foundations/${f.slug}.md`] = f.md
     index.push(`- [${f.title}](foundations/${f.slug}.md): ${f.summary}`)
-    fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${f.md}`)
+    fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${f.compact ?? f.md}`)
   }
   index.push('')
 

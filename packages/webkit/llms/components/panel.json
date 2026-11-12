@@ -60,6 +60,7 @@
   }
  ],
  "styleSeam": false,
+ "assets": [],
  "examples": [],
  "docs": "components/panel.md"
 }

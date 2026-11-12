@@ -47,6 +47,7 @@ export const illustrationPalette: Record<string, IllustrationRole | null> = {
   '#001833': 'info-surface',
   '#666666': null,
   '#E51A1A': null,
+  '#5B0B0B': null,
   '#F8CA3A': null,
   '#18B452': null,
   '#D83333': null,

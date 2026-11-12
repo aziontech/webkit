@@ -1,0 +1,5340 @@
+{
+ "items": [
+  {
+   "name": "ai-abuse-prevention",
+   "class": "ai ai-abuse-prevention",
+   "set": "azionicons",
+   "keywords": [
+    "abuse",
+    "prevention",
+    "fraud",
+    "security"
+   ]
+  },
+  {
+   "name": "ai-adaptive-security",
+   "class": "ai ai-adaptive-security",
+   "set": "azionicons",
+   "keywords": [
+    "adaptive",
+    "security",
+    "protection",
+    "shield"
+   ]
+  },
+  {
+   "name": "ai-ai-gateway",
+   "class": "ai ai-ai-gateway",
+   "set": "azionicons",
+   "keywords": [
+    "gateway",
+    "artificial intelligence",
+    "llm",
+    "model",
+    "proxy",
+    "api",
+    "routing"
+   ]
+  },
+  {
+   "name": "ai-ai-pillar",
+   "class": "ai ai-ai-pillar",
+   "set": "azionicons",
+   "keywords": [
+    "pillar",
+    "artificial intelligence",
+    "llm",
+    "model",
+    "product family"
+   ]
+  },
+  {
+   "name": "ai-angular",
+   "class": "ai ai-angular",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-app-accelerator",
+   "class": "ai ai-app-accelerator",
+   "set": "azionicons",
+   "keywords": [
+    "app",
+    "accelerator",
+    "performance",
+    "speed",
+    "product"
+   ]
+  },
+  {
+   "name": "ai-ask-azion",
+   "class": "ai ai-ask-azion",
+   "set": "azionicons",
+   "keywords": [
+    "ask",
+    "azion",
+    "question",
+    "assistant",
+    "chat",
+    "brand",
+    "logo",
+    "company"
+   ]
+  },
+  {
+   "name": "ai-astro",
+   "class": "ai ai-astro",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-attack",
+   "class": "ai ai-attack",
+   "set": "azionicons",
+   "keywords": [
+    "threat",
+    "security",
+    "ddos"
+   ]
+  },
+  {
+   "name": "ai-azion-api",
+   "class": "ai ai-azion-api",
+   "set": "azionicons",
+   "keywords": [
+    "azion",
+    "api",
+    "brand",
+    "logo",
+    "company",
+    "endpoint",
+    "integration",
+    "developer"
+   ]
+  },
+  {
+   "name": "ai-azion-cli",
+   "class": "ai ai-azion-cli",
+   "set": "azionicons",
+   "keywords": [
+    "azion",
+    "cli",
+    "brand",
+    "logo",
+    "company",
+    "terminal",
+    "command line",
+    "console"
+   ]
+  },
+  {
+   "name": "ai-azion",
+   "class": "ai ai-azion",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo",
+    "company"
+   ]
+  },
+  {
+   "name": "ai-bot-manager",
+   "class": "ai ai-bot-manager",
+   "set": "azionicons",
+   "keywords": [
+    "bot",
+    "manager",
+    "robot",
+    "automation",
+    "security"
+   ]
+  },
+  {
+   "name": "ai-branch",
+   "class": "ai ai-branch",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "version"
+   ]
+  },
+  {
+   "name": "ai-build-pillar",
+   "class": "ai ai-build-pillar",
+   "set": "azionicons",
+   "keywords": [
+    "build",
+    "pillar",
+    "product family"
+   ]
+  },
+  {
+   "name": "ai-business-support",
+   "class": "ai ai-business-support",
+   "set": "azionicons",
+   "keywords": [
+    "business",
+    "support",
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "ai-certificate-manager",
+   "class": "ai ai-certificate-manager",
+   "set": "azionicons",
+   "keywords": [
+    "certificate",
+    "manager",
+    "tls",
+    "ssl",
+    "security",
+    "https"
+   ]
+  },
+  {
+   "name": "ai-circle-half",
+   "class": "ai ai-circle-half",
+   "set": "azionicons",
+   "keywords": [
+    "circle",
+    "half",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "ai-circle-minus",
+   "class": "ai ai-circle-minus",
+   "set": "azionicons",
+   "keywords": [
+    "circle",
+    "minus",
+    "status",
+    "shape",
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "ai-claude",
+   "class": "ai ai-claude",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-column",
+   "class": "ai ai-column",
+   "set": "azionicons",
+   "keywords": [
+    "layout",
+    "grid"
+   ]
+  },
+  {
+   "name": "ai-configuration-service",
+   "class": "ai ai-configuration-service",
+   "set": "azionicons",
+   "keywords": [
+    "configuration",
+    "service",
+    "settings",
+    "preferences"
+   ]
+  },
+  {
+   "name": "ai-content-delivery",
+   "class": "ai ai-content-delivery",
+   "set": "azionicons",
+   "keywords": [
+    "content",
+    "delivery"
+   ]
+  },
+  {
+   "name": "ai-cursor",
+   "class": "ai ai-cursor",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-custom-pages",
+   "class": "ai ai-custom-pages",
+   "set": "azionicons",
+   "keywords": [
+    "custom",
+    "pages"
+   ]
+  },
+  {
+   "name": "ai-data-stream",
+   "class": "ai ai-data-stream",
+   "set": "azionicons",
+   "keywords": [
+    "data",
+    "stream",
+    "logs",
+    "events"
+   ]
+  },
+  {
+   "name": "ai-database",
+   "class": "ai ai-database",
+   "set": "azionicons",
+   "keywords": [
+    "data",
+    "storage",
+    "sql"
+   ]
+  },
+  {
+   "name": "ai-datasheet",
+   "class": "ai ai-datasheet",
+   "set": "azionicons",
+   "keywords": [
+    "document",
+    "specification"
+   ]
+  },
+  {
+   "name": "ai-deepseek",
+   "class": "ai ai-deepseek",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-deploy-pillar",
+   "class": "ai ai-deploy-pillar",
+   "set": "azionicons",
+   "keywords": [
+    "deploy",
+    "pillar",
+    "release",
+    "publish",
+    "ship",
+    "product family"
+   ]
+  },
+  {
+   "name": "ai-digital-certificates",
+   "class": "ai ai-digital-certificates",
+   "set": "azionicons",
+   "keywords": [
+    "digital",
+    "certificates",
+    "certificate",
+    "security",
+    "tls",
+    "ssl",
+    "https"
+   ]
+  },
+  {
+   "name": "ai-disabled",
+   "class": "ai ai-disabled",
+   "set": "azionicons",
+   "keywords": [
+    "off",
+    "inactive",
+    "status"
+   ]
+  },
+  {
+   "name": "ai-discord",
+   "class": "ai ai-discord",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-docusaurus",
+   "class": "ai ai-docusaurus",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-domains",
+   "class": "ai ai-domains",
+   "set": "azionicons",
+   "keywords": [
+    "dns",
+    "url",
+    "workload"
+   ]
+  },
+  {
+   "name": "ai-durable-objects",
+   "class": "ai ai-durable-objects",
+   "set": "azionicons",
+   "keywords": [
+    "durable",
+    "objects"
+   ]
+  },
+  {
+   "name": "ai-edge-ai",
+   "class": "ai ai-edge-ai",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "network",
+    "distributed",
+    "artificial intelligence",
+    "llm",
+    "model"
+   ]
+  },
+  {
+   "name": "ai-edge-application",
+   "class": "ai ai-edge-application",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "application",
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "ai-edge-connectors",
+   "class": "ai ai-edge-connectors",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "connectors",
+    "network",
+    "distributed",
+    "integration",
+    "origin"
+   ]
+  },
+  {
+   "name": "ai-edge-dns",
+   "class": "ai ai-edge-dns",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "dns",
+    "network",
+    "distributed",
+    "domain",
+    "name server",
+    "zone",
+    "records"
+   ]
+  },
+  {
+   "name": "ai-edge-firewall",
+   "class": "ai ai-edge-firewall",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "firewall",
+    "network",
+    "distributed",
+    "security",
+    "waf",
+    "protection"
+   ]
+  },
+  {
+   "name": "ai-edge-functions",
+   "class": "ai ai-edge-functions",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "functions",
+    "network",
+    "distributed",
+    "serverless",
+    "compute",
+    "code"
+   ]
+  },
+  {
+   "name": "ai-edge-kv",
+   "class": "ai ai-edge-kv",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "network",
+    "distributed",
+    "key value",
+    "store",
+    "storage"
+   ]
+  },
+  {
+   "name": "ai-edge-libraries",
+   "class": "ai ai-edge-libraries",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "libraries",
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "ai-edge-nodes",
+   "class": "ai ai-edge-nodes",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "nodes",
+    "network",
+    "distributed",
+    "servers",
+    "infrastructure"
+   ]
+  },
+  {
+   "name": "ai-edge-orchestrator",
+   "class": "ai ai-edge-orchestrator",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "orchestrator",
+    "network",
+    "distributed",
+    "infrastructure",
+    "deploy"
+   ]
+  },
+  {
+   "name": "ai-edge-pulse",
+   "class": "ai ai-edge-pulse",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "pulse",
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "ai-edge-services",
+   "class": "ai ai-edge-services",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "services",
+    "network",
+    "distributed"
+   ]
+  },
+  {
+   "name": "ai-edge-sql",
+   "class": "ai ai-edge-sql",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "sql",
+    "network",
+    "distributed",
+    "database",
+    "query"
+   ]
+  },
+  {
+   "name": "ai-edge-storage",
+   "class": "ai ai-edge-storage",
+   "set": "azionicons",
+   "keywords": [
+    "edge",
+    "storage",
+    "network",
+    "distributed",
+    "bucket",
+    "files",
+    "object storage"
+   ]
+  },
+  {
+   "name": "ai-eleventy",
+   "class": "ai ai-eleventy",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-enabled",
+   "class": "ai ai-enabled",
+   "set": "azionicons",
+   "keywords": [
+    "on",
+    "active",
+    "status"
+   ]
+  },
+  {
+   "name": "ai-filter-alt",
+   "class": "ai ai-filter-alt",
+   "set": "azionicons",
+   "keywords": [
+    "filter",
+    "alt",
+    "funnel",
+    "refine",
+    "narrow"
+   ]
+  },
+  {
+   "name": "ai-gateway",
+   "class": "ai ai-gateway",
+   "set": "azionicons",
+   "keywords": [
+    "proxy",
+    "api",
+    "routing"
+   ]
+  },
+  {
+   "name": "ai-gatsby",
+   "class": "ai ai-gatsby",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-gemini",
+   "class": "ai ai-gemini",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-git-branch-delete",
+   "class": "ai ai-git-branch-delete",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "branch",
+    "delete",
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "remove",
+    "erase"
+   ]
+  },
+  {
+   "name": "ai-git-branch-plus",
+   "class": "ai ai-git-branch-plus",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "branch",
+    "plus",
+    "version control",
+    "source",
+    "repository",
+    "version",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "ai-git-branch",
+   "class": "ai ai-git-branch",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "branch",
+    "version control",
+    "source",
+    "repository",
+    "version"
+   ]
+  },
+  {
+   "name": "ai-git-cherry-pick",
+   "class": "ai ai-git-cherry-pick",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "cherry",
+    "pick",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-commit",
+   "class": "ai ai-git-commit",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "commit",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-compare",
+   "class": "ai ai-git-compare",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "compare",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-diff",
+   "class": "ai ai-git-diff",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "diff",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-fork",
+   "class": "ai ai-git-fork",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "fork",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-graph",
+   "class": "ai ai-git-graph",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "graph",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-merge-conflict",
+   "class": "ai ai-git-merge-conflict",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "merge",
+    "conflict",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-merge",
+   "class": "ai ai-git-merge",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "merge",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-pull-request-closed",
+   "class": "ai ai-git-pull-request-closed",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "pull",
+    "request",
+    "closed",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-pull-request-draft",
+   "class": "ai ai-git-pull-request-draft",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "pull",
+    "request",
+    "draft",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-pull-request",
+   "class": "ai ai-git-pull-request",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "pull",
+    "request",
+    "version control",
+    "source",
+    "repository"
+   ]
+  },
+  {
+   "name": "ai-git-repository",
+   "class": "ai ai-git-repository",
+   "set": "azionicons",
+   "keywords": [
+    "git",
+    "repository",
+    "version control",
+    "source",
+    "code"
+   ]
+  },
+  {
+   "name": "ai-github",
+   "class": "ai ai-github",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-graphql",
+   "class": "ai ai-graphql",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-grok",
+   "class": "ai ai-grok",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-hexo",
+   "class": "ai ai-hexo",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-home",
+   "class": "ai ai-home",
+   "set": "azionicons",
+   "keywords": [
+    "house",
+    "start",
+    "dashboard"
+   ]
+  },
+  {
+   "name": "ai-hono",
+   "class": "ai ai-hono",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-html",
+   "class": "ai ai-html",
+   "set": "azionicons",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "ai-hugo",
+   "class": "ai ai-hugo",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-image-processor",
+   "class": "ai ai-image-processor",
+   "set": "azionicons",
+   "keywords": [
+    "image",
+    "processor",
+    "picture",
+    "photo",
+    "media"
+   ]
+  },
+  {
+   "name": "ai-instructor",
+   "class": "ai ai-instructor",
+   "set": "azionicons",
+   "keywords": [
+    "teacher",
+    "training",
+    "course"
+   ]
+  },
+  {
+   "name": "ai-integration-services",
+   "class": "ai ai-integration-services",
+   "set": "azionicons",
+   "keywords": [
+    "integration",
+    "services"
+   ]
+  },
+  {
+   "name": "ai-jekyll",
+   "class": "ai ai-jekyll",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-json-text",
+   "class": "ai ai-json-text",
+   "set": "azionicons",
+   "keywords": [
+    "json",
+    "text",
+    "data",
+    "format",
+    "code"
+   ]
+  },
+  {
+   "name": "ai-json",
+   "class": "ai ai-json",
+   "set": "azionicons",
+   "keywords": [
+    "data",
+    "format",
+    "code"
+   ]
+  },
+  {
+   "name": "ai-layers",
+   "class": "ai ai-layers",
+   "set": "azionicons",
+   "keywords": [
+    "stack",
+    "levels"
+   ]
+  },
+  {
+   "name": "ai-live-ingest",
+   "class": "ai ai-live-ingest",
+   "set": "azionicons",
+   "keywords": [
+    "live",
+    "ingest"
+   ]
+  },
+  {
+   "name": "ai-load-balancer",
+   "class": "ai ai-load-balancer",
+   "set": "azionicons",
+   "keywords": [
+    "load",
+    "balancer",
+    "traffic",
+    "distribution",
+    "origin"
+   ]
+  },
+  {
+   "name": "ai-lora",
+   "class": "ai ai-lora",
+   "set": "azionicons",
+   "keywords": [
+    "fine-tuning",
+    "ai",
+    "model"
+   ]
+  },
+  {
+   "name": "ai-marketplace",
+   "class": "ai ai-marketplace",
+   "set": "azionicons",
+   "keywords": [
+    "templates",
+    "store",
+    "integrations"
+   ]
+  },
+  {
+   "name": "ai-mcp-logo",
+   "class": "ai ai-mcp-logo",
+   "set": "azionicons",
+   "keywords": [
+    "mcp",
+    "logo",
+    "brand"
+   ]
+  },
+  {
+   "name": "ai-medium",
+   "class": "ai ai-medium",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-meta",
+   "class": "ai ai-meta",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-microsoft-copilot",
+   "class": "ai ai-microsoft-copilot",
+   "set": "azionicons",
+   "keywords": [
+    "microsoft",
+    "copilot",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-mistral",
+   "class": "ai ai-mistral",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-network-lists",
+   "class": "ai ai-network-lists",
+   "set": "azionicons",
+   "keywords": [
+    "network",
+    "lists",
+    "connectivity"
+   ]
+  },
+  {
+   "name": "ai-next",
+   "class": "ai ai-next",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-nuxt",
+   "class": "ai ai-nuxt",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-observe-pillar",
+   "class": "ai ai-observe-pillar",
+   "set": "azionicons",
+   "keywords": [
+    "observe",
+    "pillar",
+    "observability",
+    "monitoring",
+    "product family"
+   ]
+  },
+  {
+   "name": "ai-open",
+   "class": "ai ai-open",
+   "set": "azionicons",
+   "keywords": [
+    "openai",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-origin-accelerator",
+   "class": "ai ai-origin-accelerator",
+   "set": "azionicons",
+   "keywords": [
+    "origin",
+    "accelerator",
+    "backend",
+    "server",
+    "performance",
+    "speed",
+    "product"
+   ]
+  },
+  {
+   "name": "ai-origin-shield",
+   "class": "ai ai-origin-shield",
+   "set": "azionicons",
+   "keywords": [
+    "origin",
+    "shield",
+    "backend",
+    "server",
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "ai-perplexity",
+   "class": "ai ai-perplexity",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-pratices-review",
+   "class": "ai ai-pratices-review",
+   "set": "azionicons",
+   "keywords": [
+    "pratices",
+    "review"
+   ]
+  },
+  {
+   "name": "ai-preact",
+   "class": "ai ai-preact",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-professional-services",
+   "class": "ai ai-professional-services",
+   "set": "azionicons",
+   "keywords": [
+    "professional",
+    "services"
+   ]
+  },
+  {
+   "name": "ai-qwen",
+   "class": "ai ai-qwen",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-qwik",
+   "class": "ai ai-qwik",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-react",
+   "class": "ai ai-react",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-real-time-events",
+   "class": "ai ai-real-time-events",
+   "set": "azionicons",
+   "keywords": [
+    "real",
+    "time",
+    "events"
+   ]
+  },
+  {
+   "name": "ai-real-time-metrics",
+   "class": "ai ai-real-time-metrics",
+   "set": "azionicons",
+   "keywords": [
+    "real",
+    "time",
+    "metrics",
+    "analytics",
+    "observability",
+    "charts"
+   ]
+  },
+  {
+   "name": "ai-real-time-purge",
+   "class": "ai ai-real-time-purge",
+   "set": "azionicons",
+   "keywords": [
+    "real",
+    "time",
+    "purge",
+    "cache",
+    "clear",
+    "invalidate"
+   ]
+  },
+  {
+   "name": "ai-redis",
+   "class": "ai ai-redis",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-remix",
+   "class": "ai ai-remix",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-rss",
+   "class": "ai ai-rss",
+   "set": "azionicons",
+   "keywords": [
+    "feed",
+    "subscribe",
+    "news"
+   ]
+  },
+  {
+   "name": "ai-rules-engine",
+   "class": "ai ai-rules-engine",
+   "set": "azionicons",
+   "keywords": [
+    "rules",
+    "engine",
+    "logic",
+    "conditions",
+    "behavior"
+   ]
+  },
+  {
+   "name": "ai-sase",
+   "class": "ai ai-sase",
+   "set": "azionicons",
+   "keywords": [
+    "secure access",
+    "network security",
+    "zero trust"
+   ]
+  },
+  {
+   "name": "ai-scizors",
+   "class": "ai ai-scizors",
+   "set": "azionicons",
+   "keywords": [
+    "scissors",
+    "cut"
+   ]
+  },
+  {
+   "name": "ai-secure-pillar",
+   "class": "ai ai-secure-pillar",
+   "set": "azionicons",
+   "keywords": [
+    "secure",
+    "pillar",
+    "security",
+    "protection",
+    "product family"
+   ]
+  },
+  {
+   "name": "ai-security-team",
+   "class": "ai ai-security-team",
+   "set": "azionicons",
+   "keywords": [
+    "security",
+    "team",
+    "protection",
+    "shield"
+   ]
+  },
+  {
+   "name": "ai-sparkles",
+   "class": "ai ai-sparkles",
+   "set": "azionicons",
+   "keywords": [
+    "ai",
+    "magic",
+    "new",
+    "generate"
+   ]
+  },
+  {
+   "name": "ai-sql",
+   "class": "ai ai-sql",
+   "set": "azionicons",
+   "keywords": [
+    "database",
+    "query"
+   ]
+  },
+  {
+   "name": "ai-store",
+   "class": "ai ai-store",
+   "set": "azionicons",
+   "keywords": [
+    "shop",
+    "marketplace"
+   ]
+  },
+  {
+   "name": "ai-technical-account",
+   "class": "ai ai-technical-account",
+   "set": "azionicons",
+   "keywords": [
+    "technical",
+    "account"
+   ]
+  },
+  {
+   "name": "ai-technical-support",
+   "class": "ai ai-technical-support",
+   "set": "azionicons",
+   "keywords": [
+    "technical",
+    "support",
+    "help",
+    "service"
+   ]
+  },
+  {
+   "name": "ai-terraform",
+   "class": "ai ai-terraform",
+   "set": "azionicons",
+   "keywords": [
+    "infrastructure as code",
+    "iac",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-tiered-cache",
+   "class": "ai ai-tiered-cache",
+   "set": "azionicons",
+   "keywords": [
+    "tiered",
+    "cache"
+   ]
+  },
+  {
+   "name": "ai-turso",
+   "class": "ai ai-turso",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-twitch",
+   "class": "ai ai-twitch",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-variables",
+   "class": "ai ai-variables",
+   "set": "azionicons",
+   "keywords": [
+    "environment",
+    "env",
+    "config"
+   ]
+  },
+  {
+   "name": "ai-vite",
+   "class": "ai ai-vite",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-vitepress",
+   "class": "ai ai-vitepress",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-vue",
+   "class": "ai ai-vue",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-vuepress",
+   "class": "ai ai-vuepress",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-waf-rules",
+   "class": "ai ai-waf-rules",
+   "set": "azionicons",
+   "keywords": [
+    "waf",
+    "rules",
+    "web application firewall",
+    "security",
+    "logic",
+    "conditions",
+    "behavior"
+   ]
+  },
+  {
+   "name": "ai-webhook",
+   "class": "ai ai-webhook",
+   "set": "azionicons",
+   "keywords": [
+    "integration",
+    "callback",
+    "events"
+   ]
+  },
+  {
+   "name": "ai-windsurf",
+   "class": "ai ai-windsurf",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-workloads",
+   "class": "ai ai-workloads",
+   "set": "azionicons",
+   "keywords": [
+    "domains",
+    "deploy",
+    "traffic"
+   ]
+  },
+  {
+   "name": "ai-x",
+   "class": "ai ai-x",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-youtube",
+   "class": "ai ai-youtube",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-sparkles",
+   "class": "ai ai-sparkles",
+   "set": "primeicons",
+   "keywords": [
+    "ai",
+    "magic",
+    "new",
+    "generate"
+   ]
+  },
+  {
+   "name": "pi-address-book",
+   "class": "pi pi-address-book",
+   "set": "primeicons",
+   "keywords": [
+    "address",
+    "book",
+    "contacts",
+    "people",
+    "docs",
+    "documentation",
+    "read"
+   ]
+  },
+  {
+   "name": "pi-align-center",
+   "class": "pi pi-align-center",
+   "set": "primeicons",
+   "keywords": [
+    "align",
+    "center",
+    "text",
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "pi-align-justify",
+   "class": "pi pi-align-justify",
+   "set": "primeicons",
+   "keywords": [
+    "align",
+    "justify",
+    "text",
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "pi-align-left",
+   "class": "pi pi-align-left",
+   "set": "primeicons",
+   "keywords": [
+    "align",
+    "left",
+    "text",
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "pi-align-right",
+   "class": "pi pi-align-right",
+   "set": "primeicons",
+   "keywords": [
+    "align",
+    "right",
+    "text",
+    "alignment",
+    "format"
+   ]
+  },
+  {
+   "name": "pi-amazon",
+   "class": "pi pi-amazon",
+   "set": "primeicons",
+   "keywords": [
+    "aws",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-android",
+   "class": "pi pi-android",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-angle-double-down",
+   "class": "pi pi-angle-double-down",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "double",
+    "down",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-double-left",
+   "class": "pi pi-angle-double-left",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "double",
+    "left",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-double-right",
+   "class": "pi pi-angle-double-right",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "double",
+    "right",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-double-up",
+   "class": "pi pi-angle-double-up",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "double",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-down",
+   "class": "pi pi-angle-down",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "down",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-left",
+   "class": "pi pi-angle-left",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "left",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-right",
+   "class": "pi pi-angle-right",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "right",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-angle-up",
+   "class": "pi pi-angle-up",
+   "set": "primeicons",
+   "keywords": [
+    "angle",
+    "chevron",
+    "arrow",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-apple",
+   "class": "pi pi-apple",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-arrow-circle-down",
+   "class": "pi pi-arrow-circle-down",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "circle",
+    "down",
+    "direction",
+    "navigate",
+    "move",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-arrow-circle-left",
+   "class": "pi pi-arrow-circle-left",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "circle",
+    "left",
+    "direction",
+    "navigate",
+    "move",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-arrow-circle-right",
+   "class": "pi pi-arrow-circle-right",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "circle",
+    "right",
+    "direction",
+    "navigate",
+    "move",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-arrow-circle-up",
+   "class": "pi pi-arrow-circle-up",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "circle",
+    "direction",
+    "navigate",
+    "move",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-arrow-down-left-and-arrow-up-right-to-center",
+   "class": "pi pi-arrow-down-left-and-arrow-up-right-to-center",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "down",
+    "left",
+    "and",
+    "right",
+    "center",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-down-left",
+   "class": "pi pi-arrow-down-left",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "down",
+    "left",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-down-right",
+   "class": "pi pi-arrow-down-right",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "down",
+    "right",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-down",
+   "class": "pi pi-arrow-down",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "down",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-left",
+   "class": "pi pi-arrow-left",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "left",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-right-arrow-left",
+   "class": "pi pi-arrow-right-arrow-left",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "right",
+    "left",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-right",
+   "class": "pi pi-arrow-right",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "right",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-up-left",
+   "class": "pi pi-arrow-up-left",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "left",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-up-right-and-arrow-down-left-from-center",
+   "class": "pi pi-arrow-up-right-and-arrow-down-left-from-center",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "right",
+    "and",
+    "down",
+    "left",
+    "from",
+    "center",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-up-right",
+   "class": "pi pi-arrow-up-right",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "right",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrow-up",
+   "class": "pi pi-arrow-up",
+   "set": "primeicons",
+   "keywords": [
+    "arrow",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-arrows-alt",
+   "class": "pi pi-arrows-alt",
+   "set": "primeicons",
+   "keywords": [
+    "arrows",
+    "alt",
+    "move",
+    "resize",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-arrows-h",
+   "class": "pi pi-arrows-h",
+   "set": "primeicons",
+   "keywords": [
+    "arrows",
+    "move",
+    "resize",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-arrows-v",
+   "class": "pi pi-arrows-v",
+   "set": "primeicons",
+   "keywords": [
+    "arrows",
+    "move",
+    "resize",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-asterisk",
+   "class": "pi pi-asterisk",
+   "set": "primeicons",
+   "keywords": [
+    "required",
+    "star"
+   ]
+  },
+  {
+   "name": "pi-at",
+   "class": "pi pi-at",
+   "set": "primeicons",
+   "keywords": [
+    "email",
+    "mention"
+   ]
+  },
+  {
+   "name": "pi-backward",
+   "class": "pi pi-backward",
+   "set": "primeicons",
+   "keywords": [
+    "previous",
+    "rewind"
+   ]
+  },
+  {
+   "name": "pi-ban",
+   "class": "pi pi-ban",
+   "set": "primeicons",
+   "keywords": [
+    "block",
+    "forbidden",
+    "deny"
+   ]
+  },
+  {
+   "name": "pi-barcode",
+   "class": "pi pi-barcode",
+   "set": "primeicons",
+   "keywords": [
+    "scan",
+    "product code"
+   ]
+  },
+  {
+   "name": "pi-bars",
+   "class": "pi pi-bars",
+   "set": "primeicons",
+   "keywords": [
+    "menu",
+    "hamburger",
+    "navigation"
+   ]
+  },
+  {
+   "name": "pi-bell-slash",
+   "class": "pi pi-bell-slash",
+   "set": "primeicons",
+   "keywords": [
+    "bell",
+    "slash",
+    "notification",
+    "alert"
+   ]
+  },
+  {
+   "name": "pi-bell",
+   "class": "pi pi-bell",
+   "set": "primeicons",
+   "keywords": [
+    "notification",
+    "alert"
+   ]
+  },
+  {
+   "name": "pi-bitcoin",
+   "class": "pi pi-bitcoin",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-bolt",
+   "class": "pi pi-bolt",
+   "set": "primeicons",
+   "keywords": [
+    "fast",
+    "lightning",
+    "power"
+   ]
+  },
+  {
+   "name": "pi-book",
+   "class": "pi pi-book",
+   "set": "primeicons",
+   "keywords": [
+    "docs",
+    "documentation",
+    "read"
+   ]
+  },
+  {
+   "name": "pi-bookmark-fill",
+   "class": "pi pi-bookmark-fill",
+   "set": "primeicons",
+   "keywords": [
+    "bookmark",
+    "fill",
+    "save",
+    "favorite"
+   ]
+  },
+  {
+   "name": "pi-bookmark",
+   "class": "pi pi-bookmark",
+   "set": "primeicons",
+   "keywords": [
+    "save",
+    "favorite"
+   ]
+  },
+  {
+   "name": "pi-box",
+   "class": "pi pi-box",
+   "set": "primeicons",
+   "keywords": [
+    "package",
+    "product"
+   ]
+  },
+  {
+   "name": "pi-briefcase",
+   "class": "pi pi-briefcase",
+   "set": "primeicons",
+   "keywords": [
+    "work",
+    "business"
+   ]
+  },
+  {
+   "name": "pi-building-columns",
+   "class": "pi pi-building-columns",
+   "set": "primeicons",
+   "keywords": [
+    "building",
+    "columns",
+    "company",
+    "organization",
+    "office"
+   ]
+  },
+  {
+   "name": "pi-building",
+   "class": "pi pi-building",
+   "set": "primeicons",
+   "keywords": [
+    "company",
+    "organization",
+    "office"
+   ]
+  },
+  {
+   "name": "pi-bullseye",
+   "class": "pi pi-bullseye",
+   "set": "primeicons",
+   "keywords": [
+    "target",
+    "goal"
+   ]
+  },
+  {
+   "name": "pi-calculator",
+   "class": "pi pi-calculator",
+   "set": "primeicons",
+   "keywords": [
+    "math",
+    "pricing"
+   ]
+  },
+  {
+   "name": "pi-calendar-clock",
+   "class": "pi pi-calendar-clock",
+   "set": "primeicons",
+   "keywords": [
+    "calendar",
+    "clock",
+    "date",
+    "schedule",
+    "time",
+    "history"
+   ]
+  },
+  {
+   "name": "pi-calendar-minus",
+   "class": "pi pi-calendar-minus",
+   "set": "primeicons",
+   "keywords": [
+    "calendar",
+    "minus",
+    "date",
+    "schedule",
+    "time",
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "pi-calendar-plus",
+   "class": "pi pi-calendar-plus",
+   "set": "primeicons",
+   "keywords": [
+    "calendar",
+    "plus",
+    "date",
+    "schedule",
+    "time",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-calendar-times",
+   "class": "pi pi-calendar-times",
+   "set": "primeicons",
+   "keywords": [
+    "calendar",
+    "times",
+    "date",
+    "schedule",
+    "time",
+    "close",
+    "cancel",
+    "dismiss",
+    "x"
+   ]
+  },
+  {
+   "name": "pi-calendar",
+   "class": "pi pi-calendar",
+   "set": "primeicons",
+   "keywords": [
+    "date",
+    "schedule",
+    "time"
+   ]
+  },
+  {
+   "name": "pi-camera",
+   "class": "pi pi-camera",
+   "set": "primeicons",
+   "keywords": [
+    "photo",
+    "picture"
+   ]
+  },
+  {
+   "name": "pi-car",
+   "class": "pi pi-car",
+   "set": "primeicons",
+   "keywords": [
+    "vehicle",
+    "automotive"
+   ]
+  },
+  {
+   "name": "pi-caret-down",
+   "class": "pi pi-caret-down",
+   "set": "primeicons",
+   "keywords": [
+    "caret",
+    "down",
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "pi-caret-left",
+   "class": "pi pi-caret-left",
+   "set": "primeicons",
+   "keywords": [
+    "caret",
+    "left",
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "pi-caret-right",
+   "class": "pi pi-caret-right",
+   "set": "primeicons",
+   "keywords": [
+    "caret",
+    "right",
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "pi-caret-up",
+   "class": "pi pi-caret-up",
+   "set": "primeicons",
+   "keywords": [
+    "caret",
+    "arrow",
+    "dropdown",
+    "triangle"
+   ]
+  },
+  {
+   "name": "pi-cart-arrow-down",
+   "class": "pi pi-cart-arrow-down",
+   "set": "primeicons",
+   "keywords": [
+    "cart",
+    "arrow",
+    "down",
+    "shopping",
+    "commerce",
+    "buy",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-cart-minus",
+   "class": "pi pi-cart-minus",
+   "set": "primeicons",
+   "keywords": [
+    "cart",
+    "minus",
+    "shopping",
+    "commerce",
+    "buy",
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "pi-cart-plus",
+   "class": "pi pi-cart-plus",
+   "set": "primeicons",
+   "keywords": [
+    "cart",
+    "plus",
+    "shopping",
+    "commerce",
+    "buy",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-chart-bar",
+   "class": "pi pi-chart-bar",
+   "set": "primeicons",
+   "keywords": [
+    "chart",
+    "bar",
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "pi-chart-line",
+   "class": "pi pi-chart-line",
+   "set": "primeicons",
+   "keywords": [
+    "chart",
+    "line",
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "pi-chart-pie",
+   "class": "pi pi-chart-pie",
+   "set": "primeicons",
+   "keywords": [
+    "chart",
+    "pie",
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "pi-chart-scatter",
+   "class": "pi pi-chart-scatter",
+   "set": "primeicons",
+   "keywords": [
+    "chart",
+    "scatter",
+    "graph",
+    "analytics",
+    "metrics"
+   ]
+  },
+  {
+   "name": "pi-check-circle",
+   "class": "pi pi-check-circle",
+   "set": "primeicons",
+   "keywords": [
+    "check",
+    "circle",
+    "done",
+    "success",
+    "confirm",
+    "ok",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-check-square",
+   "class": "pi pi-check-square",
+   "set": "primeicons",
+   "keywords": [
+    "check",
+    "square",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "pi-check",
+   "class": "pi pi-check",
+   "set": "primeicons",
+   "keywords": [
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "pi-chevron-circle-down",
+   "class": "pi pi-chevron-circle-down",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "circle",
+    "down",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-chevron-circle-left",
+   "class": "pi pi-chevron-circle-left",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "circle",
+    "left",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-chevron-circle-right",
+   "class": "pi pi-chevron-circle-right",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "circle",
+    "right",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-chevron-circle-up",
+   "class": "pi pi-chevron-circle-up",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "circle",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-chevron-down",
+   "class": "pi pi-chevron-down",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "down",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-chevron-left",
+   "class": "pi pi-chevron-left",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "left",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-chevron-right",
+   "class": "pi pi-chevron-right",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "right",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-chevron-up",
+   "class": "pi pi-chevron-up",
+   "set": "primeicons",
+   "keywords": [
+    "chevron",
+    "arrow",
+    "expand",
+    "collapse",
+    "direction"
+   ]
+  },
+  {
+   "name": "pi-circle-fill",
+   "class": "pi pi-circle-fill",
+   "set": "primeicons",
+   "keywords": [
+    "circle",
+    "fill",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-circle-off",
+   "class": "pi pi-circle-off",
+   "set": "primeicons",
+   "keywords": [
+    "circle",
+    "off",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-circle-on",
+   "class": "pi pi-circle-on",
+   "set": "primeicons",
+   "keywords": [
+    "circle",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-circle",
+   "class": "pi pi-circle",
+   "set": "primeicons",
+   "keywords": [
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-claude",
+   "class": "pi pi-claude",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-clipboard",
+   "class": "pi pi-clipboard",
+   "set": "primeicons",
+   "keywords": [
+    "copy",
+    "paste"
+   ]
+  },
+  {
+   "name": "pi-clock",
+   "class": "pi pi-clock",
+   "set": "primeicons",
+   "keywords": [
+    "time",
+    "schedule",
+    "history"
+   ]
+  },
+  {
+   "name": "pi-clone",
+   "class": "pi pi-clone",
+   "set": "primeicons",
+   "keywords": [
+    "copy",
+    "duplicate"
+   ]
+  },
+  {
+   "name": "pi-cloud-download",
+   "class": "pi pi-cloud-download",
+   "set": "primeicons",
+   "keywords": [
+    "cloud",
+    "download",
+    "hosting",
+    "storage",
+    "save",
+    "export"
+   ]
+  },
+  {
+   "name": "pi-cloud-upload",
+   "class": "pi pi-cloud-upload",
+   "set": "primeicons",
+   "keywords": [
+    "cloud",
+    "upload",
+    "hosting",
+    "storage",
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "pi-cloud",
+   "class": "pi pi-cloud",
+   "set": "primeicons",
+   "keywords": [
+    "hosting",
+    "storage"
+   ]
+  },
+  {
+   "name": "pi-code",
+   "class": "pi pi-code",
+   "set": "primeicons",
+   "keywords": [
+    "developer",
+    "source",
+    "snippet"
+   ]
+  },
+  {
+   "name": "pi-cog",
+   "class": "pi pi-cog",
+   "set": "primeicons",
+   "keywords": [
+    "settings",
+    "gear",
+    "preferences",
+    "configuration"
+   ]
+  },
+  {
+   "name": "pi-comment",
+   "class": "pi pi-comment",
+   "set": "primeicons",
+   "keywords": [
+    "chat",
+    "message",
+    "feedback"
+   ]
+  },
+  {
+   "name": "pi-comments",
+   "class": "pi pi-comments",
+   "set": "primeicons",
+   "keywords": [
+    "chat",
+    "messages",
+    "discussion"
+   ]
+  },
+  {
+   "name": "pi-compass",
+   "class": "pi pi-compass",
+   "set": "primeicons",
+   "keywords": [
+    "explore",
+    "navigation"
+   ]
+  },
+  {
+   "name": "pi-copy",
+   "class": "pi pi-copy",
+   "set": "primeicons",
+   "keywords": [
+    "duplicate",
+    "clipboard"
+   ]
+  },
+  {
+   "name": "pi-credit-card",
+   "class": "pi pi-credit-card",
+   "set": "primeicons",
+   "keywords": [
+    "credit",
+    "card",
+    "payment",
+    "billing"
+   ]
+  },
+  {
+   "name": "pi-crown",
+   "class": "pi pi-crown",
+   "set": "primeicons",
+   "keywords": [
+    "premium",
+    "plan",
+    "pro"
+   ]
+  },
+  {
+   "name": "pi-database",
+   "class": "pi pi-database",
+   "set": "primeicons",
+   "keywords": [
+    "data",
+    "storage",
+    "sql"
+   ]
+  },
+  {
+   "name": "pi-delete-left",
+   "class": "pi pi-delete-left",
+   "set": "primeicons",
+   "keywords": [
+    "delete",
+    "left",
+    "remove",
+    "erase"
+   ]
+  },
+  {
+   "name": "pi-desktop",
+   "class": "pi pi-desktop",
+   "set": "primeicons",
+   "keywords": [
+    "computer",
+    "screen",
+    "device"
+   ]
+  },
+  {
+   "name": "pi-directions-alt",
+   "class": "pi pi-directions-alt",
+   "set": "primeicons",
+   "keywords": [
+    "directions",
+    "alt",
+    "route",
+    "navigation",
+    "map"
+   ]
+  },
+  {
+   "name": "pi-directions",
+   "class": "pi pi-directions",
+   "set": "primeicons",
+   "keywords": [
+    "route",
+    "navigation",
+    "map"
+   ]
+  },
+  {
+   "name": "pi-discord",
+   "class": "pi pi-discord",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-dollar",
+   "class": "pi pi-dollar",
+   "set": "primeicons",
+   "keywords": [
+    "money",
+    "price",
+    "billing",
+    "currency"
+   ]
+  },
+  {
+   "name": "pi-download",
+   "class": "pi pi-download",
+   "set": "primeicons",
+   "keywords": [
+    "save",
+    "export"
+   ]
+  },
+  {
+   "name": "pi-eject",
+   "class": "pi pi-eject",
+   "set": "primeicons",
+   "keywords": [
+    "remove",
+    "unmount"
+   ]
+  },
+  {
+   "name": "pi-ellipsis-h",
+   "class": "pi pi-ellipsis-h",
+   "set": "primeicons",
+   "keywords": [
+    "ellipsis",
+    "more",
+    "menu",
+    "actions",
+    "overflow"
+   ]
+  },
+  {
+   "name": "pi-ellipsis-v",
+   "class": "pi pi-ellipsis-v",
+   "set": "primeicons",
+   "keywords": [
+    "ellipsis",
+    "more",
+    "menu",
+    "actions",
+    "overflow"
+   ]
+  },
+  {
+   "name": "pi-envelope",
+   "class": "pi pi-envelope",
+   "set": "primeicons",
+   "keywords": [
+    "email",
+    "mail",
+    "message"
+   ]
+  },
+  {
+   "name": "pi-equals",
+   "class": "pi pi-equals",
+   "set": "primeicons",
+   "keywords": [
+    "equal",
+    "math"
+   ]
+  },
+  {
+   "name": "pi-eraser",
+   "class": "pi pi-eraser",
+   "set": "primeicons",
+   "keywords": [
+    "clear",
+    "erase"
+   ]
+  },
+  {
+   "name": "pi-ethereum",
+   "class": "pi pi-ethereum",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-euro",
+   "class": "pi pi-euro",
+   "set": "primeicons",
+   "keywords": [
+    "money",
+    "currency"
+   ]
+  },
+  {
+   "name": "pi-exclamation-circle",
+   "class": "pi pi-exclamation-circle",
+   "set": "primeicons",
+   "keywords": [
+    "exclamation",
+    "circle",
+    "warning",
+    "error",
+    "alert",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-exclamation-triangle",
+   "class": "pi pi-exclamation-triangle",
+   "set": "primeicons",
+   "keywords": [
+    "exclamation",
+    "triangle",
+    "warning",
+    "error",
+    "alert"
+   ]
+  },
+  {
+   "name": "pi-expand",
+   "class": "pi pi-expand",
+   "set": "primeicons",
+   "keywords": [
+    "fullscreen",
+    "maximize"
+   ]
+  },
+  {
+   "name": "pi-external-link",
+   "class": "pi pi-external-link",
+   "set": "primeicons",
+   "keywords": [
+    "external",
+    "link",
+    "open",
+    "new tab",
+    "link out",
+    "url",
+    "chain",
+    "hyperlink"
+   ]
+  },
+  {
+   "name": "pi-eye-slash",
+   "class": "pi pi-eye-slash",
+   "set": "primeicons",
+   "keywords": [
+    "eye",
+    "slash",
+    "hide",
+    "hidden",
+    "invisible",
+    "view",
+    "show",
+    "visible",
+    "preview"
+   ]
+  },
+  {
+   "name": "pi-eye",
+   "class": "pi pi-eye",
+   "set": "primeicons",
+   "keywords": [
+    "view",
+    "show",
+    "visible",
+    "preview"
+   ]
+  },
+  {
+   "name": "pi-face-smile",
+   "class": "pi pi-face-smile",
+   "set": "primeicons",
+   "keywords": [
+    "face",
+    "smile"
+   ]
+  },
+  {
+   "name": "pi-facebook",
+   "class": "pi pi-facebook",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-fast-backward",
+   "class": "pi pi-fast-backward",
+   "set": "primeicons",
+   "keywords": [
+    "fast",
+    "backward",
+    "previous",
+    "rewind"
+   ]
+  },
+  {
+   "name": "pi-fast-forward",
+   "class": "pi pi-fast-forward",
+   "set": "primeicons",
+   "keywords": [
+    "fast",
+    "forward",
+    "next",
+    "skip"
+   ]
+  },
+  {
+   "name": "pi-file-arrow-up",
+   "class": "pi pi-file-arrow-up",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "arrow",
+    "document",
+    "page",
+    "direction",
+    "navigate",
+    "move"
+   ]
+  },
+  {
+   "name": "pi-file-check",
+   "class": "pi pi-file-check",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "check",
+    "document",
+    "page",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "pi-file-edit",
+   "class": "pi pi-file-edit",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "edit",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-excel",
+   "class": "pi pi-file-excel",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "excel",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-export",
+   "class": "pi pi-file-export",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "export",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-import",
+   "class": "pi pi-file-import",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "import",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-o",
+   "class": "pi pi-file-o",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-pdf",
+   "class": "pi pi-file-pdf",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "pdf",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file-plus",
+   "class": "pi pi-file-plus",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "plus",
+    "document",
+    "page",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-file-word",
+   "class": "pi pi-file-word",
+   "set": "primeicons",
+   "keywords": [
+    "file",
+    "word",
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-file",
+   "class": "pi pi-file",
+   "set": "primeicons",
+   "keywords": [
+    "document",
+    "page"
+   ]
+  },
+  {
+   "name": "pi-filter-fill",
+   "class": "pi pi-filter-fill",
+   "set": "primeicons",
+   "keywords": [
+    "filter",
+    "fill",
+    "funnel",
+    "refine",
+    "narrow"
+   ]
+  },
+  {
+   "name": "pi-filter-slash",
+   "class": "pi pi-filter-slash",
+   "set": "primeicons",
+   "keywords": [
+    "filter",
+    "slash",
+    "funnel",
+    "refine",
+    "narrow"
+   ]
+  },
+  {
+   "name": "pi-filter",
+   "class": "pi pi-filter",
+   "set": "primeicons",
+   "keywords": [
+    "funnel",
+    "refine",
+    "narrow"
+   ]
+  },
+  {
+   "name": "pi-flag-fill",
+   "class": "pi pi-flag-fill",
+   "set": "primeicons",
+   "keywords": [
+    "flag",
+    "fill",
+    "report",
+    "mark"
+   ]
+  },
+  {
+   "name": "pi-flag",
+   "class": "pi pi-flag",
+   "set": "primeicons",
+   "keywords": [
+    "report",
+    "mark"
+   ]
+  },
+  {
+   "name": "pi-folder-open",
+   "class": "pi pi-folder-open",
+   "set": "primeicons",
+   "keywords": [
+    "folder",
+    "open",
+    "directory",
+    "files",
+    "openai",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-folder-plus",
+   "class": "pi pi-folder-plus",
+   "set": "primeicons",
+   "keywords": [
+    "folder",
+    "plus",
+    "directory",
+    "files",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-folder",
+   "class": "pi pi-folder",
+   "set": "primeicons",
+   "keywords": [
+    "directory",
+    "files"
+   ]
+  },
+  {
+   "name": "pi-forward",
+   "class": "pi pi-forward",
+   "set": "primeicons",
+   "keywords": [
+    "next",
+    "skip"
+   ]
+  },
+  {
+   "name": "pi-gauge",
+   "class": "pi pi-gauge",
+   "set": "primeicons",
+   "keywords": [
+    "performance",
+    "speed",
+    "meter"
+   ]
+  },
+  {
+   "name": "pi-gemini",
+   "class": "pi pi-gemini",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-gift",
+   "class": "pi pi-gift",
+   "set": "primeicons",
+   "keywords": [
+    "present",
+    "reward"
+   ]
+  },
+  {
+   "name": "pi-github",
+   "class": "pi pi-github",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-globe",
+   "class": "pi pi-globe",
+   "set": "primeicons",
+   "keywords": [
+    "world",
+    "global",
+    "language",
+    "web"
+   ]
+  },
+  {
+   "name": "pi-google",
+   "class": "pi pi-google",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-graduation-cap",
+   "class": "pi pi-graduation-cap",
+   "set": "primeicons",
+   "keywords": [
+    "graduation",
+    "cap",
+    "learn",
+    "education",
+    "course"
+   ]
+  },
+  {
+   "name": "pi-hammer",
+   "class": "pi pi-hammer",
+   "set": "primeicons",
+   "keywords": [
+    "build",
+    "tools"
+   ]
+  },
+  {
+   "name": "pi-hashtag",
+   "class": "pi pi-hashtag",
+   "set": "primeicons",
+   "keywords": [
+    "tag",
+    "number",
+    "channel"
+   ]
+  },
+  {
+   "name": "pi-headphones",
+   "class": "pi pi-headphones",
+   "set": "primeicons",
+   "keywords": [
+    "support",
+    "audio"
+   ]
+  },
+  {
+   "name": "pi-heart-fill",
+   "class": "pi pi-heart-fill",
+   "set": "primeicons",
+   "keywords": [
+    "heart",
+    "fill",
+    "like",
+    "favorite",
+    "love"
+   ]
+  },
+  {
+   "name": "pi-heart",
+   "class": "pi pi-heart",
+   "set": "primeicons",
+   "keywords": [
+    "like",
+    "favorite",
+    "love"
+   ]
+  },
+  {
+   "name": "pi-history",
+   "class": "pi pi-history",
+   "set": "primeicons",
+   "keywords": [
+    "recent",
+    "activity",
+    "audit",
+    "log"
+   ]
+  },
+  {
+   "name": "pi-home",
+   "class": "pi pi-home",
+   "set": "primeicons",
+   "keywords": [
+    "house",
+    "start",
+    "dashboard"
+   ]
+  },
+  {
+   "name": "pi-hourglass",
+   "class": "pi pi-hourglass",
+   "set": "primeicons",
+   "keywords": [
+    "wait",
+    "pending",
+    "time"
+   ]
+  },
+  {
+   "name": "pi-id-card",
+   "class": "pi pi-id-card",
+   "set": "primeicons",
+   "keywords": [
+    "card",
+    "identity",
+    "profile",
+    "account"
+   ]
+  },
+  {
+   "name": "pi-image",
+   "class": "pi pi-image",
+   "set": "primeicons",
+   "keywords": [
+    "picture",
+    "photo",
+    "media"
+   ]
+  },
+  {
+   "name": "pi-images",
+   "class": "pi pi-images",
+   "set": "primeicons",
+   "keywords": [
+    "pictures",
+    "photos",
+    "gallery",
+    "media"
+   ]
+  },
+  {
+   "name": "pi-inbox",
+   "class": "pi pi-inbox",
+   "set": "primeicons",
+   "keywords": [
+    "messages",
+    "mail",
+    "empty"
+   ]
+  },
+  {
+   "name": "pi-indian-rupee",
+   "class": "pi pi-indian-rupee",
+   "set": "primeicons",
+   "keywords": [
+    "indian",
+    "rupee"
+   ]
+  },
+  {
+   "name": "pi-info-circle",
+   "class": "pi pi-info-circle",
+   "set": "primeicons",
+   "keywords": [
+    "info",
+    "circle",
+    "information",
+    "help",
+    "about",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-info",
+   "class": "pi pi-info",
+   "set": "primeicons",
+   "keywords": [
+    "information",
+    "help",
+    "about"
+   ]
+  },
+  {
+   "name": "pi-instagram",
+   "class": "pi pi-instagram",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-key",
+   "class": "pi pi-key",
+   "set": "primeicons",
+   "keywords": [
+    "password",
+    "token",
+    "secret",
+    "credential"
+   ]
+  },
+  {
+   "name": "pi-language",
+   "class": "pi pi-language",
+   "set": "primeicons",
+   "keywords": [
+    "translate",
+    "locale",
+    "i18n"
+   ]
+  },
+  {
+   "name": "pi-lightbulb",
+   "class": "pi pi-lightbulb",
+   "set": "primeicons",
+   "keywords": [
+    "idea",
+    "tip",
+    "hint"
+   ]
+  },
+  {
+   "name": "pi-link",
+   "class": "pi pi-link",
+   "set": "primeicons",
+   "keywords": [
+    "url",
+    "chain",
+    "hyperlink"
+   ]
+  },
+  {
+   "name": "pi-linkedin",
+   "class": "pi pi-linkedin",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-list-check",
+   "class": "pi pi-list-check",
+   "set": "primeicons",
+   "keywords": [
+    "list",
+    "check",
+    "tasks",
+    "todo",
+    "checklist",
+    "items",
+    "bullets",
+    "done",
+    "success",
+    "confirm",
+    "ok"
+   ]
+  },
+  {
+   "name": "pi-list",
+   "class": "pi pi-list",
+   "set": "primeicons",
+   "keywords": [
+    "items",
+    "bullets"
+   ]
+  },
+  {
+   "name": "pi-lock-open",
+   "class": "pi pi-lock-open",
+   "set": "primeicons",
+   "keywords": [
+    "lock",
+    "open",
+    "unlock",
+    "public",
+    "unlocked",
+    "secure",
+    "private",
+    "password",
+    "locked",
+    "openai",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-lock",
+   "class": "pi pi-lock",
+   "set": "primeicons",
+   "keywords": [
+    "secure",
+    "private",
+    "password",
+    "locked"
+   ]
+  },
+  {
+   "name": "pi-map-marker",
+   "class": "pi pi-map-marker",
+   "set": "primeicons",
+   "keywords": [
+    "map",
+    "marker",
+    "location",
+    "pin",
+    "place",
+    "geo"
+   ]
+  },
+  {
+   "name": "pi-map",
+   "class": "pi pi-map",
+   "set": "primeicons",
+   "keywords": [
+    "location",
+    "geo"
+   ]
+  },
+  {
+   "name": "pi-mars",
+   "class": "pi pi-mars",
+   "set": "primeicons",
+   "keywords": [
+    "male",
+    "gender"
+   ]
+  },
+  {
+   "name": "pi-megaphone",
+   "class": "pi pi-megaphone",
+   "set": "primeicons",
+   "keywords": [
+    "announcement",
+    "marketing",
+    "news"
+   ]
+  },
+  {
+   "name": "pi-microchip-ai",
+   "class": "pi pi-microchip-ai",
+   "set": "primeicons",
+   "keywords": [
+    "microchip",
+    "hardware",
+    "processor",
+    "compute",
+    "artificial intelligence",
+    "llm",
+    "model"
+   ]
+  },
+  {
+   "name": "pi-microchip",
+   "class": "pi pi-microchip",
+   "set": "primeicons",
+   "keywords": [
+    "hardware",
+    "processor",
+    "compute"
+   ]
+  },
+  {
+   "name": "pi-microphone",
+   "class": "pi pi-microphone",
+   "set": "primeicons",
+   "keywords": [
+    "audio",
+    "voice",
+    "record"
+   ]
+  },
+  {
+   "name": "pi-microsoft",
+   "class": "pi pi-microsoft",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-minus-circle",
+   "class": "pi pi-minus-circle",
+   "set": "primeicons",
+   "keywords": [
+    "minus",
+    "circle",
+    "remove",
+    "subtract",
+    "collapse",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-minus",
+   "class": "pi pi-minus",
+   "set": "primeicons",
+   "keywords": [
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "pi-mobile",
+   "class": "pi pi-mobile",
+   "set": "primeicons",
+   "keywords": [
+    "phone",
+    "device",
+    "smartphone"
+   ]
+  },
+  {
+   "name": "pi-money-bill",
+   "class": "pi pi-money-bill",
+   "set": "primeicons",
+   "keywords": [
+    "money",
+    "bill",
+    "payment",
+    "billing",
+    "cash"
+   ]
+  },
+  {
+   "name": "pi-moon",
+   "class": "pi pi-moon",
+   "set": "primeicons",
+   "keywords": [
+    "dark mode",
+    "night",
+    "theme"
+   ]
+  },
+  {
+   "name": "pi-objects-column",
+   "class": "pi pi-objects-column",
+   "set": "primeicons",
+   "keywords": [
+    "objects",
+    "column",
+    "layout",
+    "grid"
+   ]
+  },
+  {
+   "name": "pi-palette",
+   "class": "pi pi-palette",
+   "set": "primeicons",
+   "keywords": [
+    "color",
+    "theme",
+    "design"
+   ]
+  },
+  {
+   "name": "pi-paperclip",
+   "class": "pi pi-paperclip",
+   "set": "primeicons",
+   "keywords": [
+    "attachment",
+    "attach"
+   ]
+  },
+  {
+   "name": "pi-pause-circle",
+   "class": "pi pi-pause-circle",
+   "set": "primeicons",
+   "keywords": [
+    "pause",
+    "circle",
+    "stop",
+    "hold",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-pause",
+   "class": "pi pi-pause",
+   "set": "primeicons",
+   "keywords": [
+    "stop",
+    "hold"
+   ]
+  },
+  {
+   "name": "pi-paypal",
+   "class": "pi pi-paypal",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-pen-to-square",
+   "class": "pi pi-pen-to-square",
+   "set": "primeicons",
+   "keywords": [
+    "pen",
+    "square",
+    "edit",
+    "write"
+   ]
+  },
+  {
+   "name": "pi-pencil",
+   "class": "pi pi-pencil",
+   "set": "primeicons",
+   "keywords": [
+    "edit",
+    "write",
+    "rename"
+   ]
+  },
+  {
+   "name": "pi-percentage",
+   "class": "pi pi-percentage",
+   "set": "primeicons",
+   "keywords": [
+    "percent",
+    "discount",
+    "rate"
+   ]
+  },
+  {
+   "name": "pi-phone",
+   "class": "pi pi-phone",
+   "set": "primeicons",
+   "keywords": [
+    "call",
+    "contact"
+   ]
+  },
+  {
+   "name": "pi-pinterest",
+   "class": "pi pi-pinterest",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-play-circle",
+   "class": "pi pi-play-circle",
+   "set": "primeicons",
+   "keywords": [
+    "play",
+    "circle",
+    "start",
+    "run",
+    "video",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-play",
+   "class": "pi pi-play",
+   "set": "primeicons",
+   "keywords": [
+    "start",
+    "run",
+    "video"
+   ]
+  },
+  {
+   "name": "pi-plus-circle",
+   "class": "pi pi-plus-circle",
+   "set": "primeicons",
+   "keywords": [
+    "plus",
+    "circle",
+    "add",
+    "create",
+    "new",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-plus",
+   "class": "pi pi-plus",
+   "set": "primeicons",
+   "keywords": [
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-pound",
+   "class": "pi pi-pound",
+   "set": "primeicons",
+   "keywords": [
+    "currency",
+    "money",
+    "gbp"
+   ]
+  },
+  {
+   "name": "pi-power-off",
+   "class": "pi pi-power-off",
+   "set": "primeicons",
+   "keywords": [
+    "power",
+    "off",
+    "shut down",
+    "logout"
+   ]
+  },
+  {
+   "name": "pi-prime",
+   "class": "pi pi-prime",
+   "set": "primeicons",
+   "keywords": [
+    "primevue",
+    "primefaces",
+    "brand"
+   ]
+  },
+  {
+   "name": "pi-print",
+   "class": "pi pi-print",
+   "set": "primeicons",
+   "keywords": [
+    "printer"
+   ]
+  },
+  {
+   "name": "pi-qrcode",
+   "class": "pi pi-qrcode",
+   "set": "primeicons",
+   "keywords": [
+    "qr code",
+    "scan"
+   ]
+  },
+  {
+   "name": "pi-question-circle",
+   "class": "pi pi-question-circle",
+   "set": "primeicons",
+   "keywords": [
+    "question",
+    "circle",
+    "help",
+    "faq",
+    "support",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-question",
+   "class": "pi pi-question",
+   "set": "primeicons",
+   "keywords": [
+    "help",
+    "faq",
+    "support"
+   ]
+  },
+  {
+   "name": "pi-receipt",
+   "class": "pi pi-receipt",
+   "set": "primeicons",
+   "keywords": [
+    "invoice",
+    "billing",
+    "payment"
+   ]
+  },
+  {
+   "name": "pi-reddit",
+   "class": "pi pi-reddit",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-refresh",
+   "class": "pi pi-refresh",
+   "set": "primeicons",
+   "keywords": [
+    "reload",
+    "sync",
+    "update"
+   ]
+  },
+  {
+   "name": "pi-replay",
+   "class": "pi pi-replay",
+   "set": "primeicons",
+   "keywords": [
+    "repeat",
+    "retry"
+   ]
+  },
+  {
+   "name": "pi-reply",
+   "class": "pi pi-reply",
+   "set": "primeicons",
+   "keywords": [
+    "answer",
+    "respond"
+   ]
+  },
+  {
+   "name": "pi-save",
+   "class": "pi pi-save",
+   "set": "primeicons",
+   "keywords": [
+    "disk",
+    "store"
+   ]
+  },
+  {
+   "name": "pi-search-minus",
+   "class": "pi pi-search-minus",
+   "set": "primeicons",
+   "keywords": [
+    "search",
+    "minus",
+    "zoom out",
+    "find",
+    "magnifier",
+    "lookup",
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "pi-search-plus",
+   "class": "pi pi-search-plus",
+   "set": "primeicons",
+   "keywords": [
+    "search",
+    "plus",
+    "zoom in",
+    "find",
+    "magnifier",
+    "lookup",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-search",
+   "class": "pi pi-search",
+   "set": "primeicons",
+   "keywords": [
+    "find",
+    "magnifier",
+    "lookup"
+   ]
+  },
+  {
+   "name": "pi-send",
+   "class": "pi pi-send",
+   "set": "primeicons",
+   "keywords": [
+    "submit",
+    "paper plane",
+    "message"
+   ]
+  },
+  {
+   "name": "pi-server",
+   "class": "pi pi-server",
+   "set": "primeicons",
+   "keywords": [
+    "host",
+    "infrastructure",
+    "compute"
+   ]
+  },
+  {
+   "name": "pi-share-alt",
+   "class": "pi pi-share-alt",
+   "set": "primeicons",
+   "keywords": [
+    "share",
+    "alt",
+    "send",
+    "social"
+   ]
+  },
+  {
+   "name": "pi-shield",
+   "class": "pi pi-shield",
+   "set": "primeicons",
+   "keywords": [
+    "security",
+    "protection",
+    "safe"
+   ]
+  },
+  {
+   "name": "pi-shop",
+   "class": "pi pi-shop",
+   "set": "primeicons",
+   "keywords": [
+    "store",
+    "commerce"
+   ]
+  },
+  {
+   "name": "pi-shopping-bag",
+   "class": "pi pi-shopping-bag",
+   "set": "primeicons",
+   "keywords": [
+    "shopping",
+    "bag",
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "pi-shopping-cart",
+   "class": "pi pi-shopping-cart",
+   "set": "primeicons",
+   "keywords": [
+    "shopping",
+    "cart",
+    "commerce",
+    "buy"
+   ]
+  },
+  {
+   "name": "pi-sign-in",
+   "class": "pi pi-sign-in",
+   "set": "primeicons",
+   "keywords": [
+    "sign",
+    "login",
+    "log in",
+    "enter"
+   ]
+  },
+  {
+   "name": "pi-sign-out",
+   "class": "pi pi-sign-out",
+   "set": "primeicons",
+   "keywords": [
+    "sign",
+    "out",
+    "logout",
+    "log out",
+    "exit"
+   ]
+  },
+  {
+   "name": "pi-sitemap",
+   "class": "pi pi-sitemap",
+   "set": "primeicons",
+   "keywords": [
+    "hierarchy",
+    "tree",
+    "structure"
+   ]
+  },
+  {
+   "name": "pi-slack",
+   "class": "pi pi-slack",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-sliders-h",
+   "class": "pi pi-sliders-h",
+   "set": "primeicons",
+   "keywords": [
+    "sliders",
+    "settings",
+    "controls",
+    "adjust",
+    "filters"
+   ]
+  },
+  {
+   "name": "pi-sliders-v",
+   "class": "pi pi-sliders-v",
+   "set": "primeicons",
+   "keywords": [
+    "sliders",
+    "settings",
+    "controls",
+    "adjust",
+    "filters"
+   ]
+  },
+  {
+   "name": "pi-sort-alpha-down-alt",
+   "class": "pi pi-sort-alpha-down-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alpha",
+    "down",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-alpha-down",
+   "class": "pi pi-sort-alpha-down",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alpha",
+    "down",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-alpha-up-alt",
+   "class": "pi pi-sort-alpha-up-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alpha",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-alpha-up",
+   "class": "pi pi-sort-alpha-up",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alpha",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-alt-slash",
+   "class": "pi pi-sort-alt-slash",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alt",
+    "slash",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-alt",
+   "class": "pi pi-sort-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-amount-down-alt",
+   "class": "pi pi-sort-amount-down-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "amount",
+    "down",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-amount-down",
+   "class": "pi pi-sort-amount-down",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "amount",
+    "down",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-amount-up-alt",
+   "class": "pi pi-sort-amount-up-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "amount",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-amount-up",
+   "class": "pi pi-sort-amount-up",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "amount",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-down-fill",
+   "class": "pi pi-sort-down-fill",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "down",
+    "fill",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-down",
+   "class": "pi pi-sort-down",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "down",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-numeric-down-alt",
+   "class": "pi pi-sort-numeric-down-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "numeric",
+    "down",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-numeric-down",
+   "class": "pi pi-sort-numeric-down",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "numeric",
+    "down",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-numeric-up-alt",
+   "class": "pi pi-sort-numeric-up-alt",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "numeric",
+    "alt",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-numeric-up",
+   "class": "pi pi-sort-numeric-up",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "numeric",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-up-fill",
+   "class": "pi pi-sort-up-fill",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "fill",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort-up",
+   "class": "pi pi-sort-up",
+   "set": "primeicons",
+   "keywords": [
+    "sort",
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sort",
+   "class": "pi pi-sort",
+   "set": "primeicons",
+   "keywords": [
+    "order",
+    "arrange"
+   ]
+  },
+  {
+   "name": "pi-sparkles",
+   "class": "pi pi-sparkles",
+   "set": "primeicons",
+   "keywords": [
+    "ai",
+    "magic",
+    "new",
+    "generate"
+   ]
+  },
+  {
+   "name": "pi-spinner-dotted",
+   "class": "pi pi-spinner-dotted",
+   "set": "primeicons",
+   "keywords": [
+    "spinner",
+    "dotted",
+    "loading",
+    "progress",
+    "busy"
+   ]
+  },
+  {
+   "name": "pi-spinner",
+   "class": "pi pi-spinner",
+   "set": "primeicons",
+   "keywords": [
+    "loading",
+    "progress",
+    "busy"
+   ]
+  },
+  {
+   "name": "pi-star-fill",
+   "class": "pi pi-star-fill",
+   "set": "primeicons",
+   "keywords": [
+    "star",
+    "fill",
+    "favorite",
+    "rating"
+   ]
+  },
+  {
+   "name": "pi-star-half-fill",
+   "class": "pi pi-star-half-fill",
+   "set": "primeicons",
+   "keywords": [
+    "star",
+    "half",
+    "fill",
+    "favorite",
+    "rating"
+   ]
+  },
+  {
+   "name": "pi-star-half",
+   "class": "pi pi-star-half",
+   "set": "primeicons",
+   "keywords": [
+    "star",
+    "half",
+    "favorite",
+    "rating"
+   ]
+  },
+  {
+   "name": "pi-star",
+   "class": "pi pi-star",
+   "set": "primeicons",
+   "keywords": [
+    "favorite",
+    "rating"
+   ]
+  },
+  {
+   "name": "pi-step-backward-alt",
+   "class": "pi pi-step-backward-alt",
+   "set": "primeicons",
+   "keywords": [
+    "step",
+    "backward",
+    "alt",
+    "previous",
+    "rewind"
+   ]
+  },
+  {
+   "name": "pi-step-backward",
+   "class": "pi pi-step-backward",
+   "set": "primeicons",
+   "keywords": [
+    "step",
+    "backward",
+    "previous",
+    "rewind"
+   ]
+  },
+  {
+   "name": "pi-step-forward-alt",
+   "class": "pi pi-step-forward-alt",
+   "set": "primeicons",
+   "keywords": [
+    "step",
+    "forward",
+    "alt",
+    "next",
+    "skip"
+   ]
+  },
+  {
+   "name": "pi-step-forward",
+   "class": "pi pi-step-forward",
+   "set": "primeicons",
+   "keywords": [
+    "step",
+    "forward",
+    "next",
+    "skip"
+   ]
+  },
+  {
+   "name": "pi-stop-circle",
+   "class": "pi pi-stop-circle",
+   "set": "primeicons",
+   "keywords": [
+    "stop",
+    "circle",
+    "halt",
+    "end",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-stop",
+   "class": "pi pi-stop",
+   "set": "primeicons",
+   "keywords": [
+    "halt",
+    "end"
+   ]
+  },
+  {
+   "name": "pi-stopwatch",
+   "class": "pi pi-stopwatch",
+   "set": "primeicons",
+   "keywords": [
+    "timer",
+    "time",
+    "duration"
+   ]
+  },
+  {
+   "name": "pi-sun",
+   "class": "pi pi-sun",
+   "set": "primeicons",
+   "keywords": [
+    "light mode",
+    "day",
+    "theme"
+   ]
+  },
+  {
+   "name": "pi-sync",
+   "class": "pi pi-sync",
+   "set": "primeicons",
+   "keywords": [
+    "refresh",
+    "synchronize"
+   ]
+  },
+  {
+   "name": "pi-table",
+   "class": "pi pi-table",
+   "set": "primeicons",
+   "keywords": [
+    "grid",
+    "data",
+    "rows"
+   ]
+  },
+  {
+   "name": "pi-tablet",
+   "class": "pi pi-tablet",
+   "set": "primeicons",
+   "keywords": [
+    "device",
+    "ipad"
+   ]
+  },
+  {
+   "name": "pi-tag",
+   "class": "pi pi-tag",
+   "set": "primeicons",
+   "keywords": [
+    "label",
+    "category"
+   ]
+  },
+  {
+   "name": "pi-tags",
+   "class": "pi pi-tags",
+   "set": "primeicons",
+   "keywords": [
+    "labels",
+    "categories"
+   ]
+  },
+  {
+   "name": "pi-telegram",
+   "class": "pi pi-telegram",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-th-large",
+   "class": "pi pi-th-large",
+   "set": "primeicons",
+   "keywords": [
+    "large",
+    "grid",
+    "tiles",
+    "layout"
+   ]
+  },
+  {
+   "name": "pi-thumbs-down-fill",
+   "class": "pi pi-thumbs-down-fill",
+   "set": "primeicons",
+   "keywords": [
+    "thumbs",
+    "down",
+    "fill",
+    "dislike",
+    "bad",
+    "feedback"
+   ]
+  },
+  {
+   "name": "pi-thumbs-down",
+   "class": "pi pi-thumbs-down",
+   "set": "primeicons",
+   "keywords": [
+    "thumbs",
+    "down",
+    "dislike",
+    "bad",
+    "feedback"
+   ]
+  },
+  {
+   "name": "pi-thumbs-up-fill",
+   "class": "pi pi-thumbs-up-fill",
+   "set": "primeicons",
+   "keywords": [
+    "thumbs",
+    "fill",
+    "like",
+    "good",
+    "feedback"
+   ]
+  },
+  {
+   "name": "pi-thumbs-up",
+   "class": "pi pi-thumbs-up",
+   "set": "primeicons",
+   "keywords": [
+    "thumbs",
+    "like",
+    "good",
+    "feedback"
+   ]
+  },
+  {
+   "name": "pi-thumbtack",
+   "class": "pi pi-thumbtack",
+   "set": "primeicons",
+   "keywords": [
+    "pin"
+   ]
+  },
+  {
+   "name": "pi-ticket",
+   "class": "pi pi-ticket",
+   "set": "primeicons",
+   "keywords": [
+    "support",
+    "issue"
+   ]
+  },
+  {
+   "name": "pi-tiktok",
+   "class": "pi pi-tiktok",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-times-circle",
+   "class": "pi pi-times-circle",
+   "set": "primeicons",
+   "keywords": [
+    "times",
+    "circle",
+    "close",
+    "error",
+    "clear",
+    "cancel",
+    "dismiss",
+    "x",
+    "status",
+    "shape"
+   ]
+  },
+  {
+   "name": "pi-times",
+   "class": "pi pi-times",
+   "set": "primeicons",
+   "keywords": [
+    "close",
+    "cancel",
+    "dismiss",
+    "x"
+   ]
+  },
+  {
+   "name": "pi-trash",
+   "class": "pi pi-trash",
+   "set": "primeicons",
+   "keywords": [
+    "delete",
+    "remove",
+    "bin"
+   ]
+  },
+  {
+   "name": "pi-trophy",
+   "class": "pi pi-trophy",
+   "set": "primeicons",
+   "keywords": [
+    "award",
+    "winner"
+   ]
+  },
+  {
+   "name": "pi-truck",
+   "class": "pi pi-truck",
+   "set": "primeicons",
+   "keywords": [
+    "delivery",
+    "shipping"
+   ]
+  },
+  {
+   "name": "pi-turkish-lira",
+   "class": "pi pi-turkish-lira",
+   "set": "primeicons",
+   "keywords": [
+    "turkish",
+    "lira"
+   ]
+  },
+  {
+   "name": "pi-twitch",
+   "class": "pi pi-twitch",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-twitter",
+   "class": "pi pi-twitter",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-undo",
+   "class": "pi pi-undo",
+   "set": "primeicons",
+   "keywords": [
+    "revert",
+    "back"
+   ]
+  },
+  {
+   "name": "pi-unlock",
+   "class": "pi pi-unlock",
+   "set": "primeicons",
+   "keywords": [
+    "open",
+    "unlocked"
+   ]
+  },
+  {
+   "name": "pi-upload",
+   "class": "pi pi-upload",
+   "set": "primeicons",
+   "keywords": [
+    "import",
+    "send"
+   ]
+  },
+  {
+   "name": "pi-user-edit",
+   "class": "pi pi-user-edit",
+   "set": "primeicons",
+   "keywords": [
+    "user",
+    "edit",
+    "person",
+    "account",
+    "profile"
+   ]
+  },
+  {
+   "name": "pi-user-minus",
+   "class": "pi pi-user-minus",
+   "set": "primeicons",
+   "keywords": [
+    "user",
+    "minus",
+    "person",
+    "account",
+    "profile",
+    "remove",
+    "subtract",
+    "collapse"
+   ]
+  },
+  {
+   "name": "pi-user-plus",
+   "class": "pi pi-user-plus",
+   "set": "primeicons",
+   "keywords": [
+    "user",
+    "plus",
+    "person",
+    "account",
+    "profile",
+    "add",
+    "create",
+    "new"
+   ]
+  },
+  {
+   "name": "pi-user",
+   "class": "pi pi-user",
+   "set": "primeicons",
+   "keywords": [
+    "person",
+    "account",
+    "profile"
+   ]
+  },
+  {
+   "name": "pi-users",
+   "class": "pi pi-users",
+   "set": "primeicons",
+   "keywords": [
+    "people",
+    "team",
+    "members"
+   ]
+  },
+  {
+   "name": "pi-venus",
+   "class": "pi pi-venus",
+   "set": "primeicons",
+   "keywords": [
+    "female",
+    "gender"
+   ]
+  },
+  {
+   "name": "pi-verified",
+   "class": "pi pi-verified",
+   "set": "primeicons",
+   "keywords": [
+    "check",
+    "approved",
+    "badge"
+   ]
+  },
+  {
+   "name": "pi-video",
+   "class": "pi pi-video",
+   "set": "primeicons",
+   "keywords": [
+    "movie",
+    "media"
+   ]
+  },
+  {
+   "name": "pi-vimeo",
+   "class": "pi pi-vimeo",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-volume-down",
+   "class": "pi pi-volume-down",
+   "set": "primeicons",
+   "keywords": [
+    "volume",
+    "down",
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "pi-volume-off",
+   "class": "pi pi-volume-off",
+   "set": "primeicons",
+   "keywords": [
+    "volume",
+    "off",
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "pi-volume-up",
+   "class": "pi pi-volume-up",
+   "set": "primeicons",
+   "keywords": [
+    "volume",
+    "sound",
+    "audio"
+   ]
+  },
+  {
+   "name": "pi-wallet",
+   "class": "pi pi-wallet",
+   "set": "primeicons",
+   "keywords": [
+    "payment",
+    "money"
+   ]
+  },
+  {
+   "name": "pi-warehouse",
+   "class": "pi pi-warehouse",
+   "set": "primeicons",
+   "keywords": [
+    "storage",
+    "inventory"
+   ]
+  },
+  {
+   "name": "pi-wave-pulse",
+   "class": "pi pi-wave-pulse",
+   "set": "primeicons",
+   "keywords": [
+    "wave",
+    "pulse",
+    "activity",
+    "health",
+    "monitoring"
+   ]
+  },
+  {
+   "name": "pi-whatsapp",
+   "class": "pi pi-whatsapp",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "pi-wifi",
+   "class": "pi pi-wifi",
+   "set": "primeicons",
+   "keywords": [
+    "network",
+    "wireless",
+    "connection"
+   ]
+  },
+  {
+   "name": "pi-window-maximize",
+   "class": "pi pi-window-maximize",
+   "set": "primeicons",
+   "keywords": [
+    "window",
+    "maximize",
+    "browser",
+    "app"
+   ]
+  },
+  {
+   "name": "pi-window-minimize",
+   "class": "pi pi-window-minimize",
+   "set": "primeicons",
+   "keywords": [
+    "window",
+    "minimize",
+    "browser",
+    "app"
+   ]
+  },
+  {
+   "name": "pi-wrench",
+   "class": "pi pi-wrench",
+   "set": "primeicons",
+   "keywords": [
+    "settings",
+    "tools",
+    "fix",
+    "maintenance"
+   ]
+  },
+  {
+   "name": "pi-youtube",
+   "class": "pi pi-youtube",
+   "set": "primeicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-angular",
+   "class": "ai-cor ai-angular",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-astro",
+   "class": "ai-cor ai-astro",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-azuredevops",
+   "class": "ai-cor ai-azuredevops",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-bitbucket",
+   "class": "ai-cor ai-bitbucket",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-claude",
+   "class": "ai-cor ai-claude",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-cursor",
+   "class": "ai-cor ai-cursor",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-deepseek",
+   "class": "ai-cor ai-deepseek",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-discord",
+   "class": "ai-cor ai-discord",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-flutter",
+   "class": "ai-cor ai-flutter",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-gemini",
+   "class": "ai-cor ai-gemini",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-gitlab",
+   "class": "ai-cor ai-gitlab",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-google",
+   "class": "ai-cor ai-google",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-graphql",
+   "class": "ai-cor ai-graphql",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-grok",
+   "class": "ai-cor ai-grok",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-html",
+   "class": "ai-cor ai-html",
+   "set": "color",
+   "keywords": [
+    "markup",
+    "web",
+    "brand"
+   ]
+  },
+  {
+   "name": "ai-js",
+   "class": "ai-cor ai-js",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-kotlin",
+   "class": "ai-cor ai-kotlin",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-meta",
+   "class": "ai-cor ai-meta",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-microsoft-copilot",
+   "class": "ai-cor ai-microsoft-copilot",
+   "set": "color",
+   "keywords": [
+    "microsoft",
+    "copilot",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-mistral",
+   "class": "ai-cor ai-mistral",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-next",
+   "class": "ai-cor ai-next",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-nuxt",
+   "class": "ai-cor ai-nuxt",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-open",
+   "class": "ai-cor ai-open",
+   "set": "color",
+   "keywords": [
+    "openai",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-perplexity",
+   "class": "ai-cor ai-perplexity",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-qwen",
+   "class": "ai-cor ai-qwen",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-react",
+   "class": "ai-cor ai-react",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-redwood",
+   "class": "ai-cor ai-redwood",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-solidjs",
+   "class": "ai-cor ai-solidjs",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-svelte",
+   "class": "ai-cor ai-svelte",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-terraform",
+   "class": "ai-cor ai-terraform",
+   "set": "color",
+   "keywords": [
+    "infrastructure as code",
+    "iac",
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-ts",
+   "class": "ai-cor ai-ts",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-vue",
+   "class": "ai-cor ai-vue",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-windsurf",
+   "class": "ai-cor ai-windsurf",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-x",
+   "class": "ai-cor ai-x",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
+   "name": "ai-youtube",
+   "class": "ai-cor ai-youtube",
+   "set": "color",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  }
+ ]
+}

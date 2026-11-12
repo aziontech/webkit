@@ -38,6 +38,10 @@
 | `secondaryAction` | `HeroWithOpeningAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `items` | `HeroWithOpeningItem[]` | `[]` | false | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`

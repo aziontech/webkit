@@ -8,10 +8,17 @@ import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { readBlocks, readExamples } from './lib/blocks.mjs'
-import { summary as llmsSummary, writeLlms } from './build-llms.mjs'
+import {
+  buildLlms,
+  catalogView,
+  summary as llmsSummary,
+  undocumentedExports,
+  writeLlms
+} from './build-llms.mjs'
 import { exportTarget } from './lib/exports.mjs'
 import { buildAliases, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
+import { iconKeywords } from '../../icons/scripts/icon-keywords.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -34,6 +41,9 @@ const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v4/globals.css')
 ]
 const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
+const ICONS_SVG = resolve(REPO_ROOT, 'packages/icons/src/svg-raw')
+const SRC = resolve(PKG_ROOT, 'src')
+const ASSET_PART_DIR = 'catalog/assets'
 
 const PKG_NAME = '@aziontech/webkit'
 
@@ -252,7 +262,7 @@ export async function build() {
   }
 
   function parentCompound(subpath) {
-    if (subpath.endsWith('-root')) return null
+    if (subpath.endsWith('-root') || compoundRoots.includes(subpath)) return null
     const target = exportsMap[`./${subpath}`] || ''
     for (const c of compoundByLength) {
       if (subpath !== c && subpath.startsWith(`${c}-`) && target.startsWith(compoundDir(c)))
@@ -371,9 +381,210 @@ export async function build() {
     surfaces: SURFACES,
     aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
     imports,
+    assets: buildAssets(imports),
     patterns,
     patternAliases
   }
+}
+
+const ASSET_KINDS = {
+  illustrations: {
+    title: 'Illustrations',
+    summary:
+      'The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme. Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).',
+    markers: [
+      'assets/illustrations/registry.ts',
+      'components/content/illustration/illustration.vue'
+    ],
+    registry: 'src/assets/illustrations/registry.ts',
+    unknown: 'An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.'
+  },
+  diagrams: {
+    title: 'Diagrams',
+    summary:
+      'The registered product architecture diagrams. Pass the name to `Diagram` (`name`) or to a section that shows one; the label is the diagram\u2019s accessible description.',
+    markers: ['assets/diagrams/registry.ts', 'components/marketing/diagram/diagram.vue'],
+    registry: 'src/assets/diagrams/registry.ts',
+    unknown: 'An unknown name draws nothing.'
+  },
+  lineFigures: {
+    title: 'Line figures',
+    summary:
+      'The isometric line-art figures that answer the pointer, one per product. Pass the name to `LineFigure` (`name`); the label is the figure\u2019s own English description.',
+    markers: [
+      'components/content/line-figure/figures/registry.ts',
+      'components/content/line-figure/line-figure.vue'
+    ],
+    registry: 'src/components/content/line-figure/figures/registry.ts',
+    unknown: 'An unknown or empty name draws nothing.'
+  },
+  brandMarks: {
+    title: 'Brand marks',
+    summary:
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
+    markers: ['svg/brands/registry.ts'],
+    registry: 'src/svg/brands/registry.ts',
+    unknown:
+      'An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.'
+  },
+  icons: {
+    title: 'Icons',
+    summary:
+      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
+    unknown: 'An unknown class renders nothing.'
+  }
+}
+
+function objectKeys(file, variable) {
+  const src = readFileSync(resolve(PKG_ROOT, file), 'utf-8')
+  const start = src.search(new RegExp(`export const ${variable}\\b[^=]*= \\{`))
+  if (start === -1) throw new Error(`${file}: no "export const ${variable}" object`)
+  const body = src.slice(src.indexOf('{', start) + 1, src.indexOf('\n}', start))
+  const entries = []
+  for (const m of body.matchAll(/^\s*'?([a-z0-9-]+)'?:\s*(?:'([^']*)')?/gm)) {
+    entries.push({ name: m[1], value: m[2] ?? null })
+  }
+  return entries
+}
+
+function quoted(src, key, from = 0) {
+  const m = src
+    .slice(from)
+    .match(new RegExp(`\\b${key}:\\s*(["'\`])((?:\\\\.|(?!\\1)[\\s\\S])*)\\1`))
+  return m ? m[2].replace(/\\'/g, "'").replace(/\s+/g, ' ').trim() : null
+}
+
+function viewBoxOf(file) {
+  const m = readFileSync(file, 'utf-8').match(/viewBox="([^"]+)"/)
+  const [, , w, h] = (m?.[1] ?? '').split(/[\s,]+/).map(Number)
+  return w > 0 && h > 0 ? `${Math.round(w)}x${Math.round(h)}` : null
+}
+
+function importGraph() {
+  const graph = new Map()
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name)
+      if (e.isDirectory()) walk(p)
+      else if (/\.(vue|ts|js)$/.test(e.name) && !/\.test\.|\.d\.ts$/.test(e.name)) {
+        const src = readFileSync(p, 'utf-8')
+        const deps = []
+        for (const m of src.matchAll(/(?:from\s+|import\(\s*)['"](\.{1,2}\/[^'"]+)['"]/g)) {
+          const base = resolve(dirname(p), m[1])
+          const hit = ['', '.ts', '.js', '.vue', '/index.ts', '/index.js'].find((ext) =>
+            existsSync(base + ext)
+          )
+          if (hit != null) deps.push(base + hit)
+        }
+        graph.set(p, deps)
+      }
+    }
+  }
+  walk(SRC)
+  return graph
+}
+
+function reaches(graph, from, markers) {
+  const seen = new Set()
+  const stack = [from]
+  while (stack.length) {
+    const file = stack.pop()
+    if (seen.has(file)) continue
+    seen.add(file)
+    if (markers.has(file)) return true
+    for (const dep of graph.get(file) || []) stack.push(dep)
+  }
+  return false
+}
+
+function iconItems() {
+  const sets = [
+    ['ai', 'azionicons', (n) => `ai ${n}`],
+    ['pi', 'primeicons', (n) => (n.startsWith('pi-') ? `pi ${n}` : `ai ${n}`)],
+    ['ai-cor', 'color', (n) => `ai-cor ${n}`]
+  ]
+  const items = []
+  for (const [folder, set, cls] of sets) {
+    const dir = join(ICONS_SVG, folder)
+    if (!existsSync(dir)) continue
+    for (const file of readdirSync(dir)
+      .filter((f) => f.endsWith('.svg'))
+      .sort()) {
+      const name = file.slice(0, -4)
+      items.push({ name, class: cls(name), set, keywords: iconKeywords(name) })
+    }
+  }
+  return items
+}
+
+export function buildAssets(imports) {
+  const items = {
+    illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
+      .map(({ name }) => ({
+        name,
+        canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')
+      .map(({ name }) => ({
+        name,
+        label: quoted(
+          readFileSync(resolve(SRC, 'assets/diagrams', `${name}.ts`), 'utf-8'),
+          'ariaLabel'
+        )
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    lineFigures: objectKeys(ASSET_KINDS.lineFigures.registry, 'lineFigures')
+      .map(({ name }) => {
+        const src = readFileSync(
+          resolve(SRC, 'components/content/line-figure/figures', `${name}.ts`),
+          'utf-8'
+        )
+        return {
+          name,
+          label: quoted(src, 'label', Math.max(0, src.indexOf('FigureDefinition = {')))
+        }
+      })
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    brandMarks: (() => {
+      const labels = new Map(
+        objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarkLabels').map((e) => [e.name, e.value])
+      )
+      return objectKeys(ASSET_KINDS.brandMarks.registry, 'brandMarks')
+        .map(({ name }) => ({ name, label: labels.get(name) ?? name }))
+        .sort((a, b) => a.name.localeCompare(b.name))
+    })(),
+    icons: iconItems()
+  }
+  const graph = importGraph()
+  const componentFiles = Object.entries(imports)
+    .filter(([, e]) => e.kind === 'component' && e.target?.startsWith('./src/components/'))
+    .map(([sub, e]) => [sub, resolve(PKG_ROOT, e.target)])
+  const assets = {}
+  for (const [kind, meta] of Object.entries(ASSET_KINDS)) {
+    const { markers, registry, ...rest } = meta
+    let usedBy
+    if (markers) {
+      const set = new Set(markers.map((m) => resolve(SRC, m)))
+      usedBy = componentFiles.filter(([, file]) => reaches(graph, file, set)).map(([sub]) => sub)
+    } else {
+      usedBy = Object.entries(imports)
+        .filter(([, e]) => e.kind === 'component' && (e.props || []).some(isIconProp))
+        .map(([sub]) => sub)
+    }
+    assets[kind] = {
+      ...rest,
+      ...(registry ? { registry } : {}),
+      usedBy: usedBy.sort(),
+      count: items[kind].length,
+      items: items[kind]
+    }
+  }
+  return assets
+}
+
+export function isIconProp(prop) {
+  return /^(icon|[a-z]+Icon)$/.test(prop.name) && /string/.test(prop.type)
 }
 
 function readPatternAliases(patterns) {
@@ -454,6 +665,12 @@ export function splitCatalog(full) {
     patterns[id] = meta
     files[file] = part
   }
+  const assets = {}
+  for (const [kind, { items, ...meta }] of Object.entries(full.assets || {})) {
+    const file = `${ASSET_PART_DIR}/${kind}.json`
+    files[file] = { items }
+    assets[kind] = { ...meta, file }
+  }
   const imports = {}
   for (const [subpath, e] of Object.entries(full.imports)) {
     const meta = {}
@@ -475,7 +692,7 @@ export function splitCatalog(full) {
     }
     imports[subpath] = meta
   }
-  return { catalog: { ...full, imports, patterns }, files }
+  return { catalog: { ...full, imports, assets, patterns }, files }
 }
 
 const serialize = (value) => JSON.stringify(value, null, 1) + '\n'
@@ -514,6 +731,15 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     process.exit(1)
   }
   const { catalog, files } = splitCatalog(full)
+  const view = catalogView(catalog, (file) => JSON.parse(serialize(files[file])))
+  const undocumented = undocumentedExports(view, buildLlms(view))
+  if (undocumented.length) {
+    process.stderr.write(
+      `✖ ${undocumented.length} public export(s) missing from llms/components/:\n  ${undocumented.join('\n  ')}\n` +
+        'Every component export needs its own page, and every sub-component and -root export must be listed on its compound page.\n'
+    )
+    process.exit(1)
+  }
   if (process.argv.includes('--check')) {
     const drift = checkParts(catalog, files)
     if (drift.length) {

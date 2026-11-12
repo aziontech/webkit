@@ -66,6 +66,10 @@
 | --- | --- | --- |
 | `default` | — | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `kind="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `idle`, `active` (files dragged over the target), `disabled`

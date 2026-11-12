@@ -30,7 +30,7 @@
 ## Related
 
 - [chart](chart.md) — the full history behind a tile.
-- chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.
+- [chart-card](chart-card.md) — the box for a chart; a tile is its own small surface and does not sit in one.
 - [big-numbers](big-numbers.md) — the marketing figure band, with no delta and no live data.
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.

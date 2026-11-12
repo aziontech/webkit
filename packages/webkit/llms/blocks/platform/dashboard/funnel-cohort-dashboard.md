@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/funnel-cohort-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as

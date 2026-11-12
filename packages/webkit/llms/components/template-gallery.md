@@ -44,6 +44,10 @@
 | `tickerLabel` | `string` | `''` | false | Overline above the row of marks. |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`

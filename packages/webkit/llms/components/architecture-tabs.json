@@ -79,6 +79,12 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "assets": [
+  {
+   "kind": "diagrams",
+   "page": "foundations/diagrams.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs'
 import { posix } from 'node:path'
 import test from 'node:test'
 
-const { buildLlms, checkLlms, FULL_BUDGET_BYTES } = await import('../../scripts/build-llms.mjs')
+const { assetPagePath, buildLlms, checkLlms, FULL_BUDGET_BYTES, undocumentedExports } =
+  await import('../../scripts/build-llms.mjs')
 
 const catalog = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf-8'))
 const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf-8'))
@@ -102,4 +103,49 @@ test('llms-full.txt holds every page and stays under its size budget', () => {
 
 test('the package ships llms/', () => {
   assert.ok(pkg.files.includes('llms'))
+})
+
+test('the package keeps internal review notes out of the tarball', () => {
+  assert.ok(pkg.files.includes('docs'))
+  assert.ok(pkg.files.includes('!docs/reviews'))
+})
+
+test('every asset kind has a foundation page, linked from llms.txt, that lists every name', () => {
+  for (const [kind, meta] of Object.entries(catalog.assets)) {
+    const path = assetPagePath(kind)
+    const page = files[path]
+    assert.ok(page, path)
+    assert.match(files['llms.txt'], new RegExp(`\\(${path.replace('.', '\\.')}\\)`), path)
+    const { items } = JSON.parse(readFileSync(new URL(`../../${meta.file}`, import.meta.url), 'utf-8'))
+    assert.equal(items.length, meta.count, kind)
+    for (const item of items) assert.ok(page.includes(`\`${item.class ?? item.name}\``), `${kind} ${item.name}`)
+  }
+  assert.match(files['foundations/illustrations.md'], /`ddos-protection`/)
+  assert.match(files['foundations/icons.md'], /`ai-cor ai-react`/)
+})
+
+test('a component that draws a registry asset links its asset page', () => {
+  for (const [kind, meta] of Object.entries(catalog.assets)) {
+    for (const name of meta.usedBy) {
+      const page = files[`components/${name}.md`]
+      assert.ok(page.includes('## Assets'), `${name}: ${kind}`)
+      assert.ok(page.includes(`../${assetPagePath(kind)}`), `${name}: ${kind}`)
+      const api = JSON.parse(files[`components/${name}.json`])
+      assert.ok(api.assets.some((a) => a.kind === kind), `${name}.json: ${kind}`)
+    }
+  }
+})
+
+test('every public component export is documented in llms/components', () => {
+  const view = buildLlms()
+  assert.ok(files['components/chart-card.md'])
+  assert.equal(catalog.imports['chart-card'].kind, 'component')
+  const imports = JSON.parse(JSON.stringify(catalog.imports))
+  imports['chart-card'] = { ...imports['chart-card'], kind: 'subcomponent', parent: 'chart' }
+  const missing = undocumentedExports({ imports }, view)
+  assert.ok(
+    missing.some((m) => m.startsWith('chart-card')),
+    missing.join('\n')
+  )
+  assert.deepEqual(undocumentedExports({ imports: catalog.imports }, files), [])
 })

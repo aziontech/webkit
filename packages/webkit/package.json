@@ -133,6 +133,7 @@
     "rules",
     "adapters",
     "docs",
+    "!docs/reviews",
     "blocks",
     "examples",
     "catalog.json",

@@ -42,6 +42,10 @@
 | `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`

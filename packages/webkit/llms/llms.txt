@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`).
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -18,6 +18,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Devices](foundations/devices.md): Viewport breakpoints for the shell, container queries for the content, touch targets and reflow at 320 px.
 - [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 - [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
+- [Illustrations](foundations/illustrations.md): The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme.
+- [Diagrams](foundations/diagrams.md): The registered product architecture diagrams.
+- [Line figures](foundations/line-figures.md): The isometric line-art figures that answer the pointer, one per product.
+- [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
+- [Icons](foundations/icons.md): Every icon class of `@aziontech/icons` with search keywords.
 
 ## Blocks: Headers
 
@@ -143,6 +148,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [BarList](components/bar-list.md): A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column.
 - [Chart](components/chart.md): A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand.
+- [ChartCard](components/chart-card.md): The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resi…
 - [DonutChart](components/donut-chart.md): A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it.
 - [GaugeChart](components/gauge-chart.md): One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it.
 - [MapChart](components/map-chart.md): Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value.
@@ -191,6 +197,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CollectionPreferences](components/collection-preferences.md): The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wr…
 - [Flow](components/flow.md): Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-ancho…
 - [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
+- [PaginationButton](components/pagination-button.md): PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (…
 - [PickList](components/pick-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
 - [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
 - [Table](components/table.md): Composition primitives for building accessible, pixel-perfect data tables, in two modes.
@@ -319,6 +326,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Navigation
 
 - [Breadcrumb](components/breadcrumb.md): Shows the page hierarchy so users can navigate back to parent views.
+- [BreadcrumbItem](components/breadcrumb-item.md): Single segment in a breadcrumb trail.
 - [DropdownMenu](components/dropdown-menu.md): Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections.
 - [Link](components/link.md): Helps users move between views or sections.
 - [Menu](components/menu.md): A vertical, hierarchical navigation menu.

@@ -52,6 +52,10 @@
 | --- | --- | --- |
 | `default` | — | Description body; replaces the `description` prop when provided. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, and `hover` / `focus-visible` when `href` is set

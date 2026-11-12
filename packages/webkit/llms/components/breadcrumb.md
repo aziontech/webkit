@@ -28,7 +28,7 @@
 
 ## Related
 
-- breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.
+- [breadcrumb-item](breadcrumb-item.md) — the single segment this component renders; use it alone only inside a hand-composed trail.
 - [navigation-menu](navigation-menu.md) — top-level navigation with dropdown panels, not a location trail.
 - [link](link.md) — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling.
 

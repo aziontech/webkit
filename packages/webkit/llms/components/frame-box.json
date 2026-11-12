@@ -71,6 +71,7 @@
   }
  ],
  "styleSeam": true,
+ "assets": [],
  "examples": [
   {
    "name": "Default",

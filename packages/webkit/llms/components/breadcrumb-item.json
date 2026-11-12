@@ -1,0 +1,101 @@
+{
+ "name": "breadcrumb-item",
+ "binding": "BreadcrumbItem",
+ "import": "@aziontech/webkit/breadcrumb-item",
+ "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
+ "category": "navigation",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).",
+ "setup": null,
+ "useWhen": [
+  "Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.",
+  "A single ancestor or current-page segment that must match the breadcrumb's muted / current styling and focus ring."
+ ],
+ "avoidWhen": [
+  "The whole trail is known as data → use `breadcrumb` with `items`, which renders the segments for you.",
+  "It is a standalone text link in content or a page footer → use `link`.",
+  "It is a navigation row in an app menu → use `menu`."
+ ],
+ "related": [
+  "breadcrumb` — the trail root; renders `breadcrumb-item` for each entry of `items` and re-exports it as `Breadcrumb.Item`.",
+  "link` — a general-purpose link without the segment's ghost hover and current-page treatment."
+ ],
+ "bestPractices": [
+  "Set `current` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
+  "Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.",
+  "Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.",
+  "disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "'Page Name'",
+   "required": "false",
+   "doc": "Visible segment label."
+  },
+  {
+   "name": "href",
+   "type": "string",
+   "default": "'#'",
+   "required": "false",
+   "doc": "Destination when the segment is a link (ignored when `current` is true)."
+  },
+  {
+   "name": "current",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the current page (last segment); renders as span with `aria-current=\"page\"`."
+  },
+  {
+   "name": "showIcon",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "When true, renders a leading PrimeIcons icon before the label."
+  },
+  {
+   "name": "icon",
+   "type": "string",
+   "default": "'pi pi-box'",
+   "required": "false",
+   "doc": "PrimeIcons class for the leading icon when `showIcon` is true."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables interaction and applies disabled tokens."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "(event: MouseEvent, item: { label: string; href: string })",
+   "notes": "Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Current",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Current Page\"\n    current\n  />\n</template>"
+  },
+  {
+   "name": "WithIcon",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n    show-icon\n    icon=\"pi pi-box\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/breadcrumb-item.md"
+}

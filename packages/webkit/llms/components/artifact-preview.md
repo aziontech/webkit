@@ -56,6 +56,10 @@
 | `default` | — | The inline preview; scrolls inside a 20 rem body. |
 | `actions` | — | Extra icon actions, placed before Copy and Download. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## Sub-components
 
 _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open), `copy-button`,

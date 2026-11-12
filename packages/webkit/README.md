@@ -52,7 +52,7 @@ Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent
 > then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
 
 The MCP server it wires gives your AI the screen patterns (`search_patterns`, `get_pattern`) and
-the full component catalog (`list_components`, `get_component`, `list_tokens`,
+the full component catalog (`list_components`, `get_component`, `list_tokens`, `list_assets`,
 `suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
 reviewed layout and writes the right import, prop, and token on the first try.
 

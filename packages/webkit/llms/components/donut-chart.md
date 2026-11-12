@@ -28,7 +28,7 @@
 ## Related
 
 - [chart](chart.md) — the cartesian sibling; same series model, so a dataset moves between them without reshaping.
-- chart-card` — the box a dashboard donut sits in.
+- [chart-card](chart-card.md) — the box a dashboard donut sits in.
 - [stat-tile](stat-tile.md) — the total alone, with a delta.
 
 ## Props

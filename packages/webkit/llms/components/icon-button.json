@@ -114,6 +114,12 @@
  ],
  "slots": [],
  "styleSeam": false,
+ "assets": [
+  {
+   "kind": "icons",
+   "page": "foundations/icons.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

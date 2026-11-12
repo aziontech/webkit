@@ -17,6 +17,8 @@
  "bestPractices": [
   "One figure per view; two figures answering the pointer compete.",
   "Pass `aria-label` when the page says something more specific than the figure's own description.",
-  "Use `play` only where nothing else moves."
+  "Use `play` only where nothing else moves.",
+  "Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: \"lineFigures\" })`; an unknown name draws nothing.",
+  "In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class=\"w-60 max-w-full\">`) when the art should be smaller."
  ]
 }

@@ -3878,8 +3878,7 @@
     "@aziontech/webkit/chart-legend",
     "@aziontech/webkit/chart-line",
     "@aziontech/webkit/chart-scatter",
-    "@aziontech/webkit/chart-tooltip",
-    "@aziontech/webkit/chart-card"
+    "@aziontech/webkit/chart-tooltip"
    ],
    "category": "chart",
    "structure": "composition",
@@ -4319,9 +4318,19 @@
   "chart-card": {
    "import": "@aziontech/webkit/chart-card",
    "target": "./src/components/chart/chart-card/index.ts",
-   "kind": "subcomponent",
-   "parent": "chart",
-   "treeShakeableImport": "@aziontech/webkit/chart-card",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/chart-card-root",
+   "subcomponents": [
+    "@aziontech/webkit/chart-card-content",
+    "@aziontech/webkit/chart-card-controls",
+    "@aziontech/webkit/chart-card-description",
+    "@aziontech/webkit/chart-card-drag-handle",
+    "@aziontech/webkit/chart-card-footer",
+    "@aziontech/webkit/chart-card-header",
+    "@aziontech/webkit/chart-card-resize-handle",
+    "@aziontech/webkit/chart-card-title"
+   ],
    "category": "chart",
    "structure": "composition",
    "props": [
@@ -6497,7 +6506,7 @@
    "props": [
     {
      "name": "name",
-     "type": "LineFigureName \\ | ''",
+     "type": "LineFigureName | ''",
      "default": "''",
      "required": "false",
      "doc": "Registered figure to draw; an unknown or empty name draws nothing."
@@ -25206,6 +25215,95 @@
    "surface": "product",
    "examplesFile": "catalog/examples/schema-form.json",
    "docsFile": "catalog/components/schema-form.json"
+  }
+ },
+ "assets": {
+  "illustrations": {
+   "title": "Illustrations",
+   "summary": "The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme. Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).",
+   "unknown": "An unknown name renders a \"PLACE DESIGN ASSET\" placeholder and warns in the console.",
+   "registry": "src/assets/illustrations/registry.ts",
+   "usedBy": [
+    "feature-scroll",
+    "feature-tabs",
+    "feature-tiles",
+    "feature-widgets",
+    "hero-band",
+    "illustration",
+    "media-split-band",
+    "media-split-stack"
+   ],
+   "count": 60,
+   "file": "catalog/assets/illustrations.json"
+  },
+  "diagrams": {
+   "title": "Diagrams",
+   "summary": "The registered product architecture diagrams. Pass the name to `Diagram` (`name`) or to a section that shows one; the label is the diagram’s accessible description.",
+   "unknown": "An unknown name draws nothing.",
+   "registry": "src/assets/diagrams/registry.ts",
+   "usedBy": [
+    "architecture-tabs",
+    "diagram"
+   ],
+   "count": 28,
+   "file": "catalog/assets/diagrams.json"
+  },
+  "lineFigures": {
+   "title": "Line figures",
+   "summary": "The isometric line-art figures that answer the pointer, one per product. Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.",
+   "unknown": "An unknown or empty name draws nothing.",
+   "registry": "src/components/content/line-figure/figures/registry.ts",
+   "usedBy": [
+    "line-figure"
+   ],
+   "count": 25,
+   "file": "catalog/assets/lineFigures.json"
+  },
+  "brandMarks": {
+   "title": "Brand marks",
+   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.",
+   "unknown": "An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.",
+   "registry": "src/svg/brands/registry.ts",
+   "usedBy": [
+    "client-quotes",
+    "hero",
+    "hero-band",
+    "hero-copy-on-top-art",
+    "hero-form",
+    "hero-with-opening",
+    "quote-carousel",
+    "quote-tabs",
+    "template-gallery",
+    "ticker"
+   ],
+   "count": 60,
+   "file": "catalog/assets/brandMarks.json"
+  },
+  "icons": {
+   "title": "Icons",
+   "summary": "Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.",
+   "unknown": "An unknown class renders nothing.",
+   "usedBy": [
+    "alert",
+    "artifact-preview",
+    "avatar",
+    "button",
+    "button-highlight",
+    "doc-card",
+    "doc-item",
+    "doc-prompt",
+    "empty-state",
+    "file-dropzone",
+    "icon-button",
+    "link",
+    "mini-button",
+    "settings-section",
+    "split-button",
+    "tag",
+    "topic"
+   ],
+   "count": 492,
+   "file": "catalog/assets/icons.json"
   }
  },
  "patterns": {

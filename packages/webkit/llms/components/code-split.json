@@ -73,6 +73,7 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "assets": [],
  "examples": [
   {
    "name": "Default",

@@ -30,7 +30,7 @@
 
 - [network-map](network-map.md) — the same dot grid as decoration in marketing and empty states.
 - [bar-list](bar-list.md) — the ranked list that usually sits beside the map.
-- chart-card` — the card a dashboard map sits in; the map takes its accessible name from the card title.
+- [chart-card](chart-card.md) — the card a dashboard map sits in; the map takes its accessible name from the card title.
 
 ## Props
 

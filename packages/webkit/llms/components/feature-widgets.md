@@ -40,6 +40,10 @@
 | `columns` | `FeatureWidgetsColumns` | `3` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`

@@ -52,6 +52,10 @@
 | --- | --- | --- |
 | `submit` | `(event: SubmitEvent, values: Record<string, string>)` | Fired on a valid submit, not while `loading`; `values` holds every field by `name`, trimmed, with a phone number prefixed by its dial code. The block never sends it. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`, `invalid`, `loading`, `submitted`, `error`

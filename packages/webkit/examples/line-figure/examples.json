@@ -16,6 +16,11 @@
       "name": "Gallery",
       "summary": "All 25 registered figures, one per product. Each loads on demand, so a page pays only for the figures it draws.",
       "file": "gallery.vue"
+    },
+    {
+      "name": "In an empty state",
+      "summary": "`azion-404` as the art of an `EmptyState`. The `icon` slot sizes to its content, so the figure alone takes its natural 400×320 size there (capped by the space available); a sized wrapper sets a smaller one.",
+      "file": "empty-state.vue"
     }
   ]
 }

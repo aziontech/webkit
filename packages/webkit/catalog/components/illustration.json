@@ -22,7 +22,8 @@
   "Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.",
   "Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.",
   "Pick the scene that draws the claim next to it, not the one whose filename matches the page title.",
-  "To add a scene, export the frame from the Figma assets library at 592×300, drop the `.svg` into `src/assets/illustrations/`, and register it. Never hand-draw one.",
+  "Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/webkit/llms/`), the MCP tool `list_assets` (`kind: \"illustration\"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.",
+  "To add a scene, export the frame from the Figma assets library (592×300 for a scene, the tile's own size for a tile or crop), drop the `.svg` into `src/assets/illustrations/`, and register it in `registry.ts`. The test fails while a drawing in the folder is unregistered. Never hand-draw one.",
   "Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices."
  ]
 }

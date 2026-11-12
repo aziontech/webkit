@@ -49,6 +49,10 @@
 | `duration` | `number` | `0` | false | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the row of marks, announced instead of an unnamed list. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink

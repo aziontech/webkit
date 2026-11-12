@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/service-monitoring-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as

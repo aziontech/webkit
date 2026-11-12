@@ -53,6 +53,10 @@
 | --- | --- | --- |
 | `actions` | — | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## v-model
 
 | Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                 |

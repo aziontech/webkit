@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/configurable-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as

@@ -67,6 +67,8 @@ function build(json, baseDir) {
   const patternCache = new Map()
   const exampleCache = new Map()
   const detailCache = new Map()
+  const assetCache = new Map()
+  const assets = json.assets || {}
   const subpaths = Object.keys(imports)
   const set = new Set(subpaths)
   const tokenRules = (json.tokenRules || []).map((r) => ({
@@ -92,6 +94,14 @@ function build(json, baseDir) {
     imports,
     patterns,
     patternAliases: json.patternAliases || {},
+    assets,
+    assetItems(kind) {
+      const meta = assets[kind]
+      if (!meta) return []
+      if (!meta.file) return meta.items || []
+      if (!assetCache.has(kind)) assetCache.set(kind, readPart(baseDir, meta.file)?.items || [])
+      return assetCache.get(kind)
+    },
     has: (sub) => set.has(sub),
     getEntry: (sub) => imports[sub] || null,
     getDetails(sub) {
@@ -161,6 +171,8 @@ function empty() {
     imports: {},
     patterns: {},
     patternAliases: {},
+    assets: {},
+    assetItems: () => [],
     has: () => false,
     getEntry: () => null,
     getDetails: () => null,

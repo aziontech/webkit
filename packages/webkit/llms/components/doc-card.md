@@ -48,6 +48,10 @@
 | `default` | — | Card copy. |
 | `icon` | — | The leading mark, when a font glyph will not do. Replaces `icon`. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` — the last two only when the card is a link

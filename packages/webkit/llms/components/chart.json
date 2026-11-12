@@ -17,8 +17,7 @@
   "@aziontech/webkit/chart-legend",
   "@aziontech/webkit/chart-line",
   "@aziontech/webkit/chart-scatter",
-  "@aziontech/webkit/chart-tooltip",
-  "@aziontech/webkit/chart-card"
+  "@aziontech/webkit/chart-tooltip"
  ],
  "purpose": "A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.",
  "setup": null,
@@ -226,6 +225,7 @@
   }
  ],
  "styleSeam": false,
+ "assets": [],
  "examples": [
   {
    "name": "Default",

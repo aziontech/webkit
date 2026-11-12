@@ -8,6 +8,7 @@ process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', im
 
 const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
 const {
+  listAssets,
   listComponents,
   listCategories,
   listTokens,
@@ -496,4 +497,85 @@ test('suggestComponent answers an alias with the current component, not a patter
     assert.equal(res.best.name, name, need)
     assert.match(res.note, new RegExp(`another name for "${name}"`))
   }
+})
+
+test('list_assets indexes every kind with its count and the components that use it', () => {
+  const res = listAssets(catalog)
+  assert.equal(res.ok, true)
+  const kinds = Object.fromEntries(res.kinds.map((k) => [k.kind, k]))
+  for (const kind of ['illustrations', 'diagrams', 'lineFigures', 'brandMarks', 'icons']) {
+    assert.ok(kinds[kind]?.count > 0, kind)
+  }
+  assert.ok(kinds.illustrations.usedBy.includes('illustration'))
+  assert.ok(kinds.illustrations.usedBy.includes('media-split-stack'))
+  assert.ok(kinds.brandMarks.usedBy.includes('ticker'))
+  assert.ok(kinds.brandMarks.usedBy.includes('client-quotes'))
+  assert.ok(kinds.diagrams.usedBy.includes('diagram'))
+  assert.ok(kinds.lineFigures.usedBy.includes('line-figure'))
+  assert.ok(kinds.icons.usedBy.includes('button'))
+})
+
+test('list_assets lists every registered illustration, the shipped tiles included', () => {
+  const res = listAssets(catalog, { kind: 'illustration' })
+  assert.equal(res.kind, 'illustrations')
+  const names = res.items.map((i) => i.name)
+  for (const name of [
+    'ddos-protection',
+    'ai-gateway',
+    'usage-chart',
+    'real-time-metrics-status-codes',
+    'runtime'
+  ]) {
+    assert.ok(names.includes(name), name)
+  }
+  assert.ok(!names.includes('placeholder'))
+  assert.equal(res.items.find((i) => i.name === 'runtime').canvas, '592x300')
+})
+
+test('list_assets filters by name, label and keyword', () => {
+  assert.deepEqual(
+    listAssets(catalog, { kind: 'brandMarks', query: 'magalu' }).items.map((i) => i.name),
+    ['magalu']
+  )
+  const trash = listAssets(catalog, { kind: 'icons', query: 'delete' }).items.map((i) => i.class)
+  assert.ok(trash.includes('pi pi-trash'), trash.join(', '))
+  const colour = listAssets(catalog, { kind: 'icons', query: 'react' }).items.map((i) => i.class)
+  assert.ok(colour.includes('ai-cor ai-react'), colour.join(', '))
+  const cache = listAssets(catalog, { kind: 'diagrams', query: 'tiered cache' }).items
+  assert.ok(cache.some((i) => i.name === 'cache'))
+  assert.equal(listAssets(catalog, { kind: 'figures', query: 'cache' }).kind, 'lineFigures')
+})
+
+test('list_assets names the kinds when the kind is unknown', () => {
+  const res = listAssets(catalog, { kind: 'stickers' })
+  assert.equal(res.ok, false)
+  assert.ok(res.kinds.includes('illustrations'))
+})
+
+test('every icon carries search keywords', () => {
+  const icons = listAssets(catalog, { kind: 'icons' }).items
+  const bare = icons.filter((i) => !i.keywords?.length).map((i) => i.class)
+  assert.deepEqual(bare, [])
+})
+
+test('get_component points a consuming component at its asset list', () => {
+  assert.deepEqual(
+    getComponent(catalog, 'illustration').assets.map((a) => a.kind),
+    ['illustrations']
+  )
+  assert.ok(getComponent(catalog, 'ticker').assets.some((a) => a.kind === 'brandMarks'))
+  assert.deepEqual(getComponent(catalog, 'divider').assets, [])
+})
+
+test('a marketing page query ranks the website shell and the page sections first', () => {
+  for (const q of ['product page', 'solution page', 'landing page', 'página de produto']) {
+    assert.equal(searchPatterns(catalog, q).matches[0].id, 'shells/website', q)
+    const sections = searchComponents(catalog, q).matches
+    assert.ok(sections.length > 0, q)
+    assert.ok(
+      sections.every((m) => m.category === 'sections'),
+      `${q}: ${sections.map((m) => m.name).join(', ')}`
+    )
+  }
+  assert.equal(searchPatterns(catalog, 'docs landing page').matches[0].id, 'shells/documentation')
 })

@@ -30,7 +30,7 @@
 
 ## Related
 
-- chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
+- [chart-card](chart-card.md) — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
 - [resizable](resizable.md) — split panes with a draggable divider, not a grid of cards.
 - [cards](cards.md) — a selectable collection of item cards with a fixed layout.
 - [page-header](page-header.md) — the title over the board, with the Edit layout and Reset layout actions beside it.

@@ -87,6 +87,12 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "assets": [
+  {
+   "kind": "illustrations",
+   "page": "foundations/illustrations.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

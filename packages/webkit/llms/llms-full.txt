@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`).
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -1270,6 +1270,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, `pi pi-<name>`, and `ai-cor ai-<name>` for a colour brand icon.
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -1280,6 +1281,8 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
 - ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only `w-full`, `max-w-*`, `self-*` and `shrink-0` may sit on the tag.
+- ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
+- ❌ `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: neither is a class. Use `ai-cor ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
 - ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.
@@ -1407,6 +1410,106 @@ and `validate_usage` — so an AI (or you) gets the right import / token / prop 
 has to reject the wrong one.
 
 ---
+
+---
+
+<!-- foundations/illustrations.md -->
+
+# Illustrations
+
+> The official product illustration scenes, drawn into the page as inline SVG and repainted from the theme.
+
+Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).
+
+60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
+
+Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureTiles](../components/feature-tiles.md), [FeatureWidgets](../components/feature-widgets.md), [HeroBand](../components/hero-band.md), [Illustration](../components/illustration.md), [MediaSplitBand](../components/media-split-band.md), [MediaSplitStack](../components/media-split-stack.md).
+
+## Names
+
+`ai-applications` · `ai-gateway` · `api-endpoints` · `automate-threat-mitigation` · `azion-highlight` · `azion-rest-api` · `azion-to-akamai` · `azion-to-aws` · `azion-to-cloudflare` · `azion-to-fastly` · `azion-to-vercel` · `branches` · `build-applications` · `build-databases-from-code` · `combine-data-and-vector-search` · `content-and-media-delivery` · `content-and-media-delivery-globe` · `custom-allowed-rules` · `custom-rules-mitigation` · `ddos-protection` · `deploy-secure-mcp-server` · `detect-and-classify` · `distributed-apis` · `distributed-apis-tile` · `distributed-sql-for-resilient-global-reads` · `dns-protection` · `enable-owasp-protection-with-customizable-rules` · `fastest-path-to-live-website` · `global-network` · `implement-api-gateway-security` · `improve-application-performance-and-reliability` · `infrastructure-as-code` · `intent-to-policy` · `live-debugging` · `low-latency` · `mitigation-actions` · `modern-frontends` · `multi-format-optimization-with-automatic-detection` · `network-lists-rules-engine` · `no-idle-no-waste` · `personal-tokens` · `preview` · `profiles-per-application` · `programmable-security` · `protect-financial-applications` · `quick-start-with-templates` · `read-at-the-edge` · `real-time-metrics-error-rate` · `real-time-metrics-status-codes` · `replicated-reads` · `reputation-intelligence-for-enhanced-protection` · `request-inspection` · `retail-application-modernization` · `runtime` · `saas-platforms` · `stay-in-control` · `stream-security-events-for-investigation-and-response` · `url-based-transformations-without-api-complexity` · `usage-chart` · `white-gloves-when-it-matters`
+
+Descriptions: [foundations/illustrations.md](illustrations.md).
+
+---
+
+<!-- foundations/diagrams.md -->
+
+# Diagrams
+
+> The registered product architecture diagrams.
+
+Pass the name to `Diagram` (`name`) or to a section that shows one; the label is the diagram’s accessible description.
+
+28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
+
+Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md).
+
+## Names
+
+`ai-gateway` · `ai-gateway-latency-routing` · `ai-gateway-model-routing` · `ai-gateway-provider-failover` · `ai-gateway-response-cache` · `ai-inference` · `application-accelerator` · `applications` · `bot-manager` · `cache` · `data-stream` · `ddos-protection` · `edge-dns` · `firewall` · `functions` · `image-processor` · `kv-store` · `load-balancer` · `network-shield` · `object-storage` · `real-time-events` · `real-time-metrics` · `sql-database` · `web-application-firewall` · `workloads` · `workloads-gradual-rollout` · `workloads-isolate-per-request` · `workloads-security`
+
+Descriptions: [foundations/diagrams.md](diagrams.md).
+
+---
+
+<!-- foundations/line-figures.md -->
+
+# Line figures
+
+> The isometric line-art figures that answer the pointer, one per product.
+
+Pass the name to `LineFigure` (`name`); the label is the figure’s own English description.
+
+25 names. These are the only values the components accept. An unknown or empty name draws nothing. The MCP tool `list_assets({ kind: "lineFigures" })` returns the same list (with a `query` to filter), and `catalog.json#assets.lineFigures` points at it as data.
+
+Used by: [LineFigure](../components/line-figure.md).
+
+## Names
+
+`ai-versioning` · `applications-rules` · `azion-404` · `bot-lineup` · `build-terminal` · `cache-ttl` · `certificates-chain` · `connectors-link` · `custom-pages-status` · `ddos-flood` · `deployments-release` · `dns-lookup` · `functions-invoke` · `image-variants` · `infra-workloads` · `lb-rotor` · `metrics-gauge` · `network-lists-gate` · `object-storage-bucket` · `observe-stream` · `orchestrator-scale` · `platform-edge` · `secure-shield` · `store-replicas` · `variables-keys`
+
+Descriptions: [foundations/line-figures.md](line-figures.md).
+
+---
+
+<!-- foundations/brand-marks.md -->
+
+# Brand marks
+
+> Client, analyst and framework marks drawn as theme-aware SVG.
+
+Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.
+
+60 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
+
+Used by: [ClientQuotes](../components/client-quotes.md), [Hero](../components/hero.md), [HeroBand](../components/hero-band.md), [HeroCopyOnTopArt](../components/hero-copy-on-top-art.md), [HeroForm](../components/hero-form.md), [HeroWithOpening](../components/hero-with-opening.md), [QuoteCarousel](../components/quote-carousel.md), [QuoteTabs](../components/quote-tabs.md), [TemplateGallery](../components/template-gallery.md), [Ticker](../components/ticker.md).
+
+## Names
+
+`agibank` · `america-movil` · `angular` · `anthropic` · `astro` · `aws` · `axur` · `azure` · `caixa` · `coca-cola` · `contabilizei` · `dafiti` · `docusaurus` · `drizzle` · `elastic` · `eleventy` · `equinix` · `exame` · `forrester` · `fourbank` · `frost-and-sullivan` · `g2` · `gartner` · `gatsby` · `gcp` · `gigaom` · `github` · `global-fashion-group` · `gpa` · `grafana` · `graphql` · `groq` · `herospark` · `hexo` · `hono` · `hugo` · `itau` · `jekyll` · `kafka` · `madeiramadeira` · `magalu` · `netshoes` · `nextjs` · `nodejs` · `nuxt` · `nzn` · `openai` · `preact` · `prime-video` · `qwik` · `radware` · `react` · `remix` · `renner` · `sqlite` · `terraform` · `vite` · `vitepress` · `vue` · `workers-cloudflare`
+
+Descriptions: [foundations/brand-marks.md](brand-marks.md).
+
+---
+
+<!-- foundations/icons.md -->
+
+# Icons
+
+> Every icon class of `@aziontech/icons` with search keywords.
+
+A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
+
+492 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+
+Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [ButtonHighlight](../components/button-highlight.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FileDropzone](../components/file-dropzone.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [MiniButton](../components/mini-button.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md), [Topic](../components/topic.md).
+
+## Names
+
+`ai ai-abuse-prevention` · `ai ai-adaptive-security` · `ai ai-ai-gateway` · `ai ai-ai-pillar` · `ai ai-angular` · `ai ai-app-accelerator` · `ai ai-ask-azion` · `ai ai-astro` · `ai ai-attack` · `ai ai-azion-api` · `ai ai-azion-cli` · `ai ai-azion` · `ai ai-bot-manager` · `ai ai-branch` · `ai ai-build-pillar` · `ai ai-business-support` · `ai ai-certificate-manager` · `ai ai-circle-half` · `ai ai-circle-minus` · `ai ai-claude` · `ai ai-column` · `ai ai-configuration-service` · `ai ai-content-delivery` · `ai ai-cursor` · `ai ai-custom-pages` · `ai ai-data-stream` · `ai ai-database` · `ai ai-datasheet` · `ai ai-deepseek` · `ai ai-deploy-pillar` · `ai ai-digital-certificates` · `ai ai-disabled` · `ai ai-discord` · `ai ai-docusaurus` · `ai ai-domains` · `ai ai-durable-objects` · `ai ai-edge-ai` · `ai ai-edge-application` · `ai ai-edge-connectors` · `ai ai-edge-dns` · `ai ai-edge-firewall` · `ai ai-edge-functions` · `ai ai-edge-kv` · `ai ai-edge-libraries` · `ai ai-edge-nodes` · `ai ai-edge-orchestrator` · `ai ai-edge-pulse` · `ai ai-edge-services` · `ai ai-edge-sql` · `ai ai-edge-storage` · `ai ai-eleventy` · `ai ai-enabled` · `ai ai-filter-alt` · `ai ai-gateway` · `ai ai-gatsby` · `ai ai-gemini` · `ai ai-git-branch-delete` · `ai ai-git-branch-plus` · `ai ai-git-branch` · `ai ai-git-cherry-pick` · `ai ai-git-commit` · `ai ai-git-compare` · `ai ai-git-diff` · `ai ai-git-fork` · `ai ai-git-graph` · `ai ai-git-merge-conflict` · `ai ai-git-merge` · `ai ai-git-pull-request-closed` · `ai ai-git-pull-request-draft` · `ai ai-git-pull-request` · `ai ai-git-repository` · `ai ai-github` · `ai ai-graphql` · `ai ai-grok` · `ai ai-hexo` · `ai ai-home` · `ai ai-hono` · `ai ai-html` · `ai ai-hugo` · `ai ai-image-processor` · `ai ai-instructor` · `ai ai-integration-services` · `ai ai-jekyll` · `ai ai-json-text` · `ai ai-json` · `ai ai-layers` · `ai ai-live-ingest` · `ai ai-load-balancer` · `ai ai-lora` · `ai ai-marketplace` · `ai ai-mcp-logo` · `ai ai-medium` · `ai ai-meta` · `ai ai-microsoft-copilot` · `ai ai-mistral` · `ai ai-network-lists` · `ai ai-next` · `ai ai-nuxt` · `ai ai-observe-pillar` · `ai ai-open` · `ai ai-origin-accelerator` · `ai ai-origin-shield` · `ai ai-perplexity` · `ai ai-pratices-review` · `ai ai-preact` · `ai ai-professional-services` · `ai ai-qwen` · `ai ai-qwik` · `ai ai-react` · `ai ai-real-time-events` · `ai ai-real-time-metrics` · `ai ai-real-time-purge` · `ai ai-redis` · `ai ai-remix` · `ai ai-rss` · `ai ai-rules-engine` · `ai ai-sase` · `ai ai-scizors` · `ai ai-secure-pillar` · `ai ai-security-team` · `ai ai-sparkles` · `ai ai-sql` · `ai ai-store` · `ai ai-technical-account` · `ai ai-technical-support` · `ai ai-terraform` · `ai ai-tiered-cache` · `ai ai-turso` · `ai ai-twitch` · `ai ai-variables` · `ai ai-vite` · `ai ai-vitepress` · `ai ai-vue` · `ai ai-vuepress` · `ai ai-waf-rules` · `ai ai-webhook` · `ai ai-windsurf` · `ai ai-workloads` · `ai ai-x` · `ai ai-youtube` · `ai ai-sparkles` · `pi pi-address-book` · `pi pi-align-center` · `pi pi-align-justify` · `pi pi-align-left` · `pi pi-align-right` · `pi pi-amazon` · `pi pi-android` · `pi pi-angle-double-down` · `pi pi-angle-double-left` · `pi pi-angle-double-right` · `pi pi-angle-double-up` · `pi pi-angle-down` · `pi pi-angle-left` · `pi pi-angle-right` · `pi pi-angle-up` · `pi pi-apple` · `pi pi-arrow-circle-down` · `pi pi-arrow-circle-left` · `pi pi-arrow-circle-right` · `pi pi-arrow-circle-up` · `pi pi-arrow-down-left-and-arrow-up-right-to-center` · `pi pi-arrow-down-left` · `pi pi-arrow-down-right` · `pi pi-arrow-down` · `pi pi-arrow-left` · `pi pi-arrow-right-arrow-left` · `pi pi-arrow-right` · `pi pi-arrow-up-left` · `pi pi-arrow-up-right-and-arrow-down-left-from-center` · `pi pi-arrow-up-right` · `pi pi-arrow-up` · `pi pi-arrows-alt` · `pi pi-arrows-h` · `pi pi-arrows-v` · `pi pi-asterisk` · `pi pi-at` · `pi pi-backward` · `pi pi-ban` · `pi pi-barcode` · `pi pi-bars` · `pi pi-bell-slash` · `pi pi-bell` · `pi pi-bitcoin` · `pi pi-bolt` · `pi pi-book` · `pi pi-bookmark-fill` · `pi pi-bookmark` · `pi pi-box` · `pi pi-briefcase` · `pi pi-building-columns` · `pi pi-building` · `pi pi-bullseye` · `pi pi-calculator` · `pi pi-calendar-clock` · `pi pi-calendar-minus` · `pi pi-calendar-plus` · `pi pi-calendar-times` · `pi pi-calendar` · `pi pi-camera` · `pi pi-car` · `pi pi-caret-down` · `pi pi-caret-left` · `pi pi-caret-right` · `pi pi-caret-up` · `pi pi-cart-arrow-down` · `pi pi-cart-minus` · `pi pi-cart-plus` · `pi pi-chart-bar` · `pi pi-chart-line` · `pi pi-chart-pie` · `pi pi-chart-scatter` · `pi pi-check-circle` · `pi pi-check-square` · `pi pi-check` · `pi pi-chevron-circle-down` · `pi pi-chevron-circle-left` · `pi pi-chevron-circle-right` · `pi pi-chevron-circle-up` · `pi pi-chevron-down` · `pi pi-chevron-left` · `pi pi-chevron-right` · `pi pi-chevron-up` · `pi pi-circle-fill` · `pi pi-circle-off` · `pi pi-circle-on` · `pi pi-circle` · `pi pi-claude` · `pi pi-clipboard` · `pi pi-clock` · `pi pi-clone` · `pi pi-cloud-download` · `pi pi-cloud-upload` · `pi pi-cloud` · `pi pi-code` · `pi pi-cog` · `pi pi-comment` · `pi pi-comments` · `pi pi-compass` · `pi pi-copy` · `pi pi-credit-card` · `pi pi-crown` · `pi pi-database` · `pi pi-delete-left` · `pi pi-desktop` · `pi pi-directions-alt` · `pi pi-directions` · `pi pi-discord` · `pi pi-dollar` · `pi pi-download` · `pi pi-eject` · `pi pi-ellipsis-h` · `pi pi-ellipsis-v` · `pi pi-envelope` · `pi pi-equals` · `pi pi-eraser` · `pi pi-ethereum` · `pi pi-euro` · `pi pi-exclamation-circle` · `pi pi-exclamation-triangle` · `pi pi-expand` · `pi pi-external-link` · `pi pi-eye-slash` · `pi pi-eye` · `pi pi-face-smile` · `pi pi-facebook` · `pi pi-fast-backward` · `pi pi-fast-forward` · `pi pi-file-arrow-up` · `pi pi-file-check` · `pi pi-file-edit` · `pi pi-file-excel` · `pi pi-file-export` · `pi pi-file-import` · `pi pi-file-o` · `pi pi-file-pdf` · `pi pi-file-plus` · `pi pi-file-word` · `pi pi-file` · `pi pi-filter-fill` · `pi pi-filter-slash` · `pi pi-filter` · `pi pi-flag-fill` · `pi pi-flag` · `pi pi-folder-open` · `pi pi-folder-plus` · `pi pi-folder` · `pi pi-forward` · `pi pi-gauge` · `pi pi-gemini` · `pi pi-gift` · `pi pi-github` · `pi pi-globe` · `pi pi-google` · `pi pi-graduation-cap` · `pi pi-hammer` · `pi pi-hashtag` · `pi pi-headphones` · `pi pi-heart-fill` · `pi pi-heart` · `pi pi-history` · `pi pi-home` · `pi pi-hourglass` · `pi pi-id-card` · `pi pi-image` · `pi pi-images` · `pi pi-inbox` · `pi pi-indian-rupee` · `pi pi-info-circle` · `pi pi-info` · `pi pi-instagram` · `pi pi-key` · `pi pi-language` · `pi pi-lightbulb` · `pi pi-link` · `pi pi-linkedin` · `pi pi-list-check` · `pi pi-list` · `pi pi-lock-open` · `pi pi-lock` · `pi pi-map-marker` · `pi pi-map` · `pi pi-mars` · `pi pi-megaphone` · `pi pi-microchip-ai` · `pi pi-microchip` · `pi pi-microphone` · `pi pi-microsoft` · `pi pi-minus-circle` · `pi pi-minus` · `pi pi-mobile` · `pi pi-money-bill` · `pi pi-moon` · `pi pi-objects-column` · `pi pi-palette` · `pi pi-paperclip` · `pi pi-pause-circle` · `pi pi-pause` · `pi pi-paypal` · `pi pi-pen-to-square` · `pi pi-pencil` · `pi pi-percentage` · `pi pi-phone` · `pi pi-pinterest` · `pi pi-play-circle` · `pi pi-play` · `pi pi-plus-circle` · `pi pi-plus` · `pi pi-pound` · `pi pi-power-off` · `pi pi-prime` · `pi pi-print` · `pi pi-qrcode` · `pi pi-question-circle` · `pi pi-question` · `pi pi-receipt` · `pi pi-reddit` · `pi pi-refresh` · `pi pi-replay` · `pi pi-reply` · `pi pi-save` · `pi pi-search-minus` · `pi pi-search-plus` · `pi pi-search` · `pi pi-send` · `pi pi-server` · `pi pi-share-alt` · `pi pi-shield` · `pi pi-shop` · `pi pi-shopping-bag` · `pi pi-shopping-cart` · `pi pi-sign-in` · `pi pi-sign-out` · `pi pi-sitemap` · `pi pi-slack` · `pi pi-sliders-h` · `pi pi-sliders-v` · `pi pi-sort-alpha-down-alt` · `pi pi-sort-alpha-down` · `pi pi-sort-alpha-up-alt` · `pi pi-sort-alpha-up` · `pi pi-sort-alt-slash` · `pi pi-sort-alt` · `pi pi-sort-amount-down-alt` · `pi pi-sort-amount-down` · `pi pi-sort-amount-up-alt` · `pi pi-sort-amount-up` · `pi pi-sort-down-fill` · `pi pi-sort-down` · `pi pi-sort-numeric-down-alt` · `pi pi-sort-numeric-down` · `pi pi-sort-numeric-up-alt` · `pi pi-sort-numeric-up` · `pi pi-sort-up-fill` · `pi pi-sort-up` · `pi pi-sort` · `pi pi-sparkles` · `pi pi-spinner-dotted` · `pi pi-spinner` · `pi pi-star-fill` · `pi pi-star-half-fill` · `pi pi-star-half` · `pi pi-star` · `pi pi-step-backward-alt` · `pi pi-step-backward` · `pi pi-step-forward-alt` · `pi pi-step-forward` · `pi pi-stop-circle` · `pi pi-stop` · `pi pi-stopwatch` · `pi pi-sun` · `pi pi-sync` · `pi pi-table` · `pi pi-tablet` · `pi pi-tag` · `pi pi-tags` · `pi pi-telegram` · `pi pi-th-large` · `pi pi-thumbs-down-fill` · `pi pi-thumbs-down` · `pi pi-thumbs-up-fill` · `pi pi-thumbs-up` · `pi pi-thumbtack` · `pi pi-ticket` · `pi pi-tiktok` · `pi pi-times-circle` · `pi pi-times` · `pi pi-trash` · `pi pi-trophy` · `pi pi-truck` · `pi pi-turkish-lira` · `pi pi-twitch` · `pi pi-twitter` · `pi pi-undo` · `pi pi-unlock` · `pi pi-upload` · `pi pi-user-edit` · `pi pi-user-minus` · `pi pi-user-plus` · `pi pi-user` · `pi pi-users` · `pi pi-venus` · `pi pi-verified` · `pi pi-video` · `pi pi-vimeo` · `pi pi-volume-down` · `pi pi-volume-off` · `pi pi-volume-up` · `pi pi-wallet` · `pi pi-warehouse` · `pi pi-wave-pulse` · `pi pi-whatsapp` · `pi pi-wifi` · `pi pi-window-maximize` · `pi pi-window-minimize` · `pi pi-wrench` · `pi pi-youtube` · `ai-cor ai-angular` · `ai-cor ai-astro` · `ai-cor ai-azuredevops` · `ai-cor ai-bitbucket` · `ai-cor ai-claude` · `ai-cor ai-cursor` · `ai-cor ai-deepseek` · `ai-cor ai-discord` · `ai-cor ai-flutter` · `ai-cor ai-gemini` · `ai-cor ai-gitlab` · `ai-cor ai-google` · `ai-cor ai-graphql` · `ai-cor ai-grok` · `ai-cor ai-html` · `ai-cor ai-js` · `ai-cor ai-kotlin` · `ai-cor ai-meta` · `ai-cor ai-microsoft-copilot` · `ai-cor ai-mistral` · `ai-cor ai-next` · `ai-cor ai-nuxt` · `ai-cor ai-open` · `ai-cor ai-perplexity` · `ai-cor ai-qwen` · `ai-cor ai-react` · `ai-cor ai-redwood` · `ai-cor ai-solidjs` · `ai-cor ai-svelte` · `ai-cor ai-terraform` · `ai-cor ai-ts` · `ai-cor ai-vue` · `ai-cor ai-windsurf` · `ai-cor ai-x` · `ai-cor ai-youtube`
+
+Descriptions and keywords: [foundations/icons.md](icons.md).
 
 ---
 
@@ -5474,7 +5577,7 @@ The code of every state is in [blocks/platform/create/source-wizard.md](blocks/p
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5649,7 +5752,7 @@ The code of every state is in [blocks/platform/dashboard/activity-outcomes-dashb
 - Surface: product
 - Source: `blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/alerts-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5811,7 +5914,7 @@ The code of every state is in [blocks/platform/dashboard/alerts-dashboard.md](bl
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5990,7 +6093,7 @@ The code of every state is in [blocks/platform/dashboard/analytics-dashboard.md]
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/composition-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6153,7 +6256,7 @@ The code of every state is in [blocks/platform/dashboard/composition-dashboard.m
 - Surface: product
 - Source: `blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/configurable-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Board](../../../components/board.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
@@ -6307,7 +6410,7 @@ The code of every state is in [blocks/platform/dashboard/configurable-dashboard.
 - Surface: product
 - Source: `blocks/platform/dashboard/data-dashboard/data-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/data-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6458,7 +6561,7 @@ The code of every state is in [blocks/platform/dashboard/data-dashboard.md](bloc
 - Surface: product
 - Source: `blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/executive-summary-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6614,7 +6717,7 @@ The code of every state is in [blocks/platform/dashboard/executive-summary-dashb
 - Surface: product
 - Source: `blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/funnel-cohort-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6760,7 +6863,7 @@ The code of every state is in [blocks/platform/dashboard/funnel-cohort-dashboard
 - Surface: product
 - Source: `blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/health-score-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -7099,7 +7202,7 @@ The code of every state is in [blocks/platform/dashboard/home-dashboard.md](bloc
 - Surface: product
 - Source: `blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/project-status-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -7264,7 +7367,7 @@ The code of every state is in [blocks/platform/dashboard/project-status-dashboar
 - Surface: product
 - Source: `blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/scan-results-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), `ChartCard`, [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -7424,7 +7527,7 @@ The code of every state is in [blocks/platform/dashboard/scan-results-dashboard.
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), `ChartCard`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -7588,7 +7691,7 @@ The code of every state is in [blocks/platform/dashboard/security-dashboard.md](
 - Surface: product
 - Source: `blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/service-monitoring-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -12499,6 +12602,10 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 | --- | --- | --- |
 | `prefix` | — | A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition="trailing"`, so a brand mark and a trailing chevron can share one control. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
@@ -12760,6 +12867,10 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `click` | `MouseEvent` | Fires on activation; suppressed when `disabled` or `loading`. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -13078,6 +13189,10 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | --- | --- | --- |
 | `click` | `MouseEvent` | — |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
@@ -13174,6 +13289,10 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `click` | `MouseEvent` | Fires on activation; suppressed when `disabled`. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -13406,6 +13525,10 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | --- | --- | --- |
 | `click` | `(event: MouseEvent, item: SplitButtonItem \| null)` | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`. |
 | `item-click` | `(event: MouseEvent \| KeyboardEvent, item: SplitButtonItem)` | Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -14114,6 +14237,10 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 | --- | --- | --- |
 | `default` | — | The inline preview; scrolls inside a 20 rem body. |
 | `actions` | — | Extra icon actions, placed before Copy and Download. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## Sub-components
 
@@ -15956,7 +16083,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 - [chart](chart.md) — horizontal bars with an axis, for comparing several series per category.
 - [donut-chart](donut-chart.md) — the share view of the same breakdown when the parts sum to a whole.
-- chart-card` — the box a BarList sits in on a dashboard.
+- [chart-card](chart-card.md) — the box a BarList sits in on a dashboard.
 
 ## Props
 
@@ -16071,7 +16198,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 ## Related
 
-- chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.
+- [chart-card](chart-card.md) — the box a dashboard chart sits in: title, description, controls, drag and resize.
 - [donut-chart](donut-chart.md) — part-to-whole at a glance, sharing this chart's palette, legend and states.
 - [stat-tile](stat-tile.md) — one figure with a delta and a sparkline, for a KPI row above the charts.
 - [table](table.md) — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface.
@@ -16128,7 +16255,6 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - `@aziontech/webkit/chart-line`
 - `@aziontech/webkit/chart-scatter`
 - `@aziontech/webkit/chart-tooltip`
-- `@aziontech/webkit/chart-card`
 
 ## Sub-components
 
@@ -16306,6 +16432,228 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 ---
 
+<!-- components/chart-card.md -->
+
+# Chart Card
+
+> The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.
+
+- Import: `import ChartCardRoot from '@aziontech/webkit/chart-card-root'`
+- Compound import (dot notation, not tree-shakeable): `import ChartCard from '@aziontech/webkit/chart-card'`
+- Category: chart · Surface: product · Structure: composition
+- API as JSON: [chart-card.json](https://github.com/aziontech/webkit/blob/main/.specs/chart-card.json)
+
+## When to use
+
+- Every chart on a metrics dashboard, so title, description, menu and size read the same everywhere.
+- A dashboard the person arranges: drag a card to reorder it, drag a corner to make it wider or taller.
+
+## Do
+
+- Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.
+- Keep filters and the time range above the grid, never inside a card.
+- Use `flush` content for a plot that should run edge to edge, padded for everything else.
+- Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.
+- Persist `span` and `height` with the dashboard layout; they are plain numbers.
+
+## Don’t
+
+- A KPI figure → use `stat-tile`, which is its own surface.
+- A general content card with no chart → use `card`.
+- A chart inline in a page section with its own heading → render `chart` alone.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [chart](chart.md), `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.
+- [card](card.md) — the general-purpose card; ChartCard shares its surface tokens.
+- dropdown` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `draggable` | `boolean` | `false` | false | Shows the drag handle and lets the card be dragged to a new position. |
+| `resizable` | `boolean` | `false` | false | Shows the resize handle. |
+| `minSpan` | `number` | `3` | false | Fewest grid columns the card may span. |
+| `maxSpan` | `number` | `12` | false | Most grid columns the card may span. |
+| `minHeight` | `number` | `240` | false | Smallest height in pixels the resize handle allows. |
+| `maxHeight` | `number` | `960` | false | Largest height in pixels the resize handle allows. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the card when it has no title. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `move` | `(event: KeyboardEvent, direction: 'up' \| 'down' \| 'left' \| 'right')` | An arrow key on the drag handle; the page moves the card in its own order. |
+| `drag-start` | `(event: DragEvent)` | Native drag began from the handle; the page records the source. |
+| `drag-end` | `(event: DragEvent)` | Native drag ended, dropped or cancelled. |
+| `resize-start` | `(event: PointerEvent)` | A pointer resize began on the handle. |
+| `resize-end` | `(event: PointerEvent \| KeyboardEvent)` | A resize finished: pointer released, or a keyboard nudge committed. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The parts: Header, Description, Content, Footer, ResizeHandle. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/chart-card-content`
+- `@aziontech/webkit/chart-card-controls`
+- `@aziontech/webkit/chart-card-description`
+- `@aziontech/webkit/chart-card-drag-handle`
+- `@aziontech/webkit/chart-card-footer`
+- `@aziontech/webkit/chart-card-header`
+- `@aziontech/webkit/chart-card-resize-handle`
+- `@aziontech/webkit/chart-card-title`
+
+## Sub-components
+
+The root `chart-card.vue` renders a `<section>` with the card surface. It provides a context (`injection-key.ts` + `composables/use-chart-card-context.ts`) holding the test id, the title and description ids (picked up by a nested `chart` for `aria-labelledby` / `aria-describedby`), `draggable`, `resizable`, the span and height bounds, the current span and height, and the functions `armDrag`, `move`, `startResize`, `resizeTo` and `endResize`. Every part throws a clear error when used outside `<ChartCard>`.
+
+- `chart-card.vue` — the root: surface, span and height models, native drag arming, resize bookkeeping.
+- `chart-card-header/chart-card-header.vue` — the header row, at least 56px tall, hairline under it.
+  - Props: _none_.
+  - Events: _none_.
+  - Slots: `default` — handle, title and controls in reading order.
+- `chart-card-title/chart-card-title.vue` — the title (`.text-label-md`), an `<h3>` whose id names the card and the chart inside.
+  - Props: _none_.
+  - Events: _none_.
+  - Slots: `default` — plain-text title.
+- `chart-card-description/chart-card-description.vue` — one line of context under the header (`.text-body-sm`, `var(--text-muted)`), whose id describes the chart inside.
+  - Props: _none_.
+  - Events: _none_.
+  - Slots: `default` — plain-text description.
+- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu.
+  - Props: _none_.
+  - Events: _none_.
+  - Slots: `default` — the consumer's tags, buttons and dropdown.
+- `chart-card-drag-handle/chart-card-drag-handle.vue` — a grip button that arms native drag on the card while pressed; arrow keys emit the root's `move`. Renders nothing unless the root is `draggable`.
+  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Move card` in English).
+  - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
+  - Slots: _none_.
+- `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
+  - Props: `flush?: boolean` (default `false` — no inner padding, for an edge-to-edge plot).
+  - Events: _none_.
+  - Slots: `default` — the chart.
+- `chart-card-footer/chart-card-footer.vue` — an optional row under the content, hairline above it.
+  - Props: _none_.
+  - Events: _none_.
+  - Slots: `default` — period, source, or a link.
+- `chart-card-resize-handle/chart-card-resize-handle.vue` — the corner grip that resizes the card: pointer drag with pointer capture, arrow keys from the keyboard. A `role="separator"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` naming columns and height. Renders nothing unless the root is `resizable`.
+  - Props: `ariaLabel?: string` (default `''`; empty uses the locale catalog, `Resize card` in English).
+  - Events: _none_ (flows through the root's `update:span`, `update:height`, `resize-start`, `resize-end`).
+  - Slots: _none_.
+
+## v-model
+
+| Model            | Type                  | Default     | Emits           | Notes                                                                                                        |
+| ---------------- | --------------------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
+| `v-model:span`   | `number`              | `6`         | `update:span`   | Grid columns the card spans, applied as `--chart-card-span` and capped by the grid's `--chart-grid-columns`. |
+| `v-model:height` | `number \| undefined` | `undefined` | `update:height` | Height in pixels, applied as `--chart-card-height`; absent means the content decides.                        |
+
+## States
+
+- Visual states: `default`, `dragging` (the card dims while it travels), `resizing`, `focus-visible` on each handle
+- `data-draggable`, `data-resizable` mirror the props
+- `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
+- `data-flush` on the content mirrors `flush`
+- Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
+
+## Accessibility
+
+- The card is a `<section>` named by its title (`aria-labelledby`) or by `ariaLabel`.
+- Drag handle: a real `<button>` named "Move card". Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle. Dragging never requires a pointer.
+- Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
+- Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the drag and resize grips are symmetric and do not mirror.
+- Keyboard: the drag handle moves the card one slot with the arrow keys and the resize handle grows (`ArrowRight`) or shrinks (`ArrowLeft`) the column span; both swap under `dir="rtl"` (`logicalArrowKey`).
+- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleRef)`), so dragging toward the end edge widens the card.
+- User data: chart values keep the number format of the locale.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import Chart from '@aziontech/webkit/chart'
+  import Hint from '@aziontech/webkit/hint'
+
+  const labels = [
+    '13:05',
+    '13:10',
+    '13:15',
+    '13:20',
+    '13:25',
+    '13:30',
+    '13:35',
+    '13:40',
+    '13:45',
+    '13:50',
+    '13:55',
+    '14:00'
+  ]
+  const series = [
+    {
+      id: 'allowed',
+      name: 'WAF requests allowed',
+      color: 'success',
+      values: [1210, 1340, 1295, 1480, 1530, 1460, 1610, 1580, 1720, 1690, 1810, 1760]
+    },
+    {
+      id: 'blocked',
+      name: 'WAF requests blocked',
+      color: 'danger',
+      values: [320, 410, 380, 520, 470, 430, 610, 580, 540, 690, 650, 720]
+    },
+    {
+      id: 'threat',
+      name: 'WAF requests threat',
+      color: 'warning',
+      values: [80, 95, 70, 120, 110, 90, 140, 130, 115, 160, 150, 170]
+    }
+  ]
+</script>
+
+<template>
+  <ChartCard>
+    <ChartCard.Header>
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+        <ChartCard.Title>Threats vs requests</ChartCard.Title>
+        <Hint text="Requests WAF analyzed, split into blocked, logged and allowed." />
+      </span>
+    </ChartCard.Header>
+    <ChartCard.Content>
+      <Chart
+        :series="series"
+        :labels="labels"
+      >
+        <Chart.Grid />
+        <Chart.Axis kind="y" />
+        <Chart.Axis kind="x" />
+        <Chart.Line />
+        <Chart.Crosshair />
+        <Chart.Tooltip />
+        <Chart.Legend totals />
+      </Chart>
+    </ChartCard.Content>
+    <ChartCard.Footer>Last hour, 5 minute buckets</ChartCard.Footer>
+  </ChartCard>
+</template>
+```
+
+2 more example(s) in [components/chart-card.md](https://github.com/aziontech/webkit/blob/main/.specs/components/chart-card.md).
+
+---
+
 <!-- components/donut-chart.md -->
 
 # Donut Chart
@@ -16338,7 +16686,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ## Related
 
 - [chart](chart.md) — the cartesian sibling; same series model, so a dataset moves between them without reshaping.
-- chart-card` — the box a dashboard donut sits in.
+- [chart-card](chart-card.md) — the box a dashboard donut sits in.
 - [stat-tile](stat-tile.md) — the total alone, with a delta.
 
 ## Props
@@ -16491,7 +16839,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ## Related
 
 - [stat-tile](stat-tile.md) — one figure with a delta and a sparkline, for a KPI row.
-- chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
+- [chart-card](chart-card.md) — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
 - progress-bar` — completion of a task, not a reading.
 
 ## Props
@@ -16626,7 +16974,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 - [network-map](network-map.md) — the same dot grid as decoration in marketing and empty states.
 - [bar-list](bar-list.md) — the ranked list that usually sits beside the map.
-- chart-card` — the card a dashboard map sits in; the map takes its accessible name from the card title.
+- [chart-card](chart-card.md) — the card a dashboard map sits in; the map takes its accessible name from the card title.
 
 ## Props
 
@@ -16856,7 +17204,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 ## Related
 
 - [chart](chart.md) — the full history behind a tile.
-- chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.
+- [chart-card](chart-card.md) — the box for a chart; a tile is its own small surface and does not sit in one.
 - [big-numbers](big-numbers.md) — the marketing figure band, with no delta and no live data.
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
@@ -16960,7 +17308,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 - [status-indicator](status-indicator.md) — the current state; a Tracker is that state's history.
 - [spark-chart](spark-chart.md) — a measured trend rather than a sequence of states.
-- chart-card` — the box a Tracker sits in, with the uptime figure in its header.
+- [chart-card](chart-card.md) — the box a Tracker sits in, with the uptime figure in its header.
 
 ## Props
 
@@ -17921,6 +18269,10 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
 | `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -19088,7 +19440,8 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 - Leave the illustration decorative (no `ariaLabel`) unless it carries information the surrounding copy does not. A decorative illustration is hidden from assistive tech, which keeps screen readers out of a graphic that adds nothing.
 - Size the illustration from the call site with a class. The root is `w-full` at the canvas aspect ratio, so a narrower column simply gets a smaller scene.
 - Pick the scene that draws the claim next to it, not the one whose filename matches the page title.
-- To add a scene, export the frame from the Figma assets library at 592×300, drop the `.svg` into `src/assets/illustrations/`, and register it. Never hand-draw one.
+- Find the names in `llms/foundations/illustrations.md` (installed under `node_modules/@aziontech/webkit/llms/`), the MCP tool `list_assets` (`kind: "illustration"`) or the Assets example. Never guess a name from a file name or a page title: an unknown name renders the placeholder.
+- To add a scene, export the frame from the Figma assets library (592×300 for a scene, the tile's own size for a tile or crop), drop the `.svg` into `src/assets/illustrations/`, and register it in `registry.ts`. The test fails while a drawing in the folder is unregistered. Never hand-draw one.
 - Leave `<Illustration />` unnamed where a scene is still being drawn: the placeholder frame reserves the space and reads as unfinished on the screen, which is louder than a gap nobody notices.
 
 ## Don’t
@@ -19114,11 +19467,15 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 | `name` | `string` | `''` | no | Name of an official scene in the illustration asset library. |
 | `ariaLabel` | `string` | `''` | no | Accessible name; empty keeps the illustration decorative and hidden from assistive tech. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default` — an illustration is decorative and has no `hover`, `focus-visible`, `disabled`, `loading`, or `active` state, and is never interactive.
-- Every scene is drawn on the one 592×300 canvas, so scenes line up with each other in a grid. The root declares that frame as its intrinsic `width`/`height`, which reserves the box before the SVG loads, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
-- A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`. An unregistered `name` also warns in development; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
+- Most scenes are drawn on the one 592×300 canvas, so they line up with each other in a grid; a few tiles and crops (`ai-gateway`, `azion-highlight`, `azion-rest-api`, `branches`, `ddos-protection`, `distributed-apis-tile`, `personal-tokens`, `real-time-metrics-error-rate`, `real-time-metrics-status-codes`, `usage-chart`) keep the canvas they were drawn on. The root declares 592×300 as its intrinsic `width`/`height` until the SVG loads, which reserves the box, then the scene's own canvas, and renders at its container's width at that aspect ratio. A call site that wants it smaller caps it with a class.
+- A `name` that resolves to no scene — empty, or not in the registry — renders the **placeholder**: a tinted frame reading `PLACE DESIGN ASSET`, marked `data-placeholder`, on the 592×300 canvas. An unregistered `name` also warns in the console, naming where the valid names are listed; neither case throws, and neither collapses the layout. The placeholder is always decorative, `ariaLabel` or not: it draws no scene, so announcing a description of the missing artwork would describe something that is not on the page.
 - While a registered scene's SVG is still resolving, the frame already on screen stays — the placeholder never flashes in front of a scene that is about to arrive.
 - Theme: each colour of the export palette maps to one `--illustration-*` role (see § Tokens), resolved where the scene renders, so a scene inside a `[data-theme]` subtree follows that subtree. A translucent ground colour is a drop shadow and stays as drawn; colours that read the same in both themes (window controls, framework marks, the dot map) stay as drawn too. Masks, clip paths and filters are never repainted.
 - Every instance scopes the SVG's internal ids, so two scenes — or two copies of one — on the same page never resolve each other's gradients, masks or filters.
@@ -19540,6 +19897,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - One figure per view; two figures answering the pointer compete.
 - Pass `aria-label` when the page says something more specific than the figure's own description.
 - Use `play` only where nothing else moves.
+- Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: "lineFigures" })`; an unknown name draws nothing.
+- In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class="w-60 max-w-full">`) when the art should be smaller.
 
 ## Don’t
 
@@ -19558,7 +19917,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `name` | `LineFigureName \ \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
+| `name` | `LineFigureName \| ''` | `''` | false | Registered figure to draw; an unknown or empty name draws nothing. |
 | `intensity` | `number` | `0.5` | false | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). |
 | `play` | `boolean` | `false` | false | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
 | `ariaLabel` | `string` | `''` | false | Accessible name; falls back to the figure's own English description. |
@@ -19568,6 +19927,10 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `read` | `caption: string` | The figure's current reading each time it changes (the first reading on mount). |
+
+## Assets
+
+- Line figures: every valid name is in [line-figures.md](../foundations/line-figures.md) (MCP `list_assets({ kind: "lineFigures" })`). An unknown or empty name draws nothing.
 
 ## States
 
@@ -19592,6 +19955,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Responsive
 
 - Fills its width at a 5:4 aspect; strokes stay 1px at every size (`vector-effect: non-scaling-stroke`).
+- The SVG is in flow with a natural 400×320 size, so a parent that sizes to its content (a flex column with centred items, the `EmptyState` `icon` slot) gets a 400 px wide figure, never a 0 px one; a narrower container shrinks it, and a sized wrapper sets another size.
 
 ## Examples
 
@@ -20595,6 +20959,10 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 | --- | --- | --- |
 | `default` | — | Main content. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
@@ -21497,6 +21865,123 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 ```
 
 2 more example(s) in [components/pagination.md](https://github.com/aziontech/webkit/blob/main/.specs/components/pagination.md).
+
+---
+
+<!-- components/pagination-button.md -->
+
+# Pagination Button
+
+> PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
+
+- Import: `import PaginationButton from '@aziontech/webkit/pagination-button'`
+- Category: data · Surface: product · Structure: monolithic
+- API as JSON: [pagination-button.json](https://github.com/aziontech/webkit/blob/main/.specs/pagination-button.json)
+
+## When to use
+
+- Compose a custom page strip inside `pagination`'s default slot (composition mode), one button per Previous, page number, overflow and Next.
+- Render the current page of a hand-wired pagination with `selected`, and the unavailable Previous / Next ends with `disabled`.
+
+## Do
+
+- Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.
+- Pass `aria-label` on every `previous` and `next` button: those kinds render an `aria-hidden` icon only and have no accessible name otherwise. `more` is decorative and hidden from assistive tech, so it takes no `aria-label`.
+- Put the page number in the default slot of `kind="number"` only; the other kinds ignore the slot.
+- Set `selected` on exactly one number button (it sets `aria-current="page"`), and `disabled` on Previous at the first page and Next at the last.
+- In composition mode you own every click: listen to `click` and update the page yourself; a `disabled` button never emits it.
+
+## Don’t
+
+- You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.
+- The rows live in a data-driven `table` → set `paginated` on the table instead.
+- The control is a previous / next link between documentation pages → use `doc-pagination`.
+- It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
+- It is a "Load more" control at the end of a list → use `button`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [pagination](pagination.md) — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
+- pagination-info` — the page-info text that sits beside the strip.
+- pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
+- [icon-button](icon-button.md) — a standalone icon-only action with its own frame and radius.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `kind` | `'previous' \| 'next' \| 'number' \| 'more'` | `'number'` | false | Button role within the pagination. |
+| `selected` | `boolean` | `false` | false | Marks the current page (filled surface + aria-current). |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `click` | `MouseEvent` | Fires on activation. Not emitted while `disabled` (the native `disabled` attribute also blocks it), and never for `kind="more"`. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` | — | The page number. Rendered only when `kind` is `number`. |
+
+## States
+
+- Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`.
+- Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `selected` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
+- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `pi pi-chevron-left`, `next` renders `pi pi-chevron-right`, `more` renders `pi pi-ellipsis-h`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
+- `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
+- `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
+- Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
+
+## Accessibility
+
+- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Keyboard map: native button — `Tab` focuses; `Enter` / `Space` activates; a `disabled` button is skipped by `Tab`; the `more` ellipsis is a `span` and never receives focus.
+- ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
+- Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
+- `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
+- Touch target: 28×28, a justified deviation — the buttons are butted into the compact pagination strip that sits in a table footer, with no room to pad the hit area (see `pagination`).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next chevrons mirror (`rtl:-scale-x-100`).
+- Keyboard: arrow keys are handled by `pagination`, swapped under `dir="rtl"`.
+- User data: none.
+
+## Usage
+
+```vue
+<script setup>
+  import Pagination from '@aziontech/webkit/pagination'
+  import PaginationButton from '@aziontech/webkit/pagination-button'
+</script>
+
+<template>
+  <Pagination>
+    <PaginationButton
+      kind="previous"
+      aria-label="Previous page"
+      disabled
+    />
+    <PaginationButton
+      kind="number"
+      selected
+      >1</PaginationButton
+    >
+    <PaginationButton kind="number">2</PaginationButton>
+    <PaginationButton kind="more" />
+    <PaginationButton
+      kind="next"
+      aria-label="Next page"
+    />
+  </Pagination>
+</template>
+```
 
 ---
 
@@ -23117,6 +23602,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `default` | — | Card copy. |
 | `icon` | — | The leading mark, when a font glyph will not do. Replaces `icon`. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` — the last two only when the card is a link
@@ -23803,6 +24292,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | --- | --- | --- |
 | `default` | — | The row's copy: one or two sentences of inline prose. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` — the last two exist only when the row is a link, and both are driven off the single title anchor via the shell's `has-[a:hover]` / `has-[a:focus-visible]` variants; a row with no `href` is inert
@@ -24232,6 +24725,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The prompt itself: one or more sentences of literal text. Also the string the copy control carries. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -24975,6 +25472,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `action` | — | Custom action control; replaces the built-in Button when provided. |
 | `default` | — | Alert copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list. The copy region is a flow container (a `div`, not a `p`), so block markup arriving from a server render stays inside it instead of being closed out beside the copy. Falls back to `label` when empty. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: default (per severity)
@@ -25064,6 +25565,10 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | --- | --- | --- |
 | `icon` | — | Custom adornment centered above the title, rendered inside an `aria-hidden` container. Overrides the `icon` prop's featured-icon tile. When neither this slot nor the `icon` prop is provided, no adornment renders. |
 | `actions` | — | Action area below the description; consumer composes buttons and the documentation link. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -27046,6 +27551,10 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `kind="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -29945,7 +30454,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## Related
 
-- chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
+- [chart-card](chart-card.md) — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
 - [resizable](resizable.md) — split panes with a draggable divider, not a grid of cards.
 - [cards](cards.md) — a selectable collection of item cards with a fixed layout.
 - [page-header](page-header.md) — the title over the board, with the Edit layout and Reset layout actions beside it.
@@ -31393,6 +31902,10 @@ context, so a consumer never wires one part to the other.
 | --- | --- | --- |
 | `default` | — | The band body, usually a flush Card of SettingRow rows. |
 | `title` | — | Rich title content; replaces the `title` prop text in the h2. |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## v-model
 
@@ -33188,6 +33701,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `spec` | `DiagramSpec` | `undefined` | false | The nodes, their layout and the edges between them, for a diagram the library does not have. |
 | `ariaLabel` | `string` | `''` | false | Accessible description of the whole diagram; empty uses the description the spec carries. |
 
+## Assets
+
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
+
 ## States
 
 - **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches`, and any row nested inside a tree (a branch that is itself a row), stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
@@ -33506,6 +34023,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `background` | — | Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`. |
 | `top` | — | Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band. |
 | `bottom` | — | Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `carousel` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## Sub-component imports
 
@@ -34278,6 +34799,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | `items` | `QuoteCarouselItem[]` | `[]` | false | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable row of testimonials, announced before its contents. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`, plus `focus-visible` on the track itself and `grab` / `grabbing` on the pointer while the row can be dragged
@@ -34411,6 +34936,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `actions` | — | A trailing control under the featured quotation's attribution, such as a secondary `Button` to the success stories; rendered in `quote`'s own `actions` area, the same for every client. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## v-model
 
@@ -35205,6 +35734,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | `duration` | `number` | `0` | false | Seconds for one full pass; left at `0` it is derived from the number of marks, or of items, so every strip moves at one speed. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the row of marks, announced instead of an unnamed list. |
 
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink
@@ -35322,6 +35855,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | --- | --- | --- |
 | `default` | — | Description body; replaces the `description` prop when provided. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, and `hover` / `focus-visible` when `href` is set
@@ -35404,7 +35941,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## Related
 
-- breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.
+- [breadcrumb-item](breadcrumb-item.md) — the single segment this component renders; use it alone only inside a hand-composed trail.
 - [navigation-menu](navigation-menu.md) — top-level navigation with dropdown panels, not a location trail.
 - [link](link.md) — a standalone link; a breadcrumb segment is a link with the trail's muted / current styling.
 
@@ -35490,6 +36027,100 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 ```
 
 2 more example(s) in [components/breadcrumb.md](https://github.com/aziontech/webkit/blob/main/.specs/components/breadcrumb.md).
+
+---
+
+<!-- components/breadcrumb-item.md -->
+
+# Breadcrumb Item
+
+> Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).
+
+- Import: `import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'`
+- Category: navigation · Surface: product · Structure: monolithic
+- API as JSON: [breadcrumb-item.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb-item.json)
+
+## When to use
+
+- Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.
+- A single ancestor or current-page segment that must match the breadcrumb's muted / current styling and focus ring.
+
+## Do
+
+- Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
+- Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.
+- Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.
+- disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
+
+## Don’t
+
+- The whole trail is known as data → use `breadcrumb` with `items`, which renders the segments for you.
+- It is a standalone text link in content or a page footer → use `link`.
+- It is a navigation row in an app menu → use `menu`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [breadcrumb](breadcrumb.md) — the trail root; renders `breadcrumb-item` for each entry of `items` and re-exports it as `Breadcrumb.Item`.
+- [link](link.md) — a general-purpose link without the segment's ghost hover and current-page treatment.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `label` | `string` | `'Page Name'` | false | Visible segment label. |
+| `href` | `string` | `'#'` | false | Destination when the segment is a link (ignored when `current` is true). |
+| `current` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
+| `showIcon` | `boolean` | `false` | false | When true, renders a leading PrimeIcons icon before the label. |
+| `icon` | `string` | `'pi pi-box'` | false | PrimeIcons class for the leading icon when `showIcon` is true. |
+| `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`. |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`
+- `data-current` mirrors the `current` prop
+- `data-disabled` mirrors the `disabled` prop
+
+## Accessibility
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Keyboard map: `Tab` focuses link segments; `Enter` activates.
+- ARIA: current segment uses `aria-current="page"`; disabled segments use `aria-disabled="true"`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
+- `motion-reduce:transition-none` on color transitions.
+- Touch target ≥40×40 px on interactive segments (padding + min height).
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'
+</script>
+
+<template>
+  <BreadcrumbItem
+    label="Page Name"
+    href="#"
+  />
+</template>
+```
+
+2 more example(s) in [components/breadcrumb-item.md](https://github.com/aziontech/webkit/blob/main/.specs/components/breadcrumb-item.md).
 
 ---
 
@@ -35712,6 +36343,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `click` | `MouseEvent` | — |
+
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
 
 ## States
 
@@ -38216,6 +38851,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active. |
 | `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
+## Assets
+
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
+
 ## States
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
@@ -39384,6 +40023,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
 | `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## States
 
@@ -41312,6 +41955,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, illustration, action? }` where `illustration` is a registry name and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`
@@ -41444,6 +42091,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `tabs` | `FeatureTabsTab[]` | `[]` | false | The features, in order, at most three; each is `{ title, description, illustration, illustrationLabel? }` where `illustration` is a registry name and `illustrationLabel` its accessible name. |
 | `primaryAction` | `FeatureTabsAction` | `undefined` | false | Small link under the frame; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
@@ -41553,6 +42204,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`
@@ -41651,6 +42306,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `columns` | `FeatureWidgetsColumns` | `3` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard. |
+
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
 
 ## States
 
@@ -41777,6 +42436,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `top` | — | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here. |
 | `bottom` | — | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+
 ## States
 
 - Visual states: `default`
@@ -41864,6 +42528,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `primaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `levels` | `HeroCopyOnTopArtLevel[]` | `[]` | false | The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## States
 
@@ -42012,6 +42680,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `submit` | `(event: SubmitEvent, values: Record<string, string>)` | Fired on a valid submit, not while `loading`; `values` holds every field by `name`, trimmed, with a phone number prefixed by its dial code. The block never sends it. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## States
 
@@ -42247,6 +42919,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `primaryAction` | `HeroWithOpeningAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroWithOpeningAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `items` | `HeroWithOpeningItem[]` | `[]` | false | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## States
 
@@ -42880,6 +43556,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. |
 | `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`
@@ -42956,6 +43636,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
 | `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
+
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
 
 ## States
 
@@ -45052,6 +45736,10 @@ import SiteNav from '@aziontech/webkit/site-nav'
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
 | `tickerLabel` | `string` | `''` | false | Overline above the row of marks. |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. |
+
+## Assets
+
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
 
 ## States
 

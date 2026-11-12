@@ -1,0 +1,54 @@
+# Diagrams
+
+> The registered product architecture diagrams.
+
+Pass the name to `Diagram` (`name`) or to a section that shows one; the label is the diagram’s accessible description.
+
+28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
+
+Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md).
+
+## Usage
+
+```vue
+<script setup>
+  import Diagram from '@aziontech/webkit/diagram'
+</script>
+
+<template>
+  <Diagram name="cache" />
+</template>
+```
+
+## Names
+
+| Name | Description |
+| --- | --- |
+| `ai-gateway` | An AI app calls the gateway; Firewall filters the request, the AI Gateway function checks the key, and the call goes to a model on AI Inference, with third-party providers as the fallback |
+| `ai-gateway-latency-routing` | An AI app sends real-time tasks to Mistral 3 Small on AI Inference, under 30 ms, and other tasks to OpenAI GPT-5.5 |
+| `ai-gateway-model-routing` | An AI app routes paid users to OpenAI GPT-5.5 with a fallback to Claude Opus 4.7, and everyone else to Kimi K2.6 or Gemma 4 depending on load |
+| `ai-gateway-provider-failover` | An AI app checks whether its provider is degraded; Claude Haiku 5.5 on Anthropic is degraded, so the call falls back to Claude Haiku 5.5 on Amazon Bedrock |
+| `ai-gateway-response-cache` | An AI app checks for a cached response; a match is served from the Cache API with no tokens spent, and anything else goes to a model call |
+| `ai-inference` | An app reaches the application, which runs Mistral 3 Small on AI Inference in under 30 ms, pulling context from vector search on SQL Database and a fine-tuned LoRA adapter |
+| `application-accelerator` | A user reaches the application; dynamic routes go through Application Accelerator to api.example.com and static assets are served from cache |
+| `applications` | A user reaches the application; its rules send static assets to cache, /account to the auth-handler function and /api to the origin |
+| `bot-manager` | A request crosses Firewall, which runs Bot Management; a human is allowed through and a bad bot is denied, dropped or delayed |
+| `cache` | A user reaches the application, whose cache policy serves a hit from the edge cache; a miss goes to Tiered Cache and then to the origin |
+| `data-stream` | Requests reach the workload; Data Stream collects HTTP, firewall and function logs and sends them through connectors to a SIEM or a data lake |
+| `ddos-protection` | Users and attackers reach DDoS Protection; clean traffic is served by the workload and the flood is absorbed at the edge |
+| `edge-dns` | A resolver asks the shop.example.com zone; the A record points at the workload, the MX record at the mail provider and a TXT record carries domain verification |
+| `firewall` | A request reaches Firewall, whose rules apply network lists, the WAF and a rate limit in order before the storefront application runs |
+| `functions` | A request matches an application rule that runs the auth-handler function; it is answered at the edge or forwarded to the origin API |
+| `image-processor` | A browser asks for an image; the application runs Image Processor, which resizes and converts it, caches the variant and reads the source image from the origin once |
+| `kv-store` | A request reaches the session-check function, which reads a value from the sessions namespace on KV Store at the edge and replicates writes everywhere |
+| `load-balancer` | A user reaches the application; Load Balancer sends 60% of traffic to origin-a, 40% to origin-b and nothing to the unhealthy origin-c |
+| `network-shield` | Traffic reaches Network Shield at the border; clean traffic goes on to the Firewall and listed ASNs, countries and IPs are dropped |
+| `object-storage` | A user reaches the application, whose origin is the assets bucket on Object Storage; the object is cached at the edge and uploads come from any S3-compatible client |
+| `real-time-events` | Requests reach the workload; Real-Time Events makes each one queryable in seconds, from the Console or the GraphQL API |
+| `real-time-metrics` | Requests reach the workload; Real-Time Metrics reports traffic, errors and latency on dashboards and through the GraphQL API |
+| `sql-database` | A request reaches the orders-api function, which queries the replicated orders database; reads hit the nearest replica and writes go to the primary |
+| `web-application-firewall` | A request crosses Firewall, which runs the WAF; clean traffic goes on to the application and a threat is answered with a 403 |
+| `workloads` | A user reaches routing, which sends the request to the shop.example.com workload; a hit is served from cache and a miss goes to the origin |
+| `workloads-gradual-rollout` | A workload splits traffic between two deployments: 10% to the new one, which is being watched, and 90% to the one that was serving |
+| `workloads-isolate-per-request` | Requests reach Azion Runtime, which starts a separate isolate for each one, with no cold start |
+| `workloads-security` | A user request reaches the workload over TLS, passes the bound firewall, and only then reaches the application |

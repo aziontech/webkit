@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/health-score-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), `ChartCard`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as

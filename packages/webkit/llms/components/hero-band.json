@@ -148,6 +148,16 @@
   }
  ],
  "styleSeam": false,
+ "assets": [
+  {
+   "kind": "illustrations",
+   "page": "foundations/illustrations.md"
+  },
+  {
+   "kind": "brandMarks",
+   "page": "foundations/brand-marks.md"
+  }
+ ],
  "examples": [
   {
    "name": "Default",

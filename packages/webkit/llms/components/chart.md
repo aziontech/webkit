@@ -41,7 +41,7 @@
 
 ## Related
 
-- chart-card` — the box a dashboard chart sits in: title, description, controls, drag and resize.
+- [chart-card](chart-card.md) — the box a dashboard chart sits in: title, description, controls, drag and resize.
 - [donut-chart](donut-chart.md) — part-to-whole at a glance, sharing this chart's palette, legend and states.
 - [stat-tile](stat-tile.md) — one figure with a delta and a sparkline, for a KPI row above the charts.
 - [table](table.md) — the exact numbers; a chart's own table view is the accessible twin, a `table` is the primary surface.
@@ -98,7 +98,6 @@
 - `@aziontech/webkit/chart-line`
 - `@aziontech/webkit/chart-scatter`
 - `@aziontech/webkit/chart-tooltip`
-- `@aziontech/webkit/chart-card`
 
 ## Sub-components
 

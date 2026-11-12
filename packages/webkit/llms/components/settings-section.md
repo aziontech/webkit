@@ -49,6 +49,10 @@
 | `default` | — | The band body, usually a flush Card of SettingRow rows. |
 | `title` | — | Rich title content; replaces the `title` prop text in the h2. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## v-model
 
 - **`v-model:open`** — `boolean`, default `false`. Whether a collapsible band is unfolded; it updates when the disclosure toggles. Ignored unless `collapsible`.

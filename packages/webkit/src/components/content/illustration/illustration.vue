@@ -1,11 +1,7 @@
 <script setup lang="ts">
   import { computed, shallowRef, useAttrs, useId, useTemplateRef, watch } from 'vue'
 
-  import {
-    type IllustrationAssetLoader,
-    loadIllustrationPlaceholder,
-    resolveIllustrationAsset
-  } from '../../../assets/illustrations/registry'
+  import type { IllustrationAssetLoader } from '../../../assets/illustrations/registry'
   import type { IllustrationScene } from '../../../assets/illustrations/scene'
 
   defineOptions({
@@ -45,25 +41,20 @@
     () => props.name,
     (name) => {
       if (typeof document === 'undefined') return
-      const load = name ? resolveIllustrationAsset(name) : null
-      if (!load) {
-        if (name) {
-          console.warn(`[webkit] <Illustration>: no asset registered under name "${name}".`)
-        }
-        paint(loadIllustrationPlaceholder)
-          .then((painted) => {
-            if (props.name && resolveIllustrationAsset(props.name)) return
-            scene.value = painted
-            placeheld.value = true
-          })
-          .catch(warnUnloaded)
-        return
-      }
-      paint(load)
-        .then((painted) => {
+      import('../../../assets/illustrations/registry')
+        .then(({ loadIllustrationPlaceholder, resolveIllustrationAsset }) => {
           if (props.name !== name) return
-          scene.value = painted
-          placeheld.value = false
+          const load = name ? resolveIllustrationAsset(name) : null
+          if (!load && name) {
+            console.warn(
+              `[webkit] <Illustration>: no scene named "${name}". Names: llms/foundations/illustrations.md or the MCP tool list_assets.`
+            )
+          }
+          return paint(load ?? loadIllustrationPlaceholder).then((painted) => {
+            if (props.name !== name) return
+            scene.value = painted
+            placeheld.value = !load
+          })
         })
         .catch(warnUnloaded)
     },
@@ -81,6 +72,13 @@
   )
 
   const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
+
+  const frame = computed(() => {
+    const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
+    return placeheld.value || !(width > 0 && height > 0)
+      ? { width: 592, height: 300 }
+      : { width, height }
+  })
 
   const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
 
@@ -105,8 +103,8 @@
     :aria-hidden="decorative || undefined"
     :data-testid="testId"
     :data-placeholder="placeheld || undefined"
-    width="592"
-    height="300"
+    :width="frame.width"
+    :height="frame.height"
     fill="none"
     class="block h-auto w-full"
     v-bind="passthroughAttrs"

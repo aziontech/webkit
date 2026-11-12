@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: e793577baecd0d4c719b0f46ea1e1759f86a52b25b1f249d31979faa7c4a0e99
+checksum: 2786f572ddd3195718906c9050d9342c42c34e7298ae5406ffc265d80ef6cfa6
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # LineFigure — Component Spec
@@ -38,6 +38,8 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 - One figure per view; two figures answering the pointer compete.
 - Pass `aria-label` when the page says something more specific than the figure's own description.
 - Use `play` only where nothing else moves.
+- Take the name from `llms/foundations/line-figures.md` or `list_assets({ kind: "lineFigures" })`; an unknown name draws nothing.
+- In a container that sizes to its content (the `EmptyState` `icon` slot, a centred flex column) the figure takes its natural 400×320 size, capped by the space available. Put it in a sized wrapper (`<div class="w-60 max-w-full">`) when the art should be smaller.
 
 ## Usage
 
@@ -55,7 +57,7 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 
 | Prop        | Type               | Default | Required | JSDoc                                                                                                                |
 | ----------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `name`      | `LineFigureName \\ | ''`     | `''`     | false                                                                                                                | Registered figure to draw; an unknown or empty name draws nothing. |
+| `name`      | `LineFigureName \| ''` | `''`    | false    | Registered figure to draw; an unknown or empty name draws nothing. |
 | `intensity` | `number`           | `0.5`   | false    | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong).                                          |
 | `play`      | `boolean`          | `false` | false    | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
 | `ariaLabel` | `string`           | `''`    | false    | Accessible name; falls back to the figure's own English description.                                                 |
@@ -111,6 +113,7 @@ Springs and tweens in the engine (no CSS keyframes); stroke colour transitions u
 ## Responsive
 
 - Fills its width at a 5:4 aspect; strokes stay 1px at every size (`vector-effect: non-scaling-stroke`).
+- The SVG is in flow with a natural 400×320 size, so a parent that sizes to its content (a flex column with centred items, the `EmptyState` `icon` slot) gets a 400 px wide figure, never a 0 px one; a narrower container shrinks it, and a sized wrapper sets another size.
 
 ## Performance
 
@@ -122,6 +125,7 @@ Springs and tweens in the engine (no CSS keyframes); stroke colour transitions u
 - Default — `cache-ttl` at rest.
 - Play — `lb-rotor` touring with its reading in a live region.
 - Gallery — all 25 figures.
+- In an empty state — `azion-404` in the `EmptyState` `icon` slot inside a sized wrapper, the sizing contract of a content-sized parent.
 
 ## Constraints — DO NOT
 

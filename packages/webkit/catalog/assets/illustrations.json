@@ -1,0 +1,244 @@
+{
+ "items": [
+  {
+   "name": "ai-applications",
+   "canvas": "592x300"
+  },
+  {
+   "name": "ai-gateway",
+   "canvas": "272x295"
+  },
+  {
+   "name": "api-endpoints",
+   "canvas": "960x487"
+  },
+  {
+   "name": "automate-threat-mitigation",
+   "canvas": "592x300"
+  },
+  {
+   "name": "azion-highlight",
+   "canvas": "170x128"
+  },
+  {
+   "name": "azion-rest-api",
+   "canvas": "366x176"
+  },
+  {
+   "name": "azion-to-akamai",
+   "canvas": "592x300"
+  },
+  {
+   "name": "azion-to-aws",
+   "canvas": "592x300"
+  },
+  {
+   "name": "azion-to-cloudflare",
+   "canvas": "592x300"
+  },
+  {
+   "name": "azion-to-fastly",
+   "canvas": "592x300"
+  },
+  {
+   "name": "azion-to-vercel",
+   "canvas": "592x300"
+  },
+  {
+   "name": "branches",
+   "canvas": "170x128"
+  },
+  {
+   "name": "build-applications",
+   "canvas": "592x300"
+  },
+  {
+   "name": "build-databases-from-code",
+   "canvas": "592x300"
+  },
+  {
+   "name": "combine-data-and-vector-search",
+   "canvas": "592x300"
+  },
+  {
+   "name": "content-and-media-delivery",
+   "canvas": "583x296"
+  },
+  {
+   "name": "content-and-media-delivery-globe",
+   "canvas": "625x317"
+  },
+  {
+   "name": "custom-allowed-rules",
+   "canvas": "592x300"
+  },
+  {
+   "name": "custom-rules-mitigation",
+   "canvas": "592x300"
+  },
+  {
+   "name": "ddos-protection",
+   "canvas": "186x286"
+  },
+  {
+   "name": "deploy-secure-mcp-server",
+   "canvas": "592x300"
+  },
+  {
+   "name": "detect-and-classify",
+   "canvas": "592x300"
+  },
+  {
+   "name": "distributed-apis",
+   "canvas": "592x300"
+  },
+  {
+   "name": "distributed-apis-tile",
+   "canvas": "414x148"
+  },
+  {
+   "name": "distributed-sql-for-resilient-global-reads",
+   "canvas": "592x300"
+  },
+  {
+   "name": "dns-protection",
+   "canvas": "592x300"
+  },
+  {
+   "name": "enable-owasp-protection-with-customizable-rules",
+   "canvas": "592x300"
+  },
+  {
+   "name": "fastest-path-to-live-website",
+   "canvas": "592x300"
+  },
+  {
+   "name": "global-network",
+   "canvas": "592x300"
+  },
+  {
+   "name": "implement-api-gateway-security",
+   "canvas": "592x300"
+  },
+  {
+   "name": "improve-application-performance-and-reliability",
+   "canvas": "592x300"
+  },
+  {
+   "name": "infrastructure-as-code",
+   "canvas": "667x338"
+  },
+  {
+   "name": "intent-to-policy",
+   "canvas": "592x300"
+  },
+  {
+   "name": "live-debugging",
+   "canvas": "592x300"
+  },
+  {
+   "name": "low-latency",
+   "canvas": "592x300"
+  },
+  {
+   "name": "mitigation-actions",
+   "canvas": "592x300"
+  },
+  {
+   "name": "modern-frontends",
+   "canvas": "592x300"
+  },
+  {
+   "name": "multi-format-optimization-with-automatic-detection",
+   "canvas": "592x300"
+  },
+  {
+   "name": "network-lists-rules-engine",
+   "canvas": "592x300"
+  },
+  {
+   "name": "no-idle-no-waste",
+   "canvas": "230x154"
+  },
+  {
+   "name": "personal-tokens",
+   "canvas": "170x128"
+  },
+  {
+   "name": "preview",
+   "canvas": "592x300"
+  },
+  {
+   "name": "profiles-per-application",
+   "canvas": "592x300"
+  },
+  {
+   "name": "programmable-security",
+   "canvas": "592x300"
+  },
+  {
+   "name": "protect-financial-applications",
+   "canvas": "592x300"
+  },
+  {
+   "name": "quick-start-with-templates",
+   "canvas": "360x165"
+  },
+  {
+   "name": "read-at-the-edge",
+   "canvas": "592x300"
+  },
+  {
+   "name": "real-time-metrics-error-rate",
+   "canvas": "366x193"
+  },
+  {
+   "name": "real-time-metrics-status-codes",
+   "canvas": "366x250"
+  },
+  {
+   "name": "replicated-reads",
+   "canvas": "592x300"
+  },
+  {
+   "name": "reputation-intelligence-for-enhanced-protection",
+   "canvas": "592x300"
+  },
+  {
+   "name": "request-inspection",
+   "canvas": "754x382"
+  },
+  {
+   "name": "retail-application-modernization",
+   "canvas": "592x300"
+  },
+  {
+   "name": "runtime",
+   "canvas": "592x300"
+  },
+  {
+   "name": "saas-platforms",
+   "canvas": "592x300"
+  },
+  {
+   "name": "stay-in-control",
+   "canvas": "230x154"
+  },
+  {
+   "name": "stream-security-events-for-investigation-and-response",
+   "canvas": "592x300"
+  },
+  {
+   "name": "url-based-transformations-without-api-complexity",
+   "canvas": "592x300"
+  },
+  {
+   "name": "usage-chart",
+   "canvas": "170x128"
+  },
+  {
+   "name": "white-gloves-when-it-matters",
+   "canvas": "230x154"
+  }
+ ]
+}

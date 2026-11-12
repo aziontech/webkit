@@ -36,6 +36,10 @@
 | `tabs` | `FeatureTabsTab[]` | `[]` | false | The features, in order, at most three; each is `{ title, description, illustration, illustrationLabel? }` where `illustration` is a registry name and `illustrationLabel` its accessible name. |
 | `primaryAction` | `FeatureTabsAction` | `undefined` | false | Small link under the frame; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 
+## Assets
+
+- Illustrations: every valid name is in [illustrations.md](../foundations/illustrations.md) (MCP `list_assets({ kind: "illustrations" })`). An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console.
+
 ## States
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`

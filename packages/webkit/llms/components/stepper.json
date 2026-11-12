@@ -54,6 +54,7 @@
   }
  ],
  "styleSeam": false,
+ "assets": [],
  "examples": [],
  "docs": "components/stepper.md"
 }

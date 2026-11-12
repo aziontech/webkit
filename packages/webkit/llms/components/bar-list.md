@@ -30,7 +30,7 @@
 
 - [chart](chart.md) — horizontal bars with an axis, for comparing several series per category.
 - [donut-chart](donut-chart.md) — the share view of the same breakdown when the parts sum to a whole.
-- chart-card` — the box a BarList sits in on a dashboard.
+- [chart-card](chart-card.md) — the box a BarList sits in on a dashboard.
 
 ## Props
 

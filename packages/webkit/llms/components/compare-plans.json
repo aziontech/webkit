@@ -94,6 +94,7 @@
  "events": [],
  "slots": [],
  "styleSeam": false,
+ "assets": [],
  "examples": [
   {
    "name": "Band links",

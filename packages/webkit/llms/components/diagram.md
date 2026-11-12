@@ -46,6 +46,10 @@
 | `spec` | `DiagramSpec` | `undefined` | false | The nodes, their layout and the edges between them, for a diagram the library does not have. |
 | `ariaLabel` | `string` | `''` | false | Accessible description of the whole diagram; empty uses the description the spec carries. |
 
+## Assets
+
+- Diagrams: every valid name is in [diagrams.md](../foundations/diagrams.md) (MCP `list_assets({ kind: "diagrams" })`). An unknown name draws nothing.
+
 ## States
 
 - **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches`, and any row nested inside a tree (a branch that is itself a row), stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.

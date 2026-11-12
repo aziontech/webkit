@@ -48,6 +48,10 @@
 | --- | --- | --- |
 | `default` | — | The prompt itself: one or more sentences of literal text. Also the string the copy control carries. |
 
+## Assets
+
+- Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
 ## States
 
 - Visual states: `default`, `focus-visible` (on the `line` shape, which is a scroll container)

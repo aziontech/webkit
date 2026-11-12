@@ -1,0 +1,244 @@
+{
+ "items": [
+  {
+   "name": "agibank",
+   "label": "Agibank"
+  },
+  {
+   "name": "america-movil",
+   "label": "América Móvil"
+  },
+  {
+   "name": "angular",
+   "label": "Angular"
+  },
+  {
+   "name": "anthropic",
+   "label": "Anthropic"
+  },
+  {
+   "name": "astro",
+   "label": "Astro"
+  },
+  {
+   "name": "aws",
+   "label": "AWS"
+  },
+  {
+   "name": "axur",
+   "label": "Axur"
+  },
+  {
+   "name": "azure",
+   "label": "Azure"
+  },
+  {
+   "name": "caixa",
+   "label": "Caixa"
+  },
+  {
+   "name": "coca-cola",
+   "label": "Coca-Cola"
+  },
+  {
+   "name": "contabilizei",
+   "label": "Contabilizei"
+  },
+  {
+   "name": "dafiti",
+   "label": "Dafiti"
+  },
+  {
+   "name": "docusaurus",
+   "label": "Docusaurus"
+  },
+  {
+   "name": "drizzle",
+   "label": "Drizzle"
+  },
+  {
+   "name": "elastic",
+   "label": "Elastic"
+  },
+  {
+   "name": "eleventy",
+   "label": "Eleventy"
+  },
+  {
+   "name": "equinix",
+   "label": "Equinix"
+  },
+  {
+   "name": "exame",
+   "label": "Exame"
+  },
+  {
+   "name": "forrester",
+   "label": "Forrester"
+  },
+  {
+   "name": "fourbank",
+   "label": "Fourbank"
+  },
+  {
+   "name": "frost-and-sullivan",
+   "label": "Frost & Sullivan"
+  },
+  {
+   "name": "g2",
+   "label": "G2"
+  },
+  {
+   "name": "gartner",
+   "label": "Gartner"
+  },
+  {
+   "name": "gatsby",
+   "label": "Gatsby"
+  },
+  {
+   "name": "gcp",
+   "label": "Google Cloud"
+  },
+  {
+   "name": "gigaom",
+   "label": "GigaOm"
+  },
+  {
+   "name": "github",
+   "label": "GitHub"
+  },
+  {
+   "name": "global-fashion-group",
+   "label": "Global Fashion Group"
+  },
+  {
+   "name": "gpa",
+   "label": "GPA"
+  },
+  {
+   "name": "grafana",
+   "label": "Grafana"
+  },
+  {
+   "name": "graphql",
+   "label": "GraphQL"
+  },
+  {
+   "name": "groq",
+   "label": "Groq"
+  },
+  {
+   "name": "herospark",
+   "label": "HeroSpark"
+  },
+  {
+   "name": "hexo",
+   "label": "Hexo"
+  },
+  {
+   "name": "hono",
+   "label": "Hono"
+  },
+  {
+   "name": "hugo",
+   "label": "Hugo"
+  },
+  {
+   "name": "itau",
+   "label": "Itaú"
+  },
+  {
+   "name": "jekyll",
+   "label": "Jekyll"
+  },
+  {
+   "name": "kafka",
+   "label": "Kafka"
+  },
+  {
+   "name": "madeiramadeira",
+   "label": "MadeiraMadeira"
+  },
+  {
+   "name": "magalu",
+   "label": "Magalu"
+  },
+  {
+   "name": "netshoes",
+   "label": "Netshoes"
+  },
+  {
+   "name": "nextjs",
+   "label": "Next.js"
+  },
+  {
+   "name": "nodejs",
+   "label": "Node.js"
+  },
+  {
+   "name": "nuxt",
+   "label": "Nuxt"
+  },
+  {
+   "name": "nzn",
+   "label": "NZN"
+  },
+  {
+   "name": "openai",
+   "label": "OpenAI"
+  },
+  {
+   "name": "preact",
+   "label": "Preact"
+  },
+  {
+   "name": "prime-video",
+   "label": "Prime Video"
+  },
+  {
+   "name": "qwik",
+   "label": "Qwik"
+  },
+  {
+   "name": "radware",
+   "label": "Radware"
+  },
+  {
+   "name": "react",
+   "label": "React"
+  },
+  {
+   "name": "remix",
+   "label": "Remix"
+  },
+  {
+   "name": "renner",
+   "label": "Renner"
+  },
+  {
+   "name": "sqlite",
+   "label": "SQLite"
+  },
+  {
+   "name": "terraform",
+   "label": "Terraform"
+  },
+  {
+   "name": "vite",
+   "label": "Vite"
+  },
+  {
+   "name": "vitepress",
+   "label": "VitePress"
+  },
+  {
+   "name": "vue",
+   "label": "Vue"
+  },
+  {
+   "name": "workers-cloudflare",
+   "label": "Cloudflare Workers"
+  }
+ ]
+}
