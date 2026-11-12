@@ -273,6 +273,32 @@ split view or a card these change:
   `StatTile` and `Table` (`@container/table`) are containers: `@md:` utilities in your own markup
   inside them follow that box. A `Card` used as a shrink-to-fit flex item now needs a width
   (`flex-1`, `w-full` or a grid track).
+- **Container sizes are the theme's.** The theme now declares its `--container-*` scale in
+  `@theme`, so the container variants in your own markup (`@sm:` … `@7xl:`, `@max-sm:` …, named
+  ones such as `@md/card:`) switch at the theme sizes instead of Tailwind's defaults. Before, the
+  variables existed but Tailwind compiled the variants from its own scale. `@3xs` is unchanged;
+  every other step now switches later:
+
+  | Variant | Was (Tailwind default) | Now (theme) | Variant | Was     | Now     |
+  | ------- | ---------------------- | ----------- | ------- | ------- | ------- |
+  | `@2xs`  | 288 px                 | 300 px      | `@2xl`  | 672 px  | 752 px  |
+  | `@xs`   | 320 px                 | 348 px      | `@3xl`  | 768 px  | 876 px  |
+  | `@sm`   | 384 px                 | 408 px      | `@4xl`  | 896 px  | 1024 px |
+  | `@md`   | 448 px                 | 472 px      | `@5xl`  | 1024 px | 1192 px |
+  | `@lg`   | 512 px                 | 552 px      | `@6xl`  | 1152 px | 1388 px |
+  | `@xl`   | 576 px                 | 644 px      | `@7xl`  | 1280 px | 1620 px |
+
+  Up to `@xl` the shift is at most 68 px, but it can still cross a phone: a 390 px phone gives a
+  padded box about 326 px wide, which is past the old `@xs` (320) and short of the new one (348),
+  so `@2xs:` is the step that keeps a row on that phone. From `@2xl` up, check each use: a step that has to
+  happen inside a page column (at most 1388 px on the site, 1620 px in the console) may now never
+  happen. Move it to the nearest step that still fits (`@6xl:` → `@5xl:`, `@7xl:` → `@6xl:`)
+  rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
+  `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
+  `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
+  `@5xl` and `Cards` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
+  `platform/detail/details-page`) sit side by side from `@4xl` (1024 px), so a 1280 px console
+  window stacks them.
 - **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
   every width, as before. Set `stackable` to render each row as a card of label / value lines
   when the table is narrower than `--container-lg` (552 px); the column headers stay for screen
@@ -466,6 +492,6 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 
 ## 5. Unchanged
 
-Theme tokens (apart from the sans stack above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
+Theme tokens (apart from the sans stack and the container variants above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
 (`@aziontech/webkit/<name>`) are the same. The AI bundle (`skills/`, `rules/`) is updated by
 `npx @aziontech/webkit sync`.

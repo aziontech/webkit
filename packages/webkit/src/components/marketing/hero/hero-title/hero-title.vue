@@ -103,7 +103,7 @@
       class="@container mt-(--spacing-xs) w-full"
     >
       <div
-        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @xs:flex-row @xs:flex-wrap @xs:items-center @xs:group-data-[centered]:justify-center max-md:@xs:group-data-[mobile-centered]:justify-center @xs:[&>*]:w-auto"
+        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @2xs:flex-row @2xs:flex-wrap @2xs:items-center @2xs:group-data-[centered]:justify-center max-md:@2xs:group-data-[mobile-centered]:justify-center @2xs:[&>*]:w-auto"
       >
         <slot name="actions" />
       </div>

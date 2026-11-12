@@ -19,7 +19,7 @@
 <template>
   <div
     v-if="node.kind === 'pill'"
-    class="flex items-center @6xl:h-(--size-20)"
+    class="flex items-center @5xl:h-(--size-20)"
   >
     <span
       :data-diagram-node="node.key"
@@ -59,7 +59,7 @@
   <div
     v-else-if="node.kind === 'app'"
     :data-diagram-node="node.key"
-    class="flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) [mask-image:linear-gradient(to_bottom,black_60%,transparent)] @6xl:w-(--size-44)"
+    class="flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) [mask-image:linear-gradient(to_bottom,black_60%,transparent)] @5xl:w-(--size-44)"
   >
     <span class="flex gap-(--spacing-xxs)">
       <span class="size-(--size-2) rounded-full bg-(--bg-placeholder)" />
@@ -82,7 +82,7 @@
     v-else-if="node.kind === 'item'"
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
-    class="relative flex w-full max-w-(--size-72) items-center gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs) @6xl:w-(--size-72) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+    class="relative flex w-full max-w-(--size-72) items-center gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs) @5xl:w-(--size-72) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
   >
     <span
       v-if="node.mark"
@@ -124,7 +124,7 @@
     v-else
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
-    class="relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) @6xl:w-(--size-60) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+    class="relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) @5xl:w-(--size-60) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
   >
     <span
       class="flex w-full min-w-0 items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"

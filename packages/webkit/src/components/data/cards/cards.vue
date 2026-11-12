@@ -127,7 +127,7 @@
       v-if="loading"
       :aria-label="ariaLabel || t('cards.label')"
       :data-testid="`${testId}__list`"
-      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @7xl/cards:grid-cols-4"
+      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @6xl/cards:grid-cols-4"
     >
       <li
         v-for="n in SKELETONS"
@@ -151,7 +151,7 @@
       v-else-if="items.length > 0"
       :aria-label="ariaLabel || t('cards.label')"
       :data-testid="`${testId}__list`"
-      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @7xl/cards:grid-cols-4"
+      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @6xl/cards:grid-cols-4"
     >
       <li
         v-for="(item, index) in items"

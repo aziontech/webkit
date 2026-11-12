@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 9d223a6f0406f8c6f7f6e04f6714419cdc13ea5df8a381cd2d2a47488700acab
+checksum: 5d3a3b3d167eb09e935586efafff8f2dbeb2dced11782b5ceeb2e631eb1072ec
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -132,7 +132,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 
 ## Responsive
 
-- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (448 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
+- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (472 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
 - Narrow (≤ 640 px or a narrow container): one column; labels and descriptions wrap, never truncate.
 - Touch: nothing is interactive.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; long unbroken words break.

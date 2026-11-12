@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4bc69a1c6450d29c5012f48f2efb0e67e97dd3f5b1b1b84e77b607b380fef71f
+checksum: 8b2447bc7f7045eab3cdd272f5f63a626297e0aa72afa7a0b11337bcb4b82095
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # AttributeEditor — Component Spec
@@ -185,7 +185,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 ## Responsive
 
-- Container queries: `@container/attribute-editor` on the root; at `@md` (448 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
+- Container queries: `@container/attribute-editor` on the root; at `@md` (472 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
 - Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
 - Touch: buttons follow `size`; nothing depends on hover (the Remove tooltip repeats its accessible name).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

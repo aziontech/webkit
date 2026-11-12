@@ -24,7 +24,10 @@ Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes")
   overlays turning into sheets, the page boundary.
 - **Container sizes** (`@container`, `@sm:` 408, `@md:` 472, `@lg:` 552, `@xl:` 644 px …, the
   `--container-*` scale) are for everything that can live in a panel: a band inside a drawer, a
-  split view or a card lays out for its box, not the window.
+  split view or a card lays out for its box, not the window. The variants compile from the theme
+  scale, not Tailwind's defaults (`@2xl:` is 752 px, not 672), so write the variant and never a raw
+  `@min-[47rem]:` for a size the scale has. A step that must happen inside a page column uses at
+  most `@5xl:` on the site (the column caps at 1388 px) and `@6xl:` in the console (1620 px).
 
 These components are box-aware and need nothing from the page: `Table` (scrolls sideways
 inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
