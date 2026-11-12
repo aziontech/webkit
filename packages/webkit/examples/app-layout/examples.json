@@ -8,6 +8,11 @@
       "file": "default.vue"
     },
     {
+      "name": "FullHeightPage",
+      "summary": "Breadcrumbs over a page body that fills the screen: the main is min-h-full and centres an empty state in the height left under the breadcrumbs, with no scroll.",
+      "file": "full-height-page.vue"
+    },
+    {
       "name": "SplitPanelSide",
       "summary": "A list whose selected row opens the split panel beside it. Its position and size are kept under a storage key, so the reader finds the panel where they left it after a reload.",
       "file": "split-panel-side.vue"

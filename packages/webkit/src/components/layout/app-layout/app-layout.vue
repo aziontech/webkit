@@ -379,16 +379,21 @@
           </div>
           <div
             :data-testid="`${testId}__content`"
-            class="min-h-0 min-w-0 flex-1 overflow-auto"
+            class="flex min-h-0 min-w-0 flex-1 flex-col overflow-auto"
           >
             <div
               v-if="$slots['breadcrumbs']"
               :data-testid="`${testId}__breadcrumbs`"
-              class="px-(--spacing-md) pt-(--spacing-md)"
+              class="shrink-0 px-(--spacing-md) pt-(--spacing-md)"
             >
               <slot name="breadcrumbs" />
             </div>
-            <slot />
+            <div
+              :data-testid="`${testId}__body`"
+              class="min-w-0 flex-1"
+            >
+              <slot />
+            </div>
           </div>
 
           <section
