@@ -1053,7 +1053,7 @@
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >
       <header class="flex items-center gap-(--layout-group-gap)">
-        <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+        <div class="flex min-w-0 grow flex-wrap items-center gap-(--spacing-xs)">
           <div class="flex shrink-0 items-center">
             <DateRangePicker
               v-model="range"
