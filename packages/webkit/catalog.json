@@ -26415,7 +26415,7 @@
     "media-split-band",
     "media-split-stack"
    ],
-   "count": 60,
+   "count": 68,
    "file": "catalog/assets/illustrations.json"
   },
   "diagrams": {
@@ -26486,7 +26486,7 @@
     "tag",
     "topic"
    ],
-   "count": 493,
+   "count": 495,
    "file": "catalog/assets/icons.json"
   }
  },

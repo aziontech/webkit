@@ -12,14 +12,14 @@
         'Azion bills for actual consumption. You pay for what your applications use, not for infrastructure sitting idle waiting for demand.'
     },
     {
-      illustration: 'stay-in-control',
+      illustration: 'traffic-and-cost-bar-chart',
       scale: 1,
       title: 'Stay in control',
       description:
         'Scale without losing control of your bill. Track consumption, set spending limits, and keep costs predictable as your applications grow.'
     },
     {
-      illustration: 'white-gloves-when-it-matters',
+      illustration: 'chat-and-headset-tiles',
       scale: 0.8,
       title: 'White-glove when it matters',
       description:

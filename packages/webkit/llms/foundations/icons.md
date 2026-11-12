@@ -4,7 +4,7 @@
 
 A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-493 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+495 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [ButtonHighlight](../components/button-highlight.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FileDropzone](../components/file-dropzone.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [MiniButton](../components/mini-button.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md), [Topic](../components/topic.md).
 
@@ -125,6 +125,7 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 | `ai ai-mistral` | azionicons | brand, logo |
 | `ai ai-network-lists` | azionicons | network, lists, connectivity |
 | `ai ai-next` | azionicons | brand, logo |
+| `ai ai-nitro` | azionicons | server, framework, unjs, brand, logo |
 | `ai ai-nuxt` | azionicons | brand, logo |
 | `ai ai-observe-pillar` | azionicons | observe, pillar, observability, monitoring, product family |
 | `ai ai-open` | azionicons | openai, brand, logo |
@@ -150,6 +151,7 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 | `ai ai-security-team` | azionicons | security, team, protection, shield |
 | `ai ai-sparkles` | azionicons | ai, magic, new, generate |
 | `ai ai-sql` | azionicons | database, query |
+| `ai ai-stencil` | azionicons | web components, compiler, framework, brand, logo |
 | `ai ai-store` | azionicons | shop, marketplace |
 | `ai ai-svelte` | azionicons | brand, logo |
 | `ai ai-technical-account` | azionicons | technical, account |

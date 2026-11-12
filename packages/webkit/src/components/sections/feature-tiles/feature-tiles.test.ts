@@ -41,12 +41,12 @@ const illustratedTiles = [
     description: 'Azion bills for actual consumption.'
   },
   {
-    illustration: 'stay-in-control',
+    illustration: 'traffic-and-cost-bar-chart',
     title: 'Stay in control.',
     description: 'Scale without losing control of your bill.'
   },
   {
-    illustration: 'white-gloves-when-it-matters',
+    illustration: 'chat-and-headset-tiles',
     scale: 0.8,
     title: 'White-glove when it matters.',
     description: 'Self-service when you want it, experts when you need them.'

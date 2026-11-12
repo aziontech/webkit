@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 
@@ -532,6 +533,27 @@ test('list_assets lists every registered illustration, the shipped tiles include
   assert.equal(res.items.find((i) => i.name === 'runtime').canvas, '592x300')
 })
 
+test('list_assets marks a renamed illustration deprecated and names its replacement', () => {
+  const items = listAssets(catalog, { kind: 'illustrations' }).items
+  const byName = new Map(items.map((i) => [i.name, i]))
+  for (const [retired, current] of [
+    ['saas-platforms', 'azion-to-commerce-tiles'],
+    ['enable-owasp-protection-with-customizable-rules', 'waf-threat-families-panel'],
+    ['stream-security-events-for-investigation-and-response', 'data-stream-destinations-map'],
+    ['build-databases-from-code', 'sql-sdk-code-cards'],
+    ['distributed-sql-for-resilient-global-reads', 'globe-with-sql-nodes'],
+    ['reputation-intelligence-for-enhanced-protection', 'reputation-rings-hub'],
+    ['white-gloves-when-it-matters', 'chat-and-headset-tiles'],
+    ['stay-in-control', 'traffic-and-cost-bar-chart']
+  ]) {
+    const old = byName.get(retired)
+    assert.equal(old?.deprecated, true, retired)
+    assert.equal(old.replacedBy, current, retired)
+    assert.equal(old.canvas, byName.get(current)?.canvas, retired)
+    assert.equal(byName.get(current).deprecated, undefined, current)
+  }
+})
+
 test('list_assets filters by name, label and keyword', () => {
   assert.deepEqual(
     listAssets(catalog, { kind: 'brandMarks', query: 'magalu' }).items.map((i) => i.name),
@@ -556,6 +578,29 @@ test('every icon carries search keywords', () => {
   const icons = listAssets(catalog, { kind: 'icons' }).items
   const bare = icons.filter((i) => !i.keywords?.length).map((i) => i.class)
   assert.deepEqual(bare, [])
+})
+
+test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
+  const icons = new Map(listAssets(catalog, { kind: 'icons' }).items.map((i) => [i.class, i]))
+  for (const [cls, keyword] of [
+    ['ai ai-nitro', 'server'],
+    ['ai ai-stencil', 'web components']
+  ]) {
+    const icon = icons.get(cls)
+    assert.ok(icon, cls)
+    assert.equal(icon.set, 'azionicons', cls)
+    assert.ok(icon.keywords.includes('brand'), cls)
+    assert.ok(icon.keywords.includes(keyword), cls)
+    const raw = readFileSync(
+      new URL(`../../../icons/src/svg-raw/ai/${icon.name}.svg`, import.meta.url),
+      'utf-8'
+    )
+    assert.match(raw, /<svg[^>]*fill="currentColor"/, cls)
+    assert.doesNotMatch(raw, /#[0-9a-f]{3,6}\b|gradient|<mask|<filter|stroke=/i, cls)
+    assert.equal(raw.match(/<path\b/g).length, 1, cls)
+  }
+  assert.ok(!icons.has('ai-cor ai-nitro'))
+  assert.ok(!icons.has('ai-cor ai-stencil'))
 })
 
 test('get_component points a consuming component at its asset list', () => {

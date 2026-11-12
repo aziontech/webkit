@@ -296,8 +296,12 @@ function assetUsage(kind) {
 function assetRows(kind, items) {
   if (kind === 'illustrations')
     return table(
-      ['Name', 'Canvas'],
-      items.map((i) => [`\`${i.name}\``, i.canvas ?? ''])
+      ['Name', 'Canvas', 'Status'],
+      items.map((i) => [
+        `\`${i.name}\``,
+        i.canvas ?? '',
+        i.deprecated ? `Deprecated: use \`${i.replacedBy}\`. Removed in 7.0.` : ''
+      ])
     )
   if (kind === 'icons')
     return table(
@@ -329,7 +333,7 @@ function assetPages(catalog) {
       summary: firstSentence(meta.summary),
       compact: [
         ...intro,
-        `## Names\n\n${items.map((i) => `\`${i.class ?? i.name}\``).join(' · ')}\n\nDescriptions${kind === 'icons' ? ' and keywords' : ''}: [${path}](${path.split('/').pop()}).`
+        `## Names\n\n${items.map((i) => `\`${i.class ?? i.name}\`${i.deprecated ? ` (deprecated, use \`${i.replacedBy}\`)` : ''}`).join(' · ')}\n\nDescriptions${kind === 'icons' ? ' and keywords' : ''}: [${path}](${path.split('/').pop()}).`
       ],
       body: [...intro, '## Usage', assetUsage(kind), '## Names', assetRows(kind, items)]
     }

@@ -17,7 +17,7 @@
 
 | Font           | Prefix | Icons | Description                                  |
 | -------------- | ------ | ----- | -------------------------------------------- |
-| **azionicons** | `ai`   | 141   | Azion product, platform, and ecosystem icons |
+| **azionicons** | `ai`   | 143   | Azion product, platform, and ecosystem icons |
 | **primeicons** | `pi`   | 317   | General-purpose UI icons (PrimeIcons set)    |
 
 Icons are distributed as **woff2 icon fonts** with matching CSS class utilities, making them framework-agnostic — usable in plain HTML, Vue, React, or any web project.
@@ -217,7 +217,7 @@ The same icons are also available as inline SVG strings at [`@aziontech/icons/co
 </script>
 ```
 
-> Colored icons are **not** recolored by `color` / `currentColor` — that is the whole point. For a themeable, single-color version of a framework logo, use the monochrome font icon instead (`ai ai-react`, `ai ai-vue`, `ai ai-next`, `ai ai-svelte`, …).
+> Colored icons are **not** recolored by `color` / `currentColor` — that is the whole point. For a themeable, single-color version of a framework logo, use the monochrome font icon instead (`ai ai-react`, `ai ai-vue`, `ai ai-next`, `ai ai-svelte`, `ai ai-nitro`, `ai ai-stencil`, …).
 
 Available colored icons: `ai-cor ai-angular`, `ai-cor ai-astro`, `ai-cor ai-azuredevops`, `ai-cor ai-bitbucket`, `ai-cor ai-claude`, `ai-cor ai-cursor`, `ai-cor ai-deepseek`, `ai-cor ai-discord`, `ai-cor ai-flutter`, `ai-cor ai-gemini`, `ai-cor ai-gitlab`, `ai-cor ai-google`, `ai-cor ai-graphql`, `ai-cor ai-grok`, `ai-cor ai-html`, `ai-cor ai-js`, `ai-cor ai-kotlin`, `ai-cor ai-meta`, `ai-cor ai-microsoft-copilot`, `ai-cor ai-mistral`, `ai-cor ai-next`, `ai-cor ai-nuxt`, `ai-cor ai-open`, `ai-cor ai-perplexity`, `ai-cor ai-qwen`, `ai-cor ai-react`, `ai-cor ai-redwood`, `ai-cor ai-solidjs`, `ai-cor ai-svelte`, `ai-cor ai-terraform`, `ai-cor ai-ts`, `ai-cor ai-vue`, `ai-cor ai-windsurf`, `ai-cor ai-x`, `ai-cor ai-youtube`.
 
@@ -332,7 +332,7 @@ Here's how that your SVG needs to looks in code:
 │   └── README.md
 ├── src/
 │   └── svg-raw/
-│       ├── ai/               # Azion SVG source files (141 icons, monochrome → font)
+│       ├── ai/               # Azion SVG source files (143 icons, monochrome → font)
 │       ├── ai-cor/           # Azion colored brand icons (inline SVG, NOT fonted)
 │       └── pi/               # PrimeIcons SVG source files (317 icons → font)
 ├── scripts/
@@ -469,3 +469,19 @@ npm run publish
 ## License
 
 [MIT](LICENSE) © 2026 Azion Technologies
+
+### Third-party marks
+
+Brand glyphs are trademarks of their owners and are included only to refer to their products. Where each one comes from, and under which terms, is recorded in `packages/webkit/src/assets/logos/SOURCES.md` in the WebKit repository.
+
+- `ai ai-nitro` is drawn from the Nitro icon (https://github.com/nitrojs/nitro), MIT License:
+
+  > Copyright (c) Pooya Parsa <pooya@pi0.io> and Nitro contributors
+  >
+  > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  >
+  > The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  >
+  > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- `ai ai-stencil` is the Stencil logo from Ionicons (https://github.com/ionic-team/ionicons), MIT License, Copyright (c) 2015-present Ionic (http://ionic.io/), under the same permission notice and disclaimer as above.
