@@ -14,7 +14,8 @@
 
 ## Do
 
-- ariaLabel` is required and is the only accessible name; describe the action ("Delete domain"), not the glyph ("Trash").
+- Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
 - Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
@@ -39,7 +40,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `icon` | `string` | `—` | true | PrimeIcons class for the leading/trailing icon. |
-| `ariaLabel` | `string` | `—` | true | Accessible name for icon-only controls. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
@@ -72,6 +73,7 @@
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Right-to-left

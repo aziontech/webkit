@@ -27,8 +27,8 @@
   interface Props {
     /** PrimeIcons class for the icon. */
     icon: string
-    /** Accessible name for icon-only controls. */
-    ariaLabel: string
+    /** Accessible name for the icon-only control; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the button. */
+    ariaLabel?: string
     /** Visual variant. */
     kind?: IconButtonKind
     /** Size token; affects height and typography. */
@@ -48,6 +48,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    ariaLabel: '',
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -165,7 +166,7 @@
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="rootClasses"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || undefined"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :tabindex="isInactive ? -1 : undefined"
@@ -225,7 +226,7 @@
     v-bind="forwardedAttrs"
     type="button"
     :disabled="disabled"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || undefined"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :data-disabled="disabled ? '' : undefined"

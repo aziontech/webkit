@@ -1,3 +1,4 @@
+import accessibleName from './rules/accessible-name.js'
 import authoringStandards from './rules/authoring-standards.js'
 import containerNeedsWidth from './rules/container-needs-width.js'
 import headerSearchTrigger from './rules/header-search-trigger.js'
@@ -39,7 +40,8 @@ const rules = {
   'no-output-in-command': noOutputInCommand,
   'no-root-relative-asset': noRootRelativeAsset,
   'menu-node-href': menuNodeHref,
-  'no-gap-after-closing-section': noGapAfterClosingSection
+  'no-gap-after-closing-section': noGapAfterClosingSection,
+  'accessible-name': accessibleName
 }
 
 const FILES = [
@@ -91,7 +93,8 @@ const RECOMMENDED = {
   'no-output-in-command': 'warn',
   'no-root-relative-asset': 'error',
   'menu-node-href': 'warn',
-  'no-gap-after-closing-section': 'error'
+  'no-gap-after-closing-section': 'error',
+  'accessible-name': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze([

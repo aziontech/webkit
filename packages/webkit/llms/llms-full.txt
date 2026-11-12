@@ -1078,9 +1078,10 @@ truncating text `min-w-0`.
 Webkit components are accessible by construction: drop in a `Dialog` or `Table` and its
 role, keyboard model, focus management, and reduced-motion fallback come with it. Anything
 you build around them — custom components, views, composed overlays — must hold the same
-contract. In this project accessibility is **convention + code review**; the one part that
-is mechanically enforced is color: raw colors (including focus rings) are blocked by the
-stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
+contract. In this project accessibility is **convention + code review**; two parts are
+mechanically enforced: color — raw colors (including focus rings) are blocked by the
+stylelint config and the `webkit/no-hardcoded-color` ESLint rule — and the accessible name of
+an icon-only control, which `webkit/accessible-name` requires on every `IconButton`.
 
 ## Do
 
@@ -1089,8 +1090,15 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Mirror ARIA state with the element's `data-*` state (`aria-expanded` with
   `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with
   `data-invalid`).
+- Name a webkit control in the template with the **kebab attribute**: `aria-label="Delete domain"`
+  (`:aria-label` when it changes, `aria-labelledby` when visible text already names it). Vue maps
+  it onto the component's `ariaLabel` prop. An `IconButton` (or `ButtonGroup`) with no name is
+  flagged by `webkit/accessible-name`.
 - On your own components, name the accessible-name prop **`ariaLabel`** (prefixed
-  `xAriaLabel` for sub-parts) and bind it to the `aria-label` attribute internally.
+  `xAriaLabel` for sub-parts), make it **optional with a `''` default**, and bind it to the
+  `aria-label` attribute internally (`ariaLabel || undefined`). vue-tsc does not camelize
+  `aria-*` attributes onto props, so a required `ariaLabel` makes `aria-label="…"` fail to
+  type-check in a fresh create-vue app; require the name with a lint rule or a test instead.
 - Give every interactive piece a **keyboard map** and implement exactly that
   (dialog: `Esc` closes, `Tab` is trapped; menu: arrows move, `Enter` selects,
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
@@ -1122,6 +1130,9 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Never open an overlay without trapping focus and restoring it to the trigger on close.
 - Never ship a motion class without its `motion-reduce:` fallback.
 - Never name the accessible-name prop `aria-label` — use `ariaLabel`.
+- Never write the camelCase `ariaLabel="…"` attribute in a template — write `aria-label="…"`.
+- Never add `vueCompilerOptions.htmlAttributes` to a tsconfig to make `aria-label` type-check;
+  the webkit types already accept it.
 - Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
 - Never rely on color alone for a status: pair it with a label or an icon with a name.
 
@@ -13148,7 +13159,8 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Do
 
-- ariaLabel` is required and is the only accessible name; describe the action ("Delete domain"), not the glyph ("Trash").
+- Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
 - Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
@@ -13173,7 +13185,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `icon` | `string` | `—` | true | PrimeIcons class for the leading/trailing icon. |
-| `ariaLabel` | `string` | `—` | true | Accessible name for icon-only controls. |
+| `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
@@ -13206,6 +13218,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Right-to-left
@@ -22613,6 +22626,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Give `Table.CellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `WebkitProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.
 - Drive loading through the `loading` prop (skeleton rows, `aria-busy`) and keep the `empty` slot for no-data copy — do not swap the table for a spinner.
 - On a phone a console list keeps its grid and scrolls sideways (the default). Set `stackable` only for a short list read one record at a time on a narrow, phone-first surface (a marketing listing, a summary in a side panel), where a card per row reads better than a scroll; never on a resource index, a log or a list compared across columns.
+- Type the rows, not the slot: pass a typed `data` (`ref<Domain[]>([])`, or a literal array) and destructure `#cell-name="{ row, value }"` — `row` is a `Domain` and `value` is `Domain['name']`. Keep a column's `id` equal to its `accessorKey` (or leave `id` out) so the typed `value` is the field the cell shows. Do not annotate the slot scope by hand or cast `row as Domain`; a wrong field (`row.nmae`) should be a type error.
 - Place `Table.Search`, `Table.Filter`, `Table.ColumnSelector`, `Table.Export` and `Table.RefreshButton` in the `toolbar` slot with no `v-model` wiring — they read the table from context. `Table.Search` and `Table.ColumnSelector` act on the TanStack instance, so they need data-driven mode.
 
 ## Don’t
@@ -22636,12 +22650,12 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | --- | --- | --- | --- | --- |
 | `maxHeight` | `string` | `''` | false | Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header). |
 | `bordered` | `boolean` | `false` | false | Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `bordered` / `:bordered="…"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected. |
-| `data` | `Record<string, unknown>[]` | `[]` | false | Data-driven mode: row records. |
+| `data` | `TRow[]` | `[]` | false | Data-driven mode: row records. |
 | `columns` | `TableColumn[]` | `[]` | false | Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack. |
 | `rowKey` | `string` | `'id'` | false | Field used as the stable row id (for selection). |
 | `enableSorting` | `boolean` | `false` | false | Enable sorting globally; per-column `enableSorting` overrides. |
 | `enableRowSelection` | `boolean` | `false` | false | Add a leading selection-checkbox column. |
-| `rowSelectable` | `(row: RowRecord) => boolean` | `undefined` | false | Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. |
+| `rowSelectable` | `(row: TRow) => boolean` | `undefined` | false | Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. |
 | `selectOnRowClick` | `boolean` | `false` | false | Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click. |
 | `headerKind` | `'default' \| 'compact'` | `'default'` | false | Header density (data-driven): `compact` shrinks the column-header row's height and padding. Forwarded to the `TableHeader`'s `kind`. |
 | `paginated` | `boolean` | `false` | false | Render a Pagination in the footer. |
@@ -22661,7 +22675,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `filterFields` | `FilterField[]` | `[]` | false | Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder. |
 | `state` | `TableStateSnapshot` | `undefined` | false | v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern. |
 | `initialState` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
-| `exportRows` | `(scope: 'filtered' \| 'all') => Record<string, unknown>[] \| Promise<Record<string, unknown>[]>` | `undefined` | false | Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download. |
+| `exportRows` | `(scope: 'filtered' \| 'all') => TRow[] \| Promise<TRow[]>` | `undefined` | false | Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download. |
 | `exportFilename` | `string` | `'export.csv'` | false | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
 | `stackable` | `boolean` | `false` | false | Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. |
 | `wrapLines` | `boolean` | `false` | false | Data-driven mode: cell text wraps onto several lines instead of truncating. |
@@ -22670,8 +22684,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `virtual` | `boolean` | `false` | false | Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. |
 | `estimateRowHeight` | `number` | `48` | false | Row height (px) assumed in `virtual` mode until a row is measured. |
 | `reorderable` | `boolean` | `false` | false | Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied. |
-| `rowReorderable` | `(row: Record<string, unknown>) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
-| `getSubRows` | `(row: Record<string, unknown>) => Record<string, unknown>[] \| undefined` | `undefined` | false | Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role="treegrid"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode. |
+| `rowReorderable` | `(row: TRow) => boolean` | `undefined` | false | With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys. |
+| `getSubRows` | `(row: TRow) => TRow[] \| undefined` | `undefined` | false | Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role="treegrid"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode. |
 | `expanded` | `ExpandedState` | `undefined` | false | v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed. |
 
 ## Events
@@ -22683,15 +22697,15 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `update:columnVisibility` | `value: VisibilityState` | v-model:columnVisibility. |
 | `update:globalFilter` | `value: string` | v-model:globalFilter. |
 | `update:pagination` | `value: PaginationState` | v-model:pagination. |
-| `row-click` | `(event: MouseEvent, row: Record<string, unknown>)` | Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record. |
+| `row-click` | `(event: MouseEvent, row: TRow)` | Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record. |
 | `update:filters` | `value: AppliedFilter[]` | v-model:filters. |
 | `update:state` | `value: TableStateSnapshot` | v-model:state; debounced so bursts of changes coalesce. |
 | `filter-apply` | `filters: AppliedFilter[]` | The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`. |
 | `filter-remove` | `filter: AppliedFilter` | One applied filter/chip was removed. |
 | `refresh` | `—` | Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches. |
-| `export` | `rows: Record<string, unknown>[]` | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
-| `update:data` | `value: Record<string, unknown>[]` | reorderable`: the records in their new order; bind `v-model:data`. |
-| `reorder` | `payload: { from: number; to: number; row: Record<string, unknown> }` | reorderable`: a row moved from index `from` to index `to` of `data`. |
+| `export` | `rows: TRow[]` | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
+| `update:data` | `value: TRow[]` | reorderable`: the records in their new order; bind `v-model:data`. |
+| `reorder` | `payload: { from: number; to: number; row: TRow }` | reorderable`: a row moved from index `from` to index `to` of `data`. |
 | `update:expanded` | `value: ExpandedState` | Tree rows: v-model:expanded, after a toggle by pointer or keyboard. |
 
 ## Slots

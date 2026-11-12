@@ -5,9 +5,10 @@
 Webkit components are accessible by construction: drop in a `Dialog` or `Table` and its
 role, keyboard model, focus management, and reduced-motion fallback come with it. Anything
 you build around them — custom components, views, composed overlays — must hold the same
-contract. In this project accessibility is **convention + code review**; the one part that
-is mechanically enforced is color: raw colors (including focus rings) are blocked by the
-stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
+contract. In this project accessibility is **convention + code review**; two parts are
+mechanically enforced: color — raw colors (including focus rings) are blocked by the
+stylelint config and the `webkit/no-hardcoded-color` ESLint rule — and the accessible name of
+an icon-only control, which `webkit/accessible-name` requires on every `IconButton`.
 
 ## Do
 
@@ -16,8 +17,15 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Mirror ARIA state with the element's `data-*` state (`aria-expanded` with
   `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with
   `data-invalid`).
+- Name a webkit control in the template with the **kebab attribute**: `aria-label="Delete domain"`
+  (`:aria-label` when it changes, `aria-labelledby` when visible text already names it). Vue maps
+  it onto the component's `ariaLabel` prop. An `IconButton` (or `ButtonGroup`) with no name is
+  flagged by `webkit/accessible-name`.
 - On your own components, name the accessible-name prop **`ariaLabel`** (prefixed
-  `xAriaLabel` for sub-parts) and bind it to the `aria-label` attribute internally.
+  `xAriaLabel` for sub-parts), make it **optional with a `''` default**, and bind it to the
+  `aria-label` attribute internally (`ariaLabel || undefined`). vue-tsc does not camelize
+  `aria-*` attributes onto props, so a required `ariaLabel` makes `aria-label="…"` fail to
+  type-check in a fresh create-vue app; require the name with a lint rule or a test instead.
 - Give every interactive piece a **keyboard map** and implement exactly that
   (dialog: `Esc` closes, `Tab` is trapped; menu: arrows move, `Enter` selects,
   `Esc` closes). Anything clickable must be reachable and operable by keyboard.
@@ -49,6 +57,9 @@ stylelint config and the `webkit/no-hardcoded-color` ESLint rule.
 - Never open an overlay without trapping focus and restoring it to the trigger on close.
 - Never ship a motion class without its `motion-reduce:` fallback.
 - Never name the accessible-name prop `aria-label` — use `ariaLabel`.
+- Never write the camelCase `ariaLabel="…"` attribute in a template — write `aria-label="…"`.
+- Never add `vueCompilerOptions.htmlAttributes` to a tsconfig to make `aria-label` type-check;
+  the webkit types already accept it.
 - Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
 - Never rely on color alone for a status: pair it with a label or an icon with a name.
 

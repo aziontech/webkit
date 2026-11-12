@@ -87,7 +87,9 @@ test('init advises the known-good vue-tsc in a TypeScript project without it', (
 test('init says nothing about vue-tsc in a JavaScript project', () => {
   const dir = makeProject({})
   try {
-    const plan = planInit(dir, { wireEntry: false })
+    const plan = planInit(dir, { wireEntry: false }).filter(
+      (a) => a.type === 'add-dep' || a.type === 'advise'
+    )
     assert.equal(
       plan.some((a) => JSON.stringify(a).includes('vue-tsc')),
       false

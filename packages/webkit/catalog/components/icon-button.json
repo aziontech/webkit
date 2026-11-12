@@ -17,7 +17,8 @@
   "split-button` — uses an IconButton as its chevron menu toggle."
  ],
  "bestPractices": [
-  "ariaLabel` is required and is the only accessible name; describe the action (\"Delete domain\"), not the glyph (\"Trash\").",
+  "Always name it with the kebab attribute `aria-label=\"Delete domain\"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action (\"Delete domain\"), not the glyph (\"Trash\"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.",
+  "The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label=\"…\"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.",
   "Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.",
   "Use `kind=\"transparent\"` in dense rows and toolbars; keep `primary` for a lone emphasized action.",
   "Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.",

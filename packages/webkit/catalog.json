@@ -3760,9 +3760,9 @@
     {
      "name": "ariaLabel",
      "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "Accessible name for icon-only controls."
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders."
     },
     {
      "name": "kind",
@@ -7801,7 +7801,7 @@
     },
     {
      "name": "data",
-     "type": "Record<string, unknown>[]",
+     "type": "TRow[]",
      "default": "[]",
      "required": "false",
      "doc": "Data-driven mode: row records."
@@ -7836,7 +7836,7 @@
     },
     {
      "name": "rowSelectable",
-     "type": "(row: RowRecord) => boolean",
+     "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
      "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
@@ -7976,7 +7976,7 @@
     },
     {
      "name": "exportRows",
-     "type": "(scope: 'filtered' | 'all') => Record<string, unknown>[] | Promise<Record<string, unknown>[]>",
+     "type": "(scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>",
      "default": "undefined",
      "required": "false",
      "doc": "Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download."
@@ -8039,14 +8039,14 @@
     },
     {
      "name": "rowReorderable",
-     "type": "(row: Record<string, unknown>) => boolean",
+     "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
      "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
     },
     {
      "name": "getSubRows",
-     "type": "(row: Record<string, unknown>) => Record<string, unknown>[] | undefined",
+     "type": "(row: TRow) => TRow[] | undefined",
      "default": "undefined",
      "required": "false",
      "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
@@ -8087,7 +8087,7 @@
     },
     {
      "name": "row-click",
-     "payload": "(event: MouseEvent, row: Record<string, unknown>)",
+     "payload": "(event: MouseEvent, row: TRow)",
      "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
     },
     {
@@ -8117,17 +8117,17 @@
     },
     {
      "name": "export",
-     "payload": "rows: Record<string, unknown>[]",
+     "payload": "rows: TRow[]",
      "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
     },
     {
      "name": "update:data",
-     "payload": "value: Record<string, unknown>[]",
+     "payload": "value: TRow[]",
      "notes": "reorderable`: the records in their new order; bind `v-model:data`."
     },
     {
      "name": "reorder",
-     "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
+     "payload": "payload: { from: number; to: number; row: TRow }",
      "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
     },
     {
@@ -8202,7 +8202,7 @@
     },
     {
      "name": "data",
-     "type": "Record<string, unknown>[]",
+     "type": "TRow[]",
      "default": "[]",
      "required": "false",
      "doc": "Data-driven mode: row records."
@@ -8237,7 +8237,7 @@
     },
     {
      "name": "rowSelectable",
-     "type": "(row: RowRecord) => boolean",
+     "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
      "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
@@ -8377,7 +8377,7 @@
     },
     {
      "name": "exportRows",
-     "type": "(scope: 'filtered' | 'all') => Record<string, unknown>[] | Promise<Record<string, unknown>[]>",
+     "type": "(scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>",
      "default": "undefined",
      "required": "false",
      "doc": "Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download."
@@ -8440,14 +8440,14 @@
     },
     {
      "name": "rowReorderable",
-     "type": "(row: Record<string, unknown>) => boolean",
+     "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
      "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
     },
     {
      "name": "getSubRows",
-     "type": "(row: Record<string, unknown>) => Record<string, unknown>[] | undefined",
+     "type": "(row: TRow) => TRow[] | undefined",
      "default": "undefined",
      "required": "false",
      "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
@@ -8488,7 +8488,7 @@
     },
     {
      "name": "row-click",
-     "payload": "(event: MouseEvent, row: Record<string, unknown>)",
+     "payload": "(event: MouseEvent, row: TRow)",
      "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
     },
     {
@@ -8518,17 +8518,17 @@
     },
     {
      "name": "export",
-     "payload": "rows: Record<string, unknown>[]",
+     "payload": "rows: TRow[]",
      "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
     },
     {
      "name": "update:data",
-     "payload": "value: Record<string, unknown>[]",
+     "payload": "value: TRow[]",
      "notes": "reorderable`: the records in their new order; bind `v-model:data`."
     },
     {
      "name": "reorder",
-     "payload": "payload: { from: number; to: number; row: Record<string, unknown> }",
+     "payload": "payload: { from: number; to: number; row: TRow }",
      "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
     },
     {

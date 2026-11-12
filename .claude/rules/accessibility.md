@@ -11,6 +11,7 @@ A component in this package is accessible **by construction**, not by the consum
 - Use the **native element** whose semantics match before reaching for `role` (`<button>`, `<a href>`, `<input>`); add `role` only when no native element fits.
 - ARIA state attributes mirror the component's `data-*` state (`aria-expanded` with `data-state="open"`, `aria-disabled` with `data-disabled`, `aria-invalid` with `data-invalid`).
 - Accessible name via **`ariaLabel`** prop (+ prefixed `xAriaLabel` for sub-parts) per [`prop-vocabulary.md`](./prop-vocabulary.md) — never `aria-label` as a raw prop name.
+- **The consumer writes the kebab attribute** — `aria-label="Delete domain"`, `:aria-label="label"` — in every spec `## Usage`, example, block and skill; never the camelCase `ariaLabel=` attribute. Vue maps it onto the `ariaLabel` prop at runtime, but vue-tsc does **not** camelize `aria-*` attributes onto props (its `htmlAttributes` default is `['aria-*']`), so the **`ariaLabel` prop is declared optional with a `''` default** and bound as `ariaLabel || undefined`. A required `ariaLabel` makes the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. Where the name is mandatory (an icon-only control), the requirement lives in the lint rule `webkit/accessible-name` (and axe in the component test), not in the prop type.
 
 ### Keyboard
 
@@ -36,11 +37,13 @@ A component in this package is accessible **by construction**, not by the consum
 - Do not open an overlay without trapping focus and restoring it to the trigger on close.
 - Do not ship a motion class without its `motion-reduce:` fallback.
 - Do not name the accessible-name prop `aria-label` — use `ariaLabel` (see [`prop-vocabulary.md`](./prop-vocabulary.md)).
+- Do not declare `ariaLabel` required, and do not teach the camelCase `ariaLabel=` attribute or a `vueCompilerOptions.htmlAttributes` override — consumers write `aria-label="…"`.
 
 ## Enforcement
 
 - **`eslint-plugin-vuejs-accessibility`** runs in the flat config ([`eslint.config.js`](../../eslint.config.js)) at `error` — today `alt-text`, `aria-props`, `aria-role`, and `click-events-have-key-events` are **blocking** in CI (`lint` job, zero warnings). Expanding to the full `flat/recommended` a11y set is a **ratchet**: enable the rest, fix the violations they surface, then keep them at `error`.
 - **Automated a11y (`axe`)** runs in every component test (`expectNoA11yViolations`), in the a11y harness over every block and example (`src/test/a11y-blocks-*.test.ts`, `src/test/a11y-known.json` stays empty) and on a sample of docs routes (`pnpm docs:smoke`). Contrast and focus rings are checked with the theme in the styled visual suite (`apps/visual`). Behavioural a11y (focus, keyboard, restore) is still also checked in review.
+- **`webkit/accessible-name`** (ESLint, `error` in both presets) flags an `IconButton` or `ButtonGroup` with neither `aria-label` nor `aria-labelledby`; `test/copyable/fixtures/icon-button-name.vue` proves the kebab form type-checks under create-vue compiler options; `scripts/kebab-aria-label.mjs` rewrites camelCase `ariaLabel=` attributes to the kebab form.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `ariaLabel` naming; the spec's a11y section (role + keyboard map) is required by [`.specs/_template.md`](../../.specs/_template.md).
 
 ## Why this rule exists

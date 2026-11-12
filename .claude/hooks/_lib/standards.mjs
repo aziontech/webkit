@@ -224,6 +224,7 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'ci', by: 'vuejs-accessibility' },
+      { surface: 'lint', by: 'accessible-name' },
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'Static a11y via eslint-plugin-vuejs-accessibility (error); behavioural via axe once the test layer lands; review in the meantime.'
