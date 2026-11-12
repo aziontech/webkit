@@ -40,8 +40,8 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 
 ## Breadcrumb and environment
 
-- The trail is the layout's: the app passes `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app). A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
-- A service ends the trail on its environment. That crumb is a control, so the app composes it in the layout's `breadcrumbs` slot: `Breadcrumb.List` with the module and the service, then a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. `shells/console` (DetailPage) shows the slot.
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumbs`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shells/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 
 ## Topology tab
@@ -97,7 +97,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
-- ServiceOverview: a service (its environment crumb is the layout's `breadcrumbs` slot), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 - Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.

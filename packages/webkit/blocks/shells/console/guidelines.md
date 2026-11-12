@@ -17,7 +17,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ### A. Shell — `ConsoleLayout` (required)
 
-Composed once in `App.vue` around `RouterView`. `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes the trail from the route meta (`{ label, to }`; empty on a first-level page). `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
+Composed once in `App.vue` around `RouterView` (imported from `console-layout-root`). `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes a static trail from the route meta (`{ label, href }`); a page that owns its trail renders `ConsoleLayout.Breadcrumbs` instead, and a workspace page puts `data-layout-fill` on its root. `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
 
 ### B. Actions — `Button` (required)
 
@@ -67,12 +67,14 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 
 - Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
-- Give every row an `href` (never `to` or `path`); derive `breadcrumbs` from the route.
+- Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
+- Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumbs`.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
 
 - Don't render `AppLayout`, `Sidebar`, `GlobalHeader`, `SearchTrigger`, a `Command` palette or a `<main>` in a page; the layout owns them.
+- Don't put a page's control crumb in `App.vue`, or size a body with `calc(100dvh - …)`.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's header, controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
@@ -97,7 +99,7 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 ## States
 
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) and its controls row (Filter, search, Refresh, Download CSV, Columns) over the table.
-- DetailPage: a resource detail page rendered through `ConsoleLayout`. The `breadcrumbs` slot composes the trail (a crumb that is a control, so the data prop does not fit): `Breadcrumb.List` with Applications, the application, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
+- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as `items`, then the environment in its slot, a `Select` with `kind="transparent"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list: unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `header-start` slot, before the breadcrumbs (square `Avatar` with its initials, the name, a chevron), `Switch account (Ctrl+O)` on its tooltip and `aria-keyshortcuts`; while the slot's `compact` is true it shows the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
 

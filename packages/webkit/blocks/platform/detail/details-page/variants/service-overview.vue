@@ -4,6 +4,7 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -14,6 +15,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -21,6 +23,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import SectionHeader from '@aziontech/webkit/section-header'
+  import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -41,6 +44,12 @@
 
   const activeTab = ref('overview')
   const environment = ref('Production')
+  const environmentQuery = ref('')
+  const environmentMatches = computed(() => {
+    const needle = environmentQuery.value.trim().toLowerCase()
+    if (!needle) return environments
+    return environments.filter((option) => option.name.toLowerCase().includes(needle))
+  })
 
   const domains = [
     'service-01.example.com',
@@ -345,6 +354,85 @@
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <ConsoleLayout.Breadcrumbs
+      :items="[
+        { label: 'Services', href: '/services' },
+        { label: SERVICE.name, href: '/services/1020655' }
+      ]"
+    >
+      <Select
+        :model-value="environment"
+        :display-value="(value) => String(value ?? '')"
+        kind="transparent"
+        size="small"
+        @update:model-value="
+          (value) => {
+            if (value !== '__add-environment__') environment = value
+          }
+        "
+        @update:open="
+          (open) => {
+            if (!open) environmentQuery = ''
+          }
+        "
+      >
+        <Select.Trigger aria-label="Switch environment" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="environmentQuery"
+              size="small"
+              placeholder="Search environments"
+              aria-label="Search environments"
+              @keydown.stop
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Environments">
+            <Select.Option
+              v-for="option in environmentMatches"
+              :key="option.name"
+              :value="option.name"
+            >
+              {{ option.name }}
+              <template #tag>
+                <Tag
+                  :label="option.policy"
+                  severity="secondary"
+                  size="small"
+                />
+              </template>
+            </Select.Option>
+            <p
+              v-if="!environmentMatches.length"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            >
+              No environments match "{{ environmentQuery }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Option
+              value="__add-environment__"
+              class="w-full"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="pi pi-plus-circle"
+                  aria-hidden="true"
+                />
+                Add Environment
+              </span>
+            </Select.Option>
+          </template>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Item

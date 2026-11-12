@@ -431,6 +431,27 @@ describe('ConsoleLayout — page trail', () => {
     expect(within(getByTestId('layout-console-layout__main')).queryByText('Production')).toBeNull()
   })
 
+  it('gives each top-level control its own crumb', async () => {
+    const { getByRole } = mount({}, {}, {
+      default: () =>
+        pageTrail(() => [
+          h('button', { type: 'button' }, 'Production'),
+          h('button', { type: 'button' }, 'Version 3')
+        ])
+    })
+    const header = within(getByRole('banner'))
+    await waitFor(() => expect(header.getByRole('button', { name: 'Version 3' })).toBeTruthy())
+    const crumbs = within(header.getByRole('navigation', { name: 'Breadcrumb' })).getAllByRole(
+      'listitem'
+    )
+    expect(crumbs.map((crumb) => crumb.textContent?.trim())).toEqual([
+      'Applications',
+      'azion-site',
+      'Production',
+      'Version 3'
+    ])
+  })
+
   it('renders data-only page crumbs with the last one as the current page', async () => {
     const { getByRole } = mount({ breadcrumbs: [{ label: 'Layout crumb' }] }, {}, {
       default: () => pageTrail()

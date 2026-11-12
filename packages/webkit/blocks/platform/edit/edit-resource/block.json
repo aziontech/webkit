@@ -72,7 +72,7 @@
   "variants": [
     {
       "name": "DeployableSettings",
-      "summary": "A deployable resource’s Settings tab, under the environment switcher the layout's breadcrumbs slot carries and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.",
+      "summary": "A deployable resource’s Settings tab, under the environment switcher the page sets as its control crumb with `ConsoleLayout.Breadcrumbs` and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.",
       "file": "variants/deployable-settings.vue"
     },
     {

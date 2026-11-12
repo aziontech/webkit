@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import { ref } from 'vue'
 

@@ -20,7 +20,7 @@
   })
 
   const slots = defineSlots<{
-    /** A control that ends the trail as the current crumb, such as a transparent small Select. */
+    /** One or more controls that end the trail, each its own crumb, such as a transparent small Select. */
     default?(): unknown
   }>()
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
   import Resizable from '@aziontech/webkit/resizable'
 
   const navigation: ConsoleLayoutNavGroup[] = [

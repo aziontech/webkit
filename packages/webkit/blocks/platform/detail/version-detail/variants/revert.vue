@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -282,7 +283,87 @@
 </script>
 
 <template>
-  <div class="flex h-[calc(100dvh-var(--layout-header-height))] min-h-0 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
+    <ConsoleLayout.Breadcrumbs
+      :items="[
+        { label: 'Resources', href: '/resources' },
+        { label: 'web-app', href: '/resources/1784552864' }
+      ]"
+    >
+      <Select
+        kind="transparent"
+        size="small"
+        :model-value="versionId"
+        :display-value="
+          (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
+        "
+        @update:open="
+          (open) => {
+            if (!open) query = ''
+          }
+        "
+      >
+        <Select.Trigger aria-label="Switch version" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="query"
+              size="small"
+              placeholder="Search versions"
+              aria-label="Search versions"
+              @keydown.stop
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Versions">
+            <Select.Option
+              v-for="entry in matches"
+              :key="entry.id"
+              :value="entry.id"
+            >
+              {{ entry.name }}
+              <template #tag>
+                <Tag
+                  :label="tagFor(entry).label"
+                  :severity="tagFor(entry).severity"
+                  :icon="tagFor(entry).icon"
+                  size="small"
+                />
+              </template>
+            </Select.Option>
+            <p
+              v-if="!matches.length"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            >
+              No versions match"{{ query }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Option
+              value="__create-version__"
+              class="w-full"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="pi pi-plus-circle"
+                  aria-hidden="true"
+                />
+                Add Version
+              </span>
+            </Select.Option>
+          </template>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
     <nav
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"

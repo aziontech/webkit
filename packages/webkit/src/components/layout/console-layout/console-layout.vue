@@ -1,13 +1,18 @@
 <script setup lang="ts">
   import {
+    Comment,
     computed,
+    Fragment,
     type FunctionalComponent,
+    h,
+    isVNode,
     provide,
     readonly,
     ref,
     shallowRef,
+    Text,
     useAttrs,
-    type VNodeChild,
+    type VNode,
     watch
   } from 'vue'
 
@@ -223,7 +228,18 @@
 
   const pageControl = computed(() => Boolean(pageTrail.value?.hasControl()))
 
-  const PageCrumbControl: FunctionalComponent = () => pageTrail.value?.control() as VNodeChild
+  const controlNodes = (children: unknown): VNode[] =>
+    (Array.isArray(children) ? children : [children]).flatMap((child) => {
+      if (!isVNode(child) || child.type === Comment || child.type === Text) return []
+      if (child.type === Fragment) return controlNodes(child.children)
+      return [child]
+    })
+
+  const PageCrumbControls: FunctionalComponent = () =>
+    controlNodes(pageTrail.value?.control()).flatMap((node, index) => [
+      ...(index ? [h(BreadcrumbSeparator, { key: `separator-${index}` })] : []),
+      h('li', { key: `control-${index}`, class: 'inline-flex min-w-0 items-center' }, [node])
+    ])
 
   watch(
     currentId,
@@ -439,9 +455,7 @@
                         </li>
                         <BreadcrumbSeparator />
                       </template>
-                      <li class="inline-flex min-w-0 items-center">
-                        <PageCrumbControl />
-                      </li>
+                      <PageCrumbControls />
                     </BreadcrumbList>
                   </Breadcrumb>
                 </div>
