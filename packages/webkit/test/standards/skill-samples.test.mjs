@@ -22,15 +22,6 @@ const TAG = /<([A-Z][A-Za-z0-9]*)[\s/>.]/g
 const SKIPPED_MESSAGES = new Set(['prose-comment'])
 const SKIPPED_WITHOUT_SCRIPT = new Set(['slot-without-defineslots'])
 
-// Samples outside the toolkit lane that still fail; each count may only fall.
-const KNOWN = {
-  'skills/webkit-lists/SKILL.md webkit/prefer-tree-shakeable-root': 1,
-  'rules/webkit-header-search.md webkit/prefer-tree-shakeable-root': 1,
-  'rules/webkit-root-element.md webkit/authoring-standards': 1,
-  'rules/webkit-sections.md webkit/authoring-standards': 1,
-  'rules/webkit-testid.md webkit/authoring-standards': 1
-}
-
 process.env.WEBKIT_CATALOG_PATH = join(PKG_ROOT, 'catalog.json')
 const catalog = JSON.parse(readFileSync(join(PKG_ROOT, 'catalog.json'), 'utf8'))
 const { default: webkit } = await import('../../src/eslint-plugin/index.js')
@@ -164,19 +155,11 @@ test('a synthesized import makes a fragment lintable, so a style override on a w
 
 test('every code sample in skills/ and rules/ passes the consumer lint preset', () => {
   const failures = []
-  const counts = {}
   for (const sample of codeSamples()) {
     if (sample.negative) continue
     for (const message of lintSample(sample)) {
-      const key = `${sample.file} ${message.ruleId}`
-      counts[key] = (counts[key] ?? 0) + 1
-      if (counts[key] > (KNOWN[key] ?? 0)) {
-        failures.push(`${sample.file}:${sample.line} ${message.ruleId} — ${message.message}`)
-      }
+      failures.push(`${sample.file}:${sample.line} ${message.ruleId} — ${message.message}`)
     }
   }
   assert.deepEqual(failures, [])
-  for (const [key, known] of Object.entries(KNOWN)) {
-    assert.equal(counts[key] ?? 0, known, `${key} improved: lower its KNOWN count`)
-  }
 })

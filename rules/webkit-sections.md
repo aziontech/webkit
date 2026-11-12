@@ -70,14 +70,24 @@ JSON. Never rebuild a band from primitives when a section exists.
 ## Correct
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import PricingPlans from '@aziontech/webkit/pricing-plans'
   import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
 
-  defineProps({ page: { type: Object, required: true } })
-  const subscribe = async (event, values) => {
+  interface SectionEntry {
+    /** The section's props, as the page JSON stores them. */
+    props: Record<string, unknown>
+  }
+
+  interface Props {
+    /** The page JSON, one entry per section. */
+    page: { pricing: SectionEntry; newsletter: SectionEntry }
+  }
+
+  defineProps<Props>()
+  const subscribe = async (event: SubmitEvent, values: Record<string, string>) => {
     /* post values to the site endpoint, then set the section's loading / submitted / error props */
   }
 </script>

@@ -39,6 +39,10 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
   defineOptions({ name: 'Chip', inheritAttrs: false })
+  defineSlots<{
+    /** The chip's label. */
+    default(): unknown
+  }>()
   const attrs = useAttrs()
   // consumer-supplied data-testid wins; otherwise the derived fallback
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'input-chip')

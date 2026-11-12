@@ -58,7 +58,7 @@ the band is one `useCollection` call:
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import Table from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection(
