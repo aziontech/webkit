@@ -1,8 +1,8 @@
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Board from '@aziontech/webkit/board'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import Board, { type BoardLayoutItem } from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import Hint from '@aziontech/webkit/hint'
@@ -27,7 +27,19 @@
     '09:00'
   ]
 
-  const cards = {
+  type CardKind = 'area' | 'donut' | 'line' | 'bar' | 'bar-list'
+  type CardFormat = 'count' | 'bytes' | 'ms'
+
+  interface DashboardCard {
+    title: string
+    hint: string
+    kind: CardKind
+    format: CardFormat
+    series: ChartSeries[]
+    items?: BarListItem[]
+  }
+
+  const cards: Record<string, DashboardCard> = {
     requests: {
       title: 'Requests over time',
       hint: 'Requests served by every service, per interval.',
@@ -126,6 +138,7 @@
       hint: 'The services that received the most requests in the period.',
       kind: 'bar-list',
       format: 'count',
+      series: [],
       items: [
         {
           id: 'web-app-prod',
@@ -169,7 +182,7 @@
     }
   }
 
-  const defaultLayout = [
+  const defaultLayout: BoardLayoutItem[] = [
     {
       id: 'requests',
       span: 8
@@ -196,7 +209,7 @@
     }
   ]
 
-  const formatters = {
+  const formatters: Record<CardFormat, (value: number) => string> = {
     count: (value) =>
       new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(value),
     bytes: (value) => {
@@ -213,8 +226,8 @@
   }
 
   const editing = ref(true)
-  const layout = ref(defaultLayout.map((card) => ({ ...card })))
-  const activeIndex = ref(null)
+  const layout = ref<BoardLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
+  const activeIndex = ref<number | null>(null)
   const announcement = ref('')
 
   const customized = computed(() => JSON.stringify(layout.value) !== JSON.stringify(defaultLayout))

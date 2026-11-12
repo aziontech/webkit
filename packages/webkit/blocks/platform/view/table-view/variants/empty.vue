@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -12,11 +12,25 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref, useId } from 'vue'
+
+  type ResourceStatus = 'Live' | 'Inactive'
+
+  type Resource = {
+    id: string
+    name: string
+    domain: string
+    domains: string[]
+    domainCount: number
+    status: ResourceStatus
+    owner: string
+    modifiedAt: Date
+    lastModified: string
+  }
 
   const avatars = {
     'Robson Junior': 'https://ca.slack-edge.com/TDVATDGUU-UDW2MSZAP-81cad567c9a1-512',
@@ -29,7 +43,7 @@
     'Gab Lisboa': 'https://ca.slack-edge.com/TDVATDGUU-U0279S2BC12-d09077d857f7-512'
   }
 
-  const properties = [
+  const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'owner',
@@ -40,7 +54,7 @@
     { key: 'domain', label: 'Domain' }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
@@ -49,9 +63,9 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const rows = []
+  const rows: Resource[] = []
 
-  const items = ref(rows)
+  const items = ref<Resource[]>(rows)
 
   const {
     tableProps,
@@ -75,7 +89,7 @@
   })
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -91,20 +105,20 @@
       toCsv({
         columns: columns
           .filter((column) => column.kind !== 'action')
-          .map((column) => ({ id: column.accessorKey, header: column.header })),
+          .map((column) => ({ id: column.accessorKey ?? '', header: column.header ?? '' })),
         rows: matchingItems.value
       })
     )
 
-  const pending = ref(null)
+  const pending = ref<Resource | null>(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
   const confirmLabelId = useId()
   const canDelete = computed(
-    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+    () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value, row) => {
+  const onRowAction = (value: string | number, row: Resource) => {
     if (value !== 'delete') return
     pending.value = row
     confirmation.value = ''
@@ -113,7 +127,7 @@
 
   const confirmDelete = () => {
     if (!canDelete.value) return
-    items.value = items.value.filter((item) => item.id !== pending.value.id)
+    items.value = items.value.filter((item) => item.id !== pending.value?.id)
     deleteOpen.value = false
   }
 </script>
@@ -270,7 +284,7 @@
                   <template #cell-actions="{ row }">
                     <Table.CellActions
                       :name="row.name"
-                      @select="(event, value) => onRowAction(value, row)"
+                      @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenuGroup>
                         <DropdownMenuOption

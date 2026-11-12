@@ -83,7 +83,7 @@
             icon="pi pi-refresh"
             kind="outlined"
             size="medium"
-            ariaLabel="Refresh"
+            aria-label="Refresh"
           />
         </template>
       </PageHeader>

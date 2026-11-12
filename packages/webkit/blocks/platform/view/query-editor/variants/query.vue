@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CodeEditor from '@aziontech/webkit/code-editor'
+  import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -18,12 +18,55 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
+
+  interface DatabaseColumn {
+    id: string
+    name: string
+    type: string
+    primaryKey: boolean
+    notNull: boolean
+  }
+
+  interface DatabaseRow {
+    __k: string
+    [column: string]: string | number | null
+  }
+
+  interface DatabaseTable {
+    id: string
+    name: string
+    columns: DatabaseColumn[]
+    rows: DatabaseRow[]
+  }
+
+  interface ResultRow {
+    __k: number
+    [column: string]: string | number | null
+  }
+
+  type QueryResult =
+    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
+    | { type: 'error'; line: number; text: string }
+    | { type: 'message'; text: string }
+
+  interface HistoryEntry {
+    id: string
+    sql: string
+  }
+
+  interface QueryTemplate {
+    id: string
+    title: string
+    description: string
+    icon: string
+    sql: string
+  }
 
   const tabs = [
     { value: 'tables', label: 'Tables' },
@@ -31,7 +74,7 @@
   ]
   const activeTab = ref('editor')
 
-  const tables = ref([
+  const tables = ref<DatabaseTable[]>([
     {
       id: 'tbl-customers',
       name: 'customers',
@@ -101,7 +144,7 @@
     }
   ])
   const tableSearch = ref('')
-  const selectedTableId = ref(null)
+  const selectedTableId = ref<string | null>(null)
   const filteredTables = computed(() => {
     const term = tableSearch.value.trim().toLowerCase()
     if (!term) return tables.value
@@ -111,11 +154,11 @@
     () =>
       tables.value.find((table) => table.id === selectedTableId.value) ?? tables.value[0] ?? null
   )
-  const selectTable = (id) => {
+  const selectTable = (id: string) => {
     selectedTableId.value = id
   }
 
-  const schemaColumns = [
+  const schemaColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', minWidth: 104 },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 }
@@ -165,8 +208,8 @@
         )
     )
   })
-  const rowSelection = ref({})
-  const dataColumns = computed(() => [
+  const rowSelection = ref<Record<string, boolean>>({})
+  const dataColumns = computed<TableColumn[]>(() => [
     ...(selectedTable.value?.columns ?? []).map((column) => ({
       id: column.name,
       accessorKey: column.name,
@@ -179,14 +222,14 @@
   watch(selectedTableId, () => {
     rowSelection.value = {}
   })
-  const editorMarkers = computed(() =>
+  const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
       ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
       : []
   )
-  const isNull = (value) => value === null || value === undefined || value === ''
-  const displayCell = (value) => (isNull(value) ? 'NULL' : String(value))
-  const deleteRow = (row) => {
+  const isNull = (value: unknown) => value === null || value === undefined || value === ''
+  const displayCell = (value: unknown) => (isNull(value) ? 'NULL' : String(value))
+  const deleteRow = (row: DatabaseRow) => {
     const table = tables.value.find((item) => item.id === selectedTable.value?.id)
     if (!table) return
     table.rows = table.rows.filter((item) => item.__k !== row.__k)
@@ -196,7 +239,7 @@
 FROM customers
 ORDER BY created_at DESC
 LIMIT 100;`)
-  const history = ref([
+  const history = ref<HistoryEntry[]>([
     {
       id: 'q-2',
       sql: `SELECT id, name, email, created_at
@@ -228,11 +271,11 @@ LIMIT 100;`
     if (!term) return history.value
     return history.value.filter((item) => item.sql.toLowerCase().includes(term))
   })
-  const oneLine = (sql) => sql.replace(/\s+/g, ' ').trim()
+  const oneLine = (sql: string) => sql.replace(/\s+/g, ' ').trim()
 
   const running = ref(false)
   const templatesOpen = ref(false)
-  const selectResult = {
+  const selectResult: QueryResult = {
     type: 'rows',
     columns: ['id', 'name', 'email', 'created_at'],
     rows: [
@@ -259,8 +302,8 @@ LIMIT 100;`
       }
     ]
   }
-  const results = ref(structuredClone(selectResult))
-  const resultColumns = computed(() => {
+  const results = ref<QueryResult | null>(structuredClone(selectResult))
+  const resultColumns = computed<TableColumn[]>(() => {
     if (results.value?.type !== 'rows') return []
     return results.value.columns.map((key, index) => ({
       accessorKey: key,
@@ -274,7 +317,9 @@ LIMIT 100;`
     { label: 'JSON', value: 'json' }
   ]
   const resultSearch = ref('')
-  const resultRows = computed(() => (results.value?.type === 'rows' ? results.value.rows : []))
+  const resultRows = computed<ResultRow[]>(() =>
+    results.value?.type === 'rows' ? results.value.rows : []
+  )
   const filteredResultRows = computed(() => {
     const term = resultSearch.value.trim().toLowerCase()
     if (!term) return resultRows.value
@@ -292,14 +337,14 @@ LIMIT 100;`
     )
   )
 
-  const applyTemplate = (sql) => {
+  const applyTemplate = (sql: string) => {
     editorSql.value = sql
   }
-  const loadFromHistory = (item) => {
+  const loadFromHistory = (item: HistoryEntry) => {
     editorSql.value = item.sql
     activeTab.value = 'editor'
   }
-  const deleteHistory = (event, item) => {
+  const deleteHistory = (_event: MouseEvent | KeyboardEvent, item: HistoryEntry) => {
     history.value = history.value.filter((entry) => entry.id !== item.id)
   }
   const SQL_VERBS = [
@@ -343,7 +388,7 @@ LIMIT 100;`
     }, 700)
   }
 
-  const templates = [
+  const templates: QueryTemplate[] = [
     {
       id: 'create-table',
       title: 'Create table',
@@ -447,7 +492,7 @@ LIMIT 3;`
   watch(templatesOpen, (value) => {
     if (value) templateQuery.value = ''
   })
-  const chooseTemplate = (template) => {
+  const chooseTemplate = (template: QueryTemplate) => {
     applyTemplate(template.sql)
     templatesOpen.value = false
   }
@@ -542,9 +587,7 @@ LIMIT 3;`
               >
                 <button
                   type="button"
-                  :data-selected="
-                    selectedTable && selectedTable.id === table.id ? true : null
-                  "
+                  :data-selected="selectedTable && selectedTable.id === table.id ? true : null"
                   class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
                   @click="selectTable(table.id)"
                 >
@@ -729,9 +772,7 @@ LIMIT 3;`
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
                     <span class="truncate">{{ column.name }}</span>
-                    <span class="shrink-0 text-body-xs text-(--text-muted)">{{
-                      column.type
-                    }}</span>
+                    <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                     <i
                       v-if="column.primaryKey"
                       class="pi pi-key shrink-0 text-(--primary)"
@@ -747,9 +788,7 @@ LIMIT 3;`
                 >
                   <span
                     class="truncate font-code text-label-code-sm"
-                    :class="
-                      isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'
-                    "
+                    :class="isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'"
                     >{{ displayCell(value) }}</span
                   >
                 </template>
@@ -770,9 +809,7 @@ LIMIT 3;`
                     class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
                   >
                     <p class="text-body-sm text-(--text-default)">This table is empty</p>
-                    <div
-                      class="flex flex-wrap items-center justify-center gap-(--spacing-xs)"
-                    >
+                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                       <Button
                         label="Insert row"
                         kind="secondary"
@@ -786,9 +823,7 @@ LIMIT 3;`
                         icon="pi pi-upload"
                       />
                     </div>
-                    <p class="text-body-xs text-(--text-muted)">
-                      or drag and drop a CSV file here
-                    </p>
+                    <p class="text-body-xs text-(--text-muted)">or drag and drop a CSV file here</p>
                   </div>
                   <p
                     v-else
@@ -1154,13 +1189,9 @@ LIMIT 3;`
                       class="text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="text-label-md text-(--text-default)">{{
-                      template.title
-                    }}</span>
+                    <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
                   </span>
-                  <span class="text-body-xs text-(--text-muted)">{{
-                    template.description
-                  }}</span>
+                  <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
                 </button>
               </div>
 

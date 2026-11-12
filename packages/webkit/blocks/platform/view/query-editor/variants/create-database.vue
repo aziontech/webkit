@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -23,10 +23,13 @@
   const form = reactive(blank())
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-  const errors = reactive({ name: '', nameKind: 'required' })
+  const errors = reactive<{ name: string; nameKind: HelperTextKind }>({
+    name: '',
+    nameKind: 'required'
+  })
   const advancedOpen = ref(false)
   const submitting = ref(false)
-  const nameInput = ref(null)
+  const nameInput = ref<InstanceType<typeof Input> | null>(null)
 
   const NAME_PATTERN = /^[A-Za-z0-9-]{6,50}$/
   const TAKEN = ['acme-store', 'feature-flags']

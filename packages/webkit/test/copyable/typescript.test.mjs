@@ -18,7 +18,13 @@ import { CONSUMER_COMPILER_OPTIONS } from './consumer-app.mjs'
 const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
 const require = createRequire(import.meta.url)
 
-const TYPESCRIPT_FOLDERS = ['blocks/headers', 'blocks/shells']
+const TYPESCRIPT_FOLDERS = [
+  'blocks/headers',
+  'blocks/shells',
+  'blocks/platform/dashboard',
+  'blocks/platform/states',
+  'blocks/platform/view'
+]
 
 // Type errors that come from a component's own typings, not from the copied file: { id, pattern }.
 // The fix belongs in the component; the last test fails once a listed signature no longer occurs.

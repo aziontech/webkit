@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
   import BarList from '@aziontech/webkit/bar-list'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -11,15 +11,25 @@
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
+  interface AttentionEntry {
+    id: string
+    icon: string
+    title: string
+    description: string
+    severity: TagSeverity
+    tag: string
+    action: { label: string; href: string }
+  }
+
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value) => compact.format(value)
-  const formatPercent = (value) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
+  const formatCount = (value: number) => compact.format(value)
+  const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
   const requestsBlocked = 49277
   const requestsBlockedDelta = 6.76
@@ -41,7 +51,7 @@
   ]
 
   const labels = Array.from({ length: 24 }, (_, index) => new Date(Date.UTC(2026, 10, 9, index)))
-  const matchedRequests = [
+  const matchedRequests: ChartSeries[] = [
     {
       id: 'blocked',
       name: 'Blocked',
@@ -78,7 +88,7 @@
     { id: 'Singapore', name: 'Singapore', value: 2190 },
     { id: 'France', name: 'France', value: 1460 }
   ]
-  const ipColumns = [
+  const ipColumns: TableColumn[] = [
     {
       id: 'remoteAddress',
       accessorKey: 'remoteAddress',
@@ -186,7 +196,7 @@
       requests: 860
     }
   ]
-  const attention = [
+  const attention: AttentionEntry[] = [
     {
       id: 'log-only',
       icon: 'pi pi-eye',
@@ -221,7 +231,7 @@
   ]
 
   const form = ref('line')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
   const search = ref('')
 </script>
 

@@ -167,7 +167,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Requests over time"
+                  aria-label="Expand Requests over time"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -176,7 +176,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Requests over time"
+                    aria-label="More options for Requests over time"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -237,7 +237,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Status codes"
+                  aria-label="Expand Status codes"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -246,7 +246,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Status codes"
+                    aria-label="More options for Status codes"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -294,7 +294,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Requests by country"
+                  aria-label="Expand Requests by country"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -303,7 +303,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Requests by country"
+                    aria-label="More options for Requests by country"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -352,7 +352,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Top hosts"
+                  aria-label="Expand Top hosts"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -361,7 +361,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Top hosts"
+                    aria-label="More options for Top hosts"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

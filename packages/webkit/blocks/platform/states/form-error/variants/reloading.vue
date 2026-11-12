@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -88,9 +88,10 @@
   const reloadingOrigins = ref(true)
   const deletedByOtherUser = ref('web-origin-prod')
 
-  const originLabel = (value) => origins.value.find((origin) => origin.value === value)?.label ?? ''
+  const originLabel = (value: unknown) =>
+    origins.value.find((origin) => origin.value === value)?.label ?? ''
 
-  const portsLabel = (values) =>
+  const portsLabel = (values: unknown[]) =>
     (values ?? [])
       .map((value) => httpPortOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')

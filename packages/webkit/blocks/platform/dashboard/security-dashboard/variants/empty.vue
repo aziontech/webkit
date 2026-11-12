@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -6,8 +6,8 @@
   import StatTile from '@aziontech/webkit/stat-tile'
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value) => compact.format(value)
-  const formatPercent = (value) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
+  const formatCount = (value: number) => compact.format(value)
+  const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 </script>
 
 <template>

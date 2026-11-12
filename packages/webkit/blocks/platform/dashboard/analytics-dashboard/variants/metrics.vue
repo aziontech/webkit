@@ -1,5 +1,5 @@
-<script setup>
-  import Chart from '@aziontech/webkit/chart'
+<script setup lang="ts">
+  import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Hint from '@aziontech/webkit/hint'
@@ -12,7 +12,54 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
-  const periods = [
+  type MetricFormat = 'count' | 'bytes' | 'percentage' | 'ms' | 'seconds'
+  type PanelForm = 'area' | 'line' | 'stacked'
+
+  interface Period {
+    value: string
+    label: string
+    comparison: string
+    scale: number
+    labels: string[]
+  }
+
+  interface Tile {
+    id: string
+    label: string
+    description: string
+    format: MetricFormat
+    base: number
+    rate?: boolean
+    inverse?: boolean
+  }
+
+  interface PanelSeries {
+    id: string
+    name: string
+    base: number
+    color?: ChartColor
+  }
+
+  interface Panel {
+    id: string
+    title: string
+    hint: string
+    aggregation: string
+    format: MetricFormat
+    form: PanelForm
+    rate?: boolean
+    series: PanelSeries[]
+  }
+
+  interface Product {
+    id: string
+    label: string
+    description: string
+    tiles: Tile[]
+    panels: Panel[]
+  }
+
+  const periods: Period[] = [
     {
       value: '1h',
       label: 'Last hour',
@@ -80,7 +127,7 @@
     }
   ]
 
-  const products = [
+  const products: Product[] = [
     {
       id: 'applications',
       label: 'Applications',
@@ -500,7 +547,7 @@
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
   const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
 
-  const formatters = {
+  const formatters: Record<MetricFormat, (value: number) => string> = {
     count: (value) => compact.format(value),
     bytes: (value) => {
       const steps = ['B', 'KB', 'MB', 'GB', 'TB']
@@ -517,7 +564,7 @@
     seconds: (value) => `${compact.format(value)} s`
   }
 
-  const seeded = (seed, length) => {
+  const seeded = (seed: string, length: number) => {
     let h = 0x811c9dc5
     for (const char of seed) {
       h ^= char.charCodeAt(0)
@@ -532,7 +579,7 @@
     })
   }
 
-  const seriesValues = (seed, base, period, rate) => {
+  const seriesValues = (seed: string, base: number, period: Period, rate?: boolean) => {
     const perPoint = rate ? base : (base * period.scale * 12) / period.labels.length
     return seeded(seed, period.labels.length).map((u) => {
       const value = perPoint * (0.78 + u * 0.44)
@@ -540,12 +587,13 @@
     })
   }
 
-  const activeProduct = ref('applications')
+  const activeProduct = ref<string | number | null>('applications')
   const period = ref('24h')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
 
   const periodOptions = periods.map(({ value, label }) => ({ value, label }))
-  const periodLabel = (value) => periods.find((entry) => entry.value === value)?.label ?? ''
+  const periodLabel = (value: unknown) =>
+    periods.find((entry) => entry.value === value)?.label ?? ''
 
   const currentPeriod = computed(
     () => periods.find((entry) => entry.value === period.value) ?? periods[1]
@@ -575,7 +623,7 @@
   const panels = computed(() =>
     product.value.panels.map((panel) => ({
       ...panel,
-      series: panel.series.map((entry) => ({
+      series: panel.series.map((entry): ChartSeries => ({
         id: entry.id,
         name: entry.name,
         ...(entry.color ? { color: entry.color } : {}),
@@ -589,7 +637,7 @@
     }))
   )
 
-  const selectProduct = (value) => {
+  const selectProduct = (value: string | number | null) => {
     activeProduct.value = value
     activeIndex.value = null
   }

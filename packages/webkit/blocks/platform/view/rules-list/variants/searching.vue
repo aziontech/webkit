@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
@@ -20,21 +20,66 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Switch from '@aziontech/webkit/switch'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  const SUBJECT = 'application'
+  const SUBJECT: string = 'application'
   const PAGE_DESCRIPTION =
     'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
   const PHASES = [
     { value: 'request', label: 'Request' },
     { value: 'response', label: 'Response' }
-  ]
+  ] as const
 
-  const rule = (id, name, description, phase, author, modified, options = {}) => ({
+  type Phase = (typeof PHASES)[number]['value']
+  type Control = 'up' | 'down'
+
+  interface Rule {
+    id: string
+    name: string
+    description: string
+    phase: Phase
+    author: string
+    modified: string
+    active: boolean
+    locked: boolean
+  }
+
+  interface RuleOptions {
+    active?: boolean
+    locked?: boolean
+  }
+
+  interface RuleEdit {
+    phase: Phase
+    id: string
+    to?: number
+    active?: boolean
+  }
+
+  interface Snapshot {
+    order: Record<string, string[]>
+    active: Record<string, boolean>
+  }
+
+  interface ChangeLine {
+    key: string
+    name: string
+    text: string
+  }
+
+  const rule = (
+    id: string,
+    name: string,
+    description: string,
+    phase: Phase,
+    author: string,
+    modified: string,
+    options: RuleOptions = {}
+  ): Rule => ({
     id,
     name,
     description,
@@ -45,7 +90,7 @@
     locked: options.locked ?? false
   })
 
-  const seed = () => ({
+  const seed = (): Record<Phase, Rule[]> => ({
     request: [
       rule(
         're-default',
@@ -119,7 +164,7 @@
     ]
   })
 
-  const INITIAL_EDITS = []
+  const INITIAL_EDITS: RuleEdit[] = []
   const INITIAL_SEARCH = 'cache'
   const INITIAL_LOADING = false
   const REVIEW_ON_START = false
@@ -127,9 +172,9 @@
   const SAVE_FAILURES = 0
 
   const rules = reactive(seed())
-  const phaseLabel = (phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
+  const phaseLabel = (phase: Phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
 
-  const snapshot = () => ({
+  const snapshot = (): Snapshot => ({
     order: Object.fromEntries(PHASES.map(({ value }) => [value, rules[value].map((r) => r.id)])),
     active: Object.fromEntries(
       PHASES.flatMap(({ value }) => rules[value].map((r) => [r.id, r.active]))
@@ -149,7 +194,7 @@
   const loading = ref(INITIAL_LOADING)
   const search = ref(INITIAL_SEARCH)
   const searching = computed(() => search.value.trim().length > 0)
-  const matches = (item) => {
+  const matches = (item: Rule) => {
     const term = search.value.trim().toLowerCase()
     if (!term) return true
     return [item.name, item.description, item.author].some((field) =>
@@ -157,7 +202,7 @@
     )
   }
 
-  const openPhases = ref(PHASES.map((item) => item.value))
+  const openPhases = ref<string[]>(PHASES.map((item) => item.value))
   watch(search, () => {
     if (!searching.value) return
     const hits = PHASES.filter(({ value }) => rules[value].some(matches)).map(({ value }) => value)
@@ -176,20 +221,20 @@
   )
 
   const saving = ref(false)
-  const pinned = (phase) => {
+  const pinned = (phase: Phase) => {
     const list = rules[phase]
     let count = 0
     while (count < list.length && list[count].locked) count += 1
     return count
   }
-  const canReorder = (phase) =>
+  const canReorder = (phase: Phase) =>
     !searching.value && !saving.value && rules[phase].length - pinned(phase) > 1
-  const canMove = (phase, index, direction) => {
+  const canMove = (phase: Phase, index: number, direction: number) => {
     if (!canReorder(phase) || index < pinned(phase)) return false
     const to = index + direction
     return to >= pinned(phase) && to < rules[phase].length
   }
-  const lockReason = (phase, item) => {
+  const lockReason = (phase: Phase, item: Rule) => {
     if (item.locked) return 'The default rule runs first and stays first.'
     if (searching.value) return 'Clear the search to change the order rules run in.'
     if (saving.value) return 'Wait for the save to finish.'
@@ -198,27 +243,27 @@
   }
 
   const announcement = ref('')
-  const announce = (text) => {
+  const announce = (text: string) => {
     announcement.value = ''
     nextTick(() => {
       announcement.value = text
     })
   }
 
-  const listEl = ref(null)
-  const focusControl = (id, control) =>
+  const listEl = ref<HTMLElement | null>(null)
+  const focusControl = (id: string, control: Control) =>
     nextTick(() => {
       const row = listEl.value?.querySelector(`[data-rule-id="${id}"]`)
-      const target = row?.querySelector(`[data-control="${control}"]`)
+      const target = row?.querySelector<HTMLButtonElement>(`[data-control="${control}"]`)
       const usable =
         target && !target.disabled
           ? target
-          : (row?.querySelector('[data-control]:not(:disabled)') ??
-            row?.closest('[data-reorder-row]')?.querySelector('[data-reorder-handle]'))
+          : (row?.querySelector<HTMLElement>('[data-control]:not(:disabled)') ??
+            row?.closest('[data-reorder-row]')?.querySelector<HTMLElement>('[data-reorder-handle]'))
       usable?.focus({ preventScroll: false })
     })
 
-  const moveTo = (phase, from, to, control) => {
+  const moveTo = (phase: Phase, from: number, to: number, control?: Control) => {
     const list = rules[phase]
     const head = pinned(phase)
     const target = Math.min(Math.max(to, head), list.length - 1)
@@ -230,19 +275,19 @@
     )
     if (control) focusControl(moved.id, control)
   }
-  const step = (phase, index, direction, control) => {
+  const step = (phase: Phase, index: number, direction: number, control?: Control) => {
     if (!canMove(phase, index, direction)) return
     moveTo(phase, index, index + direction, control)
   }
 
-  const position = (phase, item) => rules[phase].indexOf(item)
-  const reorderRows = (phase, next) => {
+  const position = (phase: Phase, item: Rule) => rules[phase].indexOf(item)
+  const reorderRows = (phase: Phase, next: Rule[]) => {
     if (searching.value) return
     rules[phase] = next
   }
-  const reorderable = (phase) => (row) => !lockReason(phase, row)
+  const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
-  const columns = [
+  const columns: TableColumn[] = [
     { id: 'move', header: 'Move', width: 96, hideable: false },
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 3 },
@@ -250,7 +295,7 @@
     { accessorKey: 'modified', header: 'Last modified', grow: 2 }
   ]
 
-  const setActive = (item, value) => {
+  const setActive = (item: Rule, value: boolean) => {
     item.active = value
   }
 
@@ -259,7 +304,7 @@
     PHASES.map((phase) => ({
       ...phase,
       items: rules[phase.value].flatMap((item, index) => {
-        const lines = []
+        const lines: ChangeLine[] = []
         const before = saved.value.order[phase.value].indexOf(item.id)
         if (before !== index) {
           lines.push({

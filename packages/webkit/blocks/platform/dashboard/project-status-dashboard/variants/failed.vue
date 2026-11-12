@@ -195,7 +195,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Completion"
+                    aria-label="More options for Completion"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -249,7 +249,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Sprint burndown"
+                    aria-label="More options for Sprint burndown"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Milestones"
+                    aria-label="More options for Milestones"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -333,7 +333,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for At risk"
+                    aria-label="More options for At risk"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -372,7 +372,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Owners"
+                    aria-label="More options for Owners"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

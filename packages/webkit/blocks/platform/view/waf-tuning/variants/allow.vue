@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -18,12 +18,25 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, ref } from 'vue'
+
+  interface Match {
+    ruleId: string
+    threat: string
+    hits: number
+    ips: string[]
+    countries: string[]
+    paths: string[]
+  }
+
+  interface TuningTable {
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  }
 
   const RANGES = [
     { value: '1h', label: 'Last hour', factor: 0.04 },
@@ -31,7 +44,7 @@
     { value: '7d', label: 'Last 7 days', factor: 6.2 }
   ]
 
-  const MATCHES = [
+  const MATCHES: Match[] = [
     {
       ruleId: '1005',
       threat: 'SQL injection',
@@ -76,12 +89,12 @@
 
   const INITIAL_ROWS = MATCHES
   const INITIAL_LOADING = false
-  const INITIAL_SELECTION = { 1005: true, 1201: true }
+  const INITIAL_SELECTION: Record<string, boolean> = { 1005: true, 1201: true }
   const ALLOW_ON_START = true
   const FAILED_ON_START = false
   const ALLOW_FAILURES = 0
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       accessorKey: 'ruleId',
       header: 'Rule ID',
@@ -103,7 +116,7 @@
   const selection = ref({ ...INITIAL_SELECTION })
   const sorting = ref([{ id: 'hits', desc: true }])
 
-  const rangeLabel = (value) => RANGES.find((item) => item.value === value)?.label ?? ''
+  const rangeLabel = (value: unknown) => RANGES.find((item) => item.value === value)?.label ?? ''
   const minimumHits = computed(() => {
     const value = Number.parseInt(threshold.value, 10)
     return Number.isFinite(value) && value > 0 ? value : 0
@@ -120,10 +133,10 @@
   })
   const selected = computed(() => rows.value.filter((row) => selection.value[row.ruleId]))
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
-  const formatHits = (value) => new Intl.NumberFormat('en-US').format(value)
+  const formatHits = (value: number) => new Intl.NumberFormat('en-US').format(value)
 
-  const tuningTable = ref(null)
-  const resultsEl = ref(null)
+  const tuningTable = ref<TuningTable | null>(null)
+  const resultsEl = ref<HTMLElement | null>(null)
   const exportCsv = () => tuningTable.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
   const refresh = () => {
@@ -140,7 +153,7 @@
   const submitted = ref(false)
   const allowing = ref(false)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
-  const reasonField = ref(null)
+  const reasonField = ref<HTMLElement | null>(null)
   let failuresLeft = ALLOW_FAILURES
 
   const openAllow = () => {

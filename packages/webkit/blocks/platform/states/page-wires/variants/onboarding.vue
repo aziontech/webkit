@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import Skeleton from '@aziontech/webkit/skeleton'
 </script>

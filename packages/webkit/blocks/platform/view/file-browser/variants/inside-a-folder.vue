@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
@@ -16,15 +16,44 @@
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId, watch } from 'vue'
 
-  const folderPath = ref(['20260622162046/'])
+  type FileEntry = { size: string; ext: string; lastModified: string }
+  type FolderEntry = { children: FolderTree }
+  type TreeEntry = FileEntry | FolderEntry
+
+  interface FolderTree {
+    [name: string]: TreeEntry
+  }
+
+  type RowKind = 'folder' | 'file' | 'parent'
+
+  interface FileRow {
+    id: string
+    name: string
+    kind: RowKind
+    icon?: string
+    size: string
+    lastModified: string
+    modifiedAt?: string
+    author?: string
+  }
+
+  interface TableHandle {
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  }
+
+  const folderPath = ref<string[]>(['20260622162046/'])
   const rootName = 'acme-assets'
 
-  const file = (size, ext) => ({ size, ext, lastModified: '2026-06-22T19:21:21Z' })
+  const file = (size: string, ext: string): FileEntry => ({
+    size,
+    ext,
+    lastModified: '2026-06-22T19:21:21Z'
+  })
 
   const SITE_BUILD = {
     'assets/': { children: {} },
@@ -40,9 +69,9 @@
     'nunito-sans-italic.woff2': file('49.62 KB', 'woff2'),
     'nunito-sans-regular.woff2': file('47.07 KB', 'woff2'),
     'project.json': file('1.01 KB', 'json')
-  }
+  } satisfies FolderTree
 
-  const tree = {
+  const tree: FolderTree = {
     '20260622162046/': { children: SITE_BUILD },
     '20260610093012/': { children: SITE_BUILD },
     'logs/': {
@@ -65,7 +94,7 @@
     'Gab Lisboa'
   ]
 
-  const GLYPHS = {
+  const GLYPHS: Record<string, string> = {
     svg: 'pi pi-image',
     html: 'pi pi-code',
     json: 'pi pi-database',
@@ -74,7 +103,7 @@
     txt: 'pi pi-file'
   }
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       accessorKey: 'name',
       header: 'Name',
@@ -95,7 +124,7 @@
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
 
-  const relativeTime = (input) => {
+  const relativeTime = (input: string) => {
     const days = Math.round((referenceTime - Date.parse(input)) / 86_400_000)
     if (days < 1) return 'today'
     if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`
@@ -109,17 +138,17 @@
     return `${years} ${years === 1 ? 'year' : 'years'} ago`
   }
 
-  const removed = ref([])
-  const pending = ref(null)
+  const removed = ref<string[]>([])
+  const pending = ref<FileRow | null>(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
   const confirmLabelId = useId()
-  const entryPath = (name) => [...folderPath.value, name].join('')
+  const entryPath = (name: string) => [...folderPath.value, name].join('')
   const canDelete = computed(
-    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+    () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value, row) => {
+  const onRowAction = (value: string | number, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value !== 'delete') return
     pending.value = row
@@ -128,35 +157,39 @@
   }
 
   const confirmDelete = () => {
-    if (!canDelete.value) return
+    if (!canDelete.value || !pending.value) return
     removed.value = [...removed.value, entryPath(pending.value.name)]
     deleteOpen.value = false
   }
 
-  const tableRef = ref(null)
-  const isFolder = (entry) => Boolean(entry && entry.children)
+  const tableRef = ref<TableHandle | null>(null)
+  const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
+    Boolean(entry && 'children' in entry)
+  const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
+  const childrenOf = (entry: TreeEntry | undefined) =>
+    isFolder(entry) ? entry.children : undefined
 
-  const currentFolder = computed(() => {
-    let node = tree
+  const currentFolder = computed<FolderTree>(() => {
+    let node: FolderTree | undefined = tree
     for (const segment of folderPath.value) {
-      node = node?.[segment]?.children
+      node = childrenOf(node?.[segment])
       if (!node) return {}
     }
     return node
   })
 
-  const rows = computed(() => {
+  const rows = computed<FileRow[]>(() => {
     const entries = Object.entries(currentFolder.value).filter(
       ([name]) => !removed.value.includes(entryPath(name))
     )
     const folders = entries
       .filter(([, entry]) => isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name]) => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
+      .map(([name]): FileRow => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
     const files = entries
-      .filter(([, entry]) => !isFolder(entry))
+      .filter(isFileEntry)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name, entry], index) => ({
+      .map(([name, entry], index): FileRow => ({
         id: name,
         name,
         kind: 'file',
@@ -166,20 +199,20 @@
         modifiedAt: entry.lastModified,
         author: people[index % people.length]
       }))
-    const list = [...folders, ...files]
+    const list: FileRow[] = [...folders, ...files]
     if (folderPath.value.length) {
       list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', lastModified: '' })
     }
     return list
   })
 
-  const enterFolder = (name) => {
+  const enterFolder = (name: string) => {
     folderPath.value = [...folderPath.value, name]
   }
   const goUp = () => {
     folderPath.value = folderPath.value.slice(0, -1)
   }
-  const onRowClick = (event, row) => {
+  const onRowClick = (_event: MouseEvent, row: FileRow) => {
     if (row.kind === 'parent') goUp()
     if (row.kind === 'folder') enterFolder(row.name)
   }
@@ -188,14 +221,14 @@
     { label: rootName, href: '0' },
     ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
   ])
-  const onCrumb = (event, href) => {
+  const onCrumb = (event: MouseEvent, href: string) => {
     event.preventDefault()
     const depth = Number(href)
     if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
   }
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -208,7 +241,7 @@
   const listedColumns = columns
     .filter((column) => column.kind !== 'action')
     .map((column) => ({
-      id: column.id ?? column.accessorKey,
+      id: column.id ?? column.accessorKey ?? '',
       label: column.label ?? column.header,
       locked: column.hideable === false
     }))
@@ -217,9 +250,9 @@
   watch(columnsOpen, (open) => {
     if (open) columnsTipOpen.value = false
   })
-  const columnVisibility = ref({})
-  const isVisible = (id) => columnVisibility.value[id] !== false
-  const setVisible = (id, visible) => {
+  const columnVisibility = ref<Record<string, boolean>>({})
+  const isVisible = (id: string) => columnVisibility.value[id] !== false
+  const setVisible = (id: string, visible: boolean) => {
     const next = { ...columnVisibility.value }
     if (visible) delete next[id]
     else next[id] = false
@@ -432,7 +465,7 @@
                 <Table.CellActions
                   v-if="row.kind !== 'parent'"
                   :name="row.name"
-                  @select="(event, value) => onRowAction(value, row)"
+                  @select="(_event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuGroup>
                     <DropdownMenuOption

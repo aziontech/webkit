@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Field from '@aziontech/webkit/field'
@@ -8,7 +8,15 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
-  import { computed, nextTick, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref } from 'vue'
+
+  type FieldName = 'key' | 'value' | 'environment' | 'description'
+  type FormStatus = 'idle' | 'loading' | 'submitting'
+  type VariableForm = Record<FieldName, string>
+  interface SavedVariable {
+    key: string
+    environment: string
+  }
 
   const KEY_PATTERN = /^[A-Z][A-Z0-9_]*$/
   const DESCRIPTION_LIMIT = 200
@@ -17,20 +25,20 @@
     { value: 'Production', label: 'Production' },
     { value: 'Preview', label: 'Preview' }
   ]
-  const fieldIds = {
+  const fieldIds: Record<FieldName, string> = {
     key: 'variable-key',
     value: 'variable-value',
     environment: 'variable-environment',
     description: 'variable-description'
   }
-  const empty = () => ({ key: '', value: '', environment: '', description: '' })
+  const empty = (): VariableForm => ({ key: '', value: '', environment: '', description: '' })
 
-  const form = reactive(empty())
+  const form = reactive<VariableForm>(empty())
   const submitted = ref(false)
-  const status = ref('idle')
+  const status = ref<FormStatus>('idle')
   const takenKey = ref('')
 
-  const errors = computed(() => ({
+  const errors = computed<Record<FieldName, string>>(() => ({
     key: !form.key
       ? 'Key is required.'
       : !KEY_PATTERN.test(form.key)
@@ -50,24 +58,18 @@
     () => submitted.value && Boolean(form.key) && form.key === takenKey.value
   )
   const busy = computed(() => status.value === 'loading' || status.value === 'submitting')
-  const missing = (field) => submitted.value && !form[field]
-  const invalid = (field) => submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
-  const helper = (field, guidance) =>
+  const missing = (field: FieldName) => submitted.value && !form[field]
+  const invalid = (field: FieldName) =>
+    submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
+  const helper = (field: FieldName, guidance: string) =>
     submitted.value && errors.value[field] ? errors.value[field] : guidance
 
-  const focusField = async (field) => {
+  const focusField = async (field: FieldName) => {
     await nextTick()
     document.getElementById(fieldIds[field])?.focus()
   }
 
-  const reportFailure = () =>
-    toast.error("The variable wasn't created.", {
-      id: 'create-variable-result',
-      description: "The request didn't reach the server. Your entries are kept.",
-      action: { label: 'Retry', onClick: () => submit() }
-    })
-
-  const reportSaved = (variable) =>
+  const reportSaved = (variable: SavedVariable) =>
     toast.success(`${variable.key} was created.`, {
       id: 'create-variable-result',
       description: `It is available in ${variable.environment}.`
@@ -83,7 +85,7 @@
   const submit = () => {
     if (busy.value) return
     submitted.value = true
-    const firstError = Object.keys(fieldIds).find((field) => errors.value[field])
+    const firstError = (Object.keys(fieldIds) as FieldName[]).find((field) => errors.value[field])
     if (firstError) {
       status.value = 'idle'
       focusField(firstError)

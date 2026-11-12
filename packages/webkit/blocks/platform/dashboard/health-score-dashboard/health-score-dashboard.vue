@@ -1,7 +1,7 @@
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -9,13 +9,45 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import Tag from '@aziontech/webkit/tag'
-  import Tracker from '@aziontech/webkit/tracker'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
+
+  interface Band {
+    label: string
+    severity: TagSeverity
+  }
+
+  interface Overall {
+    score: number | null
+    band: Band | null
+    cause: string
+    series: ChartSeries[]
+  }
+
+  interface HourlyRow {
+    id: string
+    name: string
+    band: Band
+    blocks: TrackerItem[]
+  }
+
+  interface Incident {
+    id: string
+    name: string
+    scope: string
+    icon: string
+    devices: number
+    share: number
+    cause: string
+    opened: string
+    openedLabel: string
+    band: Band
+  }
 
   const loading = false
   const period = ref('Last 24 hours')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
 
   const periods = [
     {
@@ -32,7 +64,9 @@
     }
   ]
 
-  const phrase = computed(() => periods.find((option) => option.label === period.value).phrase)
+  const phrase = computed(
+    () => periods.find((option) => option.label === period.value)?.phrase ?? ''
+  )
 
   const hours = [
     '00:00',
@@ -61,7 +95,7 @@
     '23:00'
   ]
 
-  const overall = {
+  const overall: Overall = {
     score: 79,
     band: {
       label: 'Fair',
@@ -80,7 +114,7 @@
     ]
   }
 
-  const applications = [
+  const applications: BarListItem[] = [
     {
       id: 'video-calls',
       name: 'Video calls · packet loss',
@@ -113,7 +147,7 @@
     }
   ]
 
-  const locations = [
+  const locations: BarListItem[] = [
     {
       id: 'travel',
       name: 'Travel · high latency',
@@ -141,7 +175,7 @@
     }
   ]
 
-  const hourly = [
+  const hourly: HourlyRow[] = [
     {
       id: 'video-calls',
       name: 'Video calls',
@@ -924,7 +958,7 @@
     }
   ]
 
-  const incidents = [
+  const incidents: Incident[] = [
     {
       id: 'incident-03',
       name: 'Video calls',
@@ -972,7 +1006,7 @@
     }
   ]
 
-  const formatScore = (value) => value.toFixed(0)
+  const formatScore = (value: number) => value.toFixed(0)
 </script>
 
 <template>

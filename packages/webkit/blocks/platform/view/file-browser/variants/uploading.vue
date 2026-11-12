@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
@@ -15,7 +15,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import FileTokenGroup from '@aziontech/webkit/file-token-group'
+  import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -24,20 +24,58 @@
   import PopoverContent from '@aziontech/webkit/popover-content'
   import PopoverRoot from '@aziontech/webkit/popover-root'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
-  import SplitButton from '@aziontech/webkit/split-button'
+  import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import UploadProgress from '@aziontech/webkit/upload-progress'
+  import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
 
-  const folderPath = ref([])
+  type FileEntry = { size: string; ext: string; lastModified: string }
+  type FolderEntry = { children: FolderTree }
+  type TreeEntry = FileEntry | FolderEntry
+
+  interface FolderTree {
+    [name: string]: TreeEntry
+  }
+
+  type RowKind = 'folder' | 'file' | 'parent'
+
+  interface FileRow {
+    id: string
+    name: string
+    kind: RowKind
+    icon?: string
+    size: string
+    lastModified: string
+    modifiedAt?: string
+    author?: string
+  }
+
+  type UploadMode = 'files' | 'folder'
+
+  type PickedFile = FileTokenGroupItem & { file: File }
+
+  interface TransferItem extends UploadProgressItem {
+    size: number
+    target: string
+  }
+
+  interface TableHandle {
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  }
+
+  const folderPath = ref<string[]>([])
   const rootName = 'acme-assets'
 
-  const file = (size, ext) => ({ size, ext, lastModified: '2026-06-22T19:21:21Z' })
+  const file = (size: string, ext: string): FileEntry => ({
+    size,
+    ext,
+    lastModified: '2026-06-22T19:21:21Z'
+  })
 
   const SITE_BUILD = {
     'assets/': { children: {} },
@@ -53,9 +91,9 @@
     'nunito-sans-italic.woff2': file('49.62 KB', 'woff2'),
     'nunito-sans-regular.woff2': file('47.07 KB', 'woff2'),
     'project.json': file('1.01 KB', 'json')
-  }
+  } satisfies FolderTree
 
-  const tree = {
+  const tree: FolderTree = {
     '20260622162046/': { children: SITE_BUILD },
     '20260610093012/': { children: SITE_BUILD },
     'logs/': {
@@ -78,7 +116,7 @@
     'Gab Lisboa'
   ]
 
-  const GLYPHS = {
+  const GLYPHS: Record<string, string> = {
     svg: 'pi pi-image',
     webp: 'pi pi-image',
     png: 'pi pi-image',
@@ -92,7 +130,7 @@
     txt: 'pi pi-file'
   }
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       accessorKey: 'name',
       header: 'Name',
@@ -114,7 +152,7 @@
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
 
-  const relativeTime = (input) => {
+  const relativeTime = (input: string) => {
     const days = Math.round((referenceTime - Date.parse(input)) / 86_400_000)
     if (days < 1) return 'today'
     if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`
@@ -128,17 +166,17 @@
     return `${years} ${years === 1 ? 'year' : 'years'} ago`
   }
 
-  const removed = ref([])
-  const pending = ref(null)
+  const removed = ref<string[]>([])
+  const pending = ref<FileRow | null>(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
   const confirmLabelId = useId()
-  const entryPath = (name) => [...folderPath.value, name].join('')
+  const entryPath = (name: string) => [...folderPath.value, name].join('')
   const canDelete = computed(
-    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+    () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value, row) => {
+  const onRowAction = (value: string | number, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value !== 'delete') return
     pending.value = row
@@ -147,27 +185,31 @@
   }
 
   const confirmDelete = () => {
-    if (!canDelete.value) return
+    if (!canDelete.value || !pending.value) return
     removed.value = [...removed.value, entryPath(pending.value.name)]
     deleteOpen.value = false
   }
 
-  const tableRef = ref(null)
-  const isFolder = (entry) => Boolean(entry && entry.children)
+  const tableRef = ref<TableHandle | null>(null)
+  const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
+    Boolean(entry && 'children' in entry)
+  const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
+  const childrenOf = (entry: TreeEntry | undefined) =>
+    isFolder(entry) ? entry.children : undefined
 
-  const currentFolder = computed(() => {
-    let node = tree
+  const currentFolder = computed<FolderTree>(() => {
+    let node: FolderTree | undefined = tree
     for (const segment of folderPath.value) {
-      node = node?.[segment]?.children
+      node = childrenOf(node?.[segment])
       if (!node) return {}
     }
     return node
   })
 
-  const added = ref({})
+  const added = ref<Record<string, FolderTree>>({})
   const folderKey = computed(() => folderPath.value.join(''))
 
-  const rows = computed(() => {
+  const rows = computed<FileRow[]>(() => {
     const extra = added.value[folderKey.value] ?? {}
     const entries = Object.entries({ ...currentFolder.value, ...extra }).filter(
       ([name]) => !removed.value.includes(entryPath(name))
@@ -175,11 +217,11 @@
     const folders = entries
       .filter(([, entry]) => isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name]) => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
+      .map(([name]): FileRow => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
     const files = entries
-      .filter(([, entry]) => !isFolder(entry))
+      .filter(isFileEntry)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name, entry], index) => ({
+      .map(([name, entry], index): FileRow => ({
         id: name,
         name,
         kind: 'file',
@@ -189,20 +231,20 @@
         modifiedAt: entry.lastModified,
         author: people[index % people.length]
       }))
-    const list = [...folders, ...files]
+    const list: FileRow[] = [...folders, ...files]
     if (folderPath.value.length) {
       list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', lastModified: '' })
     }
     return list
   })
 
-  const enterFolder = (name) => {
+  const enterFolder = (name: string) => {
     folderPath.value = [...folderPath.value, name]
   }
   const goUp = () => {
     folderPath.value = folderPath.value.slice(0, -1)
   }
-  const onRowClick = (event, row) => {
+  const onRowClick = (_event: MouseEvent, row: FileRow) => {
     if (row.kind === 'parent') goUp()
     if (row.kind === 'folder') enterFolder(row.name)
   }
@@ -211,14 +253,14 @@
     { label: rootName, href: '0' },
     ...folderPath.value.map((segment, index) => ({ label: segment, href: String(index + 1) }))
   ])
-  const onCrumb = (event, href) => {
+  const onCrumb = (event: MouseEvent, href: string) => {
     event.preventDefault()
     const depth = Number(href)
     if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
   }
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -231,7 +273,7 @@
   const listedColumns = columns
     .filter((column) => column.kind !== 'action')
     .map((column) => ({
-      id: column.id ?? column.accessorKey,
+      id: column.id ?? column.accessorKey ?? '',
       label: column.label ?? column.header,
       locked: column.hideable === false
     }))
@@ -240,9 +282,9 @@
   watch(columnsOpen, (open) => {
     if (open) columnsTipOpen.value = false
   })
-  const columnVisibility = ref({})
-  const isVisible = (id) => columnVisibility.value[id] !== false
-  const setVisible = (id, visible) => {
+  const columnVisibility = ref<Record<string, boolean>>({})
+  const isVisible = (id: string) => columnVisibility.value[id] !== false
+  const setVisible = (id: string, visible: boolean) => {
     const next = { ...columnVisibility.value }
     if (visible) delete next[id]
     else next[id] = false
@@ -254,48 +296,49 @@
   }
 
   const LIMIT = 300 * 1024 * 1024
-  const formatSize = (bytes) => {
+  const formatSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`
     return `${(bytes / 1024 / 1024).toFixed(1)} MB`
   }
-  const extensionOf = (name) => name.split('.').pop()?.toLowerCase() ?? ''
+  const extensionOf = (name: string) => name.split('.').pop()?.toLowerCase() ?? ''
 
   const uploadOpen = ref(false)
-  const picked = ref([])
-  const pickerInput = ref(null)
-  const folderInput = ref(null)
-  const uploadMode = ref('files')
-  const addHost = ref(null)
+  const picked = ref<PickedFile[]>([])
+  const pickerInput = ref<HTMLInputElement | null>(null)
+  const folderInput = ref<HTMLInputElement | null>(null)
+  const uploadMode = ref<UploadMode>('files')
+  const addHost = ref<HTMLElement | null>(null)
 
-  const toPicked = (file) => ({
+  const toPicked = (file: File): PickedFile => ({
     file,
     error: file.size > LIMIT ? 'Larger than 300 MB, the limit per file' : undefined,
     warning: file.size === 0 ? 'This file is empty' : undefined
   })
   const pickable = computed(() => picked.value.filter((item) => !item.error))
-  const addPicked = (files) => {
+  const addPicked = (files: FileList | File[]) => {
     picked.value = [...picked.value, ...Array.from(files).map(toPicked)]
   }
-  const onPick = (event) => {
-    addPicked(event.target.files ?? [])
-    event.target.value = ''
+  const onPick = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    addPicked(input.files ?? [])
+    input.value = ''
   }
-  const removePicked = (index) => {
+  const removePicked = (index: number) => {
     picked.value = picked.value.filter((_, position) => position !== index)
   }
-  const openUpload = (mode = 'files') => {
+  const openUpload = (mode: UploadMode = 'files') => {
     picked.value = []
     uploadMode.value = mode
     uploadOpen.value = true
   }
   const onAddClick = () => openUpload()
-  const onAddItem = (event, item) => {
+  const onAddItem = (_event: MouseEvent | KeyboardEvent, item: SplitButtonItem) => {
     if (item.value === 'upload') openUpload()
     if (item.value === 'upload-folder') openUpload('folder')
   }
 
-  const transfer = ref([
+  const transfer = ref<TransferItem[]>([
     { id: 'u-1', name: 'index.html', size: 6175, status: 'done', target: '' },
     { id: 'u-2', name: 'app.js', size: 248_320, status: 'running', progress: 46, target: '' },
     { id: 'u-3', name: 'styles.css', size: 52_100, status: 'running', progress: 12, target: '' },
@@ -303,15 +346,15 @@
     { id: 'u-5', name: 'hero.webp', size: 1_482_000, status: 'queued', target: '' }
   ])
   const transferCollapsed = ref(false)
-  const retried = new Set()
+  const retried = new Set<string>()
   let seq = 5
   let timer = 0
 
-  const settle = (item) => {
+  const settle = (item: TransferItem): TransferItem => {
     const failsOnce = item.name.endsWith('.mp4') && !retried.has(item.id)
     if (failsOnce) return { ...item, status: 'error', error: 'Connection lost at 82%' }
     const folders = item.name.split('/')
-    const fileName = folders.pop()
+    const fileName = folders.pop() ?? ''
     const next = { ...added.value }
     let key = item.target
     for (const folder of folders) {
@@ -330,14 +373,14 @@
     return { ...item, status: 'done', progress: 100 }
   }
 
-  const openFolder = (target) => {
+  const openFolder = (target: string) => {
     folderPath.value = target ? (target.match(/[^/]+\//g) ?? []) : []
   }
   const lastTarget = computed(
     () => transfer.value.find((item) => item.status === 'done')?.target ?? ''
   )
 
-  const isActive = (item) => item.status === 'running' || item.status === 'queued'
+  const isActive = (item: TransferItem) => item.status === 'running' || item.status === 'queued'
 
   const report = () => {
     const done = transfer.value.filter((item) => item.status === 'done').length
@@ -361,7 +404,7 @@
 
   const tick = () => {
     let starting = 2 - transfer.value.filter((item) => item.status === 'running').length
-    transfer.value = transfer.value.map((item) => {
+    transfer.value = transfer.value.map((item): TransferItem => {
       if (item.status === 'running') {
         const progress = Math.min(100, (item.progress ?? 0) + 14)
         return progress >= 100 ? settle(item) : { ...item, progress }
@@ -382,9 +425,9 @@
     if (!timer) timer = setInterval(tick, 700)
   }
 
-  const enqueue = (files) => {
+  const enqueue = (files: File[]) => {
     const target = folderKey.value
-    const next = Array.from(files).map((file) => ({
+    const next = Array.from(files).map((file): TransferItem => ({
       id: `u-${(seq += 1)}`,
       name: file.webkitRelativePath || file.name,
       size: file.size,
@@ -403,7 +446,7 @@
     uploadOpen.value = false
   }
 
-  const onPageDrop = (event, files) => {
+  const onPageDrop = (_event: DragEvent, files: File[]) => {
     enqueue(files.filter((file) => file.size <= LIMIT))
     const refused = files.filter((file) => file.size > LIMIT)
     if (refused.length) {
@@ -413,8 +456,8 @@
     }
   }
 
-  const cancel = (id) => {
-    transfer.value = transfer.value.map((item) =>
+  const cancel = (id?: string) => {
+    transfer.value = transfer.value.map((item): TransferItem =>
       (id === undefined || item.id === id) && isActive(item)
         ? { ...item, status: 'canceled' }
         : item
@@ -425,8 +468,8 @@
     }
   }
 
-  const retry = (id) => {
-    transfer.value = transfer.value.map((item) => {
+  const retry = (id?: string) => {
+    transfer.value = transfer.value.map((item): TransferItem => {
       if (item.status !== 'error' || (id !== undefined && item.id !== id)) return item
       retried.add(item.id)
       return { ...item, status: 'queued', error: undefined, progress: 0 }
@@ -661,7 +704,7 @@
                 <Table.CellActions
                   v-if="row.kind !== 'parent'"
                   :name="row.name"
-                  @select="(event, value) => onRowAction(value, row)"
+                  @select="(_event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuGroup>
                     <DropdownMenuOption
@@ -800,7 +843,7 @@
                 :directories="uploadMode === 'folder'"
                 :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
                 description="Up to 300 MB per file."
-                @drop="(event, files) => addPicked(files)"
+                @drop="(_event, files) => addPicked(files)"
               >
                 <Button
                   key="button-1"

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -36,7 +36,28 @@
     javascript: 'JavaScript'
   }
 
-  const template = (slug, title, category, framework, icon, description, updated) => ({
+  type Framework = keyof typeof FRAMEWORKS
+
+  interface Template {
+    id: string
+    title: string
+    category: string
+    framework: Framework
+    icon: string
+    description: string
+    updated: string
+    repository: string
+  }
+
+  const template = (
+    slug: string,
+    title: string,
+    category: string,
+    framework: Framework,
+    icon: string,
+    description: string,
+    updated: string
+  ): Template => ({
     id: slug,
     title,
     category,
@@ -179,11 +200,12 @@
 
   const selected = ref(templates[0])
   const previewOpen = ref(true)
-  const openPreview = (item) => {
+  const openPreview = (item: Template) => {
     selected.value = item
     previewOpen.value = true
   }
-  const categoryLabel = (id) => CATEGORIES.find((category) => category.id === id)?.label ?? id
+  const categoryLabel = (id: string) =>
+    CATEGORIES.find((category) => category.id === id)?.label ?? id
 </script>
 
 <template>

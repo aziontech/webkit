@@ -1,9 +1,14 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
+  import type { CalendarRange, CalendarValue } from '@aziontech/webkit/calendar'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, {
+    type ChartColor,
+    type ChartRange,
+    type ChartSeries
+  } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -22,14 +27,107 @@
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+  type EventSource = 'http' | 'security' | 'services' | 'access'
+  type EventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
+  type EventFieldCategory =
+    | 'request'
+    | 'response'
+    | 'cache'
+    | 'performance'
+    | 'geolocation'
+    | 'client'
+    | 'security'
+    | 'services'
+    | 'identifiers'
+
+  type EventRecord = {
+    id: string
+    at: Date
+    time: string
+    source: EventSource
+    sourceLabel: string
+    level: EventLevel
+    message: string
+    host?: string
+    requestMethod?: string
+    requestUri?: string
+    status?: number
+    requestTimeMs?: number
+    bytesSent?: number
+    cacheStatus?: string
+    country: string
+    remoteAddress: string
+    ruleName?: string
+    serviceName?: string
+    serviceDurationMs?: number
+    requestId: string
+    resourceId: string
+    userAgent?: string
+  }
+
+  type EventFieldId = Exclude<keyof EventRecord, 'id' | 'at' | 'source'>
+
+  type EventTemplate = Pick<EventRecord, 'source' | 'level' | 'message'> &
+    Partial<
+      Pick<
+        EventRecord,
+        'requestMethod' | 'requestUri' | 'status' | 'ruleName' | 'serviceName' | 'serviceDurationMs'
+      >
+    >
+
+  interface EventField {
+    id: EventFieldId
+    label: string
+    core?: boolean
+    principal?: boolean
+    category?: EventFieldCategory
+    grow?: TableColumn['grow']
+    minWidth?: number
+    align?: TableColumn['align']
+    mono?: boolean
+    format?: (value: number) => string
+  }
+
+  type AppliedValue = string | number | CalendarRange
+
+  type FilterState = Record<string, AppliedValue[]>
+
+  interface FilterOption {
+    value: AppliedValue
+    label: string
+    custom?: boolean
+  }
+
+  interface FilterField {
+    id: string
+    label: string
+    kind: 'range' | 'options'
+    options: FilterOption[]
+    formatValue?: (value: AppliedValue) => string
+    match: (event: EventRecord, values: AppliedValue[]) => boolean
+  }
+
+  interface EventBucket {
+    at: Date
+    end: Date
+    total: number
+    levels: Record<string, number>
+  }
+
+  interface ExportableTable {
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  }
+
+  type PopoverPlacement = NonNullable<InstanceType<typeof Popover>['$props']['placement']>
+
   const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
 
-  const minutesAgo = (minutes) => new Date(referenceNow - minutes * 60 * 1000)
+  const minutesAgo = (minutes: number) => new Date(referenceNow - minutes * 60 * 1000)
 
   const dayFormat = new Intl.DateTimeFormat('en-US', {
     month: 'short',
@@ -49,14 +147,15 @@
     hour12: false,
     timeZone: 'UTC'
   })
-  const isDate = (value) => value instanceof Date && !Number.isNaN(value.getTime())
+  const isDate = (value: unknown): value is Date =>
+    value instanceof Date && !Number.isNaN(value.getTime())
 
-  const formatEventTime = (date) =>
+  const formatEventTime = (date: Date) =>
     isDate(date) ? `${dayFormat.format(date)}, ${clockFormat.format(date)}` : ''
 
-  const formatEventClock = (date) => (isDate(date) ? axisFormat.format(date) : '')
+  const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat.format(date) : '')
 
-  const eventSources = {
+  const eventSources: Record<EventSource, string> = {
     http: 'HTTP Requests',
     security: 'Security',
     services: 'Services',
@@ -68,15 +167,20 @@
     label
   }))
 
-  const eventLevels = { Error: 'danger', Warning: 'warning', Info: 'info', Debug: 'secondary' }
+  const eventLevels: Record<EventLevel, TagSeverity> = {
+    Error: 'danger',
+    Warning: 'warning',
+    Info: 'info',
+    Debug: 'secondary'
+  }
 
-  const eventLevelSeverity = (level) => eventLevels[level] ?? 'secondary'
+  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'secondary'
 
-  const levelOrder = Object.keys(eventLevels)
+  const levelOrder = Object.keys(eventLevels) as EventLevel[]
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
-  const eventPeriods = [
+  const eventPeriods: FilterOption[] = [
     { value: '15m', label: 'Last 15 minutes' },
     { value: '1h', label: 'Last hour' },
     { value: '6h', label: 'Last 6 hours' },
@@ -84,11 +188,11 @@
     { value: 'custom', label: 'Custom range', custom: true }
   ]
 
-  const periodMinutes = { '15m': 15, '1h': 60, '6h': 360, '24h': 1440 }
+  const periodMinutes: Record<string, number> = { '15m': 15, '1h': 60, '6h': 360, '24h': 1440 }
 
   const fullWindowMinutes = periodMinutes['24h']
 
-  const withinRange = (date, range) => {
+  const withinRange = (date: Date, range: CalendarRange | null) => {
     if (!range) return true
     const { start, end } = range
     if (!start && !end) return true
@@ -108,7 +212,7 @@
     return true
   }
 
-  const periodRange = (value, now = new Date(referenceNow)) => {
+  const periodRange = (value: AppliedValue, now = new Date(referenceNow)) => {
     if (value && typeof value === 'object') {
       return { start: value.start ?? null, end: value.end ?? now }
     }
@@ -116,13 +220,13 @@
     return { start: new Date(now.getTime() - minutes * 60000), end: now }
   }
 
-  const matchPeriod = (date, values) => {
+  const matchPeriod = (date: Date, values: AppliedValue[]) => {
     const [period] = values ?? []
     if (!period || period === 'custom' || !isDate(date)) return true
     return withinRange(date, periodRange(period))
   }
 
-  const formatPeriod = (value) => {
+  const formatPeriod = (value: AppliedValue) => {
     if (!value || typeof value !== 'object') return ''
     const { start, end } = value
     if (!start) return end ? `Until ${formatEventClock(end)}` : ''
@@ -134,7 +238,7 @@
       : `${from} to ${dayFormat.format(end)}, ${formatEventClock(end)}`
   }
 
-  const eventFieldCategories = [
+  const eventFieldCategories: { id: EventFieldCategory; label: string }[] = [
     { id: 'request', label: 'Request' },
     { id: 'response', label: 'Response' },
     { id: 'cache', label: 'Cache' },
@@ -146,7 +250,7 @@
     { id: 'identifiers', label: 'Identifiers' }
   ]
 
-  const eventFields = [
+  const eventFields: EventField[] = [
     { id: 'time', label: 'Time', core: true, minWidth: 80, mono: true },
     { id: 'level', label: 'Level', core: true, minWidth: 104 },
     { id: 'sourceLabel', label: 'Source', core: true, minWidth: 80 },
@@ -193,11 +297,11 @@
 
   const optionalFields = eventFields.filter((field) => !field.core)
 
-  const eventField = (id) => eventFields.find((field) => field.id === id)
+  const eventField = (id: string) => eventFields.find((field) => field.id === id)
 
-  const formatEventValue = (field, value) => {
+  const formatEventValue = (field: EventField | undefined, value: unknown) => {
     if (value === undefined || value === null || value === '') return '—'
-    return field?.format ? field.format(value) : String(value)
+    return field?.format && typeof value === 'number' ? field.format(value) : String(value)
   }
 
   const hosts = [
@@ -226,7 +330,7 @@
   const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
   const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
-  const eventTemplates = [
+  const eventTemplates: EventTemplate[] = [
     {
       source: 'security',
       level: 'Error',
@@ -294,9 +398,9 @@
     }
   ]
 
-  const sequence = (seed) => {
+  const sequence = (seed: number) => {
     let state = seed
-    return (length) => {
+    return (length: number) => {
       state = (state * 1103515245 + 12345) % 2147483648
       return state % length
     }
@@ -305,13 +409,13 @@
   const eventCount = 1500
   const seedWindowMinutes = 1436
 
-  const ageFraction = (u) => (4 - Math.sqrt(16 - 15 * u)) / 3
+  const ageFraction = (u: number) => (4 - Math.sqrt(16 - 15 * u)) / 3
 
   const calmTemplates = eventTemplates.filter((template) => template.level !== 'Error')
   const errorTemplates = eventTemplates.filter((template) => template.level === 'Error')
   const rotation = [...calmTemplates, ...calmTemplates, ...errorTemplates]
 
-  const seedEvents = () => {
+  const seedEvents = (): EventRecord[] => {
     const pick = sequence(20260814)
     return Array.from({ length: eventCount }, (_, index) => {
       const template = rotation[index % rotation.length]
@@ -345,7 +449,7 @@
     })
   }
 
-  const searchEvents = (list, term) => {
+  const searchEvents = (list: EventRecord[], term: string) => {
     const needle = term.trim().toLowerCase()
     if (!needle) return list
     return list.filter((event) =>
@@ -356,8 +460,8 @@
     )
   }
 
-  const fieldValueCounts = (list, id) => {
-    const counts = new Map()
+  const fieldValueCounts = (list: EventRecord[], id: EventFieldId) => {
+    const counts = new Map<string | number, number>()
     for (const event of list) {
       const value = event[id]
       if (value === undefined || value === null || value === '') continue
@@ -368,8 +472,8 @@
       .sort((a, b) => b.count - a.count)
   }
 
-  const countFieldValues = (list, id) => {
-    const values = new Set()
+  const countFieldValues = (list: EventRecord[], id: EventFieldId) => {
+    const values = new Set<string | number>()
     for (const event of list) {
       const value = event[id]
       if (value !== undefined && value !== null && value !== '') values.add(value)
@@ -377,13 +481,13 @@
     return values.size
   }
 
-  const bucketCountFor = (windowMinutes) => {
+  const bucketCountFor = (windowMinutes: number) => {
     if (windowMinutes <= 15) return 12
     if (windowMinutes <= 60) return 20
     return 32
   }
 
-  const eventBuckets = (list, range) => {
+  const eventBuckets = (list: EventRecord[], range: CalendarRange | null): EventBucket[] => {
     const end = (range?.end ?? new Date(referenceNow)).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
@@ -406,9 +510,12 @@
     return result
   }
 
-  const eventSummary = (list) => {
+  const eventSummary = (list: EventRecord[]) => {
     const errors = list.filter((event) => event.level === 'Error').length
-    const timed = list.filter((event) => typeof event.requestTimeMs === 'number')
+    const timed = list.filter(
+      (event): event is EventRecord & { requestTimeMs: number } =>
+        typeof event.requestTimeMs === 'number'
+    )
     return {
       total: list.length,
       errors,
@@ -419,9 +526,9 @@
     }
   }
 
-  const isApplied = (state, field) => Boolean(state[field.id]?.length)
+  const isApplied = (state: FilterState, field: FilterField) => Boolean(state[field.id]?.length)
 
-  const summarize = (field, values = []) => {
+  const summarize = (field: FilterField, values: AppliedValue[] = []) => {
     if (!values.length) return null
     const first = field.options?.find((option) => option.value === values[0])
     if (first) return { label: first.label, extra: values.length - 1 }
@@ -429,13 +536,17 @@
     return { label, extra: values.length - 1 }
   }
 
-  const summarizeText = (field, values = []) => {
+  const summarizeText = (field: FilterField, values: AppliedValue[] = []) => {
     const parts = summarize(field, values)
     if (!parts) return ''
     return parts.extra ? `${parts.label} +${parts.extra}` : parts.label
   }
 
-  const toggleValue = (state, field, value) => {
+  const toggleValue = (
+    state: FilterState,
+    field: FilterField,
+    value: AppliedValue
+  ): FilterState => {
     const current = state[field.id] ?? []
     if (field.kind === 'range') {
       return { ...state, [field.id]: current[0] === value ? [] : [value] }
@@ -448,7 +559,7 @@
     }
   }
 
-  const clearField = (state, field) => {
+  const clearField = (state: FilterState, field: FilterField) => {
     const next = { ...state }
     delete next[field.id]
     return next
@@ -456,7 +567,7 @@
 
   const events = ref(seedEvents())
 
-  const baseFilterFields = [
+  const baseFilterFields: FilterField[] = [
     {
       id: 'period',
       label: 'Period',
@@ -483,18 +594,20 @@
 
   const baseFilterIds = new Set(baseFilterFields.map((field) => field.id))
 
-  const filters = ref({ period: ['24h'] })
-  const exclusions = ref({ host: ['legacy.example.com'] })
+  const filters = ref<FilterState>({ period: ['24h'] })
+  const exclusions = ref<FilterState>({ host: ['legacy.example.com'] })
   const search = ref('')
   const pagination = ref({ pageIndex: 0, pageSize: 25 })
 
   const activeFieldIds = computed(() =>
-    Object.keys(filters.value).filter((id) => !baseFilterIds.has(id) && filters.value[id]?.length)
+    Object.keys(filters.value).filter(
+      (id): id is EventFieldId => !baseFilterIds.has(id) && Boolean(filters.value[id]?.length)
+    )
   )
 
-  const filterFields = computed(() => [
+  const filterFields = computed<FilterField[]>(() => [
     ...baseFilterFields,
-    ...activeFieldIds.value.map((id) => {
+    ...activeFieldIds.value.map((id): FilterField => {
       const field = eventField(id)
       return {
         id,
@@ -504,7 +617,7 @@
           value,
           label: formatEventValue(field, value)
         })),
-        match: (event, values) => values.includes(event[id])
+        match: (event: EventRecord, values: readonly unknown[]) => values.includes(event[id])
       }
     })
   ])
@@ -516,7 +629,11 @@
           const values = filters.value[field.id]
           if (!values?.length) return true
           return field.match(event, values)
-        }) && Object.entries(exclusions.value).every(([id, values]) => !values.includes(event[id]))
+        }) &&
+        Object.entries(exclusions.value).every(
+          ([id, values]: [string, readonly unknown[]]) =>
+            !values.includes(event[id as EventFieldId])
+        )
     )
   )
 
@@ -525,7 +642,7 @@
   })
 
   const loading = ref(false)
-  let refreshTimer = null
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -535,7 +652,7 @@
     }, 700)
   }
 
-  const tableRef = ref(null)
+  const tableRef = ref<ExportableTable | null>(null)
   const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
 
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
@@ -554,7 +671,7 @@
     return eventPeriods.find((option) => option.value === period)?.label ?? 'Last 24 hours'
   })
 
-  const selectTimeRange = ({ start, end }) => {
+  const selectTimeRange = ({ start, end }: CalendarRange) => {
     filters.value = { ...filters.value, period: [{ start, end }] }
   }
 
@@ -569,13 +686,13 @@
   const fieldsCollapsed = ref(false)
   const fieldSearch = ref('')
 
-  const matchesFieldSearch = (field) => {
+  const matchesFieldSearch = (field: EventField) => {
     const term = fieldSearch.value.trim().toLowerCase()
     if (!term) return true
     return field.label.toLowerCase().includes(term) || field.id.toLowerCase().includes(term)
   }
 
-  const shownFields = computed(() => [
+  const shownFields = computed<Array<EventField & { locked?: boolean }>>(() => [
     ...coreFields.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
     ...optionalFields.filter(
       (field) => shownColumns.value.includes(field.id) && matchesFieldSearch(field)
@@ -600,12 +717,12 @@
     () => shownFields.value.length > 0 || fieldCategories.value.length > 0
   )
 
-  const categoryFilterCount = (category) =>
+  const categoryFilterCount = (category: { fields: EventField[] }) =>
     category.fields.filter((field) => filters.value[field.id]?.length).length
 
   const openCategories = ref(['request'])
 
-  const collapsedBeforeSearch = ref(null)
+  const collapsedBeforeSearch = ref<string[] | null>(null)
   watch(fieldSearch, (term, previous) => {
     const searching = Boolean(term.trim())
     if (searching && !previous.trim()) collapsedBeforeSearch.value = [...openCategories.value]
@@ -625,24 +742,28 @@
 
   const topValues = 6
 
+  const fieldValuesPlacement = 'right-start' as string as PopoverPlacement
+
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
-  const canFilterField = (field) => !unfilterableFields.has(field.id)
+  const canFilterField = (field: EventField) => !unfilterableFields.has(field.id)
 
-  const topFieldValues = (id) => fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
+  const topFieldValues = (id: EventFieldId) =>
+    fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
 
-  const fieldValueOverflow = (id) =>
+  const fieldValueOverflow = (id: EventFieldId) =>
     Math.max(0, countFieldValues(matchedEvents.value, id) - topValues)
 
-  const isValueApplied = (id, value) => (filters.value[id] ?? []).includes(value)
+  const isValueApplied = (id: string, value: AppliedValue) =>
+    (filters.value[id] ?? []).includes(value)
 
-  const toggleColumn = (id) => {
+  const toggleColumn = (id: string) => {
     shownColumns.value = shownColumns.value.includes(id)
       ? shownColumns.value.filter((shown) => shown !== id)
       : [...shownColumns.value, id]
   }
 
-  const toggleFieldValue = (id, value) => {
+  const toggleFieldValue = (id: string, value: AppliedValue) => {
     const current = filters.value[id] ?? []
     const next = current.includes(value)
       ? current.filter((applied) => applied !== value)
@@ -650,7 +771,7 @@
     filters.value = { ...filters.value, [id]: next }
   }
 
-  const toColumn = (field) => ({
+  const toColumn = (field: EventField): TableColumn => ({
     accessorKey: field.id,
     header: field.label,
     enableSorting: true,
@@ -660,7 +781,7 @@
     ...(field.align ? { align: field.align } : {})
   })
 
-  const columns = computed(() => [
+  const columns = computed<TableColumn[]>(() => [
     { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
     ...coreFields.map(toColumn),
     ...optionalFields.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
@@ -675,7 +796,7 @@
 
   const statusField = eventField('status')
 
-  const statusTone = (status) => {
+  const statusTone = (status: unknown) => {
     if (typeof status !== 'number') return null
     if (status >= 500) return 'error'
     if (status >= 400) return 'warn'
@@ -686,7 +807,7 @@
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
-  const documentEvent = ref(null)
+  const documentEvent = ref<EventRecord | null>(null)
   watch(
     selectedEvent,
     (event) => {
@@ -699,9 +820,9 @@
   const documentMinWidth = 348
   const fieldsPanelWidth = 268
 
-  const explorerEl = ref(null)
+  const explorerEl = ref<HTMLElement | null>(null)
   const explorerWidth = ref(0)
-  let explorerObserver = null
+  let explorerObserver: ResizeObserver | null = null
 
   const showFieldsPanel = computed(
     () => explorerWidth.value === 0 || explorerWidth.value >= fieldsPanelWidth + logMinWidth
@@ -734,7 +855,7 @@
     documentDrawerOpen.value = false
   }
 
-  const openDocument = (event, row) => {
+  const openDocument = (_event: MouseEvent, row: EventRecord) => {
     selectedId.value = row.id
     documentDrawerOpen.value = !isWide.value
   }
@@ -767,7 +888,7 @@
     { flush: 'sync' }
   )
 
-  const hasEventValue = (event, id) => {
+  const hasEventValue = (event: EventRecord, id: EventFieldId) => {
     const value = event[id]
     return value !== undefined && value !== null && value !== ''
   }
@@ -778,9 +899,9 @@
     documentQuery.value = ''
   })
 
-  const highlightParts = (text, term) => {
+  const highlightParts = (text: string, term: string) => {
     if (!term) return [{ text, hit: false }]
-    const parts = []
+    const parts: { text: string; hit: boolean }[] = []
     const lower = text.toLowerCase()
     let from = 0
     let at = lower.indexOf(term)
@@ -805,7 +926,7 @@
         return {
           id: field.id,
           label: field.label,
-          raw: event[field.id],
+          raw: event[field.id]!,
           value,
           parts: highlightParts(value, term),
           filterable: canFilterField(field)
@@ -820,11 +941,10 @@
       )
   })
 
-  const documentFieldCount = computed(() =>
-    documentEvent.value
-      ? eventFields.filter((field) => hasEventValue(documentEvent.value, field.id)).length
-      : 0
-  )
+  const documentFieldCount = computed(() => {
+    const event = documentEvent.value
+    return event ? eventFields.filter((field) => hasEventValue(event, field.id)).length : 0
+  })
 
   const documentStatus = computed(() => {
     if (!documentQuery.value.trim()) return ''
@@ -840,13 +960,15 @@
     )
   )
 
-  const isIncluded = (id, value) => (filters.value[id] ?? []).includes(value)
+  const isIncluded = (id: string, value: AppliedValue) => (filters.value[id] ?? []).includes(value)
 
-  const isExcluded = (id, value) => (exclusions.value[id] ?? []).includes(value)
+  const isExcluded = (id: string, value: AppliedValue) =>
+    (exclusions.value[id] ?? []).includes(value)
 
-  const without = (list = [], value) => list.filter((item) => item !== value)
+  const without = (list: AppliedValue[] = [], value: AppliedValue) =>
+    list.filter((item) => item !== value)
 
-  const includeValue = (id, value) => {
+  const includeValue = (id: string, value: AppliedValue) => {
     const current = filters.value[id] ?? []
     filters.value = {
       ...filters.value,
@@ -855,7 +977,7 @@
     exclusions.value = { ...exclusions.value, [id]: without(exclusions.value[id], value) }
   }
 
-  const excludeValue = (id, value) => {
+  const excludeValue = (id: string, value: AppliedValue) => {
     const current = exclusions.value[id] ?? []
     exclusions.value = {
       ...exclusions.value,
@@ -877,7 +999,7 @@
     })
   )
 
-  const removeExclusion = (id, value) => {
+  const removeExclusion = (id: string, value: AppliedValue) => {
     exclusions.value = { ...exclusions.value, [id]: without(exclusions.value[id], value) }
   }
 
@@ -899,11 +1021,16 @@
     ]
   })
 
-  const levelColors = { Error: 'danger', Warning: 'warning', Info: 'info', Debug: 'other' }
+  const levelColors: Record<EventLevel, ChartColor> = {
+    Error: 'danger',
+    Warning: 'warning',
+    Info: 'info',
+    Debug: 'other'
+  }
 
   const volumeLabels = computed(() => buckets.value.map((bucket) => bucket.at))
 
-  const volumeSeries = computed(() =>
+  const volumeSeries = computed<ChartSeries[]>(() =>
     levelOrder.map((level) => ({
       id: level,
       name: level,
@@ -922,7 +1049,7 @@
 
   const busiestBucket = computed(() => buckets.value[busiestIndex.value] ?? null)
 
-  const selectVolume = (span) => {
+  const selectVolume = (span: ChartRange | null) => {
     if (!span) return
     const from = buckets.value[span[0]]
     const to = buckets.value[span[1]]
@@ -944,15 +1071,15 @@
   )
 
   const filterOpen = ref(false)
-  const filterFieldId = ref(null)
+  const filterFieldId = ref<string | null>(null)
   const filterQuery = ref('')
-  const filterPanel = ref(null)
-  const filterRoot = ref(null)
-  const filterOriginId = ref(null)
-  const filterDirection = ref('forward')
-  const customFieldId = ref(null)
+  const filterPanel = ref<HTMLElement | null>(null)
+  const filterRoot = ref<HTMLElement | null>(null)
+  const filterOriginId = ref<string | null>(null)
+  const filterDirection = ref<'forward' | 'back'>('forward')
+  const customFieldId = ref<string | null>(null)
   const calendarOpen = ref(false)
-  const customRange = ref(null)
+  const customRange = ref<CalendarValue>(null)
 
   const customFilterField = computed(() =>
     filterFields.value.find((field) => field.id === customFieldId.value)
@@ -969,11 +1096,11 @@
     return filterFieldId.value ? `values:${filterFieldId.value}` : 'fields'
   })
 
-  const filterRegion = ref(null)
+  const filterRegion = ref<HTMLElement | null>(null)
   const filterRegionHeight = ref('')
-  let releaseFilterHeight = null
+  let releaseFilterHeight: (() => void) | null = null
 
-  const animateFilterHeight = async (mutate) => {
+  const animateFilterHeight = async (mutate: () => void) => {
     const node = filterRegion.value
     if (!node || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
       mutate()
@@ -986,14 +1113,14 @@
     const to = node.offsetHeight
     if (to === from) return
     filterRegionHeight.value = `${from}px`
-    let timer = null
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined
     const finish = () => {
       node.removeEventListener('transitionend', onEnd)
       clearTimeout(timer)
       filterRegionHeight.value = ''
       releaseFilterHeight = null
     }
-    const onEnd = (event) => {
+    const onEnd = (event: TransitionEvent) => {
       if (event.propertyName === 'height' && event.target === node) finish()
     }
     node.addEventListener('transitionend', onEnd)
@@ -1006,21 +1133,24 @@
     )
   }
 
-  const toFilterLevel = (direction, mutate) => {
+  const toFilterLevel = (direction: 'forward' | 'back', mutate: () => void) => {
     filterDirection.value = direction
     animateFilterHeight(mutate)
   }
 
-  const filterRows = computed(() => {
+  const filterRows = computed<Array<FilterField | FilterOption>>(() => {
     const term = filterQuery.value.trim().toLowerCase()
-    const source = filterField.value ? (filterField.value.options ?? []) : filterFields.value
+    const source: Array<FilterField | FilterOption> = filterField.value
+      ? (filterField.value.options ?? [])
+      : filterFields.value
     if (!term) return source
     return source.filter((row) => row.label.toLowerCase().includes(term))
   })
 
-  const isPicked = (value) => (filters.value[filterFieldId.value] ?? []).includes(value)
+  const isPicked = (value: AppliedValue) =>
+    (filters.value[filterFieldId.value ?? ''] ?? []).includes(value)
 
-  const enterFilterField = (fieldId) => {
+  const enterFilterField = (fieldId: string) => {
     filterOriginId.value = fieldId
     if (filterOpen.value) {
       toFilterLevel('forward', () => {
@@ -1041,14 +1171,16 @@
     })
   }
 
-  const focusFilterOrigin = async (id) => {
+  const focusFilterOrigin = async (id: string | null) => {
     await nextTick()
     const field = id ? filterFields.value.find((item) => item.id === id) : null
     const chip =
       field && isApplied(filters.value, field)
-        ? document.querySelector(`[data-filter-chip="${id}"]`)
+        ? document.querySelector<HTMLElement>(`[data-filter-chip="${id}"]`)
         : null
-    ;(chip ?? filterRoot.value?.querySelector('[data-testid="filter-button__trigger"]'))?.focus()
+    ;(
+      chip ?? filterRoot.value?.querySelector<HTMLElement>('[data-testid="filter-button__trigger"]')
+    )?.focus()
   }
 
   watch(filterOpen, (isOpen) => {
@@ -1064,7 +1196,7 @@
     focusFilterOrigin(id)
   })
 
-  const pickFilterOption = (field, option) => {
+  const pickFilterOption = (field: FilterField, option: FilterOption) => {
     if (option.custom) {
       toFilterLevel('forward', () => {
         customFieldId.value = field.id
@@ -1084,11 +1216,11 @@
     })
   }
 
-  const commitCustomRange = (range) => {
+  const commitCustomRange = (range: CalendarValue) => {
     const field = customFilterField.value
     if (!field) return
     const next = { ...filters.value }
-    if (range?.start || range?.end) next[field.id] = [range]
+    if (range && !(range instanceof Date) && (range.start || range.end)) next[field.id] = [range]
     else delete next[field.id]
     filters.value = next
     const id = field.id
@@ -1098,21 +1230,21 @@
     focusFilterOrigin(id)
   }
 
-  const clearFilterField = (field) => {
+  const clearFilterField = (field: FilterField) => {
     filters.value = clearField(filters.value, field)
   }
 
   const filterLevelRows = () => [
-    ...(filterPanel.value?.querySelectorAll(
+    ...(filterPanel.value?.querySelectorAll<HTMLElement>(
       `[data-level="${filterLevel.value}"] [data-filter-row]`
     ) ?? [])
   ]
 
-  const moveFilterFocus = (event, step) => {
+  const moveFilterFocus = (event: KeyboardEvent, step: number) => {
     const items = filterLevelRows()
     if (!items.length) return
     event.preventDefault()
-    const index = items.indexOf(event.target)
+    const index = items.indexOf(event.target as HTMLElement)
     items[(index + step + items.length) % items.length]?.focus()
   }
 
@@ -1125,7 +1257,7 @@
     filterFields.value.filter((field) => isApplied(filters.value, field))
   )
 
-  const summarizeFilter = (field) => summarize(field, filters.value[field.id])
+  const summarizeFilter = (field: FilterField) => summarize(field, filters.value[field.id])
 
   onBeforeUnmount(() => {
     clearTimeout(refreshTimer)
@@ -1223,9 +1355,7 @@
                             kind="outlined"
                             size="small"
                             :aria-label="
-                              customFilterField
-                                ? 'Back to date periods'
-                                : 'Back to all filters'
+                              customFilterField ? 'Back to date periods' : 'Back to all filters'
                             "
                             @click="customFilterField ? leaveCustomRange() : backToFields()"
                           />
@@ -1281,7 +1411,7 @@
                           >
                             <template v-if="!filterField">
                               <button
-                                v-for="field in filterRows"
+                                v-for="field in filterRows as FilterField[]"
                                 :key="field.id"
                                 type="button"
                                 data-filter-row
@@ -1305,7 +1435,7 @@
 
                             <template v-else>
                               <button
-                                v-for="option in filterRows"
+                                v-for="option in filterRows as FilterOption[]"
                                 :key="String(option.value)"
                                 type="button"
                                 data-filter-row
@@ -1316,9 +1446,7 @@
                                       ? 'menuitemradio'
                                       : 'menuitemcheckbox'
                                 "
-                                :aria-checked="
-                                  option.custom ? undefined : isPicked(option.value)
-                                "
+                                :aria-checked="option.custom ? undefined : isPicked(option.value)"
                                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                 @click="pickFilterOption(filterField, option)"
                               >
@@ -1452,7 +1580,7 @@
                   v-if="summarizeFilter(field)?.extra"
                   class="shrink-0 text-(--text-muted)"
                 >
-                  +{{ summarizeFilter(field).extra }}
+                  +{{ summarizeFilter(field)?.extra }}
                 </span>
               </span>
             </Chip>
@@ -1550,7 +1678,7 @@
 
               <Popover
                 v-if="canFilterField(field) && fieldCounts[field.id]"
-                placement="right-start"
+                :placement="fieldValuesPlacement"
               >
                 <div
                   class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1587,9 +1715,7 @@
                       >
                         {{ formatEventValue(field, entry.value) }}
                       </span>
-                      <span
-                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                      >
+                      <span class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)">
                         {{ entry.count }}
                       </span>
                       <i
@@ -1670,7 +1796,7 @@
 
                       <Popover
                         v-if="canFilterField(field) && fieldCounts[field.id]"
-                        placement="right-start"
+                        :placement="fieldValuesPlacement"
                       >
                         <div
                           class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1778,9 +1904,7 @@
               <div class="flex flex-col">
                 <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
                 <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{
-                    summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
-                  }}
+                  {{ summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms` }}
                 </dd>
               </div>
             </dl>
@@ -1840,9 +1964,7 @@
               </template>
 
               <template #cell-time="{ value }">
-                <span
-                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
-                >
+                <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
                   {{ value }}
                 </span>
               </template>
@@ -1926,9 +2048,7 @@
       >
         <template #header>
           <div class="flex items-center justify-between gap-(--spacing-xs)">
-            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
-              Event
-            </span>
+            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)"> Event </span>
             <Tooltip text="Close">
               <IconButton
                 icon="pi pi-times"
@@ -2074,9 +2194,7 @@
             </div>
 
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                Event document
-              </h3>
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
               <div class="min-w-0">
                 <CodeBlock
                   :tabs="documentTabs"
