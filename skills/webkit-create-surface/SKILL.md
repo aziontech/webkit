@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -109,7 +109,7 @@ Each piece of the anatomy is a component — compose them, never re-type their m
 | Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                            |
 | Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="pi pi-cog"`                                        |
 | Row (field, switch, stacked) | `SettingRow` (`@aziontech/webkit/setting-row`) with `kind` `field`, `compact` or `stacked`                                                  |
-| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `kind="plain"` on a create page, `kind="fade"` on a wizard step, the floating default on settings |
+| Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `kind="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `kind="plain"` on an in-page form saved as one unit, `kind="fade"` on a wizard step, the floating default on settings |
 | Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                        |
 
 ## 3. Advanced is the endpoint's not-required set

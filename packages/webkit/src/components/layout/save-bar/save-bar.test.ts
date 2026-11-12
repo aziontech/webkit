@@ -3,6 +3,7 @@ import '../../../test/reflow.css'
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Centered from '../../../../examples/save-bar/centered.vue'
 import Default from '../../../../examples/save-bar/default.vue'
 import Docked from '../../../../examples/save-bar/docked.vue'
 import Fade from '../../../../examples/save-bar/fade.vue'
@@ -32,7 +33,7 @@ describe('SaveBar', () => {
     )
   })
 
-  it.each(['floating', 'docked', 'plain', 'fade'] as const)(
+  it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
     'renders the leading slot in place of the icon and sentence (kind=%s)',
     (kind) => {
       const { getByTestId } = within(
@@ -52,7 +53,7 @@ describe('SaveBar', () => {
     }
   )
 
-  it.each(['floating', 'docked', 'plain', 'fade'] as const)(
+  it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
     'mirrors kind=%s and renders the actions',
     (kind) => {
       const { getByTestId, getByRole } = within(
@@ -97,6 +98,33 @@ describe('SaveBar', () => {
 
   it('has no accessibility violations as a wizard step footer', async () => {
     await expectNoA11yViolations(render(Fade).container)
+  })
+
+  it('puts Cancel and Create, in reading order, inside the centered card', () => {
+    const view = within(render(Centered).container)
+    const card = view.getByTestId('layout-save-bar__card')
+    const buttons = within(card).getAllByRole('button')
+
+    expect(view.getByTestId('layout-save-bar').getAttribute('data-kind')).toBe('centered')
+    expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Cancel', 'Create'])
+    expect(view.queryByTestId('layout-save-bar__message')).toBeNull()
+  })
+
+  it('renders the status sentence inside the centered card when given', () => {
+    const view = within(
+      render(SaveBar, {
+        props: { kind: 'centered' },
+        slots: { default: '3 permissions selected', actions: '<button type="button">Create</button>' }
+      }).container
+    )
+
+    expect(
+      view.getByTestId('layout-save-bar__card').contains(view.getByTestId('layout-save-bar__message'))
+    ).toBe(true)
+  })
+
+  it('has no accessibility violations as a create page footer', async () => {
+    await expectNoA11yViolations(render(Centered).container)
   })
 })
 

@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -934,8 +934,10 @@ The primary action drives the native submit so **Enter submits**. While the requ
 locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skill **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
-(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page or a form saved
-as one unit uses `kind="plain"` (always shown, on the form column); a full-page wizard step uses
+(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page uses
+`kind="centered"` (Cancel and Create in a raised card centred at the bottom of the form, always
+shown, at every width — never a hand-built sticky pill); an in-page form saved as one unit uses
+`kind="plain"` (always shown, on the form column); a full-page wizard step uses
 `kind="fade"` (no border, Back in `#leading`, the step's submit in `#actions`); a settings page
 mounts the default `floating` bar only while the form is dirty or saving, with the status sentence
 in its default slot.

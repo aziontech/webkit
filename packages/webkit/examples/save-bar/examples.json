@@ -21,6 +21,11 @@
       "name": "Fade",
       "summary": "The footer of a full-page wizard step: Back on the left and the step's primary action on the right, with no border; the step content fades into the canvas above it.",
       "file": "fade.vue"
+    },
+    {
+      "name": "Centered",
+      "summary": "The footer of a create page: Cancel and Create in a raised card centred at the bottom of the form, over the content, at every width.",
+      "file": "centered.vue"
     }
   ]
 }
