@@ -135,7 +135,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -288,7 +288,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const pending = ref<TeamRow | null>(null)
   const deleteOpen = ref(false)
 
-  const onAction = (value: string | number, row: TeamRow) => {
+  const onAction = (value: DropdownMenuOptionValue, row: TeamRow) => {
     if (value === 'duplicate') {
       const source = teams.value.find((team) => team.id === row.id)
       if (!source) return

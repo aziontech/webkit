@@ -131,7 +131,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
@@ -145,10 +145,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
     ips: string[]
     countries: string[]
     paths: string[]
-  }
-
-  interface TuningTable {
-    exportCsv: (options?: { filename?: string }) => Promise<void>
   }
 
   const RANGES = [
@@ -229,7 +225,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   const selection = ref({ ...INITIAL_SELECTION })
   const sorting = ref([{ id: 'hits', desc: true }])
 
-  const rangeLabel = (value: unknown) => RANGES.find((item) => item.value === value)?.label ?? ''
+  const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
   const minimumHits = computed(() => {
     const value = Number.parseInt(threshold.value, 10)
     return Number.isFinite(value) && value > 0 ? value : 0
@@ -248,7 +244,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
   const formatHits = (value: number) => new Intl.NumberFormat('en-US').format(value)
 
-  const tuningTable = ref<TuningTable | null>(null)
+  const tuningTable = ref<TableExposed<Match> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)
   const exportCsv = () => tuningTable.value?.exportCsv({ filename: 'waf-tuning.csv' })
 

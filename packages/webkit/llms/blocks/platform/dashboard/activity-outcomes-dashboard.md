@@ -182,7 +182,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
@@ -191,12 +191,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import { ref } from 'vue'
 
   type Outcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
-
-  interface FilterOption {
-    value: string
-    label: string
-    disabled?: boolean
-  }
 
   interface ActivityRow {
     id: string
@@ -224,7 +218,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     (_, index) => new Date(Date.UTC(2026, 10, 9, 15 + index))
   )
 
-  const timeRanges: FilterOption[] = [
+  const timeRanges: SelectOptionItem[] = [
     {
       value: 'Last hour',
       label: 'Last hour'
@@ -243,7 +237,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const actorOptions: FilterOption[] = [
+  const actorOptions: SelectOptionItem[] = [
     {
       value: 'Any actor',
       label: 'Any actor'
@@ -278,7 +272,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const outcomeOptions: FilterOption[] = [
+  const outcomeOptions: SelectOptionItem[] = [
     {
       value: 'Any outcome',
       label: 'Any outcome'
@@ -305,7 +299,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const categoryOptions: FilterOption[] = [
+  const categoryOptions: SelectOptionItem[] = [
     {
       value: 'Any category',
       label: 'Any category'

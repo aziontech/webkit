@@ -139,7 +139,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -370,7 +370,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
   )
 
-  const openHistory = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+  const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
     if (value === 'history' && !historyCollapsed.value) {
       historyCollapsed.value = true
       return

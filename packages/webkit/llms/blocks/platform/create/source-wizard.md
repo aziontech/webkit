@@ -141,8 +141,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Stepper from '@aziontech/webkit/stepper'
-  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
+  import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import { computed, nextTick, ref } from 'vue'
 
   interface ServiceOption {
@@ -246,7 +245,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const query = ref('')
   const creating = ref(false)
   const newName = ref('')
-  const nameField = ref<{ focus?: () => void } | null>(null)
+  const nameField = ref<InstanceType<typeof Input> | null>(null)
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
@@ -281,7 +280,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const startCreating = () => {
     newName.value = query.value.trim()
     creating.value = true
-    nextTick(() => nameField.value?.focus?.())
+    nextTick(() => nameField.value?.focus())
   }
 
   const cancelCreating = () => {

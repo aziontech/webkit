@@ -166,7 +166,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import Select, { type SelectValue } from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -177,9 +177,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   type DeploymentPolicy = 'single_version' | 'versioned_urls'
 
-  interface EnvironmentOption {
-    value: string
-    label: string
+  interface EnvironmentOption extends SelectOptionItem {
     deploymentPolicy: DeploymentPolicy
   }
 
@@ -218,9 +216,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const form = reactive(blankForm())
   const errors = reactive({ domain: '', environment: '' })
 
-  const environmentLabel = (value: unknown) =>
+  const environmentLabel = (value: string) =>
     environmentOptions.find((option) => option.value === value)?.label ?? ''
-  const certificateLabel = (value: unknown) =>
+  const certificateLabel = (value: string) =>
     certificateOptions.find((option) => option.value === value)?.label ?? ''
 
   const subjectCovers = (subject: string, host: string) => {
@@ -269,8 +267,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { immediate: true }
   )
 
-  const onCertificate = (value: SelectValue) => {
-    if (typeof value !== 'string') return
+  const onCertificate = (value: string) => {
     certificateTouched.value = true
     form.certificate = value
   }
@@ -301,8 +298,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
   })
 
-  const onEnvironmentModel = (value: SelectValue) => {
-    if (typeof value !== 'string') return
+  const onEnvironmentModel = (value: string) => {
     if (value === CREATE_ENVIRONMENT) {
       environmentSelectOpen.value = false
       return

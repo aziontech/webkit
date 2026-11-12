@@ -178,7 +178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CardPricing from '@aziontech/webkit/card-pricing'
@@ -201,12 +201,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   type BillingPeriod = 'monthly' | 'yearly'
-
-  interface SelectOption {
-    value: string
-    label: string
-    disabled?: boolean
-  }
 
   interface BillingAddress {
     country: string | undefined
@@ -373,7 +367,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }
   }
 
-  const countryOptions: SelectOption[] = [
+  const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },
@@ -487,13 +481,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     () => address.useAccountInformation,
     (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress())
   )
-  const stateOptions: SelectOption[] = [
+  const stateOptions: SelectOptionItem[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
     { value: 'Minas Gerais', label: 'Minas Gerais' },
     { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
   ]
-  const cityOptions: SelectOption[] = [
+  const cityOptions: SelectOptionItem[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Campinas', label: 'Campinas' },
     { value: 'Santos', label: 'Santos' }

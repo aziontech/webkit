@@ -152,7 +152,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { computed, ref } from 'vue'
@@ -160,12 +160,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   type FigureFormat = 'number' | 'share'
   type WeekKey = 'week1' | 'week2' | 'week3' | 'week4' | 'week5' | 'week6'
 
-  interface FilterOption {
-    value: string
-    label: string
-  }
-
-  interface PeriodOption extends FilterOption {
+  interface PeriodOption extends SelectOptionItem {
     comparison: string
   }
 
@@ -228,7 +223,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const segments: FilterOption[] = [
+  const segments: SelectOptionItem[] = [
     {
       value: 'all',
       label: 'All users'
@@ -576,7 +571,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const period = ref('6w')
   const segment = ref('all')
 
-  const optionLabel = (options: FilterOption[]) => (value: unknown) =>
+  const optionLabel = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)

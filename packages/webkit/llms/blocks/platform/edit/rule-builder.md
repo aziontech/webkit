@@ -139,15 +139,13 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import Select from '@aziontech/webkit/select'
-  import type { SelectValue } from '@aziontech/webkit/select-root'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  type Option = { value: string; label: string }
   type ArgumentInput = { field: string; placeholder: string; label: string }
   type BehaviorArgument =
     | ({ kind: 'text' } & ArgumentInput)
@@ -437,7 +435,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
     { value: '4021887', label: 'ab-test-split', scope: 'request' },
     { value: '4021890', label: 'security-headers', scope: 'any' }
   ]
-  const sources: Record<string, Option[]> = {
+  const sources: Record<string, SelectOptionItem[]> = {
     'cache-settings': [
       { value: 'cs-default', label: 'Default Cache' },
       { value: 'cs-static', label: 'Static Assets' }
@@ -459,10 +457,9 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
     "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
-  const operatorLabel = (value: unknown) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator: unknown) =>
-    operator !== 'exists' && operator !== 'does-not-exist'
-  const behaviorLabel = (value: unknown) => byValue[String(value)]?.label ?? ''
+  const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
+  const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
+  const behaviorLabel = (value: string) => byValue[value]?.label ?? ''
   const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
   const behaviorsFor = (phase: string) =>
     catalog.filter((behavior) => behavior.phases.includes(phase))
@@ -470,7 +467,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
     Boolean(byValue[value]?.phases.includes(phase))
   const isTerminalBehavior = (value: string | undefined) =>
     ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302'].includes(value ?? '')
-  const behaviorOptions = (source: string, phase: string): Option[] => {
+  const behaviorOptions = (source: string, phase: string): SelectOptionItem[] => {
     if (source === 'policies') {
       return policies
         .filter((policy) => phase !== 'response' || policy.scope === 'any')
@@ -574,9 +571,9 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
   const optionLabelIn = (source: string, value: unknown) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
 
-  const setBehaviorType = (index: number, type: SelectValue) => {
+  const setBehaviorType = (index: number, type: string) => {
     if (form.behaviors[index].type === type) return
-    form.behaviors[index] = { id: form.behaviors[index].id, type: String(type) }
+    form.behaviors[index] = { id: form.behaviors[index].id, type }
   }
   const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
@@ -825,7 +822,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
                   <template #cell-variable="{ value, update, invalid }">
                     <div class="contents font-code">
                       <Combobox
-                        :model-value="value as string"
+                        :model-value="value"
                         :options="variablesForPhase"
                         size="large"
                         placeholder="${uri}"
@@ -839,7 +836,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
                   </template>
                   <template #cell-operator="{ value, update }">
                     <Select
-                      :model-value="value as SelectValue"
+                      :model-value="value"
                       size="large"
                       class="w-full"
                       :disabled="submitting"
@@ -862,7 +859,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
                     <Input
                       v-if="takesArgument(item.operator)"
                       key="argument"
-                      :model-value="value as string"
+                      :model-value="value"
                       size="large"
                       class="w-full"
                       autocomplete="off"

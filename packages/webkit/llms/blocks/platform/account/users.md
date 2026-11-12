@@ -129,7 +129,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
@@ -287,7 +287,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
   const pending = ref<User | null>(null)
   const removeOpen = ref(false)
-  const onAction = (value: string | number, user: User) => {
+  const onAction = (value: DropdownMenuOptionValue, user: User) => {
     if (value === 'resend') {
       toast.success(`Invitation sent again to ${user.email}.`, {
         description: 'The earlier link stops working.'

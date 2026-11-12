@@ -264,7 +264,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
   )
 
   const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
-  const asApplication = (item: Record<string, unknown>) => item as Application
   const severityOf = (value: ApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'secondary'
 
@@ -435,15 +434,15 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
                     <dd class="min-w-0 truncate">
                       <Tag
                         v-if="field.id === 'status'"
-                        :label="asApplication(item).status"
-                        :severity="severityOf(asApplication(item).status)"
+                        :label="item.status"
+                        :severity="severityOf(item.status)"
                         size="small"
                       />
                       <bdi v-else-if="field.id === 'domain'">{{ item.domain }}</bdi>
                       <span
                         v-else-if="field.id === 'requests'"
                         class="tabular-nums"
-                        >{{ requestsFormat.format(asApplication(item).requests) }}</span
+                        >{{ requestsFormat.format(item.requests) }}</span
                       >
                       <template v-else>{{ item[field.id] }}</template>
                     </dd>

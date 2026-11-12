@@ -176,7 +176,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
@@ -193,7 +193,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -228,7 +228,6 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     query: string
     options: ScopeOption[]
   }
-  type ExportableTable = { exportCsv: (options?: { filename?: string }) => void }
 
   const columns: TableColumn[] = [
     { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
@@ -339,7 +338,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   })
 
   const loading = ref(false)
-  const table = ref<ExportableTable | null>(null)
+  const table = ref<TableExposed<Variable> | null>(null)
   const exportCsv = () => table.value?.exportCsv({ filename: 'variables.csv' })
 
   const refresh = () => {
@@ -421,7 +420,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     deleteOpen.value = false
   }
 
-  const onRowAction = (value: string | number, row: Variable) => {
+  const onRowAction = (value: DropdownMenuOptionValue, row: Variable) => {
     if (value === 'edit') {
       editing.value = row
       drawerOpen.value = true
@@ -467,10 +466,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     visible: false
   })
   const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
-  const formatKey = (value: unknown) =>
-    String(value ?? '')
-      .replace(/\s/g, '_')
-      .toUpperCase()
+  const formatKey = (value: string) => value.replace(/\s/g, '_').toUpperCase()
 
   const drawerOpen = ref(false)
   const submitting = ref(false)

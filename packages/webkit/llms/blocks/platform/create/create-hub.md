@@ -129,7 +129,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Select, { type SelectValue } from '@aziontech/webkit/select'
+  import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { computed, ref } from 'vue'
 
@@ -518,9 +518,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     }, 1500)
   }
 
-  const onSelectScope = (value: SelectValue) => {
-    if (typeof value !== 'string' || !value || value === '__add-account__' || value === scope.value)
-      return
+  const onSelectScope = (value: string) => {
+    if (!value || value === '__add-account__' || value === scope.value) return
     scope.value = value
     loadRepos()
   }

@@ -170,7 +170,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -269,7 +269,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     { value: 'weighted', label: 'Weighted' }
   ]
 
-  const policyLabel = (value: unknown) =>
+  const policyLabel = (value: string) =>
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   const filterFields: FilterField[] = [
@@ -495,7 +495,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     columnVisibility.value = {}
   }
 
-  const tableRef = ref<{ exportCsv: (options?: { filename?: string }) => void } | null>(null)
+  const tableRef = ref<TableExposed<DnsRecord> | null>(null)
   const pagination = ref({ pageIndex: 0, pageSize: 8 })
   const visibleRows = computed(() =>
     rows.filter((row) =>
