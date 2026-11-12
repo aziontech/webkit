@@ -1,11 +1,15 @@
-# `@aziontech/webkit/vite` — optional Vite config
+# `@aziontech/webkit/vite` — deprecated
 
 ```ts
 import { webkitViteConfig } from '@aziontech/webkit/vite'
 ```
 
-`webkitViteConfig` is a partial Vite config, typed (`types/vite/index.d.ts`), so it type-checks in a
-`vite.config.ts`. Today it holds one setting:
+**Deprecated since 6.0, removed in 7.0.** WebKit no longer depends on `vee-validate`: no component,
+block or example imports it (form controls bind with `v-model` inside `Field`, see the
+`webkit-form` skill), so the package dropped it from `dependencies` and this entry has nothing of
+WebKit's to pre-bundle. It keeps working unchanged until 7.0.
+
+`webkitViteConfig` is a partial Vite config:
 
 ```ts
 {
@@ -15,28 +19,21 @@ import { webkitViteConfig } from '@aziontech/webkit/vite'
 }
 ```
 
-## What it is for
+## Replacement
 
-It makes Vite pre-bundle `vee-validate` when the dev server starts. Without it, Vite discovers the
-package on the first page that imports it, optimizes it again and reloads the page; until that
-reload two copies can be loaded, and `vee-validate` keeps its form context in module state, so a
-field from one copy does not find the form from the other.
-
-You need it only when **your app** uses `vee-validate`. WebKit's components do not import it (form
-controls bind with `v-model`, see the `webkit-form` skill), `init` does not write it, and an app
-without `vee-validate` can ignore this entry. A production build (`vite build`) is not affected.
-
-## Use
-
-Merge it rather than spread it, so your own `optimizeDeps` keeps its entries:
+An app that uses `vee-validate` itself installs it and pre-bundles it in its own config, so Vite
+does not discover it on the first page that imports it and reload with a second copy (`vee-validate`
+keeps its form context in module state, so a field from one copy would not find the form from the
+other):
 
 ```ts
 import vue from '@vitejs/plugin-vue'
-import { defineConfig, mergeConfig } from 'vite'
-import { webkitViteConfig } from '@aziontech/webkit/vite'
+import { defineConfig } from 'vite'
 
-export default mergeConfig(webkitViteConfig, defineConfig({ plugins: [vue()] }))
+export default defineConfig({
+  plugins: [vue()],
+  optimizeDeps: { include: ['vee-validate'] }
+})
 ```
 
-`mergeConfig` concatenates arrays, so `optimizeDeps.include` ends up with `vee-validate` plus yours.
-Spreading (`{ ...webkitViteConfig, optimizeDeps: { … } }`) would drop it.
+An app without `vee-validate` removes the `webkitViteConfig` import and its `mergeConfig` call.
