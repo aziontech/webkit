@@ -36,11 +36,11 @@ The creation header from `headers/creation-header`: a small outlined back `IconB
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder buttons that open the system picker, the keyboard path to the drag and drop it mentions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `kind="link"` that open the system picker, the keyboard path to the drag and drop it mentions. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `Card`, `EmptyState`, `Button`, `Link` (required until connected)
 
-Under the Import from GitHub heading, a `Card` with a medium `EmptyState` on a dashed surface: the provider glyph, a title, one sentence, Continue with GitHub as a secondary large `Button` and Manage connected providers as a large `Link`. It shows only while no account is connected.
+Under the Import from GitHub heading, a `Card` with a medium `EmptyState` on a dashed surface: the provider glyph, a title, one sentence, Continue with GitHub as a secondary large `Button` and Manage connected providers as a large `Link`, both centred at their natural width (`class="self-center"`), so on a phone the button does not stretch across the column. It shows only while no account is connected.
 
 ### D. Repository search — `Select`, `Input` (required once connected)
 
@@ -69,6 +69,7 @@ Under the Start from template heading, an outlined medium Filter `Button`, then 
 - Don't add a Continue or Next button; each Import and each template card starts its flow.
 - Don't let the template gallery push the page into a long scroll on large screens; it scrolls inside its own area.
 - Don't show templates as a dense table; the glyph and sentence are what the user scans.
+- Don't hand-write the file and folder links or underline them at rest; use `Button kind="link"`.
 
 ## Copy
 
@@ -563,19 +564,15 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             <template #description>
               Start from a repository or use a framework template. You can also drag and drop your
               project, or select a
-              <button
-                type="button"
-                class="text-link cursor-pointer"
-              >
-                file
-              </button>
+              <Button
+                kind="link"
+                label="file"
+              />
               or a
-              <button
-                type="button"
-                class="text-link cursor-pointer"
-              >
-                folder</button
-              >.
+              <Button
+                kind="link"
+                label="folder"
+              />.
             </template>
           </PageHeader>
 
@@ -631,6 +628,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               icon="ai ai-github"
                               kind="secondary"
                               size="large"
+                              class="self-center"
                               :loading="connecting"
                               @click="connect"
                             />
@@ -638,6 +636,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               label="Manage connected providers"
                               href="#"
                               size="large"
+                              class="self-center"
                               @click.prevent
                             />
                           </template>

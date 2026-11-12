@@ -1,6 +1,6 @@
 # SinglePageCreate (`platform/create/single-page-create`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a fixed bar under the scrolling form, the same bar Version Detail uses, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings and ends in a full-bleed sticky footer. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput` and `Button`. ImportFromGit is the same job inside the platform shell with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput` and `Button`. ImportFromGit is the same job inside the platform shell with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.
 
 - Surface: product
 - Source: `blocks/platform/create/single-page-create/single-page-create.vue` in `@aziontech/webkit`
@@ -53,7 +53,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="plain"`, fixed under the scrolling region on the form's measure. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar as a full-bleed sticky footer; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
 
 ## Do
 
@@ -67,6 +67,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 ## Don't
 
 - Don't show the sidebar on this page, or open it as a modal over the list.
+- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar kind="centered"`.
 - Don't print the band's guidance as a paragraph under its title; use the `hint`.
 - Don't mark fields required or invalid before the first submit, or show both states on one field.
 - Don't make Save deploy, publish or charge as a side effect; creating is not deploying.
@@ -97,7 +98,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 - Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Import, Cancel and Save.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
-- CreateService: a long create in five groups of rows over a full-bleed sticky `SaveBar` with Cancel and Save.
+- CreateService: a long create in five groups of rows under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
 - ImportFromGit: the same job inside the platform shell with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
 - ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.
@@ -115,7 +116,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 - `Default` — primary (the code below)
 - `CreatePurge` — Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type.
-- `CreateService` — A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) over a full-bleed sticky footer with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.
+- `CreateService` — A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.
 - `RequiredFields` — Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error.
 - `ImportFromGit` — Standalone field stacks in one column: the platform shell with an unpadded scroll region, a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, the platform shell, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent`, `FieldTitle` and `FieldLegend` parts and choice cards), `Input`, `InputGroup`, `RadioButton`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`.
 - `ImportFromGitSubmitted` — After Deploy on the untouched form: the access token, deployment type, build command, deploy key, on-call number and the acknowledgement each show their required state and message.
@@ -230,9 +231,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         novalidate
         @submit.prevent="submit"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex min-h-0 flex-1 flex-col overflow-auto">
           <div
-            class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+            class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
               title="Create Domain"
@@ -339,47 +340,46 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               </SettingsSection>
             </fieldset>
           </div>
-        </div>
-
-        <SaveBar kind="plain">
-          <template #leading>
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+          <SaveBar kind="centered">
+            <template #leading>
+              <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+                <Button
+                  type="button"
+                  label="Import"
+                  kind="outlined"
+                  size="medium"
+                  icon="pi pi-upload"
+                  @click="openImport"
+                />
+                <p class="min-w-0 text-body-sm text-(--text-muted)">
+                  or paste zone file contents in Domain name
+                </p>
+                <input
+                  ref="fileRef"
+                  type="file"
+                  accept=".zone,.txt,.db,text/plain"
+                  class="sr-only"
+                  tabindex="-1"
+                  aria-hidden="true"
+                />
+              </div>
+            </template>
+            <template #actions>
               <Button
                 type="button"
-                label="Import"
+                label="Cancel"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-upload"
-                @click="openImport"
               />
-              <p class="min-w-0 text-body-sm text-(--text-muted)">
-                or paste zone file contents in Domain name
-              </p>
-              <input
-                ref="fileRef"
-                type="file"
-                accept=".zone,.txt,.db,text/plain"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
+              <Button
+                label="Save"
+                kind="primary"
+                size="medium"
+                type="submit"
               />
-            </div>
-          </template>
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-              size="medium"
-              type="submit"
-            />
-          </template>
-        </SaveBar>
+            </template>
+          </SaveBar>
+        </div>
       </form>
     </main>
   </div>

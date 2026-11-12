@@ -2,11 +2,11 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import GlobalHeader from '@aziontech/webkit/global-header'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
@@ -447,19 +447,15 @@
             <template #description>
               Start from a repository or use a framework template. You can also drag and drop your
               project, or select a
-              <button
-                type="button"
-                class="text-link cursor-pointer"
-              >
-                file
-              </button>
+              <Button
+                kind="link"
+                label="file"
+              />
               or a
-              <button
-                type="button"
-                class="text-link cursor-pointer"
-              >
-                folder</button
-              >.
+              <Button
+                kind="link"
+                label="folder"
+              />.
             </template>
           </PageHeader>
 
@@ -515,6 +511,7 @@
                               icon="ai ai-github"
                               kind="secondary"
                               size="large"
+                              class="self-center"
                               :loading="connecting"
                               @click="connect"
                             />
@@ -522,6 +519,7 @@
                               label="Manage connected providers"
                               href="#"
                               size="large"
+                              class="self-center"
                               @click.prevent
                             />
                           </template>

@@ -119,12 +119,10 @@
         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
           <span class="text-label-sm text-(--text-muted)">Rules</span>
           <div class="flex min-h-7 min-w-0 items-center">
-            <button
-              type="button"
-              class="truncate rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-            >
-              14 rules
-            </button>
+            <Button
+              kind="link"
+              label="14 rules"
+            />
           </div>
         </div>
 

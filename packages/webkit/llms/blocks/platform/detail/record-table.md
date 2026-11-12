@@ -39,7 +39,7 @@ Main settings is a form in the form column with four `SettingsSection` bands: Ge
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
-Values the user copies elsewhere (the three nameservers, and the key tag, algorithm, digest type and digest) are read-only large `Input`s inside an `InputGroupRoot` that ends with a transparent `CopyButton`. A helper line under the nameservers says where to paste them.
+Values the user copies elsewhere (the three nameservers, and the key tag, algorithm, digest type and digest) are read-only large `monospace` `Input`s inside an `InputGroupRoot` that ends with a transparent `CopyButton`. Their rows set `stackable`, so on a phone a long digest moves under its copy at full width instead of sharing the row. A helper line under the nameservers says where to paste them.
 
 ### D. Toggles — `Switch` (required)
 
@@ -577,18 +577,20 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         <SettingRow
                           title="Nameservers"
                           description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
+                          stackable
                         >
                           <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <InputGroupRoot
                               v-for="(ns, index) in nameservers"
                               :key="ns"
                             >
-                              <div class="flex flex-1 font-code">
+                              <div class="flex flex-1">
                                 <Input
                                   :model-value="ns"
                                   size="large"
                                   class="w-full"
                                   :aria-label="'Nameserver ' + (index + 1)"
+                                  monospace
                                   readonly
                                 />
                               </div>
@@ -636,14 +638,16 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                             :key="key.label"
                             :title="key.label"
                             :description="key.description"
+                            stackable
                           >
                             <InputGroupRoot class="w-full">
-                              <div class="flex flex-1 font-code">
+                              <div class="flex flex-1">
                                 <Input
                                   :model-value="key.value"
                                   size="large"
                                   class="w-full"
                                   :aria-label="key.label"
+                                  monospace
                                   readonly
                                 />
                               </div>

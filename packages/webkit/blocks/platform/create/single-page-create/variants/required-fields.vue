@@ -8,10 +8,10 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
-  import NumberInput from '@aziontech/webkit/number-input'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
+  import NumberInput from '@aziontech/webkit/number-input'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -524,7 +524,7 @@
           </fieldset>
         </div>
 
-        <SaveBar kind="plain">
+        <SaveBar kind="centered">
           <template #actions>
             <Button
               type="button"

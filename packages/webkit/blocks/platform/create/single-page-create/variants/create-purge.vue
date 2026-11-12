@@ -1,19 +1,19 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
-  import Alert from '@aziontech/webkit/alert'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import SettingRow from '@aziontech/webkit/setting-row'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
@@ -158,9 +158,9 @@
         novalidate
         @submit.prevent="submit"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex min-h-0 flex-1 flex-col overflow-auto">
           <div
-            class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+            class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
               title="Create Purge"
@@ -238,6 +238,7 @@
                                   {{ option.description }}
                                 </Field.Description>
                                 <Field.Description
+                                  key="field.description-2"
                                   v-if="
                                     !typeAllowed(option.value) && typeAllowed(option.value)
                                       ? ''
@@ -305,24 +306,23 @@
               </SettingsSection>
             </fieldset>
           </div>
+          <SaveBar kind="centered">
+            <template #actions>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+              />
+              <Button
+                label="Purge"
+                kind="primary"
+                size="medium"
+                type="submit"
+              />
+            </template>
+          </SaveBar>
         </div>
-
-        <SaveBar kind="plain">
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-            />
-            <Button
-              label="Purge"
-              kind="primary"
-              size="medium"
-              type="submit"
-            />
-          </template>
-        </SaveBar>
       </form>
     </main>
   </div>
