@@ -13554,7 +13554,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable."
+     "doc": "Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field."
     },
     {
      "name": "invalid",

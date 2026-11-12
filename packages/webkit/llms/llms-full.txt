@@ -1322,7 +1322,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Barrel import: `import { Button } from '@aziontech/webkit'` (no barrel exists).
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
-- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only `w-full`, `max-w-*`, `self-*` and `shrink-0` may sit on the tag.
+- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities may sit on the tag: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
 - ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
 - ❌ `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: neither is a class. Use `ai-cor ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
@@ -28582,7 +28582,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`)
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Accessibility
@@ -30499,7 +30499,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## Do
 
 - Give it a sensible default size; avoid auto-growing beyond the viewport.
-- Use the `field-*` wrapper for label/help/error.
+- Wrap it in a `Field` for the label, description and error.
+- Do not restyle a read-only textarea (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description.
 
 ## Don’t
 
@@ -30518,7 +30519,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `modelValue` | `string` | `''` | false | Bound value (v-model). |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
 | `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
@@ -30535,7 +30536,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop
-- `data-readonly` mirrors the `readonly` prop
+- `data-readonly` mirrors the `readonly` prop: a read-only textarea keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as `Input` does and the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` and the textarea stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-filled` mirrors whether `modelValue` is non-empty
 - `data-resize` on the native `<textarea>` mirrors the `resizable` prop and drives the `resize-*` Tailwind variant
 
@@ -39646,6 +39647,7 @@ packages/webkit/src/components/overlay/command/
 ## Do
 
 - Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.
+- Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
@@ -39704,7 +39706,7 @@ packages/webkit/src/components/overlay/command/
 
 The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus containment and return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `width`, `panelStyle`, and the `panelRef` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelRef` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
-- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
+- `popover-trigger/popover-trigger.vue` — as-child trigger. Reads `inject` for `isOpen`, `triggerId`, `contentId`, `setOpen`. Renders a non-interactive inline wrapper (no `role`, no `tabindex`) with the pointer cursor (`not-allowed` when disabled) that carries `data-testid`, `data-state` and `data-disabled` and toggles the panel on the bubbling `click`. It gives `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`, `aria-disabled` (when the root is disabled) and the trigger `id` (unless the control already has one) to the slotted control, which is the one tab stop, the anchor the popover positions against and the focus-return target. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"` (`-1` when disabled), opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the consumer's trigger element. The trigger forwards aria + click; the consumer must not bind those itself.
@@ -39738,6 +39740,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values (root, trigger, floating panel): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root and trigger
+- Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
 - `data-placement` on the floating panel mirrors the resolved placement (`'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 

@@ -12,6 +12,7 @@
  ],
  "bestPractices": [
   "Give it a sensible default size; avoid auto-growing beyond the viewport.",
-  "Use the `field-*` wrapper for label/help/error."
+  "Wrap it in a `Field` for the label, description and error.",
+  "Do not restyle a read-only textarea (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description."
  ]
 }

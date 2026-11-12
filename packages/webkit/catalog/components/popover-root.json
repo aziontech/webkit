@@ -19,6 +19,7 @@
  ],
  "bestPractices": [
   "Place `Popover.Trigger` first and `Popover.Content` after it. The trigger wires `aria-expanded`, `aria-controls` and the click toggle onto your element, so don't bind them yourself.",
+  "Let `Popover.Trigger` show the pointer: its wrapper sets `cursor-pointer` (`cursor-not-allowed` when disabled), so a `Tag`, `Avatar` or icon slotted in reads as clickable. Don't put `cursor-pointer` on the slotted WebKit component — `webkit/no-style-override` blocks it.",
   "Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.",
   "Set `width` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.",
   "Use `placement=\"auto\"` for triggers that can sit near a viewport edge.",

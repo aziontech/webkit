@@ -13,7 +13,8 @@
 ## Do
 
 - Give it a sensible default size; avoid auto-growing beyond the viewport.
-- Use the `field-*` wrapper for label/help/error.
+- Wrap it in a `Field` for the label, description and error.
+- Do not restyle a read-only textarea (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description.
 
 ## Don’t
 
@@ -32,7 +33,7 @@
 | `modelValue` | `string` | `''` | false | Bound value (v-model). |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `readonly` | `boolean` | `false` | false | Marks the field as read-only; keeps focus styling, blocks edits, and renders transparent with a dashed border and no hover so it never looks editable. |
+| `readonly` | `boolean` | `false` | false | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
 | `invalid` | `boolean` | `false` | false | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone. |
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
@@ -49,7 +50,7 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop
-- `data-readonly` mirrors the `readonly` prop
+- `data-readonly` mirrors the `readonly` prop: a read-only textarea keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as `Input` does and the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` and the textarea stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-filled` mirrors whether `modelValue` is non-empty
 - `data-resize` on the native `<textarea>` mirrors the `resizable` prop and drives the `resize-*` Tailwind variant
 
