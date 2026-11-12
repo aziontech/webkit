@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { h } from 'vue'
 
 import Default from '../../../../examples/process-scroll/default.vue'
+import Pinned from '../../../../examples/process-scroll/pinned.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ProcessScroll from './process-scroll.vue'
 
@@ -41,6 +42,48 @@ describe('ProcessScroll', () => {
   it('renders under rtl with logical card borders', () => {
     const { container } = render({ render: () => h('div', { dir: 'rtl' }, [h(Default)]) })
     expect(container.querySelector('li')?.className).toContain('not-last:border-e')
+  })
+
+  it('does not pin by default', () => {
+    const { getByTestId } = render(Default)
+    const root = getByTestId('sections-process-scroll')
+    expect(root).not.toHaveAttribute('data-pinned')
+    expect(root.style.height).toBe('')
+  })
+
+  it('marks a pinned band and sticks it under the site header token', () => {
+    const { getByTestId, getByRole } = render(Pinned)
+    const root = getByTestId('sections-process-scroll')
+    expect(root).toHaveAttribute('data-pinned')
+    expect(root.style.getPropertyValue('--process-scroll-offset')).toBe(
+      'var(--layout-header-height)'
+    )
+    expect(getByRole('region', { name: 'Hiring process' })).toHaveAttribute('tabindex', '0')
+  })
+
+  it('takes a custom header offset', () => {
+    const { getByTestId } = render(ProcessScroll, {
+      props: {
+        pinned: true,
+        headerOffset: '4rem',
+        title: 'Hiring process',
+        steps: [{ title: 'Role request', description: 'A manager requests a role.' }]
+      }
+    })
+    expect(
+      getByTestId('sections-process-scroll').style.getPropertyValue('--process-scroll-offset')
+    ).toBe('4rem')
+  })
+
+  it('leaves the runway and the row at rest while the band is not sticky', () => {
+    const { getByTestId, getByRole } = render(Pinned)
+    expect(getByTestId('sections-process-scroll').style.height).toBe('')
+    expect(getByRole('list').style.translate).toBe('')
+  })
+
+  it('has no axe violations when pinned', async () => {
+    const { container } = render(Pinned)
+    await expectNoA11yViolations(container)
   })
 
   it('has no axe violations', async () => {

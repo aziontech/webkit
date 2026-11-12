@@ -32,7 +32,10 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
   `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
-  `external`, `UseCaseLinks` items without `href` for a link-less grid.
+  `external`, `UseCaseLinks` items without `href` for a link-less grid, `ProcessScroll` `pinned`
+  (a band that pins while its tall cards slide sideways), a `HeroForm` field's
+  `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
+  `icon` (the bold run-in lead-in) and outcomes without `logo`.
 - Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
   top rule, its frame and its closing bottom rule, and ends on its bottom bar at every width.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
