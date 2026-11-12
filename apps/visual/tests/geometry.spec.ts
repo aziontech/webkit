@@ -184,7 +184,9 @@ for (const theme of THEMES) {
               start: Math.min(...cells.map((c) => c.left)) - box.left,
               end: box.right - Math.max(...cells.map((c) => c.right)),
               spread:
-                Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width))
+                Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width)),
+              heights:
+                Math.max(...cells.map((c) => c.height)) - Math.min(...cells.map((c) => c.height))
             }))
           })
         )
