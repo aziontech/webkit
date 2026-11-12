@@ -1,4 +1,5 @@
 import type {
+  Column,
   ColumnOrderState,
   PaginationState,
   SortingState,
@@ -111,3 +112,78 @@ export interface TableRowGroupContext {
 }
 
 export const TableRowGroupKey: InjectionKey<TableRowGroupContext> = Symbol('TableRowGroupContext')
+
+export interface TableColumn {
+  /** Column id; falls back to accessorKey. */
+  id?: string
+  /** Field read from each row record. */
+  accessorKey?: string
+  /** Header label (overridden by a `header-<id>` slot). */
+  header?: string
+  /** Allow sorting on this column. */
+  enableSorting?: boolean
+  /** Flex weight; the principal column uses 2 (see `principal`). */
+  grow?: 1 | 2 | 3
+  /** Mark this as the principal column — it defaults to `grow: 2`. When no column sets it, the first non-checkbox column is principal. */
+  principal?: boolean
+  /** Pin this column to the start or end edge. */
+  frozen?: 'start' | 'end'
+  /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
+  width?: number
+  /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
+  minWidth?: number
+  /** Cell alignment. */
+  align?: 'start' | 'center' | 'end'
+  /** Body cell kind (action renders a 40px trailing cell, auto-pinned to the right edge). */
+  kind?: 'default' | 'action'
+  /** Allow drag-to-resize on this column's header (ignored for frozen/action columns). */
+  resizable?: boolean
+  /** Column-selector label when `header` is not a string. */
+  label?: string
+  /** Exclude from Table.ColumnSelector (defaults true; action columns default false). */
+  hideable?: boolean
+  /** Opt this column into columnOrder serialization. */
+  orderable?: boolean
+}
+
+/** Scope of a data-driven cell slot named cell- plus the column id. */
+export type TableCellSlotProps<TRecord, TValue> = {
+  /** The row record, typed from the data prop. */
+  row: TRecord
+  /** The cell value, read through the column accessorKey. */
+  value: TValue
+}
+
+/** Scope of a data-driven header slot named header- plus the column id. */
+export type TableHeaderSlotProps<TRecord> = {
+  /** The TanStack column. */
+  column: Column<TRecord, unknown>
+}
+
+/** Scope of the toolbar and filters slots. */
+export type TableToolbarSlotProps<TRecord> = {
+  /** The TanStack table instance in data-driven mode; undefined in composition mode. */
+  table: TanstackTable<TRecord> | undefined
+  /** Records of the selected rows. */
+  selectedRows: TRecord[]
+  /** Number of selected rows. */
+  selectedCount: number
+  /** Clears the row selection. */
+  clearSelection: () => void
+  /** Mirrors the loading prop. */
+  loading: boolean
+}
+
+/** Data-driven cell slots: a column whose id is a field of the row gets that field's type as value. */
+export type TableCellSlots<TRecord> = {
+  [K in keyof TRecord & string as `cell-${K}`]?: (
+    props: TableCellSlotProps<TRecord, TRecord[K]>
+  ) => unknown
+} & {
+  [name: `cell-${string}`]: (props: TableCellSlotProps<TRecord, unknown>) => unknown
+}
+
+/** Data-driven header slots, one per column id. */
+export type TableHeaderSlots<TRecord> = {
+  [name: `header-${string}`]: (props: TableHeaderSlotProps<TRecord>) => unknown
+}

@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TRow extends object = Record<string, unknown>">
   import {
+    type Column,
     type ColumnDef,
     type ColumnFiltersState,
     type ColumnOrderState,
@@ -14,6 +15,7 @@
     type Row,
     type RowSelectionState,
     type SortingState,
+    type Table as TanstackTable,
     type Updater,
     useVueTable,
     type VisibilityState
@@ -50,8 +52,12 @@
     type FilterField,
     type FilterOperator,
     type FilterValue,
+    type TableCellSlots,
+    type TableColumn,
+    type TableHeaderSlots,
     TableInjectionKey,
-    type TableStateSnapshot
+    type TableStateSnapshot,
+    type TableToolbarSlotProps
   } from './injection-key'
   import TableBody from './table-body/table-body.vue'
   import TableCaption from './table-caption/table-caption.vue'
@@ -61,39 +67,6 @@
   import TableRow from './table-row/table-row.vue'
 
   type RowRecord = Record<string, unknown>
-
-  export interface TableColumn {
-    /** Column id; falls back to accessorKey. */
-    id?: string
-    /** Field read from each row record. */
-    accessorKey?: string
-    /** Header label (overridden by a `header-<id>` slot). */
-    header?: string
-    /** Allow sorting on this column. */
-    enableSorting?: boolean
-    /** Flex weight; the principal column uses 2 (see `principal`). */
-    grow?: 1 | 2 | 3
-    /** Mark this as the principal column — it defaults to `grow: 2`. When no column sets it, the first non-checkbox column is principal. */
-    principal?: boolean
-    /** Pin this column to the start or end edge. */
-    frozen?: 'start' | 'end'
-    /** Fixed width (px) — needed for a frozen column that precedes another frozen column on the same edge, so sticky offsets can be summed. */
-    width?: number
-    /** Minimum width (px). The column resolves to the widest of this floor and its own content (its header, with the sort affordance, and every rendered cell) — one width for the whole column, so a chip column reserves nothing it is not using and never clips a chip. `width` wins when both are set. */
-    minWidth?: number
-    /** Cell alignment. */
-    align?: 'start' | 'center' | 'end'
-    /** Body cell kind (action renders a 40px trailing cell, auto-pinned to the right edge). */
-    kind?: 'default' | 'action'
-    /** Allow drag-to-resize on this column's header (ignored for frozen/action columns). */
-    resizable?: boolean
-    /** Column-selector label when `header` is not a string. */
-    label?: string
-    /** Exclude from Table.ColumnSelector (defaults true; action columns default false). */
-    hideable?: boolean
-    /** Opt this column into columnOrder serialization. */
-    orderable?: boolean
-  }
 
   type TableColumnMeta = Pick<
     TableColumn,
@@ -112,7 +85,7 @@
       /** Draw the outer card border around the table (off by default; the table is typically framed by a surrounding surface). */
       bordered?: boolean
       /** Data-driven mode: row records. */
-      data?: RowRecord[]
+      data?: TRow[]
       /** Data-driven mode: column definitions. When set, the table renders itself via TanStack. */
       columns?: TableColumn[]
       /** Field used as the stable row id (for selection). */
@@ -122,7 +95,7 @@
       /** Add a leading selection-checkbox column. */
       enableRowSelection?: boolean
       /** Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. */
-      rowSelectable?: (row: RowRecord) => boolean
+      rowSelectable?: (row: TRow) => boolean
       /** Data-driven mode: clicking a row toggles its selection (requires enableRowSelection). */
       selectOnRowClick?: boolean
       /** Header density: `compact` shrinks the column-header row's height and padding. */
@@ -164,7 +137,7 @@
       /** Default filename for Table.Export and exportCsv(). */
       exportFilename?: string
       /** Rows Table.Export and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
-      exportRows?: (scope: 'filtered' | 'all') => RowRecord[] | Promise<RowRecord[]>
+      exportRows?: (scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>
       /** Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. */
       stackable?: boolean
       /** Data-driven mode: cell text wraps onto several lines instead of truncating. */
@@ -180,9 +153,9 @@
       /** Data-driven mode: a leading grip lets people drag rows, or move the focused one with Arrow Up, Arrow Down, Home and End, into a new order. The table emits `update:data` with the reordered records (bind `v-model:data`) and `reorder`; it is locked while a sort is applied. */
       reorderable?: boolean
       /** With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A row it rejects keeps its place: its grip is disabled, and no other row is dropped onto it or moved past it with the keys. */
-      rowReorderable?: (row: RowRecord) => boolean
+      rowReorderable?: (row: TRow) => boolean
       /** Data-driven mode: tree rows. Returns a row's children; rows with children expand in place under a chevron in the principal column and the grid becomes a `treegrid`. */
-      getSubRows?: (row: RowRecord) => RowRecord[] | undefined
+      getSubRows?: (row: TRow) => TRow[] | undefined
       /** v-model:expanded (TanStack ExpandedState): `true` for every row, or `{ [rowId]: true }`. */
       expanded?: ExpandedState
     }>(),
@@ -235,36 +208,37 @@
     'update:columnVisibility': [value: VisibilityState]
     'update:globalFilter': [value: string]
     'update:pagination': [value: PaginationState]
-    'row-click': [event: MouseEvent, row: RowRecord]
+    'row-click': [event: MouseEvent, row: TRow]
     'update:filters': [value: AppliedFilter[]]
     'update:state': [value: TableStateSnapshot]
     'filter-apply': [filters: AppliedFilter[]]
     'filter-remove': [filter: AppliedFilter]
     refresh: []
-    export: [rows: RowRecord[]]
-    'update:data': [value: RowRecord[]]
-    reorder: [payload: { from: number; to: number; row: RowRecord }]
+    export: [rows: TRow[]]
+    'update:data': [value: TRow[]]
+    reorder: [payload: { from: number; to: number; row: TRow }]
     'update:expanded': [value: ExpandedState]
   }>()
 
-  defineSlots<{
-    /** Composition mode: scrollable region (TableCaption, TableHeader, TableBody). */
-    default(): unknown
-    /** Title text at the start of the toolbar band. */
-    title(): unknown
-    /** Toolbar action band; scoped with the TanStack table instance in data-driven mode. */
-    toolbar(props?: Record<string, unknown>): unknown
-    /** Active-filter chips row; same table scope as toolbar. */
-    filters(props?: Record<string, unknown>): unknown
-    /** Data-driven caption content, wrapped in TableCaption. */
-    caption(): unknown
-    /** Data-driven empty state when there are no rows. */
-    empty(): unknown
-    /** Footer region below the scroll viewport, auto-rendered when data-driven and paginated. */
-    footer(): unknown
-    /** Per-column slots (data-driven): cell- and header- prefixed names, resolved at runtime. */
-    [name: string]: (props?: Record<string, unknown>) => unknown
-  }>()
+  defineSlots<
+    {
+      /** Composition mode: scrollable region (TableCaption, TableHeader, TableBody). */
+      default(): unknown
+      /** Title text at the start of the toolbar band. */
+      title(): unknown
+      /** Toolbar action band; scoped with the TanStack table instance in data-driven mode. */
+      toolbar(props: TableToolbarSlotProps<TRow>): unknown
+      /** Active-filter chips row; same scope as toolbar. */
+      filters(props: TableToolbarSlotProps<TRow>): unknown
+      /** Data-driven caption content, wrapped in TableCaption. */
+      caption(): unknown
+      /** Data-driven empty state when there are no rows. */
+      empty(): unknown
+      /** Footer region below the scroll viewport, auto-rendered when data-driven and paginated. */
+      footer(): unknown
+    } & TableCellSlots<TRow> &
+      TableHeaderSlots<TRow>
+  >()
 
   const attrs = useAttrs()
   const { t } = useTranslate({ table: en.table, tableReorder: en.tableReorder })
@@ -444,13 +418,17 @@
     () =>
       props.manualSorting && props.manualFiltering && props.manualPagination && !props.getSubRows
   )
+  const records = (): RowRecord[] => props.data as unknown as RowRecord[]
+  const typed = <T,>(value: unknown): T => value as T
+  const cellSlotOf = (id: string): `cell-${string}` => `cell-${id}`
+  const headerSlotOf = (id: string): `header-${string}` => `header-${id}`
   const rowKeyOf = (row: RowRecord): string => String(row[props.rowKey] ?? '')
-  const isSelectable = (row: RowRecord): boolean => props.rowSelectable?.(row) ?? true
+  const isSelectable = (row: RowRecord): boolean => props.rowSelectable?.(typed<TRow>(row)) ?? true
   const leanSource: { slice?: { readonly value: RowRecord[] } } = {}
 
   const table = useVueTable({
     get data() {
-      return leanRows.value && leanSource.slice ? leanSource.slice.value : props.data
+      return leanRows.value && leanSource.slice ? leanSource.slice.value : records()
     },
     get columns() {
       return tableColumns.value
@@ -481,7 +459,9 @@
         return props.expanded ?? internalExpanded.value
       }
     },
-    getSubRows: (row) => props.getSubRows?.(row as RowRecord),
+    getSubRows: (row) => {
+      return typed<RowRecord[] | undefined>(props.getSubRows?.(typed<TRow>(row)))
+    },
     enableSubRowSelection: false,
     getRowId: (row) => rowKeyOf(row as RowRecord),
     enableRowSelection: (row) => props.enableRowSelection && isSelectable(row.original),
@@ -535,13 +515,13 @@
   const headers = computed(() => table.getHeaderGroups()[0]?.headers ?? [])
   const visibleColumnKey = computed<string>(() => headers.value.map((h) => h.id).join('|'))
   const rows = computed(() => table.getRowModel().rows)
-  const sourceIds = computed<string[]>(() => (leanRows.value ? props.data.map(rowKeyOf) : []))
+  const sourceIds = computed<string[]>(() => (leanRows.value ? records().map(rowKeyOf) : []))
   const selectableIds = computed<string[]>(() =>
     leanRows.value && props.rowSelectable
-      ? props.data.filter(isSelectable).map(rowKeyOf)
+      ? records().filter(isSelectable).map(rowKeyOf)
       : sourceIds.value
   )
-  const rowTotal = computed<number>(() => (leanRows.value ? props.data.length : rows.value.length))
+  const rowTotal = computed<number>(() => (leanRows.value ? records().length : rows.value.length))
   const rowIdAt = (index: number): string =>
     leanRows.value ? (sourceIds.value[index] ?? '') : (rows.value[index]?.id ?? '')
 
@@ -556,7 +536,7 @@
         treeActive.value ? table.getSelectedRowModel().flatRows : table.getSelectedRowModel().rows
       ).map((row) => row.original)
     const selection = table.getState().rowSelection
-    return props.data.filter((row) => selection[rowKeyOf(row)])
+    return records().filter((row) => selection[rowKeyOf(row)])
   })
   const selectedCount = computed<number>(() => selectedRows.value.length)
   const pageSelection = computed<'all' | 'some' | 'none'>(() => {
@@ -616,13 +596,13 @@
   const hasExportListener = (): boolean =>
     Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.['onExport'])
   const resolveExportRows = (scope: 'page' | 'filtered' | 'all'): RowRecord[] => {
-    if (leanRows.value) return props.data
+    if (leanRows.value) return records()
     if (scope === 'all') return table.getCoreRowModel().rows.map((row) => row.original)
     if (scope === 'page') return rows.value.map((row) => row.original)
     return table.getFilteredRowModel().rows.map((row) => row.original)
   }
   const writeExport = (data: RowRecord[], filename?: string): void => {
-    emit('export', data)
+    emit('export', typed<TRow[]>(data))
     if (hasExportListener()) return
     const columns = table
       .getVisibleLeafColumns()
@@ -641,7 +621,9 @@
     const scope = options?.scope ?? 'filtered'
     const source =
       options?.rows ??
-      (scope !== 'page' && props.exportRows ? props.exportRows(scope) : resolveExportRows(scope))
+      (scope !== 'page' && props.exportRows
+        ? typed<RowRecord[] | Promise<RowRecord[]>>(props.exportRows(scope))
+        : resolveExportRows(scope))
     if (source instanceof Promise)
       return source.then((data) => writeExport(data, options?.filename))
     writeExport(source, options?.filename)
@@ -734,7 +716,7 @@
     props.manualPagination && props.rowCount !== undefined
       ? props.rowCount
       : leanRows.value
-        ? props.data.length
+        ? records().length
         : table.getFilteredRowModel().rows.length
   )
   const pageIndex = computed<number>(() => table.getState().pagination.pageIndex)
@@ -742,7 +724,7 @@
   const skeletonRowCount = computed<number>(() => {
     const displayed = props.paginated
       ? rowTotal.value || currentPageSize.value
-      : props.data.length || props.pageSize
+      : records().length || props.pageSize
     return Math.max(displayed, 1)
   })
 
@@ -764,7 +746,7 @@
     if (props.selectOnRowClick && props.enableRowSelection && row.getCanSelect()) {
       row.toggleSelected()
     }
-    emit('row-click', event, row.original)
+    emit('row-click', event, typed<TRow>(row.original))
   }
 
   const SELECTION_WIDTH = 40
@@ -974,8 +956,8 @@
   })
   leanSource.slice = computed<RowRecord[]>(() =>
     virtualActive.value || lazyActive.value
-      ? props.data.slice(windowStart.value, windowEnd.value)
-      : props.data
+      ? records().slice(windowStart.value, windowEnd.value)
+      : records()
   )
   const renderedRows = computed(() =>
     !leanRows.value && (virtualActive.value || lazyActive.value)
@@ -1268,7 +1250,7 @@
     return column?.accessorKey ?? column?.id
   })
   const rowNameOf = (id: string): string => {
-    const record = props.data.find((row) => rowKeyOf(row) === id)
+    const record = records().find((row) => rowKeyOf(row) === id)
     const key = principalKey.value
     const value = record && key ? record[key] : undefined
     return value === undefined || value === null || value === '' ? id : String(value)
@@ -1281,8 +1263,8 @@
     })
   const canMoveId = (id: string): boolean => {
     if (!props.rowReorderable) return true
-    const record = props.data.find((row) => rowKeyOf(row) === id)
-    return record ? props.rowReorderable(record) : false
+    const record = records().find((row) => rowKeyOf(row) === id)
+    return record ? props.rowReorderable(typed<TRow>(record)) : false
   }
   const dropOf = (id: string): 'before' | 'after' | undefined => {
     if (!dragId.value || overId.value !== id || dragId.value === id) return undefined
@@ -1291,10 +1273,10 @@
   }
 
   const moveRow = (id: string, targetId: string, message: 'moved' | 'dropped'): void => {
-    const from = props.data.findIndex((row) => rowKeyOf(row) === id)
-    const to = props.data.findIndex((row) => rowKeyOf(row) === targetId)
+    const from = records().findIndex((row) => rowKeyOf(row) === id)
+    const to = records().findIndex((row) => rowKeyOf(row) === targetId)
     if (from < 0 || to < 0 || from === to) return
-    const next = [...props.data]
+    const next = [...records()]
     const [moved] = next.splice(from, 1)
     next.splice(to, 0, moved)
     reorderMessage.value = t(`tableReorder.${message}`, {
@@ -1303,8 +1285,8 @@
       total: orderedIds.value.length
     })
     focusAfterMove = id
-    emit('update:data', next)
-    emit('reorder', { from, to, row: moved })
+    emit('update:data', typed<TRow[]>(next))
+    emit('reorder', { from, to, row: typed<TRow>(moved) })
   }
 
   const focusHandle = (id: string): void => {
@@ -1534,6 +1516,17 @@
   }
 </script>
 
+<script lang="ts">
+  export type {
+    TableCellSlotProps,
+    TableCellSlots,
+    TableColumn,
+    TableHeaderSlotProps,
+    TableHeaderSlots,
+    TableToolbarSlotProps
+  } from './injection-key'
+</script>
+
 <template>
   <div
     ref="rootEl"
@@ -1564,8 +1557,8 @@
       >
         <slot
           name="toolbar"
-          :table="dataDriven ? table : undefined"
-          :selected-rows="selectedRows"
+          :table="dataDriven ? typed<TanstackTable<TRow>>(table) : undefined"
+          :selected-rows="typed<TRow[]>(selectedRows)"
           :selected-count="selectedCount"
           :clear-selection="clearSelection"
           :loading="loading"
@@ -1580,8 +1573,8 @@
     >
       <slot
         name="filters"
-        :table="dataDriven ? table : undefined"
-        :selected-rows="selectedRows"
+        :table="dataDriven ? typed<TanstackTable<TRow>>(table) : undefined"
+        :selected-rows="typed<TRow[]>(selectedRows)"
         :selected-count="selectedCount"
         :clear-selection="clearSelection"
         :loading="loading"
@@ -1680,8 +1673,8 @@
                 >
                   <slot
                     v-if="hasSlot('header-' + header.column.id)"
-                    :name="'header-' + header.column.id"
-                    :column="header.column"
+                    :name="headerSlotOf(header.column.id)"
+                    :column="typed<Column<TRow, unknown>>(header.column)"
                   />
                   <template v-else-if="header.column.columnDef.header">{{
                     header.column.columnDef.header
@@ -1893,8 +1886,8 @@
                     </span>
                     <slot
                       v-if="hasSlot('cell-' + cell.column.id)"
-                      :name="'cell-' + cell.column.id"
-                      :row="row.original"
+                      :name="cellSlotOf(cell.column.id)"
+                      :row="typed<TRow>(row.original)"
                       :value="cell.getValue()"
                     />
                     <span

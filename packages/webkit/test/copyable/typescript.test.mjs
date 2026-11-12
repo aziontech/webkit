@@ -13,40 +13,16 @@ import { tmpdir } from 'node:os'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { CONSUMER_COMPILER_OPTIONS } from './consumer-app.mjs'
+
 const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
 const require = createRequire(import.meta.url)
 
 const TYPESCRIPT_FOLDERS = ['blocks/headers', 'blocks/shells']
 
-// Type errors that come from a component's own typings, not from the copied file. The data-driven
-// Table types every cell and header slot as (props?: Record<string, unknown>) => unknown, so a
-// destructured slot prop such as #cell-name="{ row }" cannot type-check; the fix belongs in
-// table.vue's defineSlots. The last test fails once the signature no longer occurs.
-const KNOWN_CONFLICTS = [
-  {
-    id: 'table-cell-slot-props',
-    pattern:
-      /error TS2339: Property '\w+' does not exist on type 'Record<string, unknown> \| undefined'/
-  }
-]
-
-const CONSUMER_COMPILER_OPTIONS = {
-  target: 'ES2022',
-  module: 'ESNext',
-  moduleResolution: 'bundler',
-  lib: ['ES2022', 'DOM', 'DOM.Iterable'],
-  jsx: 'preserve',
-  strict: true,
-  noUnusedLocals: true,
-  noUnusedParameters: true,
-  noFallthroughCasesInSwitch: true,
-  noImplicitReturns: true,
-  verbatimModuleSyntax: true,
-  isolatedModules: true,
-  resolveJsonModule: true,
-  skipLibCheck: true,
-  noEmit: true
-}
+// Type errors that come from a component's own typings, not from the copied file: { id, pattern }.
+// The fix belongs in the component; the last test fails once a listed signature no longer occurs.
+const KNOWN_CONFLICTS = []
 
 function vueFiles(dir) {
   return readdirSync(join(PKG_DIR, dir), { recursive: true, withFileTypes: true })

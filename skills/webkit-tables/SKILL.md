@@ -128,6 +128,12 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
 - Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`Table.CellStatus`
   here; see Cell recipes), which is also why the import is the `table` compound. A table with no
   cell slots and no toolbar imports `@aziontech/webkit/table-root`.
+- In a `lang="ts"` component the Table is generic over its rows: type the data
+  (`ref<Application[]>([])`, `useCollection<Application>(…)`) and every slot scope follows —
+  `#cell-status="{ row, value }"` gives `row: Application` and `value: Application['status']`, the
+  toolbar's `selectedRows` and the `@row-click` row are `Application` too. A column whose id is not a
+  row field (`actions`) gets `value: unknown`. Keep `id` equal to `accessorKey` (or omit it); never
+  cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/table-root`.
 - `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
   body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`

@@ -526,6 +526,45 @@ describe('Table (composition + data-driven)', () => {
     })
   })
 
+  describe('data-driven slot scopes (typed by defineSlots)', () => {
+    it('passes row and value to cell slots, column to header slots, and the selection to toolbar', async () => {
+      const Tree = defineComponent({
+        components: { Table },
+        setup: () => ({ rows, columns }),
+        template: `
+          <Table :data="rows" :columns="columns" enable-row-selection>
+            <template #toolbar="{ selectedCount, selectedRows, clearSelection, loading, table }">
+              <button type="button" data-testid="scope-toolbar" @click="clearSelection">
+                {{ selectedCount }}|{{ selectedRows.map((row) => row.id).join(',') }}|{{ loading }}|{{ Boolean(table) }}
+              </button>
+            </template>
+            <template #header-name="{ column }"><span data-testid="scope-header">{{ column.id }}</span></template>
+            <template #cell-name="{ row, value }"><span data-testid="scope-cell">{{ row.id }}:{{ value }}</span></template>
+          </Table>
+        `
+      })
+      const { getByTestId, getAllByTestId, getAllByRole } = render(Tree)
+
+      expect(getByTestId('scope-header').textContent).toBe('name')
+      expect(getAllByTestId('scope-cell').map((cell) => cell.textContent)).toEqual([
+        '1:Charlie',
+        '2:Alpha',
+        '3:Bravo'
+      ])
+      expect(getByTestId('scope-toolbar').textContent?.trim()).toBe('0||false|true')
+
+      const [, firstRowCheckbox] = getAllByRole('checkbox')
+      await fireEvent.click(firstRowCheckbox)
+      await waitFor(() =>
+        expect(getByTestId('scope-toolbar').textContent?.trim()).toBe('1|1|false|true')
+      )
+      await fireEvent.click(getByTestId('scope-toolbar'))
+      await waitFor(() =>
+        expect(getByTestId('scope-toolbar').textContent?.trim()).toBe('0||false|true')
+      )
+    })
+  })
+
   describe('TableSearch — context-aware global filter (provide/inject)', () => {
     it('reads and drives the injected table global filter, emitting update:globalFilter', async () => {
       // Table.Search sits in the toolbar slot; it reads ctx.table (data-driven)
