@@ -1,6 +1,6 @@
 # ActivityHistory (`platform/account/activity-history`)
 
-> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.
+> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/activity-history/activity-history.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 activity history; audit log; audit trail; account activity; security log; who did what; user activity; event history; histórico de atividades; log de auditoria; trilha de auditoria; atividade da conta
 
-The account's audit log. An admin or a security reviewer answers "who did this, from where, and when": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.
+The account's audit log. An admin or a security reviewer answers "who did this, from where, and when": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -78,7 +78,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 
 ## Accessibility
 
-- One `main`; the `PageHeader` title is the only `h1`; the table is named `Activity history`.
+- No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`; the table is named `Activity history`.
 - The filter and the period picker carry `aria-label`s; icon buttons have names that match their tooltips.
 - Category is text in a tag, never colour alone; the relative date has the exact time on its tooltip.
 - User and IP cells keep their own direction (`dir="auto"`, `dir="ltr"`) inside a right-to-left page.
@@ -127,7 +127,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const MINUTE = 60_000
   const HOUR = 60 * MINUTE
   const DAY = 24 * HOUR
-  const referenceTime = Math.floor(Date.now() / MINUTE) * MINUTE
+  const referenceTime = Date.UTC(2026, 10, 10, 12)
   const ago = (ms) => new Date(referenceTime - ms)
 
   const seedEvents = [
@@ -289,8 +289,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Activity history"
         description="Who did what in this account, from where and when. Events are kept for 90 days."
@@ -370,7 +370,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Alert>
 
-        <Card
+        <Card key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -393,7 +393,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
 
-        <Card
+        <Card key="card-2"
           v-else
           :padded="false"
         >
@@ -457,7 +457,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
       </section>
-    </main>
+    </div>
   </div>
 </template>
 ```

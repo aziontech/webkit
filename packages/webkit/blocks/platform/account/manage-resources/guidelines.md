@@ -1,6 +1,6 @@
 # Manage resources
 
-Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected.
+Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 

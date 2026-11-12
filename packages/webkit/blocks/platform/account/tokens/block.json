@@ -3,7 +3,7 @@
   "name": "Tokens",
   "title": "Templates/Platform/Account/Tokens",
   "surface": "product",
-  "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast.",
+  "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"

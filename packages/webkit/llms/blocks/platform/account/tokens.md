@@ -1,6 +1,6 @@
 # Tokens (`platform/account/tokens`)
 
-> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast.
+> The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 personal tokens; personal access tokens; api tokens; api keys; access tokens; create token; revoke token; copy token once; token expiration; tokens pessoais; token de acesso; chaves de api; criar token; revogar token
 
-The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token.
+The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -91,7 +91,7 @@ Revoke asks in a danger `ConfirmDialog` that says what stops working and that it
 
 ## Accessibility
 
-- One `main`; the `PageHeader` title is the only `h1`.
+- No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`.
 - The search `Input` and every icon-only button carry an `aria-label`; the row menu is named `Actions for <token>`.
 - The drawer and the dialogs trap focus, are named by their titles and return focus to their trigger; the first invalid field takes focus after Create.
 - The reveal labels the secret field `Token`; the copy result is announced in a polite status region.
@@ -384,8 +384,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Personal tokens"
         description="Tokens let scripts and tools call the API as you. Each one is shown only once, right after you create it."
@@ -579,7 +579,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
       </section>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="createOpen"

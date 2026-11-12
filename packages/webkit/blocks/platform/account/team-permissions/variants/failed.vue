@@ -170,8 +170,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Teams and permissions"
         description="A team is a named set of permissions. Members inherit exactly what their teams grant; nothing is granted per person."
@@ -246,6 +246,7 @@
         </Alert>
 
         <Card
+          key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -270,6 +271,7 @@
         </Card>
 
         <Card
+          key="card-2"
           v-else
           :padded="false"
         >
@@ -367,7 +369,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
 
     <ConfirmDialog
       v-model:open="deleteOpen"

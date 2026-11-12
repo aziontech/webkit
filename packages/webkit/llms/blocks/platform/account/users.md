@@ -1,6 +1,6 @@
 # Users (`platform/account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 users; users management; invite user; invite teammates; members; account members; assign teams; resend invitation; remove user; usuários; gerenciar usuários; convidar usuário; membros da conta; atribuir times
 
-Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person.
+Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -350,8 +350,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Users"
         description="The people who can sign in to this account. What each one can do comes from their teams."
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </EmptyState>
       </section>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="inviteOpen"

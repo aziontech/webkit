@@ -26571,7 +26571,7 @@
    "title": "Templates/Platform/Account/ActivityHistory",
    "source": "blocks/platform/account/activity-history/activity-history.vue",
    "surface": "product",
-   "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry.",
+   "summary": "The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "activity history",
     "audit log",
@@ -26623,7 +26623,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found.",
+   "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Empty",
@@ -26744,7 +26744,7 @@
    "title": "Templates/Platform/Account/ManageResources",
    "source": "blocks/platform/account/manage-resources/manage-resources.vue",
    "surface": "product",
-   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.",
+   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "manage resources",
     "resource hierarchy",
@@ -26825,7 +26825,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected.",
+   "guidelinesSummary": "Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Selected",
@@ -26851,7 +26851,7 @@
    "title": "Templates/Platform/Account/MfaManagement",
    "source": "blocks/platform/account/mfa-management/mfa-management.vue",
    "surface": "product",
-   "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`.",
+   "summary": "Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog` and `Toaster`. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "mfa management",
     "multi-factor authentication",
@@ -26904,7 +26904,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people.",
+   "guidelinesSummary": "Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Required",
@@ -26926,7 +26926,7 @@
    "title": "Templates/Platform/Account/OnboardingForm",
    "source": "blocks/platform/account/onboarding-form/onboarding-form.vue",
    "surface": "product",
-   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`.",
+   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
    "intents": [
     "onboarding",
     "onboarding form",
@@ -27013,7 +27013,7 @@
     "@aziontech/webkit/toggle-group"
    ],
    "primary": "Organization",
-   "guidelinesSummary": "The `/signup/onboarding` screen, frame included. A new user has an account but no organization yet, and needs to create one with as few questions as possible: one step at a time in a card (organization, plan, profile), with a live wireframe beside it from `lg` showing the app the organization will open into, named and colored by what they type.",
+   "guidelinesSummary": "The `/signup/onboarding` screen, frame included. A new user has an account but no organization yet, and needs to create one with as few questions as possible: one step at a time in a card (organization, plan, profile), with a live wireframe beside it from `lg` showing the app the organization will open into, named and colored by what they type. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
    "variants": [
     {
      "name": "Plan",
@@ -27098,7 +27098,7 @@
    "title": "Templates/Platform/Account/Profile",
    "source": "blocks/platform/account/profile/profile.vue",
    "surface": "product",
-   "summary": "The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`.",
+   "summary": "The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "profile",
     "profile page",
@@ -27158,7 +27158,7 @@
     "@aziontech/webkit/toast"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.",
+   "guidelinesSummary": "The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [],
    "file": "catalog/patterns/platform/account/profile.json"
   },
@@ -27167,7 +27167,7 @@
    "title": "Templates/Platform/Account/TeamPermissions",
    "source": "blocks/platform/account/team-permissions/team-permissions.vue",
    "surface": "product",
-   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team.",
+   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "teams",
     "teams and permissions",
@@ -27242,7 +27242,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model.",
+   "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "CreateTeam",
@@ -27272,7 +27272,7 @@
    "title": "Templates/Platform/Account/Tokens",
    "source": "blocks/platform/account/tokens/tokens.vue",
    "surface": "product",
-   "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast.",
+   "summary": "The Personal tokens page of the account settings: a `PageHeader` with Documentation and Create Personal Token, a search `Input` and Refresh over a `Table` of tokens (name with its description, `Table.CellStatus` for Active, Expires in N days, Expired or Revoked, the expiry date, `Table.CellTime` for last use and creation, `Table.CellActions` with Revoke or Delete), all on one `useCollection`. Create opens a `Drawer` (name, description, expiry `Select` that states the date), and the new secret appears once in a `Dialog` with a warning `Alert`, a read-only `PasswordInput` and a `CopyButton`. Revoke and Delete go through `ConfirmDialog`, and their outcome is a toast. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "personal tokens",
     "personal access tokens",
@@ -27371,7 +27371,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token.",
+   "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Empty",
@@ -27397,7 +27397,7 @@
    "title": "Templates/Platform/Account/Users",
    "source": "blocks/platform/account/users/users.vue",
    "surface": "product",
-   "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.",
+   "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "users",
     "users management",
@@ -27478,7 +27478,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person.",
+   "guidelinesSummary": "Who can sign in to the account, and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, moves a person between teams and removes people who left. Permissions come only from teams (`platform/account/team-permissions`), so this page assigns teams; it never grants a permission to a person. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Invite",
@@ -27504,7 +27504,7 @@
    "title": "Templates/Platform/AI/AiActionApproval",
    "source": "blocks/platform/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "product",
-   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`.",
+   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
     "approve ai action",
@@ -27545,7 +27545,7 @@
     "@aziontech/webkit/tool-call"
    ],
    "primary": "Pending",
-   "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it.",
+   "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Irreversible",
@@ -27571,7 +27571,7 @@
    "title": "Templates/Platform/AI/AiChat",
    "source": "blocks/platform/ai/ai-chat/ai-chat.vue",
    "surface": "product",
-   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`.",
+   "summary": "The full-page generative AI assistant: a header with the assistant's name, a Preview `Tag` and New chat; before the first message an `EmptyState` that says what the assistant knows, over vertical support prompts from `SuggestionGroup`; then a `Conversation` where the reader's prompts sit at the inline end and each response is a `ChatMessage` that goes pending (loading text), thinking (`Reasoning`), streaming (`StreamingResponse` with numbered citations) and complete (collapsed `Sources`, Copy, Regenerate and the feedback thumbs), followed by follow-up questions; a `PromptInput` pinned under the log with a 4,000-character limit, Stop while a response is generated, and the disclaimer under it. The primary state is the empty assistant; sending a support prompt runs the whole response cycle. Built from `ChatMessage`, `Conversation`, `PromptInput`, `StreamingResponse`, `Reasoning`, `Sources`, `SuggestionGroup`, `EmptyState`, `Tag`, `Button`, `IconButton` and `CopyButton`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai chat",
     "ai assistant",
@@ -27650,7 +27650,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Empty",
-   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`.",
+   "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Streaming",
@@ -27676,7 +27676,7 @@
    "title": "Templates/Platform/AI/AiChatDrawer",
    "source": "blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "product",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -27747,7 +27747,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Empty",
-   "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource.",
+   "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Streaming",
@@ -27769,7 +27769,7 @@
    "title": "Templates/Platform/Auth",
    "source": "blocks/platform/auth/auth.vue",
    "surface": "product",
-   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`.",
+   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. A full page routed outside ConsoleLayout.",
    "intents": [
     "login",
     "log in",
@@ -27879,7 +27879,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Login",
-   "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts.",
+   "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
    "variants": [
     {
      "name": "SignUp",
@@ -31747,7 +31747,7 @@
    "title": "Templates/Platform/Settings/SettingsForm",
    "source": "blocks/platform/settings/settings-form/settings-form.vue",
    "surface": "product",
-   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, the platform shell with an unpadded scroll region, the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, the platform shell, `Card`, `Item`, `Alert`, `Field`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
+   "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
    "intents": [
     "save all",
     "single save for the page",
@@ -31784,72 +31784,36 @@
    ],
    "components": [
     "Alert",
-    "Avatar",
-    "Brand",
-    "Breadcrumb",
     "Button",
-    "ButtonHighlight",
     "Card",
-    "Command",
-    "Drawer",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
-    "DropdownMenu",
     "Field",
-    "GlobalHeader",
     "HelperText",
-    "IconButton",
     "Input",
     "Item",
     "Link",
-    "Menu",
     "PageHeader",
     "SaveBar",
-    "SearchTrigger",
     "Select",
     "SettingRow",
-    "Sidebar",
-    "StatusIndicator",
-    "Switch",
-    "ThemeSwitcher",
-    "Tooltip"
+    "Switch"
    ],
    "imports": [
     "@aziontech/webkit/alert",
-    "@aziontech/webkit/avatar",
-    "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/command",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
-    "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/field",
-    "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
-    "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/menu",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
-    "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
-    "@aziontech/webkit/sidebar",
-    "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/switch",
-    "@aziontech/webkit/theme-switcher",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/switch"
    ],
    "primary": "SaveAll",
-   "guidelinesSummary": "The place the user goes to change how an account or a project behaves. They scan a few topics, change one or two values, and commit them knowing exactly what the save covers. The block is one layout with three save strategies: one save for a form that is one logical unit, one save per group, or one save per card on a long configuration page. The save model follows how the page is partitioned, not the container.",
+   "guidelinesSummary": "The place the user goes to change how an account or a project behaves. They scan a few topics, change one or two values, and commit them knowing exactly what the save covers. The block is one layout with three save strategies: one save for a form that is one logical unit, one save per group, or one save per card on a long configuration page. The save model follows how the page is partitioned, not the container. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the breadcrumbs, the ⌘K palette and the `<main>`.",
    "variants": [
     {
      "name": "Saving",
@@ -31857,7 +31821,7 @@
     },
     {
      "name": "SavePerGroup",
-     "summary": "A settings page split into topic groups that each save on their own: the platform shell, a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, the platform shell, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`."
+     "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`."
     },
     {
      "name": "SavingOneGroup",
@@ -31865,7 +31829,7 @@
     },
     {
      "name": "SavePerCard",
-     "summary": "A long configuration page split into titled cards that each own their save: the platform shell, a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, the platform shell, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`."
+     "summary": "A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`."
     },
     {
      "name": "SavingOneCard",

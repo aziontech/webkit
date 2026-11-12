@@ -1,6 +1,6 @@
 # Settings form
 
-The place the user goes to change how an account or a project behaves. They scan a few topics, change one or two values, and commit them knowing exactly what the save covers. The block is one layout with three save strategies: one save for a form that is one logical unit, one save per group, or one save per card on a long configuration page. The save model follows how the page is partitioned, not the container.
+The place the user goes to change how an account or a project behaves. They scan a few topics, change one or two values, and commit them knowing exactly what the save covers. The block is one layout with three save strategies: one save for a form that is one logical unit, one save per group, or one save per card on a long configuration page. The save model follows how the page is partitioned, not the container. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the breadcrumbs, the ⌘K palette and the `<main>`.
 
 ## When to use
 
@@ -18,29 +18,21 @@ The place the user goes to change how an account or a project behaves. They scan
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-
-The platform shell: the resizable, collapsible `Sidebar` with the `Brand`, the `Menu` and the account footer; the `GlobalHeader` with the `Breadcrumb`, the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The scroll region beside it is unpadded so the save footer can run full bleed.
-
-### B. Page heading — `PageHeader` (required)
+### A. Page heading — `PageHeader` (required)
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### C. Topic sections — `Card`, `Item` (required)
+### B. Topic sections — `Card`, `Item` (required)
 
 Each topic is a section with a small heading (`text-heading-xxs`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
-### D. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
+### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
 
 One `SettingRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `kind="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `HelperText` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 
-### E. Save — `SaveBar`, `Button` (required)
+### D. Save — `SaveBar`, `Button` (required)
 
 SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
-
-### F. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -53,6 +45,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 
 ## Don't
 
+- Don't render a `Sidebar`, `GlobalHeader`, `Command` palette or `<main>` in the page; `ConsoleLayout` owns them.
 - Don't mix a page-level `SaveBar` with per-card Save buttons on the same page.
 - Don't put Save in the page heading or float it beside a single field.
 - Don't flag empty required fields before the user presses Save.
@@ -62,7 +55,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 ## Copy
 
 - **Page title:** the page's name, e.g. "Profile"; description: one sentence with a period, e.g. "Define and manage personal account preferences."
-- **Breadcrumb:** the parent, then the page title exactly, e.g. "Account settings" › "Profile".
+- **Breadcrumb** (the route meta `ConsoleLayout` reads): the parent, then the page title exactly, e.g. "Account settings" › "Profile".
 - **Choices:** sentence case and no parentheses, e.g. "Team default", "Standard protection".
 - **Section heading:** a short topic noun, e.g. "General", "Notifications".
 - **Row title:** names the setting in one to three words, e.g. "Timezone"; description: one sentence with a period, e.g. "Times across the app are shown in this zone."

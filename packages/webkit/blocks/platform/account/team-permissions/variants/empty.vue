@@ -36,63 +36,6 @@
   }
   const allPermissions = Object.keys(permissionLabels)
 
-  const seedTeams = [
-    {
-      id: 'team-1',
-      name: 'Administrators',
-      description: 'Full access to the account',
-      permissions: allPermissions,
-      members: 3,
-      status: 'Active'
-    },
-    {
-      id: 'team-2',
-      name: 'Developers',
-      description: 'Build and deploy applications',
-      permissions: [
-        'applications.view',
-        'applications.edit',
-        'domains.view',
-        'storage.view',
-        'storage.edit',
-        'metrics.view',
-        'logs.view'
-      ],
-      members: 12,
-      status: 'Active'
-    },
-    {
-      id: 'team-3',
-      name: 'Security',
-      description: 'Firewall rules and certificates',
-      permissions: [
-        'firewall.view',
-        'firewall.edit',
-        'certificates.view',
-        'certificates.edit',
-        'logs.view'
-      ],
-      members: 4,
-      status: 'Active'
-    },
-    {
-      id: 'team-4',
-      name: 'Finance',
-      description: 'Invoices and payment methods',
-      permissions: ['billing.view', 'billing.edit'],
-      members: 2,
-      status: 'Active'
-    },
-    {
-      id: 'team-5',
-      name: 'Contractors',
-      description: 'Read-only access for audits',
-      permissions: ['applications.view', 'domains.view', 'metrics.view'],
-      members: 0,
-      status: 'Inactive'
-    }
-  ]
-
   const teams = ref([])
 
   const rows = computed(() =>
@@ -169,8 +112,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Teams and permissions"
         description="A team is a named set of permissions. Members inherit exactly what their teams grant; nothing is granted per person."
@@ -245,6 +188,7 @@
         </Alert>
 
         <Card
+          key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -269,6 +213,7 @@
         </Card>
 
         <Card
+          key="card-2"
           v-else
           :padded="false"
         >
@@ -366,7 +311,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
 
     <ConfirmDialog
       v-model:open="deleteOpen"

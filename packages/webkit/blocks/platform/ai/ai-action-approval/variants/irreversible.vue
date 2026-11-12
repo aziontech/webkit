@@ -48,7 +48,7 @@
 <template>
   <section
     aria-labelledby="ai-approval-title"
-    class="flex h-dvh w-full flex-col bg-(--bg-canvas)"
+    class="flex min-h-0 w-full grow basis-0 flex-col"
   >
     <header class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)">
       <h1

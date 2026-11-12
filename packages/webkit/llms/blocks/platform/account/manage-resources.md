@@ -1,6 +1,6 @@
 # ManageResources (`platform/account/manage-resources`)
 
-> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.
+> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 manage resources; resource hierarchy; account hierarchy; organizations and workspaces; resource tree; tree table; move resources; bulk actions on a tree; gerenciar recursos; hierarquia de contas; organizações e workspaces; árvore de recursos; mover recursos
 
-Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected.
+Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -441,8 +441,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
@@ -554,7 +554,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             </template>
           </Alert>
 
-          <Card
+          <Card key="card-1"
             v-else-if="!loading && !resources.length"
             :padded="false"
           >
@@ -578,7 +578,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             </template>
           </Card>
 
-          <Card
+          <Card key="card-2"
             v-else
             :padded="false"
           >
@@ -850,7 +850,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </Card>
         </aside>
       </div>
-    </main>
+    </div>
 
     <Dialog
       v-model:open="moveOpen"

@@ -312,8 +312,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
@@ -426,6 +426,7 @@
           </Alert>
 
           <Card
+            key="card-1"
             v-else-if="!loading && !resources.length"
             :padded="false"
           >
@@ -450,6 +451,7 @@
           </Card>
 
           <Card
+            key="card-2"
             v-else
             :padded="false"
           >
@@ -721,7 +723,7 @@
           </Card>
         </aside>
       </div>
-    </main>
+    </div>
 
     <Dialog
       v-model:open="moveOpen"

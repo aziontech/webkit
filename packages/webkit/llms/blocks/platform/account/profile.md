@@ -1,6 +1,6 @@
 # Profile (`platform/account/profile`)
 
-> The profile page of a signed-in account, and the layout every account settings page follows, rendered inside the app shell: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`.
+> The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `Toaster` and `Button`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/profile/profile.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 profile; profile page; account profile; user profile; my account; account settings; general account settings; company information; organization settings; login settings; danger zone; account preferences; configurações da conta; dados da empresa; configurações gerais da conta; ajustes da conta; perfil; página de perfil; minha conta
 
-The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables.
+The profile page of a signed-in account, and the layout every account settings page follows. The user comes to check or change how the account is identified, billed and signed into: a small page heading over stacked sections, each a flush card of setting rows in the form column, with a save bar that rises once a saved field changes. Billing, credentials, users and teams keep the same column and swap the sections for their own cards or tables. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -289,7 +289,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
 <template>
   <Toaster position="bottom-right" />
-  <main class="flex h-screen flex-col bg-(--bg-canvas)">
+  <div class="flex flex-1 flex-col">
     <div class="flex min-h-0 flex-1 flex-col">
       <form
         class="flex min-h-0 flex-1 flex-col"
@@ -297,7 +297,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         novalidate
         @submit.prevent="save"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex-1">
           <div
             class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
@@ -724,6 +724,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         </Transition>
       </form>
     </div>
-  </main>
+  </div>
 </template>
 ```

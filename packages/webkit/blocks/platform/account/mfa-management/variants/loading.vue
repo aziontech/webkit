@@ -153,8 +153,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col">
       <PageHeader
         title="Multi-factor authentication"
         description="Who signs in with a second factor, and whether the account requires one."
@@ -321,7 +321,7 @@
           </Card>
         </div>
       </section>
-    </main>
+    </div>
 
     <ConfirmDialog
       v-model:open="requireOpen"

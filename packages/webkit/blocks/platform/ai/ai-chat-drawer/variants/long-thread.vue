@@ -250,8 +250,8 @@
 </script>
 
 <template>
-  <div class="min-h-dvh w-full bg-(--bg-canvas)">
-    <main class="layout-column layout-boundary flex min-w-0 flex-col">
+  <div class="w-full">
+    <div class="layout-column layout-boundary flex min-w-0 flex-col">
       <div class="layout-section-start flex flex-col gap-(--layout-section-gap)">
         <PageHeader
           title="storefront"
@@ -291,7 +291,7 @@
           </div>
         </Card>
       </div>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="assistantOpen"
