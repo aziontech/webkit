@@ -17,6 +17,8 @@ export interface LocaleContext {
   dir: ComputedRef<Direction>
   /** The built-in catalog for the locale with the provider's overrides merged in. */
   messages: ComputedRef<Messages>
+  /** Reference time in epoch milliseconds for relative times; undefined reads the real clock. */
+  now?: ComputedRef<number | undefined>
 }
 
 /** What `useTranslate()` returns. */

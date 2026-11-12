@@ -3,17 +3,17 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: 0eefac8245d2fa9fafe302a2e075a0a3947a0e2aed41c07adcf532f682530e1a
+checksum: 295e69e6fe00fb4a81c7267ebbfbddc1c79d86bf107291cf161e755a02897096
 spec_version: 1
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # WebkitProvider — Component Spec
 
 ## Purpose
 
-Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. With no provider mounted every component falls back to English. The element it renders carries `lang` and `dir`.
+Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. With no provider mounted every component falls back to English. It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
 
 ## When to use
 
@@ -40,6 +40,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
 - Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left.
+- Leave `now` unset in an app: relative times then read the real clock and `Table.CellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks.
 
 ## Usage
 
@@ -62,12 +63,13 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ## Props
 
-| Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                          |
-| ---------- | -------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `locale`   | `string`                   | `'en'`      | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats.                                |
-| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. |
-| `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                          |
-| `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                   |
+| Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                            |
+| ---------- | -------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `locale`   | `string`                   | `'en'`      | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats.                                  |
+| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English.   |
+| `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                            |
+| `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                     |
+| `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. |
 
 ## Events
 
@@ -82,6 +84,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 ## States
 
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`).
+- `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
 
 ## Motion & Animations
 
@@ -110,6 +113,7 @@ _none_
 - Default — Pagination and a ConfirmDialog in Portuguese, with the pt-BR catalog registered.
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
 - RightToLeft — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
+- `now` is shown by `table/cell-presets` (a fixed reference around a table whose `Table.CellTime` cells count back from it), not by a provider example of its own.
 
 ## Constraints — DO NOT
 

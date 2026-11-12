@@ -23,13 +23,16 @@
     messages?: PartialMessages
     /** Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). */
     dir?: DirectionSetting
+    /** Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. */
+    now?: string | number | Date
   }
 
   const props = withDefaults(defineProps<Props>(), {
     locale: 'en',
     catalogs: undefined,
     messages: undefined,
-    dir: 'auto'
+    dir: 'auto',
+    now: undefined
   })
 
   defineSlots<{
@@ -43,7 +46,8 @@
     locale: () => props.locale,
     messages: () => props.messages,
     dir: () => props.dir,
-    catalogs: () => ({ en, ...props.catalogs })
+    catalogs: () => ({ en, ...props.catalogs }),
+    now: () => props.now
   })
 
   const testId = computed(
