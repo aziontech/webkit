@@ -6,6 +6,8 @@ raised each day by severity, and ends in the open alerts table, ordered from cri
 the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags
 and tables.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Alerts carry a severity level and the reader has to decide which to handle first.

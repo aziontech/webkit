@@ -13,8 +13,8 @@
 </script>
 
 <template>
-  <main
-    class="flex min-h-dvh w-full flex-col items-center justify-center bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xl)"
+  <div
+    class="flex w-full flex-1 flex-col items-center justify-center px-(--spacing-md) py-(--spacing-xl)"
   >
     <h1 class="sr-only">Error 500</h1>
     <div class="w-full max-w-(--container-md)">
@@ -48,5 +48,5 @@
         </template>
       </EmptyState>
     </div>
-  </main>
+  </div>
 </template>

@@ -2,6 +2,8 @@
 
 The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Any action that takes long enough to leave: build, deploy, redeploy, import, provision, a bulk change.
@@ -17,101 +19,27 @@ The async-action pattern, taken from the design sample (`/forms/async-deployment
 
 ## Building blocks
 
-The shell parts (A to O, T to W) are the console frame from `shells/console`; follow that block for their rules. They are listed here because the run must keep reporting while the user moves through them.
+### A. Actions — `Button` (required)
 
-### A. Navigation rail — `Sidebar` (required)
+On the page: **Deploy** starts the run and shows `loading` while it runs, **Reset scenario** (`kind="transparent"`) belongs to the simulation only, and the `EmptyState` repeats **Deploy** as its action.
 
-The console's side navigation, collapsible to a rail at `md` and up. Opening any module from it while a run is in progress must not cancel the run.
-
-### B. Product mark — `Brand` (required)
-
-In the rail's head and in the global header, inside a link to Home.
-
-### C. Search and commands — `Command` (required)
-
-The palette in the rail: resources, pages, actions (theme, collapse the sidebar) and account, with `Command.Empty` copy when nothing matches.
-
-### D. Module menu — `Menu` (required)
-
-The rail's grouped navigation (Build, Security, Data, Observability), with drill-in modules and `Menu.Back`.
-
-### E. Account avatar — `Avatar` (required)
-
-The signed-in user at the foot of the rail and in the header.
-
-### F. Account menu — `DropdownMenu` (required)
-
-Opens from the account trigger with account options, the theme switch and the plan.
-
-### G. Hint — `Tooltip` (required)
-
-Names every icon-only control in the shell (Account menu, the rail toggle, search, help).
-
-### H. Icon action — `IconButton` (required)
-
-Icon-only shell controls, each with an `aria-label` equal to its tooltip.
-
-### I. Theme — `ThemeSwitcher` (required)
-
-Inside the account menu.
-
-### J. Actions — `Button` (required)
-
-In the shell (Create, the plan entry) and on the page: **Deploy** starts the run and shows `loading` while it runs, **Reset scenario** (`kind="transparent"`) belongs to the simulation only, and the `EmptyState` repeats **Deploy** as its action.
-
-### K. Plan status — `StatusIndicator` (required)
-
-The status dot in the account menu's plan entry.
-
-### L. Top bar — `GlobalHeader` (required)
-
-`aria-label="Console"`, with the rail toggle, brand and location on the start side and search, help, Create and the avatar on the end side.
-
-### M. Location — `Breadcrumb` (required)
-
-Where the page sits in the console.
-
-### N. Search — `SearchTrigger` (required)
-
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
-
-### O. Upgrade — `ButtonHighlight` (required)
-
-The plan call to action in the header.
-
-### P. Page heading — `PageHeader` (required)
+### B. Page heading — `PageHeader` (required)
 
 `size="large"`, the page title and one sentence on what the run does. Its `#actions` slot carries the run status as a `Tag`, so the state of the run is readable from the heading in every state.
 
-### Q. Run status — `Tag` (required)
+### C. Run status — `Tag` (required)
 
 In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`), `Deployed` (`success`). One to two words, never a sentence. In the simulation panel a `secondary` tag names the repository.
 
-### R. Simulated ending — `ToggleGroup` (simulation only)
+### D. Simulated ending — `ToggleGroup` (simulation only)
 
 `Succeeds` or `Fails`, in a dashed `aside` labelled `Scenario simulation`, disabled while a run is in progress. The ending is kept in the URL (`?outcome=`) so a run is linkable. It is a story device: a real page has no such control.
 
-### S. Nothing running — `EmptyState` (idle only)
+### E. Nothing running — `EmptyState` (idle only)
 
 `bordered`, the deploy glyph, a title, one sentence and **Deploy** as its only action. It gives way to the logs card once a run starts.
 
-### T. Mobile navigation — `Drawer` (below `md`)
-
-The rail rendered in a drawer on small screens.
-
-### U. Drawer layer — `DrawerPortal` (below `md`)
-
-Mounts the drawer at the document root.
-
-### V. Drawer backdrop — `DrawerOverlay` (below `md`)
-
-Dims the page behind the open drawer.
-
-### W. Drawer panel — `DrawerContent` (below `md`)
-
-Holds the `Sidebar`, labelled `aria-label="Navigation"`; choosing an item closes it.
-
-### X. Run toast — `Toaster` (required)
+### F. Run toast — `Toaster` (required)
 
 One `Toaster` (named export of `@aziontech/webkit/toast`, beside `toast`) mounted with the page, `position="bottom-right"`, with no slot of its own, raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
 
@@ -169,4 +97,4 @@ One `Toaster` (named export of `@aziontech/webkit/toast`, beside `toast`) mounte
 - `platform/create/deployment-flow` — the deployment logs card the Running and Failed states reuse.
 - `platform/detail/deployment-logs` — the full logs of a run, the page Edit or a failure leads into.
 - `platform/create/deploy-success` — the confirmation page after a deploy completes.
-- `shells/console` — the frame the user moves through while the run reports back.
+- `shells/console` — the layout this body renders in, which the user moves through while the run reports back.

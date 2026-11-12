@@ -80,8 +80,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Experience score"
         description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
@@ -378,6 +378,6 @@
           </div>
         </template>
       </Card>
-    </main>
+    </div>
   </div>
 </template>

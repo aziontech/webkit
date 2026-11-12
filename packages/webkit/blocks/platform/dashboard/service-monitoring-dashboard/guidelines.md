@@ -6,6 +6,8 @@ its state in words; latency percentiles and error rates sit in two charts with t
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The reader watches a known set of services for state changes and threshold breaches.

@@ -449,8 +449,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="flex h-full min-h-0 flex-col">
+  <div class="layout-boundary">
+    <div class="flex h-full min-h-0 flex-col">
       <section class="relative flex min-h-0 flex-col">
         <FileDropzone
           kind="overlay"
@@ -727,7 +727,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
     <ConfirmDialog
       v-model:open="deleteOpen"
       :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"

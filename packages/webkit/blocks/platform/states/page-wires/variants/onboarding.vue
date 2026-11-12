@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <main
+  <div
     aria-busy="true"
     class="layout-column layout-boundary relative flex min-h-full flex-col"
   >
@@ -71,5 +71,5 @@
         </Card>
       </div>
     </div>
-  </main>
+  </div>
 </template>

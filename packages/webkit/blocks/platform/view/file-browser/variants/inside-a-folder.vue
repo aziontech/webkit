@@ -232,8 +232,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="flex h-full min-h-0 flex-col">
+  <div class="layout-boundary">
+    <div class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
           <template #content>
@@ -496,7 +496,7 @@
           </template>
         </Card>
       </section>
-    </main>
+    </div>
     <ConfirmDialog
       v-model:open="deleteOpen"
       :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"

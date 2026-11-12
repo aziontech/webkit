@@ -309,8 +309,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Request activity"
         description="What each actor requested through the rules: what was allowed, blocked or held for approval, and what went over budget, per actor, category and destination."
@@ -584,6 +584,6 @@
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>

@@ -187,8 +187,8 @@
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Templates"
         description="Start a project from a template and deploy it in a few steps."
@@ -290,7 +290,7 @@
           </section>
         </template>
       </section>
-    </main>
+    </div>
 
     <Drawer
       v-model:open="previewOpen"

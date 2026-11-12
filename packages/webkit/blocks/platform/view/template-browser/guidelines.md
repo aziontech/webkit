@@ -2,6 +2,8 @@
 
 The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a "Start from a template" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A gallery of starting points (framework starters, sample sites, small functions) people pick one of and deploy.
@@ -79,7 +81,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
 - Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
 - The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.

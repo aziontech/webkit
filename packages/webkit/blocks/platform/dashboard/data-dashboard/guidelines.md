@@ -5,6 +5,8 @@ previous period, and which projects drove it. It leads with six KPI tiles (each 
 the change against the previous 24 hours), then explains the headline number with this period against
 the previous one, a ranking of projects and a table of usage per project.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The reader checks consumption across several products or meters (requests, data, jobs, images).

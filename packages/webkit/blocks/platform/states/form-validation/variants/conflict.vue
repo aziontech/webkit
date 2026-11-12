@@ -111,7 +111,7 @@
 </script>
 
 <template>
-  <div class="min-h-dvh bg-(--bg-canvas)">
+  <div>
     <form
       class="layout-column-form layout-boundary flex min-w-0 flex-col"
       aria-labelledby="create-variable-title"

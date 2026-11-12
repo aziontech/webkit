@@ -5,6 +5,8 @@ off, and how well each weekly sign-up cohort keeps coming back. One global filte
 segment) drives every region, so the funnel, the tiles and the cohorts always describe the same slice
 of users.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A sequence of steps where each one is a subset of the one before (visit, sign-up, activation, paid).

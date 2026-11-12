@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div class="relative flex min-h-dvh flex-col">
+  <div class="relative flex min-h-full flex-1 flex-col">
     <Transition
       enter-active-class="animate-fade-in motion-reduce:animate-none"
       leave-active-class="animate-fade-out motion-reduce:animate-none"

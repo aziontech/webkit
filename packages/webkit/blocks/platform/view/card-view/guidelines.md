@@ -2,6 +2,8 @@
 
 The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The module the sidebar routes to lists resources people tell apart by a handful of fields or a picture rather than by comparing one column across many rows (applications, sites, templates, images).
@@ -91,7 +93,7 @@ When `status` is `empty`, the cards and the pagination give way to a medium `Emp
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the page's only `h1`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
 - `Cards` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
 - Select all items is a visible, labelled checkbox, not an icon; its state is mixed when part of the page is selected.
 - Field labels and values are a `dl`, so each value is read with its label; status is a `Tag` with text, never color alone.

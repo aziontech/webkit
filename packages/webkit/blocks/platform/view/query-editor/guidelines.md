@@ -2,6 +2,8 @@
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
+
 ## When to use
 
 - A database resource opens on its tables and an editor that runs SQL against them.
@@ -18,69 +20,61 @@ The workspace of one SQL database. The user comes here to see which tables exist
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-
-The platform shell: the resizable, collapsible `Sidebar` with `Brand`, `Menu` and the account footer; the `GlobalHeader` with the Databases `Breadcrumb`, the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; on a phone the same navigation in a right `Drawer`.
-
-### B. Page tabs — `PageTabs`, `Tabs` (required)
+### A. Page tabs — `PageTabs`, `Tabs` (required)
 
 `PageTabs` bound with `v-model` holds two `Tabs.Item`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
 
-### C. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
+### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
 A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row opens it in the pane and has a Table actions `DropdownMenu` with Delete table.
 
-### D. Empty database — `Card`, `EmptyState`, `Button` (required)
+### C. Empty database — `Card`, `EmptyState`, `Button` (required)
 
 A database with no tables replaces the pane with a `Card` holding an `EmptyState` (No tables yet) and a secondary Create Table `Button`. The side panel says the same thing in its own words; the tabs stay.
 
-### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
+### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
 
 The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with Insert row and Import data from CSV; a filter that matches nothing says so with the filter text.
 
-### F. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
+### E. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
 
 Definition shows a Columns heading with an Add column `Button`, over a flush `Card` holding a `TableRoot` of the column name, its type as a secondary `Tag`, and its constraints.
 
-### G. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
+### F. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
 
 On Editor the start `Sidebar` is named Query history, with a Search queries `Input` and one row per past query showing the statement on one line. Each row has a Query actions `DropdownMenu` with Run query and Delete query.
 
-### H. Editor — `Button`, `CodeEditor` (required)
+### G. Editor — `Button`, `CodeEditor` (required)
 
 A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a `CodeEditor` (`language="sql"`, `path="query.sql"`, 14rem) named SQL editor. The plain editor ships by default; pass `loader` with `() => import('monaco-editor')` to get Monaco with SQL highlighting, themed from the tokens. While a query runs the editor is read-only and Prettify and Templates are disabled. A statement the database rejects puts an error marker on its line (`markers`) as well as the danger `Alert` in Results.
 
-### I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
+### H. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
 
-### J. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
+### I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
 
-### K. Bulk row delete — `Button` (optional)
+### J. Bulk row delete — `Button` (optional)
 
 Variant TableData only; it adds the `Toaster` with `toast`.
 
 With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
 
-### L. Create database page — `GlobalHeader`, `Breadcrumb`, `Input`, `Button` (optional)
+### K. Create database page — `Input`, `Button` (optional)
 
-Variant CreateDatabase only; it is its own page and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
+Variant CreateDatabase only; it is its own focused page outside `ConsoleLayout`, with the creation header (`GlobalHeader` with `Breadcrumb`), and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
 
 The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
-### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
+### L. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
 Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection`, `PanelFooter` and the `Toaster` with `toast`.
 
 An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `TableRoot` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
 
 Validation runs on Insert, as the form-error rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
-
-### N. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -113,7 +107,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 
 ## Accessibility
 
-- One `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
+- The layout owns the one `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
 - Each side `Sidebar` is named (Tables, Query history) with its own collapse, expand and resize labels.
 - The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.

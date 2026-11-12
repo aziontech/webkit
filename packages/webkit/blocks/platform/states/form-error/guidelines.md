@@ -2,6 +2,8 @@
 
 The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.
 
+This block is a focused create page with its own creation header and no rail: render it outside `ConsoleLayout` (`shells/console`).
+
 ## When to use
 
 - A long, sectioned create or edit form whose save can be rejected because of one section: a linked resource deleted or changed by someone else, a value the server refuses for that section only.

@@ -2,6 +2,8 @@
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Events or logs explored over time, where the volume chart and the rows must agree on one period and one set of filters.
@@ -18,67 +20,59 @@ The events explorer. The user comes here to answer what happened on their traffi
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-
-The platform shell with the Events navigation entry active: the resizable, collapsible `Sidebar` with `Brand`, `Menu` and the account footer; the `GlobalHeader` with the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; and on a phone the same navigation in a right `Drawer`. The explorer fills the rest of the viewport with no page heading.
-
-### B. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
+### A. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
 
 An outlined medium Filter `Button` opens one `Popover` placed `bottom-start`: the field list first, then the values of the chosen field with their counts. A small `Badge` on the trigger counts applied fields. The period offers presets and a `CalendarRoot` range; the popover stays open while the calendar is open. Long value lists get their own search `Input`.
 
-### C. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
+### B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
 
 A medium search `Input` across events, hosts, paths and addresses, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
 
-### D. Applied filters — `Chip` (optional)
+### C. Applied filters — `Chip` (optional)
 
 One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### E. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### F. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
+### E. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
 
 Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar kind="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Table.CellStatus`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
-### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+### F. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
 Clicking a row opens the event in a resizable end `Sidebar` beside the log when the explorer is wide enough for the fields panel, the log and the document. Its header shows the level and source as `Tag`s and a small Close `IconButton` in a `Tooltip`; the body lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
 
-### H. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
+### G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
 
 Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and `DrawerClose`. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
-The fields panel (E) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
+The fields panel (D) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 
-### I. Query bar — `Tooltip`, `IconButton` (optional)
+### H. Query bar — `Tooltip`, `IconButton` (optional)
 
 Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePicker` to the page, in place of the Filter popover and the search field.
 
 For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
-### J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+### I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
 
 Variant Query only.
 
 Two outlined `IconButton`s beside the bar open a `Popover` each. Saved queries lists name and query text, applies one on click, deletes one with a small Delete button, and saves the applied query under a typed name. Recent queries lists the last eight queries run, newest first, with Clear history. Applying an entry fills the bar and runs it.
 
-### K. Investigation tabs — `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional)
+### J. Investigation tabs — `IconButton`, `Input`, `Tooltip` (optional)
 
-Variant Sessions only; it adds `Tabs` to the page.
+Variant Sessions only; it adds `Tabs` and `DropdownMenu` to the page.
 
 Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Each tab is `closable` while more than one is open: the × on the tab closes it with the pointer, and Delete on the focused tab closes it from the keyboard (the tab announces the shortcut through `aria-keyshortcuts`); focus moves to the tab before it. The last tab cannot be closed. The × is not a separate focusable button: inside a `tablist` anything focusable that is not a tab fails `aria-required-children`, so the keyboard path is Delete, as in the WAI-ARIA tabs pattern, and the actions menu keeps Close investigation for discovery.
 
-### L. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
+### K. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
 
 Variant EventDocument only; it adds `CopyButton` to the page.
 
 The document lists every field of the event. Search in this event narrows the list to fields whose name or value matches and highlights the match. Each filterable value has Filter by (keep only events with it) and Exclude (hide them) buttons that apply to the log; an exclusion shows as a `Host is not legacy.example.com` chip with the other filters. Copy copies the fields shown as JSON; the full JSON document stays below.
-
-### M. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -118,7 +112,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 
 ## Accessibility
 
-- One `main` landmark holds the explorer; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
+- The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
 - The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
@@ -143,5 +137,5 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - `platform/view/table-view` — the same controls row over a resource list.
 - `platform/detail/deployment-logs` — logs of one deployment run.
 - `platform/dashboard/data-dashboard` — the metrics view for the same traffic.
-- `shells/console` — the shell this explorer sits in.
+- `shells/console` — the layout this explorer renders in.
 - `TableRoot` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
