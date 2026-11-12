@@ -24,6 +24,9 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
    - **a git repository, husky not installed yet** — the install runs `prepare` (husky), which activates the hooks;
    - **not a git repository yet** — husky cannot install a hook (the install prints `.git can't be found`). `init` says so; after `git init`, run `npx husky` once (or the install again). `doctor` warns until the hook is active;
    - **a project below the git root** (a monorepo package) — `init` prints the `"prepare": "cd <root> && husky <path>/.husky"` form husky needs there.
+
+   `init` also lists any stylesheet under `src/` with raw colours (hex, `rgb()`, `hsl()` — a starter template's `style.css` usually has them): the hook's stylelint rejects them, so replace them with tokens or delete the starter stylesheet before the first commit.
+
 7. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
 8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
 9. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file.
@@ -128,6 +131,7 @@ The toolkit is fail-open by design (a missing catalog disables the lint rules ra
 - **husky** `prepare` script + `.husky/pre-commit` lint block present (`WARN` when the hook still lints the whole tree, build output included — re-run `init`);
 - **git hooks** — the folder is a git repository and `core.hooksPath` points at `.husky/` (`WARN` before `git init`, or when the install ran before it: run `npx husky`);
 - **build output ignored** — the ESLint config and `.stylelintignore` (or Stylelint's `ignoreFiles`) skip `dist/`;
+- **raw colours in styles** — shown only when a stylesheet under `src/` has hex/rgb/hsl values the webkit stylelint will reject on commit (`WARN`);
 - **styles import** (`./webkit.css`) at the app entry, and the **icons import** when `@aziontech/icons` is a dependency;
 - **toast setup** — only when the source imports `@aziontech/webkit/toast`: a region must be wired (`.use(ToastPlugin)` in the entry, or a mounted Toaster), otherwise `WARN` with the exact fix;
 - **dependency versions** — the resolved installed version of each toolkit dependency, with a `WARN` for any still pinned as `latest` (and the suggested `^x.y.z` pin);

@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, realpathSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
@@ -250,6 +250,30 @@ export function huskyBin(projectDir) {
   }
 }
 
+const RAW_COLOUR = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\(/
+
+export function rawColourStylesheets(projectDir) {
+  const found = []
+  const walk = (rel) => {
+    let entries = []
+    try {
+      entries = readdirSync(join(projectDir, rel), { withFileTypes: true })
+    } catch {
+      return
+    }
+    for (const entry of entries) {
+      const child = `${rel}/${entry.name}`
+      if (entry.name.startsWith('.') || BUILD_OUTPUT_DIRS.includes(entry.name)) continue
+      if (entry.isDirectory()) walk(child)
+      else if (/\.(css|scss)$/.test(entry.name) && child !== 'src/webkit.css') {
+        if (RAW_COLOUR.test(read(join(projectDir, child)) || '')) found.push(child)
+      }
+    }
+  }
+  walk('src')
+  return found.sort()
+}
+
 const NOT_A_REPO_NOTE =
   'This folder is not a git repository yet, so husky cannot install the pre-commit hook (the install prints ".git can\'t be found"). After `git init`, run `npx husky` once (or your package manager install again) to activate .husky/pre-commit — `npx @aziontech/webkit doctor` reports it until then.'
 
@@ -445,6 +469,14 @@ export function planInit(projectDir, opts = {}) {
     })
   }
   actions.push(...huskyActions(projectDir))
+
+  const rawStylesheets = rawColourStylesheets(projectDir)
+  if (rawStylesheets.length) {
+    actions.push({
+      type: 'advise',
+      message: `${rawStylesheets.join(', ')} ${rawStylesheets.length === 1 ? 'uses' : 'use'} raw colours (hex, rgb or hsl — a starter template's stylesheet usually does), so the pre-commit stylelint rejects ${rawStylesheets.length === 1 ? 'it' : 'them'} and your first commit fails. Replace the values with theme tokens (var(--bg-canvas), var(--text-default)…), or delete the starter stylesheet and its import, before committing.`
+    })
+  }
 
   actions.push(...planSync(projectDir).actions)
 

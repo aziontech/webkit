@@ -279,3 +279,29 @@ test(
     }
   }
 )
+
+test('init and doctor flag a starter stylesheet with raw colours before the first commit fails on it', () => {
+  const dir = makeApp({
+    'src/style.css':
+      ':root {\n  color: rgba(255, 255, 255, 0.87);\n  background-color: #242424;\n}\n',
+    'src/components/card.scss': '.card {\n  color: var(--text-default);\n}\n'
+  })
+  try {
+    const plan = planInit(dir, {})
+    const note = plan.find((a) => a.type === 'advise' && /raw colours/.test(a.message))
+    assert.ok(note, 'expected the raw-colour note')
+    assert.match(note.message, /^src\/style\.css uses raw colours/)
+    assert.doesNotMatch(note.message, /card\.scss|webkit\.css|dist/)
+
+    applyPlan(dir, plan)
+    const check = planDoctor(dir).find((c) => c.check === 'raw colours in styles')
+    assert.equal(check.status, 'warn')
+    assert.match(check.detail, /^src\/style\.css —/)
+
+    writeFileSync(join(dir, 'src/style.css'), ':root {\n  color: var(--text-default);\n}\n')
+    assert.ok(!planInit(dir, {}).some((a) => a.type === 'advise' && /raw colours/.test(a.message)))
+    assert.ok(!planDoctor(dir).some((c) => c.check === 'raw colours in styles'))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})

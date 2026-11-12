@@ -12,6 +12,7 @@ import {
   LEGACY_HUSKY_HOOK_MARKER,
   MCP_SERVER_NAME,
   POSTCSS_CONFIG_CANDIDATES,
+  rawColourStylesheets,
   read,
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
@@ -213,6 +214,15 @@ export function planDoctor(projectDir) {
               ])
         ].join('\n')
   )
+
+  const rawStylesheets = rawColourStylesheets(projectDir)
+  if (rawStylesheets.length) {
+    add(
+      'raw colours in styles',
+      'warn',
+      `${rawStylesheets.join(', ')} — hex/rgb/hsl values that the webkit stylelint rejects, so the pre-commit hook fails. Use theme tokens, or delete a starter template's stylesheet and its import.`
+    )
+  }
 
   const entry = firstExisting(projectDir, ENTRY_CANDIDATES)
   if (entry) {
