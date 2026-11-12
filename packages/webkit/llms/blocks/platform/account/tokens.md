@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), `type`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -124,7 +124,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -155,18 +155,34 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import PasswordInput from '@aziontech/webkit/password-input'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Table from '@aziontech/webkit/table'
+  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
 
+  interface Token {
+    id: string
+    name: string
+    description: string
+    createdAt: Date
+    createdBy: string
+    expiresAt: Date
+    lastUsedAt: Date | null
+    revoked: boolean
+  }
+  interface TokenStatus {
+    label: string
+    severity: TagSeverity
+  }
+
   const DAY = 86_400_000
   const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysFrom = (days) => new Date(referenceTime + days * DAY)
+  const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
 
-  const formatDate = (date) =>
+  const formatDate = (date: Date) =>
     date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -174,7 +190,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       timeZone: 'UTC'
     })
 
-  const seedTokens = [
+  const seedTokens: Token[] = [
     {
       id: 'tok-7c1e',
       name: 'Local CLI',
@@ -217,9 +233,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }
   ]
 
-  const tokens = ref(seedTokens)
+  const tokens = ref<Token[]>(seedTokens)
 
-  const statusOf = (token) => {
+  const statusOf = (token: Token): TokenStatus => {
     if (token.revoked) return { label: 'Revoked', severity: 'secondary' }
     const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
@@ -236,7 +252,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }))
   )
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'Status', minWidth: 160 },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
@@ -278,7 +294,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     { value: '90', label: '90 days' },
     { value: '365', label: '1 year' }
   ]
-  const expiryLabel = (value) => expiryOptions.find((option) => option.value === value)?.label ?? ''
+  const expiryLabel = (value: unknown) =>
+    expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
   const submitting = ref(false)
@@ -295,7 +312,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     createOpen.value = true
   }
 
-  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const revealOpen = ref(false)
   const revealed = reactive({ name: '', secret: '' })
@@ -349,12 +366,12 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     revealed.secret = ''
   }
 
-  const pending = ref(null)
+  const pending = ref<Token | null>(null)
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
   const working = ref(false)
 
-  const onAction = (value, row) => {
+  const onAction = (value: string | number, row: Token) => {
     pending.value = row
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
@@ -536,7 +553,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               <template #cell-actions="{ row }">
                 <Table.CellActions
                   :name="row.name"
-                  @select="(event, value) => onAction(value, row)"
+                  @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group
                     key="dropdown-menu.group-1"

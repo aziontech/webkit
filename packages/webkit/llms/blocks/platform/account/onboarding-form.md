@@ -127,7 +127,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Organization`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { primitives } from '@aziontech/theme/colors'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -141,7 +141,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import RadioCards from '@aziontech/webkit/radio-cards'
   import { computed, ref } from 'vue'
 
-  const accents = [
+  interface Accent {
+    value: string
+    label: string
+    ariaLabel: string
+    colors: string[]
+  }
+
+  const accents: Accent[] = [
     {
       value: 'orange',
       label: 'Orange',
@@ -192,7 +199,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const accent = ref('orange')
   const submitted = ref(false)
 
-  const accountInitials = (name) => {
+  const accountInitials = (name: string) => {
     const words = String(name ?? '')
       .trim()
       .split(/\s+/)
@@ -201,21 +208,23 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     return (words[0] ?? '').slice(0, 2).toUpperCase()
   }
 
-  const marbleOf = (name, colors) => {
+  const palette: Record<string, Record<string, string | Record<string, string>>> = primitives
+
+  const marbleOf = (name: string, colors: string[]) => {
     let seed = 0
     for (let index = 0; index < name.length; index += 1) {
       seed = (seed << 5) - seed + name.charCodeAt(index)
       seed |= 0
     }
     seed = Math.abs(seed)
-    const unit = (value, range, position) => {
+    const unit = (value: number, range: number, position?: number) => {
       const magnitude = value % range
       if (position && Math.floor((value / 10 ** position) % 10) % 2 === 0) return -magnitude
       return magnitude
     }
-    const paint = (color) => {
+    const paint = (color: string) => {
       const [, family, step] = color.match(/^var\(--color-([a-z]+)-(\d+)\)$/) ?? []
-      return family ? primitives[family][step] : color
+      return family ? palette[family][step] : color
     }
     const layers = [0, 1, 2].map((index) => {
       const value = seed * (index + 1)
@@ -368,7 +377,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             <template #default="{ item }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
-                                  :src="marbleOf(previewName, item.colors)"
+                                  :src="marbleOf(previewName, (item as Accent).colors)"
                                   :alt="item.label"
                                   size="medium"
                                   kind="square"

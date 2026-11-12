@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/create/source-wizard/source-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/source-wizard")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Stepper](../../../components/stepper.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Stepper](../../../components/stepper.md), `type`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -128,7 +128,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`WhereItRuns`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -142,7 +142,22 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Stepper from '@aziontech/webkit/stepper'
+  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
   import { computed, nextTick, ref } from 'vue'
+
+  interface ServiceOption {
+    value: string
+    label: string
+    description: string
+  }
+
+  interface WizardStep {
+    value: string
+    title: string
+    description: string
+    state: StepperStepState
+    disabled: boolean
+  }
 
   const breadcrumb = [{ label: 'Projects', href: '/projects' }, { label: 'Create Project' }]
   const wizardSteps = [
@@ -151,7 +166,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { id: 'source', label: 'Select a source' },
     { id: 'configure', label: 'Create and deploy' }
   ]
-  const services = [
+  const services: ServiceOption[] = [
     { value: 'service-01', label: 'service-01', description: 'service-01.example.com' },
     { value: 'service-02', label: 'service-02', description: 'service-02.example.com' },
     { value: 'service-03', label: 'service-03', description: 'service-03.example.com' },
@@ -205,7 +220,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const stepIndex = ref(0)
   const steps = computed(() =>
-    wizardSteps.map((entry, position) => ({
+    wizardSteps.map((entry, position): WizardStep => ({
       value: entry.id,
       title: entry.label,
       description: entry.description ?? '',
@@ -216,7 +231,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const current = computed({
     get: () => wizardSteps[stepIndex.value].id,
-    set: (value) => {
+    set: (value: string) => {
       const position = wizardSteps.findIndex((entry) => entry.id === value)
       if (position !== -1 && position < stepIndex.value) stepIndex.value = position
     }
@@ -231,7 +246,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const query = ref('')
   const creating = ref(false)
   const newName = ref('')
-  const nameField = ref(null)
+  const nameField = ref<{ focus?: () => void } | null>(null)
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
@@ -253,7 +268,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     stepIndex.value = 1
   }
 
-  const choose = (option) => {
+  const choose = (option: ServiceOption) => {
     service.value = option.value
     answerWhere()
   }

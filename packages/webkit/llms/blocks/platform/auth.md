@@ -203,10 +203,10 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 ## Code (`Login`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
-  import Button from '@aziontech/webkit/button'
+  import Button, { type ButtonKind } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -243,17 +243,19 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  const emailError = (value) =>
+  const emailError = (value: string) =>
     !value.trim()
       ? 'This field is required.'
       : emailPattern.test(value.trim())
         ? ''
         : 'Enter a valid email address.'
 
-  const newPasswordError = (value) =>
+  const newPasswordError = (value: string) =>
     !value
       ? 'This field is required.'
-      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
+      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
+            typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
+          )
         ? ''
         : 'Password does not meet requirements.'
 
@@ -274,7 +276,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     return { title: 'Welcome back', description: 'Sign in to your account.' }
   })
 
-  const primaryAction = computed(() => {
+  const primaryAction = computed<{ label: string; kind: ButtonKind }>(() => {
     if (step.value === 'password') return { label: 'Sign in', kind: 'primary' }
     if (step.value === 'reset') return { label: 'Send reset link', kind: 'primary' }
     if (step.value === 'new-password') return { label: 'Reset password', kind: 'primary' }
@@ -310,7 +312,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     step.value = 'new-password'
   }
 
-  const focusField = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const handlePrimary = () => {
     expiredNotice.value = false

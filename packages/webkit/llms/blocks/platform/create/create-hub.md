@@ -115,7 +115,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -129,12 +129,31 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectValue } from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import { computed, ref } from 'vue'
 
+  interface Account {
+    label: string
+    value: string
+  }
+  interface HubItem {
+    slug: string
+    title: string
+    description: string
+    vendor?: string
+    icon: string
+    markClass: string
+  }
+  interface HubSection {
+    id: string
+    label: string
+    kind: 'cards' | 'list'
+    items: HubItem[]
+  }
+
   const breadcrumb = [{ label: 'Creation Center', current: true }]
-  const ACCOUNTS = [
+  const ACCOUNTS: Account[] = [
     { label: 'jane-doe', value: 'jane-doe' },
     { label: 'acme', value: 'acme' },
     { label: 'acme-labs', value: 'acme-labs' }
@@ -148,7 +167,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
     { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' }
   ]
-  const sections = [
+  const sections: HubSection[] = [
     {
       id: 'recommended',
       label: 'Recommended',
@@ -476,7 +495,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   ]
   const skeletonRows = 6
 
-  const accounts = ref([])
+  const accounts = ref<Account[]>([])
   const connecting = ref(false)
   const scope = ref('')
   const reposLoading = ref(false)
@@ -499,8 +518,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     }, 1500)
   }
 
-  const onSelectScope = (value) => {
-    if (!value || value === '__add-account__' || value === scope.value) return
+  const onSelectScope = (value: SelectValue) => {
+    if (typeof value !== 'string' || !value || value === '__add-account__' || value === scope.value)
+      return
     scope.value = value
     loadRepos()
   }

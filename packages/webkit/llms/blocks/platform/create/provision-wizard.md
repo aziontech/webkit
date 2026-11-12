@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/create/provision-wizard/provision-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/provision-wizard")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioCards](../../../components/radio-cards.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioCards](../../../components/radio-cards.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), `type`, [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -142,7 +142,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Project`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -165,10 +165,71 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Stepper from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
   import { computed, reactive, ref } from 'vue'
 
+  interface WizardStep {
+    id: string
+    label: string
+    description?: string
+  }
+  interface StepItem {
+    value: string
+    title: string
+    description: string
+    state: StepperStepState
+    disabled: boolean
+  }
+  interface Option {
+    value: string
+    label: string
+    description?: string
+    disabled?: boolean
+  }
+  type CachePolicyId = 'images' | 'files-optimization'
+  interface CacheField {
+    name: string
+    label: string
+    placeholder: string
+    required: boolean
+    description: string
+  }
+  interface CachePolicy {
+    value: CachePolicyId
+    label: string
+    description: string
+    fields: CacheField[]
+  }
+  type OriginType = 'http' | 'storage' | 'live-ingest'
+  interface OriginTextField {
+    kind: 'text'
+    name: string
+    label: string
+    placeholder: string
+    required?: boolean
+    description: string
+  }
+  interface OriginSelectField {
+    kind: 'select'
+    name: string
+    label: string
+    options: Option[]
+    required?: boolean
+    description: string
+  }
+  type OriginField = OriginTextField | OriginSelectField
+  interface PickerInitial {
+    chosen?: string
+    message?: string
+    loading?: boolean
+  }
+  interface Scratch {
+    cache: Record<CachePolicyId, { enabled: boolean; values: Record<string, string> }>
+    origin: { enabled: boolean; type: OriginType; values: Record<string, string> }
+  }
+
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
-  const wizardSteps = [
+  const wizardSteps: WizardStep[] = [
     { id: 'project', label: 'Project' },
     { id: 'binding', label: 'Domain and deployment' }
   ]
@@ -176,7 +237,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { label: 'Existing project', value: 'existing' },
     { label: 'New project', value: 'new' }
   ]
-  const projects = [
+  const projects: Option[] = [
     { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
     {
       value: 'black-friday-2025',
@@ -213,7 +274,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
     { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
   ]
-  const cachePolicies = [
+  const cachePolicies: CachePolicy[] = [
     {
       value: 'images',
       label: 'Image caching',
@@ -251,7 +312,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       description: 'A region a live stream is ingested from.'
     }
   ]
-  const originFieldsByType = {
+  const originFieldsByType: Record<OriginType, OriginField[]> = {
     http: [
       {
         kind: 'text',
@@ -332,25 +393,25 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
     }
   ]
-  const certificates = [
+  const certificates: Option[] = [
     { value: 'lets_encrypt', label: 'Let’s Encrypt' },
     { value: 'shared_san', label: 'Shared SAN' },
     { value: 'own', label: 'A certificate you upload' }
   ]
-  const tlsVersions = [
+  const tlsVersions: Option[] = [
     { value: 'tls_1_0', label: 'TLS 1.0' },
     { value: 'tls_1_1', label: 'TLS 1.1' },
     { value: 'tls_1_2', label: 'TLS 1.2' },
     { value: 'tls_1_3', label: 'TLS 1.3' }
   ]
-  const errorPages = [
+  const errorPages: Option[] = [
     { value: 'Rate limited', label: 'Rate limited' },
     { value: 'Blocked by firewall', label: 'Blocked by firewall' },
     { value: 'Branded 404', label: 'Branded 404' },
     { value: 'Server error', label: 'Server error' },
     { value: 'Maintenance window', label: 'Maintenance window' }
   ]
-  const deployments = [
+  const deployments: Option[] = [
     {
       value: 'default',
       label: 'Default',
@@ -601,7 +662,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
-  const usePicker = (options, noun, initial = {}) => {
+  const usePicker = (options: Option[], noun: string, initial: PickerInitial = {}) => {
     const query = ref('')
     const chosen = ref(initial.chosen ?? '')
     const message = ref(initial.message ?? '')
@@ -663,7 +724,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   }
 
   const stepIndex = ref(0)
-  const steps = computed(() =>
+  const steps = computed<StepItem[]>(() =>
     wizardSteps.map((entry, position) => ({
       value: entry.id,
       title: entry.label,
@@ -675,7 +736,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const current = computed({
     get: () => wizardSteps[stepIndex.value].id,
-    set: (value) => {
+    set: (value: string) => {
       const position = wizardSteps.findIndex((entry) => entry.id === value)
       if (position !== -1 && position < stepIndex.value) stepIndex.value = position
     }
@@ -689,7 +750,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const projectName = ref('')
   const projectPicker = usePicker(projects, 'project', { chosen: '' })
   const deploymentPicker = usePicker(deployments, 'deployment')
-  const scratch = reactive({
+  const scratch = reactive<Scratch>({
     cache: {
       images: {
         enabled: false,
@@ -713,10 +774,10 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     allowPlatformDomain: true,
     active: true
   })
-  const errors = reactive({})
+  const errors = reactive<Record<string, string>>({})
   const advancedOpen = ref(false)
 
-  const slug = (value) =>
+  const slug = (value: string) =>
     String(value ?? '')
       .trim()
       .toLowerCase()
@@ -751,7 +812,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const originFields = computed(() => originFieldsByType[scratch.origin.type])
 
-  const labelFor = (options) => (value) =>
+  const labelFor = (options: Option[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? ''
 
   const validate = () => {

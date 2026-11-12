@@ -146,7 +146,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Service`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -174,7 +174,52 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
-  const resources = [
+  interface Version {
+    id: string
+    name: string
+    author: string
+    createdAgo: string
+    active?: boolean
+  }
+  interface Dependency {
+    key: string
+    label: string
+    name: string
+    icon: string
+    note: string
+    total: number
+    versions: Version[]
+  }
+  interface Resource extends Dependency {
+    owner: boolean
+    dependencies: Dependency[]
+  }
+  interface DomainGroup {
+    environment: string
+    total: number
+    summary: string
+    domains: string[]
+  }
+  interface ExistingProject {
+    id: string
+    name: string
+    detail: string
+    domains: DomainGroup[]
+  }
+  interface ProjectGroup {
+    key: string
+    label: string
+    projects: ExistingProject[]
+  }
+  interface ProjectView {
+    id?: string
+    name: string
+    domain?: string
+    detail?: string
+    domains?: DomainGroup[]
+  }
+
+  const resources: Resource[] = [
     {
       key: 'service',
       label: 'Service',
@@ -341,9 +386,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject = { name: 'web-app', domain: 'web-app.example.com' }
+  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
 
-  const projectGroups = [
+  const projectGroups: ProjectGroup[] = [
     {
       key: 'serving',
       label: 'Serving web-app',
@@ -593,29 +638,29 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   ]
 
   const open = ref(false)
-  const picks = reactive({ service: 'AG1VVDJP' })
-  const versionOpen = reactive({})
+  const picks = reactive<Record<string, string>>({ service: 'AG1VVDJP' })
+  const versionOpen = reactive<Record<string, boolean>>({})
   const projectMode = ref('existing')
   const projectId = ref('1020655')
   const environment = ref('Production')
 
-  const project = computed(() =>
+  const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
       ? newProject
-      : projectGroups
+      : (projectGroups
           .flatMap((group) => group.projects)
-          .find((entry) => entry.id === projectId.value)
+          .find((entry) => entry.id === projectId.value) ?? projectGroups[0].projects[0])
   )
 
-  const versionOf = (row) =>
+  const versionOf = (row: Dependency) =>
     row.versions.find((entry) => entry.id === picks[row.key]) ?? row.versions[0]
 
-  const versionSummary = (row) =>
+  const versionSummary = (row: Dependency) =>
     row.total > row.versions.length
       ? `${row.versions.length} of ${row.total} Ready versions`
       : `${row.total} Ready versions`
 
-  const pickVersion = (row, id) => {
+  const pickVersion = (row: Dependency, id: string) => {
     picks[row.key] = id
     versionOpen[row.key] = false
   }
@@ -713,7 +758,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <DropdownMenu
                             v-model:open="versionOpen[row.key]"
                             placement="bottom-end"
-                            @select="(event, id) => pickVersion(row, String(id))"
+                            @select="(_event, id) => pickVersion(row, String(id))"
                           >
                             <DropdownMenu.Trigger>
                               <Button
@@ -804,7 +849,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                         <Accordion
                           type="single"
                           collapsible
-                          size="small"
+                          size="medium"
                         >
                           <Accordion.Item value="dependencies">
                             <Accordion.Trigger>
@@ -862,7 +907,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       <DropdownMenu
                                         v-model:open="versionOpen[dependency.key]"
                                         placement="bottom-end"
-                                        @select="(event, id) => pickVersion(dependency, String(id))"
+                                        @select="
+                                          (_event, id) => pickVersion(dependency, String(id))
+                                        "
                                       >
                                         <DropdownMenu.Trigger>
                                           <Button
@@ -1131,7 +1178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                         <Item.Actions v-if="projectMode === 'existing'">
                           <DropdownMenu
                             placement="bottom-end"
-                            @select="(event, id) => (projectId = String(id))"
+                            @select="(_event, id) => (projectId = String(id))"
                           >
                             <DropdownMenu.Trigger>
                               <Button

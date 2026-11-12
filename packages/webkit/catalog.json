@@ -26820,6 +26820,7 @@
     "PageHeader",
     "PropertyFilter",
     "Table",
+    "type",
     "Tooltip",
     "use-collection"
    ],
@@ -26835,6 +26836,7 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/table",
+    "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection"
    ],
@@ -27429,6 +27431,8 @@
     "SettingsSection",
     "Switch",
     "Table",
+    "type",
+    "type",
     "Textarea",
     "toast",
     "Tooltip",
@@ -27452,6 +27456,8 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -27544,6 +27550,7 @@
     "Select",
     "SettingsSection",
     "Table",
+    "type",
     "Textarea",
     "toast",
     "Tooltip",
@@ -27581,6 +27588,7 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/table",
+    "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -27660,6 +27668,7 @@
     "PanelFooter",
     "PanelHeader",
     "Table",
+    "type",
     "Tag",
     "toast",
     "Tooltip",
@@ -27688,6 +27697,7 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/table",
+    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -28834,6 +28844,7 @@
     "SectionHeader",
     "SettingRow",
     "Stepper",
+    "type",
     "Switch",
     "Tag",
     "Textarea",
@@ -28858,6 +28869,7 @@
     "@aziontech/webkit/section-header",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/stepper",
+    "@aziontech/webkit/stepper-step",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
@@ -28929,6 +28941,7 @@
     "SettingsSection",
     "Skeleton",
     "Stepper",
+    "type",
     "Switch",
     "ToggleGroup"
    ],
@@ -28953,6 +28966,7 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stepper",
+    "@aziontech/webkit/stepper-step",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/toggle-group"
    ],
@@ -29270,7 +29284,8 @@
     "Item",
     "PageHeader",
     "SaveBar",
-    "Stepper"
+    "Stepper",
+    "type"
    ],
    "imports": [
     "@aziontech/webkit/avatar",
@@ -29285,7 +29300,8 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/save-bar",
-    "@aziontech/webkit/stepper"
+    "@aziontech/webkit/stepper",
+    "@aziontech/webkit/stepper-step"
    ],
    "primary": "WhereItRuns",
    "guidelinesSummary": "The wizard that starts a resource from code and deploys it. The user first says which service the project deploys to (an existing one, a new one created inline, or none yet), then picks how the code arrives: import from Git, sync from the CLI or start from a template. The method they pick declares the steps that follow on the rail, and the flow ends on the provisioning log and the success screen. Steps answered by a click carry no Next, so the user moves as fast as they decide.",

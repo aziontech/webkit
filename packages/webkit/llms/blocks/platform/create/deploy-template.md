@@ -104,7 +104,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`ConnectGit`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'

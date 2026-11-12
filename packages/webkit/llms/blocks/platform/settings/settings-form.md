@@ -116,7 +116,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
 ## Code (`SaveAll`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -139,7 +139,8 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const labelOf = (list) => (value) => list.find((option) => option.value === value)?.label ?? ''
+  const labelOf = (list: { label: string; value: string }[]) => (value: unknown) =>
+    list.find((option) => option.value === value)?.label ?? ''
 
   const saved = ref({
     fullName: 'Alex Morgan',

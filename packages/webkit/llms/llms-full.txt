@@ -1996,7 +1996,7 @@ What each part takes: [blocks/headers/site-header.md](blocks/headers/site-header
 - Surface: product
 - Source: `blocks/platform/account/activity-history/activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/activity-history")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, DateRangePicker, EmptyState, IconButton, PageHeader, PropertyFilter, Table, `type`, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2639,7 +2639,7 @@ What each part takes: [blocks/platform/account/profile.md](blocks/platform/accou
 - Surface: product
 - Source: `blocks/platform/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/team-permissions")`
-- Components: Alert, Avatar, Button, Card, Checkbox, Combobox, ConfirmDialog, DropdownMenu, EmptyState, Field, IconButton, Input, PageHeader, SaveBar, SettingsSection, Switch, Table, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Avatar, Button, Card, Checkbox, Combobox, ConfirmDialog, DropdownMenu, EmptyState, Field, IconButton, Input, PageHeader, SaveBar, SettingsSection, Switch, Table, `type`, `type`, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2738,7 +2738,7 @@ What each part takes: [blocks/platform/account/team-permissions.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: Alert, Button, Card, ConfirmDialog, CopyButton, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, Select, SettingsSection, Table, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, ConfirmDialog, CopyButton, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, Select, SettingsSection, Table, `type`, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2832,7 +2832,7 @@ What each part takes: [blocks/platform/account/tokens.md](blocks/platform/accoun
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/users")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, Input, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Table, Tag, Toast, Tooltip, `use-collection`
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, Input, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Table, `type`, Tag, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -4079,7 +4079,7 @@ What each part takes: [blocks/platform/create/deployment-flow.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/create/multipage-create/multipage-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/multipage-create")`
-- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, HelperText, IconButton, Input, Item, PageHeader, RadioButton, SaveBar, SectionHeader, SettingRow, Stepper, Switch, Tag, Textarea, Toast
+- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, HelperText, IconButton, Input, Item, PageHeader, RadioButton, SaveBar, SectionHeader, SettingRow, Stepper, `type`, Switch, Tag, Textarea, Toast
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4199,7 +4199,7 @@ What each part takes: [blocks/platform/create/multipage-create.md](blocks/platfo
 - Surface: product
 - Source: `blocks/platform/create/provision-wizard/provision-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/provision-wizard")`
-- Components: Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, HelperText, Hint, IconButton, Input, Item, PageHeader, RadioCards, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Stepper, Switch, ToggleGroup
+- Components: Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, HelperText, Hint, IconButton, Input, Item, PageHeader, RadioCards, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Stepper, `type`, Switch, ToggleGroup
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -4614,7 +4614,7 @@ What each part takes: [blocks/platform/create/single-page-create.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/create/source-wizard/source-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/source-wizard")`
-- Components: Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, IconButton, Input, Item, PageHeader, SaveBar, Stepper
+- Components: Avatar, Brand, Breadcrumb, Button, Card, Field, GlobalHeader, IconButton, Input, Item, PageHeader, SaveBar, Stepper, `type`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as

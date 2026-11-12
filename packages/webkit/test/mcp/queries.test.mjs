@@ -214,7 +214,7 @@ test('searchComponents finds a component by substring', () => {
 test('getUsageExample synthesizes a runnable SFC with the tree-shakeable import', () => {
   const res = getUsageExample(catalog, 'button', { fromStory: false })
   assert.equal(res.found, true)
-  assert.match(res.sfc, /<script setup>/)
+  assert.match(res.sfc, /<script setup( lang="ts")?>/)
   assert.match(res.sfc, /import Button from '@aziontech\/webkit\/button'/)
   assert.match(res.sfc, /<Button/)
   assert.match(res.sfc, /<template>/)
@@ -315,7 +315,7 @@ test('getPattern returns the SFC, components, skills and steps; variants by name
   const p = getPattern(catalog, 'platform/auth')
   assert.equal(p.found, true)
   assert.equal(p.variant, 'Login')
-  assert.match(p.sfc, /<script setup>/)
+  assert.match(p.sfc, /<script setup( lang="ts")?>/)
   assert.match(p.sfc, /autocomplete="username"/)
   assert.ok(p.components.includes('Input'))
   assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])

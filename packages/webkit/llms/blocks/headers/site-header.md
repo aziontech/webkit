@@ -120,7 +120,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Open navigation"
+                aria-label="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>

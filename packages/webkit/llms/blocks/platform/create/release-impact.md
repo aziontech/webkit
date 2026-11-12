@@ -124,7 +124,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Ready`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Badge from '@aziontech/webkit/badge'
@@ -142,7 +142,54 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
-  const SCENARIO = {
+  type ImpactState = 'ready' | 'loading' | 'partial' | 'unavailable'
+  type Outcome = '' | 'failed' | 'succeeded'
+  type ResourceType = 'service' | 'policy' | 'storage' | 'errorPage' | 'module' | 'integration'
+
+  interface Scenario {
+    impact: ImpactState
+    missingVersion: boolean
+    failFirstRun: boolean
+  }
+
+  interface ResourceTypeMeta {
+    label: string
+    icon: string
+  }
+
+  interface ResourceVersion {
+    id: string
+    current?: boolean
+    age: string
+  }
+
+  interface VersionedResource {
+    versionId: string
+    versions: ResourceVersion[]
+  }
+
+  interface DependencyRow extends VersionedResource {
+    name: string
+    sharedWith?: string[]
+  }
+
+  interface DependencyGroup {
+    type: ResourceType
+    rows: DependencyRow[]
+  }
+
+  interface ResourceCard extends VersionedResource {
+    type: ResourceType
+    name: string
+    required?: boolean
+    canToggle?: boolean
+    readonly?: boolean
+    enabled: boolean
+    note?: string
+    groups: DependencyGroup[]
+  }
+
+  const SCENARIO: Scenario = {
     impact: 'ready',
     missingVersion: false,
     failFirstRun: false
@@ -153,7 +200,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const IMPACT_MS = 1200
   const LATEST = 'latest'
 
-  const resourceTypes = {
+  const resourceTypes: Record<ResourceType, ResourceTypeMeta> = {
     service: { label: 'Service', icon: 'pi pi-server' },
     policy: { label: 'Policy', icon: 'pi pi-shield' },
     storage: { label: 'Storage', icon: 'pi pi-inbox' },
@@ -162,7 +209,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     integration: { label: 'Integrations', icon: 'pi pi-link' }
   }
 
-  const cards = reactive([
+  const cards = reactive<ResourceCard[]>([
     {
       type: 'service',
       name: 'web-app',
@@ -275,30 +322,31 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { label: 'Flow', value: 'flow' }
   ]
 
-  const impactState = ref(SCENARIO.impact)
+  const impactState = ref<ImpactState>(SCENARIO.impact)
   const impactView = ref('tree')
   const confirmOpen = ref(false)
   const deploying = ref(false)
-  const outcome = ref('')
+  const outcome = ref<Outcome>('')
   const failNext = ref(SCENARIO.failFirstRun)
-  const resourcesHeading = ref(null)
+  const resourcesHeading = ref<HTMLElement | null>(null)
 
   let impactTimer = 0
   let runTimer = 0
 
-  const plural = (count, one, other) => `${count} ${count === 1 ? one : other}`
+  const plural = (count: number, one: string, other: string) =>
+    `${count} ${count === 1 ? one : other}`
 
-  const versionLabel = (card, id) => {
+  const versionLabel = (card: VersionedResource, id: unknown) => {
     if (id === LATEST) return 'Track latest Ready'
-    return card.versions.find((version) => version.id === id)?.id ?? id
+    return card.versions.find((version) => version.id === id)?.id ?? String(id)
   }
 
-  const resolvedVersion = (card) =>
+  const resolvedVersion = (card: ResourceCard) =>
     card.versionId === LATEST
       ? (card.versions.find((version) => version.current)?.id ?? '')
       : card.versionId
 
-  const dependencyCount = (card) =>
+  const dependencyCount = (card: ResourceCard) =>
     card.groups.reduce((total, group) => total + group.rows.length, 0)
 
   const included = computed(() => cards.filter((card) => card.enabled))
@@ -668,7 +716,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                   </div>
                   <Accordion
                     type="multiple"
-                    size="small"
+                    size="medium"
                     :default-value="card.groups.map((group) => group.type)"
                   >
                     <Accordion.Item

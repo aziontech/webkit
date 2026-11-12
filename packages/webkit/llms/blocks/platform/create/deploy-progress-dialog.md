@@ -112,7 +112,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Running`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -120,18 +120,38 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import OutcomeMark from '@aziontech/webkit/outcome-mark'
+  import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
-  const SCENARIO = {
+  type DeployStatus = 'queued' | 'deploying' | 'done' | 'failed'
+
+  interface Scenario {
+    settled: number
+    failing: string[]
+  }
+
+  interface DeployItem {
+    id: string
+    name: string
+    environments: string
+    status: DeployStatus
+    message: string
+  }
+
+  interface StatusMeta {
+    label: string
+    severity: TagSeverity
+  }
+
+  const SCENARIO: Scenario = {
     settled: 2,
     failing: []
   }
@@ -157,24 +177,27 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const FAILURE = 'A rule points at an integration that does not exist, so it kept its version.'
 
-  const STATUS_TAG = {
+  const STATUS_TAG: Record<DeployStatus, StatusMeta> = {
     queued: { label: 'Queued', severity: 'secondary' },
     deploying: { label: 'Deploying', severity: 'info' },
     done: { label: 'Done', severity: 'success' },
     failed: { label: 'Failed', severity: 'danger' }
   }
 
-  const MARK = { done: 'success', failed: 'danger' }
+  const MARK: Partial<Record<DeployStatus, OutcomeMarkSeverity>> = {
+    done: 'success',
+    failed: 'danger'
+  }
 
   const items = reactive(
-    settings.map((entry, index) => ({
+    settings.map((entry, index): DeployItem => ({
       ...entry,
       status: index < SCENARIO.settled ? outcomeOf(entry.id) : 'queued',
       message: index < SCENARIO.settled && SCENARIO.failing.includes(entry.id) ? FAILURE : ''
     }))
   )
 
-  function outcomeOf(id) {
+  function outcomeOf(id: string): DeployStatus {
     return SCENARIO.failing.includes(id) ? 'failed' : 'done'
   }
 
@@ -213,7 +236,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     return items.filter((item) => item.status === filter.value)
   })
 
-  const noun = (count) => (count === 1 ? 'Deployment Setting' : 'Deployment Settings')
+  const noun = (count: number) => (count === 1 ? 'Deployment Setting' : 'Deployment Settings')
 
   const title = computed(() => {
     const { total, done, failed, settled } = counts.value

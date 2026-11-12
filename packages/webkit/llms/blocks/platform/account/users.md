@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/users")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Table](../../../components/table.md), `type`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -116,7 +116,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -139,11 +139,24 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Table from '@aziontech/webkit/table'
-  import Tag from '@aziontech/webkit/tag'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
+
+  type UserStatus = 'Active' | 'Invited' | 'Inactive'
+
+  interface User {
+    id: string
+    name: string
+    email: string
+    owner: boolean
+    teams: string[]
+    status: UserStatus
+    lastActive: Date | null
+  }
 
   const TEAMS = [
     { value: 'administrators', label: 'Administrators' },
@@ -152,14 +165,15 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     { value: 'finance', label: 'Finance' },
     { value: 'support', label: 'Support' }
   ]
-  const teamLabel = (value) => TEAMS.find((team) => team.value === value)?.label ?? value
-  const teamsLabel = (values) =>
+  const teamLabel = (value: string): string =>
+    TEAMS.find((team) => team.value === value)?.label ?? value
+  const teamsLabel = (values: string[]): string =>
     values.length ? values.map(teamLabel).join(', ') : 'No team (no access)'
 
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
 
-  const seedUsers = [
+  const seedUsers: User[] = [
     {
       id: 'u-1',
       name: 'Avery Stone',
@@ -217,15 +231,16 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   ]
 
   const INVITE_ON_START = false
-  const users = ref(seedUsers)
+  const users = ref<User[]>(seedUsers)
   const loading = ref(false)
   const loadFailed = ref(false)
 
-  const displayName = (user) => user.name || user.email
-  const statusSeverity = (value) =>
-    ({ Active: 'success', Invited: 'warning', Inactive: 'secondary' })[value] ?? 'secondary'
+  const displayName = (user: User): string => user.name || user.email
+  const statusSeverity = (value: UserStatus): TagSeverity =>
+    (({ Active: 'success', Invited: 'warning', Inactive: 'secondary' }) as const)[value] ??
+    'secondary'
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
     { accessorKey: 'status', header: 'Status', minWidth: 110 },
@@ -251,7 +266,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }, 700)
   }
 
-  const setTeams = (user, next) => {
+  const setTeams = (user: User, selected: unknown[]) => {
+    const next = selected.map(String)
     const before = [...user.teams]
     user.teams = next
     toast.success(`Teams updated for ${displayName(user)}.`, {
@@ -269,9 +285,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     })
   }
 
-  const pending = ref(null)
+  const pending = ref<User | null>(null)
   const removeOpen = ref(false)
-  const onAction = (value, user) => {
+  const onAction = (value: string | number, user: User) => {
     if (value === 'resend') {
       toast.success(`Invitation sent again to ${user.email}.`, {
         description: 'The earlier link stops working.'
@@ -299,12 +315,12 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const invite = reactive({ email: '', teams: ['developers'] })
   const submitted = ref(false)
   const sending = ref(false)
-  const formEl = ref(null)
+  const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const errors = computed(() => {
+  const errors = computed<{ email?: string; teams?: string }>(() => {
     if (!submitted.value) return {}
     const email = invite.email.trim().toLowerCase()
-    const out = {}
+    const out: { email?: string; teams?: string } = {}
     if (!email) out.email = 'Enter the email address to invite.'
     else if (!EMAIL.test(email)) out.email = 'Enter an email address like name@example.com.'
     else if (users.value.some((user) => user.email === email))
@@ -322,7 +338,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     submitted.value = true
     if (sending.value) return
     if (Object.keys(errors.value).length) {
-      nextTick(() => formEl.value?.querySelector('[aria-invalid="true"]')?.focus())
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
     sending.value = true
@@ -504,7 +520,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 <Table.CellActions
                   :name="displayName(row)"
                   :disabled="row.owner"
-                  @select="(event, value) => onAction(value, row)"
+                  @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group v-if="row.status === 'Invited'">
                     <DropdownMenu.Option

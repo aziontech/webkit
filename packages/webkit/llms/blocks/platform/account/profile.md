@@ -131,7 +131,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -181,7 +181,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       : emails.every((value) => emailPattern.test(value))
         ? ''
         : 'Enter valid email addresses, separated by semicolons.'
-    const first = ['accountName', 'billingEmails'].find((field) => errors[field])
+    const first = (['accountName', 'billingEmails'] as const).find((field) => errors[field])
     if (first) nextTick(() => document.getElementById(`profile-${first}`)?.focus())
     return !first
   }
@@ -209,7 +209,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     Object.assign(errors, { accountName: '', billingEmails: '' })
   }
 
-  const places = [
+  interface Place {
+    key: 'country' | 'state' | 'city'
+    label: string
+    options: { label: string; value: string }[]
+  }
+
+  const places: Place[] = [
     {
       key: 'country',
       label: 'Country',

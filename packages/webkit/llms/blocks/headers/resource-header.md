@@ -135,7 +135,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Open navigation"
+                aria-label="Open navigation"
               />
             </Tooltip>
           </span>
@@ -169,7 +169,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
               icon="pi pi-plus-circle"
               kind="primary"
               size="medium"
-              ariaLabel="Create"
+              aria-label="Create"
             />
           </Tooltip>
           <Tooltip
@@ -180,7 +180,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
               icon="ai ai-ask-azion"
               kind="outlined"
               size="medium"
-              ariaLabel="Agent"
+              aria-label="Agent"
             />
           </Tooltip>
         </span>

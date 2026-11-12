@@ -110,7 +110,7 @@ Each variant is the same screen in another state: `get_pattern("platform/delete/
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Input from '@aziontech/webkit/input'

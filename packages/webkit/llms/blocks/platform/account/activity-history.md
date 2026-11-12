@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/activity-history/activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/activity-history")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), `type`, [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -108,29 +108,42 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DateRangePicker from '@aziontech/webkit/date-range-picker'
+  import type { DateRangeUnit, DateRangeValue } from '@aziontech/webkit/date-range-picker'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   const MINUTE = 60_000
   const HOUR = 60 * MINUTE
   const DAY = 24 * HOUR
   const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const ago = (ms) => new Date(referenceTime - ms)
+  const ago = (ms: number) => new Date(referenceTime - ms)
 
-  const seedEvents = [
+  type ActivityCategory = 'Sign-in' | 'Security' | 'Deploy' | 'Users' | 'Billing'
+
+  interface ActivityEvent {
+    id: string
+    event: string
+    category: ActivityCategory
+    user: string
+    ip: string
+    at: Date
+  }
+
+  const seedEvents: ActivityEvent[] = [
     {
       id: 'evt-1048',
       event: 'Signed in',
@@ -215,17 +228,29 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
   const events = ref(seedEvents)
 
-  const categorySeverity = (category) =>
-    ({
-      'Sign-in': 'info',
-      Security: 'warning',
-      Deploy: 'success',
-      Users: 'secondary',
-      Billing: 'primary'
-    })[category] ?? 'secondary'
+  const categorySeverity = (category: ActivityCategory): TagSeverity =>
+    (
+      ({
+        'Sign-in': 'info',
+        Security: 'warning',
+        Deploy: 'success',
+        Users: 'secondary',
+        Billing: 'primary'
+      }) as const
+    )[category] ?? 'secondary'
 
-  const range = ref({ type: 'relative', amount: 30, unit: 'day', key: 'last-30-days' })
-  const UNIT_MS = { minute: MINUTE, hour: HOUR, day: DAY, week: 7 * DAY }
+  const range = ref<DateRangeValue>({
+    type: 'relative',
+    amount: 30,
+    unit: 'day',
+    key: 'last-30-days'
+  })
+  const UNIT_MS: Partial<Record<DateRangeUnit, number>> = {
+    minute: MINUTE,
+    hour: HOUR,
+    day: DAY,
+    week: 7 * DAY
+  }
   const period = computed(() => {
     const value = range.value
     if (value?.type === 'absolute') {
@@ -241,17 +266,17 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     })
   )
 
-  const optionsOf = (key) =>
+  const optionsOf = (key: 'category' | 'user') =>
     [...new Set(seedEvents.map((entry) => entry[key]))].sort().map((value) => ({ value }))
 
-  const properties = [
+  const properties: FilteringProperty[] = [
     { key: 'event', label: 'Event' },
     { key: 'category', label: 'Category', options: optionsOf('category') },
     { key: 'user', label: 'User', options: optionsOf('user') },
     { key: 'ip', label: 'IP address' }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'event', header: 'Event', principal: true, hideable: false, grow: 2 },
     { accessorKey: 'category', header: 'Category', enableSorting: true, minWidth: 120 },
     { accessorKey: 'user', header: 'User', enableSorting: true, minWidth: 200 },
@@ -280,7 +305,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }, 700)
   }
 
-  const activityTable = ref(null)
+  const activityTable = ref<{ exportCsv: (options: { filename: string }) => Promise<void> } | null>(
+    null
+  )
   const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const widenRange = () => {

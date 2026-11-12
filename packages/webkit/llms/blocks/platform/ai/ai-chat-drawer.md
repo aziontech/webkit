@@ -122,10 +122,13 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
 ## Code (`Empty`)
 
 ````vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessage, {
+    type ChatMessageFeedbackValue,
+    type ChatMessageState
+  } from '@aziontech/webkit/chat-message'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Drawer from '@aziontech/webkit/drawer'
@@ -139,16 +142,46 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
   import Reasoning from '@aziontech/webkit/reasoning'
-  import Sources from '@aziontech/webkit/sources'
+  import Sources, { type AiSource } from '@aziontech/webkit/sources'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
-  const supportPrompts = [
+  interface Answer {
+    reasoning: string
+    content: string
+    sources: AiSource[]
+    followUps: SuggestionItem[]
+  }
+
+  interface UserTurn {
+    id: number
+    from: 'user'
+    text: string
+    time: string
+    error?: string
+  }
+
+  interface AssistantTurn {
+    id: number
+    from: 'assistant'
+    state: ChatMessageState
+    content: string
+    thinking: boolean
+    answer: Answer
+    feedback: ChatMessageFeedbackValue | null
+    time: string
+    error?: string
+    stopped?: boolean
+  }
+
+  type Turn = UserTurn | AssistantTurn
+
+  const supportPrompts: SuggestionItem[] = [
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
@@ -158,13 +191,13 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'pi pi-globe' }
   ]
 
-  const turns = ref([])
-  const state = ref('ready')
+  const turns = ref<Turn[]>([])
+  const state = ref<PromptInputState>('ready')
   const prompt = ref('')
-  const composer = ref(null)
+  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
   const assistantOpen = ref(true)
 
-  const knowledge = {
+  const knowledge: Record<'cache' | 'errors', Answer> = {
     cache: {
       reasoning:
         'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
@@ -226,25 +259,25 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     }
   }
 
-  function answerFor(text) {
+  function answerFor(text: string): Answer {
     return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
   }
 
-  function clock() {
+  function clock(): string {
     return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
       new Date()
     )
   }
 
   let nextId = turns.value.length + 1
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   function stopTimers() {
     clearTimeout(timer)
     clearInterval(timer)
   }
 
-  function stream(turn) {
+  function stream(turn: AssistantTurn) {
     const full = turn.answer.content
     turn.state = 'streaming'
     state.value = 'streaming'
@@ -256,7 +289,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     }, 30)
   }
 
-  function finish(turn) {
+  function finish(turn: AssistantTurn) {
     stopTimers()
     turn.state = 'complete'
     turn.thinking = false
@@ -264,7 +297,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     composer.value?.focus()
   }
 
-  function respond(turn) {
+  function respond(turn: AssistantTurn) {
     turn.state = 'pending'
     turn.thinking = true
     turn.content = ''
@@ -275,11 +308,11 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     }, 1400)
   }
 
-  function send(text) {
+  function send(text: string) {
     if (!text.trim() || state.value !== 'ready') return
     prompt.value = ''
     turns.value.push({ id: nextId++, from: 'user', text, time: clock() })
-    const turn = reactive({
+    const turn = reactive<AssistantTurn>({
       id: nextId++,
       from: 'assistant',
       state: 'pending',
@@ -304,7 +337,8 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     state.value = 'ready'
   }
 
-  function retry(turn) {
+  function retry(turn: Turn) {
+    if (turn.from !== 'assistant') return
     turn.stopped = false
     respond(turn)
   }

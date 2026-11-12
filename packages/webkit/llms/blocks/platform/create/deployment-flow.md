@@ -99,7 +99,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Initial`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>

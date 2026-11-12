@@ -90,7 +90,7 @@ test('a block page carries guidelines, variants and the primary SFC', () => {
   const page = files['blocks/platform/auth.md']
   assert.match(page, /## When to use/)
   assert.match(page, /## Variants/)
-  assert.match(page, /## Code \(`Login`\)\n\n```vue\n<script setup>/)
+  assert.match(page, /## Code \(`Login`\)\n\n```vue\n<script setup( lang="ts")?>/)
 })
 
 test('llms-full.txt holds every page and stays under its size budget', () => {

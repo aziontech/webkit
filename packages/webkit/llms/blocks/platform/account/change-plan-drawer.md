@@ -173,7 +173,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
@@ -200,8 +200,25 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
+  type BillingPeriod = 'monthly' | 'yearly'
+
+  interface SelectOption {
+    value: string
+    label: string
+    disabled?: boolean
+  }
+
+  interface BillingAddress {
+    country: string | undefined
+    postalCode: string
+    state: string | undefined
+    city: string | undefined
+    line1: string
+    line2: string
+  }
+
   const changePlanOpen = ref(false)
-  const changePlanPeriod = ref('yearly')
+  const changePlanPeriod = ref<BillingPeriod>('yearly')
   const planCards = [
     {
       id: 'free',
@@ -309,15 +326,15 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   watch(changePlanOpen, (isOpen) => {
     if (isOpen) changePlanPeriod.value = 'yearly'
   })
-  const choosePlan = (plan) => {
+  const choosePlan = (plan: (typeof planCards)[number]) => {
     if (plan.action === 'upgrade') upgradeOpen.value = true
     else if (plan.action === 'contact') changePlanOpen.value = false
   }
 
   const upgradeOpen = ref(false)
-  const upgradePeriod = ref('yearly')
+  const upgradePeriod = ref<BillingPeriod>('yearly')
   const submitting = ref(false)
-  const billingPeriods = [
+  const billingPeriods: { value: BillingPeriod; label: string }[] = [
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' }
   ]
@@ -356,14 +373,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     }
   }
 
-  const countryOptions = [
+  const countryOptions: SelectOption[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },
     { value: 'Argentina', label: 'Argentina' },
     { value: 'Mexico', label: 'Mexico' }
   ]
-  const cardFieldIds = {
+  const cardFieldIds: Record<string, string> = {
     holder: 'card-holder',
     number: 'card-number',
     expiry: 'card-expiry',
@@ -373,10 +390,15 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const cardLast4 = ref('8888')
   const blankCard = () => ({ holder: '', country: 'Brazil', number: '', expiry: '', code: '' })
   const cardForm = reactive(blankCard())
-  const cardErrors = reactive({ holder: '', number: '', expiry: '', code: '' })
+  const cardErrors = reactive<Record<string, string>>({
+    holder: '',
+    number: '',
+    expiry: '',
+    code: ''
+  })
   const cardDeclined = ref(false)
 
-  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const clearCardErrors = () => {
     Object.assign(cardErrors, { holder: '', number: '', expiry: '', code: '' })
@@ -439,12 +461,12 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     focusById('card-change')
   }
 
-  const fieldState = (field) => ({
+  const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
     required: !!cardErrors[field] && !String(cardForm[field]).trim(),
     invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
   })
 
-  const accountAddress = {
+  const accountAddress: BillingAddress = {
     country: 'Brazil',
     postalCode: '01310-100',
     state: 'São Paulo',
@@ -452,7 +474,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     line1: 'Avenida Paulista, 1000',
     line2: ''
   }
-  const blankAddress = () => ({
+  const blankAddress = (): BillingAddress => ({
     country: undefined,
     postalCode: '',
     state: undefined,
@@ -465,13 +487,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     () => address.useAccountInformation,
     (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress())
   )
-  const stateOptions = [
+  const stateOptions: SelectOption[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
     { value: 'Minas Gerais', label: 'Minas Gerais' },
     { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
   ]
-  const cityOptions = [
+  const cityOptions: SelectOption[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Campinas', label: 'Campinas' },
     { value: 'Santos', label: 'Santos' }

@@ -126,14 +126,14 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -144,12 +144,24 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Switch from '@aziontech/webkit/switch'
   import { reactive, ref } from 'vue'
 
+  interface FormErrors {
+    name: string
+    nameKind: HelperTextKind
+    domain: string
+    domainKind: HelperTextKind
+  }
+
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
 
   const form = reactive({ name: '', domain: '', dnssec: false, active: true })
-  const errors = reactive({ name: '', nameKind: 'required', domain: '', domainKind: 'required' })
+  const errors = reactive<FormErrors>({
+    name: '',
+    nameKind: 'required',
+    domain: '',
+    domainKind: 'required'
+  })
   const advancedOpen = ref(false)
-  const fileRef = ref(null)
+  const fileRef = ref<HTMLInputElement | null>(null)
 
   const NAME_MAX = 50
   const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
