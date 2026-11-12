@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: c73dea74259e75661c165b5ef330bcc21233b82638863ca8816104ca138d4f8e
+checksum: 87fb5076c00d8f3e2aba2b92bdac293fa2bf3b2b2695552d5db935174144e5e5
 created: 2026-06-26
 last_updated: 2026-11-12
 ---
@@ -44,6 +44,7 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 - `selected` is a display flag. The dropdown never sets it, so derive it from your own state.
 - Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.
 - Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Usage
 
@@ -131,17 +132,21 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 | Prop        | Type                                                                   | Default          | Required | JSDoc                                                                                                                       |
 | ----------- | ---------------------------------------------------------------------- | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `open`      | `boolean`                                                              | `undefined`      | false    | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled.              |
 | `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false    | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
 | `offset`    | `number`                                                               | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                |
 | `disabled`  | `boolean`                                                              | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                    |
 
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, option activation, `Esc`, outside click). While unbound the menu is uncontrolled and starts closed. |
+
 ## Events
 
-| Event         | Payload                                                                | Notes                                                                                                                                                                                                                                                                                  |
-| ------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:open` | `boolean`                                                              | Fires on every open/closed transition; supports `v-model:open`.                                                                                                                                                                                                                        |
-| `select`      | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
+| Event    | Payload                                                                | Notes                                                                                                                                                                                                                                                                                  |
+| -------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
 
 **Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Option`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
 

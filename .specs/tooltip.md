@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 3bd602cb86f6264ff96c13cb1d633a7a7a07522a6759e3159e009666ab3bdcc4
+checksum: ad23bad211e5aab151e285bbed370b323b202c636adcc3695286b967cf6a076e
 created: 2026-06-02
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Tooltip — Component Spec
@@ -45,6 +45,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
 - Use `disabled` to suppress the tooltip. An empty `text` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Usage
 
@@ -69,14 +70,18 @@ import IconButton from '@aziontech/webkit/icon-button'
 | `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side relative to the trigger; `auto` picks the side with room. |
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (hover, focus, `Esc`). While unbound the tooltip is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
 | Event | Payload | Notes |
 |---|---|---|
-| `update:open` | `boolean` | v-model:open. Fires on open and close. |
 | `show` | `void` | Emitted right after the open transition starts. |
 | `hide` | `void` | Emitted right after the close transition starts. |
 

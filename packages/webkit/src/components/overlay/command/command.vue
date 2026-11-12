@@ -35,8 +35,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Controlled open state. Use with `v-model:open` or `@update:open`. */
-      open?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** When true, backdrop click and Escape close the palette. */
@@ -45,7 +43,6 @@
       shortcut?: string
     }>(),
     {
-      open: undefined,
       defaultOpen: false,
       dismissible: true,
       shortcut: 'meta+k'
@@ -53,11 +50,11 @@
   )
 
   const emit = defineEmits<{
-    'update:open': [value: boolean]
     select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: CommandItemValue]
   }>()
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the palette starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   defineSlots<{
     default(): unknown
@@ -70,14 +67,13 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-command')
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpen = useControllable({
     prop: openProp,
     defaultProp: props.defaultOpen,
     onChange: (value: boolean) => {
       openModel.value = value
-      emit('update:open', value)
     }
   })
 
@@ -282,7 +278,7 @@
     :open="isOpen"
     :dismissible="dismissible"
     :data-testid="testId"
-    @update:open="(value) => setOpen(Boolean(value))"
+    @update:open="(value) => setOpen(value)"
   >
     <DialogPortal>
       <DialogOverlay />

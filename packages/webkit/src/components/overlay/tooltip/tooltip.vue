@@ -27,8 +27,6 @@
     delay?: number
     /** Disables tooltip activation. */
     disabled?: boolean
-    /** Controlled open state. Use with `v-model:open`. */
-    open?: boolean
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
   }
@@ -37,17 +35,16 @@
     placement: 'top',
     delay: 200,
     disabled: false,
-    open: undefined,
     defaultOpen: false
   })
 
   const emit = defineEmits<{
-    'update:open': [value: boolean]
     show: []
     hide: []
   }>()
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the tooltip starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -59,7 +56,7 @@
 
   const tooltipId = computed(() => `${uid}-tooltip`)
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpen = useControllable<boolean>({
     prop: openProp,

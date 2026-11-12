@@ -258,6 +258,22 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
       // the exit animation, so assert the closed state on the root (as dialog does).
       expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
     })
+
+    it('emits update:open(false) once when activation closes the palette', async () => {
+      const onOpen = vi.fn()
+      render(composed({ defaultOpen: true, 'onUpdate:open': onOpen }))
+      await settle()
+
+      const input = byTestId('overlay-command__input')!.querySelector('input')!
+      await fireEvent.update(input, 'new-app')
+      await settle()
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await fireEvent.keyDown(input, { key: 'Enter' })
+      await settle()
+
+      expect(onOpen).toHaveBeenCalledTimes(1)
+      expect(onOpen).toHaveBeenCalledWith(false)
+    })
   })
 
   describe('a group rendered on the query roves where it renders', () => {

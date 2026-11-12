@@ -140,6 +140,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       await fireEvent.click(getByTestId('overlay-dialog__trigger'))
       await settle()
 
+      expect(onUpdate).toHaveBeenCalledTimes(1)
       expect(onUpdate).toHaveBeenCalledWith(true)
     })
 
@@ -179,6 +180,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       await fireEvent.click(close)
       await settle()
 
+      expect(onUpdate).toHaveBeenCalledTimes(1)
       expect(onUpdate).toHaveBeenLastCalledWith(false)
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
     })

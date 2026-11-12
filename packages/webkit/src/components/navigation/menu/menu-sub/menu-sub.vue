@@ -19,7 +19,9 @@
     defaultOpen: false
   })
 
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the sub starts at defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
+  const openBinding = computed<boolean | undefined>(() => openModel.value)
 
   defineSlots<{
     default(): unknown
@@ -43,8 +45,8 @@
 
   const isDrill = computed(() => kind.value === 'drill')
 
-  ctx.registerExpandable(id, openModel.value ?? props.defaultOpen)
-  watch(openModel, (value) => {
+  ctx.registerExpandable(id, openBinding.value ?? props.defaultOpen)
+  watch(openBinding, (value) => {
     if (value !== undefined && !isDrill.value) ctx.setExpanded(id, value)
   })
 

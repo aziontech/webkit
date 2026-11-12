@@ -396,7 +396,7 @@
                           :open="upgradeOpen"
                           size="large"
                           side="right"
-                          @update:open="onOpenChange($event as boolean)"
+                          @update:open="onOpenChange"
                         >
                           <DrawerPortal>
                             <DrawerOverlay />
