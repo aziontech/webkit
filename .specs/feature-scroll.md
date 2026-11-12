@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-04
-checksum: 11d62486fb03a2e1ea9ef6174dc24f22d1853b5fbd20b299dc17b538920d4a6f
+checksum: 3da92f650844d85940b5fbbdfccd01e2e5416fcd20c81aa47580cc3a63f30b43
 ---
 # FeatureScroll — Component Spec
 
@@ -47,7 +47,7 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
     title="Everything a workload does, one screen at a time"
     description="Scroll through the console a workload is run from."
     :items="[
-      { title: 'Every workload on one list', description: 'See each workload with its domain, status and last deployment.', illustration: 'stay-in-control', action: { label: 'Docs', href: '/docs', trailing: true } },
+      { title: 'Every workload on one list', description: 'See each workload with its domain, status and last deployment.', illustration: 'traffic-and-cost-bar-chart', action: { label: 'Docs', href: '/docs', trailing: true } },
       { title: 'Read the deployment topology', description: 'The domains, the application and the firewall a workload serves.', illustration: 'global-network', action: { label: 'Docs', href: '/docs', trailing: true } }
     ]"
   />

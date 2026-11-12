@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: aa08f02a36035dd34fdd94fb97f1e691f00e6ab051a6b64dca5038c843793abe
+checksum: d346213cc588acecf068d634f52a6e66ebd7e0de8d1030c94c0c6d63f7328523
 ---
 # FeatureTabs — Component Spec
 
@@ -46,7 +46,7 @@ import FeatureTabs from '@aziontech/webkit/feature-tabs'
     title="Inspect every run end-to-end"
     :tabs="[
       { title: 'Trace', description: 'The run as a waterfall.', illustration: 'live-debugging', illustrationLabel: 'A trace waterfall' },
-      { title: 'Logs', description: 'Structured output on the same clock.', illustration: 'stay-in-control', illustrationLabel: 'Structured logs' }
+      { title: 'Logs', description: 'Structured output on the same clock.', illustration: 'traffic-and-cost-bar-chart', illustrationLabel: 'Structured logs' }
     ]"
     :primary-action="{ label: 'Open an invocation', href: '/docs', trailing: true }"
   />
