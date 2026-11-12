@@ -11,6 +11,7 @@ import {
   lintExamples,
   loadConsumerConfig,
   resolveConfigImports,
+  shrinkBaseline,
   sortCounts,
   total
 } from '../../scripts/check-examples-lint.mjs'
@@ -72,6 +73,17 @@ test('compareToBaseline fails on growth and reports what shrank', () => {
     regressions: [],
     fixed: []
   })
+})
+
+test('--update only shrinks the baseline: it drops fixed entries and refuses growth', () => {
+  const base = { 'a/x.vue': { r: 2 }, 'b/y.vue': { r: 1 } }
+  assert.deepEqual(shrinkBaseline({ 'a/x.vue': { r: 1 } }, base), {
+    regressions: [],
+    next: { 'a/x.vue': { r: 1 } }
+  })
+  const grown = shrinkBaseline({ 'a/x.vue': { r: 3 } }, base)
+  assert.equal(grown.regressions.length, 1)
+  assert.equal(grown.next, base)
 })
 
 test('the baseline is sorted and holds positive integer counts', () => {

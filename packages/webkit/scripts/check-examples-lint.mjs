@@ -79,6 +79,11 @@ export function compareToBaseline(counts, baseline) {
   return { regressions, fixed }
 }
 
+export function shrinkBaseline(counts, baseline) {
+  const { regressions } = compareToBaseline(counts, baseline)
+  return { regressions, next: regressions.length ? baseline : sortCounts(counts) }
+}
+
 export function total(counts) {
   return Object.values(counts).reduce(
     (sum, rules) => sum + Object.values(rules).reduce((a, b) => a + b, 0),
@@ -106,16 +111,21 @@ async function main() {
   const { results, counts, samples } = await lintExamples()
   const seconds = ((Date.now() - started) / 1000).toFixed(1)
 
-  if (update) {
-    writeFileSync(BASELINE_PATH, JSON.stringify(sortCounts(counts), null, 2) + '\n', 'utf-8')
+  const baseline = existsSync(BASELINE_PATH)
+    ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8'))
+    : update
+      ? counts
+      : {}
+  const { regressions, fixed } = compareToBaseline(counts, baseline)
+
+  if (update && !regressions.length) {
+    const { next } = shrinkBaseline(counts, baseline)
+    writeFileSync(BASELINE_PATH, JSON.stringify(next, null, 2) + '\n', 'utf-8')
     process.stdout.write(
-      `examples-lint-baseline.json updated: ${total(counts)} findings in ${Object.keys(counts).length} files\n`
+      `examples-lint-baseline.json updated: ${total(next)} findings in ${Object.keys(next).length} files\n`
     )
     return
   }
-
-  const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {}
-  const { regressions, fixed } = compareToBaseline(counts, baseline)
 
   for (const r of regressions) {
     process.stderr.write(
@@ -124,7 +134,7 @@ async function main() {
   }
   if (regressions.length) {
     process.stderr.write(
-      `\nExamples are what AI agents copy, so they must pass the lint \`npx @aziontech/webkit init\` installs (webkit ${PRESET} preset). Fix the example; the baseline only shrinks.\n`
+      `\nExamples are what AI agents copy, so they must pass the lint \`npx @aziontech/webkit init\` installs (webkit ${PRESET} preset). Fix the example: the baseline only shrinks, and --update refuses to record new findings.\n`
     )
     process.exit(1)
   }
