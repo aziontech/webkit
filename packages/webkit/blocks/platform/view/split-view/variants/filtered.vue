@@ -1177,7 +1177,10 @@
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >

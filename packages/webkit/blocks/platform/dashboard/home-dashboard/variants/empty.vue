@@ -9,13 +9,7 @@
   import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
   import { reactive, ref, watch } from 'vue'
 
-  const layout = (() => {
-    try {
-      return useConsoleLayout()
-    } catch {
-      return null
-    }
-  })()
+  const layout = useConsoleLayout({ optional: true })
 
   const openSearch = () => layout?.openSearch()
 

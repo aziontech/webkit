@@ -7,7 +7,7 @@ brand-new account it becomes the first-access screen: a greeting, the command pr
 to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on
 each resource's own dashboard.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`. The populated Home fits the screen at `xl` (each resource panel scrolls its own rows), so its root carries `data-layout-fill` and scrolls itself (`overflow-y-auto`): below `xl` the root scrolls as one page, its content centred while it fits (`justify-center-safe`). The first-access screen (Empty) is a centred page with nothing pinned; it does not fill, and the layout's `main` scrolls it (`h-dvh` on the populated root only sizes a standalone preview).
 
 ## When to use
 
@@ -65,7 +65,8 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 - Make every resource row a single link with the actions menu as a separate control.
 - Let the user dismiss the agent card for good.
 - Show the first-access screen, not a grid of empty panels, when the account owns nothing.
-- Open the layout's palette from the first-access prompt with `useConsoleLayout().openSearch()`; never mount a second `Command`.
+- Open the layout's palette from the first-access prompt with `useConsoleLayout({ optional: true })` and `layout?.openSearch()` (the body also renders alone, in its preview and test, where the call returns `null`); never wrap `useConsoleLayout()` in `try` / `catch`, and never mount a second `Command`.
+- Mark the populated page root with `data-layout-fill` and let it scroll, so the panels scroll their rows at `xl` and the page scrolls as one below it.
 
 ## Don't
 

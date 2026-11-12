@@ -451,7 +451,10 @@
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-1 flex-col xl:flex-row">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-w-0 flex-col overflow-y-auto xl:flex-row"
+  >
     <div
       class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md) xl:overflow-y-auto"
     >

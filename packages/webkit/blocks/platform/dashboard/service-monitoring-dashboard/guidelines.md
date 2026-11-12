@@ -6,7 +6,7 @@ its state in words; latency percentiles and error rates sit in two charts with t
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. Its root carries `data-layout-fill`, so the layout's `main` stops scrolling and the root fills it: from `xl` the charts column and the alerts rail scroll on their own; below `xl` the root itself scrolls, so the page still scrolls as one (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -77,6 +77,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 - Keep alerts in a rail that stays in view; fold it below the charts on narrow screens.
 - Title an alert with the threshold that tripped, not with a generic name.
 - Give each chart its own window.
+- Mark the page root with `data-layout-fill` and let it scroll (`overflow-y-auto`), so the panes scroll on their own at `xl` and the page scrolls as one below it.
 
 ## Don't
 

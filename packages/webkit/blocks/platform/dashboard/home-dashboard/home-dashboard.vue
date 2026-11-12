@@ -172,7 +172,8 @@
 
 <template>
   <div
-    class="layout-column layout-boundary relative flex min-h-full flex-1 flex-col justify-center xl:h-full xl:min-h-0 xl:justify-start"
+    data-layout-fill
+    class="layout-column layout-boundary relative flex h-dvh flex-col justify-center-safe overflow-y-auto xl:justify-start"
   >
     <header class="flex items-center">
       <h1 class="text-heading-sm text-(--text-muted)">
