@@ -1875,6 +1875,7 @@
                     >
                       <span
                         v-if="row.getCanExpand()"
+                        aria-hidden="true"
                         :data-testid="`${testId}__expand-toggle`"
                         class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
                         @click.stop="toggleTreeRow(row)"

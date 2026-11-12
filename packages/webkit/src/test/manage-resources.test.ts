@@ -75,7 +75,9 @@ describe('platform/account/manage-resources', () => {
     const options = await view.findAllByRole('option')
     const labels = options.map((option) => option.textContent?.trim())
     expect(labels).not.toContain('Retail and marketplace · Group')
-    await userEvent.click(options.find((o) => o.textContent?.includes('Contoso Partners')) as HTMLElement)
+    await userEvent.click(
+      options.find((o) => o.textContent?.includes('Contoso Partners')) as HTMLElement
+    )
     await userEvent.click(confirm())
     await waitFor(() => expect(row('grp-2101').getAttribute('aria-level')).toBe('2'))
     expect(rowNames().indexOf('grp-2101')).toBeGreaterThan(rowNames().indexOf('org-1002'))

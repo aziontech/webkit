@@ -373,3 +373,13 @@ frozen-edge fades and the row pseudo-element drop line. `table-root` stays insid
 ### M2.10 row 7 — ArtifactCanvas
 
 New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s fallback is the 2 async chunks), budget 6.5 KB. It carries `ResponseBranches`, `CopyButton` and `IconButton`. The `artifactCanvas` catalog group keeps `webkit-provider` (8.79 KB), `locales/pt-BR` (8.16 KB) and `locales/es` (8.25 KB) inside their budgets.
+
+### M2.10 row 46 — Table tree rows
+
+`Table` gained tree rows (`getSubRows`, `v-model:expanded`, treegrid roles, the row-focus keyboard map and the depth gutter). Most of the growth is TanStack's `getExpandedRowModel`, which the root imports so a data-driven table can switch to tree rows by prop; the keyboard handler reads the direction per event (`eventDirection`), with no `useDirection` subscription. Measured + ~0.2 KB:
+
+| Entry           | Budget before | Measured now | New budget | Note                                 |
+| --------------- | ------------- | ------------ | ---------- | ------------------------------------ |
+| table-root      | 52.35         | 53.61        | 53.8       | Raised: tree rows.                   |
+| listing-browser | 67.5          | 68.68        | 68.9       | Raised: carries `Table` (tree rows). |
+| listing-table   | 58.6          | 59.75        | 59.95      | Raised: carries `Table` (tree rows). |
