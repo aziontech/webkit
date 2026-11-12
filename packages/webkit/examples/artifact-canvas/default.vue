@@ -3,7 +3,7 @@
   import ArtifactPreview from '@aziontech/webkit/artifact-preview'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Resizable from '@aziontech/webkit/resizable'
-  import { nextTick, ref } from 'vue'
+  import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
   const versions = [
     'SELECT * FROM orders;',
@@ -13,6 +13,18 @@
   const version = ref(versions.length - 1)
   const open = ref(true)
   const width = ref(420)
+  const height = ref(240)
+  const narrow = ref(false)
+  let narrowQuery = null
+  const onNarrowChange = () => {
+    narrow.value = !!narrowQuery?.matches
+  }
+  onMounted(() => {
+    narrowQuery = window.matchMedia?.('(max-width: 639px)') ?? null
+    onNarrowChange()
+    narrowQuery?.addEventListener('change', onNarrowChange)
+  })
+  onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
   const canvas = ref(null)
   const opener = ref(null)
 
@@ -30,7 +42,9 @@
 
 <template>
   <Resizable
-    class="h-(--container-xs) w-full rounded-(--shape-card) border border-(--border-default)"
+    :orientation="narrow ? 'vertical' : 'horizontal'"
+    class="w-full rounded-(--shape-card) border border-(--border-default)"
+    :class="narrow ? 'h-(--container-md)' : 'h-(--container-xs)'"
     aria-label="Conversation and artifact"
   >
     <Resizable.Pane>
@@ -56,9 +70,10 @@
     />
     <Resizable.Pane
       v-if="open"
-      v-model:basis="width"
-      :min="300"
-      :max="720"
+      :basis="narrow ? height : width"
+      :min="narrow ? 160 : 300"
+      :max="narrow ? 360 : 720"
+      @update:basis="(value) => (narrow ? (height = value) : (width = value))"
     >
       <ArtifactCanvas
         ref="canvas"
