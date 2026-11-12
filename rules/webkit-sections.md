@@ -34,7 +34,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
   `external`, `UseCaseLinks` items without `href` for a link-less grid.
 - Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
-  top rule, its frame and its closing bottom rule, and ends on the bottom bar from `lg`.
+  top rule, its frame and its closing bottom rule, and ends on its bottom bar at every width.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
   has. Its card grid balances the rows itself — the fewest rows the column cap allows, a short last
   row sharing the width evenly: under three columns 2 → halves, 4 → 2 × 2, 5 → 3 + 2. No row ends

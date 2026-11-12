@@ -127,24 +127,32 @@ describe('SiteFooter', () => {
     })
   })
 
-  it('places the Azion mark in CSS: the social row from lg, the signature band below it', () => {
-    const { getAllByRole, getByTestId } = footer({ homeAriaLabel: 'Go home' })
+  it('renders one Azion mark, in the social row, and no signature band', () => {
+    const { getAllByRole, getByTestId, queryByTestId } = footer({ homeAriaLabel: 'Go home' })
 
     const marks = getAllByRole('link', { name: 'Go home' })
-    expect(marks).toHaveLength(2)
-    for (const mark of marks) expect(mark.getAttribute('href')).toBe('/')
-    const inSocial = marks.find((mark) => getByTestId('layout-footer__social').contains(mark))
-    const inSignature = marks.find((mark) => getByTestId('layout-footer__signature').contains(mark))
-    expect(inSocial?.className).toMatch(/(^| )hidden( |$)/)
-    expect(inSocial?.className).toContain('lg:inline-flex')
-    expect(inSignature).toBeDefined()
-    expect(getByTestId('layout-footer')).toHaveAttribute('data-signature', 'compact')
+    expect(marks).toHaveLength(1)
+    expect(marks[0]?.getAttribute('href')).toBe('/')
+    expect(getByTestId('layout-footer__social')).toContainElement(marks[0] ?? null)
+    expect(queryByTestId('layout-footer__signature')).toBeNull()
   })
 
-  it('renders no signature band at all when home is empty', () => {
-    const { queryByTestId } = footer({ home: '' })
+  it('puts the status line before the language select in one bottom-bar group', () => {
+    const { getByRole, getByTestId, getByText } = footer()
 
-    expect(queryByTestId('layout-footer__signature')).toBeNull()
+    const bar = getByTestId(`${TESTID}__bar`)
+    const status = getByText('All Systems Operational')
+    const select = getByRole('combobox', { name: 'Language' })
+    expect(getByTestId('layout-footer__status')).toContainElement(bar)
+    expect(bar).toContainElement(status)
+    expect(bar).toContainElement(select)
+    expect(status.compareDocumentPosition(select) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders no bottom-bar group when there is neither a status line nor languages', () => {
+    const { queryByTestId } = footer({ statusLabel: '', languages: [] })
+
+    expect(queryByTestId(`${TESTID}__bar`)).toBeNull()
   })
 
   it('renders no Azion mark when home is empty', () => {

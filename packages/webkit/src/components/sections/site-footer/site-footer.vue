@@ -104,7 +104,6 @@
   >
     <Footer
       :kind="kind"
-      signature="compact"
       :aria-label="ariaLabel || t('siteFooter.label')"
     >
       <FooterColumn
@@ -136,7 +135,7 @@
           v-if="hasHome"
           :href="home"
           :aria-label="homeAriaLabel || t('siteFooter.home')"
-          class="me-(--spacing-xs) hidden w-fit lg:inline-flex items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+          class="me-(--spacing-xs) hidden w-fit md:inline-flex items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <Brand size="small" />
         </a>
@@ -152,56 +151,46 @@
       </template>
 
       <template
-        v-if="statusLabel"
+        v-if="statusLabel || languages.length > 0"
         #status
       >
-        <StatusIndicator
-          severity="success"
-          :label="statusLabel"
-        />
-      </template>
-
-      <template
-        v-if="languages.length > 0"
-        #language
-      >
-        <div class="w-28">
-          <Select
-            v-model="language"
-            :placeholder="languageAriaLabel || t('siteFooter.language')"
-          >
-            <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">
-              <template #iconLeft>
-                <i
-                  class="pi pi-globe text-(--text-muted)"
-                  aria-hidden="true"
-                />
-              </template>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectOption
-                v-for="option in languages"
-                :key="option"
-                :value="option"
-              >
-                {{ option }}
-              </SelectOption>
-            </SelectContent>
-          </Select>
-        </div>
-      </template>
-
-      <template
-        v-if="hasHome"
-        #brand
-      >
-        <a
-          :href="home"
-          :aria-label="homeAriaLabel || t('siteFooter.home')"
-          class="mx-auto inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        <div
+          :data-testid="`${testId}__bar`"
+          class="flex w-full flex-col items-start gap-(--spacing-md) md:w-auto md:flex-row md:items-center md:gap-(--spacing-lg)"
         >
-          <Brand size="small" />
-        </a>
+          <StatusIndicator
+            v-if="statusLabel"
+            severity="success"
+            :label="statusLabel"
+          />
+          <div
+            v-if="languages.length > 0"
+            class="w-28"
+          >
+            <Select
+              v-model="language"
+              :placeholder="languageAriaLabel || t('siteFooter.language')"
+            >
+              <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">
+                <template #iconLeft>
+                  <i
+                    class="pi pi-globe text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </template>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectOption
+                  v-for="option in languages"
+                  :key="option"
+                  :value="option"
+                >
+                  {{ option }}
+                </SelectOption>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </template>
     </Footer>
   </div>
