@@ -164,11 +164,16 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import { computed, nextTick, reactive, ref } from 'vue'
 
   const DAY = 86_400_000
-  const referenceTime = Math.floor(Date.now() / 60_000) * 60_000
+  const referenceTime = Date.UTC(2026, 10, 10, 12)
   const daysFrom = (days) => new Date(referenceTime + days * DAY)
 
   const formatDate = (date) =>
-    date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'UTC'
+    })
 
   const seedTokens = [
     {
