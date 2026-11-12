@@ -1,4 +1,5 @@
 <script setup>
+  import Field from '@aziontech/webkit/field'
   import PasswordInput from '@aziontech/webkit/password-input'
   import { ref } from 'vue'
 
@@ -6,19 +7,14 @@
 </script>
 
 <template>
-  <div class="flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)">
-    <label
-      for="password-input-monospace-token"
-      class="text-label-sm text-(--text-default)"
-    >
-      Personal token
-    </label>
+  <Field class="w-full max-w-(--container-xs)">
+    <Field.Label>Personal token</Field.Label>
     <PasswordInput
-      id="password-input-monospace-token"
       v-model="token"
       autocomplete="off"
       :spellcheck="false"
       monospace
     />
-  </div>
+    <Field.Description>Shown once. Store it in your secret manager.</Field.Description>
+  </Field>
 </template>
