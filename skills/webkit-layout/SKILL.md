@@ -311,8 +311,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 </template>
 ```
 
-The components that live in panels already do this, so a page gets it for free: `Table` (rows
-stack into label/value cards below `--container-lg`; `:stackable="false"` keeps the scrolling grid),
+The components that live in panels already do this, so a page gets it for free: `Table` (the grid
+scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
 `PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (keeps its
 two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,

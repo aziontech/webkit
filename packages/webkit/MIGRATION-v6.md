@@ -249,10 +249,10 @@ split view or a card these change:
   `StatTile` and `Table` (`@container/table`) are containers: `@md:` utilities in your own markup
   inside them follow that box. A `Card` used as a shrink-to-fit flex item now needs a width
   (`flex-1`, `w-full` or a grid track).
-- **Stacked table.** A data-driven `Table` narrower than `--container-lg` (552 px) renders each row
-  as a card of label / value lines instead of scrolling sideways. The column headers stay for
-  screen readers. Set `:stackable="false"` to keep the old grid; give a column `label` when its
-  header is a slot.
+- **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
+  every width, as before. Set `stackable` to render each row as a card of label / value lines
+  when the table is narrower than `--container-lg` (552 px); the column headers stay for screen
+  readers. Give a column `label` when its header is a slot.
 - **Sheets.** Below `sm` a `Dialog` or `Drawer` is a full-height, full-width sheet (it was an
   80 dvh bottom sheet, which it still is between `sm` and `md`). `PanelFooter` stretches its direct
   children to equal widths and keeps the safe-area inset clear on phones.

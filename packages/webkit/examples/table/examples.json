@@ -91,6 +91,11 @@
       "name": "TreeRows",
       "summary": "Hierarchical rows: `get-sub-rows` returns each row's children, which open under a chevron in the principal column, indented one step per level. The grid becomes a `treegrid` (`aria-level`, `aria-expanded`, `aria-setsize`, `aria-posinset`) with one row in the tab order: Arrow Up and Arrow Down move between rows, Arrow Right opens a row or enters it, Arrow Left closes it or goes to the parent, Enter toggles it and Space selects it. `v-model:expanded` holds the open rows; selection stays per row.",
       "file": "tree-rows.vue"
+    },
+    {
+      "name": "StackedRows",
+      "summary": "A short release list in a side-panel-width box with `stackable`: each row becomes a card with the release name as its title and Area and Released as label and value lines. Opt-in; a console list keeps its scrolling grid on a phone.",
+      "file": "stacked-rows.vue"
     }
   ]
 }
