@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import KindsExample from '../../../../examples/stat-tile/kinds.vue'
+import BesideCardExample from '../../../../examples/stat-tile-group/beside-card.vue'
 import DefaultExample from '../../../../examples/stat-tile-group/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import StatTile from '../stat-tile/stat-tile.vue'
@@ -75,5 +76,13 @@ describe('StatTileGroup', () => {
     strip.unmount()
     const kinds = render(KindsExample)
     await expectNoA11yViolations(kinds.container)
+  })
+
+  it('renders the BesideCard example: the strip and its neighbour card share one row', async () => {
+    const view = render(BesideCardExample)
+    const group = view.getByRole('group', { name: 'Usage' })
+    expect(group.parentElement).toBe(view.getByTestId('content-card').parentElement)
+    expect(view.getAllByTestId('chart-stat-tile')).toHaveLength(4)
+    await expectNoA11yViolations(view.container)
   })
 })
