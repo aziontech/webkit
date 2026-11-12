@@ -14,7 +14,6 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroup from '@aziontech/webkit/input-group'
-  import Label from '@aziontech/webkit/label'
   import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -255,16 +254,12 @@
                 title="Environment"
                 hint="Where the domain answers."
               >
-                <div
+                <Field
                   :data-field-invalid="errors.environment ? true : null"
-                  class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                  :required="!!errors.environment"
                 >
                   <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                    <Label
-                      for="domain-environment"
-                      :required="!!errors.environment"
-                      >Environment</Label
-                    >
+                    <Field.Label for="domain-environment">Environment</Field.Label>
                   </div>
                   <Select
                     v-model:open="environmentSelectOpen"
@@ -306,7 +301,7 @@
                     <template v-if="errors.environment">{{ errors.environment }}</template>
                     <template v-else>{{ environmentHint }}</template>
                   </HelperText>
-                </div>
+                </Field>
               </SettingsSection>
 
               <SettingsSection
@@ -314,15 +309,11 @@
                 hint="The address this resource answers on, where it comes from, and the certificate it is served with."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label id="domain-source-label">Domain source</Label>
-                    </div>
-                    <div
-                      role="radiogroup"
-                      aria-labelledby="domain-source-label"
-                      class="flex min-w-0 flex-col gap-(--spacing-sm)"
-                    >
+                  <fieldset
+                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                  >
+                    <Field.Legend kind="label">Domain source</Field.Legend>
+                    <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                       <Field.Label
                         v-for="option in kindOptions"
                         :key="option.value"
@@ -346,7 +337,7 @@
                         </Field>
                       </Field.Label>
                     </div>
-                  </div>
+                  </fieldset>
 
                   <Field
                     :disabled="submitting"
@@ -365,9 +356,9 @@
                   </Field>
 
                   <template v-if="form.kind === 'own'">
-                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                    <Field>
                       <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                        <Label for="domain-certificate">Certificate</Label>
+                        <Field.Label for="domain-certificate">Certificate</Field.Label>
                       </div>
                       <Select
                         :model-value="form.certificate"
@@ -396,7 +387,7 @@
                         kind="helper"
                         >{{ certificateHint }}</HelperText
                       >
-                    </div>
+                    </Field>
                   </template>
 
                   <Alert

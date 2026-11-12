@@ -7,10 +7,10 @@
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Label from '@aziontech/webkit/label'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -1073,20 +1073,17 @@
                                     v-for="field in originFields"
                                     :key="field.name"
                                   >
-                                    <div
+                                    <Field
                                       v-if="field.kind === 'select'"
                                       :data-field-invalid="!!errors['origin.' + field.name] || null"
-                                      class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                                      :required="!!errors['origin.' + field.name]"
                                     >
                                       <div
                                         class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                       >
-                                        <Label
-                                          :for="'origin-' + field.name"
-                                          :required="!!errors['origin.' + field.name]"
-                                        >
-                                          {{ field.label }}
-                                        </Label>
+                                        <Field.Label :for="'origin-' + field.name">{{
+                                          field.label
+                                        }}</Field.Label>
                                       </div>
                                       <Select
                                         v-model="scratch.origin.values[field.name]"
@@ -1119,7 +1116,7 @@
                                       >
                                         {{ errors['origin.' + field.name] || field.description }}
                                       </HelperText>
-                                    </div>
+                                    </Field>
                                     <Field
                                       v-else
                                       :required="!!errors['origin.' + field.name]"
@@ -1294,17 +1291,18 @@
                           <Card title="Environment and certificate">
                             <template #content>
                               <div class="flex flex-col gap-(--spacing-lg)">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <div
-                                    class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
+                                <fieldset
+                                  class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                                >
+                                  <Field.Legend
+                                    id="environment-label"
+                                    kind="label"
                                   >
-                                    <Label
-                                      id="environment-label"
-                                      hint="Which environment this binding lands on."
-                                    >
+                                    <span class="inline-flex items-center gap-(--spacing-xxs)">
                                       Environment
-                                    </Label>
-                                  </div>
+                                      <Hint text="Which environment this binding lands on." />
+                                    </span>
+                                  </Field.Legend>
                                   <RadioCards
                                     v-model="form.environment"
                                     :items="environments"
@@ -1317,19 +1315,18 @@
                                   >
                                     The domain answers on the environment it is bound to.
                                   </HelperText>
-                                </div>
+                                </fieldset>
 
                                 <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                                  <Field>
                                     <div
                                       class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                     >
-                                      <Label
+                                      <Field.Label
                                         for="certificate"
                                         hint="One certificate per service, not per domain on it."
+                                        >Certificate</Field.Label
                                       >
-                                        Certificate
-                                      </Label>
                                     </div>
                                     <Select
                                       v-model="form.certificate"
@@ -1351,7 +1348,7 @@
                                         </Select.Option>
                                       </Select.Content>
                                     </Select>
-                                  </div>
+                                  </Field>
                                 </div>
                               </div>
                             </template>
@@ -1559,16 +1556,15 @@
                           <Card :padded="false">
                             <template #content>
                               <div class="p-(--spacing-md)">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                                <Field>
                                   <div
                                     class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                   >
-                                    <Label
+                                    <Field.Label
                                       for="minimum-tls-version"
                                       hint="Connections negotiating below this version are refused."
+                                      >Minimum TLS version</Field.Label
                                     >
-                                      Minimum TLS version
-                                    </Label>
                                   </div>
                                   <Select
                                     v-model="form.minimumTlsVersion"
@@ -1590,7 +1586,7 @@
                                       </Select.Option>
                                     </Select.Content>
                                   </Select>
-                                </div>
+                                </Field>
                               </div>
 
                               <div class="border-t border-(--border-default) p-(--spacing-md)">

@@ -54,9 +54,9 @@ Put the copy in the default slot when it carries links; animate the entrance on 
 
 `<Separator label="or" />` between the social buttons and the email field. Only on the email step; no other separator in the card.
 
-### G. Field label — `Label` (required)
+### G. Field label — `Field`, `Field.Label` (required)
 
-A `Label` with `for` and `required` over each input: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required, so every label carries the indicator.
+A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field`'s `required` turns on with the required prompt after the primary action, and the label shows the indicator then.
 
 ### H. Email — `Input` (required)
 
@@ -132,7 +132,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 ## Accessibility
 
 - The form has an accessible name (`aria-label="Sign in to your account"`) and `novalidate`, so the browser does not show its own bubbles over the field messages.
-- Each input has a visible `Label` with `for`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
+- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
 - Use the right `autocomplete` on every field (`username`, `current-password`, `new-password`, `email`) so password managers and autofill work.
 - Icon-only back buttons have an `aria-label` equal to their tooltip.
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
@@ -154,7 +154,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
-- MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
+- MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
 

@@ -15,7 +15,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import NumberInput from '@aziontech/webkit/number-input'
-  import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -178,9 +177,9 @@
                     </Field.Description>
                   </Field>
 
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                  <Field>
                     <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label for="record-type">Record type</Label>
+                      <Field.Label for="record-type">Record type</Field.Label>
                     </div>
                     <Select
                       v-model="form.type"
@@ -214,11 +213,11 @@
                         target="_blank"
                       />
                     </HelperText>
-                  </div>
+                  </Field>
 
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                  <Field>
                     <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label for="record-ttl">TTL in seconds</Label>
+                      <Field.Label for="record-ttl">TTL in seconds</Field.Label>
                     </div>
                     <NumberInput
                       id="record-ttl"
@@ -234,7 +233,7 @@
                       kind="helper"
                       >Time-to-live a response can be cached for on a resolver server.</HelperText
                     >
-                  </div>
+                  </Field>
 
                   <Field
                     :disabled="submitting"
@@ -270,9 +269,9 @@
                 hint="How the zone should deal with requests answered by this record."
               >
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                  <Field>
                     <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label for="record-policy">Policy type</Label>
+                      <Field.Label for="record-policy">Policy type</Field.Label>
                     </div>
                     <Select
                       v-model="form.policy"
@@ -301,14 +300,11 @@
                       >Simple is standard resolution. Weighted distributes answers across records by
                       weight.</HelperText
                     >
-                  </div>
+                  </Field>
 
-                  <div
-                    v-if="isWeighted"
-                    class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
-                  >
+                  <Field v-if="isWeighted">
                     <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Label for="record-weight">Weight</Label>
+                      <Field.Label for="record-weight">Weight</Field.Label>
                     </div>
                     <NumberInput
                       id="record-weight"
@@ -326,7 +322,7 @@
                       >Relative weight for this record within the weighted set, from 0 to
                       255.</HelperText
                     >
-                  </div>
+                  </Field>
                 </div>
               </SettingsSection>
             </fieldset>

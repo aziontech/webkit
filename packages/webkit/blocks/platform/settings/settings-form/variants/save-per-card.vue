@@ -12,9 +12,9 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Label from '@aziontech/webkit/label'
   import Link from '@aziontech/webkit/link'
   import Menu from '@aziontech/webkit/menu'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -763,8 +763,8 @@
                   />
 
                   <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label for="tb-preprod">Pre-production deployments</Label>
+                    <Field>
+                      <Field.Label for="tb-preprod">Pre-production deployments</Field.Label>
                       <Select
                         v-model="toolbar.preprod"
                         size="large"
@@ -782,9 +782,9 @@
                           </Select.Option>
                         </Select.Content>
                       </Select>
-                    </div>
-                    <div class="flex flex-col gap-(--spacing-xs)">
-                      <Label for="tb-prod">Production deployments</Label>
+                    </Field>
+                    <Field>
+                      <Field.Label for="tb-prod">Production deployments</Field.Label>
                       <Select
                         v-model="toolbar.prod"
                         size="large"
@@ -802,7 +802,7 @@
                           </Select.Option>
                         </Select.Content>
                       </Select>
-                    </div>
+                    </Field>
                   </div>
                 </fieldset>
               </template>
@@ -839,8 +839,8 @@
                     label="Control who can access your deployments. Standard protection challenges every visitor before a deployment loads; shareable links let you grant bypass access with a generated URL."
                   />
 
-                  <div class="flex flex-col gap-(--spacing-xs)">
-                    <Label for="dp-level">Authentication</Label>
+                  <Field>
+                    <Field.Label for="dp-level">Authentication</Field.Label>
                     <div class="sm:max-w-(--container-sm)">
                       <Select
                         v-model="protection.level"
@@ -860,21 +860,20 @@
                         </Select.Content>
                       </Select>
                     </div>
-                  </div>
+                  </Field>
 
-                  <div class="flex items-center justify-between gap-(--spacing-md)">
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                      <Label id="dp-links-label">Shareable links</Label>
+                  <Field orientation="horizontal">
+                    <Field.Content>
+                      <Field.Label>Shareable links</Field.Label>
                       <p class="text-body-sm text-(--text-muted)">
                         Allow bypassing protection with a generated link.
                       </p>
-                    </div>
+                    </Field.Content>
                     <Switch
                       v-model="protection.shareableLinks"
-                      aria-labelledby="dp-links-label"
                       :disabled="savingProtection"
                     />
-                  </div>
+                  </Field>
                 </fieldset>
               </template>
               <template #footer>

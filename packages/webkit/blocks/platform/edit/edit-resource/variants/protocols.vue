@@ -1407,12 +1407,10 @@
                   A trusted CA certificate in PEM format. It is added to the account and picked for
                   this workload.
                 </DrawerDescription>
-                <div class="flex flex-col gap-(--spacing-xxs)">
-                  <label
-                    for="protocols-upload-name"
-                    class="text-label-md text-(--text-default)"
-                    >Name</label
-                  >
+                <Field>
+                  <Field.Label for="protocols-upload-name">
+                    <span class="text-label-md">Name</span>
+                  </Field.Label>
                   <Input
                     id="protocols-upload-name"
                     v-model="upload.name"
@@ -1432,13 +1430,11 @@
                     :kind="uploadErrors.name.kind"
                     :label="uploadErrors.name.message"
                   />
-                </div>
-                <div class="flex flex-col gap-(--spacing-xxs)">
-                  <label
-                    for="protocols-upload-pem"
-                    class="text-label-md text-(--text-default)"
-                    >Certificate</label
-                  >
+                </Field>
+                <Field>
+                  <Field.Label for="protocols-upload-pem">
+                    <span class="text-label-md">Certificate</span>
+                  </Field.Label>
                   <Textarea
                     id="protocols-upload-pem"
                     v-model="upload.pem"
@@ -1457,7 +1453,7 @@
                     :kind="uploadErrors.pem.kind"
                     :label="uploadErrors.pem.message"
                   />
-                </div>
+                </Field>
               </div>
             </PanelContent>
             <PanelFooter>

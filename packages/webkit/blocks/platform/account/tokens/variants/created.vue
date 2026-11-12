@@ -22,7 +22,6 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Label from '@aziontech/webkit/label'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -512,8 +511,8 @@
                   title="Expiration"
                   hint="Shorter is safer. A token cannot be extended."
                 >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <Label for="token-expiry">Expires in</Label>
+                  <Field>
+                    <Field.Label for="token-expiry">Expires in</Field.Label>
                     <Select
                       v-model="form.expiresIn"
                       size="large"
@@ -539,7 +538,7 @@
                       kind="helper"
                       >{{ expiryHint }}</HelperText
                     >
-                  </div>
+                  </Field>
                 </SettingsSection>
               </fieldset>
             </PanelContent>
@@ -589,8 +588,8 @@
                 size="small"
                 label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
               />
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label for="token-secret">Token</Label>
+              <Field>
+                <Field.Label for="token-secret">Token</Field.Label>
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <div class="min-w-0 grow">
                     <PasswordInput
@@ -616,7 +615,7 @@
                 >
                   {{ copied ? 'Copied to the clipboard.' : '' }}
                 </p>
-              </div>
+              </Field>
             </div>
           </PanelContent>
           <PanelFooter>

@@ -45,7 +45,7 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 The outlined Filter `Button` opens one popover with the Type and Policy fields; a `Badge` on the trigger counts applied fields. Filters narrow `:data` and rewind pagination to the first page. It is the same recipe as `platform/view/table-view`.
 
-### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Switch`, `Button` (optional)
+### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
 
 A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButton`s for Refresh, Download CSV and Columns, each named by a `Tooltip`. The Columns popover holds one `Switch` per hideable column and a Show all columns `Button`. ID is hidden by default; Name cannot be hidden.
 

@@ -20,6 +20,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -2210,20 +2211,22 @@
                     :key="field.id"
                     class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                   >
-                    <Checkbox
-                      binary
-                      :disabled="field.locked"
-                      :model-value="true"
-                      :input-id="`event-field-${field.id}`"
-                      @update:model-value="toggleColumn(field.id)"
-                    />
-                    <label
-                      :for="`event-field-${field.id}`"
-                      :data-locked="field.locked || null"
-                      class="min-w-0 flex-1 truncate text-label-sm text-(--text-default) data-locked:text-(--text-muted)"
-                    >
-                      {{ field.label }}
-                    </label>
+                    <div class="min-w-0 flex-1">
+                      <Field
+                        orientation="horizontal"
+                        :disabled="field.locked"
+                      >
+                        <Checkbox
+                          binary
+                          :model-value="true"
+                          :input-id="`event-field-${field.id}`"
+                          @update:model-value="toggleColumn(field.id)"
+                        />
+                        <Field.Label>
+                          <span class="truncate">{{ field.label }}</span>
+                        </Field.Label>
+                      </Field>
+                    </div>
 
                     <Popover
                       v-if="canFilterField(field) && fieldCounts[field.id]"
@@ -2331,18 +2334,19 @@
                             :key="field.id"
                             class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                           >
-                            <Checkbox
-                              binary
-                              :model-value="false"
-                              :input-id="`event-field-${field.id}`"
-                              @update:model-value="toggleColumn(field.id)"
-                            />
-                            <label
-                              :for="`event-field-${field.id}`"
-                              class="min-w-0 flex-1 truncate text-label-sm text-(--text-default) data-locked:text-(--text-muted)"
-                            >
-                              {{ field.label }}
-                            </label>
+                            <div class="min-w-0 flex-1">
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  binary
+                                  :model-value="false"
+                                  :input-id="`event-field-${field.id}`"
+                                  @update:model-value="toggleColumn(field.id)"
+                                />
+                                <Field.Label>
+                                  <span class="truncate">{{ field.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </div>
 
                             <Popover
                               v-if="canFilterField(field) && fieldCounts[field.id]"

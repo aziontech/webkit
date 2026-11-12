@@ -8,7 +8,6 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import Label from '@aziontech/webkit/label'
   import Alert from '@aziontech/webkit/alert'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
@@ -232,12 +231,8 @@
                       >
                         <legend class="sr-only">Credentials</legend>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="auth-signin-email"
-                            label="Email"
-                            :required="!!errors.signinEmail && !signin.email.trim()"
-                          />
+                        <Field :required="!!errors.signinEmail && !signin.email.trim()">
+                          <Field.Label for="auth-signin-email">Email</Field.Label>
                           <Input
                             id="auth-signin-email"
                             v-model="signin.email"
@@ -263,7 +258,7 @@
                             :kind="signin.email.trim() ? 'invalid' : 'required'"
                             :label="errors.signinEmail"
                           />
-                        </div>
+                        </Field>
 
                         <Field
                           :disabled="verifying"
@@ -362,12 +357,8 @@
                       >
                         <legend class="sr-only">Account credentials</legend>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="auth-signup-email"
-                            label="Work email"
-                            :required="!!errors.signupEmail && !signup.email.trim()"
-                          />
+                        <Field :required="!!errors.signupEmail && !signup.email.trim()">
+                          <Field.Label for="auth-signup-email">Work email</Field.Label>
                           <Input
                             id="auth-signup-email"
                             v-model="signup.email"
@@ -393,7 +384,7 @@
                             :kind="signup.email.trim() ? 'invalid' : 'required'"
                             :label="errors.signupEmail"
                           />
-                        </div>
+                        </Field>
 
                         <Field
                           :disabled="verifying"

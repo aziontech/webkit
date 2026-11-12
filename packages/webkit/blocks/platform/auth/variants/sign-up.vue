@@ -10,7 +10,6 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import Label from '@aziontech/webkit/label'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
@@ -130,12 +129,8 @@
                       <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
                         <legend class="sr-only">Account credentials</legend>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="signup-email"
-                            label="Work email"
-                            required
-                          />
+                        <Field :required="!!errors.email && !email.trim()">
+                          <Field.Label for="signup-email">Work email</Field.Label>
                           <Input
                             id="signup-email"
                             v-model="email"
@@ -156,32 +151,26 @@
                             :kind="email.trim() ? 'invalid' : 'required'"
                             :label="errors.email"
                           />
-                        </div>
+                        </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="signup-password"
-                            label="Password"
-                            required
+                        <Field
+                          :required="!!errors.password && !password"
+                          :invalid="!!errors.password && !!password"
+                        >
+                          <Field.Label for="signup-password">Password</Field.Label>
+                          <PasswordInput
+                            id="signup-password"
+                            v-model="password"
+                            name="password"
+                            autocomplete="new-password"
+                            placeholder="Create a password"
+                            @update:model-value="errors.password = ''"
                           />
-                          <Field
-                            :required="!!errors.password && !password"
-                            :invalid="!!errors.password && !!password"
-                          >
-                            <PasswordInput
-                              id="signup-password"
-                              v-model="password"
-                              name="password"
-                              autocomplete="new-password"
-                              placeholder="Create a password"
-                              @update:model-value="errors.password = ''"
-                            />
-                            <Field.Description v-if="errors.password">{{
-                              errors.password
-                            }}</Field.Description>
-                            <PasswordRequirements :value="password" />
-                          </Field>
-                        </div>
+                          <Field.Description v-if="errors.password">{{
+                            errors.password
+                          }}</Field.Description>
+                          <PasswordRequirements :value="password" />
+                        </Field>
                       </fieldset>
 
                       <Button

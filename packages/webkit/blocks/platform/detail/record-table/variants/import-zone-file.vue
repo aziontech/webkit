@@ -16,6 +16,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -1153,28 +1154,34 @@ legacy  IN HINFO "PC" "Linux"`
                         <div
                           class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
                         >
-                          <label
+                          <div
                             v-for="column in listedColumns"
                             :key="column.id"
-                            class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
                             :class="
                               column.locked
-                                ? 'cursor-default text-(--text-muted)'
-                                : 'cursor-pointer text-(--text-default) hover:bg-(--bg-hover)'
+                                ? 'cursor-default'
+                                : 'cursor-pointer hover:bg-(--bg-hover)'
                             "
                           >
-                            <Switch
-                              :model-value="isVisible(column.id)"
+                            <Field
+                              orientation="horizontal"
                               :disabled="column.locked"
-                              @update:model-value="(value) => setVisible(column.id, !!value)"
-                            />
-                            <span class="min-w-0 truncate">{{ column.label }}</span>
-                            <span
-                              v-if="column.locked"
-                              class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
-                              >Always shown</span
                             >
-                          </label>
+                              <Switch
+                                :model-value="isVisible(column.id)"
+                                @update:model-value="(value) => setVisible(column.id, !!value)"
+                              />
+                              <Field.Label>
+                                <span class="min-w-0 truncate">{{ column.label }}</span>
+                              </Field.Label>
+                              <span
+                                v-if="column.locked"
+                                class="shrink-0 text-label-xs text-(--text-muted)"
+                                >Always shown</span
+                              >
+                            </Field>
+                          </div>
                         </div>
                         <div
                           v-if="hiddenCount"
@@ -1391,19 +1398,19 @@ legacy  IN HINFO "PC" "Linux"`
                   kind="invalid"
                   :label="dropError"
                 />
-                <label
-                  for="zone-import-text"
-                  class="text-label-sm text-(--text-muted)"
-                  >Or paste it</label
-                >
-                <Textarea
-                  id="zone-import-text"
-                  v-model="zoneText"
-                  class="w-full"
-                  :rows="8"
-                  placeholder="www IN CNAME example.com."
-                  @paste="onPaste"
-                />
+                <Field>
+                  <Field.Label for="zone-import-text">
+                    <span class="text-(--text-muted)">Or paste it</span>
+                  </Field.Label>
+                  <Textarea
+                    id="zone-import-text"
+                    v-model="zoneText"
+                    class="w-full"
+                    :rows="8"
+                    placeholder="www IN CNAME example.com."
+                    @paste="onPaste"
+                  />
+                </Field>
               </section>
 
               <section

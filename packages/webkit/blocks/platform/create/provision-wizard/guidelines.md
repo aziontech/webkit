@@ -33,9 +33,9 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 The `platform/create/resource-picker` band: a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
-### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Label`, `Select` (conditional)
+### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
 
-In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as `Field` and `Input`, or a `Label` over a `Select` for a fixed list. Each opened field is required only while its switch is on.
+In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
 
 ### F. Project read-back — `Card`, `Item`, `Button` (required on step two)
 
@@ -45,17 +45,17 @@ Step two opens with a flush `Card` holding one `Item` that reads the bound proje
 
 A `Card` titled Domain with a `ToggleGroup` of Free platform domain and Your own domain. The free domain asks for a prefix `Input` with the platform suffix shown inside it; your own domain asks for the hostname and the service name. Below, a preview line names the address traffic arrives on (`https://` plus the domain) and the name the service is created as, updating as the user types.
 
-### H. Environment and certificate — `Card`, `Label`, `RadioCards`, `HelperText`, `Select` (required)
+### H. Environment and certificate — `Card`, `Field`, `RadioCards`, `Hint`, `HelperText`, `Select` (required)
 
-A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, each headed by a `Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
+A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
 
 ### I. Deployment — `Card`, `ToggleGroup`, `Item`, `Input`, `Skeleton`, `Button` (required)
 
 A `Card` titled Deployment with a `ToggleGroup` of Create one and Use existing. Create one shows the deployment that will be made, as an `Item`; Use existing reuses the paged picker list with its own search `Input`, `Skeleton` rows and Load more `Button`.
 
-### J. Advanced — `SettingsSection`, `Card`, `Label`, `Select`, `Field`, `SettingRow`, `Switch` (optional)
+### J. Advanced — `SettingsSection`, `Card`, `Select`, `Field`, `SettingRow`, `Switch` (optional)
 
-A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed by default, with a `hint` saying every field carries the endpoint's default. It holds the minimum TLS version (`Label` and `Select`), the error page (`Field` and `Select`, "Not bound" by default) and `SettingRow kind="compact"` switches for Allow the platform domain and Active. Nothing required lives here.
+A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed by default, with a `hint` saying every field carries the endpoint's default. It holds the minimum TLS version (`Field` and `Select`), the error page (`Field` and `Select`, "Not bound" by default) and `SettingRow kind="compact"` switches for Allow the platform domain and Active. Nothing required lives here.
 
 ### K. Footer — `SaveBar`, `Button` (required)
 
