@@ -21,6 +21,11 @@
       "name": "Loading",
       "summary": "While the data loads, every value becomes a skeleton and the labels stay in place, so the layout does not jump when the values arrive.",
       "file": "loading.vue"
+    },
+    {
+      "name": "Split",
+      "summary": "A subscription plan card with `kind=\"split\"`: each label at the start and its value at the end of one row, the way a summary card reads. The payment method is not set, so it shows the empty-value marker.",
+      "file": "split.vue"
     }
   ]
 }

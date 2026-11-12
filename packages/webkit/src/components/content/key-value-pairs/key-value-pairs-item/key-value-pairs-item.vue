@@ -42,14 +42,16 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+    :data-kind="context.kind.value"
+    class="flex min-w-0 flex-col gap-(--spacing-xxs) data-[kind=split]:flex-row data-[kind=split]:flex-wrap data-[kind=split]:items-center data-[kind=split]:justify-between data-[kind=split]:gap-x-(--spacing-md)"
   >
-    <dt class="flex items-center gap-(--spacing-xxs) text-body-sm text-(--text-muted)">
+    <dt class="flex shrink-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-muted)">
       <span>{{ label }}</span>
       <slot name="info" />
     </dt>
     <dd
-      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) break-words text-body-sm text-(--text-default)"
+      :data-kind="context.kind.value"
+      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) break-words text-body-sm text-(--text-default) data-[kind=split]:ms-auto data-[kind=split]:justify-end data-[kind=split]:text-end"
     >
       <Skeleton v-if="context.loading.value" />
       <slot v-else-if="hasValue()" />
