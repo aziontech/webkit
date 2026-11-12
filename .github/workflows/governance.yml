@@ -299,6 +299,9 @@ jobs:
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
 
+      - name: Theme tests (device contract, container scale in @theme, CSS types)
+        run: pnpm --filter @aziontech/theme test
+
       - name: Server rendering — every block and example renders with vue/server-renderer in Node
         run: pnpm --filter @aziontech/webkit test:ssr
 
