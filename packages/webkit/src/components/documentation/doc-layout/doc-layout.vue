@@ -83,6 +83,8 @@
     outlineGroups?: DocTocGroup[]
     /** Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). */
     ariaLabel?: string
+    /** Names the top of the docs tree in the rail's Back button when a drill level is open. Empty uses the locale catalog (Docs). */
+    rootLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -92,7 +94,8 @@
     home: '/',
     outline: () => [],
     outlineGroups: () => [],
-    ariaLabel: ''
+    ariaLabel: '',
+    rootLabel: ''
   })
 
   const emit = defineEmits<{
@@ -158,6 +161,10 @@
 
   const sectionLinks = computed(() =>
     props.sections.map((section) => ({ ...section, url: hrefOf(section) ?? '#' }))
+  )
+
+  const backLabel = computed(() =>
+    menuPath.value.length > 1 ? '' : props.rootLabel || t('docLayout.root')
   )
 
   const hasEndRail = () => props.outline.length > 0 || Boolean(slots.aside)
@@ -369,7 +376,7 @@
               role="presentation"
               @navigate="onMenuNavigate"
             >
-              <MenuBack />
+              <MenuBack :label="backLabel" />
             </Menu>
             <template
               v-if="$slots['navigation-footer']"
@@ -434,7 +441,7 @@
               class="w-full p-(--spacing-md)"
               @navigate="onMenuNavigate"
             >
-              <MenuBack />
+              <MenuBack :label="backLabel" />
             </Menu>
           </ScrollArea>
           <PanelFooter

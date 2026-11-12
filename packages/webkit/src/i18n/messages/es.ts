@@ -418,7 +418,8 @@ export const es: Messages = {
     openNavigation: 'Abrir navegación de la documentación',
     search: 'Buscar en la documentación',
     searchEmpty: 'Ninguna página coincide con la búsqueda.',
-    pages: 'Páginas'
+    pages: 'Páginas',
+    root: 'Docs'
   },
   docOnThisPage: {
     title: 'En esta página'

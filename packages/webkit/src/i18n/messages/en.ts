@@ -1169,7 +1169,8 @@ export const docLayout = {
   openNavigation: 'Open documentation navigation',
   search: 'Search docs',
   searchEmpty: 'No page matches your search.',
-  pages: 'Pages'
+  pages: 'Pages',
+  root: 'Docs'
 } as const
 
 export const siteLayout = {
