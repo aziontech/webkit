@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
-import { dirname, join } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 
 import { readJsonStrict } from './apply.js'
 import {
@@ -17,7 +17,7 @@ import {
   STYLELINT_CONFIG_CANDIDATES,
   usesTailwindVitePlugin
 } from './plan.js'
-import { planSync } from './sync.js'
+import { planSync, resolveBundleRoot } from './sync.js'
 import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
@@ -433,7 +433,22 @@ export function planDoctor(projectDir) {
     )
   }
 
-  const sync = planSync(projectDir)
+  const bundleRoot = resolveBundleRoot(projectDir)
+  const where =
+    bundleRoot.kind === 'own' ? '' : relative(projectDir, bundleRoot.dir) || bundleRoot.dir
+  if (bundleRoot.kind === 'source') {
+    add(
+      'claude bundle',
+      'ok',
+      `${where} holds the bundle sources (skills/, rules/, adapters/) this app is built with — nothing to sync`
+    )
+    return checks
+  }
+  const at = (path) => (where ? `${where}/${path}` : path)
+  const syncHint = where
+    ? `run \`npx @aziontech/webkit sync\` in ${where} (the repository root that owns the agent files)`
+    : 'run `npx @aziontech/webkit sync`'
+  const sync = planSync(bundleRoot.dir)
   const missingOrStale = sync.entries.filter((e) => e.state === 'missing' || e.state === 'stale')
   const orphans = sync.entries.filter((e) => e.state === 'orphan')
   const modified = sync.entries.filter(
@@ -441,33 +456,31 @@ export function planDoctor(projectDir) {
   )
   if (sync.drift) {
     const lines = [
-      ...missingOrStale.map((e) => `${e.state}: .claude/${e.rel}`),
-      ...orphans.map((e) => `orphan: .claude/${e.rel}`),
+      ...missingOrStale.map((e) => `${e.state}: ${at(`.claude/${e.rel}`)}`),
+      ...orphans.map((e) => `orphan: ${at(`.claude/${e.rel}`)}`),
       ...(sync.fragment.state === 'current'
         ? []
-        : [`fragment: CLAUDE.md is ${sync.fragment.state}`]),
+        : [`fragment: ${at('CLAUDE.md')} is ${sync.fragment.state}`]),
       ...(sync.agentsFragment?.state === 'current' || !sync.agentsFragment
         ? []
-        : [`fragment: AGENTS.md is ${sync.agentsFragment.state}`])
+        : [`fragment: ${at('AGENTS.md')} is ${sync.agentsFragment.state}`])
     ]
-    add(
-      'claude bundle',
-      'fail',
-      `out of date — run \`npx @aziontech/webkit sync\`.\n${lines.join('\n')}`
-    )
+    add('claude bundle', 'fail', `out of date — ${syncHint}.\n${lines.join('\n')}`)
   } else if (modified.length) {
     add(
       'claude bundle',
       'warn',
-      `${modified.length} file(s) edited locally after sync stamped them (left alone) — run \`npx @aziontech/webkit sync --force\` to overwrite, or ignore if intentional.\n${modified
-        .map((e) => `modified: .claude/${e.rel}`)
+      `${modified.length} file(s) edited locally after sync stamped them (left alone) — ${syncHint} with --force to overwrite, or ignore if intentional.\n${modified
+        .map((e) => `modified: ${at(`.claude/${e.rel}`)}`)
         .join('\n')}`
     )
   } else {
     add(
       'claude bundle',
       'ok',
-      'every bundle file and the AGENTS.md / CLAUDE.md fragment are current'
+      where
+        ? `every bundle file and the AGENTS.md / CLAUDE.md fragment in ${where} are current`
+        : 'every bundle file and the AGENTS.md / CLAUDE.md fragment are current'
     )
   }
 

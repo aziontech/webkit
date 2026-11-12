@@ -1,5 +1,5 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
-import { join, sep } from 'node:path'
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
+import { dirname, join, sep } from 'node:path'
 
 import {
   AI_TEMPLATES,
@@ -80,6 +80,41 @@ function classifyFragment(claudeMdContent, fragmentBody) {
     end: FRAGMENT_END
   })
   return next === claudeMdContent ? 'current' : 'stale'
+}
+
+export function hasBundle(dir) {
+  if (listConsumerClaudeFiles(join(dir, '.claude')).some(isWebkitBundleName)) return true
+  return ['AGENTS.md', 'CLAUDE.md'].some((name) => {
+    const content = readOrNull(join(dir, name))
+    return Boolean(content && (content.includes(FRAGMENT_START) || content.includes(LEGACY_MARKER)))
+  })
+}
+
+function canonical(path) {
+  try {
+    return realpathSync(path)
+  } catch {
+    return path
+  }
+}
+
+export function resolveBundleRoot(projectDir, { templatesDir = AI_TEMPLATES } = {}) {
+  const own = { dir: projectDir, kind: 'own' }
+  if (hasBundle(projectDir)) return own
+  const ancestors = []
+  let dir = canonical(projectDir)
+  while (!existsSync(join(dir, '.git'))) {
+    const parent = dirname(dir)
+    if (parent === dir) return own
+    dir = parent
+    ancestors.push(dir)
+  }
+  const source = canonical(templatesDir)
+  for (const ancestor of ancestors) {
+    if (ancestor === source) return { dir: ancestor, kind: 'source' }
+    if (hasBundle(ancestor)) return { dir: ancestor, kind: 'ancestor' }
+  }
+  return own
 }
 
 export function planSync(
