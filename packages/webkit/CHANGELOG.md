@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.2...@aziontech/webkit@5.12.3) (2026-11-12)
+
+
+### Bug Fixes
+
+* **webkit:** add titleLength to HeroBand and register the azion-highlight scene ([#1181](https://github.com/aziontech/webkit/issues/1181)) ([29ddf9e](https://github.com/aziontech/webkit/commit/29ddf9ec0bc545bc5a597c009c45a98d0d6b80da))
+
 ## [5.12.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.1...@aziontech/webkit@5.12.2) (2026-11-12)
 
 
