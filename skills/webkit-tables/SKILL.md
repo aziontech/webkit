@@ -499,6 +499,11 @@ raw absolute date. Two shapes, both from the console:
 With `author`, the name is on the avatar's tooltip (an email reads as a name: `maria.silva@example.com` → `Maria Silva`); the absolute
 time is on the time's tooltip and in visually hidden text, so a screen reader hears both. Every
 mounted cell shares one minute clock, so "just now" turns into "1 minute ago" without a reload.
+Where the text must not depend on when it renders (an example, a test, a server render the browser
+hydrates), set `now` on the app's `WebkitProvider` and count the sample dates back from that constant
+(`const NOW = Date.UTC(2026, 10, 10, 12)`, `new Date(NOW - 2 * HOUR)`); every cell then reads it
+instead of the clock. Never build sample dates from `Date.now()` / `new Date()` in setup: the server
+and the browser read different clocks, so hydration mismatches across a minute boundary.
 
 ```vue
 <template #cell-updatedAt="{ row }">
