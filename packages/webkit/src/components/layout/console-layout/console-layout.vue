@@ -228,6 +228,8 @@
 
   const pageControl = computed(() => Boolean(pageTrail.value?.hasControl()))
 
+  const pageKey = ref(0)
+
   const controlNodes = (children: unknown): VNode[] =>
     (Array.isArray(children) ? children : [children]).flatMap((child) => {
       if (!isVNode(child) || child.type === Comment || child.type === Text) return []
@@ -255,6 +257,10 @@
     },
     { immediate: true }
   )
+
+  watch(currentPath, (_next, previous) => {
+    if (previous) pageKey.value += 1
+  })
 
   watch(searchOpen, () => {
     query.value = ''
@@ -536,6 +542,7 @@
       </template>
 
       <main
+        :key="pageKey"
         :data-testid="`${testId}__main`"
         class="flex min-h-full min-w-0 flex-col animate-page-enter has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden motion-reduce:animate-none [&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1"
       >
