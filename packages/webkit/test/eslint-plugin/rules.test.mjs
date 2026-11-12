@@ -647,7 +647,51 @@ test('prefer-tree-shakeable-root', () => {
       {
         code: "<script setup>import Table from '@aziontech/webkit/table'</script><template><Table/></template>",
         filename: 'd.vue',
-        errors: [{ messageId: 'preferRoot', suggestions: 1 }]
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>import Table from "@aziontech/webkit/table-root"</script><template><Table/></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // named sub-component imports move to their own entries: the -root entry has no named exports
+      {
+        code: "<script setup>\nimport Table, { TableRow as Row } from '@aziontech/webkit/table';\n</script><template><Table><Row/></Table></template>",
+        filename: 'e.vue',
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>\nimport Table from "@aziontech/webkit/table-root";\nimport Row from "@aziontech/webkit/table-row";\n</script><template><Table><Row/></Table></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // a named binding the catalog cannot place: reported, but no suggestion that would break the import
+      {
+        code: "<script setup>import Table, { useTableHelper } from '@aziontech/webkit/table'</script><template><Table/></template>",
+        filename: 'f.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
+      }
+    ]
+  })
+  vueTs.run('prefer-tree-shakeable-root (type imports)', preferTreeShakeableRoot, {
+    valid: [],
+    invalid: [
+      {
+        code: "<script setup lang=\"ts\">import Table, { type TableColumn } from '@aziontech/webkit/table'\nconst columns: TableColumn[] = []</script><template><Table :columns=\"columns\"/></template>",
+        filename: 'g.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
       }
     ]
   })
