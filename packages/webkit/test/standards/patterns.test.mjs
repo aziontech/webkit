@@ -17,15 +17,18 @@ import {
   checkPatternGuidelines,
   checkPatternMetadata,
   checkSummaryComponents,
+  checkToastRegions,
   compareToBaseline,
   parseCheckArgs
 } from '../../scripts/check-patterns.mjs'
 import { readBlocks, readExamples } from '../../scripts/lib/blocks.mjs'
 import {
   checkGuidelines,
+  checkToastRegion,
   GUIDELINE_SECTIONS,
   parseGuidelines,
-  primaryComponents
+  primaryComponents,
+  rendersToastRegion
 } from '../../scripts/lib/guidelines.mjs'
 import { importsOf, kebab, patternIdFromTitle } from '../../scripts/lib/patterns.mjs'
 
@@ -285,6 +288,87 @@ test('checkSummaryComponents flags a backticked component the primary and varian
 test('every block.json summary names only components its SFCs import', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkSummaryComponents(blocks), [])
+})
+
+const toastSfc = (imports, template) =>
+  ['<script setup>', ...imports, '</script>', `<template><div>${template}</div></template>`].join(
+    '\n'
+  )
+
+test('rendersToastRegion finds a Toaster under any binding, and ignores toast calls and other parts', () => {
+  const named = "import { toast, Toaster } from '@aziontech/webkit/toast'"
+  assert.equal(rendersToastRegion(toastSfc([named], '<Toaster position="bottom-right" />')), true)
+  assert.equal(rendersToastRegion(toastSfc([named], '<Toaster>\n</Toaster>')), true)
+  assert.equal(
+    rendersToastRegion(
+      toastSfc(["import { Toaster as Region } from '@aziontech/webkit/toast'"], '<Region />')
+    ),
+    true
+  )
+  assert.equal(
+    rendersToastRegion(toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast />')),
+    true
+  )
+  assert.equal(
+    rendersToastRegion(
+      toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast.Toaster />')
+    ),
+    true
+  )
+  assert.equal(
+    rendersToastRegion(
+      toastSfc(["import Region from '@aziontech/webkit/toast-root'"], '<Region/>')
+    ),
+    true
+  )
+  assert.equal(rendersToastRegion(toastSfc([], '<toaster />')), true)
+  assert.equal(rendersToastRegion(toastSfc([], '<Toaster />')), true)
+  assert.equal(
+    rendersToastRegion(
+      toastSfc(
+        ["import { toast } from '@aziontech/webkit/toast'"],
+        '<Button @click="toast.success(\'Saved.\')">Save</Button>'
+      )
+    ),
+    false
+  )
+  assert.equal(
+    rendersToastRegion(
+      toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast.Item /><ToasterHint />')
+    ),
+    false
+  )
+  assert.equal(
+    rendersToastRegion(
+      [
+        '<script setup>',
+        '// a <Toaster /> in a comment is not rendered',
+        '</script>',
+        '<template><p /></template>'
+      ].join('\n')
+    ),
+    false
+  )
+})
+
+test('checkToastRegion flags a page body that renders a Toaster and allows an app root in shells/', () => {
+  const page = toastSfc(["import { toast } from '@aziontech/webkit/toast'"], '<p />')
+  const own = toastSfc(["import { toast, Toaster } from '@aziontech/webkit/toast'"], '<Toaster />')
+  const pattern = { primary: 'Default', sfc: page, variants: [{ name: 'Saved', sfc: own }] }
+  const errors = checkToastRegion('platform/view/x', pattern)
+  assert.equal(errors.length, 1)
+  assert.match(
+    errors[0],
+    /^blocks\/platform\/view\/x \(Saved\): renders a `Toaster` in a page body/
+  )
+  assert.match(errors[0], /ToastPlugin/)
+  assert.deepEqual(checkToastRegion('shells/console', pattern), [])
+  assert.deepEqual(checkToastRegion('platform/view/x', { ...pattern, variants: [] }), [])
+})
+
+test('no block outside shells/ renders a Toaster', () => {
+  const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
+  assert.deepEqual(checkToastRegions(blocks), [])
 })
 
 test('compareToBaseline only reports counts above the baseline', () => {
