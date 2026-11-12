@@ -325,7 +325,7 @@ function printPlan(plan) {
     switch (action.type) {
       case 'add-dep':
         process.stdout.write(
-          `PLAN   add-dep ${action.dev ? '(dev) ' : ''}${action.dep}@${action.version}\n`
+          `PLAN   add-dep ${action.dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
         )
         break
       case 'advise':

@@ -17,6 +17,7 @@ import {
   STYLELINT_CONFIG_CANDIDATES
 } from './plan.js'
 import { planSync } from './sync.js'
+import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
 
 const WEBKIT_PKGS = ['@aziontech/webkit']
 
@@ -349,6 +350,20 @@ export function planDoctor(projectDir) {
     } else {
       add('dependency versions', 'ok', lines.join('\n'))
     }
+  }
+
+  const tsc = vueTscState(projectDir)
+  if (tsc.declared || tsc.installed) {
+    const brokenInstalled = [tsc.installed, tsc.languageCore].find((v) => v && VUE_TSC_BROKEN[v])
+    const brokenRange = tsc.installed ? [] : brokenVueTscIn(tsc.declared)
+    const bad = brokenInstalled || brokenRange[0]
+    add(
+      'vue-tsc version',
+      bad ? 'warn' : 'ok',
+      bad
+        ? `vue-tsc ${brokenInstalled ? `${bad} is installed` : `"${tsc.declared}" can resolve to ${bad}`}: ${VUE_TSC_BROKEN[bad]}. Pin it: \`npm i -D vue-tsc@${VUE_TSC_KNOWN_GOOD}\`.`
+        : `vue-tsc ${tsc.installed ? `${tsc.installed} installed` : `declared ${tsc.declared}`}`
+    )
   }
 
   const webkitPkgPath = join(projectDir, 'node_modules', '@aziontech', 'webkit', 'package.json')

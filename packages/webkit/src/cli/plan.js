@@ -5,6 +5,7 @@ import { dirname, join, relative } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
 import { planSync } from './sync.js'
+import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
 
 const OWN = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'))
 
@@ -309,6 +310,36 @@ function huskyActions(projectDir) {
   ]
 }
 
+function vueTscActions(projectDir) {
+  const state = vueTscState(projectDir)
+  if (!state.typescript) return []
+  const why = (versions) =>
+    versions.map((version) => `vue-tsc ${version}: ${VUE_TSC_BROKEN[version]}`).join('; ')
+  if (!state.declared) {
+    return [
+      {
+        type: 'advise',
+        message: `TypeScript project without vue-tsc: add it pinned to a known-good version (\`npm i -D vue-tsc@${VUE_TSC_KNOWN_GOOD}\`) so \`vue-tsc -b\` type-checks WebKit templates. Avoid ${why(Object.keys(VUE_TSC_BROKEN))}.`
+      }
+    ]
+  }
+  const broken = brokenVueTscIn(state.declared)
+  if (!broken.length) return []
+  return [
+    {
+      type: 'add-dep',
+      dep: 'vue-tsc',
+      version: VUE_TSC_KNOWN_GOOD,
+      dev: state.field === 'devDependencies',
+      replace: state.declared
+    },
+    {
+      type: 'advise',
+      message: `vue-tsc "${state.declared}" can resolve to a broken release, so it is pinned to ${VUE_TSC_KNOWN_GOOD}: ${why(broken)}. Relax the pin once a fixed vue-tsc ships.`
+    }
+  ]
+}
+
 export function planInit(projectDir, opts = {}) {
   const actions = []
   const severity = opts.recommended ? 'recommended' : 'strict'
@@ -327,6 +358,7 @@ export function planInit(projectDir, opts = {}) {
     if (tailwindVite && dep === '@tailwindcss/postcss') continue
     actions.push({ type: 'add-dep', dep, version, dev: true })
   }
+  actions.push(...vueTscActions(projectDir))
   actions.push({
     type: 'advise',
     message:
