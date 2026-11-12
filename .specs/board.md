@@ -5,9 +5,9 @@ structure: composition
 status: approved
 spec_version: 1
 template: 2
-checksum: 8e22256a3889ae7270d18449d852b282a40c132ff5e04e4676e0c3624ad1fe83
+checksum: 6a05a776f49e1e7e6f38b8415fd1e9884bd247f6bb1a7dc6d8977c7f28310c5c
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Board — Component Spec
@@ -227,7 +227,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ## Responsive
 
-- Container queries: `@container/board`; one column below `@3xl` (48rem), `columns` from `@3xl`. An item spans `min(span, current columns)`.
+- Container queries: `@container/board`; one column below `@3xl` (876 px), `columns` from `@3xl`. An item spans `min(span, current columns)`.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width; reordering still works, span changes take effect once the board is wide again.
 - Touch: dragging needs a pointer; the keyboard map is the alternative.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

@@ -27,7 +27,7 @@ A large `ToggleGroup` in the heading's actions slot, `aria-label="Deploy with"`,
 
 ### C. Step cards — `Card` (required)
 
-Three `Card`s with `:padded="false"`, one per step, each led by a round step number, an `h3` title and one sentence of context. They sit in one column and go to three columns from the `@4xl` container width, joined by a dashed connector that is hidden from assistive technology.
+Three `Card`s with `:padded="false"`, one per step, each led by a round step number, an `h3` title and one sentence of context. They sit in one column and go to three columns from the `@4xl` container width (1024 px, where each step card fits its commands), joined by a dashed connector that is hidden from assistive technology.
 
 ### D. Commands — `CodeBlock` (required)
 

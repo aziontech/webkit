@@ -28,7 +28,7 @@
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
     :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
-    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @6xl:flex-row @6xl:gap-(--spacing-xl) @6xl:self-auto @6xl:data-[align=center]:items-center @6xl:data-[align=start]:items-start @6xl:data-[gap=wide]:gap-(--spacing-xxl)"
+    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @5xl:flex-row @5xl:gap-(--spacing-xl) @5xl:self-auto @5xl:data-[align=center]:items-center @5xl:data-[align=start]:items-start @5xl:data-[gap=wide]:gap-(--spacing-xxl)"
   >
     <DiagramLayout
       v-for="(child, index) in item.row"
@@ -42,7 +42,7 @@
   <div
     v-else-if="'branches' in item"
     data-stack="tree"
-    class="ms-(--spacing-12) flex flex-col items-start gap-(--spacing-xl) self-stretch @6xl:ms-0 @6xl:self-auto"
+    class="ms-(--spacing-12) flex flex-col items-start gap-(--spacing-xl) self-stretch @5xl:ms-0 @5xl:self-auto"
   >
     <DiagramLayout
       v-for="(child, index) in item.branches"
@@ -70,7 +70,7 @@
   <div
     v-else-if="'group' in item"
     :data-diagram-node="item.group"
-    class="flex flex-col self-stretch @6xl:self-auto"
+    class="flex flex-col self-stretch @5xl:self-auto"
   >
     <FrameBox
       borders="none"

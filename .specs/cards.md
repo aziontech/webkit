@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: dd20f652b7592c3021252d2adf410f03d2a8e171e8a953d80e374ea446bccd55
+checksum: 07555d6d1ecaba1a0f894cc594002a08e9f328fd1bcaea5f3c2c6d0d24bff9c0
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Cards — Component Spec
@@ -144,7 +144,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Responsive
 
-- Container queries: `@container/cards`; one column below `@xl` (36rem), two from `@xl`, three from `@4xl` (56rem), four from `@7xl` (80rem).
+- Container queries: `@container/cards`; one column below `@xl` (644 px), two from `@xl`, three from `@4xl` (1024 px), four from `@6xl` (1388 px), so a card is never narrower than about 310 px.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width.
 - Touch: the checkbox and radio grow their hit area on `pointer: coarse` (from the inputs); nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
