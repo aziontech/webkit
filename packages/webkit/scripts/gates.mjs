@@ -40,6 +40,11 @@ export const GATES = [
   },
   { id: 'patterns', label: 'Patterns (G1)', steps: [['node', 'scripts/check-patterns.mjs']] },
   {
+    id: 'examples-lint',
+    label: 'Examples pass the consumer lint',
+    steps: [['node', 'scripts/check-examples-lint.mjs']]
+  },
+  {
     id: 'cited-names',
     label: 'Cited names (G2)',
     steps: [['node', 'scripts/check-cited-names.mjs']]
