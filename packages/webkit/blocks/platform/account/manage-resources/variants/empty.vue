@@ -609,7 +609,7 @@
                 </h2>
 
                 <Tabs.Root v-model="detailsTab">
-                  <div class="flex flex-col gap-(--spacing-md)">
+                  <div class="flex w-full flex-col gap-(--spacing-md)">
                     <Tabs.List aria-label="Details">
                       <Tabs.Item
                         value="permissions"

@@ -738,7 +738,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 </h2>
 
                 <Tabs.Root v-model="detailsTab">
-                  <div class="flex flex-col gap-(--spacing-md)">
+                  <div class="flex w-full flex-col gap-(--spacing-md)">
                     <Tabs.List aria-label="Details">
                       <Tabs.Item
                         value="permissions"
