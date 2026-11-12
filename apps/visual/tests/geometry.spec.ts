@@ -218,18 +218,19 @@ for (const theme of THEMES) {
       const signature = footer.locator('[data-testid="layout-footer__signature"]')
       const social = footer.locator('[data-testid="layout-footer__social"]')
       const home = 'a[aria-label="Azion home"]'
-      if (width >= 1024) {
-        await expect(signature).toBeHidden()
+      await expect(signature).toBeHidden()
+      if (width >= 768) {
         await expect(social.locator(home)).toBeVisible()
+      } else {
+        await expect(footer.locator(home)).toBeHidden()
+      }
+      if (width >= 1024) {
         const footerBox = await footer.boundingBox()
         const socialBox = await social.boundingBox()
         if (!footerBox || !socialBox) throw new Error('no footer')
         expect(
           footerBox.y + footerBox.height - (socialBox.y + socialBox.height)
         ).toBeLessThanOrEqual(1)
-      } else {
-        await expect(signature.locator(home)).toBeVisible()
-        await expect(social.locator(home)).toBeHidden()
       }
       await expect(footer).toHaveScreenshot(shot(`geometry/site-footer-end--${label(mode)}.png`))
     })
