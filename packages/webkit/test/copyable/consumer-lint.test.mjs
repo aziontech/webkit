@@ -29,12 +29,6 @@ const IMPORTED_PACKAGES = [
 // once an entry no longer matches anything, so the list only shrinks.
 const KNOWN_CONFLICTS = [
   {
-    rule: 'webkit/no-style-override',
-    tags: ['Spinner'],
-    reason:
-      'the spec sizes the component through class (Spinner size-*, Carousel.Item w-72, ScrollArea max-h-80, LogView h-full, Sidebar h-screen w-[280px]) or through custom properties (Hero --banner-offset); the spec needs style_seam: true, or the rule needs to accept sizing utilities'
-  },
-  {
     rule: 'webkit/no-hardcoded-color',
     files: [
       'examples/client-mosaic/site-columns.vue',

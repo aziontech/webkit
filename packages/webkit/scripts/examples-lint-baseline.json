@@ -7,11 +7,5 @@
   },
   "customer-spotlight/default.vue": {
     "webkit/no-hardcoded-color": 6
-  },
-  "spinner/default.vue": {
-    "webkit/no-style-override": 1
-  },
-  "spinner/sizes.vue": {
-    "webkit/no-style-override": 4
   }
 }

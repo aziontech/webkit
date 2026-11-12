@@ -4,9 +4,10 @@ category: utils
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 1632796b52c02a0723a1f7cf68fa6e320a272d843bcbdaabe846b4cd6de01880
+checksum: e0ad8f25cc6e636fe8d23c342559bd4637c8c046668f168cb5b5bc73e3d7d2c3
+style_seam: true
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 ---
 
 # Spinner — Component Spec
@@ -36,6 +37,7 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 ## Best practices
 
 - It has no props: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
+- `class` on its tag is its sizing API, not a restyle: the spec is a `style_seam`, so `webkit/no-style-override` accepts `<Spinner class="size-4" />`. Keep the class to a `size-*` and, when it must differ from the surrounding text, a text color token.
 - It is `aria-hidden`; announce the busy state on the surrounding element (`aria-busy`, a live region or visible text).
 - The spin stops under reduced motion, so pair it with text when the wait matters.
 
