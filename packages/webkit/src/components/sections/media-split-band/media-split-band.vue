@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import type { ProductWidgetName } from '../../content/product-widget/product-widget.vue'
+  import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
 
@@ -33,6 +35,8 @@
     width?: number
     /** Intrinsic height of the picture, in pixels. */
     height?: number
+    /** Sets the picture whole on a rounded, bordered plate inset in the cell instead of covering the cell, for a badge, a logo or a screenshot. */
+    framed?: boolean
   }
 
   /** A call to action under the copy. */
@@ -56,11 +60,15 @@
     description?: string
     /** Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. */
     size?: MediaSplitBandSize
-    /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. */
+    /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media. */
     scene?: MediaSplitBandScene
-    /** Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. */
+    /** Name of the product console widget drawn in the media cell when no scene is set. */
+    widget?: ProductWidgetName
+    /** Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set. */
+    diagram?: DiagramName
+    /** Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. */
     image?: MediaSplitBandImage
-    /** Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. */
+    /** Registry name of the illustration drawn in the media cell when no other media is set. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
@@ -76,6 +84,8 @@
     description: '',
     size: 'medium',
     scene: undefined,
+    widget: undefined,
+    diagram: undefined,
     image: undefined,
     illustration: '',
     illustrationAriaLabel: '',
@@ -90,7 +100,14 @@
     SpinningGlobe: defineAsyncComponent(() => import('../../../assets/globe/spinning-globe.vue'))
   }
 
+  const ProductWidget = defineAsyncComponent(
+    () => import('../../content/product-widget/product-widget.vue')
+  )
+  const Diagram = defineAsyncComponent(() => import('../../marketing/diagram/diagram.vue'))
+
   const attrs = useAttrs()
+
+  const hovered = ref(false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-media-split-band'
@@ -102,8 +119,19 @@
 
   const hasImage = computed(() => Boolean(props.image?.src))
 
-  const hasMedia = computed(
-    () => Boolean(sceneComponent.value) || hasImage.value || props.illustration.length > 0
+  const media = computed(() => {
+    if (sceneComponent.value) return 'scene'
+    if (props.widget) return 'widget'
+    if (props.diagram) return 'diagram'
+    if (hasImage.value) return props.image?.framed ? 'framed-image' : 'image'
+    if (props.illustration.length > 0) return 'illustration'
+    return null
+  })
+
+  const hasMedia = computed(() => media.value !== null)
+
+  const mediaPadded = computed(
+    () => media.value === 'widget' || media.value === 'diagram' || media.value === 'framed-image'
   )
 
   const primary = computed(() =>
@@ -142,6 +170,9 @@
         :title="title"
         :description="description"
         :media-href="bandHref"
+        :media-padded="mediaPadded"
+        @pointerenter="hovered = true"
+        @pointerleave="hovered = false"
       >
         <template
           v-if="hasMedia"
@@ -149,10 +180,34 @@
         >
           <component
             :is="sceneComponent"
-            v-if="sceneComponent"
+            v-if="media === 'scene'"
           />
+          <ProductWidget
+            v-else-if="media === 'widget' && widget"
+            :name="widget"
+            :hover="hovered"
+          />
+          <Diagram
+            v-else-if="media === 'diagram' && diagram"
+            :name="diagram"
+          />
+          <div
+            v-else-if="media === 'framed-image'"
+            class="flex w-full items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-md)"
+          >
+            <img
+              :src="image?.src"
+              :alt="image?.alt ?? ''"
+              :width="image?.width"
+              :height="image?.height"
+              :aria-hidden="image?.alt ? undefined : 'true'"
+              loading="lazy"
+              decoding="async"
+              class="block h-auto max-h-80 w-auto max-w-full object-contain"
+            />
+          </div>
           <img
-            v-else-if="hasImage"
+            v-else-if="media === 'image'"
             :src="image?.src"
             :alt="image?.alt ?? ''"
             :width="image?.width"
@@ -163,7 +218,7 @@
             class="h-full w-full object-cover"
           />
           <Illustration
-            v-else
+            v-else-if="media === 'illustration'"
             :name="illustration"
             :aria-label="illustrationAriaLabel"
           />

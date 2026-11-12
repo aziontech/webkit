@@ -11,6 +11,11 @@
       "name": "Types",
       "summary": "Both layouts stacked: the `media-end` run of solution areas with no header, then the `alternating` run of network claims under its centered header, the pictures swapping sides band by band.",
       "file": "types.vue"
+    },
+    {
+      "name": "Product media",
+      "summary": "Bands whose pictures show the product itself: a ProductWidget console screen (`widget`), which plays its beat while the pointer is over the band, a Diagram request flow (`diagram`), and an object picture set whole on its own plate (`imageFramed`). Widget and diagram load only when a band uses them.",
+      "file": "product-media.vue"
     }
   ],
   "site": [

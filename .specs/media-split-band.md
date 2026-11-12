@@ -3,16 +3,18 @@ name: media-split-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: d995ec2f8dbbd269e25496b7562f7ab6fb26bce565f7a8e2bfc3a97041f4834f
+last_updated: 2026-11-12
+checksum: c47677f728182253289627cc7fb44116bb5d41b7f32a4bba457bb35ee58b3e85
 ---
+
 # MediaSplitBand — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it, with two the band stays unlinked.
 
 ## When to use
 
@@ -30,7 +32,9 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## Best practices
 
-- Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.
+- Give the band exactly one media: `scene`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.
+- On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.
+- Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
 - Use `size="large"` for a band that carries only its headline and description.
 - Give an `image` its `width` and `height` so the page reserves its box before it loads.
 
@@ -38,7 +42,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ```vue
 <script setup>
-import MediaSplitBand from '@aziontech/webkit/media-split-band'
+  import MediaSplitBand from '@aziontech/webkit/media-split-band'
 </script>
 
 <template>
@@ -54,18 +58,20 @@ import MediaSplitBand from '@aziontech/webkit/media-split-band'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Paragraph under the headline. |
-| `size` | `MediaSplitBandSize` | `'medium'` | false | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. |
-| `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. |
-| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. |
-| `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. |
-| `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
-| `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. |
-| `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. |
+| Prop                    | Type                   | Default     | Required | JSDoc                                                                                                                                                                                             |
+| ----------------------- | ---------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`               | `string`               | `''`        | false    | Short overline above the headline.                                                                                                                                                                |
+| `title`                 | `string`               | `''`        | false    | Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty.                                                                         |
+| `description`           | `string`               | `''`        | false    | Paragraph under the headline.                                                                                                                                                                     |
+| `size`                  | `MediaSplitBandSize`   | `'medium'`  | false    | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media.                                                                                            |
+| `scene`                 | `MediaSplitBandScene`  | `undefined` | false    | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media.                                                                                          |
+| `widget`                | `ProductWidgetName`    | `undefined` | false    | Name of the product console widget drawn in the media cell when no scene is set.                                                                                                                  |
+| `diagram`               | `DiagramName`          | `undefined` | false    | Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set.                                                                                                |
+| `image`                 | `MediaSplitBandImage`  | `undefined` | false    | Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. |
+| `illustration`          | `string`               | `''`        | false    | Registry name of the illustration drawn in the media cell when no other media is set.                                                                                                             |
+| `illustrationAriaLabel` | `string`               | `''`        | false    | Accessible name of the illustration; empty keeps it decorative.                                                                                                                                   |
+| `primaryAction`         | `MediaSplitBandAction` | `undefined` | false    | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it.                                                                       |
+| `secondaryAction`       | `MediaSplitBandAction` | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked.                                                                        |
 
 ## Events
 
@@ -81,6 +87,9 @@ import MediaSplitBand from '@aziontech/webkit/media-split-band'
 - `size` is forwarded to the media split and drives its type scale and copy alignment
 - Empty: when `title` is empty the band renders nothing but its root; with no media set the media cell is omitted
 - With exactly one action the band is a link to that action's `href`; with none or two it is not a link
+- Media precedence: `scene`, `widget`, `diagram`, `image`, `illustration`. A widget, a diagram and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
+- A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`)
+- Scenes, widget and diagram load on demand (`defineAsyncComponent`)
 
 ## Motion & Animations
 
@@ -88,29 +97,57 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| media cell fill | `var(--bg-surface)` |
-| frame rules and marks | `var(--border-default)` |
+| Region                | Token (DESIGN.md)                                                |
+| --------------------- | ---------------------------------------------------------------- |
+| media cell fill       | `var(--bg-surface)`                                              |
+| frame rules and marks | `var(--border-default)`                                          |
+| framed image plate    | `var(--bg-canvas)`, `var(--border-default)`, `var(--shape-card)` |
+| framed image inset    | `var(--spacing-md)`                                              |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by `button` and `media-split`.
 - Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
-- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty.
+- ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
 - Touch target ≥40×40 px — the medium buttons meet it.
 
+## Internationalization
+
+- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `product-widget` and `diagram`.
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only (owned by `media-split`).
+- Icons: a trailing chevron on an action mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Responsive
+
+- Container queries: none; `media-split` stacks the media under the copy below `lg`.
+- Narrow (≤ 640 px): one column; a widget, a diagram and a framed image scale down with the cell.
+- Touch: a widget shows its finished state instead of the hover beat.
+- Reflow: no horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 11 KB gzip for `./media-split-band` (initial chunk only) in `.size-limit.json`; scenes, `product-widget` and `diagram` are async chunks.
+- Runtime budget: none: static apart from the widget beat while hovered.
+- Heavy parts: the scenes, `product-widget` and `diagram`, all lazy.
+
 ## Examples
 
 - Default
+- Product media — the band with a `ProductWidget`, then with a `Diagram` (justified: `widget` and `diagram` are render paths the default does not reach).
 
 ## Constraints — DO NOT
 
