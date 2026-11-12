@@ -13,3 +13,4 @@ const FooterRoot = Object.assign(Footer, {
 }) as CompoundFooter
 
 export default FooterRoot
+export type { FooterKind, FooterSignature } from './footer.vue'

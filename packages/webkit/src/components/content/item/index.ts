@@ -37,3 +37,4 @@ const ItemRoot = Object.assign(Item, {
 }) as CompoundItem
 
 export default ItemRoot
+export type { ItemKind, ItemSize } from './item.vue'

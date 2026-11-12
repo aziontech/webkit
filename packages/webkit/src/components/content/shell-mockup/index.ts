@@ -11,3 +11,9 @@ const ShellMockupRoot = Object.assign(ShellMockup, {
 
 export default ShellMockupRoot
 export { ShellMockupPart }
+export type {
+  ShellMockupDuration,
+  ShellMockupFade,
+  ShellMockupKind,
+  ShellMockupShell
+} from './shell-mockup.vue'

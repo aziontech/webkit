@@ -2392,6 +2392,10 @@
       "types": "./types/composables/use-unsaved-changes/index.d.ts",
       "default": "./src/composables/use-unsaved-changes/index.ts"
     },
+    "./use-pinned-row": {
+      "types": "./types/composables/use-pinned-row/index.d.ts",
+      "default": "./src/composables/use-pinned-row/index.ts"
+    },
     "./attribute-editor": {
       "types": "./types/components/inputs/attribute-editor/attribute-editor.vue.d.ts",
       "default": "./src/components/inputs/attribute-editor/attribute-editor.vue"

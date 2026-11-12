@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: f3c07c9778de7f9e638372756a730e13c7f821ef389a74f73ee21ba062172d3b
+checksum: adda2875853a7c05f798a7ca075f6336b45d68d69a595fdb01336b6e397453d8
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # AppLayout — Component Spec
@@ -53,6 +53,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 - Use the split panel for the selected item of a collection. Close it when the selection clears.
 - Pass `storageKey` when the reader's choices (split panel size and position, navigation and tools open) should survive a reload.
 - Flash notifications belong in the `notifications` slot, one `Alert` per message, dismissible. Use toasts for results of actions that finish in the background.
+- A page body that fills the screen (an empty state, a centred form) is `<main class="flex min-h-full flex-col">` in the default slot. Its height is what is left under the breadcrumbs, so it never scrolls by the breadcrumb row; do not subtract the breadcrumbs yourself.
 
 ## Usage
 
@@ -146,11 +147,11 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 
 | Slot            | Scope                                                                                                     | Notes                                                                                                 |
 | --------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `default`       | —                                                                                                         | The page content (the consumer's `<main>`). Scrolls on its own.                                       |
+| `default`       | —                                                                                                         | The page content (the consumer's `<main>`). Fills the content region under the breadcrumbs, so a full-height body (`min-h-full`) takes the rest of the height without overflowing; taller content scrolls. |
 | `navigation`    | `{ drawer: boolean, closeNavigation: () => void }`                                                        | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
 | `header`        | `{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }` | The global header, above content, tools and split panel.                                              |
 | `notifications` | —                                                                                                         | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
-| `breadcrumbs`   | —                                                                                                         | Breadcrumbs above the content, inside the scroll area.                                                |
+| `breadcrumbs`   | —                                                                                                         | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them. |
 | `tools`         | —                                                                                                         | The tools region's body, usually a `HelpPanel`.                                                       |
 | `split-panel`   | —                                                                                                         | The split panel's body.                                                                               |
 
@@ -238,6 +239,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 ## Examples
 
 - Default — navigation, header, content and closed tools.
+- FullHeightPage — breadcrumbs over a full-height page body (`min-h-full`) with a centred empty state. Justified: the body fills the height left under the breadcrumbs without overflowing.
 - Help open — tools open with a `HelpPanel`. Justified: the tools region is the component's main optional region.
 - Split panel — a table with the split panel open at the bottom and at the side. Justified: the split panel and its position are the component's other region.
 - Notifications — flash `Alert`s in the notifications region. Justified: the region exists only for them.

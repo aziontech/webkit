@@ -101,6 +101,39 @@ test('llms-full.txt holds every page and stays under its size budget', () => {
   }
 })
 
+test('llms-full.txt cuts repeats and detail, the per-page files keep them', () => {
+  const full = files['llms-full.txt']
+  const entry = (file) => {
+    const start = full.indexOf(`<!-- ${file} -->`)
+    const end = full.indexOf('\n---\n', start)
+    return full.slice(start, end === -1 ? undefined : end)
+  }
+  const tagRule = 'Only layout utilities (margin, flex and grid placement'
+  assert.equal(full.split(tagRule).length - 1, 1, 'the tag-class rule is stated once')
+  assert.ok(files['components/button.md'].includes(tagRule))
+  assert.doesNotMatch(full, /^- API as JSON:/m)
+  assert.match(files['components/button.md'], /^- API as JSON: \[button\.json\]/m)
+
+  const multi = Object.keys(files).find(
+    (f) => /^components\/.*\.md$/.test(f) && (files[f].match(/^### /gm) || []).length > 2
+  )
+  assert.ok(multi)
+  assert.ok((files[multi].match(/```vue\n/g) || []).length > 1, multi)
+  assert.equal((entry(multi).match(/```vue\n/g) || []).length, 1, multi)
+
+  const auth = entry('blocks/platform/auth.md')
+  assert.match(files['blocks/platform/auth.md'], /^### A\. Signed-out bar/m)
+  assert.match(auth, /^- A\. Signed-out bar — `GlobalHeader` \(required\)$/m)
+  assert.doesNotMatch(auth, /^### /m)
+  assert.doesNotMatch(auth, /```vue/)
+  assert.match(files['blocks/platform/auth.md'], /## Code \(`Login`\)/)
+
+  for (const m of full.matchAll(/\]\(([^)\s]+\.(?:md|json))\)/g)) {
+    if (/^https?:/.test(m[1])) continue
+    assert.ok(m[1] in files, `llms-full.txt links ${m[1]}, which is not a file under llms/`)
+  }
+})
+
 test('the package ships llms/', () => {
   assert.ok(pkg.files.includes('llms'))
 })

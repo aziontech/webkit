@@ -13,3 +13,4 @@ InputGroup.Input = InputGroupInput
 
 export default InputGroup
 export { InputGroupAddon, InputGroupInput }
+export type { InputGroupSize } from './input-group.vue'

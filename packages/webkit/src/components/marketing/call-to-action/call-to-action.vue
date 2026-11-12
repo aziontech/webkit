@@ -51,6 +51,8 @@
 
   const attrs = useAttrs()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-call-to-action'
   )
@@ -85,7 +87,7 @@
           <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
               v-if="eyebrow"
-              prefix="//"
+              :prefix="EYEBROW_PREFIX"
               show-cursor
               >{{ eyebrow }}</Overline
             >
@@ -133,7 +135,7 @@
         <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg)">
           <Overline
             v-if="eyebrow"
-            prefix="//"
+            :prefix="EYEBROW_PREFIX"
             show-cursor
             >{{ eyebrow }}</Overline
           >

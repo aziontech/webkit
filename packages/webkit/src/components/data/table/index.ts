@@ -70,3 +70,4 @@ const TableRoot = Object.assign(Table, {
 }) as CompoundTable
 
 export default TableRoot
+export type { TableColumn } from './table.vue'

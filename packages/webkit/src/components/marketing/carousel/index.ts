@@ -17,3 +17,4 @@ const CarouselRoot = Object.assign(Carousel, {
 
 export default CarouselRoot
 export { CarouselItem, CarouselNext, CarouselPrevious }
+export type { CarouselKind } from './carousel.vue'

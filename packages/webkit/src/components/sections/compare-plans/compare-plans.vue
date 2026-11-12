@@ -105,6 +105,8 @@
 
   const attrs = useAttrs()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-compare-plans'
   )
@@ -233,7 +235,7 @@
             >
               <Overline
                 v-if="section.eyebrow"
-                prefix="//"
+                :prefix="EYEBROW_PREFIX"
                 class="mb-(--spacing-xs)"
               >
                 {{ section.eyebrow }}

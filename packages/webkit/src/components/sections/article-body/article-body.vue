@@ -118,6 +118,8 @@
 
   const attrs = useAttrs()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-article-body'
   )
@@ -235,7 +237,7 @@
               />
               <HeroTitle
                 :eyebrow="eyebrow"
-                eyebrow-prefix="//"
+                :eyebrow-prefix="EYEBROW_PREFIX"
                 size="medium"
                 max-width="2xl"
                 :title="article.title"

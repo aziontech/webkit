@@ -67,6 +67,32 @@ describe('AppLayout', () => {
     expect(getByText('nav links').getAttribute('data-drawer')).toBe('false')
   })
 
+  it('puts the page body in its own region after the breadcrumbs, inside the scroll area', () => {
+    const { getByTestId } = render(
+      h(AppLayout, null, {
+        breadcrumbs: () => h('nav', { 'aria-label': 'Breadcrumb' }, 'Resources'),
+        default: () => h('main', { class: 'flex min-h-full flex-col' }, 'full-height body')
+      })
+    )
+    const content = getByTestId('layout-app-layout__content')
+    const breadcrumbs = getByTestId('layout-app-layout__breadcrumbs')
+    const body = getByTestId('layout-app-layout__body')
+    expect(Array.from(content.children)).toEqual([breadcrumbs, body])
+    expect(body.children).toHaveLength(1)
+    expect(body.firstElementChild?.tagName).toBe('MAIN')
+    expect(breadcrumbs.contains(body)).toBe(false)
+  })
+
+  it('keeps the body region when there are no breadcrumbs', () => {
+    const { getByTestId, queryByTestId } = render(
+      h(AppLayout, null, { default: () => h('main', 'page') })
+    )
+    expect(queryByTestId('layout-app-layout__breadcrumbs')).toBeNull()
+    expect(Array.from(getByTestId('layout-app-layout__content').children)).toEqual([
+      getByTestId('layout-app-layout__body')
+    ])
+  })
+
   it('lets a consumer override data-testid', () => {
     const { getByTestId } = render(h(AppLayout, { 'data-testid': 'shell' }))
     expect(getByTestId('shell')).toBeTruthy()
