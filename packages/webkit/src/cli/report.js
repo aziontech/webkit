@@ -45,21 +45,25 @@ function extensionOf(path) {
   return dot === -1 ? '' : base.slice(dot + 1)
 }
 
-export function resolveEslintBin(cwd) {
+export function resolvePackageBin(cwd, name) {
   const shim = join(
     cwd,
     'node_modules',
     '.bin',
-    process.platform === 'win32' ? 'eslint.cmd' : 'eslint'
+    process.platform === 'win32' ? `${name}.cmd` : name
   )
   if (existsSync(shim)) return { command: shim, prefix: [] }
 
   const require = createRequire(join(cwd, '__webkit_report__.js'))
-  const manifestPath = require.resolve('eslint/package.json')
+  const manifestPath = require.resolve(`${name}/package.json`)
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf-8'))
-  const entry = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.eslint
-  if (!entry) throw new Error('eslint package.json declares no bin')
+  const entry = typeof manifest.bin === 'string' ? manifest.bin : manifest.bin?.[name]
+  if (!entry) throw new Error(`${name} package.json declares no bin`)
   return { command: process.execPath, prefix: [join(dirname(manifestPath), entry)] }
+}
+
+export function resolveEslintBin(cwd) {
+  return resolvePackageBin(cwd, 'eslint')
 }
 
 export function runESLint(cwd, patterns) {

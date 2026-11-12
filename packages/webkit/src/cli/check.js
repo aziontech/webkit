@@ -3,6 +3,7 @@ import { join, relative, sep } from 'node:path'
 
 import { physicalDirectionClasses } from '../eslint-plugin/direction-classes.js'
 import { blockDrift } from './blocks.js'
+import { cssScanFindings, stylelintFindings } from './css-check.js'
 import { planDoctor } from './doctor.js'
 import { loadMigration, migrateSource } from './migrate.js'
 import { ESLINT_CONFIG_CANDIDATES, firstExisting } from './plan.js'
@@ -21,8 +22,6 @@ const SKIP_DIRS = new Set([
 ])
 const SUBPATH = /['"`]@aziontech\/webkit\/([^'"`\s]+)['"`]/g
 const CLASS_ATTR = /\bclass\s*=\s*"([^"]*)"/g
-const STYLE_BLOCK = /<style\b[^>]*>([\s\S]*?)<\/style>/g
-const STYLE_ATTR = /\bstyle\s*=\s*"([^"]*)"/g
 const HEX = /#[0-9a-fA-F]{3,8}\b/
 const PALETTE =
   /\b(?:bg|text|border|ring|outline|fill|stroke|divide|placeholder|caret|accent)-(?:gray|slate|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/
@@ -120,20 +119,6 @@ function styleFindings(rel, source) {
       })
     }
   }
-  for (const re of [STYLE_ATTR, STYLE_BLOCK]) {
-    for (const m of source.matchAll(re)) {
-      const hex = m[1].match(HEX)
-      if (!hex) continue
-      out.push({
-        source: 'style',
-        severity: 'error',
-        file: rel,
-        line: lineOf(source, m.index + m[0].indexOf(hex[0])),
-        rule: 'no-hardcoded-color',
-        message: `hardcoded colour "${hex[0]}": use var(--…) semantic tokens.`
-      })
-    }
-  }
   return out
 }
 
@@ -182,6 +167,9 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
   const renamed = new Set([...Object.keys(migration.components), ...Object.keys(migration.removed)])
   const files = sourceFiles(projectDir)
   const linted = lint ? lintFindings(projectDir) : { ran: false, reason: '--no-lint', findings: [] }
+  const styled = lint
+    ? stylelintFindings(projectDir)
+    : { ran: false, reason: '--no-lint', findings: [] }
 
   for (const file of files) {
     const rel = toPosix(relative(projectDir, file))
@@ -201,6 +189,16 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     })
   }
 
+  findings.push(...styled.findings)
+  if (!styled.ran) {
+    findings.push(...cssScanFindings(projectDir).findings)
+    findings.push({
+      source: 'stylelint',
+      severity: 'warn',
+      message: `Stylelint did not run (${styled.reason}): only the built-in CSS scan (the ${PACKAGE_NAME}/stylelint-config rules) covered the styles. Run \`npx ${PACKAGE_NAME} init\` to wire it; the pre-commit hook runs it.`
+    })
+  }
+
   for (const f of blockDrift(projectDir, webkit)) findings.push({ source: 'blocks', ...f })
 
   const errors = findings.filter((f) => f.severity === 'error').length
@@ -210,6 +208,7 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     version: webkit.version,
     installed: webkit.installed,
     eslint: linted.ran,
+    stylelint: styled.ran,
     scanned: files.length,
     errors,
     warnings,
@@ -225,7 +224,7 @@ export function exitCodeFor(result, maxWarnings) {
 
 export function formatCheck(result, maxWarnings) {
   const out = [`@aziontech/webkit check — ${PACKAGE_NAME}@${result.version}`, '']
-  const order = ['doctor', 'migration', 'imports', 'lint', 'style', 'blocks']
+  const order = ['doctor', 'migration', 'imports', 'lint', 'style', 'stylelint', 'css', 'blocks']
   for (const source of order) {
     const group = result.findings.filter((f) => f.source === source)
     if (!group.length) continue

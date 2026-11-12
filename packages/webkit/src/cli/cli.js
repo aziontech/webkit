@@ -36,7 +36,8 @@ Commands:
   diff            Compare a copied block with the canonical one of the installed version.
   search          Find blocks, components and examples by plain words.
   view            Show a block (guidelines, variants, SFC) or a component (API, examples).
-  check           CI gate: doctor + v5 names + unknown imports + lint + block drift.
+  check           CI gate: doctor + v5 names + unknown imports + ESLint + Stylelint
+                   + block drift.
   doctor          Check the wiring is healthy; report resolved dependency versions.
   report          Measure webkit adoption via this project's own ESLint.
   canary          Prove the design-system lint rules still reach this project.
@@ -68,7 +69,8 @@ Options (diff, search, view, check):
   --json            Machine-readable output.
   --example <name>  view: print this example of a component instead of the first.
   --max-warnings <n> check: also fail when there are more than n warnings.
-  --no-lint         check: skip the project's ESLint run (built-in scan only).
+  --no-lint         check: skip the project's ESLint and Stylelint runs (built-in
+                    scans only).
   diff exits 0 when the copy matches the canonical block, 1 when it differs.
 
 Options (report):
