@@ -1,6 +1,6 @@
 # Website
 
-The marketing shell. A visitor scans to decide whether Azion fits, so the page is one continuous frame: the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView`: the bar is the `SiteNav` data in `navigation`, the footer is the `SiteFooter` data in `footer`, and the ⌘K palette lists every destination of the navigation. Each page is only its sections, in the layout's default slot. The hero, sections and footer all resolve to the site measure, which is what keeps the side rules continuous down the page.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteNav` and `SiteFooter` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 

@@ -1,10 +1,10 @@
 # Documentation
 
-The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the "On this page" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.
+The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close. It is `DocLayout`, composed once in the app around `RouterView`: the layout owns the docs header, the navigation rail, the "On this page" rail, the search palette and the footer, and the document itself scrolls with the header and both rails sticky. Every docs page is only its article.
 
 ## When to use
 
-- Every documentation, guide or reference page.
+- Every documentation, guide or reference page, and the docs home.
 
 ## When not to use
 
@@ -12,113 +12,98 @@ The documentation shell. A reader comes to learn one task and leave, so the shel
 
 ## Building blocks
 
-### A. Header — `GlobalHeader` (required)
+### A. Layout — `DocLayout` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`; the same bar as `headers/docs-header`.
+Composed once around the router view. `navigation` is the docs tree as data (groups of rows with `id`, `label` and `to`; an inline subsection is a row with `children` and `defaultOpen`), `sections` the header's section links, `home` where the Azion Docs mark links, `outline` the article's headings (`{ id, text, depth }`) and `outline-groups` the GitHub and Community links under them. It renders the single main landmark, the rail from `lg` (a drawer below it), the outline from `xl`, and the ⌘K palette of every navigation page. In an app leave `active-id` empty so the current row follows the route; the preview has no router, so it passes the current row's id.
 
-### B. Icon actions — `IconButton` (required)
+### B. Header actions — `IconButton` (required)
 
-The navigation trigger below `lg`, GitHub in the header, and the small `transparent` social links in the footer, each with an `aria-label`.
+In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the footer, the small `transparent` social links.
 
-### C. Brand — `Brand` (required)
+### C. Console — `Button` (required)
 
-In the header with the Docs tag, and in the footer: it leads the social row from `lg` and moves to the signature band below it.
+`secondary`, last in the `actions` slot.
 
-### D. Section links — `NavigationMenu` (required from lg)
+### D. Theme — `ThemeSwitcher` (required)
 
-The top-level documentation sections in the header.
+In the `navigation-footer` slot, labelled `Theme`; the layout shows it at the foot of the rail and of the drawer.
 
-### E. Console — `Button` (required)
+### E. Call to action — `DocCta` (optional)
 
-`secondary`, last in the header.
+In the `aside` slot, under the outline: "Ready to build?" with a primary and a secondary link.
 
-### F. Rail — `Sidebar` (required from lg)
+### F. Masthead — `DocPageHeader` (required)
 
-`aria-label="Docs"`, the width of `--container-2xs`, holding the page menu and the theme switcher in its footer. Below `lg` it leaves and the header trigger opens the navigation.
+The first thing in the article: breadcrumb, title, deck, and on real pages the last-updated date and the meta actions.
 
-### G. Theme — `ThemeSwitcher` (required)
+### G. Running text — `DocProse` (required)
 
-In the rail footer, labelled `Theme`.
+Everything under the masthead; it sets the running text and gives the headings their type scale.
 
-### H. Page menu — `MenuRoot` (required)
+### H. Section headings — `DocHeading` (required)
 
-The rail's page navigation for the current product.
+One per outline entry, with the same `id` the `outline` item carries: the layout tracks which heading is in view and scrolls a chosen entry under the sticky header.
 
-### I. Product group — `MenuGroup` (required)
+### I. Footer — `Footer` (required)
 
-One per product (`Functions`), with the product name as its heading.
+In the `footer` slot, `kind="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
 
-### J. Page link — `MenuItem` (required)
+### J. Brand — `Brand` (required)
 
-One per page, the current page `selected`.
+In the footer only; the header mark belongs to the layout.
 
-### K. Reading column — `ScrollArea` (required)
-
-The article and the footer scroll inside it, so the header, rail and outline stay put.
-
-### L. Footer — `Footer` (required)
-
-`kind="content"`, inside the scroller: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. It stacks below `md`.
-
-### M. System status — `StatusIndicator` (required)
+### K. System status — `StatusIndicator` (required)
 
 In the footer's status slot.
 
-### N. Language — `Select` (required)
+### L. Language — `Select` (required)
 
 In the footer's language slot, trigger labelled `Language`.
 
-### O. Search — `SearchTrigger` (required)
-
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
-
-### P. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
-
 ## Do
 
-- For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
-- Build a docs home from the Landing variant: `DocHero` (display title with `--spacing-xxl` of air, deck, `Get started` then `CopyPromptButton`, a note on what the prompt does), then the first section opening on `DocAgentCard` above the Console / CLI / API `DocCardGroup`. Product cards use the Azion marks (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`) in the muted ink; framework templates use the brand-colour set (`ai-cor ai-react`, `ai-cor ai-vue`…).
-- Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
+- Compose `DocLayout` once in the app's root around `RouterView`; each route renders only its `<article>`.
+- For a real page, start from a variant (Article, Reference, Landing): the variants build the article from the `Doc*` parts only.
+- Give every `DocHeading` an `id` and pass the same ids, in document order, as `outline`.
+- Put everything under `DocPageHeader` in one `DocProse`.
+- Give every navigation row an `id` and a `to` route; keep the rail scoped to the current product; the header section links switch products.
+- Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; pass no `outline`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
-- Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
-- Keep the outline's items equal to the article's `h2` headings.
-- Keep the rail scoped to the current product; the header links switch products.
-- Let the footer run full bleed across the zone between rail and outline.
 
 ## Don't
 
-- Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
-- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
-- Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
-- Don't use the marketing `Banner` on the landing, and don't fake the agent card with a `DocCard` and an eyebrow or an `// AGENT SETUP` overline: the docs home's agent block is `DocAgentCard`.
-- Don't open the docs home with `DocPageHeader` or put the prompt text on it as a `DocPrompt`: the home is `DocHero` + `CopyPromptButton` (the prompt is copied, not shown).
-- Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
+- Don't put a `ScrollArea`, an `h-screen` frame or any inner scroll region around the article: the document scrolls, so find in page, scroll restoration and full-page captures work.
+- Don't render a `<main>` in a page; the layout already renders the only one.
+- Don't repeat the header, the search, the navigation rail, the outline or the footer in a page.
+- Don't hand-write the outline, the pager or the masthead; the layout's outline rail, `DocPagination` and `DocPageHeader` own their markup and labels.
+- Don't give a `DocHeading` an id the `outline` does not list, or list an id no heading carries.
+- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
+- Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
 ## Copy
 
-- **Outline heading:** `On this page`.
 - **Article headings:** verb-led tasks in sentence case: `Create the function`, `Verify the response`.
-- **Menu items:** page titles exactly as the `h1` reads.
+- **Navigation rows:** page titles exactly as the `h1` reads.
 - **Step titles:** imperative, ending with a period when the step is a sentence: `Open Azion Console.`
 - **Landing groups:** `Start by interface`, `Start by objective`, `Ready-made templates`, `Follow along`; card link labels are a verb and the object (`Install the CLI`).
 
 ## Accessibility
 
-- One `h1` per article; outline links target the `h2` ids.
-- `ScrollArea` keeps keyboard scrolling working; the article is reachable without passing through the rail.
-- Each `nav` (header sections, rail, outline) is labelled so screen reader users can tell them apart.
+- One main landmark: the layout's. The article is an `<article>` inside it, never a second `<main>`.
+- One `h1` per article (the masthead or the hero); `DocHeading` levels follow it in order (2, then 3 under a 2), and outline entries target those ids.
+- Landmarks: the header is a banner, the rail and the outline are labelled navigation regions, the footer is contentinfo; `Tab` runs header → rail → article → outline → footer.
+- Choosing an outline entry moves focus to its heading and clears the sticky header.
 
 ## States
 
-- Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
-- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
+- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCta` from `xl`, the full footer under the article.
+- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline with an indented level 3 entry.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
-- Landing: the documentation home; no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
+- Landing: the documentation home; navigation rail, no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
 
 ## Related
 
+- `DocLayout` — the component this block shows.
 - `headers/docs-header` — the header on its own.
-- `shells/website` — the marketing counterpart that shares the footer.
+- `shells/console` (`ConsoleLayout`) and `shells/website` (`SiteLayout`) — the console and marketing counterparts.

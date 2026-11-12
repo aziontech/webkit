@@ -3,7 +3,7 @@
   "name": "Console",
   "title": "Templates/Shells/Console",
   "surface": "product",
-  "summary": "The application shell every signed-in page renders inside: a full-height navigation rail on the left that the user resizes by its edge and collapses from its foot (the product wordmark, the ⌘K palette with its Recents, navigation, Actions and Account groups, the navigation Menu with its grouped sections and drill-in levels, and the account menu with the theme switch, the Upgrade to Pro action and the system status at its foot) and a content zone on the right whose global header carries the breadcrumb on every level (one unlinked crumb on a first-level list, which opens on its controls row with no page heading), the search affordance, the Create button, the Agent button and the account avatar. The search is `SearchTrigger` (`collapsible`): the field with its ⌘K / Ctrl K keycap while the bar’s content box is at least `--container-2xl` wide and the magnifier below it; every state is framed by `AppLayout`, which measures its own width: below 768px it becomes compact, the rail moves into the layout's navigation drawer opened from the hamburger that leads the wordmark, and choosing an item closes it. First-level lists, detail pages with their tabs and Home all render inside it. Built from `AppLayout`, `PageTabs`, `Sidebar`, `Menu`, `Command`, `DropdownMenu`, `ThemeSwitcher`, `StatusIndicator`, `Avatar`, `GlobalHeader`, `Breadcrumb`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `SearchTrigger` and, per page, `Tabs`, `Select`, `Tag`, `Input` and `Card`; the page bodies here are stand-ins, the real ones are the TableView and DetailsPage templates.",
+  "summary": "The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with a router `to`, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`ButtonHighlight`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` with `ThemeSwitcher`, Upgrade to Pro and `StatusIndicator`). The body is a stand-in list page (`PageHeader`, Filter, a search `Input`, the toolbar and a `Card`) for platform/view/table-view; a page opens the same palette with useConsoleLayout().openSearch().",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -34,7 +34,11 @@
     "change organization",
     "trocar conta",
     "trocar organização",
-    "selecionar conta"
+    "selecionar conta",
+    "console layout component",
+    "ConsoleLayout",
+    "app layout with router view",
+    "layout do console com RouterView"
   ],
   "skills": ["webkit-navigation", "webkit-layout"],
   "primary": {
@@ -44,17 +48,17 @@
   "variants": [
     {
       "name": "DetailPage",
-      "summary": "A resource detail page on `AppLayout`: the breadcrumb reads Resources, the resource, then its environment, whose last crumb is a Select that searches the resource’s environments, tags each with its deployment policy and offers Add Environment at its foot; a full-bleed Tabs bar under the header carries the Overview, Deployments and Settings tabs with the outlined Deploy action, and the content scrolls beneath it.",
+      "summary": "A resource detail page rendered through `ConsoleLayout`: its `breadcrumbs` slot composes a `Breadcrumb` that reads Applications, the application, then its environment as a `Select` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
       "file": "variants/detail-page.vue"
     },
     {
       "name": "Notifications",
-      "summary": "The same ListPage frame built on `AppLayout`: the bell in the header carries an unread `Badge` and opens the notifications region on the right (the tools region of the layout, a Drawer on a narrow screen), which lists deploys, invitations and alerts with Mark all as read and Clear all, and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` above the page in the layout's notifications slot, and an empty list reads You are all caught up.",
+      "summary": "The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`.",
       "file": "variants/notifications.vue"
     },
     {
       "name": "AccountSwitch",
-      "summary": "The account switcher in the header (square Avatar, account name, Ctrl+O or ⌘O): a large Dialog with search over the organization, group and workspace tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
+      "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `header-start` slot (square `Avatar`, the account name, a chevron; avatar and chevron only while compact; Ctrl+O or ⌘O): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
       "file": "variants/account-switch.vue"
     }
   ]
