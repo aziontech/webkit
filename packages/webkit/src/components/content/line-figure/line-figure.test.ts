@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
 import Default from '../../../../examples/line-figure/default.vue'
+import InEmptyState from '../../../../examples/line-figure/empty-state.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { lineFigureNames } from './figures/registry'
 import LineFigure from './line-figure.vue'
@@ -22,6 +23,21 @@ describe('LineFigure', () => {
   it('lets aria-label override the description', async () => {
     const { getByRole } = render(LineFigure, { props: { name: 'dns-lookup', ariaLabel: 'DNS' } })
     await waitFor(() => expect(getByRole('img', { name: 'DNS' })).toBeInTheDocument())
+  })
+
+  it('gives the drawing a natural 400 by 320 size, so a content-sized parent cannot collapse it', () => {
+    const { getByTestId } = render(LineFigure, { props: { name: 'azion-404' } })
+    const svg = getByTestId('content-line-figure').querySelector('svg')!
+    expect(svg).toHaveAttribute('width', '400')
+    expect(svg).toHaveAttribute('height', '320')
+    expect(svg).toHaveAttribute('viewBox', '0 0 400 320')
+  })
+
+  it('renders the empty-state example with the figure in the icon slot', async () => {
+    const { getByTestId } = render(InEmptyState)
+    const root = getByTestId('content-line-figure')
+    expect(getByTestId('feedback-empty-state__icon').contains(root)).toBe(true)
+    await waitFor(() => expect(drawn(root)).toBeGreaterThan(0))
   })
 
   it('draws nothing and has no role for an unknown or empty name', async () => {
