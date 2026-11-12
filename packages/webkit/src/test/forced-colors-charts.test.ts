@@ -2,7 +2,7 @@ import './reflow.css'
 
 import { cleanup, render } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { commands, page } from 'vitest/browser'
+import { commands, page, server } from 'vitest/browser'
 import type { Component } from 'vue'
 import { nextTick } from 'vue'
 
@@ -16,6 +16,7 @@ const modules = import.meta.glob<{ default: Component }>(
 // legend keys) are forced to Canvas and vanish unless they opt out with `forced-color-adjust:
 // none`. A surface that only loses its tinted fill (an Alert) keeps its border and stays above the
 // threshold; a vanished mark drops the ink to a tenth. The PNGs land in __screenshots__ for review.
+// The ratio is calibrated on Chromium and asserted there only; other engines take the shots.
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
 
 const settle = async () => {
@@ -87,7 +88,7 @@ describe('forced colors · chart marks (screenshots)', () => {
     await settle()
     const forced = await ink(host, `${name}-forced`)
     host.remove()
-    if (normal < 100) return
+    if (normal < 100 || server.browser !== 'chromium') return
     expect(forced / normal, 'marks drawn with a background vanished').toBeGreaterThan(0.25)
   })
 })

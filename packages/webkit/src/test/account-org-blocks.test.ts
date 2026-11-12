@@ -163,7 +163,7 @@ describe('shells/console#AccountSwitch', () => {
     expect(panel.textContent).toContain('Northwind Group')
     expect(buttonByText('Storefront EU', panel)).toHaveAttribute('aria-current', 'true')
     await expectNoA11yViolations(panel)
-    await userEvent.type(view.getByLabelText('Search accounts'), 'research')
+    await fireEvent.update(view.getByLabelText('Search accounts'), 'research')
     await waitFor(() => expect(panel.textContent).not.toContain('Storefront US'))
     expect(panel.textContent).toContain('Contoso Labs')
     await fireEvent.click(buttonByText('Research', panel))

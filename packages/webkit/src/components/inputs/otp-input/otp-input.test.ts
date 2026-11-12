@@ -37,9 +37,9 @@ const mountBound = (props: Record<string, unknown> = {}) => {
 const paste = async (text: string) => {
   const data = new DataTransfer()
   data.setData('text', text)
-  field().dispatchEvent(
-    new ClipboardEvent('paste', { clipboardData: data, bubbles: true, cancelable: true })
-  )
+  const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true })
+  Object.defineProperty(event, 'clipboardData', { value: data })
+  field().dispatchEvent(event)
   await nextTick()
 }
 
