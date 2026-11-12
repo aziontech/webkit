@@ -121,7 +121,7 @@
 
 ## Responsive
 
-- Container queries: `@container/attribute-editor` on the root; at `@md` (448 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
+- Container queries: `@container/attribute-editor` on the root; at `@md` (472 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
 - Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
 - Touch: buttons follow `size`; nothing depends on hover (the Remove tooltip repeats its accessible name).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

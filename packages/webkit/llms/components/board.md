@@ -146,7 +146,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ## Responsive
 
-- Container queries: `@container/board`; one column below `@3xl` (48rem), `columns` from `@3xl`. An item spans `min(span, current columns)`.
+- Container queries: `@container/board`; one column below `@3xl` (876 px), `columns` from `@3xl`. An item spans `min(span, current columns)`.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width; reordering still works, span changes take effect once the board is wide again.
 - Touch: dragging needs a pointer; the keyboard map is the alternative.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

@@ -73,7 +73,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 
 ## Responsive
 
-- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (448 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
+- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (472 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
 - Narrow (≤ 640 px or a narrow container): one column; labels and descriptions wrap, never truncate.
 - Touch: nothing is interactive.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; long unbroken words break.

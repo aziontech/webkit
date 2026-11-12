@@ -88,7 +88,7 @@
 
 ## Responsive
 
-- Container queries: `@container/cards`; one column below `@xl` (36rem), two from `@xl`, three from `@4xl` (56rem), four from `@7xl` (80rem).
+- Container queries: `@container/cards`; one column below `@xl` (644 px), two from `@xl`, three from `@4xl` (1024 px), four from `@6xl` (1388 px), so a card is never narrower than about 310 px.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width.
 - Touch: the checkbox and radio grow their hit area on `pointer: coarse` (from the inputs); nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.

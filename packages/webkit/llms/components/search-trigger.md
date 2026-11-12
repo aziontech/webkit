@@ -85,7 +85,7 @@
 
 ## Responsive
 
-- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@min-[47rem]`, 752 px, equal to the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
+- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@2xl`, 752 px, the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
 - Narrow: without `collapsible` the label truncates with an ellipsis and the keycap stays.
 - Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the field shrinks to its content.

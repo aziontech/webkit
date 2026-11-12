@@ -91,7 +91,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `hero-title/hero-title.vue` — the page's leading statement: overline, `h1` with an optionally accented opening phrase, supporting paragraph and the actions row. Renders a `header`, so it carries the band's document outline.
   - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor, wrapping to the block's width instead of overflowing it; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start. `mobileCentered` (`boolean`, `false`) — centre the whole block below `md` only, where a band with `media` stacks the copy above it; from `md` up the block keeps its start alignment. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'large'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
   - Events: _none_.
-  - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width below `20rem` and laid out in a row above it.
+  - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width while the title's container is narrower than `@2xs` (300 px, so a 390 px phone keeps the row and a 320 px one stacks) and laid out in a row from it.
 
 ## States
 
@@ -120,7 +120,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - ARIA: the root renders a `section` and adds no role; the backdrop and the top asset window are wrapped `aria-hidden="true"` so decoration never reaches the accessibility tree. `Hero.Title` renders a `header` holding the page's single `h1`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the backdrop is decoration and the slotted copy owns its own contrast against the canvas.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
-- Touch target ≥40×40 px — not applicable to the band; the actions row in `Hero.Title` stacks full-width below `20rem` so each control clears the target.
+- Touch target ≥40×40 px — not applicable to the band; the actions row in `Hero.Title` stacks full-width below `@2xs` (300 px) so each control clears the target.
 
 ## Examples
 

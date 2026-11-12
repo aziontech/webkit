@@ -10587,7 +10587,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Responsive
 
-- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@min-[47rem]`, 752 px, equal to the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
+- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@2xl`, 752 px, the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
 - Narrow: without `collapsible` the label truncates with an ellipsis and the keycap stays.
 - Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the field shrinks to its content.
@@ -16366,7 +16366,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 
 ## Responsive
 
-- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (448 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
+- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (472 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
 - Narrow (≤ 640 px or a narrow container): one column; labels and descriptions wrap, never truncate.
 - Touch: nothing is interactive.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; long unbroken words break.
@@ -18744,7 +18744,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 ## Responsive
 
-- Container queries: `@container/cards`; one column below `@xl` (36rem), two from `@xl`, three from `@4xl` (56rem), four from `@7xl` (80rem).
+- Container queries: `@container/cards`; one column below `@xl` (644 px), two from `@xl`, three from `@4xl` (1024 px), four from `@6xl` (1388 px), so a card is never narrower than about 310 px.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width.
 - Touch: the checkbox and radio grow their hit area on `pointer: coarse` (from the inputs); nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
@@ -24119,7 +24119,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## Responsive
 
-- Container queries: `@container/attribute-editor` on the root; at `@md` (448 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
+- Container queries: `@container/attribute-editor` on the root; at `@md` (472 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
 - Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
 - Touch: buttons follow `size`; nothing depends on hover (the Remove tooltip repeats its accessible name).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
@@ -28069,7 +28069,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ## Responsive
 
-- Container queries: `@container/board`; one column below `@3xl` (48rem), `columns` from `@3xl`. An item spans `min(span, current columns)`.
+- Container queries: `@container/board`; one column below `@3xl` (876 px), `columns` from `@3xl`. An item spans `min(span, current columns)`.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width; reordering still works, span changes take effect once the board is wide again.
 - Touch: dragging needs a pointer; the keyboard map is the alternative.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
@@ -31677,7 +31677,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## States
 
-- **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches`, and any row nested inside a tree (a branch that is itself a row), stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
+- **Layout.** The root is an inline-size container. At the `5xl` container width (1192 px) and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches`, and any row nested inside a tree (a branch that is itself a row), stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
 - **Connectors.** After layout, the component measures every node and group (each carries `data-diagram-node` with its key) and draws each edge whose two ends exist: a curve from the source's right edge into the target's left edge, centre to centre on the vertical axis, when the target sits to the right of the source; when the target sits below, a connector from the **bottom centre** of the source to the **top centre** of the target — a straight line when the two centres align, otherwise an orthogonal path that turns at the gap's midline with rounded corners — with its label chip centred on the line (at the midpoint of the gap). Inside an indented tree (both ends in a `tree` stack) the tree rail is kept instead: an elbow from the source's bottom edge, one inset in from its start, into the target's start edge when the target is indented to the right, and a straight drop along that inset otherwise. Each end gets a port; ports at the same point merge. Edges whose ends are missing are skipped. The drawing is re-measured on every resize of the canvas or of any node, when the web fonts settle, and when the edges change.
 - **Named.** A `name` loads its spec on demand from the library; the root keeps its width and draws nothing until the spec arrives, and a `name` change clears the current drawing at once. A `name` outside the library (from untyped code), or a spec that fails to load, warns in development only and leaves the root empty; it never throws. With neither `name` nor `spec` the root is empty.
 - **Label.** The root is announced as one image named by `ariaLabel`, or, when that is empty, by the description the spec carries; with neither it is a plain figure.
@@ -32003,7 +32003,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `hero-title/hero-title.vue` — the page's leading statement: overline, `h1` with an optionally accented opening phrase, supporting paragraph and the actions row.
   - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor, wrapping to the block's width instead of overflowing it; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start. `mobileCentered` (`boolean`, `false`) — centre the whole block below `md` only, where a band with `media` stacks the copy above it; from `md` up the block keeps its start alignment. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'large'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
   - Events: _none_.
-  - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width below `20rem` and laid out in a row above it.
+  - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width while the title's container is narrower than `@2xs` (300 px, so a 390 px phone keeps the row and a 320 px one stacks) and laid out in a row from it.
 
 ## States
 
@@ -32032,7 +32032,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - ARIA: the root renders a `section` and adds no role; the backdrop and the top asset window are wrapped `aria-hidden="true"` so decoration never reaches the accessibility tree. `Hero.Title` renders a `header` holding the page's single `h1`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the backdrop is decoration and the slotted copy owns its own contrast against the canvas.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
-- Touch target ≥40×40 px — not applicable to the band; the actions row in `Hero.Title` stacks full-width below `20rem` so each control clears the target.
+- Touch target ≥40×40 px — not applicable to the band; the actions row in `Hero.Title` stacks full-width below `@2xs` (300 px) so each control clears the target.
 
 ## Examples
 
