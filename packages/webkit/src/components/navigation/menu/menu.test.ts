@@ -662,3 +662,38 @@ describe('Menu (composition, drill stack + data mode)', () => {
     await expectNoA11yViolations(view.container)
   })
 })
+
+describe('MenuGroup slot presence', () => {
+  it('follows a v-if label slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { getByTestId, queryByTestId } = render({
+      components: COMPONENTS,
+      setup: () => ({ shown }),
+      template: `
+        <Menu aria-label="Console navigation">
+          <MenuGroup aria-label="Fallback name">
+            <template v-if="shown" #label><span data-testid="probe">User agents</span></template>
+            <MenuItem label="End User" href="/end-user" />
+          </MenuGroup>
+        </Menu>
+      `
+    })
+    const group = getByTestId('navigation-menu-group')
+    expect(queryByTestId('navigation-menu-group__label')).toBeNull()
+    expect(group.getAttribute('aria-label')).toBe('Fallback name')
+
+    shown.value = true
+    await nextTick()
+    const label = getByTestId('navigation-menu-group__label')
+    expect(queryByTestId('probe')).not.toBeNull()
+    expect(group.getAttribute('aria-labelledby')).toBe(label.id)
+    expect(group.hasAttribute('aria-label')).toBe(false)
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('navigation-menu-group__label')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
+    expect(group.hasAttribute('aria-labelledby')).toBe(false)
+    expect(group.getAttribute('aria-label')).toBe('Fallback name')
+  })
+})

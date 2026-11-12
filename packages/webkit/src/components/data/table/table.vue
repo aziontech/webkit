@@ -286,14 +286,15 @@
     const frame: Record<string, unknown> = {}
     const own: Record<string, unknown> = {}
     for (const name in attrs) (name.startsWith('aria-') ? own : frame)[name] = attrs[name]
-    if (
-      (captions.value || (dataDriven.value && slots['caption'])) &&
-      !own['aria-label'] &&
-      !own['aria-labelledby']
-    )
-      own['aria-labelledby'] = captionId
     return [frame, own]
   })
+  const tableAttrs = (): Record<string, unknown> => {
+    const own = splitAttrs.value[1]
+    const captioned = captions.value || (dataDriven.value && Boolean(slots['caption']))
+    return captioned && !own['aria-label'] && !own['aria-labelledby']
+      ? { ...own, 'aria-labelledby': captionId }
+      : own
+  }
 
   const viewportHeight = computed<string>(() => props.maxHeight || (props.virtual ? '40rem' : ''))
   const viewportHeightVar = computed<Record<string, string> | undefined>(() =>
@@ -1619,7 +1620,7 @@
           >
         </div>
         <div
-          v-bind="splitAttrs[1]"
+          v-bind="tableAttrs()"
           :role="treeActive ? 'treegrid' : 'table'"
           :data-tree="treeActive || undefined"
           :data-testid="`${testId}__table`"
