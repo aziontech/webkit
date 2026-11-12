@@ -1081,6 +1081,18 @@
    ]
   },
   {
+   "name": "ai-nitro",
+   "class": "ai ai-nitro",
+   "set": "azionicons",
+   "keywords": [
+    "server",
+    "framework",
+    "unjs",
+    "brand",
+    "logo"
+   ]
+  },
+  {
    "name": "ai-nuxt",
    "class": "ai ai-nuxt",
    "set": "azionicons",
@@ -1338,6 +1350,18 @@
    "keywords": [
     "database",
     "query"
+   ]
+  },
+  {
+   "name": "ai-stencil",
+   "class": "ai ai-stencil",
+   "set": "azionicons",
+   "keywords": [
+    "web components",
+    "compiler",
+    "framework",
+    "brand",
+    "logo"
    ]
   },
   {
