@@ -119,7 +119,10 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     await mounted()
     const functionEditor = editors()[2]!
     await waitFor(
-      () => expect(functionEditor.host.querySelector('.line-numbers')?.textContent).toBe('01'),
+      () =>
+        expect(
+          functionEditor.host.querySelector('.margin-view-overlays .line-numbers')?.textContent
+        ).toBe('01'),
       { timeout: 10_000 }
     )
     const span = (text: string) =>

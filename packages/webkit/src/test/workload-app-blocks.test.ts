@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { type Component, defineComponent, h } from 'vue'
 
 import Review from '../../blocks/platform/create/multipage-create/variants/review.vue'
 import Application from '../../blocks/platform/detail/details-page/variants/application.vue'
@@ -7,9 +8,20 @@ import ImportZoneFile from '../../blocks/platform/detail/record-table/variants/i
 import EnvironmentCrumb from '../../blocks/platform/detail/version-detail/variants/environment-crumb.vue'
 import CacheSettings from '../../blocks/platform/edit/edit-resource/variants/cache-settings.vue'
 import Protocols from '../../blocks/platform/edit/edit-resource/variants/protocols.vue'
+import ConsoleLayout from '../components/layout/console-layout/console-layout.vue'
 import { expectNoA11yViolations } from './axe'
 
 const wait = { timeout: 4000 }
+
+const inConsoleLayout = (page: Component) =>
+  defineComponent({
+    render: () =>
+      h(
+        ConsoleLayout,
+        { breadcrumbs: [{ label: 'Resources', href: '/resources' }] },
+        { default: () => h(page) }
+      )
+  })
 
 afterEach(() => {
   document.documentElement.style.overflow = ''
@@ -18,7 +30,7 @@ afterEach(() => {
 
 describe('details-page#Application', () => {
   it('switches to the Topology tab and draws the diagram without axe findings', async () => {
-    render(Application)
+    render(inConsoleLayout(Application))
     await fireEvent.click(screen.getByRole('tab', { name: 'Topology' }))
     expect(await screen.findByRole('heading', { name: 'Deployment topology' })).toBeTruthy()
     expect(screen.getByText('shop.example.com')).toBeTruthy()
@@ -89,8 +101,13 @@ describe('edit-resource#Protocols', () => {
 })
 
 describe('version-detail#EnvironmentCrumb', () => {
-  it('names the environment and the version crumbs', () => {
-    render(EnvironmentCrumb)
+  it('names the environment and the version crumbs', async () => {
+    render(inConsoleLayout(EnvironmentCrumb))
+    const header = within(screen.getByTestId('layout-console-layout__header'))
+    await waitFor(() =>
+      expect(header.getByRole('combobox', { name: 'Switch environment' })).toBeTruthy()
+    )
+    expect(header.getByRole('combobox', { name: 'Switch version' })).toBeTruthy()
     const environments = screen.getAllByRole('combobox', { name: 'Switch environment' })
     expect(environments).toHaveLength(2)
     for (const trigger of environments) expect(trigger.textContent).toContain('Production')
