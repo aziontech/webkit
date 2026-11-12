@@ -7,7 +7,7 @@
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
-  import Tabs from '../../../navigation/tabs/index.js'
+  import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'

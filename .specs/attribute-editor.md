@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 8b2447bc7f7045eab3cdd272f5f63a626297e0aa72afa7a0b11337bcb4b82095
+checksum: e89e2eef5d76793f9538cbb8ddcf6e629c7b47ac0b94161530f9966b713bb246
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -45,6 +45,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
 - Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
+- Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.
 - Name the editor (`ariaLabel`) after what the rows are: "Environment variables", "Request headers".
 
 ## Usage
@@ -80,8 +81,8 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 | Prop                | Type                                     | Default     | Required | JSDoc                                                                                                        |
 | ------------------- | ---------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| `items`             | `AttributeEditorItem[]`                  | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                   |
-| `groups`            | `AttributeEditorItem[][]`                | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.   |
+| `items`             | `TItem[]`                                | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                   |
+| `groups`            | `TItem[][]`                              | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.   |
 | `definition`        | `AttributeEditorColumn[]`                | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                                   |
 | `errors`            | `AttributeEditorErrors`                  | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.                  |
 | `addButtonLabel`    | `string`                                 | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                      |
@@ -91,23 +92,25 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 | `limit`             | `number`                                 | `undefined` | false    | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
 | `groupLimit`        | `number`                                 | `undefined` | false    | Most groups allowed in grouped mode.                                                                         |
 | `minItems`          | `number`                                 | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                              |
-| `newItem`           | `() => AttributeEditorItem`              | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                 |
-| `itemRemovable`   | `(item: AttributeEditorItem) => boolean` | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
+| `newItem`           | `() => TItem`                            | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                 |
+| `itemRemovable`     | `(item: TItem) => boolean`               | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
 | `size`              | `'small' \| 'medium' \| 'large'`         | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                              |
 | `disabled`          | `boolean`                                | `false`     | false    | Disables every control, Add and Remove.                                                                      |
 | `addDisabled`       | `boolean`                                | `false`     | false    | Disables Add only, for example until the last row is filled in.                                              |
 | `ariaLabel`         | `string`                                 | `''`        | false    | Accessible name of the list of rows.                                                                         |
 
-Types: `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`.
+The component is generic over the row: `TItem extends object`, inferred from `items`, `groups`, `newItem` or `itemRemovable` (default `AttributeEditorItem`), so every slot receives `item` typed as the consumer's own interface and a `cell-<key>` slot whose key is a field of the row receives `value` typed as that field; `update` accepts whatever the slotted control emits (`unknown`), so `@update:model-value="update"` works with any WebKit control. `definition` keys stay `string`, so a column list written as a plain array type-checks.
+
+Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`); `AttributeEditorRowActionsScope<TItem>`.
 
 ## Events
 
 | Event           | Payload                                                             | Notes                                                        |
 | --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `update:items`  | `AttributeEditorItem[]`                                             | A row was added, removed or edited in list mode.             |
-| `update:groups` | `AttributeEditorItem[][]`                                           | A row or group was added, removed or edited in grouped mode. |
+| `update:items`  | `TItem[]`                                                           | A row was added, removed or edited in list mode.             |
+| `update:groups` | `TItem[][]`                                                         | A row or group was added, removed or edited in grouped mode. |
 | `add`           | `{ index: number; groupIndex?: number }`                            | After a row is added; `groupIndex` only in grouped mode.     |
-| `remove`        | `{ index: number; item: AttributeEditorItem; groupIndex?: number }` | After a row is removed.                                      |
+| `remove`        | `{ index: number; item: TItem; groupIndex?: number }`               | After a row is removed.                                      |
 
 ## Slots
 
@@ -120,7 +123,7 @@ Types: `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn =
 | `info`        | —                                                                             | Extra help text under the buttons, after the limit text.                                                                    |
 | `limit`       | `{ count, limit, left }`                                                      | Replaces the limit text in list mode (for example "You can add 3 more tags.").                                              |
 
-Dynamic slot `cell-<key>` (scope `{ item, index, groupIndex, value, update, invalid }`): replaces the default `Input` of one column; the control sits inside the cell's `Field`.
+Dynamic slot `cell-<key>` (scope `AttributeEditorCellScope<TItem, TItem[key]>`: `{ item, index, groupIndex, value, update, invalid }`, `value` typed from the row field): replaces the default `Input` of one column; the control sits inside the cell's `Field`.
 
 ## States
 

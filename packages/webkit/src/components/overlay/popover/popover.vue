@@ -20,9 +20,7 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Controlled open state. Use with v-model:open or update:open. When omitted, the component is uncontrolled. */
-      open?: boolean
-      /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
+      /** Where the panel opens relative to the trigger: a side, optionally aligned to its start or end, or `'auto'` for the best-fitting vertical corner at open time. */
       placement?: PopoverPlacementInput
       /** Pixel gap between the trigger and the panel. */
       offset?: number
@@ -34,7 +32,6 @@
       dismissible?: boolean
     }>(),
     {
-      open: undefined,
       placement: 'bottom-start',
       offset: 4,
       disabled: false,
@@ -43,11 +40,8 @@
     }
   )
 
-  defineEmits<{
-    'update:open': [value: boolean]
-  }>()
-
-  const openModel = defineModel<boolean | undefined>('open', { default: undefined })
+  /** Controlled open state. Use with v-model:open; while unbound the popover is uncontrolled and starts closed. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const uid = useId()
@@ -62,7 +56,7 @@
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed<boolean | undefined>(() => openModel.value)
 
   const isOpenState = useControllable<boolean>({
     prop: openProp,

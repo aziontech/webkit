@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 67abdfa610263eff6d7e62a1a41e59a18c5d9c2b35a3c8f683b1e07b192f30f3
+checksum: 30490bd131d55f95f355d09d2ae575c5468ec6492fe71ee9e5db8a7ece839a8b
 created: 2026-05-22
 last_updated: 2026-11-12
 ---
@@ -40,6 +40,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 ## Best practices
 
 - Give each `Tabs.Item` and its `Tabs.Panel` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility.
+- Type a variable that holds the active tab or a list of tab definitions with the exported `TabsValue` (`ref<TabsValue>('overview')`), never `string | number` spelled out or a cast.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
@@ -94,6 +95,8 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 | Prop           | Type                | Default | Required | JSDoc                                 |
 | -------------- | ------------------- | ------- | -------- | ------------------------------------- |
 | `defaultValue` | `TabsValue \| null` | `null`  | false    | Initial active tab when uncontrolled. |
+
+Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Content`, `Tabs.Panel`), so a wrong prop on a part is a type error.
 
 ## v-model
 

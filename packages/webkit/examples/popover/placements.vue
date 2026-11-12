@@ -75,5 +75,37 @@
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
     </PopoverRoot>
+
+    <PopoverRoot placement="right-start">
+      <PopoverTrigger>
+        <Button
+          kind="secondary"
+          label="right-start"
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>right-start</PopoverTitle>
+          <PopoverClose />
+        </PopoverHeader>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+      </PopoverContent>
+    </PopoverRoot>
+
+    <PopoverRoot placement="left-start">
+      <PopoverTrigger>
+        <Button
+          kind="secondary"
+          label="left-start"
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>left-start</PopoverTitle>
+          <PopoverClose />
+        </PopoverHeader>
+        <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
+      </PopoverContent>
+    </PopoverRoot>
   </div>
 </template>

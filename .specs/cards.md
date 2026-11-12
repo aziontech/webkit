@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 07555d6d1ecaba1a0f894cc594002a08e9f328fd1bcaea5f3c2c6d0d24bff9c0
+checksum: 71a163dced16f9b67db3c4450a793bc9fac237696f0ad3b5d16ad6b04d6e991d
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -39,6 +39,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 - Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.
 - Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.
 - Use `selectionMode="multi"` only when a bulk action exists next to the list.
+- Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`.
 
 ## Usage
 
@@ -64,11 +65,13 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 | Prop            | Type                            | Default  | Required | JSDoc                                                                  |
 | --------------- | ------------------------------- | -------- | -------- | ---------------------------------------------------------------------- |
-| `items`         | `Record<string, unknown>[]`     | `[]`     | false    | The items, one card each.                                              |
+| `items`         | `TItem[]`                       | `[]`     | false    | The items, one card each.                                              |
 | `trackBy`       | `string`                        | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
 | `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false    | No selection, one card, or several cards with a select-all above them. |
 | `loading`       | `boolean`                       | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
 | `ariaLabel`     | `string`                        | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
+
+The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/cards`): `CardsSelectionMode = 'none' | 'single' | 'multi'`; `CardsItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
 
 ## v-model
 
@@ -82,8 +85,8 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 | Slot      | Scope                                                                 | Notes                                                 |
 | --------- | --------------------------------------------------------------------- | ----------------------------------------------------- |
-| `header`  | `{ item: Record<string, unknown>; index: number; selected: boolean }` | Card title; names the card and its selection control. |
-| `default` | `{ item: Record<string, unknown>; index: number; selected: boolean }` | Card body: the item's fields.                         |
+| `header`  | `CardsItemSlotProps<TItem>` | Card title; names the card and its selection control. |
+| `default` | `CardsItemSlotProps<TItem>` | Card body: the item's fields.                         |
 | `empty`   | —                                                                     | Shown when there are no items.                        |
 
 ## States

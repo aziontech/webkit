@@ -5,8 +5,9 @@ export interface CsvColumn {
 }
 
 export interface CsvSerializeOptions {
-  columns: CsvColumn[]
-  rows: Record<string, unknown>[]
+  columns: readonly CsvColumn[]
+  /** Rows to write; any object type, each column reads the field named by its id. */
+  rows: readonly object[]
   /** Field separator. Defaults to a comma. */
   delimiter?: string
 }
@@ -22,7 +23,9 @@ export function toCsv(options: CsvSerializeOptions): string {
   const { columns, rows, delimiter = ',' } = options
   const header = columns.map((column) => escapeField(column.header, delimiter)).join(delimiter)
   const body = rows.map((row) =>
-    columns.map((column) => escapeField(row[column.id], delimiter)).join(delimiter)
+    columns
+      .map((column) => escapeField((row as Record<string, unknown>)[column.id], delimiter))
+      .join(delimiter)
   )
   return [header, ...body].join('\r\n')
 }

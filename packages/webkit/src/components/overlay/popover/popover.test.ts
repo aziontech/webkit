@@ -474,6 +474,22 @@ describe('Popover (compound / overlay)', () => {
     }
   )
 
+  it.each([
+    ['right-start', ''],
+    ['right', 'padding-top: 200px'],
+    ['left-start', 'padding-inline-start: 320px'],
+    ['left-end', 'padding-inline-start: 320px; padding-top: 200px']
+  ] as const)(
+    'honors the side placement=%s verbatim when the panel fits beside the trigger',
+    async (placement, wrapperStyle) => {
+      render(placedHost(placement, 0, 1, wrapperStyle))
+
+      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await waitFor(() => expect(panel()).not.toBeNull())
+      expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
+    }
+  )
+
   it('flips a top placement to bottom (alignment preserved) when no room exists above', async () => {
     // Trigger at the very top of the viewport: top-start cannot fit.
     render(placedHost('top-start', 0))
