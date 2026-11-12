@@ -27,7 +27,7 @@ A design system is imported into every consumer, so its size is the consumer's s
 
 ## Enforcement
 
-- **`check-size.mjs`** ([`packages/webkit/scripts/check-size.mjs`](../../packages/webkit/scripts/check-size.mjs)) is the size gate, active as the **Bundle budget** step of the `build` job in [`governance.yml`](../../.github/workflows/governance.yml). The stock `size-limit` presets cannot compile `.vue` source, so the gate builds each budgeted entry itself with Vite + `@vitejs/plugin-vue` (vue externalized, minified) and fails on any entry whose gzipped output exceeds its budget. Entries not yet in `.size-limit.json` remain gated by review.
+- **`check-size.mjs`** ([`packages/webkit/scripts/check-size.mjs`](../../packages/webkit/scripts/check-size.mjs)) is the size gate, active as the **Bundle budget** step of the `build` job in [`governance.yml`](../../.github/workflows/governance.yml) and as the `size` gate of `node scripts/gates.mjs`, so a local run catches an overage before CI does. The stock `size-limit` presets cannot compile `.vue` source, so the gate builds each budgeted entry itself with Vite + `@vitejs/plugin-vue` (vue externalized, minified) and fails on any entry whose gzipped output exceeds its budget. Entries not yet in `.size-limit.json` remain gated by review.
 - **`sideEffects`** is declared once at the package root (`["**/*.vue", "**/*.css"]`) so bundlers can tree-shake (see [`compound-api.md`](./compound-api.md)).
 - **[`validate-references.mjs`](../hooks/validate-references.mjs)** blocks any forbidden positioning/animation dependency at write time.
 
