@@ -1,10 +1,9 @@
 <script setup>
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
   import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 </script>
 
 <template>
@@ -17,7 +16,7 @@
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <DropdownMenu placement="auto">
+      <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
             kind="outlined"
@@ -34,11 +33,11 @@
             label="Option B"
           />
         </DropdownMenuGroup>
-      </DropdownMenu>
+      </DropdownMenuRoot>
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <DropdownMenu placement="auto">
+      <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
             kind="outlined"
@@ -55,11 +54,11 @@
             label="Option B"
           />
         </DropdownMenuGroup>
-      </DropdownMenu>
+      </DropdownMenuRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <DropdownMenu placement="auto">
+      <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
             kind="outlined"
@@ -76,11 +75,11 @@
             label="Option B"
           />
         </DropdownMenuGroup>
-      </DropdownMenu>
+      </DropdownMenuRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <DropdownMenu placement="auto">
+      <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
             kind="outlined"
@@ -97,7 +96,7 @@
             label="Option B"
           />
         </DropdownMenuGroup>
-      </DropdownMenu>
+      </DropdownMenuRoot>
     </div>
   </div>
 </template>

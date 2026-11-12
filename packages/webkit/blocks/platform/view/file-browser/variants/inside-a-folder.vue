@@ -7,6 +7,7 @@
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PopoverContent from '@aziontech/webkit/popover-content'
@@ -323,28 +324,34 @@
                           <div
                             class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
                           >
-                            <label
+                            <div
                               v-for="column in listedColumns"
                               :key="column.id"
-                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                              class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
                               :class="
                                 column.locked
-                                  ? 'cursor-default text-(--text-muted)'
-                                  : 'cursor-pointer text-(--text-default) hover:bg-(--bg-hover)'
+                                  ? 'cursor-default'
+                                  : 'cursor-pointer hover:bg-(--bg-hover)'
                               "
                             >
-                              <Switch
-                                :model-value="isVisible(column.id)"
+                              <Field
+                                orientation="horizontal"
                                 :disabled="column.locked"
-                                @update:model-value="(value) => setVisible(column.id, !!value)"
-                              />
-                              <span class="min-w-0 truncate">{{ column.label }}</span>
-                              <span
-                                v-if="column.locked"
-                                class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
-                                >Always shown</span
                               >
-                            </label>
+                                <Switch
+                                  :model-value="isVisible(column.id)"
+                                  @update:model-value="(value) => setVisible(column.id, !!value)"
+                                />
+                                <Field.Label>
+                                  <span class="min-w-0 truncate">{{ column.label }}</span>
+                                </Field.Label>
+                                <span
+                                  v-if="column.locked"
+                                  class="shrink-0 text-label-xs text-(--text-muted)"
+                                  >Always shown</span
+                                >
+                              </Field>
+                            </div>
                           </div>
                           <div
                             v-if="hiddenCount"

@@ -1,15 +1,14 @@
 <script setup>
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
   import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
-  <DropdownMenu :open="true">
+  <DropdownMenuRoot :open="true">
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
@@ -68,5 +67,5 @@
         />
       </template>
     </DropdownMenuGroup>
-  </DropdownMenu>
+  </DropdownMenuRoot>
 </template>

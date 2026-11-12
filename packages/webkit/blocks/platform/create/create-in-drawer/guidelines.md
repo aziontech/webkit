@@ -36,19 +36,19 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 `PanelContent` holds one `fieldset` disabled while saving, and inside it one `SettingsSection` per topic, each a title with a `hint` glyph rather than a paragraph. Order them by what the user decides first: here Environment, then Domain.
 
-### E. Environment select — `Label`, `Select`, `HelperText` (required)
+### E. Environment select — `Field`, `Select`, `HelperText` (required)
 
-A large `Select` with a `Label` and a `HelperText` tied to the trigger by `aria-describedby`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
+A large `Select` in a `Field` with its `Field.Label` and a `HelperText` tied to the trigger by `aria-describedby`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
 
 ### F. Domain source — `Field`, `RadioButton` (required)
 
-Choice cards: one horizontal `Field` per option with a `RadioButton`, a title and a description, grouped under a `Label` by `aria-labelledby`. Use cards when each option needs a sentence; a plain radio list when it does not.
+Choice cards: one horizontal `Field` per option with a `RadioButton`, a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 
 A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The required message appears in the field description only after submit.
 
-### H. Certificate — `Label`, `Select`, `HelperText` (optional)
+### H. Certificate — `Field`, `Select`, `HelperText` (optional)
 
 Shown only for Bring my own domain. The `Select` preselects a certificate that already covers the address and the `HelperText` says so; once the user picks one, it stops following the address.
 

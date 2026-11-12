@@ -1,13 +1,13 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 
   const counts = [2, 4, 5]
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <CardGrid
+    <CardGridRoot
       v-for="count in counts"
       :key="count"
       kind="frame"
@@ -20,6 +20,6 @@
       >
         <span class="text-body-md text-(--text-muted)">{{ index }} of {{ count }}</span>
       </CardGridCell>
-    </CardGrid>
+    </CardGridRoot>
   </div>
 </template>

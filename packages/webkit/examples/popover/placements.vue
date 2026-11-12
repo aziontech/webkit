@@ -1,21 +1,18 @@
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
   import Button from '@aziontech/webkit/button'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
 </script>
 
 <template>
   <div
     class="grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)"
   >
-    <Popover placement="bottom-start">
+    <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -29,9 +26,9 @@
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="bottom-end">
+    <PopoverRoot placement="bottom-end">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -45,9 +42,9 @@
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="top-start">
+    <PopoverRoot placement="top-start">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -61,9 +58,9 @@
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="top-end">
+    <PopoverRoot placement="top-end">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -77,6 +74,6 @@
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   </div>
 </template>

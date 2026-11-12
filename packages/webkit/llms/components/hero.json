@@ -207,7 +207,7 @@
   },
   {
    "name": "Widths",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <div>\n    <Hero max-width=\"4xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">4xl</p>\n    </Hero>\n    <Hero max-width=\"7xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">7xl</p>\n    </Hero>\n    <Hero max-width=\"full\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">full</p>\n    </Hero>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import HeroRoot from '@aziontech/webkit/hero-root'\n</script>\n\n<template>\n  <div>\n    <HeroRoot max-width=\"4xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">4xl</p>\n    </HeroRoot>\n    <HeroRoot max-width=\"7xl\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">7xl</p>\n    </HeroRoot>\n    <HeroRoot max-width=\"full\">\n      <p class=\"m-0 text-center text-body-md text-(--text-muted)\">full</p>\n    </HeroRoot>\n  </div>\n</template>"
   },
   {
    "name": "Screen",

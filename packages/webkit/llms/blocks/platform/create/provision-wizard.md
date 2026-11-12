@@ -1,11 +1,11 @@
 # ProvisionWizard (`platform/create/provision-wizard`)
 
-> A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Label`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `SaveBar` and `Button`.
+> A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Hint`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `SaveBar` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/provision-wizard/provision-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/provision-wizard")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Label](../../../components/label.md), [PageHeader](../../../components/page-header.md), [RadioCards](../../../components/radio-cards.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioCards](../../../components/radio-cards.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -45,9 +45,9 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 The `platform/create/resource-picker` band: a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
-### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Label`, `Select` (conditional)
+### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
 
-In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as `Field` and `Input`, or a `Label` over a `Select` for a fixed list. Each opened field is required only while its switch is on.
+In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
 
 ### F. Project read-back — `Card`, `Item`, `Button` (required on step two)
 
@@ -57,17 +57,17 @@ Step two opens with a flush `Card` holding one `Item` that reads the bound proje
 
 A `Card` titled Domain with a `ToggleGroup` of Free platform domain and Your own domain. The free domain asks for a prefix `Input` with the platform suffix shown inside it; your own domain asks for the hostname and the service name. Below, a preview line names the address traffic arrives on (`https://` plus the domain) and the name the service is created as, updating as the user types.
 
-### H. Environment and certificate — `Card`, `Label`, `RadioCards`, `HelperText`, `Select` (required)
+### H. Environment and certificate — `Card`, `Field`, `RadioCards`, `Hint`, `HelperText`, `Select` (required)
 
-A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, each headed by a `Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
+A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
 
 ### I. Deployment — `Card`, `ToggleGroup`, `Item`, `Input`, `Skeleton`, `Button` (required)
 
 A `Card` titled Deployment with a `ToggleGroup` of Create one and Use existing. Create one shows the deployment that will be made, as an `Item`; Use existing reuses the paged picker list with its own search `Input`, `Skeleton` rows and Load more `Button`.
 
-### J. Advanced — `SettingsSection`, `Card`, `Label`, `Select`, `Field`, `SettingRow`, `Switch` (optional)
+### J. Advanced — `SettingsSection`, `Card`, `Select`, `Field`, `SettingRow`, `Switch` (optional)
 
-A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed by default, with a `hint` saying every field carries the endpoint's default. It holds the minimum TLS version (`Label` and `Select`), the error page (`Field` and `Select`, "Not bound" by default) and `SettingRow kind="compact"` switches for Allow the platform domain and Active. Nothing required lives here.
+A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed by default, with a `hint` saying every field carries the endpoint's default. It holds the minimum TLS version (`Field` and `Select`), the error page (`Field` and `Select`, "Not bound" by default) and `SettingRow kind="compact"` switches for Allow the platform domain and Active. Nothing required lives here.
 
 ### K. Footer — `SaveBar`, `Button` (required)
 
@@ -151,10 +151,10 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Label from '@aziontech/webkit/label'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -1217,20 +1217,17 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     v-for="field in originFields"
                                     :key="field.name"
                                   >
-                                    <div
+                                    <Field key="field-1"
                                       v-if="field.kind === 'select'"
                                       :data-field-invalid="!!errors['origin.' + field.name] || null"
-                                      class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
+                                      :required="!!errors['origin.' + field.name]"
                                     >
                                       <div
                                         class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                       >
-                                        <Label
-                                          :for="'origin-' + field.name"
-                                          :required="!!errors['origin.' + field.name]"
-                                        >
-                                          {{ field.label }}
-                                        </Label>
+                                        <Field.Label :for="'origin-' + field.name">{{
+                                          field.label
+                                        }}</Field.Label>
                                       </div>
                                       <Select
                                         v-model="scratch.origin.values[field.name]"
@@ -1263,8 +1260,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       >
                                         {{ errors['origin.' + field.name] || field.description }}
                                       </HelperText>
-                                    </div>
-                                    <Field
+                                    </Field>
+                                    <Field key="field-2"
                                       v-else
                                       :required="!!errors['origin.' + field.name]"
                                     >
@@ -1438,17 +1435,18 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <Card title="Environment and certificate">
                             <template #content>
                               <div class="flex flex-col gap-(--spacing-lg)">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                                  <div
-                                    class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
+                                <fieldset
+                                  class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                                >
+                                  <Field.Legend
+                                    id="environment-label"
+                                    kind="label"
                                   >
-                                    <Label
-                                      id="environment-label"
-                                      hint="Which environment this binding lands on."
-                                    >
+                                    <span class="inline-flex items-center gap-(--spacing-xxs)">
                                       Environment
-                                    </Label>
-                                  </div>
+                                      <Hint text="Which environment this binding lands on." />
+                                    </span>
+                                  </Field.Legend>
                                   <RadioCards
                                     v-model="form.environment"
                                     :items="environments"
@@ -1461,19 +1459,18 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   >
                                     The domain answers on the environment it is bound to.
                                   </HelperText>
-                                </div>
+                                </fieldset>
 
                                 <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                                  <Field>
                                     <div
                                       class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                     >
-                                      <Label
+                                      <Field.Label
                                         for="certificate"
                                         hint="One certificate per service, not per domain on it."
+                                        >Certificate</Field.Label
                                       >
-                                        Certificate
-                                      </Label>
                                     </div>
                                     <Select
                                       v-model="form.certificate"
@@ -1495,7 +1492,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                         </Select.Option>
                                       </Select.Content>
                                     </Select>
-                                  </div>
+                                  </Field>
                                 </div>
                               </div>
                             </template>
@@ -1703,16 +1700,15 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <Card :padded="false">
                             <template #content>
                               <div class="p-(--spacing-md)">
-                                <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                                <Field>
                                   <div
                                     class="flex min-w-0 items-center justify-between gap-(--spacing-xs)"
                                   >
-                                    <Label
+                                    <Field.Label
                                       for="minimum-tls-version"
                                       hint="Connections negotiating below this version are refused."
+                                      >Minimum TLS version</Field.Label
                                     >
-                                      Minimum TLS version
-                                    </Label>
                                   </div>
                                   <Select
                                     v-model="form.minimumTlsVersion"
@@ -1734,7 +1730,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       </Select.Option>
                                     </Select.Content>
                                   </Select>
-                                </div>
+                                </Field>
                               </div>
 
                               <div class="border-t border-(--border-default) p-(--spacing-md)">

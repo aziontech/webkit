@@ -1,10 +1,10 @@
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>
-  <BentoGrid
+  <BentoGridRoot
     columns="4"
     mobile-columns="2"
     aria-label="The platform, in one block"
@@ -56,5 +56,5 @@
     <BentoGridCell kind="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Rollback in one click</h3>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>

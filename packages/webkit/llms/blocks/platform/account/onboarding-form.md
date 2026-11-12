@@ -1,11 +1,11 @@
 # OnboardingForm (`platform/account/onboarding-form`)
 
-> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` under a `Label` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`.
+> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`.
 
 - Surface: product
 - Source: `blocks/platform/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/onboarding-form")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Label](../../../components/label.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -55,9 +55,9 @@ Full name and organization name, each with `Field.Label` and `Field.Description`
 
 Large; full name with `autocomplete="name"`.
 
-### H. Group label — `Label` (required)
+### H. Group label — `Field.Legend` (required)
 
-`Organization mark`, above the radio cards.
+`Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
 
 ### I. Mark picker — `RadioCards` (required)
 
@@ -128,20 +128,18 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
 ```vue
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import { primitives } from '@aziontech/theme/colors'
   import Avatar from '@aziontech/webkit/avatar'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Label from '@aziontech/webkit/label'
+  import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import { computed, ref } from 'vue'
-
-  import { primitives } from '@aziontech/theme/colors'
 
   const accents = [
     {
@@ -359,8 +357,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           }}</Field.Description>
                         </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label>Organization mark</Label>
+                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                          <Field.Legend kind="label">Organization mark</Field.Legend>
                           <RadioCards
                             v-model="accent"
                             :items="accents"
@@ -384,7 +382,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />
-                        </div>
+                        </fieldset>
                       </div>
                     </div>
                   </fieldset>

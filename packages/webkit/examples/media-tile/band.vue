@@ -1,11 +1,11 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
   import Illustration from '@aziontech/webkit/illustration'
   import MediaTile from '@aziontech/webkit/media-tile'
 </script>
 
 <template>
-  <CardGrid
+  <CardGridRoot
     kind="gap"
     :columns="4"
     :mobile-columns="1"
@@ -42,5 +42,5 @@
         <Illustration name="runtime" />
       </template>
     </MediaTile>
-  </CardGrid>
+  </CardGridRoot>
 </template>

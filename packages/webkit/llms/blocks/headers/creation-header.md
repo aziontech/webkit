@@ -94,7 +94,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -110,7 +110,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
       <GlobalHeader.Left>
         <IconButton
           icon="pi pi-chevron-left"
-          aria-label="Back to Resources"
+          ariaLabel="Back to Resources"
           kind="outlined"
           size="small"
         />

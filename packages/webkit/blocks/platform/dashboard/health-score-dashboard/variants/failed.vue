@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
   const loading = false
@@ -25,14 +25,19 @@
     }
   ]
 
-  const overall = {
+  const overall: {
+    score: number | null
+    band: { label: string; severity: TagSeverity; icon?: string } | null
+    cause: string
+    series: unknown[]
+  } = {
     score: null,
     band: null,
     cause: '',
     series: []
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>

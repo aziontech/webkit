@@ -147,7 +147,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -163,7 +163,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
@@ -185,7 +185,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
     'Verify the response',
     'Next steps'
   ]
-  const theme = ref('dark')
+  const theme = ref<ThemeSwitcherValue>('dark')
 
   const columns = [
     {
@@ -244,9 +244,9 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
   const language = ref('EN')
 
   const brandLeadsSocialRow = ref(false)
-  let lgProbe = null
+  let lgProbe: HTMLElement | null = null
   const syncBrand = () => {
-    brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
+    if (lgProbe) brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
   }
   onMounted(() => {
     lgProbe = document.createElement('span')
@@ -274,7 +274,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open documentation navigation"
+                ariaLabel="Open documentation navigation"
               />
             </div>
             <GlobalHeader.Brand>
@@ -331,7 +331,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
             icon="pi pi-github"
             kind="outlined"
             size="medium"
-            aria-label="Azion on GitHub"
+            ariaLabel="Azion on GitHub"
             href="https://github.com/aziontech"
             target="_blank"
             class="shrink-0"
@@ -450,7 +450,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
                     kind="transparent"
                     size="small"
                     :icon="social.icon"
-                    :aria-label="social.label"
+                    :ariaLabel="social.label"
                     :href="social.href"
                     target="_blank"
                   />

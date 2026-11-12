@@ -1,21 +1,21 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import Command from '@aziontech/webkit/command'
   import CommandEmpty from '@aziontech/webkit/command-empty'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
   import CommandList from '@aziontech/webkit/command-list'
+  import CommandRoot from '@aziontech/webkit/command-root'
   import CommandSeparator from '@aziontech/webkit/command-separator'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Menu from '@aziontech/webkit/menu'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import MenuSub from '@aziontech/webkit/menu-sub'
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
   import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
@@ -41,7 +41,7 @@
           @open="paletteOpen = true"
         />
 
-        <Command v-model:open="paletteOpen">
+        <CommandRoot v-model:open="paletteOpen">
           <CommandInput placeholder="Search navigation and commands" />
           <CommandList>
             <CommandGroup heading="Build">
@@ -78,10 +78,10 @@
 
             <CommandEmpty>No navigation or command matches your search.</CommandEmpty>
           </CommandList>
-        </Command>
+        </CommandRoot>
       </SidebarHeader>
     </template>
-    <Menu role="presentation">
+    <MenuRoot role="presentation">
       <MenuBack />
       <MenuGroup>
         <MenuItem
@@ -163,61 +163,63 @@
           </MenuSubContent>
         </MenuSub>
       </MenuGroup>
-    </Menu>
+    </MenuRoot>
     <template #footer>
-      <SidebarFooter class="flex items-center gap-(--spacing-xs)">
-        <Avatar
-          kind="square"
-          size="small"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-          alt="Alex Moreira"
-        />
-        <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-          >Alex Moreira</span
-        >
-        <DropdownMenu
-          v-model:open="accountMenuOpen"
-          placement="top-end"
-        >
-          <DropdownMenuTrigger>
-            <IconButton
-              icon="pi pi-ellipsis-v"
-              aria-label="Account menu"
-              kind="outlined"
-              size="small"
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuGroup>
-            <template #top>
-              <div class="flex min-w-0 flex-col">
-                <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
-                <span class="truncate text-body-xs text-(--text-muted)"
-                  >rafael.umman@example.com</span
-                >
-              </div>
-            </template>
-            <DropdownMenuOption
-              value="settings"
-              label="Account Settings"
-            />
-            <DropdownMenuOption
-              value="personal-tokens"
-              label="Personal Tokens"
-            />
-          </DropdownMenuGroup>
-          <DropdownMenuGroup>
-            <DropdownMenuOption
-              value="logout"
-              label="Log Out"
-            >
-              <template #right
-                ><i
-                  class="pi pi-sign-out"
-                  aria-hidden="true"
-              /></template>
-            </DropdownMenuOption>
-          </DropdownMenuGroup>
-        </DropdownMenu>
+      <SidebarFooter>
+        <div class="flex items-center gap-(--spacing-xs)">
+          <Avatar
+            kind="square"
+            size="small"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
+            alt="Alex Moreira"
+          />
+          <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
+            >Alex Moreira</span
+          >
+          <DropdownMenuRoot
+            v-model:open="accountMenuOpen"
+            placement="top-end"
+          >
+            <DropdownMenuTrigger>
+              <IconButton
+                icon="pi pi-ellipsis-v"
+                aria-label="Account menu"
+                kind="outlined"
+                size="small"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuGroup>
+              <template #top>
+                <div class="flex min-w-0 flex-col">
+                  <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
+                  <span class="truncate text-body-xs text-(--text-muted)"
+                    >rafael.umman@example.com</span
+                  >
+                </div>
+              </template>
+              <DropdownMenuOption
+                value="settings"
+                label="Account Settings"
+              />
+              <DropdownMenuOption
+                value="personal-tokens"
+                label="Personal Tokens"
+              />
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuOption
+                value="logout"
+                label="Log Out"
+              >
+                <template #right
+                  ><i
+                    class="pi pi-sign-out"
+                    aria-hidden="true"
+                /></template>
+              </DropdownMenuOption>
+            </DropdownMenuGroup>
+          </DropdownMenuRoot>
+        </div>
       </SidebarFooter>
     </template>
   </Sidebar>

@@ -121,7 +121,7 @@
   },
   {
    "name": "DataDriven",
-   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <Pagination\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <PaginationRoot\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
   }
  ],
  "docs": "components/pagination.md"

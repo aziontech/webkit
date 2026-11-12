@@ -1,5 +1,5 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
 
   const questions = [
@@ -29,8 +29,8 @@
         v-for="(question, index) in questions"
         :key="question"
       >
-        <ChatMessage from="user">{{ question }}</ChatMessage>
-        <ChatMessage>{{ answers[index] }}</ChatMessage>
+        <ChatMessageRoot from="user">{{ question }}</ChatMessageRoot>
+        <ChatMessageRoot>{{ answers[index] }}</ChatMessageRoot>
       </template>
     </Conversation>
   </div>

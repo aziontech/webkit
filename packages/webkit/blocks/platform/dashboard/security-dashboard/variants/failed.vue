@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -12,8 +12,8 @@
   import { ref } from 'vue'
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value) => compact.format(value)
-  const formatPercent = (value) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
+  const formatCount = (value: number) => compact.format(value)
+  const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
   const attention = [
     {
@@ -50,7 +50,7 @@
   ]
 
   const form = ref('line')
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -139,7 +139,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Matched requests over time"
+                  ariaLabel="Expand Matched requests over time"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -148,7 +148,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Matched requests over time"
+                    ariaLabel="More options for Matched requests over time"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -226,7 +226,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Blocked requests by attack category"
+                  ariaLabel="Expand Blocked requests by attack category"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -235,7 +235,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Blocked requests by attack category"
+                    ariaLabel="More options for Blocked requests by attack category"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Blocked requests by country"
+                  ariaLabel="Expand Blocked requests by country"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -297,7 +297,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Blocked requests by country"
+                    ariaLabel="More options for Blocked requests by country"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -351,7 +351,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Top source IPs by blocked requests"
+                  ariaLabel="Expand Top source IPs by blocked requests"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -360,7 +360,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Top source IPs by blocked requests"
+                    ariaLabel="More options for Top source IPs by blocked requests"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

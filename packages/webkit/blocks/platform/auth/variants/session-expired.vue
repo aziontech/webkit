@@ -1,19 +1,18 @@
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import Separator from '@aziontech/webkit/separator'
   import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import Label from '@aziontech/webkit/label'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Alert from '@aziontech/webkit/alert'
+  import Separator from '@aziontech/webkit/separator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -246,12 +245,8 @@
                         v-if="step === 'email'"
                         class="motion-reduce:transition-none motion-reduce:transform-none"
                       >
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="login-email"
-                            label="Email"
-                            required
-                          />
+                        <Field :required="!!errors.email && !email.trim()">
+                          <Field.Label for="login-email">Email</Field.Label>
                           <Input
                             id="login-email"
                             v-model="email"
@@ -272,7 +267,7 @@
                             :kind="email.trim() ? 'invalid' : 'required'"
                             :label="errors.email"
                           />
-                        </div>
+                        </Field>
                       </div>
 
                       <div
@@ -297,15 +292,11 @@
                         </div>
 
                         <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="login-password"
-                            label="Password"
-                            required
-                          />
                           <Field
                             :required="!!errors.password && !password"
                             :invalid="!!errors.password && !!password"
                           >
+                            <Field.Label for="login-password">Password</Field.Label>
                             <PasswordInput
                               id="login-password"
                               v-model="password"
@@ -349,12 +340,8 @@
                           >
                         </div>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="reset-email"
-                            label="Email"
-                            required
-                          />
+                        <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                          <Field.Label for="reset-email">Email</Field.Label>
                           <Input
                             id="reset-email"
                             v-model="resetEmail"
@@ -375,61 +362,49 @@
                             :kind="resetEmail.trim() ? 'invalid' : 'required'"
                             :label="errors.resetEmail"
                           />
-                        </div>
+                        </Field>
                       </div>
 
                       <div
                         v-else-if="step === 'new-password'"
                         class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
                       >
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="new-password"
-                            label="New password"
-                            required
+                        <Field
+                          :required="!!errors.newPassword && !newPassword"
+                          :invalid="!!errors.newPassword && !!newPassword"
+                        >
+                          <Field.Label for="new-password">New password</Field.Label>
+                          <PasswordInput
+                            id="new-password"
+                            v-model="newPassword"
+                            name="new-password"
+                            autocomplete="new-password"
+                            placeholder="Enter a new password"
+                            @update:model-value="errors.newPassword = ''"
                           />
-                          <Field
-                            :required="!!errors.newPassword && !newPassword"
-                            :invalid="!!errors.newPassword && !!newPassword"
-                          >
-                            <PasswordInput
-                              id="new-password"
-                              v-model="newPassword"
-                              name="new-password"
-                              autocomplete="new-password"
-                              placeholder="Enter a new password"
-                              @update:model-value="errors.newPassword = ''"
-                            />
-                            <Field.Description v-if="errors.newPassword">{{
-                              errors.newPassword
-                            }}</Field.Description>
-                            <PasswordRequirements :value="newPassword" />
-                          </Field>
-                        </div>
+                          <Field.Description v-if="errors.newPassword">{{
+                            errors.newPassword
+                          }}</Field.Description>
+                          <PasswordRequirements :value="newPassword" />
+                        </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="confirm-password"
-                            label="Confirm password"
-                            required
+                        <Field
+                          :required="!!errors.confirmPassword && !confirmPassword"
+                          :invalid="!!errors.confirmPassword && !!confirmPassword"
+                        >
+                          <Field.Label for="confirm-password">Confirm password</Field.Label>
+                          <PasswordInput
+                            id="confirm-password"
+                            v-model="confirmPassword"
+                            name="confirm-password"
+                            autocomplete="new-password"
+                            placeholder="Repeat the new password"
+                            @update:model-value="errors.confirmPassword = ''"
                           />
-                          <Field
-                            :required="!!errors.confirmPassword && !confirmPassword"
-                            :invalid="!!errors.confirmPassword && !!confirmPassword"
-                          >
-                            <PasswordInput
-                              id="confirm-password"
-                              v-model="confirmPassword"
-                              name="confirm-password"
-                              autocomplete="new-password"
-                              placeholder="Repeat the new password"
-                              @update:model-value="errors.confirmPassword = ''"
-                            />
-                            <Field.Description v-if="errors.confirmPassword">{{
-                              errors.confirmPassword
-                            }}</Field.Description>
-                          </Field>
-                        </div>
+                          <Field.Description v-if="errors.confirmPassword">{{
+                            errors.confirmPassword
+                          }}</Field.Description>
+                        </Field>
                       </div>
 
                       <div

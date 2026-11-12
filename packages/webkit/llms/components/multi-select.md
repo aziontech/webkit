@@ -104,10 +104,10 @@
 
 ```vue
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref(['opt-1'])
@@ -121,7 +121,7 @@
 
 <template>
   <div style="width: 280px">
-    <MultiSelect
+    <MultiSelectRoot
       aria-label="Options"
       v-model="value"
       placeholder="Select options"
@@ -135,7 +135,7 @@
           >{{ o.label }}</MultiSelectOption
         >
       </MultiSelectContent>
-    </MultiSelect>
+    </MultiSelectRoot>
   </div>
 </template>
 ```
@@ -144,10 +144,10 @@
 
 ```vue
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])
@@ -163,7 +163,7 @@
     class="flex flex-col gap-4"
     style="width: 280px"
   >
-    <MultiSelect
+    <MultiSelectRoot
       :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
@@ -180,7 +180,7 @@
           >{{ o.label }}</MultiSelectOption
         >
       </MultiSelectContent>
-    </MultiSelect>
+    </MultiSelectRoot>
   </div>
 </template>
 ```
@@ -189,11 +189,11 @@
 
 ```vue
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])
@@ -217,7 +217,7 @@
 
 <template>
   <div style="width: 280px">
-    <MultiSelect
+    <MultiSelectRoot
       aria-label="Options"
       v-model="value"
       placeholder="Select options"
@@ -237,7 +237,7 @@
           >
         </MultiSelectGroup>
       </MultiSelectContent>
-    </MultiSelect>
+    </MultiSelectRoot>
   </div>
 </template>
 ```

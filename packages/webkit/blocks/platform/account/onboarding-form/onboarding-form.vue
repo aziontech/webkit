@@ -1,18 +1,16 @@
 <script setup>
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
+  import { primitives } from '@aziontech/theme/colors'
   import Avatar from '@aziontech/webkit/avatar'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Label from '@aziontech/webkit/label'
+  import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import { computed, ref } from 'vue'
-
-  import { primitives } from '@aziontech/theme/colors'
 
   const accents = [
     {
@@ -230,8 +228,8 @@
                           }}</Field.Description>
                         </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label>Organization mark</Label>
+                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                          <Field.Legend kind="label">Organization mark</Field.Legend>
                           <RadioCards
                             v-model="accent"
                             :items="accents"
@@ -255,7 +253,7 @@
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />
-                        </div>
+                        </fieldset>
                       </div>
                     </div>
                   </fieldset>

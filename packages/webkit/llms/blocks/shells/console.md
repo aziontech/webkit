@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AppLayout](../../components/app-layout.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Menu](../../components/menu.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), `type`, [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -157,7 +157,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
 ## Code (`ListPage`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -170,15 +170,26 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  const navGroups = [
+  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
+    path?: string
+    query?: Record<string, string>
+    children?: NavNode[]
+    groups?: NavGroup[]
+  }
+  interface NavGroup {
+    label?: string
+    items: NavNode[]
+  }
+
+  const navGroups: NavGroup[] = [
     {
       items: [
         { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
@@ -390,8 +401,8 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   const activeId = ref('resources')
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
+  const theme = ref<ThemeSwitcherValue>('system')
+  const railWidth = ref<number | null>(null)
   const railCollapsed = ref(false)
   const search = ref('')
   const crumbs = [{ label: 'Resources' }]
@@ -400,7 +411,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     paletteQuery.value = ''
   })
 
-  const leaves = (items) =>
+  const leaves = (items: NavNode[]): NavNode[] =>
     items.flatMap((item) =>
       item.groups
         ? leaves(item.groups.flatMap((group) => group.items))
@@ -410,8 +421,8 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     )
 
   const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
+    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
+    let run: NavNode[] = []
     const flush = () => {
       if (run.length) {
         blocks.push({
@@ -454,12 +465,12 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     }
   ])
 
-  const onNavigate = (event, node, closeNavigation) => {
+  const onNavigate = (node: MenuNode, closeNavigation: () => void) => {
     activeId.value = node.id
     closeNavigation()
   }
 
-  const onPaletteSelect = (event, value) => {
+  const onPaletteSelect = (_event: Event, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') activeId.value = id
     if (scope === 'res') {
@@ -507,7 +518,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
               >
                 <Command.Input
                   placeholder="Search resources, pages and commands"
-                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                  @update:model-value="(value: string) => (paletteQuery = value)"
                 />
                 <Command.List>
                   <Command.Group
@@ -606,7 +617,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
               :groups="navGroups"
               :active-id="activeId"
               role="presentation"
-              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
+              @navigate="(_event, node) => onNavigate(node, closeNavigation)"
             >
               <Menu.Back />
             </Menu>
@@ -625,7 +636,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                   <Tooltip text="Account menu">
                     <IconButton
                       icon="pi pi-ellipsis-v"
-                      aria-label="Account menu"
+                      ariaLabel="Account menu"
                       kind="outlined"
                       size="small"
                     />
@@ -774,7 +785,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                   >
                     <IconButton
                       icon="pi pi-bars"
-                      aria-label="Open navigation"
+                      ariaLabel="Open navigation"
                       kind="outlined"
                       size="medium"
                       @click="openNavigation"
@@ -824,7 +835,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                     icon="pi pi-plus-circle"
                     kind="primary"
                     size="medium"
-                    aria-label="Create"
+                    ariaLabel="Create"
                   />
                 </Tooltip>
                 <Tooltip
@@ -835,7 +846,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                     icon="ai ai-ask-azion"
                     kind="outlined"
                     size="medium"
-                    aria-label="Agent"
+                    ariaLabel="Agent"
                   />
                 </Tooltip>
               </span>
@@ -910,7 +921,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                       icon="pi pi-refresh"
                       kind="outlined"
                       size="medium"
-                      aria-label="Refresh"
+                      ariaLabel="Refresh"
                     />
                   </Tooltip>
                   <Tooltip
@@ -921,7 +932,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                       icon="pi pi-download"
                       kind="outlined"
                       size="medium"
-                      aria-label="Download CSV"
+                      ariaLabel="Download CSV"
                     />
                   </Tooltip>
                   <Tooltip text="Columns">
@@ -929,7 +940,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
                       icon="ai ai-column"
                       kind="outlined"
                       size="medium"
-                      aria-label="Columns"
+                      ariaLabel="Columns"
                     />
                   </Tooltip>
                   <Button

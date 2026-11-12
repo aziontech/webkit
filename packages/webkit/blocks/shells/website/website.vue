@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -82,9 +82,9 @@
   const language = ref('EN')
 
   const brandLeadsSocialRow = ref(false)
-  let lgProbe = null
+  let lgProbe: HTMLElement | null = null
   const syncBrand = () => {
-    brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
+    if (lgProbe) brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
   }
   onMounted(() => {
     lgProbe = document.createElement('span')
@@ -115,7 +115,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open navigation"
+                ariaLabel="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>
@@ -301,7 +301,7 @@
             kind="transparent"
             size="small"
             :icon="social.icon"
-            :aria-label="social.label"
+            :ariaLabel="social.label"
             :href="social.href"
             target="_blank"
           />

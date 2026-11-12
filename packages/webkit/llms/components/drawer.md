@@ -134,18 +134,18 @@
             Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
           </DrawerDescription>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Save"
-            kind="primary"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
         </PanelFooter>
       </DrawerContent>
     </DrawerPortal>
@@ -220,18 +220,18 @@
               Panel max-width preset for the {{ size }} drawer. Height is always 100% viewport.
             </DrawerDescription>
           </PanelContent>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              label="Cancel"
-              kind="outlined"
-              @click="openBySize[size] = false"
-            />
-            <Button
-              class="w-full md:w-auto"
-              label="Save"
-              kind="primary"
-            />
+          <PanelFooter>
+            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+              <Button
+                label="Cancel"
+                kind="outlined"
+                @click="openBySize[size] = false"
+              />
+              <Button
+                label="Save"
+                kind="primary"
+              />
+            </div>
           </PanelFooter>
         </DrawerContent>
       </DrawerPortal>
@@ -285,32 +285,34 @@
           <DrawerTitle>Scrollable drawer</DrawerTitle>
           <DrawerClose />
         </PanelHeader>
-        <PanelContent class="flex flex-col gap-(--spacing-4)">
-          <DrawerDescription>
-            Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
-            ScrollArea while header and footer stay in the panel layout.
-          </DrawerDescription>
-          <section
-            v-for="section in scrollSections"
-            :key="section.title"
-            class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
-          >
-            <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
-            <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
-          </section>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-4)">
+            <DrawerDescription>
+              Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
+              ScrollArea while header and footer stay in the panel layout.
+            </DrawerDescription>
+            <section
+              v-for="section in scrollSections"
+              :key="section.title"
+              class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+            >
+              <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
+              <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
+            </section>
+          </div>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Save"
-            kind="primary"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
         </PanelFooter>
       </DrawerContent>
     </DrawerPortal>

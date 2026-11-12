@@ -1,16 +1,15 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
-  import Field from '@aziontech/webkit/field'
-  import Switch from '@aziontech/webkit/switch'
   import Avatar from '@aziontech/webkit/avatar'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Label from '@aziontech/webkit/label'
   import Progress from '@aziontech/webkit/progress'
+  import RadioCards from '@aziontech/webkit/radio-cards'
+  import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
 
   const usageOptions = [
@@ -158,9 +157,9 @@
 
                     <div class="animate-fade-in motion-reduce:animate-none">
                       <div class="flex flex-col gap-(--spacing-lg)">
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label :required="submitted && !usage"
-                            >How are you planning to use the platform?</Label
+                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                          <Field.Legend kind="label"
+                            >How are you planning to use the platform?</Field.Legend
                           >
                           <RadioCards
                             v-model="usage"
@@ -172,12 +171,10 @@
                             kind="required"
                             label="Select one to continue."
                           />
-                        </div>
+                        </fieldset>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label :required="submitted && !role"
-                            >What best describes your role?</Label
-                          >
+                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                          <Field.Legend kind="label">What best describes your role?</Field.Legend>
                           <RadioCards
                             v-model="role"
                             :items="roleOptions"
@@ -188,7 +185,7 @@
                             kind="required"
                             label="Select one to continue."
                           />
-                        </div>
+                        </fieldset>
 
                         <Field.Label>
                           <Field orientation="horizontal">

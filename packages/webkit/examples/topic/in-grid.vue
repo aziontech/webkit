@@ -1,10 +1,10 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
   import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
-  <CardGrid
+  <CardGridRoot
     kind="divider"
     :columns="3"
   >
@@ -32,5 +32,5 @@
         href="/products/build"
       />
     </div>
-  </CardGrid>
+  </CardGridRoot>
 </template>

@@ -342,20 +342,18 @@
                       class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
                       data-testid="network-list-paste-panel"
                     >
-                      <label
-                        :for="pasteId"
-                        class="text-label-sm text-(--text-default)"
-                        >Paste one {{ copy.noun }} per line</label
-                      >
-                      <div class="[&_textarea]:font-code">
-                        <Textarea
-                          :id="pasteId"
-                          v-model="pasteText"
-                          :rows="7"
-                          spellcheck="false"
-                          :aria-describedby="`${pasteId}-report`"
-                        />
-                      </div>
+                      <Field>
+                        <Field.Label :for="pasteId">Paste one {{ copy.noun }} per line</Field.Label>
+                        <div class="[&_textarea]:font-code">
+                          <Textarea
+                            :id="pasteId"
+                            v-model="pasteText"
+                            :rows="7"
+                            spellcheck="false"
+                            :aria-describedby="`${pasteId}-report`"
+                          />
+                        </div>
+                      </Field>
                       <div
                         :id="`${pasteId}-report`"
                         class="flex flex-col gap-(--spacing-xxs)"

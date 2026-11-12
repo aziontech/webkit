@@ -1,11 +1,11 @@
 # Auth (`platform/auth`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a required `Label` over `Input` or a `Field` with `PasswordInput` and `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Label`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Label](../../components/label.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -66,9 +66,9 @@ Put the copy in the default slot when it carries links; animate the entrance on 
 
 `<Separator label="or" />` between the social buttons and the email field. Only on the email step; no other separator in the card.
 
-### G. Field label — `Label` (required)
+### G. Field label — `Field`, `Field.Label` (required)
 
-A `Label` with `for` and `required` over each input: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required, so every label carries the indicator.
+A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`, `New password`, `Confirm password`. Every field on these screens is required; the `Field`'s `required` turns on with the required prompt after the primary action, and the label shows the indicator then.
 
 ### H. Email — `Input` (required)
 
@@ -144,7 +144,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 ## Accessibility
 
 - The form has an accessible name (`aria-label="Sign in to your account"`) and `novalidate`, so the browser does not show its own bubbles over the field messages.
-- Each input has a visible `Label` with `for`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
+- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
 - Use the right `autocomplete` on every field (`username`, `current-password`, `new-password`, `email`) so password managers and autofill work.
 - Icon-only back buttons have an `aria-label` equal to their tooltip.
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
@@ -166,7 +166,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
-- MfaCode: the sign-in challenge after the password: an autofocused 6-digit `OtpInput` that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
+- MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 
 ## Related
 
@@ -196,7 +196,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `Timeout` — No response: the same message as the 500 but warning, because the request may still have gone through, with Retry.
 - `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
 - `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.
-- `MfaCode` — The sign-in MFA challenge: an autofocused 6-digit OtpInput that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
+- `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
 
 Each variant is the same screen in another state: `get_pattern("platform/auth", { variant })`, or the file under `blocks/platform/auth/variants/`.
 
@@ -204,21 +204,20 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 
 ```vue
 <script setup>
+  import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import Separator from '@aziontech/webkit/separator'
   import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import Label from '@aziontech/webkit/label'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
-  import IconButton from '@aziontech/webkit/icon-button'
-  import Alert from '@aziontech/webkit/alert'
+  import Separator from '@aziontech/webkit/separator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -451,12 +450,8 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                         v-if="step === 'email'"
                         class="motion-reduce:transition-none motion-reduce:transform-none"
                       >
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="login-email"
-                            label="Email"
-                            required
-                          />
+                        <Field :required="!!errors.email && !email.trim()">
+                          <Field.Label for="login-email">Email</Field.Label>
                           <Input
                             id="login-email"
                             v-model="email"
@@ -477,7 +472,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                             :kind="email.trim() ? 'invalid' : 'required'"
                             :label="errors.email"
                           />
-                        </div>
+                        </Field>
                       </div>
 
                       <div
@@ -502,15 +497,11 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                         </div>
 
                         <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="login-password"
-                            label="Password"
-                            required
-                          />
                           <Field
                             :required="!!errors.password && !password"
                             :invalid="!!errors.password && !!password"
                           >
+                            <Field.Label for="login-password">Password</Field.Label>
                             <PasswordInput
                               id="login-password"
                               v-model="password"
@@ -554,12 +545,8 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                           >
                         </div>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="reset-email"
-                            label="Email"
-                            required
-                          />
+                        <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                          <Field.Label for="reset-email">Email</Field.Label>
                           <Input
                             id="reset-email"
                             v-model="resetEmail"
@@ -580,61 +567,49 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                             :kind="resetEmail.trim() ? 'invalid' : 'required'"
                             :label="errors.resetEmail"
                           />
-                        </div>
+                        </Field>
                       </div>
 
                       <div
                         v-else-if="step === 'new-password'"
                         class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
                       >
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="new-password"
-                            label="New password"
-                            required
+                        <Field
+                          :required="!!errors.newPassword && !newPassword"
+                          :invalid="!!errors.newPassword && !!newPassword"
+                        >
+                          <Field.Label for="new-password">New password</Field.Label>
+                          <PasswordInput
+                            id="new-password"
+                            v-model="newPassword"
+                            name="new-password"
+                            autocomplete="new-password"
+                            placeholder="Enter a new password"
+                            @update:model-value="errors.newPassword = ''"
                           />
-                          <Field
-                            :required="!!errors.newPassword && !newPassword"
-                            :invalid="!!errors.newPassword && !!newPassword"
-                          >
-                            <PasswordInput
-                              id="new-password"
-                              v-model="newPassword"
-                              name="new-password"
-                              autocomplete="new-password"
-                              placeholder="Enter a new password"
-                              @update:model-value="errors.newPassword = ''"
-                            />
-                            <Field.Description v-if="errors.newPassword">{{
-                              errors.newPassword
-                            }}</Field.Description>
-                            <PasswordRequirements :value="newPassword" />
-                          </Field>
-                        </div>
+                          <Field.Description v-if="errors.newPassword">{{
+                            errors.newPassword
+                          }}</Field.Description>
+                          <PasswordRequirements :value="newPassword" />
+                        </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label
-                            for="confirm-password"
-                            label="Confirm password"
-                            required
+                        <Field
+                          :required="!!errors.confirmPassword && !confirmPassword"
+                          :invalid="!!errors.confirmPassword && !!confirmPassword"
+                        >
+                          <Field.Label for="confirm-password">Confirm password</Field.Label>
+                          <PasswordInput
+                            id="confirm-password"
+                            v-model="confirmPassword"
+                            name="confirm-password"
+                            autocomplete="new-password"
+                            placeholder="Repeat the new password"
+                            @update:model-value="errors.confirmPassword = ''"
                           />
-                          <Field
-                            :required="!!errors.confirmPassword && !confirmPassword"
-                            :invalid="!!errors.confirmPassword && !!confirmPassword"
-                          >
-                            <PasswordInput
-                              id="confirm-password"
-                              v-model="confirmPassword"
-                              name="confirm-password"
-                              autocomplete="new-password"
-                              placeholder="Repeat the new password"
-                              @update:model-value="errors.confirmPassword = ''"
-                            />
-                            <Field.Description v-if="errors.confirmPassword">{{
-                              errors.confirmPassword
-                            }}</Field.Description>
-                          </Field>
-                        </div>
+                          <Field.Description v-if="errors.confirmPassword">{{
+                            errors.confirmPassword
+                          }}</Field.Description>
+                        </Field>
                       </div>
 
                       <div

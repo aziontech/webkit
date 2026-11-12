@@ -30,9 +30,9 @@ The toolbar opens with the storage glyph and the storage name, truncated on one 
 
 Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
-### D. Columns panel — `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Switch`, `Button` (optional)
+### D. Columns panel — `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
 
-A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per column; locked columns show disabled with "Always shown". A transparent Show all columns `Button` appears only while a column is hidden. The column's `Tooltip` is suppressed while the popover is open.
+A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per column, labelled by a horizontal `Field`; locked columns show disabled with "Always shown". A transparent Show all columns `Button` appears only while a column is hidden. The column's `Tooltip` is suppressed while the popover is open.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 

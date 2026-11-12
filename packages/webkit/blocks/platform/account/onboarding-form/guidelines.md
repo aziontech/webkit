@@ -43,9 +43,9 @@ Full name and organization name, each with `Field.Label` and `Field.Description`
 
 Large; full name with `autocomplete="name"`.
 
-### H. Group label — `Label` (required)
+### H. Group label — `Field.Legend` (required)
 
-`Organization mark`, above the radio cards.
+`Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
 
 ### I. Mark picker — `RadioCards` (required)
 

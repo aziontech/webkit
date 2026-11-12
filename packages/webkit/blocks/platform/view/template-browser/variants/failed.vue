@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -12,7 +12,7 @@
     propertyFiltering: { properties: [{ key: 'title', label: 'Name' }] }
   })
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>

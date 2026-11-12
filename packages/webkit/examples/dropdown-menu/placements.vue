@@ -1,15 +1,14 @@
 <script setup>
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
   import Button from '@aziontech/webkit/button'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 </script>
 
 <template>
   <div class="grid grid-cols-2 gap-(--spacing-xl) place-items-center min-h-[24rem]">
-    <DropdownMenu placement="bottom-start">
+    <DropdownMenuRoot placement="bottom-start">
       <DropdownMenuTrigger>
         <Button
           kind="outlined"
@@ -26,9 +25,9 @@
           label="Option B"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
 
-    <DropdownMenu placement="bottom-end">
+    <DropdownMenuRoot placement="bottom-end">
       <DropdownMenuTrigger>
         <Button
           kind="outlined"
@@ -45,9 +44,9 @@
           label="Option B"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
 
-    <DropdownMenu placement="top-start">
+    <DropdownMenuRoot placement="top-start">
       <DropdownMenuTrigger>
         <Button
           kind="outlined"
@@ -64,9 +63,9 @@
           label="Option B"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
 
-    <DropdownMenu placement="top-end">
+    <DropdownMenuRoot placement="top-end">
       <DropdownMenuTrigger>
         <Button
           kind="outlined"
@@ -83,6 +82,6 @@
           label="Option B"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
   </div>
 </template>

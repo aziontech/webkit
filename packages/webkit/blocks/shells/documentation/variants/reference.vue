@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -25,11 +25,11 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
   const crumbs = [{ label: 'Applications', href: '#' }, { label: 'Overview' }]
 
@@ -101,7 +101,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open documentation navigation"
+                ariaLabel="Open documentation navigation"
               />
             </div>
             <GlobalHeader.Brand>
@@ -142,7 +142,7 @@
             icon="pi pi-github"
             kind="outlined"
             size="medium"
-            aria-label="Azion on GitHub"
+            ariaLabel="Azion on GitHub"
             href="https://github.com/aziontech"
             target="_blank"
             class="shrink-0"
@@ -338,7 +338,7 @@
           :items="outline"
           :active-id="activeId"
           :groups="railGroups"
-          @select="(event, item) => (activeId = item.id)"
+          @select="(_event, item) => (activeId = item.id)"
         />
         <DocCta
           title="Ready to build?"

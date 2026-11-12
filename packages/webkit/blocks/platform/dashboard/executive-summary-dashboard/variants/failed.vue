@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -7,7 +7,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
   const loading = false
@@ -72,7 +72,18 @@
     }
   ]
 
-  const trends = [
+  type Trend = {
+    id: string
+    title: string
+    description: string
+    mark: string
+    format: string
+    min?: number
+    change: { label: string; severity: TagSeverity; icon?: string } | null
+    series: unknown[]
+  }
+
+  const trends: Trend[] = [
     {
       id: 'revenue',
       title: 'Revenue',
@@ -144,16 +155,16 @@
     maximumFractionDigits: 2
   })
 
-  const formatters = {
-    currency: (value) => money.format(value),
-    count: (value) => compact.format(value),
-    percentage: (value) => `${value.toFixed(0)}%`,
-    uptime: (value) => `${value.toFixed(2)}%`,
-    score: (value) => value.toFixed(0),
-    cost: (value) => `${value.toFixed(4)}`
+  const formatters: Record<string, (value: number) => string> = {
+    currency: (value: number) => money.format(value),
+    count: (value: number) => compact.format(value),
+    percentage: (value: number) => `${value.toFixed(0)}%`,
+    uptime: (value: number) => `${value.toFixed(2)}%`,
+    score: (value: number) => value.toFixed(0),
+    cost: (value: number) => `${value.toFixed(4)}`
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>

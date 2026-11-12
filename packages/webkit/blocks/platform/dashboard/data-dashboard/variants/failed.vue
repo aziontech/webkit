@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -13,9 +13,9 @@
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatCount = (value) => compact.format(value)
+  const formatCount = (value: number) => compact.format(value)
 
-  const formatBytes = (value) => {
+  const formatBytes = (value: number) => {
     const steps = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     let current = value
     let index = 0
@@ -85,7 +85,7 @@
     }
   ]
 
-  const comparison = {
+  const comparison: { delta: number | null; labels: string[]; series: unknown[] } = {
     delta: null,
     labels: [
       '00:00',
@@ -122,7 +122,7 @@
     { label: 'Bar', value: 'bar' }
   ]
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -195,7 +195,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Data transferred, this period vs previous"
+                  ariaLabel="Expand Data transferred, this period vs previous"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -204,7 +204,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Data transferred, this period vs previous"
+                    ariaLabel="More options for Data transferred, this period vs previous"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -252,7 +252,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Data transferred by project"
+                  ariaLabel="Expand Data transferred by project"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -261,7 +261,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Data transferred by project"
+                    ariaLabel="More options for Data transferred by project"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -309,7 +309,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Usage by project"
+                  ariaLabel="Expand Usage by project"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -318,7 +318,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Usage by project"
+                    ariaLabel="More options for Usage by project"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

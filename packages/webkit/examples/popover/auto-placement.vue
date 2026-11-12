@@ -1,14 +1,11 @@
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
   import Button from '@aziontech/webkit/button'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
 </script>
 
 <template>
@@ -21,7 +18,7 @@
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -38,11 +35,11 @@
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -59,11 +56,11 @@
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -80,11 +77,11 @@
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -101,7 +98,7 @@
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
   </div>
 </template>

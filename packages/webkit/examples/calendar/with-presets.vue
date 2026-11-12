@@ -1,5 +1,5 @@
 <script setup>
-  import Calendar from '@aziontech/webkit/calendar'
+  import CalendarRoot from '@aziontech/webkit/calendar-root'
   import { ref } from 'vue'
 
   const today = new Date(2026, 10, 10)
@@ -14,7 +14,7 @@
 </script>
 
 <template>
-  <Calendar
+  <CalendarRoot
     v-model="range"
     mode="range"
     :presets="presets"

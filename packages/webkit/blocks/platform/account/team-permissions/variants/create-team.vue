@@ -275,17 +275,17 @@
                                 colspan="3"
                                 class="px-(--spacing-md) py-(--spacing-xs) text-start"
                               >
-                                <label class="flex items-center gap-(--spacing-sm)">
+                                <Field orientation="horizontal">
                                   <Checkbox
                                     binary
                                     :model-value="groupState(group).all"
                                     :indeterminate="groupState(group).some"
                                     @update:model-value="(checked) => toggleGroup(group, checked)"
                                   />
-                                  <span class="text-label-md text-(--text-default)">{{
-                                    group.label
-                                  }}</span>
-                                </label>
+                                  <Field.Label>
+                                    <span class="text-label-md">{{ group.label }}</span>
+                                  </Field.Label>
+                                </Field>
                               </th>
                             </tr>
                             <tr
@@ -344,10 +344,12 @@
               >
                 <Card>
                   <template #content>
-                    <label class="flex items-center justify-between gap-(--spacing-md)">
-                      <span class="text-label-md text-(--text-default)">Active</span>
+                    <Field orientation="horizontal">
+                      <Field.Label>
+                        <span class="text-label-md">Active</span>
+                      </Field.Label>
                       <Switch v-model="form.active" />
-                    </label>
+                    </Field>
                   </template>
                 </Card>
               </SettingsSection>

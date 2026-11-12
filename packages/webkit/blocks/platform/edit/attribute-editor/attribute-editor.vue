@@ -15,6 +15,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -904,100 +905,104 @@
                       >
                         <template #row="{ item: entry, index, remove, removable, removeLabel }">
                           <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                            <InputGroupRoot
-                              size="large"
-                              :required="keyError(entry)?.kind === 'required'"
-                              :invalid="keyError(entry)?.kind === 'invalid'"
-                            >
-                              <InputGroupAddon>
-                                <label
-                                  :for="fieldId(entry, 'key')"
-                                  class="w-20"
-                                  >Key</label
-                                >
-                              </InputGroupAddon>
-                              <input
-                                :id="fieldId(entry, 'key')"
-                                :value="entry.key"
-                                placeholder="MY_VARIABLE"
-                                autocomplete="off"
-                                spellcheck="false"
-                                :aria-invalid="!!keyError(entry) || undefined"
-                                :aria-describedby="
-                                  keyError(entry) ? messageId(entry, 'key') : undefined
-                                "
-                                :class="fieldClass"
-                                class="text-label-code-sm"
-                                @input="setKey(entry, $event.target.value)"
-                                @paste="pasteIntoKey($event, index)"
-                              />
-                              <Tooltip
-                                v-if="removable"
-                                text="Remove variable"
+                            <Field>
+                              <InputGroupRoot
+                                size="large"
+                                :required="keyError(entry)?.kind === 'required'"
+                                :invalid="keyError(entry)?.kind === 'invalid'"
                               >
-                                <IconButton
-                                  icon="pi pi-trash"
-                                  kind="outlined"
-                                  size="large"
-                                  :aria-label="removeLabel"
-                                  @click="remove"
-                                />
-                              </Tooltip>
-                            </InputGroupRoot>
-
-                            <InputGroupRoot
-                              size="large"
-                              :required="!!valueError(entry)"
-                            >
-                              <InputGroupAddon>
-                                <label
-                                  :for="fieldId(entry, 'value')"
-                                  class="w-20"
-                                  >Value</label
-                                >
-                              </InputGroupAddon>
-                              <input
-                                :id="fieldId(entry, 'value')"
-                                v-model="entry.value"
-                                :type="entry.secret && !entry.visible ? 'password' : 'text'"
-                                :placeholder="entry.secret ? SECRET_MASK : 'my-variable-value'"
-                                autocomplete="off"
-                                spellcheck="false"
-                                :aria-invalid="!!valueError(entry) || undefined"
-                                :aria-describedby="
-                                  valueError(entry) ? messageId(entry, 'value') : undefined
-                                "
-                                :class="fieldClass"
-                                class="text-label-sm"
-                              />
-                              <Tooltip
-                                v-if="entry.secret"
-                                :text="entry.visible ? 'Hide value' : 'Show value'"
-                              >
-                                <IconButton
-                                  :icon="entry.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
-                                  kind="outlined"
-                                  size="large"
-                                  :aria-label="entry.visible ? 'Hide value' : 'Show value'"
-                                  :aria-pressed="entry.visible"
-                                  @click="entry.visible = !entry.visible"
-                                />
-                              </Tooltip>
-                              <InputGroupAddon>
-                                <Tooltip :text="secretTooltip(entry)">
-                                  <span class="flex items-center gap-(--spacing-xs)">
-                                    <label :for="fieldId(entry, 'secret')">Secret</label>
-                                    <Checkbox
-                                      v-model="entry.secret"
-                                      binary
-                                      :input-id="fieldId(entry, 'secret')"
-                                      :aria-label="secretAriaLabel(entry)"
-                                      :disabled="Boolean(editing?.secret)"
-                                    />
+                                <InputGroupAddon>
+                                  <span class="inline-block w-20">
+                                    <Field.Label :for="fieldId(entry, 'key')">Key</Field.Label>
                                   </span>
+                                </InputGroupAddon>
+                                <input
+                                  :id="fieldId(entry, 'key')"
+                                  :value="entry.key"
+                                  placeholder="MY_VARIABLE"
+                                  autocomplete="off"
+                                  spellcheck="false"
+                                  :aria-invalid="!!keyError(entry) || undefined"
+                                  :aria-describedby="
+                                    keyError(entry) ? messageId(entry, 'key') : undefined
+                                  "
+                                  :class="fieldClass"
+                                  class="text-label-code-sm"
+                                  @input="setKey(entry, $event.target.value)"
+                                  @paste="pasteIntoKey($event, index)"
+                                />
+                                <Tooltip
+                                  v-if="removable"
+                                  text="Remove variable"
+                                >
+                                  <IconButton
+                                    icon="pi pi-trash"
+                                    kind="outlined"
+                                    size="large"
+                                    :aria-label="removeLabel"
+                                    @click="remove"
+                                  />
                                 </Tooltip>
-                              </InputGroupAddon>
-                            </InputGroupRoot>
+                              </InputGroupRoot>
+                            </Field>
+
+                            <Field>
+                              <InputGroupRoot
+                                size="large"
+                                :required="!!valueError(entry)"
+                              >
+                                <InputGroupAddon>
+                                  <span class="inline-block w-20">
+                                    <Field.Label :for="fieldId(entry, 'value')">Value</Field.Label>
+                                  </span>
+                                </InputGroupAddon>
+                                <input
+                                  :id="fieldId(entry, 'value')"
+                                  v-model="entry.value"
+                                  :type="entry.secret && !entry.visible ? 'password' : 'text'"
+                                  :placeholder="entry.secret ? SECRET_MASK : 'my-variable-value'"
+                                  autocomplete="off"
+                                  spellcheck="false"
+                                  :aria-invalid="!!valueError(entry) || undefined"
+                                  :aria-describedby="
+                                    valueError(entry) ? messageId(entry, 'value') : undefined
+                                  "
+                                  :class="fieldClass"
+                                  class="text-label-sm"
+                                />
+                                <Tooltip
+                                  v-if="entry.secret"
+                                  :text="entry.visible ? 'Hide value' : 'Show value'"
+                                >
+                                  <IconButton
+                                    :icon="entry.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                    kind="outlined"
+                                    size="large"
+                                    :aria-label="entry.visible ? 'Hide value' : 'Show value'"
+                                    :aria-pressed="entry.visible"
+                                    @click="entry.visible = !entry.visible"
+                                  />
+                                </Tooltip>
+                                <InputGroupAddon>
+                                  <Tooltip :text="secretTooltip(entry)">
+                                    <Field
+                                      orientation="horizontal"
+                                      :disabled="Boolean(editing?.secret)"
+                                    >
+                                      <Field.Label :for="fieldId(entry, 'secret')"
+                                        >Secret</Field.Label
+                                      >
+                                      <Checkbox
+                                        v-model="entry.secret"
+                                        binary
+                                        :input-id="fieldId(entry, 'secret')"
+                                        :aria-label="secretAriaLabel(entry)"
+                                      />
+                                    </Field>
+                                  </Tooltip>
+                                </InputGroupAddon>
+                              </InputGroupRoot>
+                            </Field>
                           </div>
 
                           <HelperText

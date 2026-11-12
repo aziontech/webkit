@@ -9,8 +9,8 @@
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
+  import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
-  import Label from '@aziontech/webkit/label'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -186,14 +186,14 @@
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <legend class="mb-(--spacing-xs) p-0">
-                      <Label
-                        required
-                        hint="Defines whether each version locks its resource IDs or allows them to change."
-                      >
+                    <Field.Legend kind="label">
+                      <span class="inline-flex items-center gap-(--spacing-xxs)">
                         Binding policy
-                      </Label>
-                    </legend>
+                        <Hint
+                          text="Defines whether each version locks its resource IDs or allows them to change."
+                        />
+                      </span>
+                    </Field.Legend>
                     <div class="flex flex-col gap-(--spacing-sm)">
                       <Field
                         v-for="policy in bindingPolicies"
@@ -222,14 +222,12 @@
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <legend class="mb-(--spacing-xs) p-0">
-                      <Label
-                        required
-                        hint="Defines how many versions can receive traffic."
-                      >
+                    <Field.Legend kind="label">
+                      <span class="inline-flex items-center gap-(--spacing-xxs)">
                         Deployment version policy
-                      </Label>
-                    </legend>
+                        <Hint text="Defines how many versions can receive traffic." />
+                      </span>
+                    </Field.Legend>
                     <div class="flex flex-col gap-(--spacing-sm)">
                       <Field
                         v-for="policy in deploymentPolicies"

@@ -1,11 +1,11 @@
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
 </script>
 
 <template>
-  <ColumnNavigation
+  <ColumnNavigationRoot
     aria-label="Row states"
     :columns="2"
   >
@@ -34,5 +34,5 @@
         description="Secure, manage, and optimize AI traffic"
       />
     </ColumnNavigationColumn>
-  </ColumnNavigation>
+  </ColumnNavigationRoot>
 </template>

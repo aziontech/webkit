@@ -3,8 +3,7 @@
 </script>
 
 <template>
-  <TopologyDiagram
-    loading
-    class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
-  />
+  <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
+    <TopologyDiagram loading />
+  </div>
 </template>

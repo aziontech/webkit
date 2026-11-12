@@ -219,15 +219,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <Calendar\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
   },
   {
    "name": "Open",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"min-h-[640px] w-full max-w-[560px]\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      :open=\"true\"\n      show-time\n      show-timezone\n      clearable\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"min-h-[640px] w-full max-w-[560px]\">\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      :open=\"true\"\n      show-time\n      show-timezone\n      clearable\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n\n  import Calendar from '@aziontech/webkit/calendar'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"small\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"medium\"\n    />\n    <Calendar\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"small\"\n    />\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"medium\"\n    />\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"large\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/calendar.md"

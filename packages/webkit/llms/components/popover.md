@@ -132,20 +132,17 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
   import Button from '@aziontech/webkit/button'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
 </script>
 
 <template>
-  <Popover>
+  <PopoverRoot>
     <PopoverTrigger>
       <Button
         kind="secondary"
@@ -163,7 +160,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         This content is rendered inside the popover panel.
       </div>
     </PopoverContent>
-  </Popover>
+  </PopoverRoot>
 </template>
 ```
 
@@ -171,23 +168,20 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
   import Button from '@aziontech/webkit/button'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
 </script>
 
 <template>
   <div
     class="grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)"
   >
-    <Popover placement="bottom-start">
+    <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -201,9 +195,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="bottom-end">
+    <PopoverRoot placement="bottom-end">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -217,9 +211,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="top-start">
+    <PopoverRoot placement="top-start">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -233,9 +227,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover placement="top-end">
+    <PopoverRoot placement="top-end">
       <PopoverTrigger>
         <Button
           kind="secondary"
@@ -249,7 +243,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         </PopoverHeader>
         <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   </div>
 </template>
 ```
@@ -258,16 +252,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ```vue
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
   import Button from '@aziontech/webkit/button'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
 </script>
 
 <template>
@@ -280,7 +271,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -297,11 +288,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -318,11 +309,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -339,11 +330,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
 
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
-      <Popover
+      <PopoverRoot
         :open="true"
         placement="auto"
       >
@@ -360,7 +351,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
           </PopoverHeader>
           <div class="p-(--spacing-md) text-body-sm text-(--text-default)">Popover content.</div>
         </PopoverContent>
-      </Popover>
+      </PopoverRoot>
     </div>
   </div>
 </template>

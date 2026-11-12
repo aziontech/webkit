@@ -13,7 +13,7 @@
   {
    "name": "DataDriven",
    "summary": "Data-driven mode: pass `total` and bind `v-model:page` / `v-model:page-size`. The Pagination renders its own info text, windowed page numbers, overflow ellipsis, and the rows-per-page selector, emitting `update:page` / `update:pageSize`.",
-   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <Pagination\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const pageSize = ref(10)\n</script>\n\n<template>\n  <PaginationRoot\n    v-model:page=\"page\"\n    v-model:page-size=\"pageSize\"\n    :total=\"200\"\n    :page-size-options=\"[10, 25, 50, 100]\"\n    :sibling-count=\"1\"\n  />\n</template>"
   }
  ]
 }

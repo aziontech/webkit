@@ -86,9 +86,10 @@ export function parseCheckArgs(argv) {
 
 async function consumerLinter() {
   process.env.WEBKIT_CATALOG_PATH = CATALOG_PATH
-  const [{ Linter }, vueParser, { default: plugin }] = await Promise.all([
+  const [{ Linter }, vueParser, tsParser, { default: plugin }] = await Promise.all([
     import('eslint'),
     import('vue-eslint-parser'),
+    import('@typescript-eslint/parser'),
     import('../src/eslint-plugin/index.js')
   ])
   const rules = Object.fromEntries(
@@ -99,7 +100,12 @@ async function consumerLinter() {
   const config = [
     {
       files: ['**/*.vue'],
-      languageOptions: { parser: vueParser, ecmaVersion: 2022, sourceType: 'module' },
+      languageOptions: {
+        parser: vueParser,
+        parserOptions: { parser: tsParser },
+        ecmaVersion: 2022,
+        sourceType: 'module'
+      },
       plugins: { webkit: plugin },
       rules
     }

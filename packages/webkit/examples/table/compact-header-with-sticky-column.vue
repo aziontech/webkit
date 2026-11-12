@@ -1,10 +1,10 @@
 <script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -71,12 +71,12 @@
   const statusSeverity = (status) =>
     status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'
 
-  const onRowClick = (row) => {}
-  const onRowAction = ({ action }) => {}
+  const onRowClick = (_row) => {}
+  const onRowAction = (_payload) => {}
 </script>
 
 <template>
-  <Table
+  <TableRoot
     :data="rows"
     :columns="columns"
     row-key="id"
@@ -99,7 +99,7 @@
       <span class="sr-only">Actions</span>
     </template>
     <template #cell-actions="{ row }">
-      <DropdownMenu @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
+      <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
             icon="pi pi-ellipsis-v"
@@ -125,7 +125,7 @@
             /></template>
           </DropdownMenuOption>
         </DropdownMenuGroup>
-      </DropdownMenu>
+      </DropdownMenuRoot>
     </template>
-  </Table>
+  </TableRoot>
 </template>

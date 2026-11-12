@@ -17,7 +17,6 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
-  import Label from '@aziontech/webkit/label'
   import Menu from '@aziontech/webkit/menu'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -857,12 +856,8 @@
               <legend class="sr-only">Template settings</legend>
 
               <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
-                <div class="flex w-full flex-col gap-(--spacing-xs)">
-                  <Label
-                    for="tpl-scope"
-                    :required="scopeWarning"
-                    >Scope</Label
-                  >
+                <Field :required="scopeWarning">
+                  <Field.Label for="tpl-scope">Scope</Field.Label>
                   <Select
                     v-model="form.scope"
                     size="large"
@@ -888,7 +883,7 @@
                       </Select.Option>
                     </Select.Content>
                   </Select>
-                </div>
+                </Field>
 
                 <Field
                   :required="repoWarning"
@@ -1004,9 +999,7 @@
                 <h2 class="text-heading-xs text-(--text-default)">Deployment</h2>
 
                 <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
-                  <legend class="mb-(--spacing-xs) p-0">
-                    <Label :required="deploymentTypeWarning">Deployment type</Label>
-                  </legend>
+                  <Field.Legend kind="label">Deployment type</Field.Legend>
                   <div class="flex flex-col gap-(--spacing-sm)">
                     <Field.Label
                       v-for="option in deploymentTypes"
@@ -1037,9 +1030,7 @@
                 </fieldset>
 
                 <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
-                  <legend class="mb-(--spacing-xs) p-0">
-                    <Label>Runtime</Label>
-                  </legend>
+                  <Field.Legend kind="label">Runtime</Field.Legend>
                   <div class="flex flex-wrap gap-(--spacing-lg)">
                     <div
                       v-for="option in runtimes"
@@ -1063,8 +1054,8 @@
                   </div>
                 </fieldset>
 
-                <div class="flex w-full flex-col gap-(--spacing-xs)">
-                  <Label for="tpl-regions">Regions</Label>
+                <Field>
+                  <Field.Label for="tpl-regions">Regions</Field.Label>
                   <MultiSelect
                     v-model="form.regions"
                     size="large"
@@ -1084,7 +1075,7 @@
                     </MultiSelect.Content>
                   </MultiSelect>
                   <HelperText label="Leave empty to deploy to every available region." />
-                </div>
+                </Field>
               </section>
 
               <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">

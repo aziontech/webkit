@@ -148,20 +148,20 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import Hero from '@aziontech/webkit/hero'
+  import HeroRoot from '@aziontech/webkit/hero-root'
 </script>
 
 <template>
   <div>
-    <Hero max-width="4xl">
+    <HeroRoot max-width="4xl">
       <p class="m-0 text-center text-body-md text-(--text-muted)">4xl</p>
-    </Hero>
-    <Hero max-width="7xl">
+    </HeroRoot>
+    <HeroRoot max-width="7xl">
       <p class="m-0 text-center text-body-md text-(--text-muted)">7xl</p>
-    </Hero>
-    <Hero max-width="full">
+    </HeroRoot>
+    <HeroRoot max-width="full">
       <p class="m-0 text-center text-body-md text-(--text-muted)">full</p>
-    </Hero>
+    </HeroRoot>
   </div>
 </template>
 ```

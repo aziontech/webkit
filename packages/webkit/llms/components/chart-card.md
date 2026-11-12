@@ -308,13 +308,12 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
 ```vue
 <script setup>
-  import ChartCard from '@aziontech/webkit/chart-card'
   import Chart from '@aziontech/webkit/chart'
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
+  import ChartCard from '@aziontech/webkit/chart-card'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tag from '@aziontech/webkit/tag'
@@ -359,7 +358,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
           label="+12.40%"
           severity="danger"
         />
-        <DropdownMenu>
+        <DropdownMenuRoot>
           <DropdownMenuTrigger>
             <IconButton
               kind="transparent"
@@ -382,7 +381,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
               label="Show mean line"
             />
           </DropdownMenuGroup>
-        </DropdownMenu>
+        </DropdownMenuRoot>
       </ChartCard.Controls>
     </ChartCard.Header>
     <ChartCard.Content>

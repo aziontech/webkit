@@ -141,9 +141,9 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
-  import Menu from '@aziontech/webkit/menu'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -173,7 +173,7 @@
           :resizable="!drawer"
           :collapsible="!drawer"
         >
-          <Menu role="presentation">
+          <MenuRoot role="presentation">
             <MenuGroup>
               <MenuItem
                 label="Home"
@@ -192,22 +192,24 @@
                 href="#"
               />
             </MenuGroup>
-          </Menu>
+          </MenuRoot>
         </Sidebar>
       </template>
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left class="justify-start!">
-              <IconButton
-                v-if="compact"
-                icon="pi pi-bars"
-                aria-label="Open navigation"
-                kind="outlined"
-                size="medium"
-                @click="openNavigation"
-              />
+            <GlobalHeader.Left>
+              <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                <IconButton
+                  v-if="compact"
+                  icon="pi pi-bars"
+                  aria-label="Open navigation"
+                  kind="outlined"
+                  size="medium"
+                  @click="openNavigation"
+                />
+              </div>
             </GlobalHeader.Left>
             <GlobalHeader.Middle />
             <GlobalHeader.Right>
@@ -335,57 +337,58 @@
 </script>
 
 <template>
-  <AppLayout
-    v-model:split-panel-open="splitPanelOpen"
-    split-panel-position="side"
-    :split-panel-title="selected ? selected.id : ''"
-    storage-key="example-services-layout"
-    class="h-dvh"
-  >
-    <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
-      <PageHeader
-        title="Services"
-        description="Select a service to see its details beside the list."
-      />
-      <ul
-        aria-label="Services"
-        class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
-      >
-        <li
-          v-for="service in services"
-          :key="service.id"
+  <div class="h-dvh">
+    <AppLayout
+      v-model:split-panel-open="splitPanelOpen"
+      split-panel-position="side"
+      :split-panel-title="selected ? selected.id : ''"
+      storage-key="example-services-layout"
+    >
+      <main class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+        <PageHeader
+          title="Services"
+          description="Select a service to see its details beside the list."
+        />
+        <ul
+          aria-label="Services"
+          class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
         >
-          <button
-            type="button"
-            :aria-pressed="selectedId === service.id"
-            class="flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none"
-            @click="selectedId = service.id"
+          <li
+            v-for="service in services"
+            :key="service.id"
           >
-            <span class="min-w-0 truncate">{{ service.id }}</span>
-            <StatusIndicator
-              :severity="service.status"
-              :label="service.label"
-            />
-          </button>
-        </li>
-      </ul>
-    </main>
+            <button
+              type="button"
+              :aria-pressed="selectedId === service.id"
+              class="flex w-full items-center justify-between gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-md text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-pressed:border-(--accent) motion-reduce:transition-none"
+              @click="selectedId = service.id"
+            >
+              <span class="min-w-0 truncate">{{ service.id }}</span>
+              <StatusIndicator
+                :severity="service.status"
+                :label="service.label"
+              />
+            </button>
+          </li>
+        </ul>
+      </main>
 
-    <template #split-panel>
-      <KeyValuePairs
-        v-if="selected"
-        aria-label="Service details"
-      >
-        <KeyValuePairs.Item label="Status">
-          <StatusIndicator
-            :severity="selected.status"
-            :label="selected.label"
-          />
-        </KeyValuePairs.Item>
-        <KeyValuePairs.Item label="Domain">{{ selected.domain }}</KeyValuePairs.Item>
-      </KeyValuePairs>
-    </template>
-  </AppLayout>
+      <template #split-panel>
+        <KeyValuePairs
+          v-if="selected"
+          aria-label="Service details"
+        >
+          <KeyValuePairs.Item label="Status">
+            <StatusIndicator
+              :severity="selected.status"
+              :label="selected.label"
+            />
+          </KeyValuePairs.Item>
+          <KeyValuePairs.Item label="Domain">{{ selected.domain }}</KeyValuePairs.Item>
+        </KeyValuePairs>
+      </template>
+    </AppLayout>
+  </div>
 </template>
 ```
 
@@ -398,9 +401,9 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Menu from '@aziontech/webkit/menu'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -419,7 +422,7 @@
           :resizable="!drawer"
           :collapsible="!drawer"
         >
-          <Menu role="presentation">
+          <MenuRoot role="presentation">
             <MenuGroup>
               <MenuItem
                 label="Home"
@@ -433,22 +436,24 @@
                 href="#"
               />
             </MenuGroup>
-          </Menu>
+          </MenuRoot>
         </Sidebar>
       </template>
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left class="justify-start!">
-              <IconButton
-                v-if="compact"
-                icon="pi pi-bars"
-                aria-label="Open navigation"
-                kind="outlined"
-                size="medium"
-                @click="openNavigation"
-              />
+            <GlobalHeader.Left>
+              <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                <IconButton
+                  v-if="compact"
+                  icon="pi pi-bars"
+                  aria-label="Open navigation"
+                  kind="outlined"
+                  size="medium"
+                  @click="openNavigation"
+                />
+              </div>
             </GlobalHeader.Left>
             <GlobalHeader.Middle />
             <GlobalHeader.Right>

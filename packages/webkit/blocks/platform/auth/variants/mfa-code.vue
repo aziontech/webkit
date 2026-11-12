@@ -7,7 +7,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, onMounted, ref } from 'vue'
 
   const account = 'ana.silva@example.com'
 
@@ -41,6 +41,7 @@
   )
 
   const focusCode = () => nextTick(() => document.getElementById('mfa-code')?.focus())
+  onMounted(focusCode)
 
   const switchMethod = () => {
     recovery.value = !recovery.value
@@ -129,12 +130,14 @@
                     />
 
                     <Alert
+                      key="alert-1"
                       v-if="signedIn"
                       severity="success"
                       size="small"
                       label="Signed in."
                     />
                     <Alert
+                      key="alert-2"
                       v-else-if="unreachable"
                       severity="warning"
                       size="small"
@@ -167,7 +170,6 @@
                           :mode="recovery ? 'alphanumeric' : 'numeric'"
                           :group="recovery ? 4 : 0"
                           :disabled="verifying || signedIn"
-                          autofocus
                           @update:model-value="codeError = ''"
                           @complete="verify"
                         />

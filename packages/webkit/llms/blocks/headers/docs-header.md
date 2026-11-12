@@ -95,7 +95,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -120,7 +120,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
               icon="pi pi-bars"
               kind="outlined"
               size="medium"
-              aria-label="Open documentation navigation"
+              ariaLabel="Open documentation navigation"
             />
           </div>
           <GlobalHeader.Brand>
@@ -177,7 +177,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
           icon="pi pi-github"
           kind="outlined"
           size="medium"
-          aria-label="Azion on GitHub"
+          ariaLabel="Azion on GitHub"
           href="https://github.com/aziontech"
           target="_blank"
           class="shrink-0"

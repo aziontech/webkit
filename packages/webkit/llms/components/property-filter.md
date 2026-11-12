@@ -162,7 +162,7 @@
 ```vue
 <script setup>
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const workloads = Array.from({ length: 36 }, (_, i) => ({
@@ -205,7 +205,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <PropertyFilter v-bind="propertyFilterProps" />
-    <Table v-bind="tableProps" />
+    <TableRoot v-bind="tableProps" />
   </div>
 </template>
 ```

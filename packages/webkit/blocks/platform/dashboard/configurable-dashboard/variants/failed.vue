@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Board from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
@@ -8,7 +8,17 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
-  const cards = {
+  const cards: Record<
+    string,
+    {
+      title: string
+      hint: string
+      kind: string
+      format: string
+      series?: unknown[]
+      items?: unknown[]
+    }
+  > = {
     requests: {
       title: 'Requests over time',
       hint: 'Requests served by every service, per interval.',
@@ -91,7 +101,7 @@
     announcement.value = 'Layout reset to the default.'
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>

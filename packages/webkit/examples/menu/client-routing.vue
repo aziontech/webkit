@@ -1,5 +1,5 @@
 <script setup>
-  import Menu from '@aziontech/webkit/menu'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import { computed, ref } from 'vue'
 
   const groups = [
@@ -44,7 +44,7 @@
 
 <template>
   <div class="flex w-[264px] flex-col gap-(--spacing-sm)">
-    <Menu
+    <MenuRoot
       :groups="groups"
       :active-id="activeId"
       aria-label="Console navigation"

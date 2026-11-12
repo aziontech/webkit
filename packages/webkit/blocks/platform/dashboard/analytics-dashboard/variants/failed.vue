@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -6,7 +6,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
@@ -57,7 +57,10 @@
     }
   ]
 
-  const variations = {
+  const variations: Record<
+    'requests' | 'statusCodes',
+    { label: string; severity: TagSeverity; icon?: string } | null
+  > = {
     requests: null,
     statusCodes: null
   }
@@ -75,9 +78,9 @@
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatters = {
-    count: (value) => compact.format(value),
-    bytes: (value) => {
+  const formatters: Record<string, (value: number) => string> = {
+    count: (value: number) => compact.format(value),
+    bytes: (value: number) => {
       const steps = ['B', 'KB', 'MB', 'GB', 'TB']
       let current = value
       let index = 0
@@ -87,12 +90,12 @@
       }
       return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
     },
-    percentage: (value) => `${value.toFixed(0)}%`
+    percentage: (value: number) => `${value.toFixed(0)}%`
   }
 
   const requestsForm = ref('line')
   const statusForm = ref('line')
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -164,7 +167,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Requests over time"
+                  ariaLabel="Expand Requests over time"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -173,7 +176,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Requests over time"
+                    ariaLabel="More options for Requests over time"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -234,7 +237,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Status codes"
+                  ariaLabel="Expand Status codes"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -243,7 +246,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Status codes"
+                    ariaLabel="More options for Status codes"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -291,7 +294,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Requests by country"
+                  ariaLabel="Expand Requests by country"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -300,7 +303,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Requests by country"
+                    ariaLabel="More options for Requests by country"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -349,7 +352,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  aria-label="Expand Top hosts"
+                  ariaLabel="Expand Top hosts"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -358,7 +361,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Top hosts"
+                    ariaLabel="More options for Top hosts"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

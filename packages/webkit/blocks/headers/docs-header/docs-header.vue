@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -23,7 +23,7 @@
               icon="pi pi-bars"
               kind="outlined"
               size="medium"
-              aria-label="Open documentation navigation"
+              ariaLabel="Open documentation navigation"
             />
           </div>
           <GlobalHeader.Brand>
@@ -80,7 +80,7 @@
           icon="pi pi-github"
           kind="outlined"
           size="medium"
-          aria-label="Azion on GitHub"
+          ariaLabel="Azion on GitHub"
           href="https://github.com/aziontech"
           target="_blank"
           class="shrink-0"

@@ -76,7 +76,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import InputGroup from '@aziontech/webkit/input-group'\n  import Button from '@aziontech/webkit/button'\n  import Select from '@aziontech/webkit/select'\n</script>\n\n<template>\n  <InputGroup>\n    <input\n      placeholder=\"domain\"\n      class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n    />\n  </InputGroup>\n</template>"
+   "sfc": "<script setup>\n  import InputGroupRoot from '@aziontech/webkit/input-group-root'\n  </script>\n\n<template>\n  <InputGroupRoot>\n    <input\n      placeholder=\"domain\"\n      class=\"flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)\"\n    />\n  </InputGroupRoot>\n</template>"
   },
   {
    "name": "Sizes",

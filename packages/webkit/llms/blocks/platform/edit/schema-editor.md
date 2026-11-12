@@ -1091,15 +1091,15 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                               :aria-label="`Default value of column ${index + 1}`"
                             />
                           </div>
-                          <label
-                            class="flex shrink-0 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
-                          >
-                            <Checkbox
-                              v-model="column.primaryKey"
-                              binary
-                            />
-                            Primary
-                          </label>
+                          <div class="shrink-0">
+                            <Field orientation="horizontal">
+                              <Checkbox
+                                v-model="column.primaryKey"
+                                binary
+                              />
+                              <Field.Label>Primary</Field.Label>
+                            </Field>
+                          </div>
                           <Tooltip text="Remove column">
                             <IconButton
                               icon="pi pi-times"

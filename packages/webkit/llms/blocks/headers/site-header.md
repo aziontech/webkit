@@ -91,7 +91,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -120,7 +120,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open navigation"
+                ariaLabel="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>

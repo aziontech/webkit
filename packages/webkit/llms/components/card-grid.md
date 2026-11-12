@@ -104,15 +104,15 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
-  <CardGrid :columns="3">
+  <CardGridRoot :columns="3">
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">One</div>
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Two</div>
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Three</div>
-  </CardGrid>
+  </CardGridRoot>
 </template>
 ```
 
@@ -120,36 +120,36 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <CardGrid
+    <CardGridRoot
       kind="gap"
       :columns="3"
     >
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">gap</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">gap</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">gap</div>
-    </CardGrid>
-    <CardGrid
+    </CardGridRoot>
+    <CardGridRoot
       kind="divider"
       :columns="3"
     >
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">divider</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">divider</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">divider</div>
-    </CardGrid>
-    <CardGrid
+    </CardGridRoot>
+    <CardGridRoot
       kind="frame"
       :columns="3"
     >
       <CardGridCell kind="canvas">frame</CardGridCell>
       <CardGridCell kind="canvas">frame</CardGridCell>
       <CardGridCell kind="canvas">frame</CardGridCell>
-    </CardGrid>
+    </CardGridRoot>
   </div>
 </template>
 ```
@@ -158,19 +158,19 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <CardGrid
+    <CardGridRoot
       kind="divider"
       :columns="2"
     >
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">1</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">2</div>
-    </CardGrid>
-    <CardGrid
+    </CardGridRoot>
+    <CardGridRoot
       kind="divider"
       :columns="4"
     >
@@ -178,7 +178,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">2</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">3</div>
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">4</div>
-    </CardGrid>
+    </CardGridRoot>
   </div>
 </template>
 ```

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -100,18 +100,18 @@
   const grouped = new Intl.NumberFormat('en-US')
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatters = {
-    number: (value) => grouped.format(value),
-    compact: (value) => compact.format(value),
-    percent: (value) => (value === null ? '—' : `${value.toFixed(0)}%`),
-    share: (value) => `${value.toFixed(1)}%`,
-    drop: (value) => `−${value.toFixed(1)}%`
+  const formatters: Record<string, (value: number) => string> = {
+    number: (value: number) => grouped.format(value),
+    compact: (value: number) => compact.format(value),
+    percent: (value: number | null) => (value === null ? '—' : `${value.toFixed(0)}%`),
+    share: (value: number) => `${value.toFixed(1)}%`,
+    drop: (value: number) => `−${value.toFixed(1)}%`
   }
 
   const period = ref('6w')
   const segment = ref('partners')
 
-  const optionLabel = (options) => (value) =>
+  const optionLabel = (options: { value: string; label: string }[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)
@@ -119,7 +119,7 @@
     () => periods.find((option) => option.value === period.value)?.comparison ?? ''
   )
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -214,7 +214,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  aria-label="More options for Conversion funnel"
+                  ariaLabel="More options for Conversion funnel"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
@@ -251,7 +251,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  aria-label="More options for Retention by cohort"
+                  ariaLabel="More options for Retention by cohort"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  aria-label="More options for Weekly cohorts"
+                  ariaLabel="More options for Weekly cohorts"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>

@@ -230,16 +230,18 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
           description="Everything your team runs, in one list."
         />
         <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-          <Hotspot
-            hotspot-id="search"
-            class="min-w-0 flex-1"
-          >
-            <Input
-              v-model="query"
-              aria-label="Search services"
-              placeholder="Search services"
-            />
-          </Hotspot>
+          <div class="min-w-0 flex-1">
+            <Hotspot
+              hotspot-id="search"
+              class="w-full"
+            >
+              <Input
+                v-model="query"
+                aria-label="Search services"
+                placeholder="Search services"
+              />
+            </Hotspot>
+          </div>
           <Hotspot hotspot-id="new-service">
             <Button
               label="New service"

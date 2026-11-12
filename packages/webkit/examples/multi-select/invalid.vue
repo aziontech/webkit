@@ -1,8 +1,8 @@
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
-  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
+  import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
 
   const value = ref([])
@@ -16,7 +16,7 @@
 
 <template>
   <div style="width: 280px">
-    <MultiSelect
+    <MultiSelectRoot
       aria-label="Options"
       v-model="value"
       placeholder="Select options"
@@ -31,6 +31,6 @@
           >{{ o.label }}</MultiSelectOption
         >
       </MultiSelectContent>
-    </MultiSelect>
+    </MultiSelectRoot>
   </div>
 </template>

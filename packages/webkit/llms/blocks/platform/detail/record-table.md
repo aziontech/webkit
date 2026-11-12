@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Card](../../../components/card.md), [Chip](../../../components/chip.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, `PopoverContent`, `PopoverRoot`, `PopoverTrigger`, [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -57,7 +57,7 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 The outlined Filter `Button` opens one popover with the Type and Policy fields; a `Badge` on the trigger counts applied fields. Filters narrow `:data` and rewind pagination to the first page. It is the same recipe as `platform/view/table-view`.
 
-### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Switch`, `Button` (optional)
+### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
 
 A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButton`s for Refresh, Download CSV and Columns, each named by a `Tooltip`. The Columns popover holds one `Switch` per hideable column and a Show all columns `Button`. ID is hidden by default; Name cannot be hidden.
 
@@ -152,6 +152,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -1047,28 +1048,34 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         <div
                           class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
                         >
-                          <label
+                          <div
                             v-for="column in listedColumns"
                             :key="column.id"
-                            class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
                             :class="
                               column.locked
-                                ? 'cursor-default text-(--text-muted)'
-                                : 'cursor-pointer text-(--text-default) hover:bg-(--bg-hover)'
+                                ? 'cursor-default'
+                                : 'cursor-pointer hover:bg-(--bg-hover)'
                             "
                           >
-                            <Switch
-                              :model-value="isVisible(column.id)"
+                            <Field
+                              orientation="horizontal"
                               :disabled="column.locked"
-                              @update:model-value="(value) => setVisible(column.id, !!value)"
-                            />
-                            <span class="min-w-0 truncate">{{ column.label }}</span>
-                            <span
-                              v-if="column.locked"
-                              class="ms-auto shrink-0 text-label-xs text-(--text-muted)"
-                              >Always shown</span
                             >
-                          </label>
+                              <Switch
+                                :model-value="isVisible(column.id)"
+                                @update:model-value="(value) => setVisible(column.id, !!value)"
+                              />
+                              <Field.Label>
+                                <span class="min-w-0 truncate">{{ column.label }}</span>
+                              </Field.Label>
+                              <span
+                                v-if="column.locked"
+                                class="shrink-0 text-label-xs text-(--text-muted)"
+                                >Always shown</span
+                              >
+                            </Field>
+                          </div>
                         </div>
                         <div
                           v-if="hiddenCount"

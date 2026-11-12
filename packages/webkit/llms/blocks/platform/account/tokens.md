@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Label](../../../components/label.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -55,7 +55,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
 
-### H. Fields — `Field`, `Textarea`, `Label`, `Select`, `HelperText` (required)
+### H. Fields — `Field`, `Textarea`, `Select`, `HelperText` (required)
 
 Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `HelperText` under it says the exact date it stops working.
 
@@ -148,7 +148,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Label from '@aziontech/webkit/label'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -460,7 +459,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Alert>
 
-        <Card
+        <Card key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -484,7 +483,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
 
-        <Card
+        <Card key="card-2"
           v-else
           :padded="false"
         >
@@ -537,13 +536,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   :name="row.name"
                   @select="(event, value) => onAction(value, row)"
                 >
-                  <DropdownMenu.Group v-if="!row.revoked && row.status !== 'Expired'">
+                  <DropdownMenu.Group key="dropdown-menu.group-1" v-if="!row.revoked && row.status !== 'Expired'">
                     <DropdownMenu.Option
                       value="revoke"
                       label="Revoke"
                     />
                   </DropdownMenu.Group>
-                  <DropdownMenu.Group v-else>
+                  <DropdownMenu.Group key="dropdown-menu.group-2" v-else>
                     <DropdownMenu.Option
                       value="delete"
                       label="Delete"
@@ -640,8 +639,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   title="Expiration"
                   hint="Shorter is safer. A token cannot be extended."
                 >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <Label for="token-expiry">Expires in</Label>
+                  <Field>
+                    <Field.Label for="token-expiry">Expires in</Field.Label>
                     <Select
                       v-model="form.expiresIn"
                       size="large"
@@ -667,7 +666,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                       kind="helper"
                       >{{ expiryHint }}</HelperText
                     >
-                  </div>
+                  </Field>
                 </SettingsSection>
               </fieldset>
             </PanelContent>
@@ -717,8 +716,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 size="small"
                 label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
               />
-              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                <Label for="token-secret">Token</Label>
+              <Field>
+                <Field.Label for="token-secret">Token</Field.Label>
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <div class="min-w-0 grow">
                     <PasswordInput
@@ -744,7 +743,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 >
                   {{ copied ? 'Copied to the clipboard.' : '' }}
                 </p>
-              </div>
+              </Field>
             </div>
           </PanelContent>
           <PanelFooter>

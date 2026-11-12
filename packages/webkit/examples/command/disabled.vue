@@ -1,11 +1,11 @@
 <script setup>
-  import { ref } from 'vue'
-  import Command from '@aziontech/webkit/command'
-  import CommandInput from '@aziontech/webkit/command-input'
-  import CommandList from '@aziontech/webkit/command-list'
-  import CommandGroup from '@aziontech/webkit/command-group'
-  import CommandItem from '@aziontech/webkit/command-item'
   import Button from '@aziontech/webkit/button'
+  import CommandGroup from '@aziontech/webkit/command-group'
+  import CommandInput from '@aziontech/webkit/command-input'
+  import CommandItem from '@aziontech/webkit/command-item'
+  import CommandList from '@aziontech/webkit/command-list'
+  import CommandRoot from '@aziontech/webkit/command-root'
+  import { ref } from 'vue'
 
   const open = ref(false)
 </script>
@@ -17,7 +17,7 @@
     @click="open = true"
   />
 
-  <Command
+  <CommandRoot
     v-model:open="open"
     shortcut=""
   >
@@ -33,5 +33,5 @@
         <CommandItem value="new-app">Create Application</CommandItem>
       </CommandGroup>
     </CommandList>
-  </Command>
+  </CommandRoot>
 </template>

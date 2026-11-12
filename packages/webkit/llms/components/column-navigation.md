@@ -93,13 +93,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
 </script>
 
 <template>
-  <ColumnNavigation
+  <ColumnNavigationRoot
     aria-label="Platform"
     :columns="4"
   >
@@ -183,7 +183,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         href="/real-time-events"
       />
     </ColumnNavigationColumn>
-  </ColumnNavigation>
+  </ColumnNavigationRoot>
 </template>
 ```
 
@@ -191,14 +191,14 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, two columns"
       :columns="2"
     >
@@ -230,9 +230,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           href="/cache"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
 
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, three columns"
       :columns="3"
     >
@@ -260,9 +260,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           href="/waf"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
 
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, four columns"
       :columns="4"
     >
@@ -298,7 +298,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
           href="/real-time-metrics"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
   </div>
 </template>
 ```
@@ -307,13 +307,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
 </script>
 
 <template>
-  <ColumnNavigation
+  <ColumnNavigationRoot
     aria-label="Row states"
     :columns="2"
   >
@@ -342,6 +342,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         description="Secure, manage, and optimize AI traffic"
       />
     </ColumnNavigationColumn>
-  </ColumnNavigation>
+  </ColumnNavigationRoot>
 </template>
 ```

@@ -1,13 +1,12 @@
 <script setup>
+  import CalendarRoot from '@aziontech/webkit/calendar-root'
   import { ref } from 'vue'
-
-  import Calendar from '@aziontech/webkit/calendar'
 
   const range = ref(null)
 </script>
 
 <template>
-  <Calendar
+  <CalendarRoot
     v-model="range"
     mode="range"
     horizontal

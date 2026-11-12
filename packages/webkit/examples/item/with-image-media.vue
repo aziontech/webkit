@@ -15,7 +15,7 @@
       <Item.Title>Midnight City Lights</Item.Title>
       <Item.Description>Neon Dreams · Electric Nights</Item.Description>
     </Item.Content>
-    <Item.Content class="flex-none text-center">
+    <Item.Content>
       <Item.Description>3:45</Item.Description>
     </Item.Content>
   </Item>

@@ -1,11 +1,11 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
-  <CardGrid :columns="3">
+  <CardGridRoot :columns="3">
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">One</div>
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Two</div>
     <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">Three</div>
-  </CardGrid>
+  </CardGridRoot>
 </template>

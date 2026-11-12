@@ -90,12 +90,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>
-  <BentoGrid aria-label="Platform capabilities">
+  <BentoGridRoot aria-label="Platform capabilities">
     <BentoGridCell>
       <h3 class="m-0 text-heading-sm text-(--text-default)">Deploy in seconds</h3>
       <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">
@@ -124,7 +124,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         running.
       </p>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>
 ```
 
@@ -132,12 +132,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>
-  <BentoGrid aria-label="Platform capabilities">
+  <BentoGridRoot aria-label="Platform capabilities">
     <BentoGridCell span="full">
       <h3 class="m-0 text-heading-sm text-(--text-default)">Everything runs at the edge</h3>
       <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">
@@ -169,7 +169,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         Billing follows requests and compute time, so an idle application costs nothing.
       </p>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>
 ```
 
@@ -177,12 +177,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ```vue
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>
-  <BentoGrid
+  <BentoGridRoot
     columns="4"
     mobile-columns="2"
     aria-label="The platform, in one block"
@@ -234,6 +234,6 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     <BentoGridCell kind="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Rollback in one click</h3>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>
 ```

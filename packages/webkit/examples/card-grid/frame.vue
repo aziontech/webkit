@@ -1,10 +1,10 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
   import CardGridCell from '@aziontech/webkit/card-grid-cell'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
 </script>
 
 <template>
-  <CardGrid
+  <CardGridRoot
     kind="frame"
     :columns="3"
   >
@@ -18,5 +18,5 @@
         A cell that paints itself
       </div>
     </CardGridCell>
-  </CardGrid>
+  </CardGridRoot>
 </template>

@@ -1092,18 +1092,22 @@
                         }}</span>
                       </template>
                       <template #cell-status="{ row }">
-                        <div class="flex min-w-0 items-center">
-                          <label
-                            class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                          >
+                        <div class="flex min-h-10 min-w-0 items-center">
+                          <Field orientation="horizontal">
                             <Switch
                               :model-value="row.active"
                               :disabled="row.locked || saving"
                               :aria-label="`Run ${row.name}`"
                               @update:model-value="setActive(row, $event)"
                             />
-                            <span aria-hidden="true">{{ row.active ? 'Active' : 'Inactive' }}</span>
-                          </label>
+                            <Field.Label>
+                              <span
+                                class="text-body-sm"
+                                aria-hidden="true"
+                                >{{ row.active ? 'Active' : 'Inactive' }}</span
+                              >
+                            </Field.Label>
+                          </Field>
                         </div>
                       </template>
                       <template #cell-modified="{ row }">

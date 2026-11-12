@@ -113,8 +113,10 @@
 <template>
   <div class="flex w-full flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console header">
-      <GlobalHeader.Left class="justify-start!">
-        <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
+      <GlobalHeader.Left>
+        <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+          <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
+        </div>
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
@@ -160,12 +162,14 @@
             size="small"
         /></a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle class="justify-start!">
-        <a
-          class="text-label-md text-(--text-default) no-underline"
-          href="/pricing"
-          >Pricing</a
-        >
+      <GlobalHeader.Middle>
+        <div class="flex w-full min-w-0 items-center">
+          <a
+            class="text-label-md text-(--text-default) no-underline"
+            href="/pricing"
+            >Pricing</a
+          >
+        </div>
       </GlobalHeader.Middle>
       <GlobalHeader.Right>
         <Button

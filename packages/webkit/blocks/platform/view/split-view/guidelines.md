@@ -34,7 +34,7 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### E. Fields panel — `Sidebar`, `Input`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### E. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
@@ -133,7 +133,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Default: live traffic with the summary, the chart and the log filled, and no filters applied.
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
-- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
+- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.

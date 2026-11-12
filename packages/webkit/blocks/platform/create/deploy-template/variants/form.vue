@@ -11,7 +11,6 @@
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -194,12 +193,10 @@
                     </Select>
                   </Field>
 
-                  <div class="flex flex-col gap-(--spacing-xs)">
-                    <Label
-                      :label="isPublic ? 'Public repository name' : 'Private repository name'"
-                      required
-                      for="repoName"
-                    />
+                  <Field required>
+                    <Field.Label for="repoName">
+                      {{ isPublic ? 'Public repository name' : 'Private repository name' }}
+                    </Field.Label>
                     <InputGroupRoot size="large">
                       <InputGroupInput
                         id="repoName"
@@ -217,7 +214,7 @@
                         </Tooltip>
                       </InputGroupAddon>
                     </InputGroupRoot>
-                  </div>
+                  </Field>
                 </div>
 
                 <h3 class="text-heading-xxs text-(--text-default)">Template settings</h3>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -19,7 +19,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -27,13 +27,25 @@
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
-  const navGroups = [
+  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
+    path?: string
+    query?: Record<string, string>
+    children?: NavNode[]
+    groups?: NavGroup[]
+  }
+  interface NavGroup {
+    label?: string
+    items: NavNode[]
+  }
+
+  const navGroups: NavGroup[] = [
     {
       items: [
         { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
@@ -242,12 +254,28 @@
     { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
   ]
 
-  const accountTypes = {
-    organization: { label: 'Organization', icon: 'pi pi-building', severity: 'primary' },
-    group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
+  type AccountType = 'organization' | 'group' | 'workspace'
+  type Account = {
+    id: string
+    clientId: string
+    name: string
+    type: AccountType
+    parentId: string | null
   }
-  const accounts = [
+  type AccountRow = Account & {
+    depth: number
+    hasChildren: boolean
+    expanded: boolean
+    typeLabel: string
+  }
+
+  const accountTypes: Record<AccountType, { label: string; icon: string; severity: TagSeverity }> =
+    {
+      organization: { label: 'Organization', icon: 'pi pi-building', severity: 'primary' },
+      group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
+      workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
+    }
+  const accounts: Account[] = [
     {
       id: '1001',
       clientId: '7f3a1',
@@ -263,30 +291,31 @@
     { id: '3001', clientId: '9c201', name: 'Contoso Labs', type: 'organization', parentId: null },
     { id: '3105', clientId: '9c2e8', name: 'Research', type: 'workspace', parentId: '3001' }
   ]
-  const childrenOf = (id) => accounts.filter((account) => account.parentId === id)
+  const typeOf = (row: AccountRow) => accountTypes[row.type]
+  const childrenOf = (id: string | null) => accounts.filter((account) => account.parentId === id)
 
   const currentAccountId = ref('2201')
-  const currentAccount = computed(() =>
-    accounts.find((account) => account.id === currentAccountId.value)
+  const currentAccount = computed(
+    () => accounts.find((account) => account.id === currentAccountId.value) ?? accounts[0]
   )
 
   const switchOpen = ref(false)
   const accountQuery = ref('')
-  const collapsed = ref(new Set())
+  const collapsed = ref(new Set<string>())
   const shortcut = ref('Ctrl+O')
 
-  const matchesQuery = (account, needle) =>
+  const matchesQuery = (account: Account, needle: string) =>
     [account.name, account.id, account.clientId].some((value) =>
       value.toLowerCase().includes(needle)
     )
-  const subtreeMatches = (account, needle) =>
+  const subtreeMatches = (account: Account, needle: string): boolean =>
     matchesQuery(account, needle) ||
     childrenOf(account.id).some((child) => subtreeMatches(child, needle))
 
   const accountRows = computed(() => {
     const needle = accountQuery.value.trim().toLowerCase()
-    const rows = []
-    const walk = (parentId, depth) => {
+    const rows: AccountRow[] = []
+    const walk = (parentId: string | null, depth: number) => {
       for (const account of childrenOf(parentId)) {
         if (needle && !subtreeMatches(account, needle)) continue
         const hasChildren = childrenOf(account.id).length > 0
@@ -305,14 +334,14 @@
     return rows
   })
 
-  const accountColumns = [
+  const accountColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
     { accessorKey: 'typeLabel', header: 'Type', minWidth: 140 },
     { accessorKey: 'id', header: 'ID', minWidth: 120 },
     { accessorKey: 'clientId', header: 'Client ID', minWidth: 120 }
   ]
 
-  const toggleAccount = (row) => {
+  const toggleAccount = (row: AccountRow) => {
     const next = new Set(collapsed.value)
     if (next.has(row.id)) next.delete(row.id)
     else next.add(row.id)
@@ -325,7 +354,7 @@
     nextTick(() => document.getElementById('account-switch-search')?.focus())
   }
 
-  const chooseAccount = (row) => {
+  const chooseAccount = (row: AccountRow) => {
     switchOpen.value = false
     if (row.id === currentAccountId.value) {
       toast.info(`You are already on ${row.name}.`)
@@ -337,7 +366,7 @@
     })
   }
 
-  const onShortcut = (event) => {
+  const onShortcut = (event: KeyboardEvent) => {
     if (event.key?.toLowerCase() !== 'o' || event.altKey || event.shiftKey) return
     const mac = /mac/i.test(navigator.platform || navigator.userAgent || '')
     if (!(mac ? event.metaKey : event.ctrlKey)) return
@@ -355,8 +384,8 @@
   const activeId = ref('resources')
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
+  const theme = ref<ThemeSwitcherValue>('system')
+  const railWidth = ref<number | null>(null)
   const railCollapsed = ref(false)
   const search = ref('')
   const crumbs = [{ label: 'Resources' }]
@@ -365,7 +394,7 @@
     paletteQuery.value = ''
   })
 
-  const leaves = (items) =>
+  const leaves = (items: NavNode[]): NavNode[] =>
     items.flatMap((item) =>
       item.groups
         ? leaves(item.groups.flatMap((group) => group.items))
@@ -375,8 +404,8 @@
     )
 
   const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
+    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
+    let run: NavNode[] = []
     const flush = () => {
       if (run.length) {
         blocks.push({
@@ -419,12 +448,12 @@
     }
   ])
 
-  const onNavigate = (event, node, closeNavigation) => {
+  const onNavigate = (node: MenuNode, closeNavigation: () => void) => {
     activeId.value = node.id
     closeNavigation()
   }
 
-  const onPaletteSelect = (event, value) => {
+  const onPaletteSelect = (_event: Event, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') activeId.value = id
     if (scope === 'res') {
@@ -472,7 +501,7 @@
               >
                 <Command.Input
                   placeholder="Search resources, pages and commands"
-                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                  @update:model-value="(value: string) => (paletteQuery = value)"
                 />
                 <Command.List>
                   <Command.Group
@@ -571,7 +600,7 @@
               :groups="navGroups"
               :active-id="activeId"
               role="presentation"
-              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
+              @navigate="(_event, node) => onNavigate(node, closeNavigation)"
             >
               <Menu.Back />
             </Menu>
@@ -590,7 +619,7 @@
                   <Tooltip text="Account menu">
                     <IconButton
                       icon="pi pi-ellipsis-v"
-                      aria-label="Account menu"
+                      ariaLabel="Account menu"
                       kind="outlined"
                       size="small"
                     />
@@ -739,7 +768,7 @@
                   >
                     <IconButton
                       icon="pi pi-bars"
-                      aria-label="Open navigation"
+                      ariaLabel="Open navigation"
                       kind="outlined"
                       size="medium"
                       @click="openNavigation"
@@ -818,7 +847,7 @@
                     icon="pi pi-plus-circle"
                     kind="primary"
                     size="medium"
-                    aria-label="Create"
+                    ariaLabel="Create"
                   />
                 </Tooltip>
                 <Tooltip
@@ -829,7 +858,7 @@
                     icon="ai ai-ask-azion"
                     kind="outlined"
                     size="medium"
-                    aria-label="Agent"
+                    ariaLabel="Agent"
                   />
                 </Tooltip>
               </span>
@@ -904,7 +933,7 @@
                       icon="pi pi-refresh"
                       kind="outlined"
                       size="medium"
-                      aria-label="Refresh"
+                      ariaLabel="Refresh"
                     />
                   </Tooltip>
                   <Tooltip
@@ -915,7 +944,7 @@
                       icon="pi pi-download"
                       kind="outlined"
                       size="medium"
-                      aria-label="Download CSV"
+                      ariaLabel="Download CSV"
                     />
                   </Tooltip>
                   <Tooltip text="Columns">
@@ -923,7 +952,7 @@
                       icon="ai ai-column"
                       kind="outlined"
                       size="medium"
-                      aria-label="Columns"
+                      ariaLabel="Columns"
                     />
                   </Tooltip>
                   <Button
@@ -1008,7 +1037,7 @@
                           :icon="row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                           kind="transparent"
                           size="small"
-                          :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
+                          :ariaLabel="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
                           :aria-expanded="row.expanded"
                           :disabled="Boolean(accountQuery.trim())"
                           @click="toggleAccount(row)"
@@ -1019,7 +1048,7 @@
                           aria-hidden="true"
                         />
                         <i
-                          :class="accountTypes[row.type].icon"
+                          :class="typeOf(row).icon"
                           class="shrink-0 text-body-sm text-(--text-muted)"
                           aria-hidden="true"
                         />
@@ -1042,8 +1071,8 @@
                     <template #cell-typeLabel="{ row }">
                       <Table.CellStatus
                         :label="row.typeLabel"
-                        :icon="accountTypes[row.type].icon"
-                        :severity="accountTypes[row.type].severity"
+                        :icon="typeOf(row).icon"
+                        :severity="typeOf(row).severity"
                       />
                     </template>
                     <template #cell-id="{ value }">

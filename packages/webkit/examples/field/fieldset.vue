@@ -1,9 +1,9 @@
 <script setup>
-  import { ref } from 'vue'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
+  import { ref } from 'vue'
 
   const region = ref('sa-east')
   const plan = ref('pro')
@@ -47,7 +47,9 @@
             :value="option"
             name="plan"
           />
-          <Field.Label class="capitalize">{{ option }}</Field.Label>
+          <Field.Label>
+            <span class="capitalize">{{ option }}</span>
+          </Field.Label>
         </Field>
       </Field.Set>
     </Field.Group>

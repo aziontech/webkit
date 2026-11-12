@@ -1,16 +1,16 @@
 <script setup>
-  import Menu from '@aziontech/webkit/menu'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import MenuSub from '@aziontech/webkit/menu-sub'
-  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
+  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
 </script>
 
 <template>
   <div class="w-[264px] overflow-hidden">
-    <Menu aria-label="Console navigation">
+    <MenuRoot aria-label="Console navigation">
       <MenuBack />
       <MenuGroup label="Account">
         <MenuItem
@@ -43,6 +43,6 @@
           </MenuSubContent>
         </MenuSub>
       </MenuGroup>
-    </Menu>
+    </MenuRoot>
   </div>
 </template>

@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Hint from '@aziontech/webkit/hint'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
@@ -14,14 +14,21 @@
   const latencyWindow = ref('24h')
   const errorWindow = ref('24h')
 
-  const formatLatency = (value) => `${Math.round(value)} ms`
+  const formatLatency = (value: number) => `${Math.round(value)} ms`
   const windows = [
     { label: '1h', value: '1h' },
     { label: '6h', value: '6h' },
     { label: '24h', value: '24h' }
   ]
 
-  const services = [
+  const services: {
+    id: string
+    name: string
+    status: { label: string; severity: StatusIndicatorSeverity }
+    latency: number | null
+    delta: number | null
+    trend: number[]
+  }[] = [
     {
       id: 'web-app-prod',
       name: 'web-app-prod',
@@ -72,9 +79,9 @@
     }
   ]
 
-  const alerts = []
+  const alerts: unknown[] = []
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>

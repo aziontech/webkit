@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Badge](../../../components/badge.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [Command](../../../components/command.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Menu](../../../components/menu.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -46,7 +46,7 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### E. Fields panel — `Sidebar`, `Input`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### E. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
@@ -145,7 +145,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Default: live traffic with the summary, the chart and the log filled, and no filters applied.
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
-- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
+- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.
@@ -194,6 +194,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -2278,20 +2279,22 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                     :key="field.id"
                     class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                   >
-                    <Checkbox
-                      binary
-                      :disabled="field.locked"
-                      :model-value="true"
-                      :input-id="`event-field-${field.id}`"
-                      @update:model-value="toggleColumn(field.id)"
-                    />
-                    <label
-                      :for="`event-field-${field.id}`"
-                      :data-locked="field.locked || null"
-                      class="min-w-0 flex-1 truncate text-label-sm text-(--text-default) data-locked:text-(--text-muted)"
-                    >
-                      {{ field.label }}
-                    </label>
+                    <div class="min-w-0 flex-1">
+                      <Field
+                        orientation="horizontal"
+                        :disabled="field.locked"
+                      >
+                        <Checkbox
+                          binary
+                          :model-value="true"
+                          :input-id="`event-field-${field.id}`"
+                          @update:model-value="toggleColumn(field.id)"
+                        />
+                        <Field.Label>
+                          <span class="truncate">{{ field.label }}</span>
+                        </Field.Label>
+                      </Field>
+                    </div>
 
                     <Popover
                       v-if="canFilterField(field) && fieldCounts[field.id]"
@@ -2399,18 +2402,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                             :key="field.id"
                             class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                           >
-                            <Checkbox
-                              binary
-                              :model-value="false"
-                              :input-id="`event-field-${field.id}`"
-                              @update:model-value="toggleColumn(field.id)"
-                            />
-                            <label
-                              :for="`event-field-${field.id}`"
-                              class="min-w-0 flex-1 truncate text-label-sm text-(--text-default) data-locked:text-(--text-muted)"
-                            >
-                              {{ field.label }}
-                            </label>
+                            <div class="min-w-0 flex-1">
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  binary
+                                  :model-value="false"
+                                  :input-id="`event-field-${field.id}`"
+                                  @update:model-value="toggleColumn(field.id)"
+                                />
+                                <Field.Label>
+                                  <span class="truncate">{{ field.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </div>
 
                             <Popover
                               v-if="canFilterField(field) && fieldCounts[field.id]"

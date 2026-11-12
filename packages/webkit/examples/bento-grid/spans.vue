@@ -1,10 +1,10 @@
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
 </script>
 
 <template>
-  <BentoGrid aria-label="Platform capabilities">
+  <BentoGridRoot aria-label="Platform capabilities">
     <BentoGridCell span="full">
       <h3 class="m-0 text-heading-sm text-(--text-default)">Everything runs at the edge</h3>
       <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">
@@ -36,5 +36,5 @@
         Billing follows requests and compute time, so an idle application costs nothing.
       </p>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>

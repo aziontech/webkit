@@ -133,7 +133,7 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -217,9 +217,9 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
   const language = ref('EN')
 
   const brandLeadsSocialRow = ref(false)
-  let lgProbe = null
+  let lgProbe: HTMLElement | null = null
   const syncBrand = () => {
-    brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
+    if (lgProbe) brandLeadsSocialRow.value = getComputedStyle(lgProbe).display !== 'none'
   }
   onMounted(() => {
     lgProbe = document.createElement('span')
@@ -250,7 +250,7 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open navigation"
+                ariaLabel="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>
@@ -436,7 +436,7 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
             kind="transparent"
             size="small"
             :icon="social.icon"
-            :aria-label="social.label"
+            :ariaLabel="social.label"
             :href="social.href"
             target="_blank"
           />

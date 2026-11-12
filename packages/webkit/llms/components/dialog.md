@@ -138,18 +138,18 @@
             Modal content. Uses the shared Panel header, body, and footer regions.
           </DialogDescription>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Save"
-            kind="primary"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
         </PanelFooter>
       </DialogContent>
     </DialogPortal>
@@ -173,7 +173,6 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-
   import { reactive, watch } from 'vue'
 
   const sizes = ['small', 'medium', 'large']
@@ -219,13 +218,14 @@
               Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
             </DialogDescription>
           </PanelContent>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              label="Close"
-              kind="outlined"
-              @click="openBySize[size] = false"
-            />
+          <PanelFooter>
+            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+              <Button
+                label="Close"
+                kind="outlined"
+                @click="openBySize[size] = false"
+              />
+            </div>
           </PanelFooter>
         </DialogContent>
       </DialogPortal>
@@ -349,18 +349,18 @@
             actions stay reachable.
           </p>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Save"
-            kind="primary"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
         </PanelFooter>
       </DialogContent>
     </DialogPortal>

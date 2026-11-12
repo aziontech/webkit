@@ -91,7 +91,7 @@
 ```vue
 <script setup>
   import ConsolePanel from '@aziontech/webkit/console-panel'
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
+  import ShellMockupRoot from '@aziontech/webkit/shell-mockup-root'
   import Tag from '@aziontech/webkit/tag'
 
   const tabs = [
@@ -116,7 +116,7 @@
     :crop="0.2"
   >
     <template #scene="{ tab }">
-      <ShellMockup
+      <ShellMockupRoot
         :title="views[tab ?? 'applications'].heading"
         rail="workloads"
         fade="bottom"
@@ -138,7 +138,7 @@
             />
           </div>
         </div>
-      </ShellMockup>
+      </ShellMockupRoot>
     </template>
   </ConsolePanel>
 </template>

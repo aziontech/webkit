@@ -40,7 +40,7 @@ A medium `Input` with a search icon, named "Search rules", matching name, descri
 
 A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, the arrow on the start side, one item per phase, all open by default. Each trigger is an `h2` reading "Request phase" with the rule count in muted tabular figures. A resource with a single phase keeps the same anatomy with one item.
 
-### D. Rules table — `TableRoot`, `Tag`, `Switch` (required)
+### D. Rules table — `TableRoot`, `Tag`, `Field`, `Switch` (required)
 
 A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`), so rows stack as cards in a narrow container: the table's own grip column (Order), Move (96 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
@@ -142,6 +142,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -611,18 +612,22 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                         }}</span>
                       </template>
                       <template #cell-status="{ row }">
-                        <div class="flex min-w-0 items-center">
-                          <label
-                            class="flex min-h-10 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                          >
+                        <div class="flex min-h-10 min-w-0 items-center">
+                          <Field orientation="horizontal">
                             <Switch
                               :model-value="row.active"
                               :disabled="row.locked || saving"
                               :aria-label="`Run ${row.name}`"
                               @update:model-value="setActive(row, $event)"
                             />
-                            <span aria-hidden="true">{{ row.active ? 'Active' : 'Inactive' }}</span>
-                          </label>
+                            <Field.Label>
+                              <span
+                                class="text-body-sm"
+                                aria-hidden="true"
+                                >{{ row.active ? 'Active' : 'Inactive' }}</span
+                              >
+                            </Field.Label>
+                          </Field>
                         </div>
                       </template>
                       <template #cell-modified="{ row }">

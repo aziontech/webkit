@@ -193,7 +193,7 @@
 
 ```vue
 <script setup>
-  import Pagination from '@aziontech/webkit/pagination'
+  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import { ref } from 'vue'
 
   const page = ref(1)
@@ -201,7 +201,7 @@
 </script>
 
 <template>
-  <Pagination
+  <PaginationRoot
     v-model:page="page"
     v-model:page-size="pageSize"
     :total="200"

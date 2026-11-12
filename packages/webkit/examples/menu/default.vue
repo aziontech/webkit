@@ -1,12 +1,12 @@
 <script setup>
-  import Menu from '@aziontech/webkit/menu'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
+  import MenuRoot from '@aziontech/webkit/menu-root'
 </script>
 
 <template>
   <div class="w-[264px] overflow-hidden">
-    <Menu aria-label="Console navigation">
+    <MenuRoot aria-label="Console navigation">
       <MenuGroup label="User agents">
         <MenuItem
           label="End User"
@@ -43,6 +43,6 @@
           href="/metrics"
         />
       </MenuGroup>
-    </Menu>
+    </MenuRoot>
   </div>
 </template>

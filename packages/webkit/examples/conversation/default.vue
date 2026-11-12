@@ -1,5 +1,5 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import Conversation from '@aziontech/webkit/conversation'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup from '@aziontech/webkit/suggestion-group'
@@ -15,28 +15,28 @@
     class="flex h-[28rem] w-full max-w-(--container-3xl) flex-col rounded-(--shape-card) border border-(--border-default)"
   >
     <Conversation>
-      <ChatMessage
+      <ChatMessageRoot
         from="user"
         timestamp="10:41"
       >
         How do I purge the cache of one URL?
-      </ChatMessage>
-      <ChatMessage timestamp="10:41">
+      </ChatMessageRoot>
+      <ChatMessageRoot timestamp="10:41">
         <StreamingResponse
           content="Open **Real-Time Purge**, choose *URL* as the purge type and paste the address."
         />
-      </ChatMessage>
-      <ChatMessage
+      </ChatMessageRoot>
+      <ChatMessageRoot
         from="user"
         timestamp="10:43"
       >
         Can I do it from the CLI?
-      </ChatMessage>
-      <ChatMessage timestamp="10:43">
+      </ChatMessageRoot>
+      <ChatMessageRoot timestamp="10:43">
         <StreamingResponse
           :content="'Yes:\n\n```bash\nazion purge urls --urls https://www.example.com/styles.css\n```'"
         />
-      </ChatMessage>
+      </ChatMessageRoot>
       <SuggestionGroup
         :items="followUps"
         aria-label="Follow-up questions"
