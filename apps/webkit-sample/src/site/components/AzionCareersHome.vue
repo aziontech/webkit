@@ -10,6 +10,7 @@
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
   import Table from '@aziontech/webkit/table'
+  import { markRaw } from 'vue'
   import { useRouter } from 'vue-router'
 
   import { CAREERS_JOBS, jobFacets, jobId } from '../data/careers.js'
@@ -24,9 +25,11 @@
   } from '../data/careers-home.js'
   import { COMPANY_CLOSING } from '../data/product-pages.js'
   import ClosingCallToAction from '../ui/sections/ClosingCallToAction.vue'
+  import GridLightsScene from '../ui/GridLightsScene.vue'
   import StepsList from '../ui/sections/StepsList.vue'
   import SpinningGlobe from '../ui/SpinningGlobe.vue'
 
+  const HIRING_SCENE = { component: markRaw(GridLightsScene) }
   const router = useRouter()
   const openRole = (id) => router.push(`/site/careers/${id}`)
 
@@ -174,6 +177,7 @@
       :title="CAREERS_PROCESS.title"
       :description="CAREERS_PROCESS.description"
       :steps="CAREERS_PROCESS.steps"
+      :scene="HIRING_SCENE"
       aria-label="Hiring process stages"
     />
 

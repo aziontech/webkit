@@ -1,6 +1,7 @@
 import { markRaw } from 'vue'
 
 import BrandGlobeScene from '../../ui/BrandGlobeScene.vue'
+import GridLightsScene from '../../ui/GridLightsScene.vue'
 import { CAREERS_JOBS, jobFacets, jobId } from '../careers.js'
 import {
   CAREERS_HOME_HERO,
@@ -59,6 +60,7 @@ export const CAREERS_HOME_PAGE = [
     title: CAREERS_PROCESS.title,
     description: CAREERS_PROCESS.description,
     steps: CAREERS_PROCESS.steps,
+    scene: { component: markRaw(GridLightsScene) },
     ariaLabel: 'Hiring process stages'
   },
   {
