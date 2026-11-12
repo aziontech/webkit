@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import SectionHeader from '@aziontech/webkit/section-header'

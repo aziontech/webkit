@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
@@ -7,7 +7,7 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import LogView from '@aziontech/webkit/log-view'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
@@ -15,7 +15,17 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
-  const steps = [
+  type StepStatus = 'done' | 'failed' | 'skipped' | 'running' | 'pending'
+  type DeployStep = {
+    key: string
+    title: string
+    description: string
+    status: StepStatus
+    duration: string
+    lines: LogViewLine[]
+  }
+
+  const steps: DeployStep[] = [
     {
       key: 'build',
       title: 'Build',
@@ -342,7 +352,7 @@
   const logView = ref('phased')
   const openStep = ref('finish')
 
-  const stepStatusLabels = {
+  const stepStatusLabels: Record<StepStatus, string> = {
     done: 'Done',
     failed: 'Failed',
     skipped: 'Skipped',
