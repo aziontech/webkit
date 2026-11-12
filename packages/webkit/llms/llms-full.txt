@@ -2162,12 +2162,12 @@ The code of every state is in [blocks/platform/account/activity-history.md](bloc
 
 # ChangePlanDrawer (`platform/account/change-plan-drawer`)
 
-> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.
+> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -2279,6 +2279,10 @@ Mounted once with the drawers. A failure no section owns (the payment service di
 ### W. Card brand — `PaymentBrand` (required)
 
 The plate before the card on file in the Payment method section, named after the brand.
+
+### X. Included features — `FeatureList` (required)
+
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
 
 ## Do
 
@@ -3049,7 +3053,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
+- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
 - EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the search row and the table's loading rows.
@@ -3066,7 +3070,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## Variants
 
 - `Default` — primary (the code below)
-- `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix.
+- `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.
 - `EditTeam` — The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.
 - `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.
 - `Loading` — The first load: the search row and the table's loading rows.
@@ -3211,12 +3215,12 @@ The code of every state is in [blocks/platform/account/tokens.md](blocks/platfor
 
 # Users (`platform/account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, Owner marked, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over a search `Input` and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email, the owner marked with a highlight `Tag`, the email under it), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `Input`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `Tooltip`, `DropdownMenu`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `EmptyState`, `Alert` and `Toaster`.
 
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/users")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Table](../../../components/table.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3247,9 +3251,9 @@ Title `Users` and one sentence that says access comes from teams. Actions: Docum
 
 A search `Input` bound with `v-bind="filterProps"` over name, email and status. Hidden while the list failed to load.
 
-### C. Users table — `Card`, `Table`, `Avatar`, `useCollection` (required)
+### C. Users table — `Card`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
 
-`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name. Name: a square `Avatar` with the initials, the name (or the email while the invitation is pending), `Owner` in muted text after the owner's name, and the email under it. Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
+`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name. Name: a square `Avatar` with the initials, the name (or the email while the invitation is pending), an `Owner` `Tag` (`severity="highlight"`, small) after the owner's name, and the email under it. Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 
@@ -7049,12 +7053,12 @@ The code of every state is in [blocks/platform/dashboard/health-score-dashboard.
 
 # HomeDashboard (`platform/dashboard/home-dashboard`)
 
-> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
+> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTileGroup`, `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -7100,7 +7104,9 @@ navigation groups, `Actions` and `Account`. On a new account it is also what the
 
 ### D. Navigation — `Menu` (required)
 
-The grouped navigation items inside the rail, and the account row at its foot.
+The grouped navigation items inside the rail, and the account row at its foot. Each node's destination
+is `href` (never `path`, which is the drill stack); `@navigate` calls `event.preventDefault()` on a
+plain click and routes in the app, so the rows stay real links.
 
 ### E. Account identity — `Avatar` (required)
 
@@ -7148,15 +7154,18 @@ The header search, first in the end cluster: the field (`Search` with the ⌘K /
 `Agent` in the header, the one emphasized entry to the coding agent. Only one highlighted button per
 screen.
 
-### O. Usage band — `StatTile` (required)
+### O. Usage band — `StatTileGroup`, `StatTile` (required)
 
-Four chartless tiles in an aside labelled `Usage`, each with value, unit and delta. Beside them, the
-dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest belongs on
-a dashboard.
+Four chartless tiles joined in one `StatTileGroup` card (the group draws the surface and the dividers),
+in an aside labelled `Usage`, each with a numeric `value`, a unit and a numeric `delta`. Beside them,
+the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
+belongs on a dashboard.
 
 ### P. Agent onboarding — `Card` (optional)
 
-A whole-card button: the agent marks, `Set up your coding agent` and one sentence. Its dismiss
+A whole-card button: the agent marks, `Set up your coding agent` and one sentence. A mono mark is a
+CSS mask whose `url('…')` is quoted: the build inlines the SVG as a `data:` URI, and unquoted it breaks
+the declaration and the mark renders as a solid square. Its dismiss
 `IconButton` sits outside the button so the two actions never nest.
 
 ### Q. Resource rows — `Item` (required)
@@ -7192,6 +7201,9 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 
 - Don't add charts to Home; link to the dashboard that has them.
 - Don't put more than four usage tiles in the band.
+- Don't hand-build the band's card, grid or dividers around the tiles; `StatTileGroup` draws them.
+- Don't pass figures as strings or flags as `'true'` / `'false'`: a tile's `value` and `delta` are
+  numbers, and the string `'false'` is truthy.
 - Don't nest the dismiss button inside the card's button.
 - Don't show a second highlighted button next to `Agent`.
 
@@ -10034,7 +10046,8 @@ Joins the read-only command and its copy button into one control, full width.
 
 ### G. Command — `Input` (CLI method)
 
-`readonly`, `size="large"`, holding the command to run, with an `aria-label` that names it.
+`readonly`, `monospace`, `:spellcheck="false"` and `size="large"`, holding the command to run in the
+code face, with an `aria-label` that names it.
 
 ### H. Copy — `CopyButton` (CLI method)
 
@@ -10050,6 +10063,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## Don't
 
+- Don't write an agent mark's mask as an unquoted `url(...)`: the build inlines the SVG as a `data:` URI and the unquoted value renders the mark as a solid square. Quote it (`url('…')`).
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -10992,7 +11006,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - Don't add a `PageHeader` above the card; the toolbar is the header.
 - Don't split Upload file and Add folder into two primary buttons.
 - Don't give the `..` row a row menu, a size or an author.
-- Don't let the table scroll the page sideways; narrow widths stack the rows.
+- Don't let the table scroll the page sideways; on a phone the grid scrolls sideways inside its card, never the page.
 - Don't replace the toolbar with a full-page empty state when a folder is empty; only the table area changes.
 - Don't block the page with a modal progress dialog while files upload or move.
 - Don't offer View deployments, Edit or Redeploy after a storage transfer; nothing is deployed.
@@ -11095,7 +11109,7 @@ The page where people find something made by Azion or a partner and add it to wh
 
 ### B. Item kinds — `Tabs` (required)
 
-`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
+`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
 
 ### C. Featured — `Card` (required)
 
@@ -11323,7 +11337,7 @@ With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:
 
 Variant CreateDatabase only; it is its own page and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
 
-The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
+The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
 ### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
@@ -11409,7 +11423,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - `Failed` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
 - `TableData` — The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
 - `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
-- `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
+- `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/query-editor", { variant })`, or the file under `blocks/platform/view/query-editor/variants/`.
 
@@ -11421,7 +11435,7 @@ The code of every state is in [blocks/platform/view/query-editor.md](blocks/plat
 
 # RulesList (`platform/view/rules-list`)
 
-> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (stacking to cards when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
+> An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (scrolling sideways when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.
 
 - Surface: product
 - Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
@@ -11463,7 +11477,7 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 ### D. Rules table — `TableRoot`, `Tag`, `Field`, `Switch` (required)
 
-A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`), so rows stack as cards in a narrow container: the table's own grip column (Order), Move (96 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
+A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel): the table's own grip column (Order), Move (96 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
 ### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
 
@@ -11607,7 +11621,7 @@ A resizable, collapsible start `Sidebar` named Fields with its own Search fields
 
 ### F. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar stacked` with `Chart.Brush`, bound to `v-model:range`). Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Table.CellStatus`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar kind="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a `Table.CellStatus`, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -11783,7 +11797,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `TableRoot` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. Below the container width the rows stack into label and value cards instead of scrolling sideways.
+`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 

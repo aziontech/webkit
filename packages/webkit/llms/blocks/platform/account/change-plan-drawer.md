@@ -1,11 +1,11 @@
 # ChangePlanDrawer (`platform/account/change-plan-drawer`)
 
-> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing` and `Button`.
+> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -118,6 +118,10 @@ Mounted once with the drawers. A failure no section owns (the payment service di
 
 The plate before the card on file in the Payment method section, named after the brand.
 
+### X. Included features — `FeatureList` (required)
+
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.
@@ -178,6 +182,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CardPricing from '@aziontech/webkit/card-pricing'
+  import FeatureList from '@aziontech/webkit/feature-list'
   import Separator from '@aziontech/webkit/separator'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -317,17 +322,17 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     { value: 'yearly', label: 'Yearly' }
   ]
   const upgradeFeatures = [
-    { title: '100 resources', detail: 'then $0.10 per resource per month' },
-    { title: '10M requests', detail: 'then as low as $0.90 per 1M' },
-    { title: '50 hours of compute time', detail: 'then $0.18 per hour' },
-    { title: '10 GB of event log storage', detail: 'then $0.10 per GB-month' },
-    { title: '100 GB of file storage', detail: 'then as low as $0.021 per GB-month' },
-    { title: '1 GB of database storage', detail: 'then $0.75 per GB-month' },
-    { title: '100M security rule evaluations', detail: 'then as low as $0.30 per 1M' },
-    { title: 'DDoS protection included', detail: '' },
-    { title: 'PCI DSS 4.0.1 Level 1', detail: '' },
-    { title: 'SOC 2 Type 2 / SOC 3', detail: '' },
-    { title: 'Data migration assistance', detail: '' }
+    { label: '100 resources', description: 'then $0.10 per resource per month' },
+    { label: '10M requests', description: 'then as low as $0.90 per 1M' },
+    { label: '50 hours of compute time', description: 'then $0.18 per hour' },
+    { label: '10 GB of event log storage', description: 'then $0.10 per GB-month' },
+    { label: '100 GB of file storage', description: 'then as low as $0.021 per GB-month' },
+    { label: '1 GB of database storage', description: 'then $0.75 per GB-month' },
+    { label: '100M security rule evaluations', description: 'then as low as $0.30 per 1M' },
+    { label: 'DDoS protection included' },
+    { label: 'PCI DSS 4.0.1 Level 1' },
+    { label: 'SOC 2 Type 2 / SOC 3' },
+    { label: 'Data migration assistance' }
   ]
   const pricingLinks = [
     { label: 'Learn more about pricing', href: 'https://example.com/pricing' },
@@ -640,26 +645,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   >
                     What's included
                   </h3>
-                  <ul class="m-0 flex list-none flex-col p-0">
-                    <li
-                      v-for="feature in upgradeFeatures"
-                      :key="feature.title"
-                      class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
-                    >
-                      <i
-                        class="pi pi-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
-                        aria-hidden="true"
-                      />
-                      <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                        <span class="text-label-md text-(--text-default)">{{ feature.title }}</span>
-                        <span
-                          v-if="feature.detail"
-                          class="text-body-xs text-(--text-muted)"
-                          >{{ feature.detail }}</span
-                        >
-                      </span>
-                    </li>
-                  </ul>
+                  <div class="px-(--spacing-xs)">
+                    <FeatureList :items="upgradeFeatures" />
+                  </div>
                 </div>
                 <div class="flex flex-col gap-(--spacing-xs)">
                   <Separator />

@@ -1,11 +1,11 @@
 # HomeDashboard (`platform/dashboard/home-dashboard`)
 
-> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
+> The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTileGroup`, `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Sidebar](../../../components/sidebar.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [StatusIndicator](../../../components/status-indicator.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -51,7 +51,9 @@ navigation groups, `Actions` and `Account`. On a new account it is also what the
 
 ### D. Navigation — `Menu` (required)
 
-The grouped navigation items inside the rail, and the account row at its foot.
+The grouped navigation items inside the rail, and the account row at its foot. Each node's destination
+is `href` (never `path`, which is the drill stack); `@navigate` calls `event.preventDefault()` on a
+plain click and routes in the app, so the rows stay real links.
 
 ### E. Account identity — `Avatar` (required)
 
@@ -99,15 +101,18 @@ The header search, first in the end cluster: the field (`Search` with the ⌘K /
 `Agent` in the header, the one emphasized entry to the coding agent. Only one highlighted button per
 screen.
 
-### O. Usage band — `StatTile` (required)
+### O. Usage band — `StatTileGroup`, `StatTile` (required)
 
-Four chartless tiles in an aside labelled `Usage`, each with value, unit and delta. Beside them, the
-dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest belongs on
-a dashboard.
+Four chartless tiles joined in one `StatTileGroup` card (the group draws the surface and the dividers),
+in an aside labelled `Usage`, each with a numeric `value`, a unit and a numeric `delta`. Beside them,
+the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
+belongs on a dashboard.
 
 ### P. Agent onboarding — `Card` (optional)
 
-A whole-card button: the agent marks, `Set up your coding agent` and one sentence. Its dismiss
+A whole-card button: the agent marks, `Set up your coding agent` and one sentence. A mono mark is a
+CSS mask whose `url('…')` is quoted: the build inlines the SVG as a `data:` URI, and unquoted it breaks
+the declaration and the mark renders as a solid square. Its dismiss
 `IconButton` sits outside the button so the two actions never nest.
 
 ### Q. Resource rows — `Item` (required)
@@ -143,6 +148,9 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 
 - Don't add charts to Home; link to the dashboard that has them.
 - Don't put more than four usage tiles in the band.
+- Don't hand-build the band's card, grid or dividers around the tiles; `StatTileGroup` draws them.
+- Don't pass figures as strings or flags as `'true'` / `'false'`: a tile's `value` and `delta` are
+  numbers, and the string `'false'` is truthy.
 - Don't nest the dismiss button inside the card's button.
 - Don't show a second highlighted button next to `Agent`.
 
@@ -208,6 +216,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -216,33 +225,33 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const navGroups = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', path: '/projects' },
+        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
+        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
         {
           id: 'deployments',
           label: 'Deployments',
           icon: 'pi pi-cloud-upload',
-          path: '/deployments'
+          href: '/deployments'
         }
       ]
     },
     {
       label: 'Build',
       items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', path: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', path: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', path: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', path: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', path: '/templates' }
+        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
+        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
+        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
+        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
+        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
       ]
     },
     {
       label: 'Security',
       items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', path: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', path: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', path: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', path: '/keys' }
+        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
+        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
+        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
+        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
       ]
     },
     {
@@ -252,16 +261,16 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           id: 'databases',
           label: 'Databases',
           icon: 'pi pi-database',
-          path: '/databases',
+          href: '/databases',
           tagValue: 'Preview'
         },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', path: '/storage' }
+        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
       ]
     },
     {
       label: 'Observability',
       items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', path: '/logs' },
+        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
         {
           id: 'metrics-module',
           label: 'Metrics',
@@ -270,7 +279,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           href: '/metrics',
           groups: [
             {
-              items: [{ id: 'metrics', label: 'Overview', path: '/metrics' }]
+              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
             },
             {
               label: 'Build',
@@ -278,19 +287,19 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 {
                   id: 'metrics-resources',
                   label: 'Resources',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'resources' }
                 },
                 {
                   id: 'metrics-services',
                   label: 'Services',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'services' }
                 },
                 {
                   id: 'metrics-cache',
                   label: 'Cache',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'cache' }
                 }
               ]
@@ -301,19 +310,19 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 {
                   id: 'metrics-domains',
                   label: 'Domains',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'domains' }
                 },
                 {
                   id: 'metrics-policies',
                   label: 'Policies',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'policies' }
                 },
                 {
                   id: 'metrics-rule-sets',
                   label: 'Rule sets',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'rule-sets' }
                 }
               ]
@@ -324,26 +333,26 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 {
                   id: 'metrics-databases',
                   label: 'Databases',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'databases' }
                 },
                 {
                   id: 'metrics-storage',
                   label: 'Storage',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'storage' }
                 }
               ]
             }
           ]
         },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', path: '/events' }
+        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
       ]
     },
     {
       label: 'More',
       items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', path: '/catalog' },
+        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
         {
           id: 'settings',
           label: 'Settings',
@@ -353,35 +362,35 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', path: '/account' },
+                { id: 'settings-general', label: 'General', href: '/account' },
                 {
                   id: 'settings-build-deployment',
                   label: 'Build and deployment',
-                  path: '/account/build-deployment'
+                  href: '/account/build-deployment'
                 },
                 {
                   id: 'settings-environments',
                   label: 'Environments',
-                  path: '/account/environments'
+                  href: '/account/environments'
                 },
-                { id: 'settings-users', label: 'Users management', path: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
+                { id: 'settings-users', label: 'Users management', href: '/account/users' },
+                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
               ]
             },
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
+                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
+                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
               ]
             },
             {
               label: 'Billing',
               items: [
-                { id: 'settings-billing', label: 'Billing and plan', path: '/account/billing' },
+                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
                 { id: 'settings-invoices', label: 'Invoices' }
               ]
             }
@@ -489,6 +498,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   ])
 
   const onNavigate = (event, node) => {
+    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0
+    if (node.href && !modified) event.preventDefault()
     activeId.value = node.id
   }
 
@@ -510,30 +521,30 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const metrics = [
     {
       label: 'Data transferred',
-      value: '842',
+      value: 842,
       unit: 'GB',
-      delta: '12.4',
+      delta: 12.4,
       hint: 'Total bytes delivered across all your resources.'
     },
     {
       label: 'Requests per second',
-      value: '1240',
+      value: 1240,
       unit: '/s',
-      delta: '3.8',
+      delta: 3.8,
       hint: 'Average requests handled per second in the selected window.'
     },
     {
       label: 'Bandwidth saving',
-      value: '588',
+      value: 588,
       unit: 'GB',
-      delta: '6.2',
+      delta: 6.2,
       hint: 'Bytes served from cache instead of your origin.'
     },
     {
       label: 'Data offload',
-      value: '70',
+      value: 70,
       unit: '%',
-      delta: '-1.5',
+      delta: -1.5,
       hint: 'Share of traffic served from cache instead of your origin.'
     }
   ]
@@ -543,8 +554,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       key: 'projects',
       label: 'Projects',
       path: '/projects',
-      recent: 'false',
-      marked: 'true',
+      recent: false,
+      marked: true,
       resources: [
         {
           id: '4410203040',
@@ -592,8 +603,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       key: 'resources',
       label: 'Resources',
       path: '/resources',
-      recent: 'false',
-      marked: 'false',
+      recent: false,
+      marked: false,
       resources: [
         { id: '1020655', type: 'resources', typeLabel: 'Resource', name: 'resource-01' },
         { id: '1031410003', type: 'resources', typeLabel: 'Resource', name: 'resource-02' },
@@ -604,8 +615,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       key: 'domains',
       label: 'Domains',
       path: '',
-      recent: 'false',
-      marked: 'false',
+      recent: false,
+      marked: false,
       resources: [
         { id: 'domain-1020655', type: 'domains', typeLabel: 'Domain', name: 'app.example.com' },
         {
@@ -622,8 +633,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       key: 'recents',
       label: 'Recents',
       path: '',
-      recent: 'true',
-      marked: 'false',
+      recent: true,
+      marked: false,
       resources: [
         { id: '1020655', type: 'resources', typeLabel: 'Resource', name: 'resource-01' },
         { id: 'domain-1020655', type: 'domains', typeLabel: 'Domain', name: 'app.example.com' },
@@ -1059,26 +1070,26 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               class="animate-content-enter motion-reduce:animate-none flex w-full shrink-0 flex-col gap-(--layout-group-gap) xl:flex-row xl:items-stretch xl:gap-(--layout-section-gap)"
               aria-label="Usage"
             >
-              <div
-                class="grid min-w-0 grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 xl:flex-1 xl:grid-cols-4"
-              >
-                <StatTile
-                  v-for="metric in metrics"
-                  :key="metric.label"
-                  :label="metric.label"
-                  :value="metric.value"
-                  :unit="metric.unit"
-                  :delta="metric.delta"
-                >
-                  <template #aside>
-                    <Tooltip :text="metric.hint">
-                      <i
-                        class="pi pi-info-circle text-body-sm text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </Tooltip>
-                  </template>
-                </StatTile>
+              <div class="min-w-0 xl:flex-1">
+                <StatTileGroup>
+                  <StatTile
+                    v-for="metric in metrics"
+                    :key="metric.label"
+                    :label="metric.label"
+                    :value="metric.value"
+                    :unit="metric.unit"
+                    :delta="metric.delta"
+                  >
+                    <template #aside>
+                      <Tooltip :text="metric.hint">
+                        <i
+                          class="pi pi-info-circle text-body-sm text-(--text-muted)"
+                          aria-hidden="true"
+                        />
+                      </Tooltip>
+                    </template>
+                  </StatTile>
+                </StatTileGroup>
               </div>
 
               <Transition
@@ -1110,7 +1121,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                             <span
                               v-if="agent.mono"
                               class="size-(--size-4) shrink-0 bg-current text-(--text-default) mask-(--agent-mark) mask-contain mask-center mask-no-repeat"
-                              :style="{ '--agent-mark': 'url(' + agent.src + ')' }"
+                              :style="{ '--agent-mark': `url('${agent.src}')` }"
                             />
                             <img
                               v-else

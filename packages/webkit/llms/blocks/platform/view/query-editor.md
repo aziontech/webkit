@@ -80,7 +80,7 @@ With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:
 
 Variant CreateDatabase only; it is its own page and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
 
-The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
+The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
 ### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
@@ -166,7 +166,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - `Failed` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
 - `TableData` — The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
 - `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
-- `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, over a save bar with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
+- `CreateDatabase` — The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/query-editor", { variant })`, or the file under `blocks/platform/view/query-editor/variants/`.
 
@@ -213,33 +213,33 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   const navGroups = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', path: '/projects' },
+        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
+        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
         {
           id: 'deployments',
           label: 'Deployments',
           icon: 'pi pi-cloud-upload',
-          path: '/deployments'
+          href: '/deployments'
         }
       ]
     },
     {
       label: 'Build',
       items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', path: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', path: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', path: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', path: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', path: '/templates' }
+        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
+        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
+        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
+        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
+        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
       ]
     },
     {
       label: 'Security',
       items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', path: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', path: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', path: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', path: '/keys' }
+        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
+        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
+        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
+        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
       ]
     },
     {
@@ -249,16 +249,16 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
           id: 'databases',
           label: 'Databases',
           icon: 'pi pi-database',
-          path: '/databases',
+          href: '/databases',
           tagValue: 'Preview'
         },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', path: '/storage' }
+        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
       ]
     },
     {
       label: 'Observability',
       items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', path: '/logs' },
+        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
         {
           id: 'metrics-module',
           label: 'Metrics',
@@ -267,7 +267,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
           href: '/metrics',
           groups: [
             {
-              items: [{ id: 'metrics', label: 'Overview', path: '/metrics' }]
+              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
             },
             {
               label: 'Build',
@@ -275,19 +275,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
                 {
                   id: 'metrics-resources',
                   label: 'Resources',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'resources' }
                 },
                 {
                   id: 'metrics-services',
                   label: 'Services',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'services' }
                 },
                 {
                   id: 'metrics-cache',
                   label: 'Cache',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'cache' }
                 }
               ]
@@ -298,19 +298,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
                 {
                   id: 'metrics-domains',
                   label: 'Domains',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'domains' }
                 },
                 {
                   id: 'metrics-policies',
                   label: 'Policies',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'policies' }
                 },
                 {
                   id: 'metrics-rule-sets',
                   label: 'Rule sets',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'rule-sets' }
                 }
               ]
@@ -321,26 +321,26 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
                 {
                   id: 'metrics-databases',
                   label: 'Databases',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'databases' }
                 },
                 {
                   id: 'metrics-storage',
                   label: 'Storage',
-                  path: '/metrics',
+                  href: '/metrics',
                   query: { dashboard: 'storage' }
                 }
               ]
             }
           ]
         },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', path: '/events' }
+        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
       ]
     },
     {
       label: 'More',
       items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', path: '/catalog' },
+        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
         {
           id: 'settings',
           label: 'Settings',
@@ -350,35 +350,35 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
             {
               label: 'Settings',
               items: [
-                { id: 'settings-general', label: 'General', path: '/account' },
+                { id: 'settings-general', label: 'General', href: '/account' },
                 {
                   id: 'settings-build-deployment',
                   label: 'Build and deployment',
-                  path: '/account/build-deployment'
+                  href: '/account/build-deployment'
                 },
                 {
                   id: 'settings-environments',
                   label: 'Environments',
-                  path: '/account/environments'
+                  href: '/account/environments'
                 },
-                { id: 'settings-users', label: 'Users management', path: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', path: '/account/teams' }
+                { id: 'settings-users', label: 'Users management', href: '/account/users' },
+                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
               ]
             },
             {
               label: 'Access',
               items: [
-                { id: 'settings-tokens', label: 'Personal tokens', path: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', path: '/account/credentials' },
+                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
+                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
                 { id: 'settings-security-mfa', label: 'Multi-factor auth' },
                 { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', path: '/account/activity' }
+                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
               ]
             },
             {
               label: 'Billing',
               items: [
-                { id: 'settings-billing', label: 'Billing and plan', path: '/account/billing' },
+                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
                 { id: 'settings-invoices', label: 'Invoices' }
               ]
             }
@@ -488,6 +488,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   ])
 
   const onNavigate = (event, node) => {
+    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0
+    if (node.href && !modified) event.preventDefault()
     activeId.value = node.id
   }
 

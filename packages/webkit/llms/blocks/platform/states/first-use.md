@@ -55,7 +55,8 @@ Joins the read-only command and its copy button into one control, full width.
 
 ### G. Command — `Input` (CLI method)
 
-`readonly`, `size="large"`, holding the command to run, with an `aria-label` that names it.
+`readonly`, `monospace`, `:spellcheck="false"` and `size="large"`, holding the command to run in the
+code face, with an `aria-label` that names it.
 
 ### H. Copy — `CopyButton` (CLI method)
 
@@ -71,6 +72,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## Don't
 
+- Don't write an agent mark's mask as an unquoted `url(...)`: the build inlines the SVG as a `data:` URI and the unquoted value renders the mark as a solid square. Quote it (`url('…')`).
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -127,8 +129,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Input from '@aziontech/webkit/input'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
 
@@ -217,6 +219,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                         class="w-full"
                         aria-label="Via CLI command"
                         readonly
+                        monospace
+                        :spellcheck="false"
                       />
                     </div>
                     <CopyButton
@@ -342,7 +346,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                 <span
                   v-if="agent.mono"
                   class="size-(--size-4) shrink-0 bg-current text-(--text-default) mask-(--agent-mark) mask-contain mask-center mask-no-repeat"
-                  :style="{ '--agent-mark': 'url(' + agent.src + ')' }"
+                  :style="{ '--agent-mark': `url('${agent.src}')` }"
                 />
                 <img
                   v-else
