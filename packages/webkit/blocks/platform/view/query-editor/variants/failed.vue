@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -6,7 +6,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
-  import CodeEditor from '@aziontech/webkit/code-editor'
+  import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
   import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -19,7 +19,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -27,15 +27,26 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
 
-  const navGroups = [
+  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
+    path?: string
+    query?: Record<string, string>
+    children?: NavNode[]
+    groups?: NavGroup[]
+  }
+  interface NavGroup {
+    label?: string
+    items: NavNode[]
+  }
+
+  const navGroups: NavGroup[] = [
     {
       items: [
         { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
@@ -250,15 +261,15 @@
   const navOpen = ref(false)
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
+  const theme = ref<ThemeSwitcherValue>('system')
+  const railWidth = ref<number | null>(null)
   const railCollapsed = ref(false)
 
   watch(paletteOpen, () => {
     paletteQuery.value = ''
   })
 
-  const leaves = (items) =>
+  const leaves = (items: NavNode[]): NavNode[] =>
     items.flatMap((item) =>
       item.groups
         ? leaves(item.groups.flatMap((group) => group.items))
@@ -268,8 +279,8 @@
     )
 
   const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
+    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
+    let run: NavNode[] = []
     const flush = () => {
       if (run.length) {
         blocks.push({
@@ -312,16 +323,16 @@
     }
   ])
 
-  const onNavigate = (event, node) => {
+  const onNavigate = (_event: MouseEvent, node: MenuNode) => {
     activeId.value = node.id
   }
 
-  const onMobileNavigate = (event, node) => {
+  const onMobileNavigate = (event: MouseEvent, node: MenuNode) => {
     onNavigate(event, node)
     navOpen.value = false
   }
 
-  const onPaletteSelect = (event, value) => {
+  const onPaletteSelect = (_event: Event, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') activeId.value = id
     if (scope === 'res') {
@@ -407,7 +418,7 @@
     }
   ])
   const tableSearch = ref('')
-  const selectedTableId = ref(null)
+  const selectedTableId = ref<string | null>(null)
   const filteredTables = computed(() => {
     const term = tableSearch.value.trim().toLowerCase()
     if (!term) return tables.value
@@ -417,11 +428,11 @@
     () =>
       tables.value.find((table) => table.id === selectedTableId.value) ?? tables.value[0] ?? null
   )
-  const selectTable = (id) => {
+  const selectTable = (id: string) => {
     selectedTableId.value = id
   }
 
-  const schemaColumns = [
+  const schemaColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', minWidth: 104 },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 }
@@ -488,11 +499,17 @@
     if (!term) return history.value
     return history.value.filter((item) => item.sql.toLowerCase().includes(term))
   })
-  const oneLine = (sql) => sql.replace(/\s+/g, ' ').trim()
+  const oneLine = (sql: string) => sql.replace(/\s+/g, ' ').trim()
 
   const running = ref(false)
   const templatesOpen = ref(false)
-  const selectResult = {
+  type ResultRow = Record<string, string | number>
+  type QueryResult =
+    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
+    | { type: 'error'; line: number; text: string }
+    | { type: 'message'; text: string }
+
+  const selectResult: QueryResult = {
     type: 'rows',
     columns: ['id', 'name', 'email', 'created_at'],
     rows: [
@@ -519,10 +536,10 @@
       }
     ]
   }
-  const results = ref(null)
+  const results = ref<QueryResult | null>(null)
   const resultColumns = computed(() => {
     if (results.value?.type !== 'rows') return []
-    return results.value.columns.map((key, index) => ({
+    return results.value.columns.map((key: string, index: number) => ({
       accessorKey: key,
       header: key,
       principal: index === 0
@@ -534,7 +551,9 @@
     { label: 'JSON', value: 'json' }
   ]
   const resultSearch = ref('')
-  const resultRows = computed(() => (results.value?.type === 'rows' ? results.value.rows : []))
+  const resultRows = computed<ResultRow[]>(() =>
+    results.value?.type === 'rows' ? results.value.rows : []
+  )
   const filteredResultRows = computed(() => {
     const term = resultSearch.value.trim().toLowerCase()
     if (!term) return resultRows.value
@@ -552,19 +571,19 @@
     )
   )
 
-  const editorMarkers = computed(() =>
+  const editorMarkers = computed<CodeEditorMarker[]>(() =>
     results.value?.type === 'error' && results.value.line
       ? [{ line: results.value.line, severity: 'error', message: results.value.text }]
       : []
   )
-  const applyTemplate = (sql) => {
+  const applyTemplate = (sql: string) => {
     editorSql.value = sql
   }
-  const loadFromHistory = (item) => {
+  const loadFromHistory = (item: { sql: string }) => {
     editorSql.value = item.sql
     activeTab.value = 'editor'
   }
-  const deleteHistory = (event, item) => {
+  const deleteHistory = (_event: Event, item: { id: string }) => {
     history.value = history.value.filter((entry) => entry.id !== item.id)
   }
   const SQL_VERBS = [
@@ -712,12 +731,12 @@ LIMIT 3;`
   watch(templatesOpen, (value) => {
     if (value) templateQuery.value = ''
   })
-  const chooseTemplate = (template) => {
+  const chooseTemplate = (template: { sql: string }) => {
     applyTemplate(template.sql)
     templatesOpen.value = false
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -756,7 +775,7 @@ LIMIT 3;`
             >
               <Command.Input
                 placeholder="Search resources, pages and commands"
-                @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                @update:model-value="(value: string) => (paletteQuery = value)"
               />
               <Command.List>
                 <Command.Group
@@ -874,7 +893,7 @@ LIMIT 3;`
                 <Tooltip text="Account menu">
                   <IconButton
                     icon="pi pi-ellipsis-v"
-                    aria-label="Account menu"
+                    ariaLabel="Account menu"
                     kind="outlined"
                     size="small"
                   />
@@ -1016,7 +1035,7 @@ LIMIT 3;`
                 >
                   <IconButton
                     icon="pi pi-bars"
-                    aria-label="Open navigation"
+                    ariaLabel="Open navigation"
                     kind="outlined"
                     size="medium"
                     @click="navOpen = true"
@@ -1059,7 +1078,7 @@ LIMIT 3;`
                   icon="pi pi-plus-circle"
                   kind="primary"
                   size="medium"
-                  aria-label="Create"
+                  ariaLabel="Create"
                 />
               </Tooltip>
               <Tooltip
@@ -1070,7 +1089,7 @@ LIMIT 3;`
                   icon="ai ai-ask-azion"
                   kind="outlined"
                   size="medium"
-                  aria-label="Agent"
+                  ariaLabel="Agent"
                 />
               </Tooltip>
             </span>
@@ -1139,7 +1158,7 @@ LIMIT 3;`
                             icon="pi pi-refresh"
                             kind="outlined"
                             size="small"
-                            aria-label="Refresh tables"
+                            ariaLabel="Refresh tables"
                           />
                         </Tooltip>
                         <Tooltip text="Create Table">
@@ -1147,7 +1166,7 @@ LIMIT 3;`
                             icon="pi pi-plus"
                             kind="outlined"
                             size="small"
-                            aria-label="Create Table"
+                            ariaLabel="Create Table"
                           />
                         </Tooltip>
                       </div>
@@ -1211,7 +1230,7 @@ LIMIT 3;`
                               icon="pi pi-ellipsis-h"
                               kind="transparent"
                               size="small"
-                              aria-label="Table actions"
+                              ariaLabel="Table actions"
                             />
                           </Tooltip>
                         </DropdownMenu.Trigger>
@@ -1345,7 +1364,7 @@ LIMIT 3;`
                           icon="pi pi-refresh"
                           kind="outlined"
                           size="medium"
-                          aria-label="Refresh"
+                          ariaLabel="Refresh"
                         />
                       </Tooltip>
                       <Button
@@ -1482,7 +1501,7 @@ LIMIT 3;`
                               icon="pi pi-ellipsis-h"
                               kind="transparent"
                               size="small"
-                              aria-label="Query actions"
+                              ariaLabel="Query actions"
                             />
                           </Tooltip>
                         </DropdownMenu.Trigger>
@@ -1591,7 +1610,7 @@ LIMIT 3;`
                         icon="pi pi-refresh"
                         kind="outlined"
                         size="medium"
-                        aria-label="Refresh results"
+                        ariaLabel="Refresh results"
                         :loading="running"
                         @click="runQuery"
                       />
@@ -1601,7 +1620,7 @@ LIMIT 3;`
                         icon="pi pi-download"
                         kind="outlined"
                         size="medium"
-                        aria-label="Download results"
+                        ariaLabel="Download results"
                         :disabled="!resultRows.length"
                       />
                     </Tooltip>
@@ -1610,7 +1629,7 @@ LIMIT 3;`
                         icon="pi pi-table"
                         kind="outlined"
                         size="medium"
-                        aria-label="Toggle columns"
+                        ariaLabel="Toggle columns"
                         :disabled="!resultRows.length"
                       />
                     </Tooltip>
@@ -1799,7 +1818,7 @@ LIMIT 3;`
                     <Tooltip text="Account menu">
                       <IconButton
                         icon="pi pi-ellipsis-v"
-                        aria-label="Account menu"
+                        ariaLabel="Account menu"
                         kind="outlined"
                         size="small"
                       />

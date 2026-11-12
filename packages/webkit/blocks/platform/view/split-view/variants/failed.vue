@@ -1112,8 +1112,6 @@
     explorerObserver?.disconnect()
     window.removeEventListener('pointerup', releaseBuckets)
   })
-
-  const emit = defineEmits(['retry'])
 </script>
 
 <template>
@@ -2098,7 +2096,7 @@
                 severity="danger"
                 label="Couldn't load events. Check your connection and retry."
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="refresh"
               />
             </div>
 

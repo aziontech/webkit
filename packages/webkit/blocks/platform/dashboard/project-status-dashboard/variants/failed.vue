@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -7,7 +7,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
   const loading = false
@@ -86,23 +86,23 @@
     }
   ]
 
-  const behind = null
+  const behind = null as { label: string; severity: TagSeverity; icon?: string } | null
 
-  const atRisk = []
+  const atRisk: unknown[] = []
 
-  const formatters = {
-    count: (value) => new Intl.NumberFormat('en-US').format(value),
-    percentage: (value) => `${value.toFixed(0)}%`,
-    points: (value) => `${value} pts`
+  const formatters: Record<string, (value: number) => string> = {
+    count: (value: number) => new Intl.NumberFormat('en-US').format(value),
+    percentage: (value: number) => `${value.toFixed(0)}%`,
+    points: (value: number) => `${value} pts`
   }
 
-  const labelOf = (options) => (value) =>
-    options.find((option) => option.value === value)?.label ?? value
+  const labelOf = (options: { value: string; label: string }[]) => (value: unknown) =>
+    options.find((option) => option.value === value)?.label ?? String(value)
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -195,7 +195,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Completion"
+                    ariaLabel="More options for Completion"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -249,7 +249,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Sprint burndown"
+                    ariaLabel="More options for Sprint burndown"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Milestones"
+                    ariaLabel="More options for Milestones"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -333,7 +333,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for At risk"
+                    ariaLabel="More options for At risk"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -372,7 +372,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Owners"
+                    ariaLabel="More options for Owners"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

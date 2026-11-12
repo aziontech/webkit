@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -27,7 +27,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open navigation"
+                ariaLabel="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>

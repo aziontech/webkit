@@ -133,7 +133,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Default: live traffic with the summary, the chart and the log filled, and no filters applied.
 - Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
-- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry.
+- Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
 - Sessions: three investigation tabs, API errors active.
 - EventDocument: an error event's document open, with Host is not legacy.example.com applied.

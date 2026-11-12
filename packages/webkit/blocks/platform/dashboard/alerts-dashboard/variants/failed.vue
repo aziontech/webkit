@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import ChartCard from '@aziontech/webkit/chart-card'
@@ -67,12 +67,12 @@
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatters = {
-    count: (value) => compact.format(value),
-    percentage: (value) => `${value.toFixed(0)}%`
+  const formatters: Record<string, (value: number) => string> = {
+    count: (value: number) => compact.format(value),
+    percentage: (value: number) => `${value.toFixed(0)}%`
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -88,7 +88,8 @@
               v-model="period"
               size="medium"
               :display-value="
-                (value) => periods.find((option) => option.value === value)?.label ?? value
+                (value: unknown) =>
+                  periods.find((option) => option.value === value)?.label ?? String(value)
               "
             >
               <Select.Trigger aria-label="Period" />

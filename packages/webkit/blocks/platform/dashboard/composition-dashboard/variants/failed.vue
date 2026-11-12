@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ChartCard from '@aziontech/webkit/chart-card'
@@ -88,17 +88,17 @@
     maximumFractionDigits: 0
   })
 
-  const formatters = {
-    spend: (value) => spendFormat.format(value),
-    amount: (value) => amountFormat.format(value),
-    share: (value) => `${value.toFixed(1)}%`,
-    change: (value) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
+  const formatters: Record<string, (value: number) => string> = {
+    spend: (value: number) => spendFormat.format(value),
+    amount: (value: number) => amountFormat.format(value),
+    share: (value: number) => `${value.toFixed(1)}%`,
+    change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
   const period = ref('12m')
   const trendForm = ref('area')
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -114,7 +114,8 @@
               v-model="period"
               size="medium"
               :display-value="
-                (value) => periods.find((option) => option.value === value)?.label ?? value
+                (value: unknown) =>
+                  periods.find((option) => option.value === value)?.label ?? String(value)
               "
             >
               <Select.Trigger aria-label="Period" />
@@ -185,7 +186,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Spend by category"
+                    ariaLabel="More options for Spend by category"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -220,7 +221,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Current split"
+                    ariaLabel="More options for Current split"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -257,7 +258,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    aria-label="More options for Top contributors"
+                    ariaLabel="More options for Top contributors"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

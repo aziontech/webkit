@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
@@ -21,11 +21,11 @@
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = ['Reference', 'Guides', 'Dev tools']
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
   const gettingStarted = ['Fundamentals', 'Agent setup', 'Use cases', 'Support', 'Marketplace']
   const platform = [
@@ -158,7 +158,13 @@
       text: 'Azion security specialists to analyze threats and investigate attacks.'
     }
   ]
-  const followAlong = [
+  const followAlong: {
+    title: string
+    icon: string
+    link?: string
+    text: string
+    target?: '_blank' | '_self'
+  }[] = [
     {
       title: 'Release notes',
       icon: 'pi pi-megaphone',
@@ -208,7 +214,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open documentation navigation"
+                ariaLabel="Open documentation navigation"
               />
             </div>
             <GlobalHeader.Brand>
@@ -249,7 +255,7 @@
             icon="pi pi-github"
             kind="outlined"
             size="medium"
-            aria-label="Azion on GitHub"
+            ariaLabel="Azion on GitHub"
             href="https://github.com/aziontech"
             target="_blank"
             class="shrink-0"

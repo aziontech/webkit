@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
@@ -14,15 +14,26 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  const navGroups = [
+  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
+    path?: string
+    query?: Record<string, string>
+    children?: NavNode[]
+    groups?: NavGroup[]
+  }
+  interface NavGroup {
+    label?: string
+    items: NavNode[]
+  }
+
+  const navGroups: NavGroup[] = [
     {
       items: [
         { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
@@ -234,8 +245,8 @@
   const activeId = ref('resources')
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
+  const theme = ref<ThemeSwitcherValue>('system')
+  const railWidth = ref<number | null>(null)
   const railCollapsed = ref(false)
   const search = ref('')
   const crumbs = [{ label: 'Resources' }]
@@ -244,7 +255,7 @@
     paletteQuery.value = ''
   })
 
-  const leaves = (items) =>
+  const leaves = (items: NavNode[]): NavNode[] =>
     items.flatMap((item) =>
       item.groups
         ? leaves(item.groups.flatMap((group) => group.items))
@@ -254,8 +265,8 @@
     )
 
   const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
+    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
+    let run: NavNode[] = []
     const flush = () => {
       if (run.length) {
         blocks.push({
@@ -298,12 +309,12 @@
     }
   ])
 
-  const onNavigate = (event, node, closeNavigation) => {
+  const onNavigate = (node: MenuNode, closeNavigation: () => void) => {
     activeId.value = node.id
     closeNavigation()
   }
 
-  const onPaletteSelect = (event, value) => {
+  const onPaletteSelect = (_event: Event, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') activeId.value = id
     if (scope === 'res') {
@@ -313,7 +324,17 @@
     if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
   }
 
-  const notifications = ref([
+  type NotificationKind = 'deploy-failed' | 'deploy-succeeded' | 'info'
+  interface Notification {
+    id: string
+    kind: NotificationKind
+    title: string
+    description: string
+    time: string
+    read: boolean
+  }
+
+  const notifications = ref<Notification[]>([
     {
       id: 'run-4182',
       kind: 'deploy-failed',
@@ -353,13 +374,13 @@
   const clearAll = () => {
     notifications.value = []
   }
-  const markRead = (id) => {
+  const markRead = (id: string) => {
     notifications.value = notifications.value.map((item) =>
       item.id === id ? { ...item, read: true } : item
     )
   }
 
-  const icons = {
+  const icons: Record<NotificationKind, { icon: string; tone: string }> = {
     'deploy-failed': { icon: 'pi pi-times-circle', tone: 'text-(--danger)' },
     'deploy-succeeded': { icon: 'pi pi-check-circle', tone: 'text-(--success)' },
     info: { icon: 'pi pi-info-circle', tone: 'text-(--text-muted)' }
@@ -406,7 +427,7 @@
               >
                 <Command.Input
                   placeholder="Search resources, pages and commands"
-                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                  @update:model-value="(value: string) => (paletteQuery = value)"
                 />
                 <Command.List>
                   <Command.Group
@@ -505,7 +526,7 @@
               :groups="navGroups"
               :active-id="activeId"
               role="presentation"
-              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
+              @navigate="(_event, node) => onNavigate(node, closeNavigation)"
             >
               <Menu.Back />
             </Menu>
@@ -524,7 +545,7 @@
                   <Tooltip text="Account menu">
                     <IconButton
                       icon="pi pi-ellipsis-v"
-                      aria-label="Account menu"
+                      ariaLabel="Account menu"
                       kind="outlined"
                       size="small"
                     />
@@ -673,7 +694,7 @@
                   >
                     <IconButton
                       icon="pi pi-bars"
-                      aria-label="Open navigation"
+                      ariaLabel="Open navigation"
                       kind="outlined"
                       size="medium"
                       @click="openNavigation"
@@ -723,7 +744,7 @@
                     icon="pi pi-plus-circle"
                     kind="primary"
                     size="medium"
-                    aria-label="Create"
+                    ariaLabel="Create"
                   />
                 </Tooltip>
                 <Tooltip
@@ -734,7 +755,7 @@
                     icon="ai ai-ask-azion"
                     kind="outlined"
                     size="medium"
-                    aria-label="Agent"
+                    ariaLabel="Agent"
                   />
                 </Tooltip>
               </span>
@@ -764,7 +785,7 @@
                     icon="pi pi-bell"
                     kind="outlined"
                     size="medium"
-                    :aria-label="bellLabel"
+                    :ariaLabel="bellLabel"
                     :aria-pressed="notificationsOpen"
                     @click="toggleTools"
                   />
@@ -862,7 +883,7 @@
                       icon="pi pi-refresh"
                       kind="outlined"
                       size="medium"
-                      aria-label="Refresh"
+                      ariaLabel="Refresh"
                     />
                   </Tooltip>
                   <Tooltip
@@ -873,7 +894,7 @@
                       icon="pi pi-download"
                       kind="outlined"
                       size="medium"
-                      aria-label="Download CSV"
+                      ariaLabel="Download CSV"
                     />
                   </Tooltip>
                   <Tooltip text="Columns">
@@ -881,7 +902,7 @@
                       icon="ai ai-column"
                       kind="outlined"
                       size="medium"
-                      aria-label="Columns"
+                      ariaLabel="Columns"
                     />
                   </Tooltip>
                   <Button

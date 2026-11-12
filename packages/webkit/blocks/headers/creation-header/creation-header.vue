@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -14,7 +14,7 @@
       <GlobalHeader.Left>
         <IconButton
           icon="pi pi-chevron-left"
-          aria-label="Back to Resources"
+          ariaLabel="Back to Resources"
           kind="outlined"
           size="small"
         />

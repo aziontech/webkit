@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -26,7 +26,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                aria-label="Open navigation"
+                ariaLabel="Open navigation"
               />
             </Tooltip>
           </span>
@@ -60,7 +60,7 @@
               icon="pi pi-plus-circle"
               kind="primary"
               size="medium"
-              aria-label="Create"
+              ariaLabel="Create"
             />
           </Tooltip>
           <Tooltip
@@ -71,7 +71,7 @@
               icon="ai ai-ask-azion"
               kind="outlined"
               size="medium"
-              aria-label="Agent"
+              ariaLabel="Agent"
             />
           </Tooltip>
         </span>

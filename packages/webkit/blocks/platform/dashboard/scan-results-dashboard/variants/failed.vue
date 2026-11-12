@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Card from '@aziontech/webkit/card'
   import ChartCard from '@aziontech/webkit/chart-card'
@@ -53,11 +53,11 @@
 
   const UNITS = ['B', 'KB', 'MB', 'GB']
 
-  const formatters = {
-    count: (value) => count.format(value),
-    compact: (value) => compact.format(value),
-    score: (value) => (value === null ? '—' : String(value)),
-    size: (value) => {
+  const formatters: Record<string, (value: number) => string> = {
+    count: (value: number) => count.format(value),
+    compact: (value: number) => compact.format(value),
+    score: (value: number | null) => (value === null ? '—' : String(value)),
+    size: (value: number) => {
       let size = value
       let unit = 0
       while (size >= 1000 && unit < UNITS.length - 1) {
@@ -68,7 +68,7 @@
     }
   }
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -83,7 +83,7 @@
             icon="pi pi-refresh"
             kind="outlined"
             size="medium"
-            aria-label="Refresh"
+            ariaLabel="Refresh"
           />
         </template>
       </PageHeader>

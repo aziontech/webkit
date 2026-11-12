@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import ChartCard from '@aziontech/webkit/chart-card'
   import Field from '@aziontech/webkit/field'
@@ -18,7 +18,7 @@
   const outcome = ref('Any outcome')
   const category = ref('Any category')
   const destination = ref('')
-  const timeRanges = [
+  const timeRanges: { value: string; label: string; disabled?: boolean }[] = [
     {
       value: 'Last hour',
       label: 'Last hour'
@@ -37,7 +37,7 @@
     }
   ]
 
-  const actorOptions = [
+  const actorOptions: { value: string; label: string; disabled?: boolean }[] = [
     {
       value: 'Any actor',
       label: 'Any actor'
@@ -72,7 +72,7 @@
     }
   ]
 
-  const outcomeOptions = [
+  const outcomeOptions: { value: string; label: string; disabled?: boolean }[] = [
     {
       value: 'Any outcome',
       label: 'Any outcome'
@@ -99,7 +99,7 @@
     }
   ]
 
-  const categoryOptions = [
+  const categoryOptions: { value: string; label: string; disabled?: boolean }[] = [
     {
       value: 'Any category',
       label: 'Any category'
@@ -189,13 +189,13 @@
     }
   ]
 
-  const rows = []
+  const rows: unknown[] = []
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatCount = (value) => compact.format(value)
+  const formatCount = (value: number) => compact.format(value)
 
-  const emit = defineEmits(['retry'])
+  const emit = defineEmits<{ retry: [] }>()
 </script>
 
 <template>
@@ -210,7 +210,7 @@
             icon="pi pi-refresh"
             kind="outlined"
             size="medium"
-            aria-label="Refresh"
+            ariaLabel="Refresh"
           />
         </template>
       </PageHeader>

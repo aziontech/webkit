@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AppLayout from '@aziontech/webkit/app-layout'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -11,7 +11,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
@@ -19,11 +19,22 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
-  const navGroups = [
+  interface NavNode extends Omit<MenuNode, 'children' | 'groups'> {
+    path?: string
+    query?: Record<string, string>
+    children?: NavNode[]
+    groups?: NavGroup[]
+  }
+  interface NavGroup {
+    label?: string
+    items: NavNode[]
+  }
+
+  const navGroups: NavGroup[] = [
     {
       items: [
         { id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' },
@@ -251,8 +262,8 @@
   const activeId = ref('resources')
   const paletteOpen = ref(false)
   const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
+  const theme = ref<ThemeSwitcherValue>('system')
+  const railWidth = ref<number | null>(null)
   const railCollapsed = ref(false)
   const activeTab = ref('overview')
   const environment = ref('Production')
@@ -264,11 +275,11 @@
     return environments.filter((entry) => entry.name.toLowerCase().includes(needle))
   })
 
-  const pickEnvironment = (value) => {
-    if (value !== '__create-environment__') environment.value = value
+  const pickEnvironment = (value: unknown) => {
+    if (typeof value === 'string' && value !== '__create-environment__') environment.value = value
   }
 
-  const onEnvironmentOpen = (open) => {
+  const onEnvironmentOpen = (open: boolean) => {
     if (!open) environmentQuery.value = ''
   }
 
@@ -276,7 +287,7 @@
     paletteQuery.value = ''
   })
 
-  const leaves = (items) =>
+  const leaves = (items: NavNode[]): NavNode[] =>
     items.flatMap((item) =>
       item.groups
         ? leaves(item.groups.flatMap((group) => group.items))
@@ -286,8 +297,8 @@
     )
 
   const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
+    const blocks: { key: string; heading: string; items: NavNode[] }[] = []
+    let run: NavNode[] = []
     const flush = () => {
       if (run.length) {
         blocks.push({
@@ -330,12 +341,12 @@
     }
   ])
 
-  const onNavigate = (event, node, closeNavigation) => {
+  const onNavigate = (node: MenuNode, closeNavigation: () => void) => {
     activeId.value = node.id
     closeNavigation()
   }
 
-  const onPaletteSelect = (event, value) => {
+  const onPaletteSelect = (_event: Event, value: string | number) => {
     const [scope, id] = String(value).split(':')
     if (scope === 'nav') activeId.value = id
     if (scope === 'res') {
@@ -383,7 +394,7 @@
               >
                 <Command.Input
                   placeholder="Search resources, pages and commands"
-                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
+                  @update:model-value="(value: string) => (paletteQuery = value)"
                 />
                 <Command.List>
                   <Command.Group
@@ -482,7 +493,7 @@
               :groups="navGroups"
               :active-id="activeId"
               role="presentation"
-              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
+              @navigate="(_event, node) => onNavigate(node, closeNavigation)"
             >
               <Menu.Back />
             </Menu>
@@ -501,7 +512,7 @@
                   <Tooltip text="Account menu">
                     <IconButton
                       icon="pi pi-ellipsis-v"
-                      aria-label="Account menu"
+                      ariaLabel="Account menu"
                       kind="outlined"
                       size="small"
                     />
@@ -650,7 +661,7 @@
                   >
                     <IconButton
                       icon="pi pi-bars"
-                      aria-label="Open navigation"
+                      ariaLabel="Open navigation"
                       kind="outlined"
                       size="medium"
                       @click="openNavigation"
@@ -780,7 +791,7 @@
                     icon="pi pi-plus-circle"
                     kind="primary"
                     size="medium"
-                    aria-label="Create"
+                    ariaLabel="Create"
                   />
                 </Tooltip>
                 <Tooltip
@@ -791,7 +802,7 @@
                     icon="ai ai-ask-azion"
                     kind="outlined"
                     size="medium"
-                    aria-label="Agent"
+                    ariaLabel="Agent"
                   />
                 </Tooltip>
               </span>
