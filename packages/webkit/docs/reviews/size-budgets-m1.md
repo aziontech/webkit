@@ -410,3 +410,48 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 | webkit-provider    | 8.93          | 8.96         | 9.16       | New strings: `copyPromptButton`, `docAgentCard` (measured + 0.2).                                   |
 | locales-pt-BR      | 8.32          | 8.34         | 8.54       | Same strings (measured + 0.2).                                                                      |
 | locales-es         | 8.41          | 8.44         | 8.64       | Same strings (measured + 0.2).                                                                      |
+
+## Battery 2 merges — budget pass (2026-11-12)
+
+`check-size.mjs` failed 37 entries on `feat/webkit-ai-ready` after the battery 2 merges. Measured against `80b674cb1` (the last budget pass) with the same toolchain, one shared cause stood out: `Button` gained `kind="link"` and sits in 30 of the 37 entries (about 0.14 KB each). The rest is feature growth: `CardGrid` balanced rows (7 entries), the typed `Table` with tree rows (2), `Select kind="transparent"` (4), `Input` `monospace` and `focus()` (12), `Tag severity="highlight"`, `Item kind="option"`, `SearchTrigger` with its `Tooltip` (`SiteNav`) and the new catalog strings (`WebkitProvider`). No dev-only warning string, eagerly loaded chunk or whole locale catalog was found in any production build.
+
+Shared reductions, each rendering the same HTML as before (223 server renders of `Button`, `IconButton`, `Input` and `Textarea` across kinds, sizes, states, anchors and consumer attributes compared byte for byte with the previous source):
+
+- `Button` and `IconButton` keep their base classes in one string instead of two arrays, and their disabled and loading classes in one `inactiveClasses` string with the cursor picked separately. `IconButton` changed too, so that gzip keeps matching the two components' identical strings in entries that carry both.
+- `Input` and `Textarea` write their root classes as a static `class` before `:class="attrs.class"`, instead of a `:class` array of 12 and 13 literals.
+
+That brought 102 entries down by 0.01–0.71 KB, raised none, and cleared 12 of the 37. Two shrinks were tried and dropped: one template for the anchor and the button through `<component :is="isAnchor ? 'a' : 'button'">` recursed inside `Button` (Vue resolves the string `button` to the component's own name) and, in `IconButton`, would resolve to any globally registered `Button` (a PrimeVue app); the same template through a functional wrapper that calls `h(tag)` saved 0.05–0.1 KB on `IconButton` entries but adds a component instance per button.
+
+The other 25 entries are raised to the measured size plus about 0.1 KB:
+
+| Entry                      | Budget before | Measured now | New budget | Reason                                                                                                                                                |
+| -------------------------- | ------------- | ------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| site-nav                   | 54            | 55.85        | 55.95      | `SearchTrigger` (field-shaped search button, ⌘K keycap and shortcut, folds into a `Tooltip` below 47rem): +3.9 KB.                                    |
+| listing-browser            | 68.9          | 69.12        | 69.25      | Carries `Table` (generic row type, tree rows), `Select kind="transparent"`, `Item kind="option"`.                                                     |
+| listing-table              | 59.95         | 59.98        | 60.1       | Carries `Table` (generic row type, tree rows), `Item kind="option"`.                                                                                  |
+| logo-wall                  | 4.25          | 4.39         | 4.5        | Carries `CardGrid` (balanced rows count the cells and fill the trailing tracks).                                                                      |
+| article-cards              | 4.7           | 4.71         | 4.85       | Carries `CardGrid` (balanced rows).                                                                                                                   |
+| capability-grid            | 6.75          | 6.81         | 6.95       | Carries `CardGrid` (balanced rows) and `Button`.                                                                                                      |
+| hero-with-opening          | 10            | 10.01        | 10.15      | Carries `CardGrid` (balanced rows) and `Button`.                                                                                                      |
+| pricing-plans              | 22            | 22.19        | 22.3       | Carries `CardGrid` (balanced rows), `Button`, `Tag severity="highlight"`.                                                                             |
+| article-index-resource-hub | 27            | 27.16        | 27.3       | Carries `Select kind="transparent"`, `Input` and `Button`.                                                                                            |
+| story-library              | 28            | 28.03        | 28.15      | Carries `Select kind="transparent"`, `Input` and `Button`.                                                                                            |
+| schema-form                | 31            | 31.21        | 31.35      | Carries `Select kind="transparent"`, `Input` (`monospace`, `focus()`) and `Textarea`.                                                                 |
+| calendar-root              | 20.5          | 20.67        | 20.8       | `Button kind="link"` and `Input`; was already 20.54 at `80b674cb1` (translator and catalog growth).                                                   |
+| date-range-picker          | 33.25         | 33.42        | 33.55      | Carries `Calendar` (as above); falls back to the provider's `now`.                                                                                    |
+| property-filter            | 28.75         | 28.92        | 29.05      | `Button kind="link"` and `Input`; was already 28.81 at `80b674cb1`.                                                                                   |
+| doc-page-header            | 26.8          | 26.92        | 27.05      | `Button kind="link"`, `Item kind="option"` in the shared interactive-state classes.                                                                   |
+| shell-mockup-root          | 30.15         | 30.28        | 30.4       | `Button kind="link"`; was already 30.25 at `80b674cb1`.                                                                                               |
+| chart                      | 21.75         | 21.95        | 22.1       | `Button kind="link"` (error-state retry), `Chart.Bar`; was already 21.75 at `80b674cb1`.                                                              |
+| chart-root                 | 15.1          | 15.27        | 15.4       | `Button kind="link"`; was already 15.20 at `80b674cb1`.                                                                                               |
+| gauge-chart                | 10.5          | 10.62        | 10.75      | `Button kind="link"`; was already 10.59 at `80b674cb1`.                                                                                               |
+| map-chart                  | 16.9          | 17.05        | 17.15      | `Button kind="link"`; was already 17.01 at `80b674cb1`.                                                                                               |
+| error-boundary             | 6.5           | 6.61         | 6.75       | `Button kind="link"`; was already 6.55 at `80b674cb1`.                                                                                                |
+| confirm-dialog             | 24.67         | 24.71        | 24.85      | `Button kind="link"`.                                                                                                                                 |
+| feedback-reason-dialog     | 31.64         | 31.77        | 31.9       | `Button kind="link"`, `Textarea`, `Item kind="option"`.                                                                                               |
+| file-token-group           | 7             | 7.04         | 7.15       | `Button kind="link"`.                                                                                                                                 |
+| webkit-provider            | 9.16          | 9.22         | 9.35       | Ships the `en` catalog, which gained `searchTrigger`, `artifactCanvas`, `consoleLayout` and the DocLayout rail strings, and the `now` reference time. |
+
+### `gates.mjs` runs the size check
+
+`gates.mjs` mirrored only the `toolkit` job of `governance.yml`, which runs on every PR in under a minute; the size check lives in the `build` job (only when `packages/webkit` changes), so it was left out and a local `gates` run passed while CI failed. `check-size.mjs` takes about 14 s for the 265 entries on the 32-core host (Vite 8 with Rolldown), so it is now the `size` gate, run by default; `--only` still skips it. `test/standards/gates.test.mjs` accepts a `pnpm run <script>` step whose `working-directory` is `packages/webkit` as the CI twin of a gate.
