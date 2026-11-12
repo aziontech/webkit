@@ -2,7 +2,7 @@
 name: webkit-microcopy
 description: The writing rules for Azion product interfaces (Console). Use whenever you author or review any interface string: page and section titles, field labels, helper text, buttons, menu and nav items, table headers, tags, tooltips, empty states, toasts, dialogs, validation messages. Fixes punctuation and capitalization (no em dash, no ampersand, no parentheses in labels, no bold in running text, sentence case with Azion product names capitalized), which surface each kind of copy belongs on (label names, description constrains, Alert explains impact, Popover defines, Tag states), one word per concept (Select not Pick, Include dependencies not Additional dependencies, Deployment topology not Composition, Review and deploy not Build and activate, Application not Edge Application, and no `edge` as a prefix or a location), navigation and IA naming, and copy that survives every breakpoint.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-prefer-over-custom, review]
 ---
@@ -109,6 +109,8 @@ anything the reader needs in order to answer appears before the input, never ins
 | The result of something the user did       | `Toast`                                    | One sentence, past tense, with a period   | `Deployment created.`                                                                         |
 | Why a value was rejected                   | field error, inline at the field           | What is wrong plus what to do             | `Version 1.2.0 was already deployed. Select another version.`                                 |
 | There is nothing here yet                  | `EmptyState`                               | One sentence plus one action              | `No deployments yet. Create your first deployment to start receiving traffic.`                |
+
+A transitional `StatusIndicator` with `loading` takes the bare verb (`Deploying`, `Building`): the component adds the ellipsis itself and trims one already in the copy, so `Building...` still renders `Building…`.
 
 Three consequences worth stating on their own, because each one is a real defect when skipped:
 
