@@ -118,6 +118,13 @@ describe('ConsoleLayout', () => {
     expect(router.push).toHaveBeenCalledWith('/workloads')
   })
 
+  it('leaves a modified click on a route row to the browser', async () => {
+    const router = fakeRouter('/')
+    const { getByRole } = mount({}, { router })
+    await fireEvent.click(getByRole('link', { name: 'Workloads' }), { ctrlKey: true })
+    expect(router.push).not.toHaveBeenCalled()
+  })
+
   it('leaves a row with no destination to the navigate handler', async () => {
     const router = fakeRouter('/')
     const onNavigate = vi.fn()

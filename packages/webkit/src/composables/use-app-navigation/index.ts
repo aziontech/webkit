@@ -108,15 +108,19 @@ export function useAppNavigation(): UseAppNavigationReturn {
   }
 
   const follow = (event: Event, link: AppLinkTarget) => {
+    const onAnchor =
+      event.type === 'click' &&
+      event.target instanceof globalThis.Element &&
+      Boolean(event.target.closest('a[href]'))
+    const newTab =
+      event instanceof globalThis.MouseEvent &&
+      (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+    if (onAnchor && newTab) return
     if (link.to !== undefined && router) {
       event.preventDefault()
       void router.push(link.to)
       return
     }
-    const onAnchor =
-      event.type === 'click' &&
-      event.target instanceof globalThis.Element &&
-      Boolean(event.target.closest('a[href]'))
     if (onAnchor) return
     const href = hrefOf(link)
     if (href) globalThis.location?.assign(href)
