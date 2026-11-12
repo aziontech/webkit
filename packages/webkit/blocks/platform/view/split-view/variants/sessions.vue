@@ -1339,7 +1339,10 @@
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
     <section
       ref="sessionStrip"
       aria-label="Investigations"

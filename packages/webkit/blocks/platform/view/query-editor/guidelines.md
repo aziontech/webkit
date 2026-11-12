@@ -2,7 +2,7 @@
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The editor is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the side panel, the rows, the editor and the results each scroll on their own at every width (`h-dvh` only sizes a standalone preview). CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
 
 ## When to use
 
@@ -84,6 +84,7 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
+- Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
 
 ## Don't
 
@@ -92,6 +93,7 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - Don't hide the tabs when the database is empty.
 - Don't put a second primary action in a pane; Insert on Data and Run query on Editor are the only ones.
 - Don't let the results scroll the page sideways; they scroll inside their band.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
 
 ## Copy
 

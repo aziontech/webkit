@@ -2,7 +2,7 @@
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -84,6 +84,7 @@ The document lists every field of the event. Search in this event narrows the li
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
 - Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
+- Mark the page root with `data-layout-fill`, so the panes scroll on their own instead of the page.
 
 ## Don't
 
@@ -92,6 +93,7 @@ The document lists every field of the event. Search in this event narrows the li
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
 - Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
 - Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
 - Don't let investigation tabs grow without a limit, and never close the last one.

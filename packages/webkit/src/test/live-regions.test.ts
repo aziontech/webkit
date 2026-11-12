@@ -11,6 +11,7 @@ import type { LogViewLine } from '../components/code/log-view/injection-key'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import StatusIndicator from '../components/feedback/status-indicator/status-indicator.vue'
+import Toaster from '../components/feedback/toast/toaster.vue'
 
 const LIVE = '[aria-live]:not([aria-live="off"]),[role="status"],[role="alert"],[role="log"]'
 
@@ -45,8 +46,12 @@ describe('live regions', () => {
     expect(nested()).toEqual([])
   })
 
-  it('async-submit announces the result once, through the Toaster region', async () => {
-    render(AsyncSubmitSucceeded)
+  it('async-submit announces the result once, through the app Toaster region', async () => {
+    render(
+      defineComponent({
+        setup: () => () => [h(Toaster, { position: 'bottom-right' }), h(AsyncSubmitSucceeded)]
+      })
+    )
     await waitFor(() => expect(regionsSaying('is live.').length).toBeGreaterThan(0))
     const regions = regionsSaying('is live.')
     expect(regions).toHaveLength(1)
