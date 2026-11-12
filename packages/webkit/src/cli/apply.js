@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process'
 import {
   chmodSync,
   copyFileSync,
@@ -9,6 +10,7 @@ import {
 import { dirname, join } from 'node:path'
 
 import { spliceFragment } from './bundle.js'
+import { gitState, huskyBin } from './plan.js'
 
 function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true })
@@ -174,6 +176,28 @@ function applyCopyStamped(projectDir, action) {
   return { action, result: existed ? 'merged' : 'written', detail: action.to }
 }
 
+function applyActivateHooks(projectDir, action) {
+  const bin = huskyBin(projectDir)
+  if (!bin) {
+    return {
+      action,
+      result: 'advised',
+      detail:
+        'husky is not installed yet — run your package manager install (its "prepare" script runs husky) to activate .husky/pre-commit.'
+    }
+  }
+  const proc = spawnSync(process.execPath, [bin], { cwd: projectDir, encoding: 'utf8' })
+  const output = `${proc.stdout || ''}${proc.stderr || ''}`.trim()
+  if (proc.status !== 0 || output || !gitState(projectDir).huskyActive) {
+    return {
+      action,
+      result: 'error',
+      detail: `husky could not activate the git hooks${output ? ` (${output})` : ''} — run \`npx husky\` and check \`git config core.hooksPath\`.`
+    }
+  }
+  return { action, result: 'written', detail: 'git hooks activated (core.hooksPath = .husky/_)' }
+}
+
 function applyReportOnly(action) {
   return { action, result: action.reportResult || 'skipped', detail: action.detail }
 }
@@ -205,6 +229,9 @@ export function applyPlan(projectDir, plan) {
         break
       case 'fence':
         results.push(applyFence(projectDir, action))
+        break
+      case 'activate-hooks':
+        results.push(applyActivateHooks(projectDir, action))
         break
       case 'advise':
         results.push({ action, result: 'advised', detail: action.message })

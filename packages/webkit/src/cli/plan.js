@@ -1,5 +1,7 @@
-import { existsSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { spawnSync } from 'node:child_process'
+import { existsSync, readFileSync, realpathSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import { dirname, join, relative } from 'node:path'
 
 import { LEGACY_MARKER, listBundle } from './bundle.js'
 import { planSync } from './sync.js'
@@ -84,14 +86,35 @@ function firstExisting(projectDir, candidates) {
   return null
 }
 
+export const BUILD_OUTPUT_DIRS = [
+  'node_modules',
+  'dist',
+  'dist-ssr',
+  'coverage',
+  '.vite',
+  '.nuxt',
+  '.output',
+  '.next',
+  '.svelte-kit',
+  'storybook-static'
+]
+
+export const TOOL_CONFIG_FILES = '*.config.{js,cjs,mjs,ts,cts,mts}'
+
 function eslintFlatConfig(severityConfig) {
+  const ignores = BUILD_OUTPUT_DIRS.map((dir) => `'**/${dir}/'`).join(', ')
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
 import a11y from 'eslint-plugin-vuejs-accessibility'
 import vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 export default [
+  { ignores: [${ignores}] },
   ...webkitPlugin.configs.${severityConfig},
+  {
+    files: ['${TOOL_CONFIG_FILES}'],
+    rules: { 'webkit/authoring-standards': 'off' }
+  },
   {
     files: ['**/*.vue'],
     languageOptions: {
@@ -164,10 +187,103 @@ const STYLELINT_CONTENT = `${JSON.stringify(
   2
 )}\n`
 
-const HUSKY_PRECOMMIT = `# Lint with the webkit rules before every commit.
-npx eslint .
-npx stylelint "**/*.{css,scss,vue}"
+const STYLELINT_IGNORE = `${BUILD_OUTPUT_DIRS.map((dir) => `${dir}/`).join('\n')}\n`
+
+const STYLELINT_IGNORE_SNIPPET_HEADER =
+  'A .stylelintignore already exists — not overwriting it. Make sure it ignores the build output, or the pre-commit hook and your editor lint compiled CSS:'
+
+const HUSKY_COMMENT = '# Lint the source with the webkit rules before every commit.'
+const HUSKY_ESLINT = 'npx eslint src --no-error-on-unmatched-pattern'
+const HUSKY_STYLELINT = 'npx stylelint "src/**/*.{css,scss,vue}" --allow-empty-input'
+
+const HUSKY_PRECOMMIT = `${HUSKY_COMMENT}
+${HUSKY_ESLINT}
+${HUSKY_STYLELINT}
 `
+
+const LEGACY_HUSKY_LINES = new Map([
+  ['# Lint with the webkit rules before every commit.', HUSKY_COMMENT],
+  ['npx eslint .', HUSKY_ESLINT],
+  ['npx stylelint "**/*.{css,scss,vue}"', HUSKY_STYLELINT]
+])
+
+export const LEGACY_HUSKY_HOOK_MARKER = 'npx stylelint "**/*.{css,scss,vue}"'
+
+function upgradeLegacyHook(hook) {
+  return hook
+    .split('\n')
+    .map((line) => LEGACY_HUSKY_LINES.get(line.trim()) ?? line)
+    .join('\n')
+}
+
+export function gitState(projectDir) {
+  const git = (args) => spawnSync('git', args, { cwd: projectDir, encoding: 'utf8' })
+  const top = git(['rev-parse', '--show-toplevel'])
+  if (top.error) return { available: false, repo: false }
+  if (top.status !== 0) return { available: true, repo: false }
+  const canonical = (path) => {
+    try {
+      return realpathSync(path)
+    } catch {
+      return path
+    }
+  }
+  const root = canonical(top.stdout.trim())
+  const hooksPath = git(['config', '--get', 'core.hooksPath']).stdout.trim()
+  return {
+    available: true,
+    repo: true,
+    root,
+    atRoot: root === canonical(projectDir),
+    hooksPath,
+    huskyActive: /^\.husky(\/|$)/.test(hooksPath)
+  }
+}
+
+export function huskyBin(projectDir) {
+  try {
+    const require = createRequire(join(projectDir, '__webkit_resolve__.js'))
+    const bin = join(dirname(require.resolve('husky')), 'bin.js')
+    return existsSync(bin) ? bin : null
+  } catch {
+    return null
+  }
+}
+
+const NOT_A_REPO_NOTE =
+  'This folder is not a git repository yet, so husky cannot install the pre-commit hook (the install prints ".git can\'t be found"). After `git init`, run `npx husky` once (or your package manager install again) to activate .husky/pre-commit — `npx @aziontech/webkit doctor` reports it until then.'
+
+function huskyActions(projectDir) {
+  const git = gitState(projectDir)
+  if (!git.available) {
+    return [
+      {
+        type: 'advise',
+        message:
+          'git was not found, so the pre-commit hook cannot be activated. Install git, then run `git init` (if needed) and `npx husky` to activate .husky/pre-commit.'
+      }
+    ]
+  }
+  if (!git.repo) return [{ type: 'advise', message: NOT_A_REPO_NOTE }]
+  if (git.huskyActive) return []
+  if (!git.atRoot) {
+    const rel = relative(git.root, projectDir).split('\\').join('/')
+    return [
+      {
+        type: 'advise',
+        message: `The git root is ${git.root}, above this project, so a plain "prepare": "husky" cannot find .git. Point it at this folder instead: "prepare": "cd ${relative(projectDir, git.root).split('\\').join('/') || '.'} && husky ${rel}/.husky", then run your install.`
+      }
+    ]
+  }
+  if (huskyBin(projectDir)) return [{ type: 'activate-hooks' }]
+  return [
+    {
+      type: 'advise',
+      message:
+        'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
+    }
+  ]
+}
 
 export function planInit(projectDir, opts = {}) {
   const actions = []
@@ -259,6 +375,23 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
+  if (existsSync(join(projectDir, '.stylelintignore'))) {
+    const current = read(join(projectDir, '.stylelintignore')) || ''
+    if (!/^\/?dist\/?$/m.test(current)) {
+      actions.push({
+        type: 'advise',
+        message: `${STYLELINT_IGNORE_SNIPPET_HEADER}\n${STYLELINT_IGNORE}`
+      })
+    }
+  } else {
+    actions.push({
+      type: 'write',
+      path: '.stylelintignore',
+      content: STYLELINT_IGNORE,
+      skipIfExists: true
+    })
+  }
+
   actions.push({
     type: 'merge-json',
     path: '.mcp.json',
@@ -291,18 +424,27 @@ export function planInit(projectDir, opts = {}) {
     })
   }
 
-  actions.push({
-    type: 'append',
-    path: '.husky/pre-commit',
-    content: HUSKY_PRECOMMIT,
-    marker: HUSKY_HOOK_MARKER,
-    mode: 0o755
-  })
-  actions.push({
-    type: 'advise',
-    message:
-      'Husky pre-commit hook written. Run your package manager install (which runs the "prepare" script) to activate git hooks.'
-  })
+  const existingHook = read(join(projectDir, '.husky/pre-commit'))
+  if (
+    existingHook &&
+    existingHook.includes(LEGACY_HUSKY_HOOK_MARKER) &&
+    !existingHook.includes(HUSKY_HOOK_MARKER)
+  ) {
+    actions.push({
+      type: 'write',
+      path: '.husky/pre-commit',
+      content: upgradeLegacyHook(existingHook)
+    })
+  } else {
+    actions.push({
+      type: 'append',
+      path: '.husky/pre-commit',
+      content: HUSKY_PRECOMMIT,
+      marker: HUSKY_HOOK_MARKER,
+      mode: 0o755
+    })
+  }
+  actions.push(...huskyActions(projectDir))
 
   actions.push(...planSync(projectDir).actions)
 
@@ -383,7 +525,7 @@ export const STYLELINT_CONFIG_CANDIDATES = [
   'stylelint.config.cjs',
   'stylelint.config.mjs'
 ]
-export const HUSKY_HOOK_MARKER = 'npx stylelint "**/*.{css,scss,vue}"'
+export const HUSKY_HOOK_MARKER = HUSKY_STYLELINT
 
 export const _internals = {
   RUNTIME_DEPS,
@@ -398,5 +540,7 @@ export const _internals = {
   usesTailwindVitePlugin,
   styleEntryContent,
   STYLELINT_CONTENT,
-  HUSKY_PRECOMMIT
+  STYLELINT_IGNORE,
+  HUSKY_PRECOMMIT,
+  upgradeLegacyHook
 }
