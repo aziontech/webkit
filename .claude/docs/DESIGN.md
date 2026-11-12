@@ -72,7 +72,7 @@ Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
 | `text-body-code-sm`                                                | Monospace prose — a mono paragraph that WRAPS (the `label-code-*` set is `leading-none`, made for one-row-per-line code) |
 | `text-overline-md` / `text-overline-sm` / `text-overline-xs`       | Overlines (uppercase, tracking baked in)                                                                                 |
 | `text-button-lg` / `text-button-md`                                | Button labels                                                                                                            |
-| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; hover underline)                                            |
+| `text-link`                                                        | Inline `<a>` inside body/heading copy (inherits parent size; quiet underline at rest, full underline on hover)           |
 
 These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do not duplicate breakpoint logic in components.
 
@@ -111,7 +111,9 @@ For anchors **inside** body or heading copy, use the `text-link` typography clas
 </p>
 ```
 
-For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone.
+`text-link` draws a quiet underline at rest (40 % of the link colour) and a full 2px underline on hover. Never remove it from a link inside a sentence: the link blue is only about 3:1 against default text and close to 1:1 against muted text, so colour alone does not mark the link (WCAG 1.4.1).
+
+For **standalone** navigation links (icon, ghost hover surface, fixed height), use `@aziontech/webkit/link` — not `text-link` alone. A standalone `Link` underlines on hover only.
 
 ---
 
@@ -305,7 +307,7 @@ text-(--text-default) text-(--text-muted) ring-(--ring-color)
 | Accent        | `--accent`, `--accent-mask`, `--accent-selected`, `--accent-contrast` — the blue that marks a path or state as _other_, distinct from the brand orange. Mode-invariant.                                        |
 | Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                       |
 | Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                  |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`                                                                                                                                                            |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-primary` (brand-coloured text: overlines, eyebrows, accents; primary-700 in light and primary-500 in dark so small text keeps 4.5:1)              |
 | Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`                                                                                                                                   |
 | Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast` |
 | Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment` |
