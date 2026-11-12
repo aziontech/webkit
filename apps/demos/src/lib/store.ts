@@ -37,7 +37,7 @@ function seed(n: number): Resource {
     domainCount: aliases.length,
     status: n === 7 ? 'Inactive' : 'Live',
     owner: OWNERS[n % OWNERS.length],
-    modifiedAt: new Date(REFERENCE - n * 18 * 86_400_000),
+    modifiedAt: new Date(REFERENCE - (n - 1) * 18 * 86_400_000),
     lastModified: AGES[Math.min(n - 1, AGES.length - 1)],
     dnssec: n % 2 === 0
   }
