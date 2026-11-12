@@ -1,6 +1,6 @@
 # Delete with confirmation
 
-The last stop before a resource is gone for good. The user chose Delete from a row menu or a settings page and now has to see what goes with the resource, take one deliberate step to prove they mean this one, and either confirm or back out. The dialog makes the irreversible action slow on purpose: Delete stays disabled until the typed name matches.
+The last stop before a resource is gone for good. The user chose Delete from a row menu or a settings page and now has to see what goes with the resource, take one deliberate step to prove they mean this one, and either confirm or back out. The dialog makes the irreversible action slow on purpose: Delete stays disabled until the typed name matches. LabelledField draws the page it is opened from as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).
 
 ## When to use
 

@@ -1,18 +1,18 @@
 # EditResource (`platform/edit/edit-resource`)
 
-> The settings page of a resource: the platform shell with the resource breadcrumb, then a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, the platform shell, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.
+> The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.
 
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: [Alert](../../../components/alert.md), [AppLayout](../../../components/app-layout.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SearchTrigger](../../../components/search-trigger.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
 
 settings page; resource settings; settings tab; application settings; workload settings; firewall settings; edit settings; página de configurações; configurações do recurso; aba de configurações; save bar; unsaved changes bar; sticky save bar; discard and save; commit bar; barra de salvar; alterações não salvas; salvar alterações; edit resource; editar recurso; data stream; data stream settings; log streaming; stream destination; sampling; log template; configurações do data stream; envio de logs; streaming de logs; stale record; changed elsewhere; overwrite changes; conflict on save; danger zone; delete resource; type the name to confirm; zona de perigo; excluir recurso; alterado em outro lugar; leave page guard; unsaved changes dialog; cache settings; cache policy; browser cache; edge cache; tiered cache; configurações de cache; protocol settings; https ports; http/3; tls version; mutual authentication; mtls; autenticação mútua
 
-The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it.
+The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the resource breadcrumb, the ⌘K palette and the `main`; the save band sticks to the bottom of the layout's scrolling region.
 
 ## When to use
 
@@ -30,57 +30,49 @@ The settings page of one existing resource. The user comes here to change how th
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Resource tabs — `PageTabs`, `Tabs` (optional)
 
-The platform shell from `shells/console`: the `Sidebar` with `Brand`, `Command` search, the `Menu` of modules and the account `DropdownMenu`; the `GlobalHeader` with the resource `Breadcrumb` and the Create and Agent actions; and on small screens the same sidebar in a `Drawer`. The breadcrumb names the resource. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Item` per tab, Settings last, in a `sticky top-0` wrapper on the canvas fill so it stays in view while the layout scrolls. A first-level resource with no tabs drops this bar and renders the page at its own settings route.
 
-### B. Resource tabs — `PageTabs`, `Tabs` (optional)
-
-A full-bleed `PageTabs` with one `Tabs.Item` per tab, Settings last. A first-level resource with no tabs drops this bar and renders the page at its own settings route.
-
-### C. Page heading — `PageHeader` (required)
+### B. Page heading — `PageHeader` (required)
 
 A small `PageHeader` titled Settings with one sentence about what these settings cover. It sits at the top of the form column, inside the scrolling region.
 
-### D. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `HelperText`, `Switch` (required)
+### C. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `HelperText`, `Switch` (required)
 
 One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `HelperText` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
 
-### E. Locked settings — `Tooltip`, `Switch` (optional)
+### D. Locked settings — `Tooltip`, `Switch` (optional)
 
 A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and a link in the description to where it can be changed, e.g. Contact sales.
 
-### F. Save bar — `SaveBar`, `Button` (required)
+### E. Save bar — `SaveBar`, `Button` (required)
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
-### G. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
+### F. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
 
 When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `Field` choice cards around `RadioButton`) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `Field` choice cards around `RadioButton`; the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
-### H. Template editor — `SettingRow`, `HelperText` (optional)
+### G. Template editor — `SettingRow`, `HelperText` (optional)
 
-A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `CodeEditor` (`language="json"`, a fixed `height`), checked on Save (`Write the data set as a JSON object.`); a product passes its Monaco `loader` for JSON validation as you type.
+A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `CodeEditor` (`language="json"`, a fixed `height`), checked on Save (`Write the data set as a JSON object.`); it passes `:loader="loadMonaco"` (the loader from the `code-editor` spec, with the JSON worker) so JSON is validated as you type, and keeps plain line numbers: `pad-line-numbers` is for full-page editors, not a fixed-height field in a form.
 
-### I. Section warnings and server errors — `SettingsSection`, `Button` (optional)
+### H. Section warnings and server errors — `SettingsSection`, `Button` (optional)
 
 A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-error rule (`platform/states/form-error`): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
 
-### J. Leave guard — `Tabs`, `SaveBar` (optional)
+### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
 `useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Item` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
 
-### K. Changed elsewhere — `Button`, `SaveBar` (optional)
+### J. Changed elsewhere — `Button`, `SaveBar` (optional)
 
 When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-error rule (`platform/states/form-error`) applied to an edit: one message above the form, the recovery action on it.
 
-### L. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
+### K. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
 
 The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link, then "To confirm, type" the name in a code chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
-
-### M. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -151,8 +143,8 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
-- CacheSettings: one cache setting of an application, on the `AppLayout` console shell; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
-- Protocols: the protocol settings of a workload, on the `AppLayout` console shell; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
+- CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
+- Protocols: the protocol settings of a workload; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
 
 ## Settings that deploy
@@ -166,7 +158,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shells/console` — the platform shell around this page.
+- `shells/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is its `breadcrumbs` slot, a `Select` with `kind="transparent"` and `size="small"`.
 - `platform/create/single-page-create` — the create page that shares this field list.
 - `platform/detail/attached-resources` — the Domains section body in DeployableSettings.
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
@@ -180,7 +172,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 ## Variants
 
 - `ProjectSettings` — primary (the code below)
-- `DeployableSettings` — A deployable resource’s Settings tab, under the environment switcher in the breadcrumb and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.
+- `DeployableSettings` — A deployable resource’s Settings tab, under the environment switcher the layout's breadcrumbs slot carries and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region.
 - `PolicySettings` — A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.
 - `ResourceSettings` — The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits.
 - `UnsavedChanges` — The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go.
@@ -188,8 +180,8 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `DataStream` — The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays.
 - `StaleRecord` — The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo.
 - `DangerZone` — The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs.
-- `CacheSettings` — One cache setting of an application at /applications/:id/cache-settings/:name, on the `AppLayout` console shell: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.
-- `Protocols` — The protocol settings of a workload on the `AppLayout` console shell: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.
+- `CacheSettings` — One cache setting of an application at /applications/:id/cache-settings/:name: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy.
+- `Protocols` — The protocol settings of a workload: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/edit-resource", { variant })`, or the file under `blocks/platform/edit/edit-resource/variants/`.
 
@@ -197,248 +189,20 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
 
 ```vue
 <script setup>
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
-  import Command from '@aziontech/webkit/command'
-  import Drawer from '@aziontech/webkit/drawer'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Menu from '@aziontech/webkit/menu'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
-
-  const navGroups = [
-    {
-      items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'pi pi-cloud-upload',
-          href: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
-      ]
-    },
-    {
-      label: 'Security',
-      items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
-      ]
-    },
-    {
-      label: 'Data',
-      items: [
-        {
-          id: 'databases',
-          label: 'Databases',
-          icon: 'pi pi-database',
-          href: '/databases',
-          tagValue: 'Preview'
-        },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
-      ]
-    },
-    {
-      label: 'Observability',
-      items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
-        {
-          id: 'metrics-module',
-          label: 'Metrics',
-          icon: 'pi pi-chart-bar',
-          kind: 'drill',
-          href: '/metrics',
-          groups: [
-            {
-              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
-            },
-            {
-              label: 'Build',
-              items: [
-                {
-                  id: 'metrics-resources',
-                  label: 'Resources',
-                  href: '/metrics',
-                  query: { dashboard: 'resources' }
-                },
-                {
-                  id: 'metrics-services',
-                  label: 'Services',
-                  href: '/metrics',
-                  query: { dashboard: 'services' }
-                },
-                {
-                  id: 'metrics-cache',
-                  label: 'Cache',
-                  href: '/metrics',
-                  query: { dashboard: 'cache' }
-                }
-              ]
-            },
-            {
-              label: 'Security',
-              items: [
-                {
-                  id: 'metrics-domains',
-                  label: 'Domains',
-                  href: '/metrics',
-                  query: { dashboard: 'domains' }
-                },
-                {
-                  id: 'metrics-policies',
-                  label: 'Policies',
-                  href: '/metrics',
-                  query: { dashboard: 'policies' }
-                },
-                {
-                  id: 'metrics-rule-sets',
-                  label: 'Rule sets',
-                  href: '/metrics',
-                  query: { dashboard: 'rule-sets' }
-                }
-              ]
-            },
-            {
-              label: 'Data',
-              items: [
-                {
-                  id: 'metrics-databases',
-                  label: 'Databases',
-                  href: '/metrics',
-                  query: { dashboard: 'databases' }
-                },
-                {
-                  id: 'metrics-storage',
-                  label: 'Storage',
-                  href: '/metrics',
-                  query: { dashboard: 'storage' }
-                }
-              ]
-            }
-          ]
-        },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          kind: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', href: '/account' },
-                {
-                  id: 'settings-build-deployment',
-                  label: 'Build and deployment',
-                  href: '/account/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  href: '/account/environments'
-                },
-                { id: 'settings-users', label: 'Users management', href: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const recentRows = [
-    {
-      key: 'resources/1020655',
-      name: 'resource-01',
-      icon: 'pi pi-box',
-      typeLabel: 'Resource',
-      navId: 'resources'
-    },
-    {
-      key: 'domains/domain-1020655',
-      name: 'app.example.com',
-      icon: 'pi pi-globe',
-      typeLabel: 'Domain',
-      navId: 'domains'
-    },
-    {
-      key: 'databases/feature-flags',
-      name: 'feature-flags',
-      icon: 'pi pi-database',
-      typeLabel: 'Database',
-      navId: 'databases'
-    }
-  ]
-
-  const accountCommands = [
-    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
-    { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
-    { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
-  ]
-
-  const breadcrumb = [{ label: 'Projects', href: '/projects' }, { label: 'web-app' }]
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -451,92 +215,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
     { value: 'main-settings', label: 'Settings' }
   ]
 
-  const activeId = ref('projects')
-  const navOpen = ref(false)
-  const paletteOpen = ref(false)
-  const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
-  const railCollapsed = ref(false)
   const activeTab = ref('main-settings')
-
-  watch(paletteOpen, () => {
-    paletteQuery.value = ''
-  })
-
-  const leaves = (items) =>
-    items.flatMap((item) =>
-      item.groups
-        ? leaves(item.groups.flatMap((group) => group.items))
-        : item.children
-          ? leaves(item.children)
-          : [item]
-    )
-
-  const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
-    const flush = () => {
-      if (run.length) {
-        blocks.push({
-          key: `area-${groupIndex}-${blocks.length}`,
-          heading: group.label ?? '',
-          items: leaves(run)
-        })
-      }
-      run = []
-    }
-    for (const item of group.items) {
-      if (item.groups || item.children) {
-        flush()
-        blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
-      } else run.push(item)
-    }
-    flush()
-    return blocks
-  })
-
-  const resolvedTheme = computed(() =>
-    theme.value === 'system'
-      ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme.value
-  )
-
-  const actionCommands = computed(() => [
-    { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
-    {
-      id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-      icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
-    },
-    {
-      id: 'sidebar',
-      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
-      icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
-    }
-  ])
-
-  const onNavigate = (event, node) => {
-    event.preventDefault()
-    activeId.value = node.id
-  }
-
-  const onMobileNavigate = (event, node) => {
-    onNavigate(event, node)
-    navOpen.value = false
-  }
-
-  const onPaletteSelect = (event, value) => {
-    const [scope, id] = String(value).split(':')
-    if (scope === 'nav') activeId.value = id
-    if (scope === 'res') {
-      activeId.value = recentRows.find((row) => row.key === id)?.navId ?? activeId.value
-    }
-    if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
-    if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
-  }
 
   const defaultModules = [
     {
@@ -621,769 +300,193 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
 </script>
 
 <template>
-  <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
-    <div class="hidden h-full [--sidebar-width:var(--container-2xs)] md:flex">
-      <Sidebar
-        v-model:width="railWidth"
-        v-model:collapsed="railCollapsed"
-        resizable
-        collapsible
-        aria-label="Main navigation"
-        collapse-aria-label="Collapse sidebar"
-        expand-aria-label="Expand sidebar"
-        resize-aria-label="Resize sidebar"
-      >
-        <template #header>
-          <div class="-m-(--spacing-md) flex flex-col">
-            <div
-              class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-            </div>
+  <div class="flex min-h-0 flex-1 flex-col">
+    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
+      <PageTabs v-model="activeTab">
+        <Tabs.Item
+          v-for="tab in tabs"
+          :key="tab.value"
+          :value="tab.value"
+          :label="tab.label"
+        />
+      </PageTabs>
+    </div>
 
-            <Command
-              v-model:open="paletteOpen"
-              @select="onPaletteSelect"
-            >
-              <Command.Input
-                placeholder="Search resources, pages and commands"
-                @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
-              />
-              <Command.List>
-                <Command.Group
-                  v-if="!paletteQuery"
-                  key="recents"
-                  heading="Recents"
-                >
-                  <Command.Item
-                    v-for="row in recentRows"
-                    :key="row.key"
-                    :value="'res:' + row.key"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="row.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ row.name }}
-                    <template #suffix>
-                      <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                    </template>
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator
-                  v-if="!paletteQuery"
-                  key="recents-rule"
-                />
-
-                <Command.Group
-                  v-for="group in paletteGroups"
-                  :key="group.key"
-                  :heading="group.heading"
-                >
-                  <Command.Item
-                    v-for="item in group.items"
-                    :key="item.id"
-                    :value="'nav:' + item.id"
-                  >
-                    <template
-                      v-if="item.icon"
-                      #prefix
-                    >
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator key="commands-rule" />
-
-                <Command.Group heading="Actions">
-                  <Command.Item
-                    v-for="command in actionCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Group heading="Account">
-                  <Command.Item
-                    v-for="command in accountCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-              </Command.List>
-            </Command>
-          </div>
-        </template>
-
-        <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-          <Menu
-            :groups="navGroups"
-            :active-id="activeId"
-            role="presentation"
-            @navigate="onNavigate"
+    <div class="relative flex min-h-0 flex-1 flex-col">
+      <section class="min-h-0 flex-1">
+        <div class="flex min-h-full flex-col">
+          <form
+            class="flex min-h-full flex-col"
+            aria-label="Main settings"
+            novalidate
+            @submit.prevent="save"
           >
-            <Menu.Back />
-          </Menu>
-        </div>
-
-        <template #footer>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Avatar
-              label="alex@example.com"
-              size="small"
-              kind="square"
-            />
-            <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <DropdownMenu placement="top-end">
-              <DropdownMenu.Trigger>
-                <Tooltip text="Account menu">
-                  <IconButton
-                    icon="pi pi-ellipsis-v"
-                    aria-label="Account menu"
-                    kind="outlined"
-                    size="small"
-                  />
-                </Tooltip>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <template #top>
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">alex</span>
-                    <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
-                  </div>
-                </template>
-                <DropdownMenu.Option
-                  value="settings"
-                  label="Account settings"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-cog"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="personal-tokens"
-                  label="Personal tokens"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-key"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div
-                  class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                >
-                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                    >Theme</span
-                  >
-                  <ThemeSwitcher
-                    v-model="theme"
-                    aria-label="Theme"
-                  />
-                </div>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="home"
-                  label="Home page"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-home"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="changelog"
-                  label="Changelog"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-pencil"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="feedback"
-                  label="Feedback"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-comment"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="docs"
-                  label="Docs"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-book"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="logout"
-                  label="Log out"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-sign-out"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
-                  <Button
-                    label="Upgrade to Pro"
-                    kind="secondary"
-                    size="medium"
-                    class="w-full"
-                  />
-                  <div class="flex justify-center px-(--spacing-xs)">
-                    <StatusIndicator
-                      severity="success"
-                      label="All systems normal"
-                    />
-                  </div>
-                </div>
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </div>
-        </template>
-      </Sidebar>
-    </div>
-
-    <div class="flex min-w-0 flex-1 flex-col">
-      <div class="@container">
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left>
-            <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-              <span class="contents md:hidden">
-                <Tooltip
-                  text="Open navigation"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="pi pi-bars"
-                    aria-label="Open navigation"
-                    kind="outlined"
-                    size="medium"
-                    @click="navOpen = true"
-                  />
-                </Tooltip>
-              </span>
-
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-
-              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
-                <Breadcrumb
-                  :items="breadcrumb"
-                  class="w-full"
-                />
-              </div>
-            </div>
-          </GlobalHeader.Left>
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right>
-            <SearchTrigger
-              collapsible
-              @open="paletteOpen = true"
-            />
-
-            <span class="contents md:hidden">
-              <Tooltip
-                text="Create"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="pi pi-plus-circle"
-                  kind="primary"
-                  size="medium"
-                  aria-label="Create"
-                />
-              </Tooltip>
-              <Tooltip
-                text="Agent"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="ai ai-ask-azion"
-                  kind="outlined"
-                  size="medium"
-                  aria-label="Agent"
-                />
-              </Tooltip>
-            </span>
-            <span class="hidden md:contents">
-              <Button
-                label="Create"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus-circle"
-              />
-              <ButtonHighlight
-                label="Agent"
-                size="medium"
-                icon="ai ai-ask-azion"
-              />
-            </span>
-
-            <button
-              type="button"
-              aria-label="Account settings"
-              class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            <div
+              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
             >
-              <Avatar
-                label="alex@example.com"
-                size="medium"
-                kind="square"
+              <PageHeader
+                title="Settings"
+                description="Core configuration for this project."
+                size="small"
               />
-            </button>
-          </GlobalHeader.Right>
-        </GlobalHeader>
-      </div>
 
-      <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
-        <main class="flex h-full flex-col">
-          <PageTabs v-model="activeTab">
-            <Tabs.Item
-              v-for="tab in tabs"
-              :key="tab.value"
-              :value="tab.value"
-              :label="tab.label"
-            />
-          </PageTabs>
-
-          <div class="relative flex min-h-0 flex-1 flex-col">
-            <section class="min-h-0 flex-1 overflow-auto">
-              <div class="flex min-h-full flex-col">
-                <form
-                  class="flex min-h-full flex-col"
-                  aria-label="Main settings"
-                  novalidate
-                  @submit.prevent="save"
-                >
-                  <div
-                    class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
-                  >
-                    <PageHeader
-                      title="Settings"
-                      description="Core configuration for this project."
-                      size="small"
-                    />
-
-                    <fieldset
-                      class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
-                      :disabled="saving"
-                    >
-                      <legend class="sr-only">Main settings</legend>
-
-                      <SettingsSection
-                        title="General"
-                        hint="How this project is identified across the platform, and whether it is serving traffic."
-                        anchor="general"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <Item.List>
-                              <SettingRow
-                                title="Name"
-                                description="A unique and descriptive name to identify the project."
-                              >
-                                <div class="flex w-full flex-col gap-(--spacing-xs)">
-                                  <Input
-                                    id="resource-name"
-                                    v-model="form.name"
-                                    size="large"
-                                    :disabled="saving"
-                                    class="w-full"
-                                    aria-label="Name"
-                                    :required="nameError"
-                                    :aria-describedby="
-                                      nameError ? 'resource-name-message' : undefined
-                                    "
-                                  />
-                                  <HelperText
-                                    v-if="nameError"
-                                    id="resource-name-message"
-                                    kind="required"
-                                    label="This field is required."
-                                  />
-                                </div>
-                              </SettingRow>
-                              <SettingRow
-                                title="Active"
-                                description="When disabled, the project stops serving traffic."
-                                kind="compact"
-                              >
-                                <Switch
-                                  v-model="form.active"
-                                  aria-label="Active"
-                                  :disabled="saving"
-                                />
-                              </SettingRow>
-                            </Item.List>
-                          </template>
-                        </Card>
-                      </SettingsSection>
-
-                      <SettingsSection
-                        title="Modules"
-                        hint="The capabilities this project runs with, each of which can be toggled here."
-                        anchor="modules"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <Item.List>
-                              <SettingRow
-                                v-for="mod in defaultModules"
-                                :key="mod.key"
-                                :title="mod.title"
-                                :description="mod.description"
-                                kind="compact"
-                              >
-                                <Switch
-                                  v-model="form.modules[mod.key]"
-                                  :aria-label="mod.title"
-                                  :disabled="saving"
-                                />
-                              </SettingRow>
-                            </Item.List>
-                          </template>
-                        </Card>
-                      </SettingsSection>
-
-                      <SettingsSection
-                        title="Subscription modules"
-                        hint="Paid add-ons that are activated with sales, not from this page."
-                        anchor="subscription-modules"
-                      >
-                        <Card :padded="false">
-                          <template #content>
-                            <Item.List>
-                              <SettingRow
-                                v-for="mod in subscriptionModules"
-                                :key="mod.key"
-                                :title="mod.title"
-                                kind="compact"
-                              >
-                                <template #description>
-                                  {{ mod.description }}
-                                  <a
-                                    href="https://example.com/contact-sales"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                                  >
-                                    Contact sales
-                                    <i
-                                      class="pi pi-external-link shrink-0 text-body-sm leading-none"
-                                      aria-hidden="true"
-                                    />
-                                  </a>
-                                </template>
-                                <Tooltip text="Contact sales to activate this module.">
-                                  <Switch
-                                    v-model="form.modules[mod.key]"
-                                    disabled
-                                    :aria-label="mod.title"
-                                  />
-                                </Tooltip>
-                              </SettingRow>
-                            </Item.List>
-                          </template>
-                        </Card>
-                      </SettingsSection>
-                    </fieldset>
-                  </div>
-
-                  <Transition
-                    enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-                    enter-from-class="translate-y-2 opacity-0"
-                    leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                    leave-to-class="translate-y-2 opacity-0"
-                  >
-                    <SaveBar v-if="dirty || saving">
-                      Project settings changed.
-                      <span class="text-(--text-muted)"
-                        >Saving publishes them on the next deployment.</span
-                      >
-                      <template #actions>
-                        <Button
-                          type="button"
-                          label="Discard"
-                          kind="outlined"
-                          size="medium"
-                          :disabled="saving"
-                          @click="discard"
-                        />
-                        <Button
-                          label="Save"
-                          kind="primary"
-                          size="medium"
-                          :loading="saving"
-                          @click="save"
-                        />
-                      </template>
-                    </SaveBar>
-                  </Transition>
-                </form>
-              </div>
-            </section>
-          </div>
-        </main>
-      </div>
-    </div>
-
-    <Drawer
-      v-model:open="navOpen"
-      side="right"
-      size="small"
-    >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent aria-label="Navigation">
-          <Sidebar aria-label="Main navigation">
-            <template #header>
-              <div class="-m-(--spacing-md) flex flex-col">
-                <div
-                  class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-                >
-                  <a
-                    href="/home"
-                    aria-label="Azion home"
-                    class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                  >
-                    <Brand
-                      kind="default"
-                      size="small"
-                    />
-                  </a>
-                </div>
-              </div>
-            </template>
-
-            <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-              <Menu
-                :groups="navGroups"
-                :active-id="activeId"
-                role="presentation"
-                @navigate="onMobileNavigate"
+              <fieldset
+                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+                :disabled="saving"
               >
-                <Menu.Back />
-              </Menu>
+                <legend class="sr-only">Main settings</legend>
+
+                <SettingsSection
+                  title="General"
+                  hint="How this project is identified across the platform, and whether it is serving traffic."
+                  anchor="general"
+                >
+                  <Card :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <SettingRow
+                          title="Name"
+                          description="A unique and descriptive name to identify the project."
+                        >
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              id="resource-name"
+                              v-model="form.name"
+                              size="large"
+                              :disabled="saving"
+                              class="w-full"
+                              aria-label="Name"
+                              :required="nameError"
+                              :aria-describedby="nameError ? 'resource-name-message' : undefined"
+                            />
+                            <HelperText
+                              v-if="nameError"
+                              id="resource-name-message"
+                              kind="required"
+                              label="This field is required."
+                            />
+                          </div>
+                        </SettingRow>
+                        <SettingRow
+                          title="Active"
+                          description="When disabled, the project stops serving traffic."
+                          kind="compact"
+                        >
+                          <Switch
+                            v-model="form.active"
+                            aria-label="Active"
+                            :disabled="saving"
+                          />
+                        </SettingRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsSection>
+
+                <SettingsSection
+                  title="Modules"
+                  hint="The capabilities this project runs with, each of which can be toggled here."
+                  anchor="modules"
+                >
+                  <Card :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <SettingRow
+                          v-for="mod in defaultModules"
+                          :key="mod.key"
+                          :title="mod.title"
+                          :description="mod.description"
+                          kind="compact"
+                        >
+                          <Switch
+                            v-model="form.modules[mod.key]"
+                            :aria-label="mod.title"
+                            :disabled="saving"
+                          />
+                        </SettingRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsSection>
+
+                <SettingsSection
+                  title="Subscription modules"
+                  hint="Paid add-ons that are activated with sales, not from this page."
+                  anchor="subscription-modules"
+                >
+                  <Card :padded="false">
+                    <template #content>
+                      <Item.List>
+                        <SettingRow
+                          v-for="mod in subscriptionModules"
+                          :key="mod.key"
+                          :title="mod.title"
+                          kind="compact"
+                        >
+                          <template #description>
+                            {{ mod.description }}
+                            <a
+                              href="https://example.com/contact-sales"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                            >
+                              Contact sales
+                              <i
+                                class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                aria-hidden="true"
+                              />
+                            </a>
+                          </template>
+                          <Tooltip text="Contact sales to activate this module.">
+                            <Switch
+                              v-model="form.modules[mod.key]"
+                              disabled
+                              :aria-label="mod.title"
+                            />
+                          </Tooltip>
+                        </SettingRow>
+                      </Item.List>
+                    </template>
+                  </Card>
+                </SettingsSection>
+              </fieldset>
             </div>
 
-            <template #footer>
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Avatar
-                  label="alex@example.com"
-                  size="small"
-                  kind="square"
-                />
-                <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                  >alex</span
+            <Transition
+              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+              enter-from-class="translate-y-2 opacity-0"
+              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+              leave-to-class="translate-y-2 opacity-0"
+            >
+              <SaveBar v-if="dirty || saving">
+                Project settings changed.
+                <span class="text-(--text-muted)"
+                  >Saving publishes them on the next deployment.</span
                 >
-                <DropdownMenu placement="top-end">
-                  <DropdownMenu.Trigger>
-                    <Tooltip text="Account menu">
-                      <IconButton
-                        icon="pi pi-ellipsis-v"
-                        aria-label="Account menu"
-                        kind="outlined"
-                        size="small"
-                      />
-                    </Tooltip>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Group>
-                    <template #top>
-                      <div class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-md text-(--text-default)">alex</span>
-                        <span class="truncate text-body-xs text-(--text-muted)"
-                          >alex@example.com</span
-                        >
-                      </div>
-                    </template>
-                    <DropdownMenu.Option
-                      value="settings"
-                      label="Account settings"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-cog"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="personal-tokens"
-                      label="Personal tokens"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-key"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                    >
-                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                        >Theme</span
-                      >
-                      <ThemeSwitcher
-                        v-model="theme"
-                        aria-label="Theme"
-                      />
-                    </div>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="home"
-                      label="Home page"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-home"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="changelog"
-                      label="Changelog"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-pencil"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="feedback"
-                      label="Feedback"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-comment"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="docs"
-                      label="Docs"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-book"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="logout"
-                      label="Log out"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-sign-out"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                    >
-                      <Button
-                        label="Upgrade to Pro"
-                        kind="secondary"
-                        size="medium"
-                        class="w-full"
-                      />
-                      <div class="flex justify-center px-(--spacing-xs)">
-                        <StatusIndicator
-                          severity="success"
-                          label="All systems normal"
-                        />
-                      </div>
-                    </div>
-                  </DropdownMenu.Group>
-                </DropdownMenu>
-              </div>
-            </template>
-          </Sidebar>
-        </DrawerContent>
-      </DrawerPortal>
-    </Drawer>
+                <template #actions>
+                  <Button
+                    type="button"
+                    label="Discard"
+                    kind="outlined"
+                    size="medium"
+                    :disabled="saving"
+                    @click="discard"
+                  />
+                  <Button
+                    label="Save"
+                    kind="primary"
+                    size="medium"
+                    :loading="saving"
+                    @click="save"
+                  />
+                </template>
+              </SaveBar>
+            </Transition>
+          </form>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 ```

@@ -633,7 +633,7 @@
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col gap-(--spacing-md) bg-(--bg-canvas) p-(--spacing-md)">
+  <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
     <Card :padded="false">
       <template #content>
         <TableRoot

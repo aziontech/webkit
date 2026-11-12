@@ -119,19 +119,18 @@ mr+L2DBwFXtW2qJfNedf/9rU
   const formEl = ref(null)
   const fileInput = ref(null)
   const uploadStatus = ref('')
-  const now = ref(Date.now())
+  const NOW = Date.UTC(2026, 10, 10, 12)
 
   watch(open, (isOpen) => {
     if (!isOpen) return
     Object.assign(form, blankForm(), { name: 'shop.example.com', certificate: SAMPLE_PEM })
     submitted.value = false
     uploadStatus.value = ''
-    now.value = Date.now()
   })
 
   const parsed = computed(() => parseCertificates(form.certificate))
   const daysLeft = computed(() =>
-    parsed.value?.notAfter ? Math.floor((parsed.value.notAfter.getTime() - now.value) / DAY) : null
+    parsed.value?.notAfter ? Math.floor((parsed.value.notAfter.getTime() - NOW) / DAY) : null
   )
   const expiry = computed(() => {
     if (daysLeft.value === null) return null

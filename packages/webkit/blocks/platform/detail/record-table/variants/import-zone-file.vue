@@ -579,8 +579,8 @@ legacy  IN HINFO "PC" "Linux"`
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <main class="flex h-full min-h-0 flex-col">
+  <div class="flex min-h-0 flex-1 flex-col">
+    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Item
           v-for="tab in tabs"
@@ -589,758 +589,758 @@ legacy  IN HINFO "PC" "Linux"`
           :label="tab.label"
         />
       </PageTabs>
+    </div>
 
-      <section
-        v-if="activeTab === 'main-settings'"
-        class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col overflow-auto"
+    <section
+      v-if="activeTab === 'main-settings'"
+      class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col"
+    >
+      <form
+        class="flex min-h-full min-w-0 flex-col"
+        aria-label="Zone settings"
+        novalidate
+        @submit.prevent="save"
       >
-        <form
-          class="flex min-h-full min-w-0 flex-col"
-          aria-label="Zone settings"
-          novalidate
-          @submit.prevent="save"
-        >
-          <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
-            <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="saving"
-              >
-                <legend class="sr-only">Zone settings</legend>
-                <SettingsSection
-                  title="General"
-                  hint="How this zone is identified across the platform."
-                  anchor="general"
-                >
-                  <Card :padded="false">
-                    <template #content>
-                      <ItemList>
-                        <SettingRow
-                          title="Name"
-                          description="Give a unique and descriptive name to identify your zone."
-                        >
-                          <Input
-                            v-model="settings.name"
-                            size="large"
-                            class="w-full"
-                            aria-label="Name"
-                            autocomplete="off"
-                            :required="!!errors.name"
-                            :aria-describedby="errors.name ? nameMessageId : undefined"
-                            :disabled="saving"
-                            @update:model-value="errors.name = ''"
-                          />
-                          <HelperText
-                            v-if="errors.name"
-                            :id="nameMessageId"
-                            kind="required"
-                            :label="errors.name"
-                          />
-                        </SettingRow>
-
-                        <SettingRow
-                          title="Domain name"
-                          description="Provide the domain name you want to host. Example: example.com."
-                        >
-                          <Input
-                            v-model="settings.domain"
-                            size="large"
-                            class="w-full"
-                            aria-label="Domain name"
-                            autocomplete="off"
-                            :required="!!errors.domain"
-                            :aria-describedby="errors.domain ? domainMessageId : undefined"
-                            :disabled="saving"
-                            @update:model-value="errors.domain = ''"
-                          />
-                          <HelperText
-                            v-if="errors.domain"
-                            :id="domainMessageId"
-                            kind="required"
-                            :label="errors.domain"
-                          />
-                        </SettingRow>
-                      </ItemList>
-                    </template>
-                  </Card>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Configure your nameserver"
-                  hint="Make this zone the authoritative DNS for the domain."
-                  anchor="configure-your-nameserver"
-                >
-                  <Card :padded="false">
-                    <template #content>
-                      <ItemList>
-                        <SettingRow
-                          title="Nameservers"
-                          description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
-                          stackable
-                        >
-                          <div class="flex w-full flex-col gap-(--spacing-xs)">
-                            <InputGroupRoot
-                              v-for="(ns, index) in nameservers"
-                              :key="ns"
-                            >
-                              <div class="flex flex-1">
-                                <Input
-                                  :model-value="ns"
-                                  size="large"
-                                  class="w-full"
-                                  :aria-label="'Nameserver ' + (index + 1)"
-                                  monospace
-                                  readonly
-                                />
-                              </div>
-                              <CopyButton
-                                kind="transparent"
-                                :value="ns"
-                                :aria-label="'Copy nameserver ' + (index + 1)"
-                              />
-                            </InputGroupRoot>
-                          </div>
-                          <HelperText
-                            :id="nameserverMessageId"
-                            kind="helper"
-                            label="Add the nameservers in your domain provider."
-                          />
-                        </SettingRow>
-                      </ItemList>
-                    </template>
-                  </Card>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="DNSSEC"
-                  hint="Signs the zone so resolvers can detect spoofed answers."
-                  anchor="dnssec"
-                >
-                  <Card :padded="false">
-                    <template #content>
-                      <ItemList>
-                        <SettingRow
-                          title="Enable DNSSEC"
-                          description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
-                          kind="compact"
-                        >
-                          <Switch
-                            v-model="settings.dnssec"
-                            aria-label="Enable DNSSEC"
-                            :disabled="saving"
-                          />
-                        </SettingRow>
-
-                        <template v-if="settings.dnssec">
-                          <SettingRow
-                            v-for="key in dnssecKeys"
-                            :key="key.label"
-                            :title="key.label"
-                            :description="key.description"
-                            stackable
-                          >
-                            <InputGroupRoot class="w-full">
-                              <div class="flex flex-1">
-                                <Input
-                                  :model-value="key.value"
-                                  size="large"
-                                  class="w-full"
-                                  :aria-label="key.label"
-                                  monospace
-                                  readonly
-                                />
-                              </div>
-                              <CopyButton
-                                kind="transparent"
-                                :value="key.value"
-                                :aria-label="'Copy ' + key.label"
-                              />
-                            </InputGroupRoot>
-                          </SettingRow>
-                        </template>
-                      </ItemList>
-                    </template>
-                  </Card>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Status"
-                  hint="A zone can be held inactive while its records are being built."
-                  anchor="status"
-                >
-                  <Card :padded="false">
-                    <template #content>
-                      <ItemList>
-                        <SettingRow
-                          title="Active"
-                          description="When active, the zone answers authoritative DNS queries for the domain."
-                          kind="compact"
-                        >
-                          <Switch
-                            v-model="settings.active"
-                            aria-label="Active"
-                            :disabled="saving"
-                          />
-                        </SettingRow>
-                      </ItemList>
-                    </template>
-                  </Card>
-                </SettingsSection>
-              </fieldset>
-            </section>
-          </div>
-          <Transition
-            enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-            enter-from-class="translate-y-2 opacity-0"
-            leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-            leave-to-class="translate-y-2 opacity-0"
-          >
-            <SaveBar
-              v-if="dirty || saving"
-              kind="docked"
-            >
-              You have unsaved changes.
-
-              <template #actions>
-                <Button
-                  type="button"
-                  label="Discard"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="saving"
-                  @click="discard"
-                />
-                <Button
-                  type="submit"
-                  label="Save"
-                  kind="primary"
-                  size="medium"
-                  :loading="saving"
-                />
-              </template>
-            </SaveBar>
-          </Transition>
-        </form>
-      </section>
-
-      <section
-        v-else
-        class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
-      >
-        <div class="layout-column layout-boundary flex min-w-0 flex-col">
-          <PageHeader
-            title="Records"
-            description="The authoritative records this zone answers with."
-            size="small"
-          >
-            <template #actions>
-              <Button
-                label="Documentation"
-                icon="pi pi-book"
-                kind="outlined"
-                size="medium"
-                href="https://example.com/docs/records"
-                target="_blank"
-              />
-              <Button
-                label="Import zone file"
-                icon="pi pi-file-import"
-                kind="outlined"
-                size="medium"
-                @click="importOpen = true"
-              />
-              <Button
-                label="Add Record"
-                icon="pi pi-plus"
-                kind="outlined"
-                size="medium"
-              />
-            </template>
-          </PageHeader>
+        <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
           <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-            <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <header class="flex items-center gap-(--layout-group-gap)">
-                <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-                  <div class="flex shrink-0 items-center">
-                    <PopoverRoot
-                      v-model:open="filterOpen"
-                      placement="bottom-start"
-                      :dismissible="!calendarOpen"
-                      class="shrink-0"
-                    >
-                      <div class="relative">
-                        <PopoverTrigger>
-                          <Button
-                            label="Filter"
-                            kind="outlined"
-                            size="medium"
-                            icon="pi pi-filter"
-                          />
-                          <Transition
-                            enter-from-class="scale-75 opacity-0"
-                            enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                            leave-to-class="scale-75 opacity-0"
-                            leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="saving"
+            >
+              <legend class="sr-only">Zone settings</legend>
+              <SettingsSection
+                title="General"
+                hint="How this zone is identified across the platform."
+                anchor="general"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <ItemList>
+                      <SettingRow
+                        title="Name"
+                        description="Give a unique and descriptive name to identify your zone."
+                      >
+                        <Input
+                          v-model="settings.name"
+                          size="large"
+                          class="w-full"
+                          aria-label="Name"
+                          autocomplete="off"
+                          :required="!!errors.name"
+                          :aria-describedby="errors.name ? nameMessageId : undefined"
+                          :disabled="saving"
+                          @update:model-value="errors.name = ''"
+                        />
+                        <HelperText
+                          v-if="errors.name"
+                          :id="nameMessageId"
+                          kind="required"
+                          :label="errors.name"
+                        />
+                      </SettingRow>
+
+                      <SettingRow
+                        title="Domain name"
+                        description="Provide the domain name you want to host. Example: example.com."
+                      >
+                        <Input
+                          v-model="settings.domain"
+                          size="large"
+                          class="w-full"
+                          aria-label="Domain name"
+                          autocomplete="off"
+                          :required="!!errors.domain"
+                          :aria-describedby="errors.domain ? domainMessageId : undefined"
+                          :disabled="saving"
+                          @update:model-value="errors.domain = ''"
+                        />
+                        <HelperText
+                          v-if="errors.domain"
+                          :id="domainMessageId"
+                          kind="required"
+                          :label="errors.domain"
+                        />
+                      </SettingRow>
+                    </ItemList>
+                  </template>
+                </Card>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Configure your nameserver"
+                hint="Make this zone the authoritative DNS for the domain."
+                anchor="configure-your-nameserver"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <ItemList>
+                      <SettingRow
+                        title="Nameservers"
+                        description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
+                        stackable
+                      >
+                        <div class="flex w-full flex-col gap-(--spacing-xs)">
+                          <InputGroupRoot
+                            v-for="(ns, index) in nameservers"
+                            :key="ns"
                           >
-                            <div
-                              v-if="appliedCount"
-                              class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-                            >
-                              <Badge
-                                :label="String(appliedCount)"
-                                severity="primary"
-                                size="small"
-                                aria-hidden="true"
+                            <div class="flex flex-1">
+                              <Input
+                                :model-value="ns"
+                                size="large"
                                 class="w-full"
+                                :aria-label="'Nameserver ' + (index + 1)"
+                                monospace
+                                readonly
                               />
                             </div>
-                          </Transition>
-                        </PopoverTrigger>
-                      </div>
-                      <PopoverContent>
-                        <div
-                          ref="filterPanel"
-                          class="flex flex-col"
-                          @keydown.down="move($event, 1)"
-                          @keydown.up="move($event, -1)"
-                        >
-                          <div class="relative overflow-hidden">
-                            <Transition
-                              :enter-from-class="
-                                direction === 'forward'
-                                  ? 'translate-x-[12%] opacity-0'
-                                  : 'translate-x-[-12%] opacity-0'
-                              "
-                              enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                              :leave-to-class="
-                                direction === 'forward'
-                                  ? 'translate-x-[-12%] opacity-0'
-                                  : 'translate-x-[12%] opacity-0'
-                              "
-                              leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                            >
-                              <div
-                                :key="levelKey"
-                                :data-level="levelKey"
-                                class="flex flex-col"
-                              >
-                                <div
-                                  v-if="activeField"
-                                  class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
-                                >
-                                  <IconButton
-                                    icon="pi pi-angle-left"
-                                    kind="outlined"
-                                    size="small"
-                                    :aria-label="
-                                      customField ? 'Back to date periods' : 'Back to all filters'
-                                    "
-                                    @click="customField ? leaveCustom() : back()"
-                                  />
-                                  <span class="truncate text-label-sm text-(--text-default)">{{
-                                    activeField.label
-                                  }}</span>
-                                </div>
-
-                                <div
-                                  v-if="customField"
-                                  class="px-(--spacing-md) py-(--spacing-sm)"
-                                >
-                                  <CalendarRoot
-                                    v-model="customRange"
-                                    v-model:open="calendarOpen"
-                                    mode="range"
-                                    size="medium"
-                                    :show-fields="false"
-                                    placeholder="Select a range"
-                                    class="w-full"
-                                    @update:model-value="commitCustom"
-                                  />
-                                </div>
-
-                                <template v-else>
-                                  <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                    <Input
-                                      v-model="query"
-                                      size="medium"
-                                      class="w-full"
-                                      :placeholder="
-                                        activeField
-                                          ? 'Search ' + activeField.label.toLowerCase()
-                                          : 'Search fields'
-                                      "
-                                      :aria-label="
-                                        activeField
-                                          ? 'Search ' + activeField.label + ' values'
-                                          : 'Search filter fields'
-                                      "
-                                    >
-                                      <template #iconLeft>
-                                        <i
-                                          class="pi pi-search"
-                                          aria-hidden="true"
-                                        />
-                                      </template>
-                                    </Input>
-                                  </div>
-
-                                  <div
-                                    class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
-                                  >
-                                    <template v-if="!activeField">
-                                      <button
-                                        v-for="field in filterRows"
-                                        :key="field.id"
-                                        type="button"
-                                        data-filter-row
-                                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                        :aria-expanded="false"
-                                        @click="enter(field.id)"
-                                      >
-                                        <span class="grow truncate">{{ field.label }}</span>
-                                        <span
-                                          v-if="isApplied(field)"
-                                          class="truncate text-(--text-muted)"
-                                          >{{ summarizeText(field) }}</span
-                                        >
-                                        <i
-                                          class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </template>
-
-                                    <template v-else>
-                                      <button
-                                        v-for="option in filterRows"
-                                        :key="String(option.value)"
-                                        type="button"
-                                        data-filter-row
-                                        :role="
-                                          option.custom
-                                            ? undefined
-                                            : activeField.kind === 'range'
-                                              ? 'menuitemradio'
-                                              : 'menuitemcheckbox'
-                                        "
-                                        :aria-checked="
-                                          option.custom ? undefined : isPicked(option.value)
-                                        "
-                                        class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                        @click="pick(activeField, option)"
-                                      >
-                                        <Avatar
-                                          v-if="'avatar' in option"
-                                          :src="option.avatar || undefined"
-                                          :alt="option.label"
-                                          :label="option.label"
-                                          size="small"
-                                          kind="square"
-                                          class="shrink-0"
-                                        />
-                                        <span class="grow truncate">{{ option.label }}</span>
-                                        <i
-                                          v-if="option.custom"
-                                          class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                          aria-hidden="true"
-                                        />
-                                        <i
-                                          v-else
-                                          class="pi pi-check shrink-0 text-(--text-default)"
-                                          :class="isPicked(option.value) ? '' : 'invisible'"
-                                          aria-hidden="true"
-                                        />
-                                      </button>
-                                    </template>
-
-                                    <p
-                                      v-if="!filterRows.length"
-                                      class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                                    >
-                                      No match for “{{ query }}”.
-                                    </p>
-                                  </div>
-
-                                  <div
-                                    v-if="activeField && isApplied(activeField)"
-                                    class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                  >
-                                    <button
-                                      type="button"
-                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                      @click="clearFilter(activeField)"
-                                    >
-                                      <i
-                                        class="pi pi-filter-slash text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                      Clear {{ activeField.label }}
-                                    </button>
-                                  </div>
-                                </template>
-                              </div>
-                            </Transition>
-                          </div>
+                            <CopyButton
+                              kind="transparent"
+                              :value="ns"
+                              :aria-label="'Copy nameserver ' + (index + 1)"
+                            />
+                          </InputGroupRoot>
                         </div>
-                      </PopoverContent>
-                    </PopoverRoot>
-                  </div>
-                  <div class="flex min-w-36 grow basis-(--container-2xs)">
-                    <Input
-                      v-model="search"
-                      size="medium"
-                      placeholder="Search records"
-                      aria-label="Search records"
-                      class="w-full"
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
+                        <HelperText
+                          :id="nameserverMessageId"
+                          kind="helper"
+                          label="Add the nameservers in your domain provider."
                         />
-                      </template>
-                    </Input>
-                  </div>
-                </div>
-                <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Tooltip
-                    text="Refresh"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="pi pi-refresh"
-                      kind="outlined"
-                      size="medium"
-                      :loading="loading"
-                      aria-label="Refresh"
-                      @click="refresh"
-                    />
-                  </Tooltip>
-                  <Tooltip
-                    text="Download CSV"
-                    class="shrink-0"
-                  >
-                    <IconButton
-                      icon="pi pi-download"
-                      kind="outlined"
-                      size="medium"
-                      :disabled="!tableRef"
-                      aria-label="Download CSV"
-                      @click="tableRef?.exportCsv({ filename: 'records.csv' })"
-                    />
-                  </Tooltip>
-                  <PopoverRoot
-                    v-model:open="columnsOpen"
-                    placement="bottom-end"
-                    class="shrink-0"
-                  >
-                    <PopoverTrigger>
-                      <Tooltip
-                        v-model:open="columnsTipOpen"
-                        text="Columns"
-                        :disabled="columnsOpen"
+                      </SettingRow>
+                    </ItemList>
+                  </template>
+                </Card>
+              </SettingsSection>
+
+              <SettingsSection
+                title="DNSSEC"
+                hint="Signs the zone so resolvers can detect spoofed answers."
+                anchor="dnssec"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <ItemList>
+                      <SettingRow
+                        title="Enable DNSSEC"
+                        description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
+                        kind="compact"
                       >
-                        <IconButton
-                          icon="ai ai-column"
+                        <Switch
+                          v-model="settings.dnssec"
+                          aria-label="Enable DNSSEC"
+                          :disabled="saving"
+                        />
+                      </SettingRow>
+
+                      <template v-if="settings.dnssec">
+                        <SettingRow
+                          v-for="key in dnssecKeys"
+                          :key="key.label"
+                          :title="key.label"
+                          :description="key.description"
+                          stackable
+                        >
+                          <InputGroupRoot class="w-full">
+                            <div class="flex flex-1">
+                              <Input
+                                :model-value="key.value"
+                                size="large"
+                                class="w-full"
+                                :aria-label="key.label"
+                                monospace
+                                readonly
+                              />
+                            </div>
+                            <CopyButton
+                              kind="transparent"
+                              :value="key.value"
+                              :aria-label="'Copy ' + key.label"
+                            />
+                          </InputGroupRoot>
+                        </SettingRow>
+                      </template>
+                    </ItemList>
+                  </template>
+                </Card>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Status"
+                hint="A zone can be held inactive while its records are being built."
+                anchor="status"
+              >
+                <Card :padded="false">
+                  <template #content>
+                    <ItemList>
+                      <SettingRow
+                        title="Active"
+                        description="When active, the zone answers authoritative DNS queries for the domain."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="settings.active"
+                          aria-label="Active"
+                          :disabled="saving"
+                        />
+                      </SettingRow>
+                    </ItemList>
+                  </template>
+                </Card>
+              </SettingsSection>
+            </fieldset>
+          </section>
+        </div>
+        <Transition
+          enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          enter-from-class="translate-y-2 opacity-0"
+          leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+          leave-to-class="translate-y-2 opacity-0"
+        >
+          <SaveBar
+            v-if="dirty || saving"
+            kind="docked"
+          >
+            You have unsaved changes.
+
+            <template #actions>
+              <Button
+                type="button"
+                label="Discard"
+                kind="outlined"
+                size="medium"
+                :disabled="saving"
+                @click="discard"
+              />
+              <Button
+                type="submit"
+                label="Save"
+                kind="primary"
+                size="medium"
+                :loading="saving"
+              />
+            </template>
+          </SaveBar>
+        </Transition>
+      </form>
+    </section>
+
+    <section
+      v-else
+      class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <PageHeader
+          title="Records"
+          description="The authoritative records this zone answers with."
+          size="small"
+        >
+          <template #actions>
+            <Button
+              label="Documentation"
+              icon="pi pi-book"
+              kind="outlined"
+              size="medium"
+              href="https://example.com/docs/records"
+              target="_blank"
+            />
+            <Button
+              label="Import zone file"
+              icon="pi pi-file-import"
+              kind="outlined"
+              size="medium"
+              @click="importOpen = true"
+            />
+            <Button
+              label="Add Record"
+              icon="pi pi-plus"
+              kind="outlined"
+              size="medium"
+            />
+          </template>
+        </PageHeader>
+        <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+          <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+            <header class="flex items-center gap-(--layout-group-gap)">
+              <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
+                <div class="flex shrink-0 items-center">
+                  <PopoverRoot
+                    v-model:open="filterOpen"
+                    placement="bottom-start"
+                    :dismissible="!calendarOpen"
+                    class="shrink-0"
+                  >
+                    <div class="relative">
+                      <PopoverTrigger>
+                        <Button
+                          label="Filter"
                           kind="outlined"
                           size="medium"
-                          aria-label="Columns"
+                          icon="pi pi-filter"
                         />
-                      </Tooltip>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <div class="flex flex-col">
-                        <div
-                          class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
-                        >
-                          <p class="text-label-md text-(--text-default)">Columns</p>
-                        </div>
-                        <div
-                          class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
+                        <Transition
+                          enter-from-class="scale-75 opacity-0"
+                          enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                          leave-to-class="scale-75 opacity-0"
+                          leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
                         >
                           <div
-                            v-for="column in listedColumns"
-                            :key="column.id"
-                            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                            :class="
-                              column.locked
-                                ? 'cursor-default'
-                                : 'cursor-pointer hover:bg-(--bg-hover)'
-                            "
+                            v-if="appliedCount"
+                            class="pointer-events-none absolute -top-2 -end-2 min-w-5"
                           >
-                            <Field
-                              orientation="horizontal"
-                              :disabled="column.locked"
-                            >
-                              <Switch
-                                :model-value="isVisible(column.id)"
-                                @update:model-value="(value) => setVisible(column.id, !!value)"
-                              />
-                              <Field.Label>
-                                <span class="min-w-0 truncate">{{ column.label }}</span>
-                              </Field.Label>
-                              <span
-                                v-if="column.locked"
-                                class="shrink-0 text-label-xs text-(--text-muted)"
-                                >Always shown</span
-                              >
-                            </Field>
+                            <Badge
+                              :label="String(appliedCount)"
+                              severity="primary"
+                              size="small"
+                              aria-hidden="true"
+                              class="w-full"
+                            />
                           </div>
-                        </div>
-                        <div
-                          v-if="hiddenCount"
-                          class="border-t border-(--border-default) p-(--spacing-xxs)"
-                        >
-                          <Button
-                            label="Show all columns"
-                            kind="transparent"
-                            size="small"
-                            class="w-full"
-                            @click="showAll"
-                          />
+                        </Transition>
+                      </PopoverTrigger>
+                    </div>
+                    <PopoverContent>
+                      <div
+                        ref="filterPanel"
+                        class="flex flex-col"
+                        @keydown.down="move($event, 1)"
+                        @keydown.up="move($event, -1)"
+                      >
+                        <div class="relative overflow-hidden">
+                          <Transition
+                            :enter-from-class="
+                              direction === 'forward'
+                                ? 'translate-x-[12%] opacity-0'
+                                : 'translate-x-[-12%] opacity-0'
+                            "
+                            enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                            :leave-to-class="
+                              direction === 'forward'
+                                ? 'translate-x-[-12%] opacity-0'
+                                : 'translate-x-[12%] opacity-0'
+                            "
+                            leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+                          >
+                            <div
+                              :key="levelKey"
+                              :data-level="levelKey"
+                              class="flex flex-col"
+                            >
+                              <div
+                                v-if="activeField"
+                                class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
+                              >
+                                <IconButton
+                                  icon="pi pi-angle-left"
+                                  kind="outlined"
+                                  size="small"
+                                  :aria-label="
+                                    customField ? 'Back to date periods' : 'Back to all filters'
+                                  "
+                                  @click="customField ? leaveCustom() : back()"
+                                />
+                                <span class="truncate text-label-sm text-(--text-default)">{{
+                                  activeField.label
+                                }}</span>
+                              </div>
+
+                              <div
+                                v-if="customField"
+                                class="px-(--spacing-md) py-(--spacing-sm)"
+                              >
+                                <CalendarRoot
+                                  v-model="customRange"
+                                  v-model:open="calendarOpen"
+                                  mode="range"
+                                  size="medium"
+                                  :show-fields="false"
+                                  placeholder="Select a range"
+                                  class="w-full"
+                                  @update:model-value="commitCustom"
+                                />
+                              </div>
+
+                              <template v-else>
+                                <div class="border-b border-(--border-default) p-(--spacing-xs)">
+                                  <Input
+                                    v-model="query"
+                                    size="medium"
+                                    class="w-full"
+                                    :placeholder="
+                                      activeField
+                                        ? 'Search ' + activeField.label.toLowerCase()
+                                        : 'Search fields'
+                                    "
+                                    :aria-label="
+                                      activeField
+                                        ? 'Search ' + activeField.label + ' values'
+                                        : 'Search filter fields'
+                                    "
+                                  >
+                                    <template #iconLeft>
+                                      <i
+                                        class="pi pi-search"
+                                        aria-hidden="true"
+                                      />
+                                    </template>
+                                  </Input>
+                                </div>
+
+                                <div
+                                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
+                                >
+                                  <template v-if="!activeField">
+                                    <button
+                                      v-for="field in filterRows"
+                                      :key="field.id"
+                                      type="button"
+                                      data-filter-row
+                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                      :aria-expanded="false"
+                                      @click="enter(field.id)"
+                                    >
+                                      <span class="grow truncate">{{ field.label }}</span>
+                                      <span
+                                        v-if="isApplied(field)"
+                                        class="truncate text-(--text-muted)"
+                                        >{{ summarizeText(field) }}</span
+                                      >
+                                      <i
+                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                                        aria-hidden="true"
+                                      />
+                                    </button>
+                                  </template>
+
+                                  <template v-else>
+                                    <button
+                                      v-for="option in filterRows"
+                                      :key="String(option.value)"
+                                      type="button"
+                                      data-filter-row
+                                      :role="
+                                        option.custom
+                                          ? undefined
+                                          : activeField.kind === 'range'
+                                            ? 'menuitemradio'
+                                            : 'menuitemcheckbox'
+                                      "
+                                      :aria-checked="
+                                        option.custom ? undefined : isPicked(option.value)
+                                      "
+                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                      @click="pick(activeField, option)"
+                                    >
+                                      <Avatar
+                                        v-if="'avatar' in option"
+                                        :src="option.avatar || undefined"
+                                        :alt="option.label"
+                                        :label="option.label"
+                                        size="small"
+                                        kind="square"
+                                        class="shrink-0"
+                                      />
+                                      <span class="grow truncate">{{ option.label }}</span>
+                                      <i
+                                        v-if="option.custom"
+                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
+                                        aria-hidden="true"
+                                      />
+                                      <i
+                                        v-else
+                                        class="pi pi-check shrink-0 text-(--text-default)"
+                                        :class="isPicked(option.value) ? '' : 'invisible'"
+                                        aria-hidden="true"
+                                      />
+                                    </button>
+                                  </template>
+
+                                  <p
+                                    v-if="!filterRows.length"
+                                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
+                                  >
+                                    No match for “{{ query }}”.
+                                  </p>
+                                </div>
+
+                                <div
+                                  v-if="activeField && isApplied(activeField)"
+                                  class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                >
+                                  <button
+                                    type="button"
+                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                                    @click="clearFilter(activeField)"
+                                  >
+                                    <i
+                                      class="pi pi-filter-slash text-(--text-muted)"
+                                      aria-hidden="true"
+                                    />
+                                    Clear {{ activeField.label }}
+                                  </button>
+                                </div>
+                              </template>
+                            </div>
+                          </Transition>
                         </div>
                       </div>
                     </PopoverContent>
                   </PopoverRoot>
                 </div>
-              </header>
-              <div
-                v-if="appliedFilters.length"
-                class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-              >
-                <TransitionGroup
-                  move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                  enter-from-class="scale-90 opacity-0"
-                  leave-from-class="scale-100 opacity-100"
-                  leave-to-class="scale-90 opacity-0"
-                  leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                >
-                  <span
-                    v-for="field in appliedFilters"
-                    :key="field.id"
-                    class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                <div class="flex min-w-36 grow basis-(--container-2xs)">
+                  <Input
+                    v-model="search"
+                    size="medium"
+                    placeholder="Search records"
+                    aria-label="Search records"
+                    class="w-full"
                   >
-                    <Chip
-                      :data-filter-chip="field.id"
-                      :label="field.label"
-                      kind="filled"
-                      size="medium"
-                      clickable
-                      removable
-                      @click="enter(field.id)"
-                      @remove="clearFilter(field)"
-                    >
-                      <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                        <span class="truncate text-(--text-muted)">{{ field.label }}</span>
-                        <span
-                          v-if="avatarsOf(field).length"
-                          class="flex shrink-0 items-center -space-x-1"
-                        >
-                          <Avatar
-                            v-for="option in avatarsOf(field)"
-                            :key="String(option.value)"
-                            :src="option.avatar || undefined"
-                            :alt="option.label"
-                            :label="option.label"
-                            size="small"
-                            kind="circle"
-                          />
-                        </span>
-                        <span class="truncate">{{ summarize(field)?.label }}</span>
-                        <span
-                          v-if="summarize(field)?.extra"
-                          class="shrink-0 text-(--text-muted)"
-                          >+{{ summarize(field).extra }}</span
-                        >
-                      </span>
-                    </Chip>
-                  </span>
-                </TransitionGroup>
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </div>
               </div>
-              <Card :padded="false">
-                <template #content>
-                  <TableRoot
-                    ref="tableRef"
-                    v-model:pagination="pagination"
-                    v-model:globalFilter="search"
-                    v-model:columnVisibility="columnVisibility"
-                    :data="visibleRows"
-                    :columns="columns"
-                    row-key="id"
-                    enable-sorting
-                    paginated
-                    :page-size="8"
-                    :bordered="false"
+              <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                <Tooltip
+                  text="Refresh"
+                  class="shrink-0"
+                >
+                  <IconButton
+                    icon="pi pi-refresh"
+                    kind="outlined"
+                    size="medium"
                     :loading="loading"
-                  >
-                    <template #cell-name="{ value }">
-                      <span class="min-w-0 truncate">{{ value }}</span>
-                    </template>
-                    <template #cell-id="{ value }">
-                      <Table.CellId
-                        :value="value"
-                        resource="record"
-                      />
-                    </template>
-                    <template #cell-type="{ value }">
-                      <Tag
-                        :label="value"
-                        severity="secondary"
+                    aria-label="Refresh"
+                    @click="refresh"
+                  />
+                </Tooltip>
+                <Tooltip
+                  text="Download CSV"
+                  class="shrink-0"
+                >
+                  <IconButton
+                    icon="pi pi-download"
+                    kind="outlined"
+                    size="medium"
+                    :disabled="!tableRef"
+                    aria-label="Download CSV"
+                    @click="tableRef?.exportCsv({ filename: 'records.csv' })"
+                  />
+                </Tooltip>
+                <PopoverRoot
+                  v-model:open="columnsOpen"
+                  placement="bottom-end"
+                  class="shrink-0"
+                >
+                  <PopoverTrigger>
+                    <Tooltip
+                      v-model:open="columnsTipOpen"
+                      text="Columns"
+                      :disabled="columnsOpen"
+                    >
+                      <IconButton
+                        icon="ai ai-column"
+                        kind="outlined"
                         size="medium"
+                        aria-label="Columns"
                       />
-                    </template>
-                    <template #cell-value="{ value }">
-                      <Table.CellLink
-                        :label="value"
-                        copyable
-                        @click.stop
-                      />
-                    </template>
-                    <template #cell-policy="{ value }">
-                      <span class="min-w-0 truncate">{{ policyLabel(value) }}</span>
-                    </template>
-                    <template #cell-weight="{ value }">
-                      <span class="min-w-0 truncate">{{ value ?? '—' }}</span>
-                    </template>
-                    <template #cell-description="{ value }">
-                      <span class="min-w-0 truncate">{{ value || '—' }}</span>
-                    </template>
-                    <template #cell-actions="{ row }">
-                      <Table.CellActions :name="row.name">
-                        <DropdownMenuGroup>
-                          <DropdownMenuOption
-                            value="edit"
-                            label="Edit"
+                    </Tooltip>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div class="flex flex-col">
+                      <div
+                        class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
+                      >
+                        <p class="text-label-md text-(--text-default)">Columns</p>
+                      </div>
+                      <div
+                        class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
+                      >
+                        <div
+                          v-for="column in listedColumns"
+                          :key="column.id"
+                          class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+                          :class="
+                            column.locked
+                              ? 'cursor-default'
+                              : 'cursor-pointer hover:bg-(--bg-hover)'
+                          "
+                        >
+                          <Field
+                            orientation="horizontal"
+                            :disabled="column.locked"
                           >
-                            <template #left
-                              ><i
-                                class="pi pi-pencil"
-                                aria-hidden="true"
-                            /></template>
-                          </DropdownMenuOption>
-                        </DropdownMenuGroup>
-                        <DropdownMenuGroup>
-                          <DropdownMenuOption
-                            value="delete"
-                            label="Delete"
-                          >
-                            <template #left
-                              ><i
-                                class="pi pi-trash"
-                                aria-hidden="true"
-                            /></template>
-                          </DropdownMenuOption>
-                        </DropdownMenuGroup>
-                      </Table.CellActions>
-                    </template>
-                  </TableRoot>
-                </template>
-              </Card>
-            </section>
+                            <Switch
+                              :model-value="isVisible(column.id)"
+                              @update:model-value="(value) => setVisible(column.id, !!value)"
+                            />
+                            <Field.Label>
+                              <span class="min-w-0 truncate">{{ column.label }}</span>
+                            </Field.Label>
+                            <span
+                              v-if="column.locked"
+                              class="shrink-0 text-label-xs text-(--text-muted)"
+                              >Always shown</span
+                            >
+                          </Field>
+                        </div>
+                      </div>
+                      <div
+                        v-if="hiddenCount"
+                        class="border-t border-(--border-default) p-(--spacing-xxs)"
+                      >
+                        <Button
+                          label="Show all columns"
+                          kind="transparent"
+                          size="small"
+                          class="w-full"
+                          @click="showAll"
+                        />
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </PopoverRoot>
+              </div>
+            </header>
+            <div
+              v-if="appliedFilters.length"
+              class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+            >
+              <TransitionGroup
+                move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                enter-from-class="scale-90 opacity-0"
+                leave-from-class="scale-100 opacity-100"
+                leave-to-class="scale-90 opacity-0"
+                leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+              >
+                <span
+                  v-for="field in appliedFilters"
+                  :key="field.id"
+                  class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
+                >
+                  <Chip
+                    :data-filter-chip="field.id"
+                    :label="field.label"
+                    kind="filled"
+                    size="medium"
+                    clickable
+                    removable
+                    @click="enter(field.id)"
+                    @remove="clearFilter(field)"
+                  >
+                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                      <span class="truncate text-(--text-muted)">{{ field.label }}</span>
+                      <span
+                        v-if="avatarsOf(field).length"
+                        class="flex shrink-0 items-center -space-x-1"
+                      >
+                        <Avatar
+                          v-for="option in avatarsOf(field)"
+                          :key="String(option.value)"
+                          :src="option.avatar || undefined"
+                          :alt="option.label"
+                          :label="option.label"
+                          size="small"
+                          kind="circle"
+                        />
+                      </span>
+                      <span class="truncate">{{ summarize(field)?.label }}</span>
+                      <span
+                        v-if="summarize(field)?.extra"
+                        class="shrink-0 text-(--text-muted)"
+                        >+{{ summarize(field).extra }}</span
+                      >
+                    </span>
+                  </Chip>
+                </span>
+              </TransitionGroup>
+            </div>
+            <Card :padded="false">
+              <template #content>
+                <TableRoot
+                  ref="tableRef"
+                  v-model:pagination="pagination"
+                  v-model:globalFilter="search"
+                  v-model:columnVisibility="columnVisibility"
+                  :data="visibleRows"
+                  :columns="columns"
+                  row-key="id"
+                  enable-sorting
+                  paginated
+                  :page-size="8"
+                  :bordered="false"
+                  :loading="loading"
+                >
+                  <template #cell-name="{ value }">
+                    <span class="min-w-0 truncate">{{ value }}</span>
+                  </template>
+                  <template #cell-id="{ value }">
+                    <Table.CellId
+                      :value="value"
+                      resource="record"
+                    />
+                  </template>
+                  <template #cell-type="{ value }">
+                    <Tag
+                      :label="value"
+                      severity="secondary"
+                      size="medium"
+                    />
+                  </template>
+                  <template #cell-value="{ value }">
+                    <Table.CellLink
+                      :label="value"
+                      copyable
+                      @click.stop
+                    />
+                  </template>
+                  <template #cell-policy="{ value }">
+                    <span class="min-w-0 truncate">{{ policyLabel(value) }}</span>
+                  </template>
+                  <template #cell-weight="{ value }">
+                    <span class="min-w-0 truncate">{{ value ?? '—' }}</span>
+                  </template>
+                  <template #cell-description="{ value }">
+                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
+                  </template>
+                  <template #cell-actions="{ row }">
+                    <Table.CellActions :name="row.name">
+                      <DropdownMenuGroup>
+                        <DropdownMenuOption
+                          value="edit"
+                          label="Edit"
+                        >
+                          <template #left
+                            ><i
+                              class="pi pi-pencil"
+                              aria-hidden="true"
+                          /></template>
+                        </DropdownMenuOption>
+                      </DropdownMenuGroup>
+                      <DropdownMenuGroup>
+                        <DropdownMenuOption
+                          value="delete"
+                          label="Delete"
+                        >
+                          <template #left
+                            ><i
+                              class="pi pi-trash"
+                              aria-hidden="true"
+                          /></template>
+                        </DropdownMenuOption>
+                      </DropdownMenuGroup>
+                    </Table.CellActions>
+                  </template>
+                </TableRoot>
+              </template>
+            </Card>
           </section>
-        </div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </section>
 
     <Drawer
       v-model:open="importOpen"

@@ -1,5 +1,4 @@
 [
-  "packages/webkit/blocks/platform/create/create-in-drawer/variants/certificate.vue::clock:no-clock-in-setup",
   "packages/webkit/examples/table/refresh.vue::clock:no-clock-in-setup",
   "packages/webkit/src/components/actions/button-highlight/button-highlight.vue::token:js-class-preset",
   "packages/webkit/src/components/actions/button/button.vue::token:js-class-preset",

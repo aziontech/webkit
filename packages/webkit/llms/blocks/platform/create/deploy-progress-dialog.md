@@ -1,6 +1,6 @@
 # DeployProgressDialog (`platform/create/deploy-progress-dialog`)
 
-> The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`.
+> The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, cannot be dismissed and keeps Close disabled; under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Activating <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button` and `Toaster`. The page behind it is a page body for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
@@ -12,7 +12,7 @@
 
 deploy progress; deploy progress dialog; drop to deploy; deploy a folder; multi deploy progress; progresso do deploy; arrastar e implantar; progreso del despliegue
 
-The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those.
+The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those. The page behind the dialog is a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`); the dialog teleports over it.
 
 **The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.
 
@@ -332,24 +332,22 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col bg-(--bg-canvas)">
-    <main class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
-      <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-        <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
-        <p class="text-body-md text-(--text-muted)">
-          Deploys to {{ items.length }} {{ noun(items.length) }}, each activating on its own.
-        </p>
-      </header>
-      <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-        <Button
-          label="Show progress"
-          kind="outlined"
-          size="medium"
-          icon="pi pi-list"
-          @click="open = true"
-        />
-      </div>
-    </main>
+  <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
+    <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+      <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
+      <p class="text-body-md text-(--text-muted)">
+        Deploys to {{ items.length }} {{ noun(items.length) }}, each activating on its own.
+      </p>
+    </header>
+    <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+      <Button
+        label="Show progress"
+        kind="outlined"
+        size="medium"
+        icon="pi pi-list"
+        @click="open = true"
+      />
+    </div>
 
     <Dialog
       v-model:open="open"
@@ -500,6 +498,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         </DialogContent>
       </DialogPortal>
     </Dialog>
+
     <Toaster position="bottom-right" />
   </div>
 </template>

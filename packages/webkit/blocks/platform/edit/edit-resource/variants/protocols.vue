@@ -1,12 +1,6 @@
 <script setup>
-  import AppLayout from '@aziontech/webkit/app-layout'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
-  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -14,14 +8,10 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Menu from '@aziontech/webkit/menu'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -29,309 +19,13 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Sidebar from '@aziontech/webkit/sidebar'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
-
-  const navGroups = [
-    {
-      items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'pi pi-cloud-upload',
-          href: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
-        { id: 'workloads', label: 'Workloads', icon: 'pi pi-sitemap', href: '/workloads' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
-      ]
-    },
-    {
-      label: 'Security',
-      items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
-      ]
-    },
-    {
-      label: 'Data',
-      items: [
-        {
-          id: 'databases',
-          label: 'Databases',
-          icon: 'pi pi-database',
-          href: '/databases',
-          tagValue: 'Preview'
-        },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
-      ]
-    },
-    {
-      label: 'Observability',
-      items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
-        {
-          id: 'metrics-module',
-          label: 'Metrics',
-          icon: 'pi pi-chart-bar',
-          kind: 'drill',
-          href: '/metrics',
-          groups: [
-            {
-              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
-            },
-            {
-              label: 'Build',
-              items: [
-                {
-                  id: 'metrics-resources',
-                  label: 'Resources',
-                  href: '/metrics',
-                  query: { dashboard: 'resources' }
-                },
-                {
-                  id: 'metrics-services',
-                  label: 'Services',
-                  href: '/metrics',
-                  query: { dashboard: 'services' }
-                },
-                {
-                  id: 'metrics-cache',
-                  label: 'Cache',
-                  href: '/metrics',
-                  query: { dashboard: 'cache' }
-                }
-              ]
-            },
-            {
-              label: 'Security',
-              items: [
-                {
-                  id: 'metrics-domains',
-                  label: 'Domains',
-                  href: '/metrics',
-                  query: { dashboard: 'domains' }
-                },
-                {
-                  id: 'metrics-policies',
-                  label: 'Policies',
-                  href: '/metrics',
-                  query: { dashboard: 'policies' }
-                },
-                {
-                  id: 'metrics-rule-sets',
-                  label: 'Rule sets',
-                  href: '/metrics',
-                  query: { dashboard: 'rule-sets' }
-                }
-              ]
-            },
-            {
-              label: 'Data',
-              items: [
-                {
-                  id: 'metrics-databases',
-                  label: 'Databases',
-                  href: '/metrics',
-                  query: { dashboard: 'databases' }
-                },
-                {
-                  id: 'metrics-storage',
-                  label: 'Storage',
-                  href: '/metrics',
-                  query: { dashboard: 'storage' }
-                }
-              ]
-            }
-          ]
-        },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          kind: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', href: '/account' },
-                {
-                  id: 'settings-build-deployment',
-                  label: 'Build and deployment',
-                  href: '/account/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  href: '/account/environments'
-                },
-                { id: 'settings-users', label: 'Users management', href: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const recentRows = [
-    {
-      key: 'workloads/storefront',
-      name: 'storefront',
-      icon: 'pi pi-box',
-      typeLabel: 'Workload',
-      navId: 'workloads'
-    },
-    {
-      key: 'domains/domain-1020655',
-      name: 'app.example.com',
-      icon: 'pi pi-globe',
-      typeLabel: 'Domain',
-      navId: 'domains'
-    },
-    {
-      key: 'databases/feature-flags',
-      name: 'feature-flags',
-      icon: 'pi pi-database',
-      typeLabel: 'Database',
-      navId: 'databases'
-    }
-  ]
-
-  const accountCommands = [
-    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
-    { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
-    { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
-  ]
-
-  const activeId = ref('workloads')
-  const paletteOpen = ref(false)
-  const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
-  const railCollapsed = ref(false)
-
-  watch(paletteOpen, () => {
-    paletteQuery.value = ''
-  })
-
-  const leaves = (items) =>
-    items.flatMap((item) =>
-      item.groups
-        ? leaves(item.groups.flatMap((group) => group.items))
-        : item.children
-          ? leaves(item.children)
-          : [item]
-    )
-
-  const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
-    const flush = () => {
-      if (run.length) {
-        blocks.push({
-          key: `area-${groupIndex}-${blocks.length}`,
-          heading: group.label ?? '',
-          items: leaves(run)
-        })
-      }
-      run = []
-    }
-    for (const item of group.items) {
-      if (item.groups || item.children) {
-        flush()
-        blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
-      } else run.push(item)
-    }
-    flush()
-    return blocks
-  })
-
-  const resolvedTheme = computed(() =>
-    theme.value === 'system'
-      ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme.value
-  )
-
-  const actionCommands = computed(() => [
-    { id: 'create', label: 'Create Workload', icon: 'pi pi-plus-circle' },
-    {
-      id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-      icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
-    },
-    {
-      id: 'sidebar',
-      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
-      icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
-    }
-  ])
-
-  const onNavigate = (event, node, closeNavigation) => {
-    event.preventDefault()
-    activeId.value = node.id
-    closeNavigation()
-  }
-
-  const onPaletteSelect = (event, value) => {
-    const [scope, id] = String(value).split(':')
-    if (scope === 'nav') activeId.value = id
-    if (scope === 'res') {
-      activeId.value = recentRows.find((row) => row.key === id)?.navId ?? activeId.value
-    }
-    if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
-    if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
-  }
-  const crumbs = [{ label: 'Workloads', href: '/workloads' }, { label: 'storefront' }]
+  import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   const port = (value, label = String(value)) => ({ value, label })
   const httpPorts = [port(80, '80 (default)'), port(8008), port(8080), port(8880)]
@@ -532,858 +226,453 @@
 </script>
 
 <template>
-  <div class="h-dvh [--sidebar-width:var(--container-2xs)]">
-    <AppLayout>
-      <template #navigation="{ drawer, closeNavigation }">
-        <Sidebar
-          v-model:width="railWidth"
-          v-model:collapsed="railCollapsed"
-          :resizable="!drawer"
-          :collapsible="!drawer"
-          aria-label="Main navigation"
-          collapse-aria-label="Collapse sidebar"
-          expand-aria-label="Expand sidebar"
-          resize-aria-label="Resize sidebar"
+  <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+    <form
+      class="flex min-h-0 min-w-0 flex-1 flex-col"
+      aria-label="Protocol settings"
+      novalidate
+      @submit.prevent="save"
+    >
+      <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
+        <PageHeader
+          title="Protocols"
+          description="How clients connect to storefront: ports, TLS, and whether they must present a certificate."
+          size="small"
+        />
+
+        <fieldset
+          class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
+          :disabled="saving"
         >
-          <template #header>
-            <div class="-m-(--spacing-md) flex flex-col">
-              <div
-                class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-              >
-                <a
-                  href="/home"
-                  aria-label="Azion home"
-                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                >
-                  <Brand
-                    kind="default"
-                    size="small"
-                  />
-                </a>
-              </div>
+          <legend class="sr-only">Protocol settings</legend>
 
-              <Command
-                v-model:open="paletteOpen"
-                @select="onPaletteSelect"
-              >
-                <Command.Input
-                  placeholder="Search resources, pages and commands"
-                  @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
-                />
-                <Command.List>
-                  <Command.Group
-                    v-if="!paletteQuery"
-                    key="recents"
-                    heading="Recents"
-                  >
-                    <Command.Item
-                      v-for="row in recentRows"
-                      :key="row.key"
-                      :value="'res:' + row.key"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="row.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ row.name }}
-                      <template #suffix>
-                        <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                      </template>
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Separator
-                    v-if="!paletteQuery"
-                    key="recents-rule"
-                  />
-
-                  <Command.Group
-                    v-for="group in paletteGroups"
-                    :key="group.key"
-                    :heading="group.heading"
-                  >
-                    <Command.Item
-                      v-for="item in group.items"
-                      :key="item.id"
-                      :value="'nav:' + item.id"
-                    >
-                      <template
-                        v-if="item.icon"
-                        #prefix
-                      >
-                        <i
-                          :class="item.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ item.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Separator key="commands-rule" />
-
-                  <Command.Group heading="Actions">
-                    <Command.Item
-                      v-for="command in actionCommands"
-                      :key="command.id"
-                      :value="'cmd:' + command.id"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="command.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ command.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Group heading="Account">
-                    <Command.Item
-                      v-for="command in accountCommands"
-                      :key="command.id"
-                      :value="'cmd:' + command.id"
-                    >
-                      <template #prefix>
-                        <i
-                          :class="command.icon"
-                          aria-hidden="true"
-                        />
-                      </template>
-                      {{ command.label }}
-                    </Command.Item>
-                  </Command.Group>
-
-                  <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-                </Command.List>
-              </Command>
-            </div>
-          </template>
-
-          <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-            <Menu
-              :groups="navGroups"
-              :active-id="activeId"
-              role="presentation"
-              @navigate="(event, node) => onNavigate(event, node, closeNavigation)"
-            >
-              <Menu.Back />
-            </Menu>
-          </div>
-
-          <template #footer>
-            <div class="flex items-center gap-(--spacing-xs)">
-              <Avatar
-                label="alex@example.com"
-                size="small"
-                kind="square"
-              />
-              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-              <DropdownMenu placement="top-end">
-                <DropdownMenu.Trigger>
-                  <Tooltip text="Account menu">
-                    <IconButton
-                      icon="pi pi-ellipsis-v"
-                      aria-label="Account menu"
-                      kind="outlined"
-                      size="small"
-                    />
-                  </Tooltip>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Group>
-                  <template #top>
-                    <div class="flex min-w-0 flex-col">
-                      <span class="truncate text-label-md text-(--text-default)">alex</span>
-                      <span class="truncate text-body-xs text-(--text-muted)"
-                        >alex@example.com</span
-                      >
-                    </div>
-                  </template>
-                  <DropdownMenu.Option
-                    value="settings"
-                    label="Account settings"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-cog"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="personal-tokens"
-                    label="Personal tokens"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-key"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <div
-                    class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                  >
-                    <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                      >Theme</span
-                    >
-                    <ThemeSwitcher
-                      v-model="theme"
-                      aria-label="Theme"
-                    />
-                  </div>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Option
-                    value="home"
-                    label="Home page"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-home"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="changelog"
-                    label="Changelog"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-pencil"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="feedback"
-                    label="Feedback"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-comment"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                  <DropdownMenu.Option
-                    value="docs"
-                    label="Docs"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-book"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <DropdownMenu.Option
-                    value="logout"
-                    label="Log out"
-                  >
-                    <template #right>
-                      <i
-                        class="pi pi-sign-out"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </DropdownMenu.Option>
-                </DropdownMenu.Group>
-                <DropdownMenu.Group>
-                  <div
-                    class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                  >
-                    <Button
-                      label="Upgrade to Pro"
-                      kind="secondary"
-                      size="medium"
-                      class="w-full"
-                    />
-                    <div class="flex justify-center px-(--spacing-xs)">
-                      <StatusIndicator
-                        severity="success"
-                        label="All systems normal"
-                      />
-                    </div>
-                  </div>
-                </DropdownMenu.Group>
-              </DropdownMenu>
-            </div>
-          </template>
-        </Sidebar>
-      </template>
-
-      <template #header="{ compact, openNavigation }">
-        <div class="@container">
-          <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left>
-              <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-                <span
-                  v-if="compact"
-                  class="contents"
-                >
-                  <Tooltip
-                    text="Open navigation"
-                    placement="bottom"
-                  >
-                    <IconButton
-                      icon="pi pi-bars"
-                      aria-label="Open navigation"
-                      kind="outlined"
-                      size="medium"
-                      @click="openNavigation"
-                    />
-                  </Tooltip>
-                </span>
-
-                <a
-                  v-if="compact"
-                  href="/home"
-                  aria-label="Azion home"
-                  class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                >
-                  <Brand
-                    kind="default"
-                    size="small"
-                  />
-                </a>
-
-                <div
-                  v-else
-                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
-                >
-                  <Breadcrumb
-                    :items="crumbs"
-                    class="w-full"
-                  />
-                </div>
-              </div>
-            </GlobalHeader.Left>
-            <GlobalHeader.Middle />
-            <GlobalHeader.Right>
-              <SearchTrigger
-                collapsible
-                @open="paletteOpen = true"
-              />
-
-              <span
-                v-if="compact"
-                class="contents"
-              >
-                <Tooltip
-                  text="Create"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="pi pi-plus-circle"
-                    kind="primary"
-                    size="medium"
-                    aria-label="Create"
-                  />
-                </Tooltip>
-                <Tooltip
-                  text="Agent"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="ai ai-ask-azion"
-                    kind="outlined"
-                    size="medium"
-                    aria-label="Agent"
-                  />
-                </Tooltip>
-              </span>
-              <span
-                v-else
-                class="contents"
-              >
-                <Button
-                  label="Create"
-                  kind="primary"
-                  size="medium"
-                  icon="pi pi-plus-circle"
-                />
-                <ButtonHighlight
-                  label="Agent"
-                  size="medium"
-                  icon="ai ai-ask-azion"
-                />
-              </span>
-
-              <button
-                type="button"
-                aria-label="Account settings"
-                class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-              >
-                <Avatar
-                  label="alex@example.com"
-                  size="medium"
-                  kind="square"
-                />
-              </button>
-            </GlobalHeader.Right>
-          </GlobalHeader>
-        </div>
-      </template>
-
-      <main class="flex min-h-full min-w-0 flex-col">
-        <form
-          class="flex min-h-full min-w-0 flex-col animate-page-enter motion-reduce:animate-none"
-          aria-label="Protocol settings"
-          novalidate
-          @submit.prevent="save"
-        >
-          <div class="layout-column-form layout-boundary flex min-w-0 flex-1 flex-col">
-            <PageHeader
-              title="Protocols"
-              description="How clients connect to storefront: ports, TLS, and whether they must present a certificate."
-              size="small"
-            />
-
-            <fieldset
-              class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="saving"
-            >
-              <legend class="sr-only">Protocol settings</legend>
-
-              <SettingsSection
-                title="Protocols"
-                hint="The ports and TLS settings clients connect to this workload with."
-                anchor="protocols"
-              >
-                <Card :padded="false">
-                  <template #content>
-                    <Item.List>
-                      <TransitionGroup
-                        enter-active-class="animate-content-enter motion-reduce:animate-none"
-                      >
-                        <SettingRow
-                          key="httpPorts"
-                          title="HTTP ports"
-                          description="The ports this workload answers plain HTTP on."
-                        >
-                          <MultiSelect
-                            v-model="form.httpPorts"
-                            size="large"
-                            class="w-full"
-                            placeholder="Select an HTTP port"
-                            :display-value="portsLabel"
-                            :disabled="saving"
-                            :required="errors.httpPorts?.kind === 'required'"
-                            :invalid="errors.httpPorts?.kind === 'invalid'"
-                            :aria-describedby="
-                              errors.httpPorts ? 'protocols-httpPorts-message' : undefined
-                            "
-                            @update:model-value="clear('httpPorts')"
-                          >
-                            <MultiSelect.Trigger
-                              id="protocols-httpPorts"
-                              aria-label="HTTP ports"
-                            />
-                            <MultiSelect.Content>
-                              <MultiSelect.Option
-                                v-for="option in httpPorts"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </MultiSelect.Option>
-                            </MultiSelect.Content>
-                          </MultiSelect>
-                          <HelperText
-                            v-if="errors.httpPorts"
-                            id="protocols-httpPorts-message"
-                            :kind="errors.httpPorts.kind"
-                            :label="errors.httpPorts.message"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          key="useHttps"
-                          title="HTTPS support"
-                          description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
-                          kind="compact"
-                        >
-                          <Switch
-                            :model-value="form.useHttps"
-                            aria-label="HTTPS support"
-                            :disabled="saving"
-                            @update:model-value="setHttps"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          v-if="form.useHttps"
-                          key="httpsPorts"
-                          title="HTTPS ports"
-                          description="The ports this workload answers TLS traffic on."
-                          :level="1"
-                        >
-                          <MultiSelect
-                            v-model="form.httpsPorts"
-                            size="large"
-                            class="w-full"
-                            placeholder="Select an HTTPS port"
-                            :display-value="portsLabel"
-                            :disabled="saving"
-                            :required="errors.httpsPorts?.kind === 'required'"
-                            :invalid="errors.httpsPorts?.kind === 'invalid'"
-                            :aria-describedby="
-                              errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
-                            "
-                            @update:model-value="clear('httpsPorts')"
-                          >
-                            <MultiSelect.Trigger
-                              id="protocols-httpsPorts"
-                              aria-label="HTTPS ports"
-                            />
-                            <MultiSelect.Content>
-                              <MultiSelect.Option
-                                v-for="option in httpsPorts"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </MultiSelect.Option>
-                            </MultiSelect.Content>
-                          </MultiSelect>
-                          <HelperText
-                            v-if="errors.httpsPorts"
-                            id="protocols-httpsPorts-message"
-                            :kind="errors.httpsPorts.kind"
-                            :label="errors.httpsPorts.message"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          key="useHttp3"
-                          title="HTTP/3 support"
-                          description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
-                          kind="compact"
-                        >
-                          <Switch
-                            :model-value="form.useHttp3"
-                            aria-label="HTTP/3 support"
-                            :disabled="saving"
-                            @update:model-value="setHttp3"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          v-if="form.useHttp3"
-                          key="http3Ports"
-                          title="HTTP/3 ports"
-                          description="The ports QUIC is answered on."
-                          :level="1"
-                        >
-                          <MultiSelect
-                            v-model="form.http3Ports"
-                            size="large"
-                            class="w-full"
-                            placeholder="Select an HTTP/3 port"
-                            :display-value="portsLabel"
-                            :disabled="saving"
-                            :required="errors.http3Ports?.kind === 'required'"
-                            :invalid="errors.http3Ports?.kind === 'invalid'"
-                            :aria-describedby="
-                              errors.http3Ports ? 'protocols-http3Ports-message' : undefined
-                            "
-                            @update:model-value="clear('http3Ports')"
-                          >
-                            <MultiSelect.Trigger
-                              id="protocols-http3Ports"
-                              aria-label="HTTP/3 ports"
-                            />
-                            <MultiSelect.Content>
-                              <MultiSelect.Option
-                                v-for="option in http3Ports"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </MultiSelect.Option>
-                            </MultiSelect.Content>
-                          </MultiSelect>
-                          <HelperText
-                            v-if="errors.http3Ports"
-                            id="protocols-http3Ports-message"
-                            :kind="errors.http3Ports.kind"
-                            :label="errors.http3Ports.message"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          v-if="form.useHttps"
-                          key="minimumTls"
-                          title="Minimum TLS version"
-                          description="The oldest TLS version a client may negotiate."
-                        >
-                          <Select
-                            v-model="form.minimumTls"
-                            size="large"
-                            class="w-full"
-                            :display-value="labelOf(tlsVersions)"
-                            :disabled="saving"
-                          >
-                            <Select.Trigger aria-label="Minimum TLS version" />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="option in tlsVersions"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                        </SettingRow>
-                        <SettingRow
-                          v-if="form.useHttps"
-                          key="cipherSuite"
-                          title="Cipher suite"
-                          description="The ciphers offered during the handshake."
-                        >
-                          <Select
-                            v-model="form.cipherSuite"
-                            size="large"
-                            class="w-full"
-                            :display-value="labelOf(cipherSuites)"
-                            :disabled="saving"
-                          >
-                            <Select.Trigger aria-label="Cipher suite" />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="option in cipherSuites"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                        </SettingRow>
-                      </TransitionGroup>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsSection>
-              <SettingsSection
-                title="Mutual authentication"
-                hint="Ask each client for a certificate the workload can verify, as well as presenting its own."
-                anchor="mutual-authentication"
-              >
-                <Card :padded="false">
-                  <template #content>
-                    <Item.List>
-                      <TransitionGroup
-                        enter-active-class="animate-content-enter motion-reduce:animate-none"
-                      >
-                        <SettingRow
-                          key="mtls"
-                          title="Mutual authentication"
-                          description="Clients without a valid certificate are refused or flagged, depending on the mode."
-                          kind="compact"
-                        >
-                          <Switch
-                            v-model="form.mtls"
-                            aria-label="Mutual authentication"
-                            :disabled="saving || !form.useHttps"
-                          />
-                          <HelperText
-                            v-if="!form.useHttps"
-                            label="Turn on HTTPS support to use mutual authentication."
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          v-if="armed"
-                          key="mtlsMode"
-                          title="Mode"
-                          description="What happens when a client certificate cannot be verified."
-                          kind="stacked"
-                          :level="1"
-                        >
-                          <fieldset
-                            class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
-                          >
-                            <legend class="sr-only">Mutual authentication mode</legend>
-                            <Field.Label
-                              v-for="option in mtlsModes"
-                              :key="option.value"
-                            >
-                              <Field
-                                orientation="horizontal"
-                                :disabled="saving"
-                              >
-                                <RadioButton
-                                  v-model="form.mtlsMode"
-                                  :value="option.value"
-                                  name="protocols-mtls-mode"
-                                />
-                                <Field.Content>
-                                  <Field.Title>{{ option.label }}</Field.Title>
-                                  <Field.Description>{{ option.description }}</Field.Description>
-                                </Field.Content>
-                              </Field>
-                            </Field.Label>
-                          </fieldset>
-                        </SettingRow>
-                        <SettingRow
-                          v-if="armed"
-                          key="trustedCa"
-                          title="Trusted CA certificate"
-                          description="The authority client certificates are verified against."
-                          :level="1"
-                        >
-                          <Select
-                            :model-value="form.trustedCa"
-                            size="large"
-                            class="w-full"
-                            placeholder="Select a trusted CA certificate"
-                            :display-value="caLabel"
-                            :disabled="saving"
-                            :required="errors.trustedCa?.kind === 'required'"
-                            @update:model-value="pickCa"
-                            @update:open="(open) => !open && (caQuery = '')"
-                          >
-                            <Select.Trigger
-                              id="protocols-trustedCa"
-                              aria-label="Trusted CA certificate"
-                              :aria-describedby="
-                                errors.trustedCa ? 'protocols-trustedCa-message' : undefined
-                              "
-                            />
-                            <Select.Content>
-                              <template #search>
-                                <Input
-                                  v-model="caQuery"
-                                  size="small"
-                                  placeholder="Search certificates"
-                                  aria-label="Search certificates"
-                                  @keydown.stop
-                                >
-                                  <template #iconLeft>
-                                    <i
-                                      class="pi pi-search"
-                                      aria-hidden="true"
-                                    />
-                                  </template>
-                                </Input>
-                              </template>
-                              <Select.Group label="Trusted CA certificates">
-                                <Select.Option
-                                  v-for="option in caMatches"
-                                  :key="option.value"
-                                  :value="option.value"
-                                >
-                                  {{ option.label }}
-                                  <template #tag>
-                                    <span class="text-body-xs text-(--text-muted)">{{
-                                      option.expires
-                                    }}</span>
-                                  </template>
-                                </Select.Option>
-                                <p
-                                  v-if="!caMatches.length"
-                                  class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                                >
-                                  No certificate matches "{{ caQuery }}".
-                                </p>
-                              </Select.Group>
-                              <template #footer>
-                                <Select.Option
-                                  value="__upload__"
-                                  class="w-full"
-                                >
-                                  <span class="flex items-center gap-(--spacing-xs)">
-                                    <i
-                                      class="pi pi-upload"
-                                      aria-hidden="true"
-                                    />
-                                    Upload certificate
-                                  </span>
-                                </Select.Option>
-                              </template>
-                            </Select.Content>
-                          </Select>
-                          <HelperText
-                            v-if="errors.trustedCa"
-                            id="protocols-trustedCa-message"
-                            :kind="errors.trustedCa.kind"
-                            :label="errors.trustedCa.message"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          v-if="armed"
-                          key="crl"
-                          title="Certificate revocation lists"
-                          description="Certificates on these lists are refused during the handshake."
-                          :level="1"
-                        >
-                          <MultiSelect
-                            v-model="form.crl"
-                            size="large"
-                            class="w-full"
-                            placeholder="No revocation list"
-                            :display-value="listLabel"
-                            :disabled="saving"
-                          >
-                            <MultiSelect.Trigger
-                              id="protocols-crl"
-                              aria-label="Certificate revocation lists"
-                            />
-                            <MultiSelect.Content>
-                              <MultiSelect.Option
-                                v-for="option in revocationLists"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </MultiSelect.Option>
-                            </MultiSelect.Content>
-                          </MultiSelect>
-                        </SettingRow>
-                      </TransitionGroup>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsSection>
-            </fieldset>
-          </div>
-
-          <Transition
-            enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-            enter-from-class="translate-y-2 opacity-0"
-            leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-            leave-to-class="translate-y-2 opacity-0"
+          <SettingsSection
+            title="Protocols"
+            hint="The ports and TLS settings clients connect to this workload with."
+            anchor="protocols"
           >
-            <SaveBar v-if="dirty || saving">
-              Protocol settings changed.
-              <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
-
-              <template #actions>
-                <Button
-                  type="button"
-                  label="Discard"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="saving"
-                  @click="discard"
-                />
-                <Button
-                  label="Save"
-                  kind="primary"
-                  size="medium"
-                  :loading="saving"
-                  @click="save"
-                />
+            <Card :padded="false">
+              <template #content>
+                <Item.List>
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SettingRow
+                      key="httpPorts"
+                      title="HTTP ports"
+                      description="The ports this workload answers plain HTTP on."
+                    >
+                      <MultiSelect
+                        v-model="form.httpPorts"
+                        size="large"
+                        class="w-full"
+                        placeholder="Select an HTTP port"
+                        :display-value="portsLabel"
+                        :disabled="saving"
+                        :required="errors.httpPorts?.kind === 'required'"
+                        :invalid="errors.httpPorts?.kind === 'invalid'"
+                        :aria-describedby="
+                          errors.httpPorts ? 'protocols-httpPorts-message' : undefined
+                        "
+                        @update:model-value="clear('httpPorts')"
+                      >
+                        <MultiSelect.Trigger
+                          id="protocols-httpPorts"
+                          aria-label="HTTP ports"
+                        />
+                        <MultiSelect.Content>
+                          <MultiSelect.Option
+                            v-for="option in httpPorts"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </MultiSelect.Option>
+                        </MultiSelect.Content>
+                      </MultiSelect>
+                      <HelperText
+                        v-if="errors.httpPorts"
+                        id="protocols-httpPorts-message"
+                        :kind="errors.httpPorts.kind"
+                        :label="errors.httpPorts.message"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      key="useHttps"
+                      title="HTTPS support"
+                      description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
+                      kind="compact"
+                    >
+                      <Switch
+                        :model-value="form.useHttps"
+                        aria-label="HTTPS support"
+                        :disabled="saving"
+                        @update:model-value="setHttps"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      v-if="form.useHttps"
+                      key="httpsPorts"
+                      title="HTTPS ports"
+                      description="The ports this workload answers TLS traffic on."
+                      :level="1"
+                    >
+                      <MultiSelect
+                        v-model="form.httpsPorts"
+                        size="large"
+                        class="w-full"
+                        placeholder="Select an HTTPS port"
+                        :display-value="portsLabel"
+                        :disabled="saving"
+                        :required="errors.httpsPorts?.kind === 'required'"
+                        :invalid="errors.httpsPorts?.kind === 'invalid'"
+                        :aria-describedby="
+                          errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
+                        "
+                        @update:model-value="clear('httpsPorts')"
+                      >
+                        <MultiSelect.Trigger
+                          id="protocols-httpsPorts"
+                          aria-label="HTTPS ports"
+                        />
+                        <MultiSelect.Content>
+                          <MultiSelect.Option
+                            v-for="option in httpsPorts"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </MultiSelect.Option>
+                        </MultiSelect.Content>
+                      </MultiSelect>
+                      <HelperText
+                        v-if="errors.httpsPorts"
+                        id="protocols-httpsPorts-message"
+                        :kind="errors.httpsPorts.kind"
+                        :label="errors.httpsPorts.message"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      key="useHttp3"
+                      title="HTTP/3 support"
+                      description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
+                      kind="compact"
+                    >
+                      <Switch
+                        :model-value="form.useHttp3"
+                        aria-label="HTTP/3 support"
+                        :disabled="saving"
+                        @update:model-value="setHttp3"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      v-if="form.useHttp3"
+                      key="http3Ports"
+                      title="HTTP/3 ports"
+                      description="The ports QUIC is answered on."
+                      :level="1"
+                    >
+                      <MultiSelect
+                        v-model="form.http3Ports"
+                        size="large"
+                        class="w-full"
+                        placeholder="Select an HTTP/3 port"
+                        :display-value="portsLabel"
+                        :disabled="saving"
+                        :required="errors.http3Ports?.kind === 'required'"
+                        :invalid="errors.http3Ports?.kind === 'invalid'"
+                        :aria-describedby="
+                          errors.http3Ports ? 'protocols-http3Ports-message' : undefined
+                        "
+                        @update:model-value="clear('http3Ports')"
+                      >
+                        <MultiSelect.Trigger
+                          id="protocols-http3Ports"
+                          aria-label="HTTP/3 ports"
+                        />
+                        <MultiSelect.Content>
+                          <MultiSelect.Option
+                            v-for="option in http3Ports"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </MultiSelect.Option>
+                        </MultiSelect.Content>
+                      </MultiSelect>
+                      <HelperText
+                        v-if="errors.http3Ports"
+                        id="protocols-http3Ports-message"
+                        :kind="errors.http3Ports.kind"
+                        :label="errors.http3Ports.message"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      v-if="form.useHttps"
+                      key="minimumTls"
+                      title="Minimum TLS version"
+                      description="The oldest TLS version a client may negotiate."
+                    >
+                      <Select
+                        v-model="form.minimumTls"
+                        size="large"
+                        class="w-full"
+                        :display-value="labelOf(tlsVersions)"
+                        :disabled="saving"
+                      >
+                        <Select.Trigger aria-label="Minimum TLS version" />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="option in tlsVersions"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Option>
+                        </Select.Content>
+                      </Select>
+                    </SettingRow>
+                    <SettingRow
+                      v-if="form.useHttps"
+                      key="cipherSuite"
+                      title="Cipher suite"
+                      description="The ciphers offered during the handshake."
+                    >
+                      <Select
+                        v-model="form.cipherSuite"
+                        size="large"
+                        class="w-full"
+                        :display-value="labelOf(cipherSuites)"
+                        :disabled="saving"
+                      >
+                        <Select.Trigger aria-label="Cipher suite" />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="option in cipherSuites"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </Select.Option>
+                        </Select.Content>
+                      </Select>
+                    </SettingRow>
+                  </TransitionGroup>
+                </Item.List>
               </template>
-            </SaveBar>
-          </Transition>
-        </form>
-      </main>
-    </AppLayout>
+            </Card>
+          </SettingsSection>
+          <SettingsSection
+            title="Mutual authentication"
+            hint="Ask each client for a certificate the workload can verify, as well as presenting its own."
+            anchor="mutual-authentication"
+          >
+            <Card :padded="false">
+              <template #content>
+                <Item.List>
+                  <TransitionGroup
+                    enter-active-class="animate-content-enter motion-reduce:animate-none"
+                  >
+                    <SettingRow
+                      key="mtls"
+                      title="Mutual authentication"
+                      description="Clients without a valid certificate are refused or flagged, depending on the mode."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.mtls"
+                        aria-label="Mutual authentication"
+                        :disabled="saving || !form.useHttps"
+                      />
+                      <HelperText
+                        v-if="!form.useHttps"
+                        label="Turn on HTTPS support to use mutual authentication."
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      v-if="armed"
+                      key="mtlsMode"
+                      title="Mode"
+                      description="What happens when a client certificate cannot be verified."
+                      kind="stacked"
+                      :level="1"
+                    >
+                      <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
+                        <legend class="sr-only">Mutual authentication mode</legend>
+                        <Field.Label
+                          v-for="option in mtlsModes"
+                          :key="option.value"
+                        >
+                          <Field
+                            orientation="horizontal"
+                            :disabled="saving"
+                          >
+                            <RadioButton
+                              v-model="form.mtlsMode"
+                              :value="option.value"
+                              name="protocols-mtls-mode"
+                            />
+                            <Field.Content>
+                              <Field.Title>{{ option.label }}</Field.Title>
+                              <Field.Description>{{ option.description }}</Field.Description>
+                            </Field.Content>
+                          </Field>
+                        </Field.Label>
+                      </fieldset>
+                    </SettingRow>
+                    <SettingRow
+                      v-if="armed"
+                      key="trustedCa"
+                      title="Trusted CA certificate"
+                      description="The authority client certificates are verified against."
+                      :level="1"
+                    >
+                      <Select
+                        :model-value="form.trustedCa"
+                        size="large"
+                        class="w-full"
+                        placeholder="Select a trusted CA certificate"
+                        :display-value="caLabel"
+                        :disabled="saving"
+                        :required="errors.trustedCa?.kind === 'required'"
+                        @update:model-value="pickCa"
+                        @update:open="(open) => !open && (caQuery = '')"
+                      >
+                        <Select.Trigger
+                          id="protocols-trustedCa"
+                          aria-label="Trusted CA certificate"
+                          :aria-describedby="
+                            errors.trustedCa ? 'protocols-trustedCa-message' : undefined
+                          "
+                        />
+                        <Select.Content>
+                          <template #search>
+                            <Input
+                              v-model="caQuery"
+                              size="small"
+                              placeholder="Search certificates"
+                              aria-label="Search certificates"
+                              @keydown.stop
+                            >
+                              <template #iconLeft>
+                                <i
+                                  class="pi pi-search"
+                                  aria-hidden="true"
+                                />
+                              </template>
+                            </Input>
+                          </template>
+                          <Select.Group label="Trusted CA certificates">
+                            <Select.Option
+                              v-for="option in caMatches"
+                              :key="option.value"
+                              :value="option.value"
+                            >
+                              {{ option.label }}
+                              <template #tag>
+                                <span class="text-body-xs text-(--text-muted)">{{
+                                  option.expires
+                                }}</span>
+                              </template>
+                            </Select.Option>
+                            <p
+                              v-if="!caMatches.length"
+                              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                            >
+                              No certificate matches"{{ caQuery }}".
+                            </p>
+                          </Select.Group>
+                          <template #footer>
+                            <Select.Option
+                              value="__upload__"
+                              class="w-full"
+                            >
+                              <span class="flex items-center gap-(--spacing-xs)">
+                                <i
+                                  class="pi pi-upload"
+                                  aria-hidden="true"
+                                />
+                                Upload certificate
+                              </span>
+                            </Select.Option>
+                          </template>
+                        </Select.Content>
+                      </Select>
+                      <HelperText
+                        v-if="errors.trustedCa"
+                        id="protocols-trustedCa-message"
+                        :kind="errors.trustedCa.kind"
+                        :label="errors.trustedCa.message"
+                      />
+                    </SettingRow>
+                    <SettingRow
+                      v-if="armed"
+                      key="crl"
+                      title="Certificate revocation lists"
+                      description="Certificates on these lists are refused during the handshake."
+                      :level="1"
+                    >
+                      <MultiSelect
+                        v-model="form.crl"
+                        size="large"
+                        class="w-full"
+                        placeholder="No revocation list"
+                        :display-value="listLabel"
+                        :disabled="saving"
+                      >
+                        <MultiSelect.Trigger
+                          id="protocols-crl"
+                          aria-label="Certificate revocation lists"
+                        />
+                        <MultiSelect.Content>
+                          <MultiSelect.Option
+                            v-for="option in revocationLists"
+                            :key="option.value"
+                            :value="option.value"
+                          >
+                            {{ option.label }}
+                          </MultiSelect.Option>
+                        </MultiSelect.Content>
+                      </MultiSelect>
+                    </SettingRow>
+                  </TransitionGroup>
+                </Item.List>
+              </template>
+            </Card>
+          </SettingsSection>
+        </fieldset>
+      </div>
+
+      <Transition
+        enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+        enter-from-class="translate-y-2 opacity-0"
+        leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        leave-to-class="translate-y-2 opacity-0"
+      >
+        <SaveBar v-if="dirty || saving">
+          Protocol settings changed.
+          <span class="text-(--text-muted)">Saving deploys storefront to Production.</span>
+
+          <template #actions>
+            <Button
+              type="button"
+              label="Discard"
+              kind="outlined"
+              size="medium"
+              :disabled="saving"
+              @click="discard"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+              size="medium"
+              :loading="saving"
+              @click="save"
+            />
+          </template>
+        </SaveBar>
+      </Transition>
+    </form>
 
     <Drawer
       v-model:open="uploadOpen"

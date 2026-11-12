@@ -88,7 +88,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create in five groups of rows under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
-- ImportFromGit: the same job inside the platform shell with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
+- ImportFromGit: the same job as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`) with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
 - ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.
 
 ## Related
