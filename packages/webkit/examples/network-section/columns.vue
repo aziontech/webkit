@@ -45,26 +45,22 @@
 
   const benefits = [
     {
-      icon: 'pi pi-globe',
-      title: 'Global resilience beyond anycast',
+      title: 'Global resilience beyond anycast.',
       description:
         'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
     },
     {
-      icon: 'pi pi-stopwatch',
-      title: 'Low latency everywhere',
+      title: 'Low latency everywhere.',
       description:
         'Compute, AI, databases, and security run in every data center, close to your users.'
     },
     {
-      icon: 'pi pi-arrows-v',
-      title: 'Zero-ops autoscaling and failover',
+      title: 'Zero-ops autoscaling and failover.',
       description:
         'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
     },
     {
-      icon: 'pi pi-shield',
-      title: 'Always-on protection',
+      title: 'Always-on protection.',
       description:
         'DDoS mitigation and a programmable security layer run in front of every application.'
     }
@@ -90,7 +86,7 @@
       :key="`benefits-${count}`"
       kind="benefits"
       eyebrow="Region: Earth."
-      :title="`${count} benefits set the floor in ${count} columns`"
+      :title="`${count} benefits on the four-column floor`"
       lead="Built around your users. Distributed around your data."
       :claims="claims"
       :benefits="benefits.slice(0, count)"

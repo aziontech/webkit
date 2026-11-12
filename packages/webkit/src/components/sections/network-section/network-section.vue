@@ -24,10 +24,10 @@
 
   /** One client result, rendered as a quote cell on the `outcomes` floor. */
   export type NetworkSectionOutcome = {
-    /** URL of the client mark. */
-    logo: string
+    /** URL of the client mark; the cell renders no mark when it is absent. */
+    logo?: string
     /** Client name, read as the mark's alt text. */
-    logoAlt: string
+    logoAlt?: string
     /** Treatment applied to the mark; defaults to `as-is`. */
     logoTreatment?: NetworkSectionLogoTreatment
     /** The result, quoted. */
@@ -36,18 +36,18 @@
     highlights?: string[]
   }
 
-  /** One benefit, rendered as a topic cell on the `benefits` floor. */
+  /** One benefit, rendered as a cell on the `benefits` floor. */
   export type NetworkSectionBenefit = {
-    /** Icon class for the glyph that leads the benefit's heading. */
-    icon: string
-    /** The benefit, rendered as its h3. */
+    /** The benefit as a short sentence, set bold and running into the description; with an icon it becomes the topic's h3. */
     title: string
-    /** One sentence explaining the benefit. */
+    /** The sentences that continue the title. */
     description: string
+    /** Icon class of a glyph that leads the benefit; with it the benefit renders as an icon-led topic. */
+    icon?: string
   }
 
   interface Props {
-    /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics. */
+    /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the run-in benefit topics on a four-column floor. */
     kind?: NetworkSectionKind
     /** Overline above the headline. */
     eyebrow?: string
@@ -57,9 +57,9 @@
     lead?: string
     /** Short figures rendered as chips under the lead, in order. */
     claims?: string[]
-    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
+    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
-    /** Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. */
+    /** Topics for the `benefits` floor, in order, on four columns from the large breakpoint; each is `{ title, description, icon? }` where `title` is set bold and runs into `description`, and an `icon` turns the topic into an icon-led one with its own heading. */
     benefits?: NetworkSectionBenefit[]
   }
 
@@ -78,8 +78,6 @@
   const floorColumns = (count: number): CardGridColumns => (count <= 2 ? 2 : count === 3 ? 3 : 4)
 
   const outcomeColumns = computed<CardGridColumns>(() => floorColumns(props.outcomes.length))
-
-  const benefitColumns = computed<CardGridColumns>(() => floorColumns(props.benefits.length))
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-network-section'
@@ -178,7 +176,7 @@
           >
             <CardGridCell
               v-for="outcome in outcomes"
-              :key="outcome.logoAlt"
+              :key="outcome.logoAlt || outcome.text"
               kind="canvas"
             >
               <Quote
@@ -186,10 +184,13 @@
                 :highlights="outcome.highlights ?? []"
                 class="h-full"
               >
-                <template #mark>
+                <template
+                  v-if="outcome.logo"
+                  #mark
+                >
                   <img
                     :src="outcome.logo"
-                    :alt="outcome.logoAlt"
+                    :alt="outcome.logoAlt ?? ''"
                     decoding="async"
                     :data-treatment="outcome.logoTreatment ?? 'as-is'"
                     class="h-full w-auto max-w-32 object-contain data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert"
@@ -204,7 +205,8 @@
             v-else-if="kind === 'benefits' && benefits.length"
             flush
             kind="frame"
-            :columns="benefitColumns"
+            layout="fixed"
+            :columns="4"
             class="border-t border-(--border-default)"
           >
             <CardGridCell
@@ -213,11 +215,19 @@
               kind="canvas"
             >
               <Topic
+                v-if="benefit.icon"
                 :heading-level="3"
                 :icon="benefit.icon"
                 :title="benefit.title"
                 :description="benefit.description"
               />
+              <p
+                v-else
+                class="m-0 text-pretty text-body-md text-(--text-muted)"
+              >
+                <strong class="font-medium text-(--text-default)">{{ benefit.title }}</strong>
+                {{ benefit.description }}
+              </p>
             </CardGridCell>
           </CardGrid>
         </div>
