@@ -17,3 +17,4 @@ const FlowRoot = Object.assign(Flow, {
 
 export default FlowRoot
 export { FlowAnchor, FlowNode, FlowParallel }
+export type { FlowAlign } from './injection-key'

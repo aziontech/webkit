@@ -16,3 +16,5 @@ Accordion.Content = AccordionContent
 
 export default Accordion
 export { AccordionContent, AccordionItem, AccordionTrigger }
+export type { AccordionValue } from './accordion.vue'
+export type { AccordionArrowPosition, AccordionSize, AccordionType } from './injection-key'

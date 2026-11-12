@@ -54,6 +54,7 @@
     type FilterValue,
     type TableCellSlots,
     type TableColumn,
+    type TableExposed,
     type TableHeaderSlots,
     TableInjectionKey,
     type TableStateSnapshot,
@@ -710,7 +711,14 @@
     registerCaption
   })
 
-  defineExpose({ reload, clearFilters, exportCsv, getState, setState })
+  const exposed: TableExposed<TRow> = {
+    reload,
+    clearFilters,
+    exportCsv: typed<TableExposed<TRow>['exportCsv']>(exportCsv),
+    getState,
+    setState
+  }
+  defineExpose(exposed)
 
   const totalRows = computed<number>(() =>
     props.manualPagination && props.rowCount !== undefined
@@ -1517,10 +1525,12 @@
 </script>
 
 <script lang="ts">
+  export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
   export type {
     TableCellSlotProps,
     TableCellSlots,
     TableColumn,
+    TableExposed,
     TableHeaderSlotProps,
     TableHeaderSlots,
     TableToolbarSlotProps

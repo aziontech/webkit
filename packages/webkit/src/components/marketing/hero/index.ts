@@ -11,3 +11,8 @@ const HeroRoot = Object.assign(Hero, {
 
 export default HeroRoot
 export type { HeroAlign, HeroKind, HeroMediaAlign, HeroSize, HeroWidth } from './hero.vue'
+export type {
+  HeroTitleEyebrowPrefix,
+  HeroTitleSize,
+  HeroTitleWidth
+} from './hero-title/hero-title.vue'

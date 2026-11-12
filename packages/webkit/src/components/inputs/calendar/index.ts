@@ -21,3 +21,4 @@ export type {
 } from './injection-key'
 
 export default CalendarRoot
+export type { CalendarPresetItem } from './injection-key'

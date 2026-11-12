@@ -21,6 +21,12 @@
   } from './injection-key'
   import { DropdownMenuInjectionKey } from './injection-key'
 
+  export type {
+    DropdownMenuOptionValue,
+    DropdownMenuPlacement,
+    DropdownMenuPlacementInput
+  } from './injection-key'
+
   defineOptions({
     name: 'DropdownMenu',
     inheritAttrs: false

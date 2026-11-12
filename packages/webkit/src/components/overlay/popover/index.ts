@@ -26,3 +26,4 @@ export {
   PopoverTitle,
   PopoverTrigger
 }
+export type { PopoverPlacement, PopoverPlacementInput } from './injection-key'
