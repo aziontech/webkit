@@ -73,7 +73,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @click=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group heading=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
+   "sfc": "<script setup>\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @click=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group heading=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
   },
   {
    "name": "Collapsible",

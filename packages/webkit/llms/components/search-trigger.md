@@ -92,9 +92,9 @@
 
 ```vue
 <script setup>
-  import { ref } from 'vue'
   import Command from '@aziontech/webkit/command'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import { ref } from 'vue'
 
   const open = ref(false)
   const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']
