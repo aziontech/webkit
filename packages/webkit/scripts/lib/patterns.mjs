@@ -26,6 +26,7 @@ export function importsOf(sfc) {
     const source = m[2]
     if (!source.startsWith(PKG_PREFIX)) continue
     const clause = m[1].trim()
+    if (/^type\s/.test(clause)) continue
     const def = clause.match(/^([A-Za-z_$][\w$]*)/)
     out.push({ binding: def ? def[1] : null, subpath: source.slice(PKG_PREFIX.length) })
   }

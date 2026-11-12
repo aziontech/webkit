@@ -104,6 +104,20 @@ test('importsOf keeps only @aziontech/webkit imports with their bindings', () =>
   ])
 })
 
+test('importsOf leaves out type-only imports, which render nothing', () => {
+  const sfc = [
+    '<script setup lang="ts">',
+    "import type { TableColumn } from '@aziontech/webkit/table-root'",
+    "import TableRoot from '@aziontech/webkit/table-root'",
+    "import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
+    '</script>'
+  ].join('\n')
+  assert.deepEqual(importsOf(sfc), [
+    { binding: 'TableRoot', subpath: 'table-root' },
+    { binding: 'Tag', subpath: 'tag' }
+  ])
+})
+
 test('readBlocks builds a pattern from block.json, the primary SFC and every variant file', () => {
   const pkg = mkdtempSync(join(tmpdir(), 'blocks-'))
   try {
