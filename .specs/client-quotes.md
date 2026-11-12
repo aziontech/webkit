@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-12
-checksum: 79b9989e9ef0613c21e0c9ed8211808ac5cb733d25e4244b1168a32da8a5ae7f
+checksum: 3002838e7f234bcad547db8e27bd72a936903b21a63b6f931168128726d6169c
 ---
 # ClientQuotes — Component Spec
 
@@ -31,6 +31,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
+- Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-quote` for one quotation beside a logo wall.
 - The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
 ## Usage
@@ -79,7 +80,7 @@ import ClientQuotes from '@aziontech/webkit/client-quotes'
 ## States
 
 - Visual states: `default`
-- Empty: when `items` is empty the band renders nothing
+- Empty: when no item carries `text` the band renders nothing; an item without `text` is skipped, and the `v-model` index counts the quotes that remain
 - The active quote, its progress and the tab keyboard model belong to `quote-tabs`; `autoplay`, `autoplayInterval` and `v-model` are passed straight through to it
 
 ## Motion & Animations

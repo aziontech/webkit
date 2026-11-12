@@ -17,7 +17,8 @@
   const primaryAction = {
     label: 'Learn more',
     href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',
-    trailing: true
+    trailing: true,
+    kind: 'transparent'
   }
 </script>
 

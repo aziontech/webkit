@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 50dd23bc8fa5da063e9295e513bec32785f50f6e78fc808c2cc06fab7c0f4eba
+last_updated: 2026-11-12
+checksum: 0dc6b78d90d5a45a459190cf7e032ffd95d66786d3b352c838d9284d68ee89f2
 ---
 
 # PlatformDirectory — Component Spec
@@ -33,7 +33,7 @@ A directory of Azion's products under a section title: one column per product gr
 
 ## Best practices
 
-- Keep to four groups; the directory fans out to four columns at the large breakpoint.
+- Keep to four groups or fewer; the directory fans out to one column per group at the large breakpoint, up to four, so one, two or three groups never leave an empty cell.
 - Give each item an `href`; an item without a title or a link is skipped, and a group left with no items is skipped too.
 - Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation.
 
@@ -85,7 +85,8 @@ import PlatformDirectory from '@aziontech/webkit/platform-directory'
 ## States
 
 - Visual states: `default`
-- Four columns from the large breakpoint, one column below the small one; the column layout is `column-navigation`'s own
+- One column per group from the large breakpoint, up to four (`column-navigation`'s `columns` is 2, 3 or 4), one column below the small one; the column layout is `column-navigation`'s own
+- No empty cell: a single group spans the whole row (`data-span="full"`), and with three groups the third spans both columns between the small and the large breakpoints (`data-span="pair"`), so the rule colour never shows through a missing column
 - Empty: when no group carries a linked item the band renders nothing — not the header, not the frame
 
 ## Motion & Animations
@@ -117,6 +118,7 @@ _none_
 ## Examples
 
 - Default
+- Three groups — the directory fans out to three columns, with no empty cell at any width.
 
 ## Constraints — DO NOT
 

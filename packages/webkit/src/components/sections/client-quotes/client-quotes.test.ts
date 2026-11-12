@@ -83,6 +83,12 @@ describe('ClientQuotes', () => {
     expect(emitted<[number]>('update:modelValue').at(-1)).toEqual([2])
   })
 
+  it('skips an item without a quotation', () => {
+    const { getAllByRole } = band({ items: [...items, { text: '', clientName: 'Hooli' }] })
+
+    expect(getAllByRole('tab')).toHaveLength(items.length)
+  })
+
   it('renders one tab per item', () => {
     const { getAllByRole } = band()
 

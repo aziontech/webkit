@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import type { ColumnNavigationColumns } from '../../marketing/column-navigation/column-navigation.vue'
   import ColumnNavigation from '../../marketing/column-navigation/column-navigation.vue'
   import ColumnNavigationColumn from '../../marketing/column-navigation/column-navigation-column/column-navigation-column.vue'
   import ColumnNavigationItem from '../../marketing/column-navigation/column-navigation-item/column-navigation-item.vue'
@@ -65,6 +66,19 @@
 
   const hasColumns = computed(() => columns.value.length > 0)
 
+  const trackCount = computed<ColumnNavigationColumns>(() => {
+    const count = columns.value.length
+    if (count >= 4) return 4
+    return count === 3 ? 3 : 2
+  })
+
+  const spanOf = (index: number): 'full' | 'pair' | undefined => {
+    const count = columns.value.length
+    if (count === 1) return 'full'
+    if (count === 3 && index === 2) return 'pair'
+    return undefined
+  }
+
   const hasHeader = computed(() => hasColumns.value && props.title.length > 0)
 </script>
 
@@ -92,7 +106,7 @@
         marks="all"
       >
         <ColumnNavigation
-          :columns="4"
+          :columns="trackCount"
           :mobile-columns="1"
           :aria-label="ariaLabel"
         >
@@ -100,6 +114,8 @@
             v-for="(group, index) in columns"
             :key="`${group.title}-${index}`"
             :title="group.title"
+            :data-span="spanOf(index)"
+            class="data-[span=full]:col-span-full data-[span=pair]:sm:col-span-2 data-[span=pair]:lg:col-span-1"
           >
             <ColumnNavigationItem
               v-for="item in group.items"

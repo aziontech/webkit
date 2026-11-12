@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-11
 last_updated: 2026-11-12
-checksum: acb78ecdc520ec82ec1ae53c17e4a985c8478c5d1e04887b995011995b2a3fa1
+checksum: 36541d9337d50b64cddedbf25858f7838f6b080a1baaa7ad427d560446ea3e2e
 ---
 
 # ClosingCallToActionTemplates — Component Spec
@@ -35,6 +35,7 @@ The close for a page whose last ask is "start from a template": a framed split w
 - Give the grid six to eight templates so it overflows its height and reads as scrollable; an even count keeps its two columns full.
 - Keep each template line to one short sentence so the cards keep one height.
 - Give every card an `href` and set `deployLabel`, or no card shows its deploy button.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 

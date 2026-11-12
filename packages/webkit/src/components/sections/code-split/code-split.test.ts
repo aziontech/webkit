@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeSplit from './code-split.vue'
@@ -46,6 +47,12 @@ const secondaryAction = {
   icon: 'pi pi-github',
   target: '_blank' as const
 }
+
+const KindProbe = defineComponent({
+  name: 'Button',
+  props: { label: { type: String, default: '' }, href: { type: String, default: '' }, kind: { type: String, default: '' } },
+  setup: (probe) => () => h('a', { href: probe.href, 'data-kind': probe.kind }, probe.label)
+})
 
 const band = (props: Record<string, unknown> = {}) =>
   render(CodeSplit, {
@@ -151,6 +158,31 @@ describe('CodeSplit', () => {
     const link = getByRole('link', { name: secondaryAction.label })
     expect(link.getAttribute('href')).toBe(secondaryAction.href)
     expect(link.getAttribute('target')).toBe('_blank')
+  })
+
+  it('draws the first action secondary and the second outlined unless an action sets its kind', () => {
+    const stubs = { global: { stubs: { Button: KindProbe } } }
+    const { getByRole, unmount } = render(CodeSplit, {
+      props: { title: 'Ship code', codeTabs: [], primaryAction, secondaryAction },
+      ...stubs
+    })
+
+    expect(getByRole('link', { name: primaryAction.label })).toHaveAttribute('data-kind', 'secondary')
+    expect(getByRole('link', { name: secondaryAction.label })).toHaveAttribute('data-kind', 'outlined')
+    unmount()
+
+    const text = render(CodeSplit, {
+      props: {
+        title: 'Ship code',
+        codeTabs: [],
+        primaryAction: { ...primaryAction, kind: 'transparent' }
+      },
+      ...stubs
+    })
+    expect(text.getByRole('link', { name: primaryAction.label })).toHaveAttribute(
+      'data-kind',
+      'transparent'
+    )
   })
 
   it('renders no buttons when no action is set', () => {

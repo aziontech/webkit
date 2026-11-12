@@ -21,7 +21,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `title` and `description` are the copy beside the code.
 - `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped.
 - `copyAriaLabel` names the copy button for screen readers.
-- `primaryAction` and `secondaryAction` are the two buttons, each a `label` and an `href`; `trailing` closes the label on a chevron, `icon` draws a leading glyph and `target` opens the link elsewhere. Leave either out to drop it.
+- `primaryAction` and `secondaryAction` are the two buttons, each a `label` and an `href`; `trailing` closes the label on a chevron, `icon` draws a leading glyph and `target` opens the link elsewhere, and `kind` picks the button (`secondary` by default for the first, `outlined` for the second, `transparent` for a quiet text button like "Learn more"). Leave either out to drop it.
 
 Example:
 
@@ -48,7 +48,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `title` and `description` are the copy on the start side.
 - `codeTabs` are the files; one tab draws a filename bar instead of tabs.
 - `copyAriaLabel` names the copy button for screen readers.
-- `primaryAction` is the button, a `label`, an `href` and `trailing`.
+- `primaryAction` is the button, a `label`, an `href`, `trailing` and `kind: 'transparent'`, the quiet "Learn more" text button of the product pages.
 
 Example:
 

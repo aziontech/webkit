@@ -14,7 +14,9 @@ export const layoutsData = {
 
   'layout-measure-site': 'var(--container-6xl)',
   'layout-measure-site-header': 'var(--container-7xl)',
-  'layout-measure-control': 'var(--container-3xs)'
+  'layout-measure-control': 'var(--container-3xs)',
+
+  'layout-header-height': 'calc(var(--spacing) * 14)'
 }
 
 const COLUMN_MEASURE = {

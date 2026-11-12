@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The band as the Application Accelerator page places it: the overline, the left-aligned headline and its supporting sentence, then six icon-led use cases in a three-column divider grid, each linking out to the page that explains it. Edit the props in the Controls panel — a band with no items renders nothing at all.",
       "file": "default.vue"
+    },
+    {
+      "name": "Without links",
+      "summary": "Items with no `href` render as plain topics: the same left-aligned title over a three-column divider grid, with nothing to follow. Link every item or none.",
+      "file": "without-links.vue"
     }
   ],
   "site": [

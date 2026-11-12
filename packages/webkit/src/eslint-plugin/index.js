@@ -4,6 +4,7 @@ import headerSearchTrigger from './rules/header-search-trigger.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
+import noGapAfterClosingSection from './rules/no-gap-after-closing-section.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noOutputInCommand from './rules/no-output-in-command.js'
@@ -33,6 +34,7 @@ const rules = {
   'container-needs-width': containerNeedsWidth,
   'header-search-trigger': headerSearchTrigger,
   'no-wrapped-page-chrome': noWrappedPageChrome,
+  'no-gap-after-closing-section': noGapAfterClosingSection,
   'no-output-in-command': noOutputInCommand
 }
 
@@ -82,6 +84,7 @@ const RECOMMENDED = {
   'container-needs-width': 'warn',
   'header-search-trigger': 'error',
   'no-wrapped-page-chrome': 'error',
+  'no-gap-after-closing-section': 'error',
   'no-output-in-command': 'warn'
 }
 

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 376e1563494f014945beffd14b5483a49effa1ab40f09d277c9161f0caa3bdee
+last_updated: 2026-11-12
+checksum: 9b62e702af5f569fec69b46abce38bde731766f74ff46e19f1e7a12968e354d0
 ---
 
 # ClosingCallToActionNewsletter — Component Spec
@@ -34,6 +34,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - Set `loading` while the address is sent, then `submitted` or `error` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shells/website` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 

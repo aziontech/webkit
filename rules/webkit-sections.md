@@ -19,6 +19,20 @@ JSON. Never rebuild a band from primitives when a section exists.
 - For a section with a form (lead form, newsletter): listen to `submit` (`(event, values)`) and send
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
+- Open the page with `SiteNav` and wire its search: `@search` opens the page's `Command`
+  (`<Command v-model:open="searchOpen">`), as `rules/webkit-header-search.md` asks of every header.
+  On a phone it drops Login from the bar, as azion.com does; leave `secondaryActionOnPhones` off.
+- Size a screen-filling hero under `SiteNav` with the `--layout-header-height` token: `HeroBand`
+  takes it out of the screen by default, and a bare `Hero kind="screen"` takes
+  `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
+- End the page column on a closing section (`ClosingCallToAction` and its `-newsletter`,
+  `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
+  itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
+  `FrameBox` of `shells/website`.
+- Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
+  `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
+  `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
+  `external`, `UseCaseLinks` items without `href` for a link-less grid.
 - Close the page with `SiteFooter` as the last child of the page shell, unwrapped. It draws its own
   top rule, its frame and its closing bottom rule, and ends on the bottom bar from `lg`.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
@@ -40,6 +54,10 @@ JSON. Never rebuild a band from primitives when a section exists.
   make a grid "fit"; and do not compose a fixed `grid-cols-3` of cards yourself — `CardGrid` with its
   default `layout="balanced"` is the grid.
 - Do not let the form section fetch, and do not fake a success state in the component.
+- Do not put a `SectionGap` or a closing `FrameBox` after a closing section: the hatch doubles
+  (`webkit/no-gap-after-closing-section`).
+- Do not wrap a bare `CapabilityGrid` in a `SectionModule` to move its title: set `titleKind`, or
+  its capability headings rise to `h2`.
 
 ## Correct
 
@@ -65,7 +83,6 @@ JSON. Never rebuild a band from primitives when a section exists.
       v-bind="page.newsletter.props"
       @submit="subscribe"
     />
-    <SectionGap hatch />
   </SectionContainer>
 </template>
 ```

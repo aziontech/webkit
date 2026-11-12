@@ -69,7 +69,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-client-quotes'
   )
 
-  const hasItems = computed(() => props.items.length > 0)
+  const quotes = computed(() => props.items.filter((item) => Boolean(item.text)))
+
+  const hasItems = computed(() => quotes.value.length > 0)
 </script>
 
 <template>
@@ -90,7 +92,7 @@
         <QuoteTabs
           :aria-label="ariaLabel || undefined"
           v-model="model"
-          :items="items"
+          :items="quotes"
           :autoplay="autoplay"
           :autoplay-interval="autoplayInterval"
         >

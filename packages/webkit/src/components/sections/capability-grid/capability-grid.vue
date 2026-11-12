@@ -6,6 +6,7 @@
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleKind } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
 
@@ -55,6 +56,8 @@
     actions?: CapabilityGridAction[]
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
+    /** Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
+    titleKind?: SectionTitleKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -64,7 +67,8 @@
     items: () => [],
     columns: 3,
     actions: () => [],
-    anchor: ''
+    anchor: '',
+    titleKind: 'centered'
   })
 
   const attrs = useAttrs()
@@ -93,6 +97,7 @@
         #header
       >
         <SectionTitle
+          :kind="titleKind"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"

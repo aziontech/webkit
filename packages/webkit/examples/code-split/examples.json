@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the Application Accelerator page places it: the claim and one large button beside a one-file sample, drawn with a filename bar. Edit the props in the Controls panel — add a second file to get a tab strip, or a `secondaryAction` for a second button.",
+      "summary": "The band as the Application Accelerator page places it: the claim and a large \"Learn more\" text button (`kind: 'transparent'`) beside a one-file sample, drawn with a filename bar. Edit the props in the Controls panel — add a second file to get a tab strip, or a `secondaryAction` for a second button.",
       "file": "default.vue"
     }
   ],
@@ -17,7 +17,7 @@
     },
     {
       "name": "Accelerator",
-      "summary": "The Application Accelerator band: a one-file sample, drawn with a filename bar, and one large button.",
+      "summary": "The Application Accelerator band: a one-file sample, drawn with a filename bar, and a large \"Learn more\" text button (`kind: 'transparent'`).",
       "file": "site-accelerator.vue",
       "json": "site-accelerator.json"
     },

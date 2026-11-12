@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  /** One use case, rendered as a linked topic cell. */
+  /** One use case, rendered as a topic cell that links to its page when it has an href. */
   export type UseCaseLinksItem = {
     /** Icon class for the glyph that leads the use case's heading. */
     icon: string
@@ -20,8 +20,8 @@
     title: string
     /** One sentence explaining the use case. */
     description: string
-    /** Destination the whole cell links to. */
-    href: string
+    /** Destination the whole cell links to; an item without it renders as a plain, unlinked topic. */
+    href?: string
   }
 
   interface Props {
@@ -31,7 +31,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href }`. */
+    /** The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. */
     items?: UseCaseLinksItem[]
   }
 
@@ -87,14 +87,14 @@
         >
           <div
             v-for="item in items"
-            :key="item.href + item.title"
+            :key="(item.href ?? '') + item.title"
             class="relative flex bg-(--bg-canvas)"
           >
             <Topic
               :icon="item.icon"
               :title="item.title"
               :description="item.description"
-              :href="item.href"
+              :href="item.href ?? ''"
               :heading-level="3"
               class="w-full p-(--spacing-xl)"
             />
