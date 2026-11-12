@@ -34,6 +34,8 @@ const preferWebkitComponent = (
   await import('../../src/eslint-plugin/rules/prefer-webkit-component.js')
 ).default
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
+const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
+  await import('../../src/eslint-plugin/layout-classes.js')
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
 const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
@@ -654,7 +656,7 @@ test('no-style-override', () => {
         filename: 'e.vue',
         options: [{ checkStyle: false }]
       },
-      // layout utilities only: the four families, arbitrary values included
+      // layout utilities only: how the box sits in its parent, arbitrary values included
       {
         code: `${imp('Button', 'button')}<template><Button class="w-full" /></template>`,
         filename: 'l1.vue'
@@ -670,9 +672,32 @@ test('no-style-override', () => {
       {
         code: `${imp('Table', 'table')}<template><Table><Table.Row class="shrink-0" /></Table></template>`,
         filename: 'l4.vue'
+      },
+      {
+        code: `${imp('Table', 'table')}<template><Table max-height="100%" class="h-full min-h-0"><Table.Search class="flex-1" /></Table></template>`,
+        filename: 'l5.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="min-w-36 grow basis-1/3" /></template>`,
+        filename: 'l6.vue'
       }
     ],
     invalid: [
+      {
+        code: `${imp('Button', 'button')}<template><Button class="shrink-0 cursor-pointer" /></template>`,
+        filename: 'cursor.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'cursor-pointer', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+          }
+        ]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="flex-1 flex-col" /></template>`,
+        filename: 'flexcol.vue',
+        errors: [{ messageId: 'overrideClasses' }]
+      },
       {
         code: `${imp('Button', 'button')}<template><Button class="p-8">x</Button></template>`,
         filename: 'f.vue',
@@ -701,7 +726,7 @@ test('no-style-override', () => {
         errors: [
           {
             messageId: 'overrideClasses',
-            data: { classes: 'mt-4', tag: 'Button', allowed: 'w-full, max-w-*, self-*, shrink-0' }
+            data: { classes: 'mt-4', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
           }
         ]
       },
@@ -910,18 +935,67 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
 test('layout class families: shared constant used by the rule and the MCP', async () => {
   const { LAYOUT_CLASS_FAMILIES, isLayoutClass, nonLayoutClasses } =
     await import('../../src/eslint-plugin/index.js')
-  assert.deepEqual([...LAYOUT_CLASS_FAMILIES], ['w-full', 'max-w-*', 'self-*', 'shrink-0'])
+  assert.deepEqual(
+    [...LAYOUT_CLASS_FAMILIES],
+    [
+      'w-full',
+      'h-full',
+      'max-w-*',
+      'min-w-*',
+      'max-h-*',
+      'min-h-*',
+      'flex-1',
+      'flex-auto',
+      'flex-initial',
+      'flex-none',
+      'grow',
+      'grow-*',
+      'basis-*',
+      'self-*',
+      'shrink-0'
+    ]
+  )
   for (const ok of [
     'w-full',
+    'h-full',
     'max-w-sm',
     'max-w-(--container-sm)',
     'max-w-[320px]',
+    'min-w-0',
+    'min-w-36',
+    'max-h-96',
+    'min-h-0',
+    'flex-1',
+    'flex-none',
+    'grow',
+    'grow-0',
+    'basis-1/3',
     'self-end',
     'shrink-0'
   ]) {
     assert.equal(isLayoutClass(ok), true, ok)
   }
-  for (const bad of ['w-1/2', 'max-w-', 'self-', 'shrink', 'shrink-1', 'p-4', 'lg:w-full', '']) {
+  for (const bad of [
+    'w-1/2',
+    'h-10',
+    'max-w-',
+    'min-h-',
+    'self-',
+    'shrink',
+    'shrink-1',
+    'flex',
+    'flex-col',
+    'flex-row',
+    'flex-wrap',
+    'grow-',
+    'p-4',
+    'gap-(--spacing-sm)',
+    'cursor-pointer',
+    'text-body-md',
+    'bg-(--bg-surface)',
+    'lg:w-full',
+    ''
+  ]) {
     assert.equal(isLayoutClass(bad), false, bad)
   }
   assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])

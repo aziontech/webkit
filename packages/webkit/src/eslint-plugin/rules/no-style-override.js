@@ -22,7 +22,7 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component. A static class made only of layout utilities (w-full, max-w-*, self-*, shrink-0) is allowed.'
+        'Disallow overriding a webkit component’s styles via class/style on its tag; compose in slots or use a personalizable component. A static class made only of layout utilities (how the box sits in its parent: w-full, h-full, min/max width and height, flex-1/auto/initial/none, grow, basis-*, self-*, shrink-0) is allowed.'
     },
     schema: [
       {

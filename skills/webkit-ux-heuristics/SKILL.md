@@ -2,7 +2,7 @@
 name: webkit-ux-heuristics
 description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing pi-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-12
 scope: general
 # prettier-ignore
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, ui-verify, review]
@@ -147,7 +147,7 @@ Behavior:
 ```vue
 <Popover v-model:open="open" placement="bottom-start" width="small">
   <Popover.Trigger @click.stop>
-    <Tag :label="`+${count}`" severity="secondary" size="small" class="shrink-0 cursor-pointer" />
+    <Tag :label="`+${count}`" severity="secondary" size="small" class="shrink-0" />
   </Popover.Trigger>
   <Popover.Content @click.stop>
     <div class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)">

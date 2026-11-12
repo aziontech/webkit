@@ -1,4 +1,20 @@
-export const LAYOUT_CLASS_FAMILIES = Object.freeze(['w-full', 'max-w-*', 'self-*', 'shrink-0'])
+export const LAYOUT_CLASS_FAMILIES = Object.freeze([
+  'w-full',
+  'h-full',
+  'max-w-*',
+  'min-w-*',
+  'max-h-*',
+  'min-h-*',
+  'flex-1',
+  'flex-auto',
+  'flex-initial',
+  'flex-none',
+  'grow',
+  'grow-*',
+  'basis-*',
+  'self-*',
+  'shrink-0'
+])
 
 const MATCHERS = LAYOUT_CLASS_FAMILIES.map((family) =>
   family.endsWith('*')
