@@ -11,7 +11,7 @@
 | Question                                 | Answer                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Is it duplicated compilation?**        | The two colored steps aren't _redundant_ (they serve different consumption modes), **but the colored SVG payload is duplicated across two `dist` files** — `azionicons-color.css` (~32 KB) and `color-catalog.json` (~32 KB) both embed the same 17 SVGs. Each script also re-reads `ai-cor/` from disk independently. The **monochrome** catalog embeds _no_ SVG (names only), so this duplication is unique to the colored path. |
-| **How is the SVG used in the icon?**     | Two delivery modes. **(a) CSS class** — the SVG becomes a `background-image` data-URI on `.ai-<name>-cor`, sized to `1em`, used as `<i class="ai-google-cor"></i>`. **(b) Inline SVG string** — `color-catalog.json` stores the raw `<svg>` markup, which a consumer injects into the DOM (e.g. `ColoredIcon.vue` via a render function + `innerHTML`).                                                                            |
+| **How is the SVG used in the icon?**     | Two delivery modes. **(a) CSS class** — the SVG becomes a `background-image` data-URI on `.ai-cor.ai-<name>`, sized to `1em`, used as `<i class="ai-cor ai-google"></i>`. **(b) Inline SVG string** — `color-catalog.json` stores the raw `<svg>` markup, which a consumer injects into the DOM (e.g. `ColoredIcon.vue` via a render function + `innerHTML`).                                                                      |
 | **Compiled to `font-family` or base64?** | **Neither, for colored.** Colored icons are **percent-encoded (URL-encoded) UTF-8 SVG data-URIs** (`data:image/svg+xml,%3Csvg…`) — _not_ base64 — plus raw inline SVG in the catalog. **`font-family` is the _monochrome_ path only** (woff2 glyphs via `@font-face` + `content: '\fXXX'`).                                                                                                                                        |
 
 ---
@@ -22,15 +22,15 @@ A woff2 **font glyph is single-color** — it's painted with the surrounding `co
 
 So the package splits by _colorability_:
 
-|               | Monochrome (`ai`, `pi`)                         | Colored (`ai-cor`)                                            |
-| ------------- | ----------------------------------------------- | ------------------------------------------------------------- |
-| Source        | `src/svg-raw/ai/` (87), `src/svg-raw/pi/` (315) | `src/svg-raw/ai-cor/` (17)                                    |
-| SVG fill      | `fill="currentColor"` (recolorable)             | `fill="#DA0B36"`, gradients, `fill="white"` (fixed palette)   |
-| Compiler      | **fantasticon** → woff2 font                    | custom scripts → CSS data-URI + JSON                          |
-| Delivery      | `@font-face` glyph                              | `background-image` data-URI **+** inline SVG                  |
-| CSS mechanism | `.ai.ai-x::before { content: '\f101' }`         | `.ai-x-cor { background-image: url("data:image/svg+xml,…") }` |
-| Recolorable?  | ✅ via `color`                                  | ❌ keeps its own palette                                      |
-| Catalog       | `catalog.json` (name + class, **no SVG**)       | `color-catalog.json` (name + **inline SVG**)                  |
+|               | Monochrome (`ai`, `pi`)                         | Colored (`ai-cor`)                                               |
+| ------------- | ----------------------------------------------- | ---------------------------------------------------------------- |
+| Source        | `src/svg-raw/ai/` (87), `src/svg-raw/pi/` (315) | `src/svg-raw/ai-cor/` (17)                                       |
+| SVG fill      | `fill="currentColor"` (recolorable)             | `fill="#DA0B36"`, gradients, `fill="white"` (fixed palette)      |
+| Compiler      | **fantasticon** → woff2 font                    | custom scripts → CSS data-URI + JSON                             |
+| Delivery      | `@font-face` glyph                              | `background-image` data-URI **+** inline SVG                     |
+| CSS mechanism | `.ai.ai-x::before { content: '\f101' }`         | `.ai-cor.ai-x { background-image: url("data:image/svg+xml,…") }` |
+| Recolorable?  | ✅ via `color`                                  | ❌ keeps its own palette                                         |
+| Catalog       | `catalog.json` (name + class, **no SVG**)       | `color-catalog.json` (name + **inline SVG**)                     |
 
 ---
 
@@ -63,7 +63,7 @@ flowchart TD
         WOFF["azionicons.woff2<br/>primeicons.woff2"]
         MCSS["azionicons.css / primeicons.css<br/>@font-face + content:'\fXXX'"]
         MJSON["catalog.json<br/>name + font class (NO svg)"]
-        COLCSS["azionicons-color.css<br/>.ai-*-cor { background-image: data-URI }"]
+        COLCSS["azionicons-color.css<br/>.ai-cor.ai-* { background-image: data-URI }"]
         COLJSON["color-catalog.json<br/>name + INLINE svg string"]
         BARREL["index.css<br/>@import all three CSS"]
     end
@@ -139,7 +139,7 @@ So: the **compilation steps are justified** (two real consumption modes), but th
 
 ```css
 /* shared box — every colored icon */
-.ai-angular-cor, .ai-astro-cor, /* … */ .ai-vue-cor {
+.ai-cor {
   display: inline-block;
   width: 1em; /* scales with font-size, like a glyph's box */
   height: 1em;
@@ -150,7 +150,7 @@ So: the **compilation steps are justified** (two real consumption modes), but th
 }
 
 /* per icon — the vector */
-.ai-google-cor {
+.ai-cor.ai-google {
   background-image: url("data:image/svg+xml,%3Csvg width='14' … %3E%3C/svg%3E");
 }
 ```
@@ -158,23 +158,24 @@ So: the **compilation steps are justified** (two real consumption modes), but th
 Usage — identical ergonomics to a font icon:
 
 ```html
-<i class="ai-google-cor"></i>
-<!-- self-contained: sizes to 1em -->
+<i class="ai-cor ai-google"></i>
+<!-- sizes to 1em -->
 <i
-  class="ai-google-cor"
+  class="ai-cor ai-google"
   style="font-size:32px"
 ></i>
 <!-- scales via font-size -->
 ```
 
-> The class name already contains the `ai-` prefix (filename `ai-google-cor.svg` → `.ai-google-cor`), and the rule is fully self-contained. Unlike monochrome — which needs **both** `.ai` (sets `font-family`) **and** `.ai-x` (sets the glyph) — colored needs **only** the single `.ai-*-cor` class. Adding a bare `ai` (as the CSS header comment shows) is harmless but unnecessary.
+> The file `src/svg-raw/ai-cor/ai-google.svg` becomes the rule `.ai-cor.ai-google`. Like monochrome, which needs `.ai` (sets `font-family`) and `.ai-x` (sets the glyph), colored needs two classes: `ai-cor` (the box) and `ai-<name>` (the image). Do not add `ai`: `ai ai-google` is the monochrome glyph. `ai-google-cor` is not a class and renders nothing.
 
 ### Mode B — inline SVG string (`color-catalog.json`)
 
 ```json
 {
-  "icon": "ai-angular-cor",
-  "name": "ai-angular-cor",
+  "icon": "ai-cor ai-angular",
+  "name": "ai-angular",
+  "keywords": "brand, logo",
   "colored": true,
   "svg": "<svg width=\"14\" … <path fill=\"#DA0B36\" …/></svg>"
 }
@@ -237,11 +238,11 @@ This keeps gradients, `clipPath`, and multiple fills as inspectable nodes — wh
 
 - **`font-family` is exclusively the monochrome path** — `azionicons` / `primeicons` woff2 via `@font-face`. Colored icons never enter the font.
 
-| Icon kind                   | Mechanism                               | Encoding                               |
-| --------------------------- | --------------------------------------- | -------------------------------------- |
-| Monochrome (`ai`, `pi`)     | woff2 `@font-face` + `content: '\fXXX'` | binary glyph in woff2                  |
-| Colored — CSS (`.ai-*-cor`) | `background-image` data-URI             | **percent-encoded UTF-8** (not base64) |
-| Colored — catalog           | inline `<svg>` string                   | **none** (raw markup in JSON)          |
+| Icon kind                      | Mechanism                               | Encoding                               |
+| ------------------------------ | --------------------------------------- | -------------------------------------- |
+| Monochrome (`ai`, `pi`)        | woff2 `@font-face` + `content: '\fXXX'` | binary glyph in woff2                  |
+| Colored — CSS (`.ai-cor.ai-*`) | `background-image` data-URI             | **percent-encoded UTF-8** (not base64) |
+| Colored — catalog              | inline `<svg>` string                   | **none** (raw markup in JSON)          |
 
 ---
 
@@ -256,7 +257,7 @@ This keeps gradients, `clipPath`, and multiple fills as inspectable nodes — wh
 | `./catalog`          | `catalog.json`         | mono list (name + class, no SVG)        |
 | `./color-catalog`    | `color-catalog.json`   | colored list (name + inline SVG)        |
 
-**Consumers**: `apps/icons-gallery` (`ColoredIcon.vue`, `App.vue`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-*-cor">` classes.
+**Consumers**: `apps/icons-gallery` (`ColoredIcon.vue`, `App.vue`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-cor ai-<name>">` classes.
 
 ---
 

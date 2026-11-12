@@ -1,6 +1,8 @@
 import { writeFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
+import { iconKeywordString } from './icon-keywords.mjs'
+
 const CWD = process.cwd()
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
@@ -18,7 +20,7 @@ svgFolder.map(function (folder) {
 
     data.push({
       icon: `${folder} ${iconName}`,
-      keywords: '',
+      keywords: iconKeywordString(iconName),
       name: `${iconName}`
     })
   })

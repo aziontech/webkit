@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
+import { iconKeywordString } from './icon-keywords.mjs'
+
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
 const COLOR_DIR = './src/svg-raw/ai-cor'
@@ -16,7 +18,7 @@ const data = files.map((file) => {
 
   return {
     icon: `ai-cor ${name}`,
-    keywords: '',
+    keywords: iconKeywordString(name),
     name,
     colored: true,
     svg: readFileSync(join(COLOR_DIR, file), CHARSET).trim()

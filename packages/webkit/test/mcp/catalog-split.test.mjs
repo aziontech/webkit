@@ -13,6 +13,7 @@ const {
   getComponent,
   getPattern,
   getUsageExample,
+  listAssets,
   searchComponents,
   searchPatterns
 } = await import('../../src/mcp/queries.js')
@@ -121,4 +122,12 @@ test('get_component and get_usage_example return the same examples from the spli
   }
   assert.ok(getComponent(split, 'button').purpose)
   assert.ok(getComponent(split, 'field').examples[0].sfc.includes('<template>'))
+})
+
+test('list_assets returns the same names from the split catalog as from one file', () => {
+  for (const kind of Object.keys(full.assets)) {
+    assert.deepEqual(listAssets(split, { kind }), listAssets(monolith, { kind }), kind)
+  }
+  assert.ok(split.assets.icons.file.startsWith('catalog/assets/'))
+  assert.equal(split.assets.icons.items, undefined)
 })

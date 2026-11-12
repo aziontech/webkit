@@ -1322,6 +1322,111 @@
       "query": "botón",
       "top1": "button",
       "top3": ["button"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "en",
+      "query": "product page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "en",
+      "query": "solution page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "en",
+      "query": "marketing page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "pt-BR",
+      "query": "página de produto",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "patterns",
+      "lang": "es",
+      "query": "página de solución",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "product page",
+      "top1": "hero-band",
+      "top3": ["hero-band", "closing-call-to-action"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "solution page",
+      "top1": "hero-band",
+      "top3": ["hero-band", "resource-grid", "template-gallery"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "hero-band",
+      "top3": ["hero-band", "closing-call-to-action"]
+    },
+    {
+      "tool": "components",
+      "lang": "en",
+      "query": "pricing page",
+      "top1": "pricing-plans",
+      "top3": ["pricing-plans"]
+    },
+    {
+      "tool": "components",
+      "lang": "es",
+      "query": "página de aterrizaje",
+      "top1": "hero-band",
+      "top3": ["hero-band", "closing-call-to-action"]
+    },
+    {
+      "tool": "components",
+      "lang": "pt-BR",
+      "query": "página de produto",
+      "top1": "hero-band",
+      "top3": ["hero-band", "closing-call-to-action"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "product page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "en",
+      "query": "landing page",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
+    },
+    {
+      "tool": "suggest",
+      "lang": "pt-BR",
+      "query": "página de solução",
+      "top1": "shells/website",
+      "top3": ["shells/website"]
     }
   ]
 }

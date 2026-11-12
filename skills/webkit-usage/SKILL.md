@@ -109,6 +109,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, `pi pi-<name>`, and `ai-cor ai-<name>` for a colour brand icon.
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -118,6 +119,8 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Barrel import: `import { Button } from '@aziontech/webkit'` (no barrel exists).
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
+- ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
+- ❌ `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: neither is a class. Use `ai-cor ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
 - ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.

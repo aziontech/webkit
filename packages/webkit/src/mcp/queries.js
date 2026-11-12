@@ -1,6 +1,10 @@
 import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/layout-classes.js'
 import {
   COMPONENT_TERMS,
+  MARKETING_PAGE_FRAME,
+  MARKETING_PAGE_GENERIC,
+  MARKETING_PAGE_NOT,
+  MARKETING_PAGES,
   MARKETING_WORDS,
   SCREEN_WORDS,
   STOPWORDS,
@@ -122,6 +126,102 @@ export function listTokens(catalog, { category } = {}) {
   }
 }
 
+const ASSET_KIND_ALIASES = {
+  illustration: 'illustrations',
+  illustrations: 'illustrations',
+  scene: 'illustrations',
+  diagram: 'diagrams',
+  diagrams: 'diagrams',
+  'line-figure': 'lineFigures',
+  'line-figures': 'lineFigures',
+  linefigure: 'lineFigures',
+  linefigures: 'lineFigures',
+  figure: 'lineFigures',
+  figures: 'lineFigures',
+  'brand-mark': 'brandMarks',
+  'brand-marks': 'brandMarks',
+  brandmark: 'brandMarks',
+  brandmarks: 'brandMarks',
+  brand: 'brandMarks',
+  brands: 'brandMarks',
+  mark: 'brandMarks',
+  marks: 'brandMarks',
+  logo: 'brandMarks',
+  logos: 'brandMarks',
+  icon: 'icons',
+  icons: 'icons'
+}
+
+function assetKindOf(catalog, kind) {
+  const key = String(kind || '')
+    .trim()
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-')
+  const resolved = ASSET_KIND_ALIASES[key] ?? key
+  return catalog.assets?.[resolved] ? resolved : null
+}
+
+function assetMatches(item, words) {
+  const text = normalize([item.name, item.label, ...(item.keywords || [])].join(' '))
+  return words.every((w) => text.includes(w))
+}
+
+export function listAssets(catalog, { kind, query } = {}) {
+  if (!catalog.available) return NOT_AVAILABLE
+  const kinds = Object.keys(catalog.assets || {})
+  const words = normalize(query).split(' ').filter(Boolean)
+  if (kind == null || !String(kind).trim()) {
+    return {
+      ok: true,
+      available: true,
+      kinds: kinds.map((k) => {
+        const { file: _file, items: _items, ...meta } = catalog.assets[k]
+        const matches = words.length
+          ? catalog.assetItems(k).filter((item) => assetMatches(item, words)).length
+          : undefined
+        return { kind: k, ...meta, ...(matches != null ? { matches } : {}) }
+      }),
+      hint: 'Call list_assets with a kind ("illustrations", "diagrams", "lineFigures", "brandMarks", "icons") for every valid name, and a query to filter by name, label or keyword. Never guess a name from a file in src/: an unregistered name renders a placeholder or nothing.'
+    }
+  }
+  const resolved = assetKindOf(catalog, kind)
+  if (!resolved) {
+    return {
+      ok: false,
+      available: true,
+      found: false,
+      kind: String(kind),
+      kinds,
+      message: `No asset kind "${kind}". Kinds: ${kinds.join(', ')}.`
+    }
+  }
+  const { file: _file, items: _items, ...meta } = catalog.assets[resolved]
+  const all = catalog.assetItems(resolved)
+  const items = words.length ? all.filter((item) => assetMatches(item, words)) : all
+  return {
+    ok: true,
+    available: true,
+    found: true,
+    kind: resolved,
+    ...meta,
+    ...(words.length ? { query: String(query) } : {}),
+    count: items.length,
+    items
+  }
+}
+
+function assetsFor(catalog, name) {
+  return Object.entries(catalog.assets || {})
+    .filter(([, meta]) => (meta.usedBy || []).includes(name))
+    .map(([kind, meta]) => ({
+      kind,
+      title: meta.title,
+      count: meta.count,
+      list: `list_assets({ kind: "${kind}" })`
+    }))
+}
+
 function resolveAlias(catalog, name) {
   const key = normalize(name).replace(/ /g, '-')
   const to = catalog.aliases?.[key]
@@ -194,6 +294,7 @@ export function getComponent(catalog, name) {
     events: e.events ?? [],
     slots: e.slots ?? [],
     examples: catalog.examples(key),
+    assets: assetsFor(catalog, key),
     allowedClasses: allowedClassesFor(e)
   }
 }
@@ -336,11 +437,70 @@ function conceptHits(catalog, query) {
   return hits
 }
 
+const NORMALIZED_PAGES = MARKETING_PAGES.map((page) => ({
+  terms: page.terms.map(normalize),
+  prose: page.prose.map(normalize)
+}))
+const NORMALIZED_PAGE_NOT = MARKETING_PAGE_NOT.map(normalize)
+const NORMALIZED_PAGE_GENERIC = new Set(MARKETING_PAGE_GENERIC.map(normalize))
+
+export function marketingPageIntent(query, surface) {
+  const nq = normalize(query)
+  if (!nq || (surface && surface !== 'marketing')) return null
+  if (NORMALIZED_PAGE_NOT.some((w) => hasPhrase(nq, w))) return null
+  const pages = NORMALIZED_PAGES.filter((page) => page.terms.some((t) => hasPhrase(nq, t)))
+  if (!pages.length) return null
+  return {
+    prose: [...new Set(pages.flatMap((page) => page.prose))],
+    words: contentWords(nq).filter((w) => !NORMALIZED_PAGE_GENERIC.has(w))
+  }
+}
+
+function marketingPageSections(catalog, intent) {
+  return catalog.subpaths
+    .filter((sub) => {
+      const e = catalog.getEntry(sub)
+      return e?.kind === 'component' && e.category === 'sections'
+    })
+    .map((sub) => {
+      const e = catalog.getDetails(sub)
+      const name = normalize(sub)
+      const prose = normalize(
+        [e.purpose || '', ...(e.useWhen || []), ...(e.bestPractices || [])].join(' ')
+      )
+      let score = MARKETING_PAGE_FRAME[sub] ?? 0
+      if (intent.prose.some((p) => hasPhrase(prose, p))) score += 20
+      for (const w of intent.words) {
+        if (hasPhrase(name, w)) score += 40
+        else if (name.includes(w)) score += 20
+        if (hasPhrase(prose, w)) score += 4
+      }
+      return { sub, score }
+    })
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
+}
+
 export function searchComponents(catalog, query, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(query || '')
   const nq = normalize(q)
   const wantedSurface = surfaceOf(surface)
+  const page = marketingPageIntent(q, wantedSurface)
+  if (page) {
+    const matches = marketingPageSections(catalog, page)
+      .slice(0, 10)
+      .map((r) => ({ ...componentCard(catalog, r.sub), score: r.score }))
+    return {
+      ok: true,
+      available: true,
+      query: q,
+      ...(wantedSurface ? { surface: wantedSurface } : {}),
+      count: matches.length,
+      matches,
+      hint: 'A marketing page is the shells/website block (get_pattern("shells/website")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+    }
+  }
   const aliases = aliasHits(catalog, q)
   const concepts = conceptHits(catalog, q)
   const ranked = catalog.subpaths
@@ -700,8 +860,11 @@ export function searchPatterns(catalog, query, { surface } = {}) {
     }
   }
   const expanded = expandQuery(raw)
+  const page = marketingPageIntent(raw, wantedSurface)
+  const pageBoost = (id, p) =>
+    page && (p.surface ?? 'product') === 'marketing' ? 120 + (id.startsWith('shells/') ? 40 : 0) : 0
   const matches = entries
-    .map(([id, p]) => ({ id, p, score: scorePattern(id, p, expanded) }))
+    .map(([id, p]) => ({ id, p, score: scorePattern(id, p, expanded) + pageBoost(id, p) }))
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id))
     .slice(0, 5)
@@ -853,6 +1016,26 @@ export function suggestComponent(catalog, need, { surface } = {}) {
     isMarketing || wantedSurface
       ? componentSuggestion(catalog, q, opts)
       : preferProductSurface(catalog, componentSuggestion(catalog, q, opts))
+
+  const page = marketingPageIntent(q, wantedSurface)
+  if (page && !page.words.length) {
+    const patterns = searchPatterns(catalog, q, opts)
+    const topPattern = patterns.matches?.[0]
+    if (topPattern) {
+      return {
+        ok: true,
+        available: true,
+        need: q,
+        found: true,
+        recommendation: 'pattern',
+        pattern: topPattern,
+        patternAlternatives: patterns.matches.slice(1, 3),
+        hint: `A marketing page starts from the website shell: call get_pattern("${topPattern.id}") and copy its SFC, then fill the frame with page sections (the components below, in page order: the hero band first, the closing call to action last).`,
+        best: component.best,
+        alternatives: component.alternatives
+      }
+    }
+  }
 
   if (isMarketing) {
     const sections = sectionSuggestion(catalog, q)
