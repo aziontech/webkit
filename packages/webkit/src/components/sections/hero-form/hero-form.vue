@@ -41,6 +41,8 @@
     options?: string[]
     /** Starting country code of a phone field. */
     country?: string
+    /** Keeps the label as the control's accessible name without drawing it, for a field the page labels by its placeholder. */
+    visuallyHiddenLabel?: boolean
   }
 
   /** One highlight under the description. */
@@ -80,7 +82,7 @@
     items?: HeroFormItem[]
     /** Accessible name of the field group, read as its legend. */
     formAriaLabel?: string
-    /** The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`. */
+    /** The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. */
     fields?: HeroFormField[]
     /** Label of the submit button. */
     submitLabel?: string
@@ -115,6 +117,8 @@
   const emit = defineEmits<{
     submit: [event: SubmitEvent, values: Record<string, string>]
   }>()
+
+  const EYEBROW_PREFIX = '//' as const
 
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -218,12 +222,12 @@
       >
         <HeroTitle
           :eyebrow="eyebrow"
-          eyebrow-prefix="//"
+          :eyebrow-prefix="EYEBROW_PREFIX"
           :highlight="highlight"
           :title="title"
           :description="description"
           max-width="lg"
-          class="min-w-0"
+          class="min-w-0 [&_h1]:max-w-(--container-md)"
         />
 
         <ul
@@ -284,6 +288,8 @@
                   :for="fieldId(field)"
                   :label="field.label"
                   :required="field.required"
+                  :data-visually-hidden="field.visuallyHiddenLabel || null"
+                  class="data-[visually-hidden]:sr-only"
                 />
                 <HeroFormSelect
                   v-if="field.kind === 'select'"

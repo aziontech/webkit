@@ -135,6 +135,8 @@
 
   const narrowTitle = computed(() => isCentered.value && props.titleLength === 'short')
 
+  const EYEBROW_PREFIX = '//' as const
+
   const dots = computed(() => props.kind === 'centered' && !props.plain)
 
   const hasArt = computed(() => props.kind === 'copy-beside-art' && props.illustration.length > 0)
@@ -180,7 +182,7 @@
         :mobile-centered="kind === 'copy-beside-art'"
         :max-width="titleWidth"
         :eyebrow="eyebrow"
-        eyebrow-prefix="//"
+        :eyebrow-prefix="EYEBROW_PREFIX"
         :highlight="highlight"
         :title="title"
         :description="description"

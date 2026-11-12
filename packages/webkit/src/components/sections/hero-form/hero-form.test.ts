@@ -134,6 +134,28 @@ describe('HeroForm', () => {
     })
   })
 
+  it('keeps a visually hidden label as the accessible name of its control', () => {
+    const { getByLabelText } = band({
+      fields: [
+        {
+          name: 'mobilephone',
+          kind: 'phone',
+          label: 'Phone',
+          placeholder: '(999) 999-9999',
+          visuallyHiddenLabel: true
+        },
+        { name: 'email', kind: 'email', label: 'Work email' }
+      ]
+    })
+
+    const phone = getByLabelText(/Phone/, { selector: 'input' })
+    expect(phone).toHaveAttribute('placeholder', '(999) 999-9999')
+    const hidden = document.querySelector(`label[for="${phone.id}"]`)
+    expect(hidden?.closest('[data-visually-hidden]')).not.toBeNull()
+    const email = getByLabelText(/Work email/, { selector: 'input' })
+    expect(document.querySelector(`label[for="${email.id}"]`)?.closest('[data-visually-hidden]')).toBeNull()
+  })
+
   it('shows the field errors and emits nothing on an invalid submit', async () => {
     const { getByLabelText, getByRole, getByText, getAllByText, emitted } = band()
 
