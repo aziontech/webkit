@@ -192,7 +192,6 @@ between them is the ring-offset surface below.
       <SidebarHeader>
         <SearchTrigger
           class="w-full"
-          label="Search navigation and commands"
           @open="paletteOpen = true"
         />
 
@@ -430,7 +429,6 @@ between them is the ring-offset surface below.
         <SidebarHeader>
           <SearchTrigger
             class="w-full"
-            label="Search navigation and commands"
             @open="paletteOpen = true"
           />
 

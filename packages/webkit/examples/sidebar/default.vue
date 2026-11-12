@@ -38,7 +38,6 @@
       <SidebarHeader>
         <SearchTrigger
           class="w-full"
-          label="Search navigation and commands"
           @open="paletteOpen = true"
         />
 
