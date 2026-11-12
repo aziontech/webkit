@@ -6,6 +6,9 @@ import InstallFailed from '../../blocks/platform/view/marketplace/variants/insta
 import Installed from '../../blocks/platform/view/marketplace/variants/installed.vue'
 import NoMatch from '../../blocks/platform/view/marketplace/variants/no-match.vue'
 import TemplateBrowser from '../../blocks/platform/view/template-browser/template-browser.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const toastWith = (text: string) =>
   Array.from(document.querySelectorAll<HTMLElement>('[data-testid="feedback-toast__item"]')).find(

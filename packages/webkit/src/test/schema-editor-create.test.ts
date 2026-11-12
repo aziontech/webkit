@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 
 import SchemaEditor from '../../blocks/platform/edit/schema-editor/schema-editor.vue'
 import ImportCsv from '../../blocks/platform/edit/schema-editor/variants/import-csv.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const drawer = () => document.querySelector('[role="dialog"]') as HTMLElement
 const columnNames = () =>

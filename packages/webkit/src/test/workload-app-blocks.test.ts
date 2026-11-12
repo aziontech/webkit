@@ -8,6 +8,9 @@ import EnvironmentCrumb from '../../blocks/platform/detail/version-detail/varian
 import CacheSettings from '../../blocks/platform/edit/edit-resource/variants/cache-settings.vue'
 import Protocols from '../../blocks/platform/edit/edit-resource/variants/protocols.vue'
 import { expectNoA11yViolations } from './axe'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const wait = { timeout: 4000 }
 

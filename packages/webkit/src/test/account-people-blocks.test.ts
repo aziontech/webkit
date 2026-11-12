@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 
 import MfaManagement from '../../blocks/platform/account/mfa-management/mfa-management.vue'
 import Invite from '../../blocks/platform/account/users/variants/invite.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
 const button = (root: HTMLElement, label: string) =>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { Toaster } from '@aziontech/webkit/toast'
   import { useHead } from '@unhead/vue'
   import { type Component, computed, onBeforeUnmount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
@@ -53,6 +54,7 @@
       block?.layout === 'fullscreen' ? '' : 'p-(--spacing-lg)'
     ]"
   >
+    <Toaster position="bottom-right" />
     <component
       :is="live"
       v-if="live"

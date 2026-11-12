@@ -6,6 +6,9 @@ import NetworkList from '../../blocks/platform/edit/attribute-editor/variants/ne
 import RulesReview from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
 import WafAllow from '../../blocks/platform/view/waf-tuning/variants/allow.vue'
 import { expectNoA11yViolations } from './axe'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
 

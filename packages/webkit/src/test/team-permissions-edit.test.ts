@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import EditTeam from '../../blocks/platform/account/team-permissions/variants/edit-team.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const memberNames = () =>
   Array.from(document.querySelectorAll('ul[aria-label="Members"] li')).map((item) =>
