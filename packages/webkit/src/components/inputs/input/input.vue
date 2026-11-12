@@ -136,25 +136,8 @@
     :data-monospace="monospace || null"
     :data-has-icon-left="hasIconLeft() || null"
     :data-has-icon-right="hasIconRight() || null"
-    :class="[
-      'group/input relative inline-flex items-center w-full cursor-text',
-      'gap-(--spacing-xs) px-(--spacing-sm)',
-      'rounded-(--shape-elements)',
-      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
-      'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong)',
-      // The ring offset must match the surface BEHIND the field: a host that puts the
-      // field on something other than the canvas retunes it by redeclaring the input
-      // ring-offset custom property on any ancestor — custom properties inherit, so one
-      // declaration covers a whole group of fields.
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))]',
-      'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
-      'data-[invalid]:border-(--danger-border)',
-      'data-[required]:border-(--warning-border)',
-      'data-[readonly]:cursor-default',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
-      attrs.class
-    ]"
+    class="group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[readonly]:cursor-default data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0"
+    :class="attrs.class"
     @mousedown="handleChromeMouseDown"
   >
     <span
