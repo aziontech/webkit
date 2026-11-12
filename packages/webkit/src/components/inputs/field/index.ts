@@ -32,3 +32,5 @@ export {
   FieldSet,
   FieldTitle
 }
+export type { FieldLegendKind } from './field-legend/field-legend.vue'
+export type { FieldOrientation } from './injection-key'

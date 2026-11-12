@@ -32,3 +32,4 @@ export default Menu
 
 export { MenuBack, MenuGroup, MenuItem, MenuSub, MenuSubContent, MenuSubTrigger }
 export type { MenuGroupNode, MenuLevel, MenuNode, MenuSubKind } from './injection-key'
+export type { MenuItemKind, MenuItemTagSeverity } from './menu-item/menu-item.vue'

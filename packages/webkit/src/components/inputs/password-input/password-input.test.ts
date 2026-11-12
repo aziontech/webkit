@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/password-input/default.vue'
 import Monospace from '../../../../examples/password-input/monospace.vue'
@@ -351,5 +351,24 @@ describe('PasswordInput — monospace', () => {
     expect(input.getAttribute('spellcheck')).toBe('false')
     expect(container.querySelector('[data-monospace]')).not.toBeNull()
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('PasswordInput — exposed focus()', () => {
+  it('focus() on a template ref moves focus to the native input', async () => {
+    const field = ref<InstanceType<typeof PasswordInput> | null>(null)
+    const Host = defineComponent({
+      setup: () => () => h(PasswordInput, { ref: field, 'aria-label': 'Name' })
+    })
+    const { container } = render(Host)
+    await nextTick()
+
+    const native = container.querySelector('input')
+    expect(native).not.toBeNull()
+    expect(document.activeElement).not.toBe(native)
+
+    field.value?.focus()
+
+    expect(document.activeElement).toBe(native)
   })
 })

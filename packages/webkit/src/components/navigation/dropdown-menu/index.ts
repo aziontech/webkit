@@ -16,3 +16,8 @@ DropdownMenu.Option = DropdownMenuOption
 
 export default DropdownMenu
 export { DropdownMenuGroup, DropdownMenuOption, DropdownMenuTrigger }
+export type {
+  DropdownMenuOptionValue,
+  DropdownMenuPlacement,
+  DropdownMenuPlacementInput
+} from './dropdown-menu.vue'

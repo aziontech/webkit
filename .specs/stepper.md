@@ -4,9 +4,9 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 1fd21ff3e14ae1655cbacc723bf6ee1b342996b24d2084ca231234c01002bd7f
+checksum: 18e70771dbba54f6fabe5126284d0553bda033d238c8a7af556499314ac00f9a
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Stepper — Component Spec
@@ -113,6 +113,8 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 "./stepper-root": "./src/components/navigation/stepper/stepper.vue",
 "./stepper-step": "./src/components/navigation/stepper/stepper-step/stepper-step.vue"
 ```
+
+`./stepper` and `./stepper-step` export the type `StepperStepState` (`'upcoming' | 'complete' | 'error' | 'loading'`), the type of `Stepper.Step`'s `state` prop, so an owner can type the state it derives.
 
 ## Props
 

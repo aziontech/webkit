@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 417f6f9567980779d19bce397f1abaa66941edd284874780d4107a74ab91e750
+checksum: c73dea74259e75661c165b5ef330bcc21233b82638863ca8816104ca138d4f8e
 created: 2026-06-26
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # DropdownMenu — Component Spec
@@ -138,10 +138,12 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Events
 
-| Event         | Payload                                                         | Notes                                                                                                                                                                                                                                                                                  |
-| ------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:open` | `boolean`                                                       | Fires on every open/closed transition; supports `v-model:open`.                                                                                                                                                                                                                        |
-| `select`      | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
+| Event         | Payload                                                                | Notes                                                                                                                                                                                                                                                                                  |
+| ------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `update:open` | `boolean`                                                              | Fires on every open/closed transition; supports `v-model:open`.                                                                                                                                                                                                                        |
+| `select`      | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
+
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Option`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
 
 ## Slots
 

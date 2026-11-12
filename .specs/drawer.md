@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 98f67ca63f3d0c87a76762427ab723685eb499fb920d09d7ac95e13f52a1eafc
+checksum: 7b9401503209e242c346bb7880bf650578821d27a4bd30cdde2e938a34444412
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Drawer — Component Spec
@@ -109,19 +109,22 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 ## Props
 
-| Prop          | Type         | Default     | Required | JSDoc                                                                                                   |
-| ------------- | ------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `open`        | `boolean`    | `undefined` | false    | Controlled open state. Use with `v-model:open`.                                                         |
-| `defaultOpen` | `boolean`    | `false`     | false    | Initial open state when uncontrolled.                                                                   |
-| `dismissible` | `boolean`    | `true`      | false    | When true, overlay click and Escape close the drawer.                                                   |
-| `side`        | `DrawerSide` | `'right'`   | false    | Edge the drawer panel slides from.                                                                      |
-| `size`        | `DrawerSize` | `'medium'`  | false    | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+| Prop          | Type         | Default    | Required | JSDoc                                                                                                   |
+| ------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                   |
+| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the drawer.                                                   |
+| `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                      |
+| `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+
+## v-model
+
+| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                    |
+| -------------- | ---------------------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Controlled open state through `defineModel('open')`, the single declaration of `open`, so `@update:open` carries the model type `boolean | undefined`(the`undefined`of an unbound model; a transition always sends a boolean), as on`dialog`and`popover`. Fires once per transition. While unbound the drawer is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload          | Notes         |
-| ------------- | ---------------- | ------------- |
-| `update:open` | `value: boolean` | v-model:open. |
+| _none_ | — | — |
 
 ## Slots
 

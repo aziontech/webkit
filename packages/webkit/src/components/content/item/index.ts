@@ -38,3 +38,4 @@ const ItemRoot = Object.assign(Item, {
 
 export default ItemRoot
 export type { ItemKind, ItemSize } from './item.vue'
+export type { ItemMediaKind } from './item-media.vue'

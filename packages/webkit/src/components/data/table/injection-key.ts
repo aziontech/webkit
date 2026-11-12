@@ -61,6 +61,24 @@ export interface TableStateSnapshot {
   filters?: AppliedFilter[]
 }
 
+/** Imperative API a Table template ref exposes; type the ref with it, as a generic component has no InstanceType. */
+export interface TableExposed<TRecord extends object = TableRowRecord> {
+  /** Emits refresh so the app refetches; no-op while loading. */
+  reload: () => void
+  /** Clears the structured filters and the global search text. */
+  clearFilters: () => void
+  /** Writes the visible, ordered columns of the chosen rows to a CSV download, or emits export when it is bound. */
+  exportCsv: (options?: {
+    filename?: string
+    scope?: 'page' | 'filtered' | 'all'
+    rows?: TRecord[]
+  }) => Promise<void>
+  /** Deep-cloned snapshot of sorting, pagination, column visibility and order, search and filters. */
+  getState: () => TableStateSnapshot
+  /** Writes the given concerns back through the same models that back v-model:state. */
+  setState: (next: Partial<TableStateSnapshot>) => void
+}
+
 export interface TableContext {
   /** Root data-testid; sub-components derive BEM-suffixed ids from it. */
   testId: string

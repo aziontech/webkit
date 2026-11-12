@@ -19,3 +19,4 @@ MultiSelect.Option = MultiSelectOption
 
 export default MultiSelect
 export { MultiSelectContent, MultiSelectGroup, MultiSelectOption, MultiSelectTrigger }
+export type { MultiSelectSize } from './injection-key'

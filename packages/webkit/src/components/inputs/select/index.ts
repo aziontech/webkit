@@ -19,4 +19,4 @@ Select.Option = SelectOption
 
 export default Select
 export { SelectContent, SelectGroup, SelectOption, SelectTrigger }
-export type { SelectKind, SelectSize, SelectValue } from './select.vue'
+export type { SelectKind, SelectOptionItem, SelectSize, SelectValue } from './select.vue'

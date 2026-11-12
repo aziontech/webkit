@@ -25,3 +25,4 @@ Command.Separator = CommandSeparator
 
 export default Command
 export { CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator }
+export type { CommandItemValue } from './injection-key'

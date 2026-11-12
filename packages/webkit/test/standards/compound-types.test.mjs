@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
@@ -46,6 +46,58 @@ export function exportedNames(source) {
 
 function scripts(vue) {
   return [...vue.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n')
+}
+
+const SURFACE = [/\binterface\s+Props\b[^{]*/g, /\bdefine(?:Props|Emits|Slots|Model)\s*</g]
+
+function balanced(source, from) {
+  const open = source.indexOf('{', from)
+  const angle = source.indexOf('(', from)
+  if (open === -1 || (angle !== -1 && angle < open))
+    return source.slice(from, angle === -1 ? from : angle)
+  let depth = 0
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === '{') depth++
+    else if (source[i] === '}' && --depth === 0) return source.slice(from, i + 1)
+  }
+  return source.slice(from)
+}
+
+export function publicSurface(script) {
+  return SURFACE.flatMap((re) =>
+    [...script.matchAll(re)].map((m) => balanced(script, m.index))
+  ).join('\n')
+}
+
+export function localTypeImports(script) {
+  const names = new Set()
+  for (const m of script.matchAll(/import\s+(type\s+)?\{([^}]*)\}\s*from\s*'(\.[^']*)'/g)) {
+    for (const part of m[2].split(',')) {
+      const typeOnly = Boolean(m[1]) || /^\s*type\s+/.test(part)
+      const name = part
+        .replace(/^\s*type\s+/, '')
+        .split(/\s+as\s+/)
+        .pop()
+        .trim()
+      if (typeOnly && name) names.add(name)
+    }
+  }
+  return names
+}
+
+export function surfaceTypes(script) {
+  const surface = publicSurface(script)
+  return [...localTypeImports(script)].filter((name) =>
+    new RegExp(`\\b${name.replace(/\$/g, '\\$')}\\b`).test(surface)
+  )
+}
+
+function vueFiles(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name)
+    if (entry.isDirectory()) return vueFiles(path)
+    return entry.name.endsWith('.vue') ? [path] : []
+  })
 }
 
 export function compounds(exportsMap) {
@@ -95,4 +147,35 @@ test('every type a compound root exports is re-exported by its compound index.ts
     }
   }
   assert.deepEqual(missing, [])
+})
+
+test('surfaceTypes reads type imports a public declaration uses, and skips internal ones', () => {
+  const script = [
+    "import { selectContextKey, type SelectSize, type SelectContext } from './injection-key'",
+    "import type { StepState } from './step'",
+    'interface Props { size?: SelectSize }',
+    "const emit = defineEmits<{ 'update:state': [value: StepState] }>()",
+    'const ctx = inject(selectContextKey) as SelectContext'
+  ].join('\n')
+  assert.deepEqual(surfaceTypes(script).sort(), ['SelectSize', 'StepState'])
+})
+
+test('every type a compound part exports or types its props, events, slots or model with is re-exported by its index.ts', () => {
+  const missing = []
+  for (const { key, index, root } of compounds(pkg.exports)) {
+    if (!existsSync(index) || !existsSync(root)) continue
+    const fromIndex = exportedNames(readFileSync(index, 'utf8'))
+    for (const file of vueFiles(dirname(root))) {
+      const script = scripts(readFileSync(file, 'utf8'))
+      const part = file.slice(dirname(root).length + 1)
+      for (const name of exportedTypes(script)) {
+        if (name !== 'Props' && !fromIndex.has(name))
+          missing.push(`${key}: ${name} (exported by ${part})`)
+      }
+      for (const name of surfaceTypes(script)) {
+        if (!fromIndex.has(name)) missing.push(`${key}: ${name} (types the API of ${part})`)
+      }
+    }
+  }
+  assert.deepEqual([...new Set(missing)], [])
 })

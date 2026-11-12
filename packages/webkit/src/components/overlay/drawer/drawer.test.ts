@@ -172,6 +172,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       await settle()
 
       expect(onUpdate).toHaveBeenCalledWith(true)
+      expect(onUpdate).toHaveBeenCalledTimes(1)
     })
 
     it('a controlled parent drives open; DrawerClose emits update:open(false)', async () => {

@@ -17,3 +17,4 @@ const PickListRoot = Object.assign(PickList, {
 
 export default PickListRoot
 export { PickListControls, PickListSource, PickListTarget }
+export type { MoveDirection, PickListItems, PickListSide, PickListValue } from './injection-key'

@@ -12,6 +12,8 @@
     type AccordionValue
   } from './injection-key'
 
+  export type { AccordionValue } from './injection-key'
+
   defineOptions({
     name: 'Accordion',
     inheritAttrs: false

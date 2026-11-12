@@ -119,6 +119,11 @@
     event.preventDefault()
     inputRef.value?.focus()
   }
+
+  defineExpose({
+    /** Moves focus to the native field. */
+    focus: (): void => inputRef.value?.focus()
+  })
 </script>
 
 <template>

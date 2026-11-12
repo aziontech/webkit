@@ -15,8 +15,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Controlled open state. Use with `v-model:open`. */
-      open?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** When true, overlay click and Escape close the drawer. */
@@ -27,7 +25,6 @@
       size?: DrawerSize
     }>(),
     {
-      open: undefined,
       defaultOpen: false,
       dismissible: true,
       side: 'right',
@@ -35,10 +32,7 @@
     }
   )
 
-  const emit = defineEmits<{
-    'update:open': [value: boolean]
-  }>()
-
+  /** Controlled open state. Use with v-model:open; while unbound the drawer starts at defaultOpen. */
   const openModel = defineModel<boolean | undefined>('open', { default: undefined })
 
   const attrs = useAttrs()
@@ -48,14 +42,13 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
 
-  const openProp = computed(() => openModel.value ?? props.open)
+  const openProp = computed(() => openModel.value)
 
   const isOpen = useControllable<boolean>({
     prop: openProp,
     defaultProp: props.defaultOpen,
     onChange: (value) => {
       openModel.value = value
-      emit('update:open', value)
     }
   })
 

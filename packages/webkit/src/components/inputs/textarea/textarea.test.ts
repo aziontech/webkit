@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/textarea/default.vue'
 import Disabled from '../../../../examples/textarea/disabled.vue'
@@ -319,5 +319,24 @@ describe('Textarea — monospace', () => {
     paste.unmount()
     const fixed = render(ReadOnly)
     expect(fixed.getByLabelText('Certificate').hasAttribute('data-monospace')).toBe(true)
+  })
+})
+
+describe('Textarea — exposed focus()', () => {
+  it('focus() on a template ref moves focus to the native textarea', async () => {
+    const field = ref<InstanceType<typeof Textarea> | null>(null)
+    const Host = defineComponent({
+      setup: () => () => h(Textarea, { ref: field, 'aria-label': 'Name' })
+    })
+    const { container } = render(Host)
+    await nextTick()
+
+    const native = container.querySelector('textarea')
+    expect(native).not.toBeNull()
+    expect(document.activeElement).not.toBe(native)
+
+    field.value?.focus()
+
+    expect(document.activeElement).toBe(native)
   })
 })

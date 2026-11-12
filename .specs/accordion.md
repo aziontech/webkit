@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: e958e54def4d83566a03da656071acf54b79236f26101406237dda70b0b36a68
+checksum: 490595ed857d4c5243662b0aae86046b13cee51d216f9266439bc2a7563751db
 created: 2026-06-26
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Accordion — Component Spec
@@ -143,6 +143,8 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 | Model     | Type                                      | Default     | Emits               | Notes                                                                                                                                                                                                                          |
 | --------- | ----------------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model` | `string \| string[] \| null \| undefined` | `undefined` | `update:modelValue` | Open item(s) via `defineModel`: a single `value` string in single mode, an array of values in multiple mode, `null` when none is open. While unbound (`undefined`) the accordion is uncontrolled and starts at `defaultValue`. |
+
+`./accordion` and `./accordion-root` export the type `AccordionValue` (`string | string[] | null`), the model's value without its unbound `undefined`.
 
 ## Events
 

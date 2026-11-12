@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: d1926dbaa37dcee7a36cc830673cf9a92d070307649e5b84b8a617ab18dc4d0b
+checksum: 5405ffd7f915dfb05dae4ec3072c8a122916da825b555c02e34c629491b28ffe
 created: 2026-05-22
 last_updated: 2026-11-12
 ---
@@ -95,6 +95,12 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 | ----------- | --------------------------------------------------------- | -------------------------------------------------- |
 | `iconLeft`  | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
 | `iconRight` | Trailing icon rendered inside the field, after the input. | Hidden from assistive tech (`aria-hidden="true"`). |
+
+## Exposed
+
+| Method    | Notes                                                                                                                                                                                                                                                        |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `focus()` | Moves focus to the native `<input>`. For a host that focuses the field from script (a rename that opens with the name field focused): `const field = ref<InstanceType<typeof Input> \| null>(null)` on `<Input ref="field" />`, then `field.value?.focus()`. |
 
 ## States
 
