@@ -112,7 +112,7 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
   import FrameBox from '@aziontech/webkit/frame-box'
@@ -120,10 +120,13 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
-  import SiteLayout from '@aziontech/webkit/site-layout'
+  import SiteLayout, {
+    type SiteLayoutFooter,
+    type SiteLayoutNavigation
+  } from '@aziontech/webkit/site-layout'
   import TextureMaterial from '@aziontech/webkit/texture-material'
 
-  const navigation = {
+  const navigation: SiteLayoutNavigation = {
     home: '/en/',
     menus: [
       {
@@ -473,7 +476,7 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
     secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' }
   }
 
-  const footer = {
+  const footer: SiteLayoutFooter = {
     kind: 'site',
     home: '/en/',
     homeAriaLabel: 'Azion home',
