@@ -3,8 +3,10 @@
     type ColumnDef,
     type ColumnFiltersState,
     type ColumnOrderState,
+    type ExpandedState,
     type FilterFn,
     getCoreRowModel,
+    getExpandedRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
@@ -32,6 +34,7 @@
     watch
   } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -178,6 +181,10 @@
       reorderable?: boolean
       /** With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A row it rejects keeps its place: its grip is disabled, and no other row is dropped onto it or moved past it with the keys. */
       rowReorderable?: (row: RowRecord) => boolean
+      /** Data-driven mode: tree rows. Returns a row's children; rows with children expand in place under a chevron in the principal column and the grid becomes a `treegrid`. */
+      getSubRows?: (row: RowRecord) => RowRecord[] | undefined
+      /** v-model:expanded (TanStack ExpandedState): `true` for every row, or `{ [rowId]: true }`. */
+      expanded?: ExpandedState
     }>(),
     {
       maxHeight: '',
@@ -216,7 +223,9 @@
       virtual: false,
       estimateRowHeight: 48,
       reorderable: false,
-      rowReorderable: undefined
+      rowReorderable: undefined,
+      getSubRows: undefined,
+      expanded: undefined
     }
   )
 
@@ -235,6 +244,7 @@
     export: [rows: RowRecord[]]
     'update:data': [value: RowRecord[]]
     reorder: [payload: { from: number; to: number; row: RowRecord }]
+    'update:expanded': [value: ExpandedState]
   }>()
 
   defineSlots<{
@@ -305,6 +315,11 @@
   )
   const internalColumnOrder = ref<ColumnOrderState>(seed('columnOrder') ?? [])
   const internalFilters = ref<AppliedFilter[]>(props.filters ?? seed('filters') ?? [])
+  const internalExpanded = ref<ExpandedState>(props.expanded ?? {})
+  watch(
+    () => props.expanded,
+    (v) => v !== undefined && (internalExpanded.value = v)
+  )
   watch(
     () => props.sorting,
     (v) => v && (internalSorting.value = v)
@@ -423,8 +438,10 @@
     }))
   )
 
+  const treeActive = computed<boolean>(() => dataDriven.value && Boolean(props.getSubRows))
   const leanRows = computed<boolean>(
-    () => props.manualSorting && props.manualFiltering && props.manualPagination
+    () =>
+      props.manualSorting && props.manualFiltering && props.manualPagination && !props.getSubRows
   )
   const rowKeyOf = (row: RowRecord): string => String(row[props.rowKey] ?? '')
   const isSelectable = (row: RowRecord): boolean => props.rowSelectable?.(row) ?? true
@@ -458,8 +475,13 @@
       },
       get columnOrder() {
         return internalColumnOrder.value
+      },
+      get expanded() {
+        return props.expanded ?? internalExpanded.value
       }
     },
+    getSubRows: (row) => props.getSubRows?.(row as RowRecord),
+    enableSubRowSelection: false,
     getRowId: (row) => rowKeyOf(row as RowRecord),
     enableRowSelection: (row) => props.enableRowSelection && isSelectable(row.original),
     manualSorting: props.manualSorting,
@@ -497,9 +519,15 @@
     onColumnOrderChange: (updater: Updater<ColumnOrderState>) => {
       internalColumnOrder.value = applyUpdater(updater, internalColumnOrder.value)
     },
+    onExpandedChange: (updater: Updater<ExpandedState>) => {
+      const next = applyUpdater(updater, props.expanded ?? internalExpanded.value)
+      internalExpanded.value = next
+      emit('update:expanded', next)
+    },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: props.getSubRows ? getExpandedRowModel() : undefined,
     getPaginationRowModel: props.paginated ? getPaginationRowModel() : undefined
   })
 
@@ -522,7 +550,10 @@
   const autoWidths = ref<Record<string, number>>({})
 
   const selectedRows = computed<RowRecord[]>(() => {
-    if (!leanRows.value) return table.getSelectedRowModel().rows.map((row) => row.original)
+    if (!leanRows.value)
+      return (
+        treeActive.value ? table.getSelectedRowModel().flatRows : table.getSelectedRowModel().rows
+      ).map((row) => row.original)
     const selection = table.getState().rowSelection
     return props.data.filter((row) => selection[rowKeyOf(row)])
   })
@@ -843,7 +874,7 @@
 
   const columnContentMinWidths = (headEls: HTMLElement[]): number[] => {
     const groups = headEls.map((headEl) => {
-      const tableEl = headEl.closest('[role="table"]') as HTMLElement | null
+      const tableEl = headEl.closest('[role="table"], [role="treegrid"]') as HTMLElement | null
       const row = headEl.closest('[role="row"]') as HTMLElement | null
       const host = tableEl ?? globalThis.document.body
       const colIndex = row ? Array.from(row.children).indexOf(headEl) : -1
@@ -1116,6 +1147,7 @@
     style: Record<string, string> | undefined
     stackedClass: string | undefined
     stackedField: boolean
+    principal: boolean
   }
   const columnViews = computed<Map<string, ColumnView>>(() => {
     const views = new Map<string, ColumnView>()
@@ -1134,7 +1166,8 @@
             ? STACKED_FIELD_CLASS
             : STACKED_CELL_CLASS
           : undefined,
-        stackedField
+        stackedField,
+        principal: Boolean(meta.principal)
       })
     }
     return views
@@ -1205,7 +1238,9 @@
     () => void scheduleAutoFit()
   )
 
-  const reorderActive = computed<boolean>(() => props.reorderable && dataDriven.value)
+  const reorderActive = computed<boolean>(
+    () => props.reorderable && dataDriven.value && !treeActive.value
+  )
   const reorderLocked = computed<boolean>(() => table.getState().sorting.length > 0)
   const leadingCells = computed<number>(
     () => (props.enableRowSelection ? 1 : 0) + (reorderActive.value ? 1 : 0)
@@ -1397,6 +1432,106 @@
     doc.addEventListener('touchend', onEnd)
     event.preventDefault()
   }
+  const treeDir = useDirection(rootEl)
+  const treeFocusId = ref<string | null>(null)
+  const treeTabStop = computed<string | undefined>(() =>
+    treeActive.value
+      ? treeFocusId.value && rowIndexById.value.has(treeFocusId.value)
+        ? treeFocusId.value
+        : rows.value[0]?.id
+      : undefined
+  )
+  const treePlacement = computed<Map<string, { setsize: number; posinset: number }>>(() => {
+    const placement = new Map<string, { setsize: number; posinset: number }>()
+    if (!treeActive.value) return placement
+    const groups = new Map<string, string[]>()
+    for (const row of rows.value) {
+      const key = row.parentId ?? ''
+      const group = groups.get(key) ?? []
+      group.push(row.id)
+      groups.set(key, group)
+    }
+    for (const group of groups.values())
+      group.forEach((id, index) =>
+        placement.set(id, { setsize: group.length, posinset: index + 1 })
+      )
+    return placement
+  })
+  const treeRowEl = (id: string): HTMLElement | undefined =>
+    Array.from(rootEl.value?.querySelectorAll<HTMLElement>('[data-tree-row]') ?? []).find(
+      (el) => el.getAttribute('data-tree-row') === id
+    )
+  const focusTreeRow = async (id: string): Promise<void> => {
+    treeFocusId.value = id
+    await nextTick()
+    let el = treeRowEl(id)
+    const viewport = viewportEl()
+    const index = rowIndexById.value.get(id)
+    if (!el && virtualActive.value && viewport && index !== undefined) {
+      viewport.scrollTop = rowOffsets.value[index] ?? 0
+      scrollTop.value = viewport.scrollTop
+      await nextTick()
+      el = treeRowEl(id)
+    }
+    el?.focus()
+  }
+  const toggleTreeRow = (row: Row<RowRecord>, open?: boolean): void => {
+    const active = globalThis.document?.activeElement
+    const holder = active?.closest?.('[data-tree-row]')?.getAttribute('data-tree-row')
+    const closing = open === false || (open === undefined && row.getIsExpanded())
+    const inside =
+      closing && holder !== undefined && holder !== row.id
+        ? row.getLeafRows().some((leaf) => leaf.id === holder)
+        : false
+    row.toggleExpanded(open)
+    if (inside) void focusTreeRow(row.id)
+  }
+  const onTreeFocusin = (row: Row<RowRecord>): void => {
+    treeFocusId.value = row.id
+  }
+  const onTreeKeydown = (event: KeyboardEvent, row: Row<RowRecord>): void => {
+    if (!treeActive.value || event.target !== event.currentTarget) return
+    const list = rows.value
+    const index = rowIndexById.value.get(row.id) ?? -1
+    const go = (target: Row<RowRecord> | undefined): void => {
+      event.preventDefault()
+      if (target) void focusTreeRow(target.id)
+    }
+    switch (logicalArrowKey(event.key, treeDir.value)) {
+      case 'ArrowDown':
+        return go(list[index + 1])
+      case 'ArrowUp':
+        return go(list[index - 1])
+      case 'Home':
+        return go(list[0])
+      case 'End':
+        return go(list[list.length - 1])
+      case 'ArrowRight':
+        event.preventDefault()
+        if (row.getCanExpand() && !row.getIsExpanded()) toggleTreeRow(row, true)
+        else if (row.getIsExpanded()) go(list[index + 1])
+        return
+      case 'ArrowLeft':
+        event.preventDefault()
+        if (row.getIsExpanded()) toggleTreeRow(row, false)
+        else {
+          const parent = row.getParentRow()
+          if (parent) void focusTreeRow(parent.id)
+        }
+        return
+      case 'Enter':
+        if (!row.getCanExpand()) return
+        event.preventDefault()
+        toggleTreeRow(row)
+        return
+      case ' ':
+        if (!props.enableRowSelection || !row.getCanSelect()) return
+        event.preventDefault()
+        row.toggleSelected()
+        return
+      default:
+    }
+  }
 </script>
 
 <template>
@@ -1486,7 +1621,8 @@
         </div>
         <div
           v-bind="splitAttrs[1]"
-          role="table"
+          :role="treeActive ? 'treegrid' : 'table'"
+          :data-tree="treeActive || undefined"
           :data-testid="`${testId}__table`"
           :aria-busy="loading || undefined"
           :aria-rowcount="windowed ? rowTotal + 1 : undefined"
@@ -1637,10 +1773,23 @@
                     reorderLocked,
                     dragId === row.id,
                     dropOf(row.id),
-                    orderedIds.length
+                    orderedIds.length,
+                    treeActive,
+                    row.getIsExpanded(),
+                    row.id === treeTabStop,
+                    treePlacement.get(row.id)
                   ]"
                   :selected="row.getIsSelected()"
                   :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
+                  :aria-level="treeActive ? row.depth + 1 : undefined"
+                  :aria-setsize="treePlacement.get(row.id)?.setsize"
+                  :aria-posinset="treePlacement.get(row.id)?.posinset"
+                  :aria-expanded="
+                    treeActive && row.getCanExpand() ? row.getIsExpanded() : undefined
+                  "
+                  :tabindex="treeActive ? (row.id === treeTabStop ? 0 : -1) : undefined"
+                  :data-tree-row="treeActive ? row.id : undefined"
+                  :data-depth="treeActive ? row.depth : undefined"
                   :data-reorder-row="reorderActive ? row.id : undefined"
                   :data-dragging="dragId === row.id || undefined"
                   :data-drop="dropOf(row.id)"
@@ -1651,9 +1800,11 @@
                     striped && (windowStart + index) % 2 === 1
                       ? '[--table-row-bg:var(--bg-surface-raised)]'
                       : undefined,
-                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)]'
+                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
                   ]"
                   @click="onRowClick($event, row)"
+                  @keydown="onTreeKeydown($event, row)"
+                  @focusin="treeActive && onTreeFocusin(row)"
                 >
                   <TableCell
                     v-if="reorderActive"
@@ -1714,6 +1865,35 @@
                       class="w-2/5 shrink-0 truncate text-label-sm text-(--text-muted)"
                       >{{ stackedLabelOf(cell.column) }}</span
                     >
+                    <template v-if="treeActive && viewOf(cell.column.id).principal">
+                      <span
+                        v-if="row.depth"
+                        aria-hidden="true"
+                        class="shrink-0"
+                        :style="{ inlineSize: `calc(var(--spacing-md) * ${row.depth})` }"
+                      />
+                      <span
+                        v-if="row.getCanExpand()"
+                        aria-hidden="true"
+                        :data-testid="`${testId}__expand-toggle`"
+                        class="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-(--shape-button) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-canvas) motion-reduce:transition-none"
+                        @click.stop="toggleTreeRow(row)"
+                      >
+                        <i
+                          class="text-body-xs"
+                          :class="
+                            row.getIsExpanded()
+                              ? 'pi pi-chevron-down'
+                              : 'pi pi-chevron-right rtl:-scale-x-100'
+                          "
+                        />
+                      </span>
+                      <span
+                        v-else
+                        aria-hidden="true"
+                        class="size-7 shrink-0"
+                      />
+                    </template>
                     <slot
                       v-if="hasSlot('cell-' + cell.column.id)"
                       :name="'cell-' + cell.column.id"

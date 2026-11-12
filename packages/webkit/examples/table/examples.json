@@ -86,6 +86,11 @@
       "name": "Refresh",
       "summary": "The refresh pattern: `Table.RefreshButton` with `loading` spins while the current rows stay on screen, an `Updated` line beside it uses `Table.CellTime` (relative, absolute on the tooltip, re-rendered every minute), and auto-refresh is off by default, runs every 30 seconds when turned on and skips a tick while the tab is hidden.",
       "file": "refresh.vue"
+    },
+    {
+      "name": "TreeRows",
+      "summary": "Hierarchical rows: `get-sub-rows` returns each row's children, which open under a chevron in the principal column, indented one step per level. The grid becomes a `treegrid` (`aria-level`, `aria-expanded`, `aria-setsize`, `aria-posinset`) with one row in the tab order: Arrow Up and Arrow Down move between rows, Arrow Right opens a row or enters it, Arrow Left closes it or goes to the parent, Enter toggles it and Space selects it. `v-model:expanded` holds the open rows; selection stays per row.",
+      "file": "tree-rows.vue"
     }
   ]
 }
