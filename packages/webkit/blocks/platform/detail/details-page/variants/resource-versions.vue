@@ -7,7 +7,7 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -168,7 +168,7 @@
 
   const search = ref('')
   const pagination = ref({ pageIndex: 0, pageSize: 10 })
-  const tableRef = ref<{ exportCsv: (options?: { filename?: string }) => void } | null>(null)
+  const tableRef = ref<TableExposed | null>(null)
   const columnVisibility = ref({})
 
   const loading = ref(false)

@@ -30,8 +30,8 @@
     { value: 'other', label: 'Other' }
   ]
 
-  const usage = ref<string | number>()
-  const role = ref<string | number>()
+  const usage = ref<string>()
+  const role = ref<string>()
   const session = ref(false)
   const submitted = ref(false)
   const creating = ref(false)

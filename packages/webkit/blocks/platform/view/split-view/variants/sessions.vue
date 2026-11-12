@@ -18,7 +18,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -744,7 +744,7 @@
     }
   }
 
-  const onSessionAction = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+  const onSessionAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
     const id = activeSession.value
     if (value === 'rename') startRename(id)
     if (value === 'duplicate') duplicateSession(id)

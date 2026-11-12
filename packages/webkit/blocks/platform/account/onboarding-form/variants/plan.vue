@@ -221,8 +221,8 @@
   }
   const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
 
-  const plan = ref<string | number>()
-  const pendingPlanId = ref<string | number>('')
+  const plan = ref<string>()
+  const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const submitted = ref(false)
   const period = ref<BillingPeriod>('yearly')
@@ -238,7 +238,7 @@
     (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress)
   )
 
-  const selectPlan = (value: string | number) => {
+  const selectPlan = (value: string) => {
     submitted.value = false
     if (value === 'free') {
       plan.value = value
@@ -373,13 +373,13 @@
                               </div>
                               <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
                                 <Tag
-                                  :label="(item as PlanItem).name"
-                                  :severity="(item as PlanItem).severity"
+                                  :label="item.name"
+                                  :severity="item.severity"
                                   size="small"
                                   rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
-                                  {{ (item as PlanItem).price }}
+                                  {{ item.price }}
                                 </span>
                               </div>
                             </div>

@@ -27,7 +27,11 @@
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import TableRoot, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -62,10 +66,6 @@
   interface TransferItem extends UploadProgressItem {
     size: number
     target: string
-  }
-
-  interface TableHandle {
-    exportCsv: (options?: { filename?: string }) => Promise<void>
   }
 
   const folderPath = ref<string[]>([])
@@ -176,7 +176,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: string | number, row: FileRow) => {
+  const onRowAction = (value: DropdownMenuOptionValue, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value !== 'delete') return
     pending.value = row
@@ -190,7 +190,7 @@
     deleteOpen.value = false
   }
 
-  const tableRef = ref<TableHandle | null>(null)
+  const tableRef = ref<TableExposed<FileRow> | null>(null)
   const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
     Boolean(entry && 'children' in entry)
   const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
