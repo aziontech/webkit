@@ -14,6 +14,7 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
+  import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Brand from '../../content/brand/brand.vue'
   import GlobalHeader from '../../layout/global-header/global-header.vue'
   import GlobalHeaderBrand from '../../layout/global-header/global-header-brand.vue'
@@ -100,8 +101,10 @@
     contact?: SiteNavLink
     /** The sign-up button, filled, in the bar and in the sheet footer; `{ label, href }`. */
     primaryAction?: SiteNavLink
-    /** The login button beside it, in the bar and in the sheet footer; `{ label, href }`. */
+    /** The login button beside it, in the bar from `sm` up and in the sheet footer; `{ label, href }`. */
     secondaryAction?: SiteNavLink
+    /** Keeps the login button in the bar below `sm` too; off, it steps out on phones, as on azion.com, and stays in the sheet footer. */
+    secondaryActionOnPhones?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -109,8 +112,14 @@
     links: () => [],
     contact: undefined,
     primaryAction: undefined,
-    secondaryAction: undefined
+    secondaryAction: undefined,
+    secondaryActionOnPhones: false
   })
+
+  const emit = defineEmits<{
+    /** The search trigger was clicked or ⌘K / Ctrl K was pressed; open the page's Command palette from it. */
+    search: [event: MouseEvent | KeyboardEvent]
+  }>()
 
   const attrs = useAttrs()
   const { t } = useTranslate({ siteNav: en.siteNav })
@@ -322,13 +331,19 @@
             :href="contact.href"
           />
         </div>
-        <Button
+        <div
           v-if="secondaryAction"
-          :label="secondaryAction.label"
-          kind="secondary"
-          size="medium"
-          :href="secondaryAction.href"
-        />
+          :data-testid="`${testId}__secondary-action`"
+          :data-on-phones="secondaryActionOnPhones || null"
+          class="hidden sm:flex data-[on-phones]:flex"
+        >
+          <Button
+            :label="secondaryAction.label"
+            kind="secondary"
+            size="medium"
+            :href="secondaryAction.href"
+          />
+        </div>
         <Button
           key="button-2"
           v-if="primaryAction"
@@ -338,12 +353,11 @@
           class="shrink-0"
           :href="primaryAction.href"
         />
-        <IconButton
-          icon="pi pi-search"
-          kind="outlined"
-          size="medium"
-          :ariaLabel="t('siteNav.search')"
+        <SearchTrigger
+          collapsible
+          :label="t('siteNav.search')"
           class="shrink-0"
+          @open="emit('search', $event)"
         />
       </GlobalHeaderRight>
     </GlobalHeader>

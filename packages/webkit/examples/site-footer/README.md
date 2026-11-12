@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `kind` is `site` under a framed marketing page; `home` is where the Azion mark links. Without `home` the mark is left out.
 - `ariaLabel` names the footer landmark, `homeAriaLabel` the Azion mark and `languageAriaLabel` the language select, for assistive tech.
-- `columns[]` are the link columns, each a `title` and its `links[]` (`label`, `href`).
+- `columns[]` are the link columns, each a `title` and its `links[]` (`label`, `href`, and `external: true` for a link that leaves the site: it opens in a new tab and closes on the external-link glyph, like `Status` here).
 - `socials[]` are the profile icon buttons, each an `icon`, a `label` for assistive tech and an `href`.
 - `statusLabel` is the line beside the language select, and `languages[]` are the select's options as the reader sees them; the first one is selected.
 

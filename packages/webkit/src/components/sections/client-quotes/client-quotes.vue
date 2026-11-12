@@ -46,13 +46,22 @@
     items?: ClientQuotesItem[]
     /** Button under the quotes; omitted when absent. */
     primaryAction?: ClientQuotesAction
+    /** Advances to the next quote on a timer, as QuoteTabs does; pauses under the pointer or keyboard focus and never runs under reduced motion. */
+    autoplay?: boolean
+    /** Milliseconds each quote is held before the band advances. */
+    autoplayInterval?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
     items: () => [],
-    primaryAction: undefined
+    primaryAction: undefined,
+    autoplay: true,
+    autoplayInterval: 5000
   })
+
+  /** Index of the selected quote, passed through to QuoteTabs; left unbound the band starts on the first quote. */
+  const model = defineModel<number>({ default: 0 })
 
   const attrs = useAttrs()
 
@@ -80,7 +89,10 @@
       >
         <QuoteTabs
           :aria-label="ariaLabel || undefined"
+          v-model="model"
           :items="items"
+          :autoplay="autoplay"
+          :autoplay-interval="autoplayInterval"
         >
           <template #actions>
             <Button

@@ -752,7 +752,8 @@ export const es: Messages = {
   siteFooter: {
     label: 'Pie de página',
     home: 'Página de inicio de Azion',
-    language: 'Idioma'
+    language: 'Idioma',
+    newTab: '(se abre en una pestaña nueva)'
   },
   siteNav: {
     open: 'Abrir navegación',

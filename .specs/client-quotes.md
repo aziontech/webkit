@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: aa4fc0a252196c3d462a39659e0291f00916dd461eade0ab75d5e47c1277da82
+last_updated: 2026-11-12
+checksum: 79b9989e9ef0613c21e0c9ed8211808ac5cb733d25e4244b1168a32da8a5ae7f
 ---
 # ClientQuotes — Component Spec
 
@@ -31,6 +31,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
+- The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
 ## Usage
 
@@ -58,6 +59,14 @@ import ClientQuotes from '@aziontech/webkit/client-quotes'
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
 | `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
+| `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion. |
+| `autoplayInterval` | `number` | `5000` | false | Milliseconds each quote is held before the band advances. |
+
+## v-model
+
+| Model | Type | Default | Emits | Notes |
+|---|---|---|---|---|
+| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
 
 ## Events
 
@@ -71,7 +80,7 @@ import ClientQuotes from '@aziontech/webkit/client-quotes'
 
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing
-- The active quote, its progress and the tab keyboard model belong to `quote-tabs`
+- The active quote, its progress and the tab keyboard model belong to `quote-tabs`; `autoplay`, `autoplayInterval` and `v-model` are passed straight through to it
 
 ## Motion & Animations
 
@@ -101,6 +110,7 @@ _none_
 ## Examples
 
 - Default
+- Still — `autoplay` off, opening on the second quote through `v-model`.
 
 ## Constraints — DO NOT
 

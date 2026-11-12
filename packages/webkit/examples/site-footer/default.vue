@@ -89,7 +89,8 @@
         },
         {
           label: 'Status',
-          href: '#'
+          href: '#',
+          external: true
         }
       ]
     },

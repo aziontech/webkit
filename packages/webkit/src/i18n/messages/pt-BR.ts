@@ -752,7 +752,8 @@ export const ptBR: Messages = {
   siteFooter: {
     label: 'Rodapé',
     home: 'Página inicial da Azion',
-    language: 'Idioma'
+    language: 'Idioma',
+    newTab: '(abre em uma nova aba)'
   },
   siteNav: {
     open: 'Abrir navegação',

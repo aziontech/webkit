@@ -741,7 +741,8 @@ export const sidebar = {
 export const siteFooter = {
   label: 'Footer',
   home: 'Azion home',
-  language: 'Language'
+  language: 'Language',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const siteNav = {
