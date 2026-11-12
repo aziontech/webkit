@@ -26,6 +26,8 @@
       to?: string | Record<string, unknown>
       /** Where an in-app link leads (`Workloads`), for the tooltip `Open <label> in <destination>`. */
       destination?: string
+      /** Glyph class drawn before the name, muted (the provider or resource type: `ai ai-github`, `ai ai-workloads`). */
+      icon?: string
       /** Adds a copy button pinned to the cell's end edge. */
       copyable?: boolean
       /** Text the copy button copies; defaults to `label`. */
@@ -40,6 +42,7 @@
       href: '',
       to: undefined,
       destination: '',
+      icon: '',
       copyable: false,
       copyValue: '',
       more: () => [],
@@ -88,6 +91,13 @@
     :data-testid="testId"
     class="flex w-full min-w-0 items-center gap-(--spacing-xs)"
   >
+    <i
+      v-if="icon"
+      :class="icon"
+      :data-testid="`${testId}__icon`"
+      class="shrink-0 text-body-lg leading-none text-(--text-muted)"
+      aria-hidden="true"
+    />
     <Tooltip
       :text="tooltip"
       :disabled="!isLink"

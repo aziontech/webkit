@@ -399,6 +399,11 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
 
 - `to` renders the app's registered `RouterLink`; with no router it falls back to a plain `href`.
 - It underlines on hover, not at rest, and stops the click so the row's `@row-click` does not fire.
+- A provider or resource-type glyph before the name (the GitHub mark of a repository, the workload
+  glyph of a workload) is `icon="ai ai-github"` / `icon="ai ai-workloads"`: muted, outside the
+  link, hidden from screen readers. Never a hand-written `<i>` beside the preset.
+- An action that only looks like a link (`Connect Git Repository` in an empty repository cell) is
+  `Button kind="link"`, not a `CellLink` with no destination.
 - Do not re-type its markup per call site. The hand-made copies drift on every axis at once (glyph,
   icon size, underline at rest, tooltip or none), and a `Tooltip` trigger in a flex cell needs
   `shrink!` to let the name truncate, which the preset already sets.
