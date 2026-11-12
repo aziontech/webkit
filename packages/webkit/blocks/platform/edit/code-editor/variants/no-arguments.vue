@@ -217,7 +217,10 @@ export async function handleRequest(request) {
 </script>
 
 <template>
-  <div class="flex h-[calc(100dvh-var(--layout-header-height))] min-h-0 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
     <h1 class="sr-only">{{ form.name }}</h1>
     <PageTabs v-model="activeTab">
       <Tabs.Item

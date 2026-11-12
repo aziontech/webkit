@@ -48,7 +48,7 @@
   "variants": [
     {
       "name": "DetailPage",
-      "summary": "A resource detail page rendered through `ConsoleLayout`: its `breadcrumbs` slot composes a `Breadcrumb` that reads Applications, the application, then its environment as a `Select` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
+      "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumbs` (Applications, the application) ending on its environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.",
       "file": "variants/detail-page.vue"
     },
     {

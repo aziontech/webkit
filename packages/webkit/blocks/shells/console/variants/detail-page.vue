@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
@@ -238,92 +237,6 @@
     active-id="applications"
     @search-select="onSearchSelect"
   >
-    <template #breadcrumbs>
-      <Breadcrumb class="w-full">
-        <Breadcrumb.List>
-          <template
-            v-for="(item, index) in leadingCrumbs"
-            :key="item.label + '-' + index"
-          >
-            <li class="inline-flex items-center">
-              <Breadcrumb.Item
-                :label="item.label"
-                :href="item.href"
-              />
-            </li>
-            <Breadcrumb.Separator />
-          </template>
-          <li class="inline-flex min-w-0 items-center">
-            <div class="min-w-0">
-              <Select
-                :model-value="environment"
-                :display-value="environmentLabel"
-                size="small"
-                class="w-full"
-                @update:model-value="pickEnvironment"
-                @update:open="onEnvironmentOpen"
-              >
-                <Select.Trigger aria-label="Switch environment" />
-                <Select.Content>
-                  <template #search>
-                    <Input
-                      v-model="environmentQuery"
-                      size="small"
-                      placeholder="Search environments"
-                      aria-label="Search environments"
-                      @keydown.stop
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </template>
-                  <Select.Group label="Environments">
-                    <Select.Option
-                      v-for="entry in environmentMatches"
-                      :key="entry.name"
-                      :value="entry.name"
-                    >
-                      {{ entry.name }}
-                      <template #tag>
-                        <Tag
-                          :label="entry.policy"
-                          severity="secondary"
-                          size="small"
-                        />
-                      </template>
-                    </Select.Option>
-                    <p
-                      v-if="!environmentMatches.length"
-                      class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                    >
-                      No environments match "{{ environmentQuery }}".
-                    </p>
-                  </Select.Group>
-                  <template #footer>
-                    <Select.Option
-                      value="__create-environment__"
-                      class="w-full"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)">
-                        <i
-                          class="pi pi-plus-circle"
-                          aria-hidden="true"
-                        />
-                        Add Environment
-                      </span>
-                    </Select.Option>
-                  </template>
-                </Select.Content>
-              </Select>
-            </div>
-          </li>
-        </Breadcrumb.List>
-      </Breadcrumb>
-    </template>
 
     <template #actions="{ compact }">
       <template v-if="compact">
@@ -492,6 +405,73 @@
         </div>
       </DropdownMenu.Group>
     </template>
+
+    <ConsoleLayout.Breadcrumbs :items="leadingCrumbs">
+      <Select
+        :model-value="environment"
+        :display-value="environmentLabel"
+        kind="transparent"
+        size="small"
+        @update:model-value="pickEnvironment"
+        @update:open="onEnvironmentOpen"
+      >
+        <Select.Trigger aria-label="Switch environment" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="environmentQuery"
+              size="small"
+              placeholder="Search environments"
+              aria-label="Search environments"
+              @keydown.stop
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Environments">
+            <Select.Option
+              v-for="entry in environmentMatches"
+              :key="entry.name"
+              :value="entry.name"
+            >
+              {{ entry.name }}
+              <template #tag>
+                <Tag
+                  :label="entry.policy"
+                  severity="secondary"
+                  size="small"
+                />
+              </template>
+            </Select.Option>
+            <p
+              v-if="!environmentMatches.length"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            >
+              No environments match "{{ environmentQuery }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Option
+              value="__create-environment__"
+              class="w-full"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="pi pi-plus-circle"
+                  aria-hidden="true"
+                />
+                Add Environment
+              </span>
+            </Select.Option>
+          </template>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
 
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">

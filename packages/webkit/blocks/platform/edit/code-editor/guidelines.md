@@ -1,6 +1,6 @@
 # Code editor
 
-The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`).
+The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -69,6 +69,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 ## Do
 
 - Let the editor fill the pane; the page scrolls inside the editor, not around it.
+- Mark the page root with `data-layout-fill`.
 - Show the schema JSON and the fields form side by side, so the user can check one against the other.
 - Keep collapsed fields as one-line summaries with their tags, and open settings only for the field being edited.
 - Lock fields that cannot change after creation, with a lock glyph and a description that says so.
@@ -80,6 +81,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 
 - Don't put the code editor inside a card, a drawer or a modal.
 - Don't add a page heading above the tabs; the layout's breadcrumb names the service.
+- Don't size the page with `calc(100dvh - …)`; it overflows under a notification.
 - Don't save from inside the Arguments pane or a field; Save lives in the bar.
 - Don't flag a new field's name before the user has touched it.
 - Don't let the schema pane squeeze the fields pane below a usable width; collapse it instead.

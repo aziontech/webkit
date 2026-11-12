@@ -1,11 +1,11 @@
 ---
 name: console-layout
 category: layout
-structure: monolithic
+structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: fd3194e617a707e1b0dd63b5491e6feeeb4f280b8c91e56e59d167ccc1f2ea98
+checksum: 2b06909998f64825e8dcd04996ec84a28a95bf471746a36b6f4ac3b4ac01b18b
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumbs`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
 ## When to use
 
@@ -39,20 +39,62 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
 - Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
-- Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
-- Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
+- A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
+- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))`.
 - Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
 
 ## Usage
 
+A page body sets its own trail, ending on a control crumb, and fills the main region:
+
 ```vue
 <script setup lang="ts">
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import Select from '@aziontech/webkit/select'
+  import { ref } from 'vue'
+
+  const environment = ref('production')
+</script>
+
+<template>
+  <div
+    data-layout-fill
+    class="flex min-h-0 flex-col"
+  >
+    <ConsoleLayout.Breadcrumbs
+      :items="[
+        { label: 'Applications', href: '/applications' },
+        { label: 'azion-site', href: '/applications/azion-site' }
+      ]"
+    >
+      <Select
+        v-model="environment"
+        kind="transparent"
+        size="small"
+      >
+        <Select.Trigger aria-label="Switch environment" />
+        <Select.Content>
+          <Select.Option value="production">Production</Select.Option>
+          <Select.Option value="preview">Preview</Select.Option>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
+  </div>
+</template>
+```
+
+The app's root renders only `<ConsoleLayout>`, so it imports the standalone root (`webkit/prefer-tree-shakeable-root`); the root entry also carries the types:
+
+```vue
+<script setup lang="ts">
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -74,6 +116,27 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
   </ConsoleLayout>
 </template>
 ```
+
+`@aziontech/webkit/console-layout-breadcrumbs` is the standalone part.
+
+## Sub-components
+
+The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `ConsoleLayoutCrumb`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
+
+```
+packages/webkit/src/components/layout/console-layout/
+├── console-layout.vue          (root — the chrome, provides the context)
+├── index.ts                    (compound Object.assign)
+├── injection-key.ts            (the page context and the trail registry)
+├── composables/use-console-layout.ts
+├── console-layout.test.ts
+└── console-layout-breadcrumbs/console-layout-breadcrumbs.vue
+```
+
+- `console-layout-breadcrumbs/console-layout-breadcrumbs.vue` — a page's own trail. Renders nothing in place; registers with the layout on mount and `KeepAlive` activation, unregisters on unmount and deactivation; the latest wins and replaces the layout's `breadcrumbs` prop and slot. Does nothing outside a `ConsoleLayout`. Crumbs are followed with the app's router.
+  - Props: `items: ConsoleLayoutCrumb[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
+  - Events: _none_ (crumb clicks are followed by the layout).
+  - Slots: `default` — one or more controls that end the trail (a `Select` with `kind="transparent"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
 
 ## Props
 
@@ -107,10 +170,10 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 | Slot            | Scope                                           | Notes                                                                                                                                                                               |
 | --------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default`       | —                                               | The page body, rendered inside the layout's `<main>`.                                                                                                                               |
+| `default`       | —                                               | The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main.                                        |
 | `actions`       | `{ compact: boolean, toggleTools: () => void }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
 | `header-start`  | `{ compact: boolean }`                          | Content at the start of the header, before the breadcrumbs (an account or organization switcher).                                                                                   |
-| `breadcrumbs`   | —                                               | A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact.                                               |
+| `breadcrumbs`   | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact.                                |
 | `notifications` | —                                               | Flash messages (`Alert`) above the page, kept in view while the page scrolls.                                                                                                       |
 | `tools`         | —                                               | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`.                                                                                |
 | `search`        | `{ query: string }`                             | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette.                                                                              |
@@ -120,6 +183,8 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
@@ -155,6 +220,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the account trigger (`Account menu`) come from the locale catalog; the avatar carries the account name.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
+- A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 
 ## Internationalization
 
@@ -186,17 +252,23 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## Performance
 
-- Bundle budget: 66 KB gzip for `./console-layout` in `.size-limit.json` (64.3 KB measured; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`).
-- Runtime budget: one `popstate` listener when no router is installed; the active row is a computed match over the navigation leaves.
+- Bundle budget: 66 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 65.0 KB measured, up from 64.3 KB for the page trail; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumbs` (0.42 KB measured).
+- Runtime budget: one `popstate` listener when no router is installed; the active row is a computed match over the navigation leaves; the page trail is a short list of registrations.
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
+
+## Decisions and open questions
+
+- **Page trail and fill mode (2026-11-12).** Platform detail pages need a crumb that is a control (an environment or version `Select`), and they had to put it in `App.vue`'s `breadcrumbs` slot, far from the page that owns it; workspace pages sized themselves with `calc(100dvh - var(--layout-header-height))`, which ignores the notifications region and breaks the moment the header changes. Decided: (1) a context-aware part, `ConsoleLayout.Breadcrumbs`, rendered by the page, over a `useConsoleLayout()` method — a template part takes reactive props and a slot for the control, and it cleans up with the page by construction; it registers on mount, not in setup, because the server renders the header before the page body, so a setup-time registration could never reach the server markup either and mount keeps the server and the hydrated markup identical. The structure moves from monolithic to composition (`spec_version` 2; the compound `./console-layout` re-exports the root's types, and `./console-layout-root` is the standalone root). Consequence: an `App.vue` that renders only `<ConsoleLayout>` now imports `console-layout-root` (`webkit/prefer-tree-shakeable-root`, as for every compound). (2) Fill mode is a `data-layout-fill` marker on the page's root read by the main through `:has()`, not a prop bound per route or a composable call: it is pure CSS, so it is right in the server render, needs no wiring in `App.vue`, and ends with the page. `AppLayout` is unchanged: `ConsoleLayout` renders its trail in the header, not in `AppLayout`'s breadcrumbs row, so the main's `h-full` is exactly the content area under the header.
 
 ## Examples
 
 - Default — the layout with console navigation (a drill level and a preview badge), breadcrumbs, header actions, the account menu and a list page body.
 - Page opens search — a page body that opens the shared palette with `useConsoleLayout().openSearch()` from its own button.
 - Navigation expanded — `v-model:navigation-expanded` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
+- Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumbs`, ending on an environment `Select` (`kind="transparent"`, `size="small"`).
+- Fill page — a workspace page body whose root carries `data-layout-fill`: the main stops scrolling and the body's own panes scroll.
 
-The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it.
+The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it. The fourth is justified: a page-owned trail with a control crumb is the sub-component's whole reason to exist. The fifth is justified: the fill mode only shows with a body that pins its own panes.
 
 ## Constraints — DO NOT
 

@@ -16,6 +16,16 @@
       "name": "NavigationExpanded",
       "summary": "`v-model:navigation-expanded` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value.",
       "file": "navigation-expanded.vue"
+    },
+    {
+      "name": "PageBreadcrumbs",
+      "summary": "A detail page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as crumbs, then the environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"`. While the page is mounted its trail replaces the layout's `breadcrumbs`; it is cleared when the page unmounts.",
+      "file": "page-breadcrumbs.vue"
+    },
+    {
+      "name": "FillPage",
+      "summary": "A workspace page body whose root carries `data-layout-fill`: the layout's main becomes a fixed-height region under the header that does not scroll, the body fills it, and its own panes scroll.",
+      "file": "fill-page.vue"
     }
   ]
 }

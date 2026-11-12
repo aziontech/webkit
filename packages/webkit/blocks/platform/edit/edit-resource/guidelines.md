@@ -146,7 +146,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shells/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is its `breadcrumbs` slot, a `Select` with `kind="transparent"` and `size="small"`.
+- `shells/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
 - `platform/create/single-page-create` — the create page that shares this field list.
 - `platform/detail/attached-resources` — the Domains section body in DeployableSettings.
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.

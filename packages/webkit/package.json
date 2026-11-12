@@ -1223,8 +1223,16 @@
       "default": "./src/components/layout/app-layout/app-layout.vue"
     },
     "./console-layout": {
+      "types": "./types/components/layout/console-layout/index.d.ts",
+      "default": "./src/components/layout/console-layout/index.ts"
+    },
+    "./console-layout-root": {
       "types": "./types/components/layout/console-layout/console-layout.vue.d.ts",
       "default": "./src/components/layout/console-layout/console-layout.vue"
+    },
+    "./console-layout-breadcrumbs": {
+      "types": "./types/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue"
     },
     "./use-console-layout": {
       "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",

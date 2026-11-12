@@ -10,6 +10,11 @@
     "limit": "66 KB"
   },
   {
+    "name": "console-layout-breadcrumbs",
+    "path": "src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue",
+    "limit": "1 KB"
+  },
+  {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
     "limit": "71 KB"

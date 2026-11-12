@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -31,6 +32,17 @@
   ]
 
   const activeTab = ref('settings')
+  const environments = [
+    { name: 'Production', policy: 'Single' },
+    { name: 'Preview', policy: 'Versioned' }
+  ]
+  const environment = ref('Production')
+  const environmentQuery = ref('')
+  const environmentMatches = computed(() => {
+    const needle = environmentQuery.value.trim().toLowerCase()
+    if (!needle) return environments
+    return environments.filter((option) => option.name.toLowerCase().includes(needle))
+  })
   const advancedOpen = ref(false)
 
   const domains = [
@@ -246,6 +258,85 @@
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
+    <ConsoleLayout.Breadcrumbs
+      :items="[
+        { label: 'Resources', href: '/resources' },
+        { label: record.name, href: '/resources/1020655' }
+      ]"
+    >
+      <Select
+        :model-value="environment"
+        :display-value="(value) => String(value ?? '')"
+        kind="transparent"
+        size="small"
+        @update:model-value="
+          (value) => {
+            if (value !== '__add-environment__') environment = value
+          }
+        "
+        @update:open="
+          (open) => {
+            if (!open) environmentQuery = ''
+          }
+        "
+      >
+        <Select.Trigger aria-label="Switch environment" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="environmentQuery"
+              size="small"
+              placeholder="Search environments"
+              aria-label="Search environments"
+              @keydown.stop
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Environments">
+            <Select.Option
+              v-for="option in environmentMatches"
+              :key="option.name"
+              :value="option.name"
+            >
+              {{ option.name }}
+              <template #tag>
+                <Tag
+                  :label="option.policy"
+                  severity="secondary"
+                  size="small"
+                />
+              </template>
+            </Select.Option>
+            <p
+              v-if="!environmentMatches.length"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            >
+              No environments match "{{ environmentQuery }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Option
+              value="__add-environment__"
+              class="w-full"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="pi pi-plus-circle"
+                  aria-hidden="true"
+                />
+                Add Environment
+              </span>
+            </Select.Option>
+          </template>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Item

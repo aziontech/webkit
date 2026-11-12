@@ -1,6 +1,6 @@
 # Version detail
 
-One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`) and its panes scroll on their own.
+One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.
 
 ## When to use
 
@@ -17,9 +17,9 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ## Building blocks
 
-### A. Version switcher — `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
+### A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 
-The trail is the layout's, and its last crumb is the version, a control: the app composes it in the layout's `breadcrumbs` slot (module, resource, then a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`; `shells/console` DetailPage shows the slot). The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
+The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
 The layout hides its breadcrumbs while compact, so the body opens on a row (`md:hidden`, its own `nav` named Breadcrumb) that carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
 
@@ -52,6 +52,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Keep one primary action on the page, in the version bar; the tabs share it.
 - Lock the settings fieldset, not each control one by one, when the version is built.
 - Let the user switch versions from the breadcrumb without going back to the list.
+- Set the trail from the page with `ConsoleLayout.Breadcrumbs`, and mark the root with `data-layout-fill`.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
@@ -60,6 +61,7 @@ An earlier version opened from Version history keeps the page read-only and says
 ## Don't
 
 - Don't let a built version look editable; disable the fieldset and say Read-only.
+- Don't size the body with `calc(100dvh - …)`.
 - Don't put Save or Deploy in the tab row or the page header.
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
@@ -96,7 +98,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The breadcrumb ends on two crumbs, environment then version, each a small `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 
 ## Related
 
