@@ -73,7 +73,7 @@
   )
   const alignment = computed(() => conversation?.alignment.value ?? 'split')
   const busy = computed<boolean>(() => props.state === 'pending' || props.state === 'streaming')
-  const showActions = computed<boolean>(() => props.state === 'complete' && Boolean(slots.actions))
+  const showActions = () => props.state === 'complete' && Boolean(slots.actions)
 
   const body = ref<HTMLElement | null>(null)
 
@@ -188,7 +188,7 @@
         />
       </div>
       <div
-        v-if="showActions"
+        v-if="showActions()"
         :data-testid="`${testId}__actions`"
         class="flex items-center"
       >

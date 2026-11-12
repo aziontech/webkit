@@ -370,9 +370,9 @@
     formatWindowLabel(props.modelValue, props.mode, timezoneValue.value, locale.value)
   )
 
-  const hasPresets = computed(() => props.presets.length > 0 || Boolean(slots['presets']))
+  const hasPresets = () => props.presets.length > 0 || Boolean(slots['presets'])
 
-  const isTwoPart = computed(() => hasPresets.value && !props.period)
+  const isTwoPart = () => hasPresets() && !props.period
   const presetLabel = computed(() => committedPeriodLabel.value || t('calendar.selectPeriod'))
   const rangeText = computed(() => windowLabel.value || placeholderText.value)
 
@@ -485,10 +485,10 @@
           :data-size="size"
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="disabled || null"
-          :data-two-part="isTwoPart || null"
+          :data-two-part="isTwoPart() || null"
           class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[two-part]:w-(--container-xs) motion-reduce:transition-none"
         >
-          <template v-if="isTwoPart">
+          <template v-if="isTwoPart()">
             <button
               ref="presetsTriggerRef"
               type="button"

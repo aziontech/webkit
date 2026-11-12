@@ -135,9 +135,7 @@
     return ''
   }
 
-  const showActions = computed<boolean>(
-    () => state.value !== 'running' && Boolean(slots['actions'])
-  )
+  const showActions = () => state.value !== 'running' && Boolean(slots['actions'])
 </script>
 
 <template>
@@ -291,7 +289,7 @@
     </ul>
 
     <div
-      v-if="(state === 'running' && cancelable) || state === 'failed' || showActions"
+      v-if="(state === 'running' && cancelable) || state === 'failed' || showActions()"
       class="flex flex-wrap items-center justify-end gap-(--spacing-xs)"
     >
       <Button

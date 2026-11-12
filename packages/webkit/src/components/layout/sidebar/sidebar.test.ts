@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/sidebar/default.vue'
 import Resizable from '../../../../examples/sidebar/resizable.vue'
@@ -487,5 +488,27 @@ describe('Sidebar', () => {
         expect(getByTestId('layout-sidebar').style.getPropertyValue('--sidebar-width')).not.toBe('')
       )
     })
+  })
+})
+
+describe('Sidebar slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { Sidebar },
+      setup: () => ({ shown }),
+      template: `<Sidebar><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template><a href="/home">Home</a></Sidebar>`
+    })
+    expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('layout-sidebar__footer')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })

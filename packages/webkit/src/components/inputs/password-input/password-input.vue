@@ -84,8 +84,8 @@
     return rest
   })
 
-  const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
-  const hasIconRight = computed(() => !props.toggleable && Boolean(slots['iconRight']))
+  const hasIconLeft = () => Boolean(slots['iconLeft'])
+  const hasIconRight = () => !props.toggleable && Boolean(slots['iconRight'])
 
   const toggleLabel = computed(() =>
     visible.value ? t('passwordInput.hide') : t('passwordInput.show')
@@ -107,8 +107,8 @@
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
-    :data-has-icon-left="hasIconLeft || null"
-    :data-has-icon-right="hasIconRight || null"
+    :data-has-icon-left="hasIconLeft() || null"
+    :data-has-icon-right="hasIconRight() || null"
     :data-toggleable="toggleable || null"
     :data-visible="visible || null"
     :class="[
@@ -126,7 +126,7 @@
     ]"
   >
     <span
-      v-if="hasIconLeft"
+      v-if="hasIconLeft()"
       class="inline-flex shrink-0 items-center justify-center ps-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
@@ -154,7 +154,7 @@
     />
 
     <span
-      v-if="hasIconRight"
+      v-if="hasIconRight()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >

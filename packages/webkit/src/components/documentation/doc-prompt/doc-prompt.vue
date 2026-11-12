@@ -49,7 +49,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-prompt')
 
-  const hasPrompt = computed(() => Boolean(slots['default']) || props.label.length > 0)
+  const hasPrompt = () => Boolean(slots['default']) || props.label.length > 0
 
   const promptText = ref('')
 
@@ -248,7 +248,7 @@
       </div>
 
       <div
-        v-if="hasPrompt"
+        v-if="hasPrompt()"
         class="flex shrink-0 justify-end"
       >
         <CopyButton

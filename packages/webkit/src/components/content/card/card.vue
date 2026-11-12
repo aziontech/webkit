@@ -77,20 +77,18 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-card')
 
   const isIntegration = computed(() => props.kind === 'integration')
-  const hasHeaderSlot = computed(() => Boolean(slots['header']))
-  const hasHeaderActionSlot = computed(() => Boolean(slots['header-action']))
-  const hasFooterSlot = computed(() => Boolean(slots['footer']))
-  const hasContentSlot = computed(() => Boolean(slots['content']))
-  const hasActionSlot = computed(() => Boolean(slots['action']))
+  const hasHeaderSlot = () => Boolean(slots['header'])
+  const hasHeaderActionSlot = () => Boolean(slots['header-action'])
+  const hasFooterSlot = () => Boolean(slots['footer'])
+  const hasContentSlot = () => Boolean(slots['content'])
+  const hasActionSlot = () => Boolean(slots['action'])
 
-  const showHeaderRegion = computed(
-    () =>
-      hasHeaderSlot.value ||
-      hasHeaderActionSlot.value ||
-      (!isIntegration.value && Boolean(props.title?.trim()))
-  )
+  const showHeaderRegion = () =>
+    hasHeaderSlot() ||
+    hasHeaderActionSlot() ||
+    (!isIntegration.value && Boolean(props.title?.trim()))
 
-  const showDefaultHeader = computed(() => showHeaderRegion.value && !hasHeaderSlot.value)
+  const showDefaultHeader = () => showHeaderRegion() && !hasHeaderSlot()
 
   const rootClasses = computed(() =>
     cn(
@@ -125,15 +123,15 @@
     :data-testid="testId"
   >
     <header
-      v-if="showHeaderRegion"
+      v-if="showHeaderRegion()"
       :class="headerClasses"
       :data-testid="`${testId}__header`"
     >
       <slot
-        v-if="hasHeaderSlot"
+        v-if="hasHeaderSlot()"
         name="header"
       />
-      <template v-else-if="showDefaultHeader">
+      <template v-else-if="showDefaultHeader()">
         <h2
           v-if="title && !isIntegration"
           :class="titleClasses"
@@ -142,7 +140,7 @@
           {{ title }}
         </h2>
         <div
-          v-if="hasHeaderActionSlot"
+          v-if="hasHeaderActionSlot()"
           class="ms-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
           :data-testid="`${testId}__header-action`"
         >
@@ -211,11 +209,11 @@
           </div>
         </div>
         <slot
-          v-if="hasContentSlot"
+          v-if="hasContentSlot()"
           name="content"
         />
         <div
-          v-if="installed || badges.length || hasActionSlot"
+          v-if="installed || badges.length || hasActionSlot()"
           class="mt-auto flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
         >
           <Tag
@@ -234,7 +232,7 @@
             size="small"
           />
           <div
-            v-if="hasActionSlot"
+            v-if="hasActionSlot()"
             class="relative z-[1] ms-auto"
             :data-testid="`${testId}__action`"
           >
@@ -243,13 +241,13 @@
         </div>
       </div>
       <slot
-        v-else-if="hasContentSlot"
+        v-else-if="hasContentSlot()"
         name="content"
       />
     </div>
 
     <footer
-      v-if="hasFooterSlot"
+      v-if="hasFooterSlot()"
       :class="footerClasses"
       :data-testid="`${testId}__footer`"
     >

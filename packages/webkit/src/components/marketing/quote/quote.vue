@@ -53,7 +53,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote')
 
-  const hasMark = computed<boolean>(() => Boolean(slots.mark) || props.logo.length > 0)
+  const hasMark = () => Boolean(slots.mark) || props.logo.length > 0
 
   const hasAttribution = computed<boolean>(() => props.name.length > 0 || props.jobTitle.length > 0)
 
@@ -88,7 +88,7 @@
     class="group m-0 flex flex-col data-[kind=inline]:gap-(--spacing-lg) data-[kind=signed]:gap-(--spacing-sm) data-[kind=highlight]:gap-(--spacing-xl) data-[kind=highlight]:md:grid data-[kind=highlight]:md:grid-cols-1 data-[kind=highlight]:md:grid-rows-1"
   >
     <div
-      v-if="hasMark"
+      v-if="hasMark()"
       class="group-data-[kind=inline]:flex group-data-[kind=inline]:h-6 group-data-[kind=inline]:items-center group-data-[kind=signed]:pb-(--spacing-md) group-data-[kind=highlight]:md:col-start-2 group-data-[kind=highlight]:md:row-start-1 group-data-[kind=highlight]:md:w-72 group-data-[kind=highlight]:md:pt-[calc(1.5rem+var(--spacing-md))]"
     >
       <slot name="mark">

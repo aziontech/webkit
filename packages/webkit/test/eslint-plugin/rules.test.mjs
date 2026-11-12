@@ -794,6 +794,20 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
           '/** Size token. */ export type Size = "small" | "large"; interface Props { /** Visual variant. */ kind?: string; size?: Size } defineProps<Props>(); defineEmits<{ /** Fired on activation. */ click: [event: MouseEvent] }>()'
         ),
         filename: 'c.vue'
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Aside. */ aside(): unknown }>(); const slots = useSlots(); const hasAside = () => Boolean(slots.aside); const label = computed<string>(() => 'x')",
+          '<div v-if="hasAside()"><slot name="aside" /></div>'
+        ),
+        filename: 'i.vue'
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Cells. */ default(): unknown }>(); const slots = useSlots(); const cells = computed(() => slots.default?.() ?? [])",
+          '<div><slot /></div>'
+        ),
+        filename: 'j.vue'
       }
     ],
     invalid: [
@@ -824,6 +838,17 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
         ),
         filename: 'h.vue',
         errors: [{ messageId: 'computed-slot-presence' }]
+      },
+      {
+        code: sfc(
+          "import { computed, useSlots } from 'vue'; defineSlots<{ /** Media. */ media(): unknown; /** Body. */ default(): unknown }>(); const slots = useSlots(); const hasMedia = computed<boolean>(() => Boolean(slots.media)); const hasBody = computed<Record<string, boolean>>(\n  () => ({ body: !!slots['default'] })\n)",
+          '<div><slot name="media" /><slot /></div>'
+        ),
+        filename: 'k.vue',
+        errors: [
+          { messageId: 'computed-slot-presence', line: 1 },
+          { messageId: 'computed-slot-presence', line: 1 }
+        ]
       },
       {
         code: sfc('const a = 1 // explains a', '<div><!-- explains the div --></div>'),

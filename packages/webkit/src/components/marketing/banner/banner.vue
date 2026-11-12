@@ -33,7 +33,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-banner')
 
-  const hasAside = computed<boolean>(() => Boolean(slots.aside) || props.description.length > 0)
+  const hasAside = () => Boolean(slots.aside) || props.description.length > 0
 </script>
 
 <template>
@@ -62,7 +62,7 @@
       </div>
 
       <div
-        v-if="hasAside"
+        v-if="hasAside()"
         class="bg-(--bg-surface-raised) p-(--spacing-xxl) md:basis-1/3 md:shrink-0"
       >
         <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">

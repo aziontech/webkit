@@ -236,3 +236,37 @@ describe('PromptInput', () => {
     })
   })
 })
+
+describe('PromptInput slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId, container } = render({
+      components: { PromptInput },
+      setup: () => ({ shown }),
+      template: `<PromptInput aria-label="Message"><template v-if="shown" #hint><span data-testid="probe">Slotted</span></template></PromptInput>`
+    })
+    expect(
+      (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
+        queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+      )
+    ).toBe(false)
+
+    shown.value = true
+    await nextTick()
+    expect(
+      (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
+        queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+      )
+    ).toBe(true)
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(
+      (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
+        queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+      )
+    ).toBe(false)
+    expect(queryByTestId('probe')).toBeNull()
+  })
+})

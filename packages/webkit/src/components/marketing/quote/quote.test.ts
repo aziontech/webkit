@@ -1,5 +1,6 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Quote from './quote.vue'
@@ -213,5 +214,27 @@ describe('Quote', () => {
     const { container } = render(Quote, { props: { ...props, kind: 'highlight', logo } })
 
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('Quote slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { Quote },
+      setup: () => ({ shown }),
+      template: `<Quote text="Fast."><template v-if="shown" #mark><span data-testid="probe">Slotted</span></template></Quote>`
+    })
+    expect(queryByTestId('probe')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('probe')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('probe')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })

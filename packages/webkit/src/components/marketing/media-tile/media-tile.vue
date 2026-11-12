@@ -53,11 +53,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tile'
   )
 
-  const hasMedia = computed<boolean>(() => Boolean(slots.media) || props.src.length > 0)
+  const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const mediaStyle = computed(() =>
     props.mediaScale === 1 ? undefined : { scale: String(props.mediaScale) }
@@ -69,8 +67,8 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    :data-media="hasMedia || null"
-    :data-described="hasDescription || null"
+    :data-media="hasMedia() || null"
+    :data-described="hasDescription() || null"
     :data-padded="padded || null"
     class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[kind=plain]:bg-(--bg-canvas)"
   >
@@ -106,7 +104,7 @@
       class="m-0 text-pretty text-body-md text-(--text-muted) data-[kind=plain]:px-(--spacing-lg) data-[kind=plain]:pb-(--spacing-lg)"
     >
       <strong class="font-medium text-(--text-default)">{{ title }}</strong>
-      <template v-if="hasDescription"
+      <template v-if="hasDescription()"
         >{{ ' ' }}<slot>{{ description }}</slot></template
       >
     </figcaption>

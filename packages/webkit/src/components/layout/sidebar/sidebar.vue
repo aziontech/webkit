@@ -182,7 +182,7 @@
     props.collapsible ? 'w-full shrink-0' : 'w-full shrink-0 px-(--spacing-md) pb-(--spacing-md)'
   )
 
-  const footerBandClass = computed(() =>
+  const footerBandClass = () =>
     props.collapsible
       ? cn(
           'flex h-14 items-center gap-(--spacing-xs)',
@@ -190,15 +190,13 @@
           !slots['footer'] ? 'justify-end' : undefined
         )
       : undefined
-  )
 
-  const scrollClass = computed(() =>
+  const scrollClass = () =>
     cn(
       'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
       'scroll-py-(--spacing-xxs)',
       slots['header'] ? 'pt-(--spacing-xxs)' : undefined
     )
-  )
 </script>
 
 <template>
@@ -244,7 +242,7 @@
         :data-testid="`${testId}__nav`"
       >
         <ScrollArea
-          :class="scrollClass"
+          :class="scrollClass()"
           tabindex="-1"
           fade
           :data-testid="`${testId}__scroll`"
@@ -257,7 +255,7 @@
         :class="footerRegionClass"
         :data-testid="`${testId}__footer`"
       >
-        <div :class="footerBandClass">
+        <div :class="footerBandClass()">
           <div
             v-if="$slots['footer']"
             :class="collapsible ? 'min-w-0 flex-1' : undefined"

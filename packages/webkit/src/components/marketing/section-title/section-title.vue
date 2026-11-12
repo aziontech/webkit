@@ -58,9 +58,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-title'
   )
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
@@ -100,7 +98,7 @@
             {{ title }}
           </h2>
           <p
-            v-if="hasDescription"
+            v-if="hasDescription()"
             class="m-0 self-start text-pretty text-heading-sm text-(--text-muted) md:col-start-3 md:group-data-[description-width=wide]:col-span-2 md:group-data-[description-width=wide]:col-start-2 md:group-data-[description-width=wide]:max-w-(--container-xl) md:group-data-[description-width=wide]:justify-self-end"
           >
             <slot>{{ description }}</slot>
@@ -124,7 +122,7 @@
           {{ title }}
         </h2>
         <p
-          v-if="hasDescription"
+          v-if="hasDescription()"
           class="m-0 text-pretty text-heading-sm text-(--text-muted)"
         >
           <slot>{{ description }}</slot>

@@ -114,11 +114,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
   )
 
-  const hasMedia = computed<boolean>(() => Boolean(slots.media) || props.src.length > 0)
+  const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const isMediaLink = computed<boolean>(() => props.mediaHref.length > 0)
 
@@ -160,7 +158,7 @@
     :data-fill="fill"
     :data-media-fill="mediaFill"
     :data-size="size"
-    :data-media="hasMedia || null"
+    :data-media="hasMedia() || null"
     :data-divided="divided || null"
     :data-media-padded="mediaPadded || null"
     :data-media-href="isMediaLink || null"
@@ -205,7 +203,7 @@
               </component>
 
               <p
-                v-if="hasDescription"
+                v-if="hasDescription()"
                 class="m-0 text-pretty text-(--text-muted) group-data-[size=medium]/split:text-body-md group-data-[size=large]/split:text-body-lg"
               >
                 <slot>{{ description }}</slot>
@@ -225,7 +223,7 @@
 
         <component
           :is="cellFrame"
-          v-if="hasMedia"
+          v-if="hasMedia()"
           v-bind="cellFrameProps"
           :data-testid="`${testId}__media-cell`"
           class="min-w-0"

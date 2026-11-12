@@ -470,6 +470,38 @@ group('hook: validate-authoring.mjs comments', () => {
   })
 })
 
+group('hook: validate-authoring.mjs slot presence', () => {
+  const write = (content) =>
+    runHook('.claude/hooks/validate-authoring.mjs', {
+      tool_name: 'Write',
+      tool_input: {
+        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.vue'),
+        content
+      }
+    })
+  const sfc = (presence) =>
+    [
+      '<script setup lang="ts">',
+      "  import { computed, useSlots } from 'vue'",
+      '  defineSlots<{',
+      '    /** Media. */',
+      '    media(): unknown',
+      '  }>()',
+      '  const slots = useSlots()',
+      `  ${presence}`,
+      '</script>',
+      '<template><div v-if="hasMedia"><slot name="media" /></div></template>'
+    ].join('\n')
+  test('typed computed reading slot presence blocks (exit 2)', () => {
+    const r = write(sfc('const hasMedia = computed<boolean>(() => Boolean(slots.media))'))
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('computed-slot-presence'), 'names the check')
+  })
+  test('render-time slot presence passes (exit 0)', () => {
+    assertEqual(write(sfc('const hasMedia = () => Boolean(slots.media)')).code, 0)
+  })
+})
+
 group('hook: validate-authoring.mjs built-in strings', () => {
   const write = (rel, content) =>
     runHook('.claude/hooks/validate-authoring.mjs', {
