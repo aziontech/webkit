@@ -1218,6 +1218,14 @@
       "types": "./types/components/layout/app-layout/app-layout.vue.d.ts",
       "default": "./src/components/layout/app-layout/app-layout.vue"
     },
+    "./console-layout": {
+      "types": "./types/components/layout/console-layout/console-layout.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout.vue"
+    },
+    "./use-console-layout": {
+      "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
+      "default": "./src/components/layout/console-layout/composables/use-console-layout.ts"
+    },
     "./board": {
       "types": "./types/components/layout/board/index.d.ts",
       "default": "./src/components/layout/board/index.ts"

@@ -1151,6 +1151,33 @@ export const docAgentCard = {
   action: 'Agent setup'
 } as const
 
+export const consoleLayout = {
+  navigation: 'Main navigation',
+  home: 'Azion home',
+  openNavigation: 'Open navigation',
+  accountMenu: 'Account menu',
+  searchPlaceholder: 'Search pages and commands',
+  searchEmpty: 'No page or command matches your search.',
+  pages: 'Pages'
+} as const
+
+export const docLayout = {
+  navigation: 'Documentation',
+  sections: 'Documentation sections',
+  home: 'Azion Docs home',
+  badge: 'Docs',
+  openNavigation: 'Open documentation navigation',
+  search: 'Search docs',
+  searchEmpty: 'No page matches your search.',
+  pages: 'Pages'
+} as const
+
+export const siteLayout = {
+  searchPlaceholder: 'Search the site',
+  searchEmpty: 'No page matches your search.',
+  pages: 'Pages'
+} as const
+
 export const en = {
   actionConfirmation,
   aiLoading,
@@ -1180,6 +1207,7 @@ export const en = {
   collectionPreferences,
   combobox,
   command,
+  consoleLayout,
   comparisonTable,
   confirmDialog,
   conversation,
@@ -1193,6 +1221,7 @@ export const en = {
   dateRangePicker,
   dialog,
   docFrame,
+  docLayout,
   docOnThisPage,
   docPageHeader,
   docPagination,
@@ -1242,6 +1271,7 @@ export const en = {
   severityTag,
   sidebar,
   siteFooter,
+  siteLayout,
   siteNav,
   sources,
   splitButton,
