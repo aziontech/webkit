@@ -3,6 +3,7 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
+import NavigationExpandedExample from '../../../../examples/console-layout/navigation-expanded.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CommandGroup from '../../overlay/command/command-group/command-group.vue'
 import CommandItem from '../../overlay/command/command-item/command-item.vue'
@@ -329,5 +330,56 @@ describe('ConsoleLayout', () => {
     const { container, getByRole } = mount({}, { dir: 'rtl' })
     expect(getByRole('main')).toBeTruthy()
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('ConsoleLayout — navigation rail state', () => {
+  const rail = (view: ReturnType<typeof render>) =>
+    view.getByTestId('layout-console-layout__navigation')
+
+  it('renders the rail expanded by default', () => {
+    const view = mount()
+    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+  })
+
+  it('collapses the rail when navigationExpanded is false', () => {
+    const view = mount({ navigationExpanded: false })
+    expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
+  })
+
+  it('emits update:navigationExpanded when the rail collapses itself', async () => {
+    const onExpanded = vi.fn()
+    const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
+    await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
+    expect(onExpanded).toHaveBeenCalledWith(false)
+    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+  })
+
+  it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {
+    const view = render(
+      defineComponent({
+        render: () => h('div', { style: { width: '1200px' } }, [h(NavigationExpandedExample)])
+      })
+    )
+    await waitFor(() => rail(view))
+    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+
+    await userEvent.click(
+      within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+        name: /search/i
+      })
+    )
+    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+    await userEvent.click(within(dialog).getByText('Collapse sidebar'))
+    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+
+    await userEvent.click(
+      within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+        name: /search/i
+      })
+    )
+    const reopened = await waitFor(() => within(document.body).getByRole('dialog'))
+    await userEvent.click(within(reopened).getByText('Expand sidebar'))
+    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
   })
 })
