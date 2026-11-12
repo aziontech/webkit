@@ -17,6 +17,7 @@
  "bestPractices": [
   "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
   "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.",
   "Group related actions with `<Command.Group heading=\"…\">` and separate distinct sections with `<Command.Separator>`."
  ]
 }

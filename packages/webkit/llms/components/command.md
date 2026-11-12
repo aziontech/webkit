@@ -16,6 +16,7 @@
 
 - Write items as Title Case verb phrases describing an action ("Deploy Project"), not navigation labels.
 - Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 - Group related actions with `<Command.Group heading="…">` and separate distinct sections with `<Command.Separator>`.
 
 ## Don’t
@@ -35,16 +36,15 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `dismissible` | `boolean` | `true` | false | When true, backdrop click and Escape close the palette. |
 | `shortcut` | `string` | `'meta+k'` | false | Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms. |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled item is activated (click or `Enter`). `event` is the activation event; `value` is the item's identifier. The palette closes automatically and focus returns to the element that was focused before opening. |
 
 ## Slots
@@ -108,6 +108,12 @@ packages/webkit/src/components/overlay/command/
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                           |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`. |
 
 ## States
 

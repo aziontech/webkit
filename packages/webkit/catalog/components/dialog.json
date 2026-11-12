@@ -14,6 +14,7 @@
  ],
  "bestPractices": [
   "Trap focus, restore it on close, and close on Escape and overlay click.",
-  "One clear primary action; keep the body scannable."
+  "One clear primary action; keep the body scannable.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ]
 }

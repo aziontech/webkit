@@ -15,6 +15,7 @@
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
 - Trap focus while open and provide an obvious close affordance.
+- Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Don’t
 
@@ -35,7 +36,7 @@
 | `dismissible` | `boolean` | `true` | false | When true, overlay click and Escape close the drawer. |
 | `side` | `DrawerSide` | `'right'` | false | Edge the drawer panel slides from. |
 | `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
-| `open` | `boolean \| undefined` | `undefined` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -65,9 +66,9 @@
 
 ## v-model
 
-| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                    |
-| -------------- | ---------------------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Controlled open state through `defineModel('open')`, the single declaration of `open`, so `@update:open` carries the model type `boolean | undefined`(the`undefined`of an unbound model; a transition always sends a boolean), as on`dialog`and`popover`. Fires once per transition. While unbound the drawer is uncontrolled and starts at `defaultOpen`. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                        |
+| -------------- | --------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Controlled open state through `defineModel('open')`, the single declaration of `open`, so `@update:open` is typed `(value: boolean) => void`, as on `dialog` and `popover`. Fires once per transition. While unbound the drawer is uncontrolled and starts at `defaultOpen`. |
 
 ## States
 

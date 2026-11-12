@@ -32,16 +32,10 @@
  ],
  "bestPractices": [
   "Trap focus, restore it on close, and close on Escape and overlay click.",
-  "One clear primary action; keep the body scannable."
+  "One clear primary action; keep the body scannable.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ],
  "props": [
-  {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open`."
-  },
   {
    "name": "defaultOpen",
    "type": "boolean",
@@ -62,15 +56,16 @@
    "default": "'medium'",
    "required": "false",
    "doc": "Panel max-width preset passed to the inner Panel."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:open",
-   "payload": "value: boolean",
-   "notes": "v-model:open."
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "default",

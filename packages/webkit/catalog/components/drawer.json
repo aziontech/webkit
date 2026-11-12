@@ -14,6 +14,7 @@
  ],
  "bestPractices": [
   "Pick the edge (side) intentionally and keep it consistent across the app.",
-  "Trap focus while open and provide an obvious close affordance."
+  "Trap focus while open and provide an obvious close affordance.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ]
 }

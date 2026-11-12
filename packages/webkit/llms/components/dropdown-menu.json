@@ -35,16 +35,10 @@
   "Give every `DropdownMenu.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.",
   "selected` is a display flag. The dropdown never sets it, so derive it from your own state.",
   "Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.",
-  "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list."
+  "Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ],
  "props": [
-  {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
-  },
   {
    "name": "placement",
    "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
@@ -65,14 +59,16 @@
    "default": "false",
    "required": "false",
    "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [
-  {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": "Fires on every open/closed transition; supports `v-model:open`."
-  },
   {
    "name": "select",
    "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",

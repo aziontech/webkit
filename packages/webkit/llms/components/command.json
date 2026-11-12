@@ -34,16 +34,10 @@
  "bestPractices": [
   "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
   "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.",
   "Group related actions with `<Command.Group heading=\"…\">` and separate distinct sections with `<Command.Separator>`."
  ],
  "props": [
-  {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
-  },
   {
    "name": "defaultOpen",
    "type": "boolean",
@@ -64,14 +58,16 @@
    "default": "'meta+k'",
    "required": "false",
    "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [
-  {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": "Fires on every open/closed transition; supports `v-model:open`."
-  },
   {
    "name": "select",
    "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",

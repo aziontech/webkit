@@ -13627,13 +13627,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
-    },
-    {
      "name": "placement",
      "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
      "default": "'bottom-start'",
@@ -13653,14 +13646,16 @@
      "default": "false",
      "required": "false",
      "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`."
-    },
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
@@ -13698,13 +13693,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the component is uncontrolled."
-    },
-    {
      "name": "placement",
      "type": "'auto' | 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
      "default": "'bottom-start'",
@@ -13724,14 +13712,16 @@
      "default": "false",
      "required": "false",
      "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`."
-    },
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
@@ -18254,26 +18244,21 @@
      "doc": "Disables tooltip activation."
     },
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open`."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
      "required": "false",
      "doc": "Initial open state when uncontrolled."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "v-model:open. Fires on open and close."
-    },
     {
      "name": "show",
      "payload": "void",
@@ -18314,13 +18299,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -18340,14 +18318,16 @@
      "default": "'meta+k'",
      "required": "false",
      "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`."
-    },
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
@@ -18375,13 +18355,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open` or `@update:open`. When omitted, the palette is uncontrolled."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -18401,14 +18374,16 @@
      "default": "'meta+k'",
      "required": "false",
      "doc": "Global `'+'`-delimited keyboard shortcut that toggles the palette open (e.g. `'meta+k'`); matched against Ctrl on non-macOS platforms."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires on every open/closed transition; supports `v-model:open`."
-    },
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
@@ -18492,13 +18467,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open`."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -18518,13 +18486,13 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Panel max-width preset passed to the inner Panel."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:open",
-     "payload": "value: boolean",
-     "notes": "v-model:open."
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -18747,8 +18715,8 @@
     },
     {
      "name": "open",
-     "type": "boolean | undefined",
-     "default": "undefined",
+     "type": "boolean",
+     "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }

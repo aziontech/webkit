@@ -119,7 +119,7 @@ element instead of three.
   - Slots: `default` — the group's rows; `label` — replaces the header text.
 - `menu-sub/menu-sub.vue` — The `<li>` that owns a row plus that row's children. Provides the sub context (open state, generated trigger/content ids, nesting level derived from any ancestor sub) so its trigger and content need no wiring.
   - Props: `defaultOpen?: boolean` (default `false` — initial state when uncontrolled; ignored for `kind="drill"`, whose visibility is the root's stack).
-  - Model: `open` — `boolean | undefined`, default `undefined` (controlled via `v-model:open`).
+  - Model: `open` — `boolean`, default `undefined` (unbound: uncontrolled, starts at `defaultOpen`). Controlled via `v-model:open`; `@update:open` is typed `(value: boolean) => void`.
   - Slots: `default` — exactly one `SubTrigger` and one `SubContent`.
 - `menu-sub-trigger/menu-sub-trigger.vue` — The row that owns children, and a **heading for them**.
   - **Geometry matches `Menu.Item` exactly** — height, padding (including `py`), gap, 32 px icon box, glyph size, and the unset root font-size that sizes that glyph — so its icon and label columns line up with the leaves around it.
