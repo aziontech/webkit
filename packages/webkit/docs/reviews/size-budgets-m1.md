@@ -388,4 +388,4 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 
 | Entry   | Budget before | Measured now | New budget | Note                                                                                               |
 | ------- | ------------- | ------------ | ---------- | -------------------------------------------------------------------------------------------------- |
-| diagram | 10            | 10.05        | 10.3       | Raised: stacked rows centre their nodes; connectors run centre to centre with an orthogonal route. |
+| diagram | 10            | 10.11        | 10.3       | Raised: stacked rows centre their nodes; connectors run centre to centre with an orthogonal route. |
