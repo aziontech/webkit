@@ -48,7 +48,9 @@
       const load = name ? resolveIllustrationAsset(name) : null
       if (!load) {
         if (name) {
-          console.warn(`[webkit] <Illustration>: no asset registered under name "${name}".`)
+          console.warn(
+            `[webkit] <Illustration>: no scene named "${name}"; rendering the placeholder. The names are listed in llms/foundations/illustrations.md and by the MCP tool list_assets.`
+          )
         }
         paint(loadIllustrationPlaceholder)
           .then((painted) => {
@@ -82,6 +84,13 @@
 
   const viewBox = computed(() => scene.value?.viewBox || '0 0 592 300')
 
+  const frame = computed(() => {
+    const [, , width, height] = viewBox.value.split(/[\s,]+/).map(Number)
+    return placeheld.value || !(width > 0 && height > 0)
+      ? { width: 592, height: 300 }
+      : { width, height }
+  })
+
   const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
 
   const testId = computed(
@@ -105,8 +114,8 @@
     :aria-hidden="decorative || undefined"
     :data-testid="testId"
     :data-placeholder="placeheld || undefined"
-    width="592"
-    height="300"
+    :width="frame.width"
+    :height="frame.height"
     fill="none"
     class="block h-auto w-full"
     v-bind="passthroughAttrs"

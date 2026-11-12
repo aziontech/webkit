@@ -9,7 +9,7 @@
     },
     {
       "name": "Assets",
-      "summary": "Every registered scene. These are the only values `name` accepts — a drawing that is not here has to be exported from Figma first.",
+      "summary": "Every registered scene: one per drawing in the illustration folder. These are the only values `name` accepts (the same list is in `llms/foundations/illustrations.md` and the MCP tool `list_assets`); a drawing that is not here has to be exported from Figma first.",
       "file": "assets.vue"
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "name": "Files",
-      "summary": "Drawings that are not registered scenes ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image.",
+      "summary": "The drawings a section shows as a picture also ship as files. Import one by its final name from `@aziontech/webkit/assets/` — the folder it lives in is not part of the path, so the file can move without breaking the import — and render it as an image where an inline, theme-following scene is not wanted.",
       "file": "files.vue"
     }
   ]

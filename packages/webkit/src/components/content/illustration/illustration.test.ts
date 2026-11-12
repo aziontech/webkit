@@ -64,6 +64,11 @@ const drawnFixture = async (style: string, body: string) => {
 
 const UNPAINTED = 'mask, clipPath, filter'
 
+const shippedDrawings = Object.keys(import.meta.glob('../../../assets/illustrations/*.svg'))
+  .map((path) => path.split('/').pop()!.replace(/\.svg$/, ''))
+  .filter((name) => name !== 'placeholder')
+  .sort()
+
 describe('Illustration', () => {
   it('renders the story with the derived testid', async () => {
     expect(await root(render(Default))).toBeTruthy()
@@ -195,6 +200,27 @@ describe('Illustration', () => {
     expect(el.getAttribute('height')).toBe('300')
   })
 
+  it('registers every drawing that ships in the illustration folder, and nothing else', () => {
+    expect([...illustrationAssetNames]).toEqual(shippedDrawings)
+  })
+
+  it('declares the canvas a tile was drawn on once it loads', async () => {
+    const view = render(Illustration, { props: { name: 'usage-chart' } })
+    await drawsScene(view, await sceneOf('usage-chart'))
+    const el = await root(view)
+    expect(el.getAttribute('viewBox')).toBe('0 0 170 128')
+    expect(el.getAttribute('width')).toBe('170')
+    expect(el.getAttribute('height')).toBe('128')
+  })
+
+  it('keeps the 592 by 300 canvas for the placeholder', async () => {
+    const view = render(Illustration)
+    await drawsScene(view, await placeholderScene())
+    const el = await root(view)
+    expect(el.getAttribute('width')).toBe('592')
+    expect(el.getAttribute('height')).toBe('300')
+  })
+
   it('falls back to the placeholder when name is empty', async () => {
     const view = render(Illustration)
     await drawsScene(view, await placeholderScene())
@@ -211,6 +237,7 @@ describe('Illustration', () => {
     await drawsScene(view, await placeholderScene())
     expect((await root(view)).getAttribute('data-placeholder')).toBe('true')
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('not-a-real-scene'))
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('list_assets'))
     warn.mockRestore()
   })
 
