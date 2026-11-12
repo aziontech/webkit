@@ -12,7 +12,7 @@
 
 console header; app header; resource header; header with breadcrumb; header with search and avatar; platform top bar; signed-in header; cabeçalho do console; cabeçalho da plataforma; barra superior do app
 
-The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (a single unlinked crumb at the first level, the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.
+The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (no breadcrumb at the first level, where the rail's active row already says it; the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.
 
 ## When to use
 
@@ -52,7 +52,7 @@ Inside a button labelled `Account settings`, always last.
 
 ### G. Location — `Breadcrumb` (required)
 
-Shows from `md`, on every level. First level: one crumb, the module, with no link (`Applications`). Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
+Shows from `md`, from the second level on. First level: no breadcrumb — the rail's active row names the module and the page opens on its own `PageHeader`; an empty trail, never a single crumb. Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
 ### H. Search — `SearchTrigger` (required)
 
@@ -88,7 +88,7 @@ Names every icon-only control: the navigation trigger, and Create and Agent belo
 
 ## States
 
-- FirstLevel: a module page the rail routes to; one unlinked crumb names the module (`Applications`).
+- FirstLevel: a module page the rail routes to; no breadcrumb (the rail's active row names the module).
 - SecondLevel: a resource inside a module; the breadcrumb names the module and the resource from `md`, last crumb unlinked.
 
 ## Related

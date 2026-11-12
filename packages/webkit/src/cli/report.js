@@ -8,6 +8,8 @@ import { loadCatalog } from '../eslint-plugin/catalog.js'
 export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
+  'no-viewport-height-calc':
+    'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
   'no-root-relative-asset':
     'site-only /marketing-components or /media URL a copied app does not serve',
   'valid-import-path': 'import path that does not exist in the installed version',

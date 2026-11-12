@@ -26728,7 +26728,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "FirstLevel",
-   "guidelinesSummary": "The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (a single unlinked crumb at the first level, the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.",
+   "guidelinesSummary": "The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (no breadcrumb at the first level, where the rail's active row already says it; the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.",
    "variants": [
     {
      "name": "SecondLevel",
