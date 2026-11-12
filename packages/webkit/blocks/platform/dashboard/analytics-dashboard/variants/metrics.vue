@@ -645,6 +645,7 @@
             class="flex min-w-0 flex-col"
           >
             <StatTile
+              kind="sans"
               :label="tile.label"
               :value="tile.value"
               :format-value="formatters[tile.format]"

@@ -23,7 +23,7 @@ The page where people find something made by Azion or a partner and add it to wh
 
 ### B. Item kinds — `Tabs` (required)
 
-`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
+`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
 
 ### C. Featured — `Card` (required)
 

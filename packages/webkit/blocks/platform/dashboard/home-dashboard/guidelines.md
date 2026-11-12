@@ -39,7 +39,9 @@ navigation groups, `Actions` and `Account`. On a new account it is also what the
 
 ### D. Navigation — `Menu` (required)
 
-The grouped navigation items inside the rail, and the account row at its foot.
+The grouped navigation items inside the rail, and the account row at its foot. Each node's destination
+is `href` (never `path`, which is the drill stack); `@navigate` calls `event.preventDefault()` on a
+plain click and routes in the app, so the rows stay real links.
 
 ### E. Account identity — `Avatar` (required)
 
@@ -87,15 +89,18 @@ The header search, first in the end cluster: the field (`Search` with the ⌘K /
 `Agent` in the header, the one emphasized entry to the coding agent. Only one highlighted button per
 screen.
 
-### O. Usage band — `StatTile` (required)
+### O. Usage band — `StatTileGroup`, `StatTile` (required)
 
-Four chartless tiles in an aside labelled `Usage`, each with value, unit and delta. Beside them, the
-dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest belongs on
-a dashboard.
+Four chartless tiles joined in one `StatTileGroup` card (the group draws the surface and the dividers),
+in an aside labelled `Usage`, each with a numeric `value`, a unit and a numeric `delta`. Beside them,
+the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
+belongs on a dashboard.
 
 ### P. Agent onboarding — `Card` (optional)
 
-A whole-card button: the agent marks, `Set up your coding agent` and one sentence. Its dismiss
+A whole-card button: the agent marks, `Set up your coding agent` and one sentence. A mono mark is a
+CSS mask whose `url('…')` is quoted: the build inlines the SVG as a `data:` URI, and unquoted it breaks
+the declaration and the mark renders as a solid square. Its dismiss
 `IconButton` sits outside the button so the two actions never nest.
 
 ### Q. Resource rows — `Item` (required)
@@ -131,6 +136,9 @@ The labelled panel (`Navigation`) that contains the `Sidebar`.
 
 - Don't add charts to Home; link to the dashboard that has them.
 - Don't put more than four usage tiles in the band.
+- Don't hand-build the band's card, grid or dividers around the tiles; `StatTileGroup` draws them.
+- Don't pass figures as strings or flags as `'true'` / `'false'`: a tile's `value` and `delta` are
+  numbers, and the string `'false'` is truthy.
 - Don't nest the dismiss button inside the card's button.
 - Don't show a second highlighted button next to `Agent`.
 

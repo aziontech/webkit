@@ -277,7 +277,7 @@
 
       <div class="layout-section-start">
         <Tabs.Root v-model="activeTab">
-          <Tabs.List>
+          <Tabs.List align="center">
             <Tabs.Item
               value="integrations"
               label="Integrations"

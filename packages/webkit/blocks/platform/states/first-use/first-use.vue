@@ -7,8 +7,8 @@
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Input from '@aziontech/webkit/input'
+  import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
 
@@ -97,6 +97,8 @@
                         class="w-full"
                         aria-label="Via CLI command"
                         readonly
+                        monospace
+                        :spellcheck="false"
                       />
                     </div>
                     <CopyButton
@@ -222,7 +224,7 @@
                 <span
                   v-if="agent.mono"
                   class="size-(--size-4) shrink-0 bg-current text-(--text-default) mask-(--agent-mark) mask-contain mask-center mask-no-repeat"
-                  :style="{ '--agent-mark': 'url(' + agent.src + ')' }"
+                  :style="{ '--agent-mark': `url('${agent.src}')` }"
                 />
                 <img
                   v-else

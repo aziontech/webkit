@@ -93,7 +93,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - Don't add a `PageHeader` above the card; the toolbar is the header.
 - Don't split Upload file and Add folder into two primary buttons.
 - Don't give the `..` row a row menu, a size or an author.
-- Don't let the table scroll the page sideways; narrow widths stack the rows.
+- Don't let the table scroll the page sideways; on a phone the grid scrolls sideways inside its card, never the page.
 - Don't replace the toolbar with a full-page empty state when a folder is empty; only the table area changes.
 - Don't block the page with a modal progress dialog while files upload or move.
 - Don't offer View deployments, Edit or Redeploy after a storage transfer; nothing is deployed.
