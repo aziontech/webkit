@@ -2,6 +2,12 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import StoryLibrary from '@aziontech/webkit/story-library'
+  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
+  import marisaExtendedReversed from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
+  import panvelExtendedReversed from '@aziontech/webkit/assets/panvel-extended-reversed.svg'
 
   const items = [
     {
@@ -9,7 +15,7 @@
       href: '/site/success-cases/gpa',
       client: {
         name: 'GPA',
-        logo: '/marketing-components/logos/gpa-extended-reversed.svg'
+        logo: gpaExtendedReversed
       },
       category: 'Retail',
       description:
@@ -25,7 +31,7 @@
       href: '/site/success-cases/axur',
       client: {
         name: 'Axur',
-        logo: '/marketing-components/logos/axur-extended-reversed.svg'
+        logo: axurExtendedReversed
       },
       category: 'Tech',
       description:
@@ -41,7 +47,7 @@
       href: '/site/success-cases/exame',
       client: {
         name: 'Exame',
-        logo: '/marketing-components/logos/exame-extended-reversed.svg'
+        logo: exameExtendedReversed
       },
       category: 'Media',
       description:
@@ -57,7 +63,7 @@
       href: '/site/success-cases/fourbank',
       client: {
         name: 'Fourbank',
-        logo: '/marketing-components/logos/fourbank-extended-reversed.svg'
+        logo: fourbankExtendedReversed
       },
       category: 'Tech',
       description:
@@ -73,7 +79,7 @@
       href: '/site/success-cases/panvel',
       client: {
         name: 'Panvel',
-        logo: '/marketing-components/logos/panvel-extended-reversed.svg'
+        logo: panvelExtendedReversed
       },
       category: 'Retail',
       description:
@@ -89,7 +95,7 @@
       href: '/site/success-cases/marisa',
       client: {
         name: 'Marisa',
-        logo: '/marketing-components/logos/marisa-extended-reversed.svg'
+        logo: marisaExtendedReversed
       },
       category: 'Retail',
       description:
