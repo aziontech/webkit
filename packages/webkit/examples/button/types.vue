@@ -24,5 +24,9 @@
       kind="danger"
       label="Button"
     />
+    <Button
+      kind="link"
+      label="Link button"
+    />
   </div>
 </template>
