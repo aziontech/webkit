@@ -37,6 +37,10 @@
    "canvas": "592x300"
   },
   {
+   "name": "azion-to-commerce-tiles",
+   "canvas": "592x300"
+  },
+  {
    "name": "azion-to-fastly",
    "canvas": "592x300"
   },
@@ -54,7 +58,13 @@
   },
   {
    "name": "build-databases-from-code",
-   "canvas": "592x300"
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "sql-sdk-code-cards"
+  },
+  {
+   "name": "chat-and-headset-tiles",
+   "canvas": "230x154"
   },
   {
    "name": "combine-data-and-vector-search",
@@ -74,6 +84,10 @@
   },
   {
    "name": "custom-rules-mitigation",
+   "canvas": "592x300"
+  },
+  {
+   "name": "data-stream-destinations-map",
    "canvas": "592x300"
   },
   {
@@ -98,7 +112,9 @@
   },
   {
    "name": "distributed-sql-for-resilient-global-reads",
-   "canvas": "592x300"
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "globe-with-sql-nodes"
   },
   {
    "name": "dns-protection",
@@ -106,7 +122,9 @@
   },
   {
    "name": "enable-owasp-protection-with-customizable-rules",
-   "canvas": "592x300"
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "waf-threat-families-panel"
   },
   {
    "name": "fastest-path-to-live-website",
@@ -114,6 +132,10 @@
   },
   {
    "name": "global-network",
+   "canvas": "592x300"
+  },
+  {
+   "name": "globe-with-sql-nodes",
    "canvas": "592x300"
   },
   {
@@ -202,6 +224,12 @@
   },
   {
    "name": "reputation-intelligence-for-enhanced-protection",
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "reputation-rings-hub"
+  },
+  {
+   "name": "reputation-rings-hub",
    "canvas": "592x300"
   },
   {
@@ -218,15 +246,29 @@
   },
   {
    "name": "saas-platforms",
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "azion-to-commerce-tiles"
+  },
+  {
+   "name": "sql-sdk-code-cards",
    "canvas": "592x300"
   },
   {
    "name": "stay-in-control",
-   "canvas": "230x154"
+   "canvas": "230x154",
+   "deprecated": true,
+   "replacedBy": "traffic-and-cost-bar-chart"
   },
   {
    "name": "stream-security-events-for-investigation-and-response",
-   "canvas": "592x300"
+   "canvas": "592x300",
+   "deprecated": true,
+   "replacedBy": "data-stream-destinations-map"
+  },
+  {
+   "name": "traffic-and-cost-bar-chart",
+   "canvas": "230x154"
   },
   {
    "name": "url-based-transformations-without-api-complexity",
@@ -237,8 +279,14 @@
    "canvas": "170x128"
   },
   {
+   "name": "waf-threat-families-panel",
+   "canvas": "592x300"
+  },
+  {
    "name": "white-gloves-when-it-matters",
-   "canvas": "230x154"
+   "canvas": "230x154",
+   "deprecated": true,
+   "replacedBy": "chat-and-headset-tiles"
   }
  ]
 }

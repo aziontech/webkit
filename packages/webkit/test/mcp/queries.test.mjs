@@ -532,6 +532,27 @@ test('list_assets lists every registered illustration, the shipped tiles include
   assert.equal(res.items.find((i) => i.name === 'runtime').canvas, '592x300')
 })
 
+test('list_assets marks a renamed illustration deprecated and names its replacement', () => {
+  const items = listAssets(catalog, { kind: 'illustrations' }).items
+  const byName = new Map(items.map((i) => [i.name, i]))
+  for (const [retired, current] of [
+    ['saas-platforms', 'azion-to-commerce-tiles'],
+    ['enable-owasp-protection-with-customizable-rules', 'waf-threat-families-panel'],
+    ['stream-security-events-for-investigation-and-response', 'data-stream-destinations-map'],
+    ['build-databases-from-code', 'sql-sdk-code-cards'],
+    ['distributed-sql-for-resilient-global-reads', 'globe-with-sql-nodes'],
+    ['reputation-intelligence-for-enhanced-protection', 'reputation-rings-hub'],
+    ['white-gloves-when-it-matters', 'chat-and-headset-tiles'],
+    ['stay-in-control', 'traffic-and-cost-bar-chart']
+  ]) {
+    const old = byName.get(retired)
+    assert.equal(old?.deprecated, true, retired)
+    assert.equal(old.replacedBy, current, retired)
+    assert.equal(old.canvas, byName.get(current)?.canvas, retired)
+    assert.equal(byName.get(current).deprecated, undefined, current)
+  }
+})
+
 test('list_assets filters by name, label and keyword', () => {
   assert.deepEqual(
     listAssets(catalog, { kind: 'brandMarks', query: 'magalu' }).items.map((i) => i.name),

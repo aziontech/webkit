@@ -1506,13 +1506,13 @@ has to reject the wrong one.
 
 Pass the name to `Illustration` (`name`) or to a section that shows one (`illustration`).
 
-60 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
+68 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
 Used by: FeatureScroll, FeatureTabs, FeatureTiles, FeatureWidgets, HeroBand, Illustration, MediaSplitBand, MediaSplitStack.
 
 ## Names
 
-`ai-applications` · `ai-gateway` · `api-endpoints` · `automate-threat-mitigation` · `azion-highlight` · `azion-rest-api` · `azion-to-akamai` · `azion-to-aws` · `azion-to-cloudflare` · `azion-to-fastly` · `azion-to-vercel` · `branches` · `build-applications` · `build-databases-from-code` · `combine-data-and-vector-search` · `content-and-media-delivery` · `content-and-media-delivery-globe` · `custom-allowed-rules` · `custom-rules-mitigation` · `ddos-protection` · `deploy-secure-mcp-server` · `detect-and-classify` · `distributed-apis` · `distributed-apis-tile` · `distributed-sql-for-resilient-global-reads` · `dns-protection` · `enable-owasp-protection-with-customizable-rules` · `fastest-path-to-live-website` · `global-network` · `implement-api-gateway-security` · `improve-application-performance-and-reliability` · `infrastructure-as-code` · `intent-to-policy` · `live-debugging` · `low-latency` · `mitigation-actions` · `modern-frontends` · `multi-format-optimization-with-automatic-detection` · `network-lists-rules-engine` · `no-idle-no-waste` · `personal-tokens` · `preview` · `profiles-per-application` · `programmable-security` · `protect-financial-applications` · `quick-start-with-templates` · `read-at-the-edge` · `real-time-metrics-error-rate` · `real-time-metrics-status-codes` · `replicated-reads` · `reputation-intelligence-for-enhanced-protection` · `request-inspection` · `retail-application-modernization` · `runtime` · `saas-platforms` · `stay-in-control` · `stream-security-events-for-investigation-and-response` · `url-based-transformations-without-api-complexity` · `usage-chart` · `white-gloves-when-it-matters`
+`ai-applications` · `ai-gateway` · `api-endpoints` · `automate-threat-mitigation` · `azion-highlight` · `azion-rest-api` · `azion-to-akamai` · `azion-to-aws` · `azion-to-cloudflare` · `azion-to-commerce-tiles` · `azion-to-fastly` · `azion-to-vercel` · `branches` · `build-applications` · `build-databases-from-code` (deprecated, use `sql-sdk-code-cards`) · `chat-and-headset-tiles` · `combine-data-and-vector-search` · `content-and-media-delivery` · `content-and-media-delivery-globe` · `custom-allowed-rules` · `custom-rules-mitigation` · `data-stream-destinations-map` · `ddos-protection` · `deploy-secure-mcp-server` · `detect-and-classify` · `distributed-apis` · `distributed-apis-tile` · `distributed-sql-for-resilient-global-reads` (deprecated, use `globe-with-sql-nodes`) · `dns-protection` · `enable-owasp-protection-with-customizable-rules` (deprecated, use `waf-threat-families-panel`) · `fastest-path-to-live-website` · `global-network` · `globe-with-sql-nodes` · `implement-api-gateway-security` · `improve-application-performance-and-reliability` · `infrastructure-as-code` · `intent-to-policy` · `live-debugging` · `low-latency` · `mitigation-actions` · `modern-frontends` · `multi-format-optimization-with-automatic-detection` · `network-lists-rules-engine` · `no-idle-no-waste` · `personal-tokens` · `preview` · `profiles-per-application` · `programmable-security` · `protect-financial-applications` · `quick-start-with-templates` · `read-at-the-edge` · `real-time-metrics-error-rate` · `real-time-metrics-status-codes` · `replicated-reads` · `reputation-intelligence-for-enhanced-protection` (deprecated, use `reputation-rings-hub`) · `reputation-rings-hub` · `request-inspection` · `retail-application-modernization` · `runtime` · `saas-platforms` (deprecated, use `azion-to-commerce-tiles`) · `sql-sdk-code-cards` · `stay-in-control` (deprecated, use `traffic-and-cost-bar-chart`) · `stream-security-events-for-investigation-and-response` (deprecated, use `data-stream-destinations-map`) · `traffic-and-cost-bar-chart` · `url-based-transformations-without-api-complexity` · `usage-chart` · `waf-threat-families-panel` · `white-gloves-when-it-matters` (deprecated, use `chat-and-headset-tiles`)
 
 Descriptions: foundations/illustrations.md.
 
@@ -40172,7 +40172,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        illustration: 'stay-in-control',
+        illustration: 'traffic-and-cost-bar-chart',
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -40307,7 +40307,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       title: 'Logs',
       description:
         'Structured output on the same clock as the trace, filtered by level, searchable in place.',
-      illustration: 'stay-in-control',
+      illustration: 'traffic-and-cost-bar-chart',
       illustrationLabel: 'Structured logs filtered by level'
     },
     {

@@ -586,12 +586,20 @@ function iconItems() {
 
 export function buildAssets(imports) {
   const items = {
-    illustrations: objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets')
-      .map(({ name }) => ({
+    illustrations: [
+      ...objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssets').map(({ name }) => ({
         name,
         canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${name}.svg`))
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name)),
+      })),
+      ...objectKeys(ASSET_KINDS.illustrations.registry, 'illustrationAssetAliases').map(
+        ({ name, value }) => ({
+          name,
+          canvas: viewBoxOf(resolve(SRC, 'assets/illustrations', `${value}.svg`)),
+          deprecated: true,
+          replacedBy: value
+        })
+      )
+    ].sort((a, b) => a.name.localeCompare(b.name)),
     diagrams: objectKeys(ASSET_KINDS.diagrams.registry, 'diagrams')
       .map(({ name }) => ({
         name,

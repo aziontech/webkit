@@ -13,7 +13,7 @@ const items = [
   {
     title: 'Every workload on one list',
     description: 'See each workload with its domain, status and last deployment.',
-    illustration: 'stay-in-control',
+    illustration: 'traffic-and-cost-bar-chart',
     action: { label: 'List docs', href: '/docs/list', trailing: true }
   },
   {

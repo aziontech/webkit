@@ -8,7 +8,7 @@
       {
         "title": "Every workload on one list",
         "description": "See each workload with its domain, status and last deployment, so what is live is never a question.",
-        "illustration": "stay-in-control",
+        "illustration": "traffic-and-cost-bar-chart",
         "action": {
           "label": "Docs",
           "href": "https://www.azion.com/en/documentation/products/workloads/",

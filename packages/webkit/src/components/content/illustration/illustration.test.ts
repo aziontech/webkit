@@ -10,9 +10,11 @@ import {
   normalizeIllustrationColor
 } from '../../../assets/illustrations/palette'
 import {
+  illustrationAssetAliases,
   illustrationAssetNames,
   loadIllustrationPlaceholder,
-  resolveIllustrationAsset
+  resolveIllustrationAsset,
+  resolveIllustrationAssetName
 } from '../../../assets/illustrations/registry'
 import { loadIllustrationScene } from '../../../assets/illustrations/scene'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -245,6 +247,28 @@ describe('Illustration', () => {
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('list_assets'))
     warn.mockRestore()
   })
+
+  it('keeps every deprecated name as an alias of a registered scene, never as a scene of its own', () => {
+    for (const [retired, current] of Object.entries(illustrationAssetAliases)) {
+      expect(illustrationAssetNames).toContain(current)
+      expect(illustrationAssetNames).not.toContain(retired)
+      expect(shippedDrawings).not.toContain(retired)
+      expect(resolveIllustrationAssetName(retired)).toBe(current)
+      expect(resolveIllustrationAsset(retired)).toBe(resolveIllustrationAsset(current))
+    }
+  })
+
+  it.each(Object.entries(illustrationAssetAliases))(
+    'still draws the renamed scene for the deprecated name %s',
+    async (retired, current) => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const view = render(Illustration, { props: { name: retired } })
+      await drawsScene(view, await sceneOf(current))
+      expect((await root(view)).getAttribute('data-placeholder')).toBeNull()
+      expect(warn).not.toHaveBeenCalled()
+      warn.mockRestore()
+    }
+  )
 
   it('does not mark a registered scene as placeheld', async () => {
     const el = await root(render(Illustration, { props: { name: 'runtime' } }))

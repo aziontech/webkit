@@ -13,7 +13,7 @@
       title: 'Logs',
       description:
         'Structured output on the same clock as the trace, filtered by level, searchable in place.',
-      illustration: 'stay-in-control',
+      illustration: 'traffic-and-cost-bar-chart',
       illustrationLabel: 'Structured logs filtered by level'
     },
     {
