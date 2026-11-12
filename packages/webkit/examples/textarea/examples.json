@@ -23,6 +23,11 @@
       "file": "required.vue"
     },
     {
+      "name": "ReadOnly",
+      "summary": "A read-only textarea keeps the filled look and drops the hover border; the field description says why the value cannot change.",
+      "file": "read-only.vue"
+    },
+    {
       "name": "Resizable",
       "summary": "",
       "file": "resizable.vue"

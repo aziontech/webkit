@@ -1,9 +1,12 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 
 import Default from '../../../../examples/textarea/default.vue'
 import Disabled from '../../../../examples/textarea/disabled.vue'
 import Invalid from '../../../../examples/textarea/invalid.vue'
+import ReadOnly from '../../../../examples/textarea/read-only.vue'
 import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Textarea from './textarea.vue'
@@ -125,12 +128,45 @@ describe('Textarea', () => {
   })
 
   describe('readonly', () => {
-    it('carries the dashed, transparent read-only look and no hover border', () => {
-      const { getByTestId } = render(Textarea, { props: { readonly: true } })
-      const el = getByTestId('input-textarea')
-      expect(el.className).toContain('data-[readonly]:border-dashed')
-      expect(el.className).toContain('data-[readonly]:bg-transparent')
-      expect(el.className).toContain(':not([data-readonly])]:hover:border-(--border-strong)')
+    it('keeps a read-only textarea focusable with its value', () => {
+      const { getByTestId } = render(Textarea, {
+        props: { readonly: true, modelValue: 'issued by Azion' }
+      })
+      const el = getByTestId('input-textarea') as HTMLTextAreaElement
+      expect(el.readOnly).toBe(true)
+      expect(el.disabled).toBe(false)
+      expect(el.value).toBe('issued by Azion')
+      el.focus()
+      expect(document.activeElement).toBe(el)
+    })
+
+    it('does not emit update:modelValue from a read-only textarea', async () => {
+      const { getByTestId, emitted } = render(Textarea, {
+        props: { readonly: true, modelValue: 'issued by Azion' }
+      })
+      const el = getByTestId('input-textarea') as HTMLTextAreaElement
+      el.focus()
+      await userEvent.keyboard('x')
+      expect(el.value).toBe('issued by Azion')
+      expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('keeps the read-only state apart from the disabled state', () => {
+      const readonly = render(Textarea, { props: { readonly: true } }).getAllByTestId(
+        'input-textarea'
+      )[0] as HTMLElement
+      expect(readonly.hasAttribute('data-readonly')).toBe(true)
+      expect(readonly.hasAttribute('data-disabled')).toBe(false)
+    })
+
+    it('renders the ReadOnly example inside a Field with its description', async () => {
+      const { container, getByRole } = render(ReadOnly)
+      await nextTick()
+      const control = getByRole('textbox', { name: 'Certificate' })
+      expect(control).toHaveAttribute('readonly')
+      expect(control).toHaveAttribute('data-readonly')
+      expect(control.getAttribute('aria-describedby')).toBeTruthy()
+      await expectNoA11yViolations(container)
     })
 
     it('sets data-readonly + native readonly on the textarea', () => {
