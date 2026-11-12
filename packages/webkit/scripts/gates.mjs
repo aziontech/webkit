@@ -71,6 +71,11 @@ export const GATES = [
     steps: [['node', 'scripts/check-tests.mjs']]
   },
   {
+    id: 'size',
+    label: 'Bundle budget',
+    steps: [['node', 'scripts/check-size.mjs']]
+  },
+  {
     id: 'hook-tests',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/__tests__/run.mjs']]

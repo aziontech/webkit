@@ -71,11 +71,12 @@ pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 
 It runs `catalog:check`, `naming:check`, `marketing:check`, `patterns:check`, `cited-names`,
 `spec-status` (no draft spec), `spec-template:check` (template-2 sections), `authoring`,
-`doc-standards`, `test:gate`, the hook tests and `test:toolkit`. The `toolkit`
-job of `.github/workflows/governance.yml` runs the same commands on **every** PR; the lint, type,
-size, Vitest browser (including `src/test/copyable-sfcs.test.ts`, which mounts every block and
-example) jobs run when `packages/webkit` changes; the docs/demos build and the styled visual job
-run when `packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.
+`doc-standards`, `test:gate`, `size` (the bundle budget, about 15 s), the hook tests and
+`test:toolkit`. The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
+**every** PR, except `size`, which runs in the `build` job; the lint, type, size, Vitest browser
+(including `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run
+when `packages/webkit` changes; the docs/demos build and the styled visual job run when
+`packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.
 
 **Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
 `Right-to-left`, `Responsive` and `Performance`. `spec-template:check`, `spec-validate` and the

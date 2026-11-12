@@ -76,26 +76,8 @@
 
   const isAnchor = computed(() => Boolean(props.href))
 
-  const ghostLayerClasses = [
-    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
-    "before:opacity-0 before:content-['']",
-    'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance',
-    'after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]',
-    "after:opacity-0 after:content-['']",
-    'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
-    'hover:before:opacity-100 active:after:opacity-100',
-    'motion-reduce:before:transition-none motion-reduce:after:transition-none',
-    'disabled:before:hidden disabled:after:hidden'
-  ]
-
-  const sharedClasses = [
-    'group/button relative inline-flex items-center justify-center whitespace-nowrap',
-    'rounded-(--shape-button)',
-    'forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText]',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
-    ...ghostLayerClasses
-  ]
+  const sharedClasses =
+    "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden"
 
   const kindClasses: Record<ButtonKind, string> = {
     primary:
@@ -111,11 +93,11 @@
     link: 'bg-transparent text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline motion-reduce:transition-none before:hidden after:hidden forced-colors:border-0 forced-colors:text-[LinkText]'
   }
 
-  const disabledClasses =
-    'cursor-not-allowed border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
+  const inactiveClasses =
+    'border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
-  const loadingClasses =
-    'cursor-wait border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
+  const linkInactiveClasses =
+    'border-transparent text-(--text-disabled) before:hidden after:hidden forced-colors:border-0'
 
   const sizeClasses: Record<ButtonSize, string> = {
     large: 'min-w-20 h-10 px-(--spacing-md) text-button-lg',
@@ -129,26 +111,15 @@
     small: 'size-3'
   }
 
-  const linkInactiveClasses =
-    'border-transparent text-(--text-disabled) before:hidden after:hidden forced-colors:border-0'
-
   const rootClasses = computed(() => {
-    if (props.kind === 'link') {
-      const linkState = props.disabled
-        ? `cursor-not-allowed ${linkInactiveClasses}`
-        : props.loading
-          ? `cursor-wait ${linkInactiveClasses}`
-          : kindClasses.link
-      return [sharedClasses, linkState, 'text-body-sm', attrs['class']]
-    }
-
-    const stateClasses = props.disabled
-      ? disabledClasses
-      : props.loading
-        ? loadingClasses
-        : kindClasses[props.kind]
-
-    return [sharedClasses, stateClasses, sizeClasses[props.size], attrs['class']]
+    const isLink = props.kind === 'link'
+    const cursor = props.disabled ? 'cursor-not-allowed' : props.loading ? 'cursor-wait' : ''
+    return [
+      sharedClasses,
+      cursor ? [cursor, isLink ? linkInactiveClasses : inactiveClasses] : kindClasses[props.kind],
+      isLink ? 'text-body-sm' : sizeClasses[props.size],
+      attrs['class']
+    ]
   })
 
   const loadingTestId = computed(() => `${testId.value}-loading`)

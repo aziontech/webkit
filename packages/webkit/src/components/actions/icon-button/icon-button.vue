@@ -80,25 +80,8 @@
 
   const isAnchor = computed(() => Boolean(props.href))
 
-  const ghostLayerClasses = [
-    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
-    "before:opacity-0 before:content-['']",
-    'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance',
-    'after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]',
-    "after:opacity-0 after:content-['']",
-    'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
-    'hover:before:opacity-100 active:after:opacity-100',
-    'motion-reduce:before:transition-none motion-reduce:after:transition-none',
-    'disabled:before:hidden disabled:after:hidden'
-  ]
-
-  const sharedClasses = [
-    'relative inline-flex shrink-0 items-center justify-center',
-    'rounded-(--shape-button)',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
-    ...ghostLayerClasses
-  ]
+  const sharedClasses =
+    "relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden"
 
   const kindClasses: Record<IconButtonKind, string> = {
     primary:
@@ -113,11 +96,8 @@
       'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
   }
 
-  const disabledClasses =
-    'cursor-not-allowed border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
-
-  const loadingClasses =
-    'cursor-wait border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
+  const inactiveClasses =
+    'border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
 
   const iconClasses =
     'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
@@ -137,13 +117,13 @@
   const spinnerSizeClasses = iconSlotSizeClasses
 
   const rootClasses = computed(() => {
-    const stateClasses = props.disabled
-      ? disabledClasses
-      : props.loading
-        ? loadingClasses
-        : kindClasses[props.kind]
-
-    return [sharedClasses, stateClasses, sizeClasses[props.size], attrs.class]
+    const cursor = props.disabled ? 'cursor-not-allowed' : props.loading ? 'cursor-wait' : ''
+    return [
+      sharedClasses,
+      cursor ? [cursor, inactiveClasses] : kindClasses[props.kind],
+      sizeClasses[props.size],
+      attrs.class
+    ]
   })
 
   const loadingTestId = computed(() => `${testId.value}-loading`)

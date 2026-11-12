@@ -106,22 +106,8 @@
     :data-monospace="monospace || null"
     :data-filled="isFilled || null"
     :data-resize="resizable"
-    :class="[
-      'relative block min-w-0 min-h-[80px]',
-      'px-(--spacing-sm) py-(--spacing-sm)',
-      'rounded-(--shape-elements)',
-      'border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm',
-      'placeholder:text-(--text-muted)',
-      'transition-colors duration-150 ease-out motion-reduce:transition-none',
-      '[&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong)',
-      'focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas)',
-      'data-[invalid]:border-(--danger-border)',
-      'data-[required]:border-(--warning-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0',
-      'data-[readonly]:cursor-default',
-      'data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none',
-      attrs.class
-    ]"
+    class="relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm placeholder:text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0 data-[readonly]:cursor-default data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none"
+    :class="attrs.class"
     @input="handleInput"
   />
 </template>
