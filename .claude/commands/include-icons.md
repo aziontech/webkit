@@ -1,5 +1,5 @@
 ---
-description: Add one or more icons to `@aziontech/icons` — decides monochrome (font) vs colored (`ai-*-cor`), normalizes names, places the SVGs, rebuilds, and verifies they surface in the catalog, CSS, gallery, and docs site.
+description: Add one or more icons to `@aziontech/icons` — decides monochrome (font) vs colored (`ai-cor ai-<name>`), normalizes names, places the SVGs, rebuilds, and verifies they surface in the catalog, CSS, gallery, and docs site.
 argument-hint: [svg file(s) / pasted svg / names] [ai|pi]
 ---
 
@@ -20,7 +20,7 @@ An icon **font glyph is single-color** — it physically cannot carry gradients 
 | Kind | When | Goes to | Delivered as | Used as |
 |---|---|---|---|---|
 | **Monochrome** | one color, meant to inherit `currentColor` (UI icons, single-color logos) | `src/svg-raw/ai/` (or `pi/`) | woff2 **font** glyph + `catalog.json` | `<i class="ai ai-<name>">` (recolorable) |
-| **Colored** | multicolor brand/framework logo (gradients, ≥2 fills) | `src/svg-raw/ai-cor/` | `azionicons-color.css` (`.ai-<name>-cor` background-image) **+** `color-catalog.json` (inline SVG). **Not** in the font. | `<i class="ai ai-<name>-cor">` (keeps its palette) or inline via `color-catalog` |
+| **Colored** | multicolor brand/framework logo (gradients, ≥2 fills) | `src/svg-raw/ai-cor/` | `azionicons-color.css` (`.ai-cor.ai-<name>` background-image) **+** `color-catalog.json` (inline SVG). **Not** in the font. | `<i class="ai-cor ai-<name>">` (keeps its palette) or inline via `color-catalog` |
 
 Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`, `<clipPath>`, or **more than one distinct** `fill="#…"` / `fill="white"` (i.e. a real palette). If it is a single solid shape that should theme with text, it is monochrome. **If genuinely unsure which the user wants, ask** — the choice is not reversible without redoing the work.
 
@@ -28,7 +28,7 @@ Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`,
 
 1. **Collect the SVGs.** From `$ARGUMENTS` (file paths, pasted SVG markup, or names) gather each icon's raw SVG. Default set is `ai` (Azion); use `pi` only if the user says so.
 2. **Classify** each SVG monochrome vs colored using the rule above.
-3. **Normalize the name** → lowercase **kebab-case**, no spaces, **no dots**, no capitals. Map to the framework's real name. Examples: `Kotlin`→`kotlin`, `next.js`→`next`, `svelt`→`svelte`. Monochrome file: `ai-<name>.svg`. Colored file: `ai-<name>-cor.svg`. Refuse names that collide with an existing icon of the same kind (pick a distinct name).
+3. **Normalize the name** → lowercase **kebab-case**, no spaces, **no dots**, no capitals. Map to the framework's real name. Examples: `Kotlin`→`kotlin`, `next.js`→`next`, `svelt`→`svelte`. Monochrome file: `ai-<name>.svg`. Colored file: also `ai-<name>.svg` (the `ai-cor/` folder marks it colored; there is no `-cor` suffix anywhere). The same logo may exist in both sets under one name (`ai ai-svelte` and `ai-cor ai-svelte`). Refuse names that collide with an existing icon of the same kind (pick a distinct name).
 4. **Prepare each SVG** (rewrite to our conventions — never paste a foreign SVG as-is):
    - Square `viewBox` (`0 0 14 14` for the colored set; keep the source's square viewBox otherwise).
    - **Monochrome:** strip hardcoded fills/strokes and set `fill="currentColor"`; remove `<clipPath>`/strokes; merge to filled `<path>`s. It must pass [`validate-svg.mjs`](../../packages/icons/scripts/validate-svg.mjs) (no `fill="#000"`, no strokes, has a `<path>`).
@@ -37,9 +37,9 @@ Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`,
 6. **Build:** `cd packages/icons && npm run build`. This regenerates the font, `catalog.json`, `color-catalog.json`, and `azionicons-color.css`. (`dist/` is gitignored — it is a build artifact; never edit it by hand.)
 7. **Verify** (state results plainly — counts, not vibes):
    - **Monochrome:** the name is in `dist/catalog.json` as `{ icon: "ai ai-<name>", … }`; it is **not** in `color-catalog.json`.
-   - **Colored:** the name is in `dist/color-catalog.json` (well-formed `<svg>`, no `currentColor`) **and** has a `.ai-<name>-cor` rule in `dist/azionicons-color.css` whose data-URI decodes to the colored SVG; it is **not** in `catalog.json` and **not** in the woff2 font.
-   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm docs:dev` to see it in an example if one uses it. For colored, confirm `<i class="ai ai-<name>-cor">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
-8. **Report** what you added (names, kind), how to use each (`<i class="ai ai-<name>">` or `<i class="ai ai-<name>-cor">`), and the verification outcome.
+   - **Colored:** the name is in `dist/color-catalog.json` (well-formed `<svg>`; `currentColor` only for ink parts, which the build emits per theme) **and** has a `.ai-cor.ai-<name>` rule in `dist/azionicons-color.css` whose data-URI decodes to the colored SVG; it is **not** in `catalog.json` and **not** in the woff2 font.
+   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm docs:dev` to see it in an example if one uses it. For colored, confirm `<i class="ai-cor ai-<name>">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
+8. **Report** what you added (names, kind), how to use each (`<i class="ai ai-<name>">` or `<i class="ai-cor ai-<name>">`), and the verification outcome.
 
 ## Rules (hard)
 

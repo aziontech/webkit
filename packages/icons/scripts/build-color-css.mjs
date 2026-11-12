@@ -69,9 +69,10 @@ const perIconRules = files
   })
   .join('\n\n')
 
-const css = `/* azionicons-color — colored brand icons (ai-*-cor) as background-image.
- * These are multicolor logos that cannot live in the woff2 font; use them exactly
- * like a font icon: <i class="ai ai-google-cor"></i>. Sizes with font-size (1em).
+const css = `/* azionicons-color — colored brand icons as background-image.
+ * These are multicolor logos that cannot live in the woff2 font; use them like a
+ * font icon, with the ai-cor base class instead of ai: <i class="ai-cor ai-google"></i>.
+ * There is no ai-<name>-cor class. Sizes with font-size (1em).
  * An icon whose SVG uses currentColor for its ink parts is emitted twice — light ink
  * in the base rule, dark ink under the theme's dark selectors — because a
  * background-image cannot inherit color from the element painting it.
