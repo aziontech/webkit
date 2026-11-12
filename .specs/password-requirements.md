@@ -4,16 +4,16 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: d9d731ed51861fe2bf249bb9cb7f3bc2fda62dbf092061fe660fa71ce5fe43f7
+checksum: 59a56b4e4421c9bf01bd0299eb6ade7866f4949d2425b2cc23af027dbf601862
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # PasswordRequirements — Component Spec
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. It replaces the requirements row of the v5 `field-password`; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. It replaces the requirements row of the v5 `field-password`; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
 
 ## When to use
 
@@ -47,10 +47,7 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
   } from '@aziontech/webkit/password-requirements'
 
   const password = ref('')
-  const valid = () =>
-    DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
-      typeof rule.test === 'function' ? rule.test(password.value) : rule.test.test(password.value)
-    )
+  const valid = () => DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(password.value))
 </script>
 
 <template>

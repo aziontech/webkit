@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
 
@@ -45,6 +45,7 @@
   }>()
 
   const attrs = useAttrs()
+  const textareaRef = ref<globalThis.HTMLTextAreaElement | null>(null)
 
   const {
     controlId,
@@ -74,10 +75,16 @@
     const target = event.target as globalThis.HTMLTextAreaElement
     emit('update:modelValue', target.value)
   }
+
+  defineExpose({
+    /** Moves focus to the native field. */
+    focus: (): void => textareaRef.value?.focus()
+  })
 </script>
 
 <template>
   <textarea
+    ref="textareaRef"
     dir="auto"
     v-bind="passthroughAttrs"
     :id="controlId"

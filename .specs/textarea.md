@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: ddb6f69b0551e38614945580cfb23a4ad4f5b844c5b2a0df9c284feaa004f25c
+checksum: 8f65a3799ef47f1b124101943dbd5759c91baa1b399d83d229c6f894d1dff394
 created: 2026-06-23
 last_updated: 2026-11-12
 ---
@@ -91,6 +91,12 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 ## Slots
 
 _No slots._
+
+## Exposed
+
+| Method    | Notes                                                                                                                                                                                                                                                                 |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `focus()` | Moves focus to the native `<textarea>`. For a host that focuses the field from script (a rename that opens with the name field focused): `const field = ref<InstanceType<typeof Textarea> \| null>(null)` on `<Textarea ref="field" />`, then `field.value?.focus()`. |
 
 ## States
 

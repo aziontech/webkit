@@ -8,7 +8,10 @@ export interface PasswordRequirement {
   test: RegExp | ((value: string) => boolean)
 }
 
-export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
+/** A built-in rule: always keyed, always a pattern, so rule.test.test(value) needs no narrowing. */
+export type PasswordPatternRequirement = PasswordRequirement & { key: string; test: RegExp }
+
+export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordPatternRequirement[] = [
   { key: 'length', label: '8-128 characters', test: /^.{8,128}$/ },
   { key: 'uppercase', label: 'Uppercase letter', test: /[A-Z]/ },
   { key: 'special', label: 'Special character', test: /[^A-Za-z0-9]/ },

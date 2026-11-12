@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: ec320f3e8e36c62b7cc6a68943cd553d392eff13ac5029f846bba39c446f6f42
+checksum: 21ddf99c3d79969db16a268720c860e1b6e64969f8faba8e08c606e860935702
 created: 2026-06-16
 last_updated: 2026-11-12
 ---
@@ -92,6 +92,12 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 | ----------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `iconLeft`  | —     | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`).                                                                                                   |
 | `iconRight` | —     | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+
+## Exposed
+
+| Method    | Notes                                                                                                                                                                                                                                                                        |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `focus()` | Moves focus to the native `<input>`. For a host that focuses the field from script (a rename that opens with the name field focused): `const field = ref<InstanceType<typeof PasswordInput> \| null>(null)` on `<PasswordInput ref="field" />`, then `field.value?.focus()`. |
 
 ## States
 

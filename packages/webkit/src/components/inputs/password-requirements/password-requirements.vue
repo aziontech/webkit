@@ -39,6 +39,8 @@
   const { height: contentHeight } = useElementSize(contentEl)
   const rowHeight = computed(() => (contentHeight.value ? `${contentHeight.value}px` : undefined))
 
+  const builtInRules: readonly PasswordRequirement[] = DEFAULT_PASSWORD_REQUIREMENTS
+
   const evaluated = computed(() =>
     props.requirements.map((requirement: PasswordRequirement) => {
       const met =
@@ -49,7 +51,7 @@
               : requirement.test
             ).test(props.value)
 
-      const builtIn = DEFAULT_PASSWORD_REQUIREMENTS.includes(requirement) && requirement.key
+      const builtIn = builtInRules.includes(requirement) && requirement.key
       const label = builtIn
         ? t(`passwordRequirements.${requirement.key}` as MessageKey)
         : requirement.label

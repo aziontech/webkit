@@ -428,3 +428,22 @@ describe('Input — direction of the typed value', () => {
     expect(getByTestId('input').getAttribute('dir')).toBe('ltr')
   })
 })
+
+describe('Input — exposed focus()', () => {
+  it('focus() on a template ref moves focus to the native input', async () => {
+    const field = ref<InstanceType<typeof Input> | null>(null)
+    const Host = defineComponent({
+      setup: () => () => h(Input, { ref: field, 'aria-label': 'Name' })
+    })
+    const { container } = render(Host)
+    await nextTick()
+
+    const native = container.querySelector('input')
+    expect(native).not.toBeNull()
+    expect(document.activeElement).not.toBe(native)
+
+    field.value?.focus()
+
+    expect(document.activeElement).toBe(native)
+  })
+})
