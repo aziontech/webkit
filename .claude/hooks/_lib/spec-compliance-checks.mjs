@@ -6,8 +6,8 @@
 //     editor push that never ran the hook cannot merge off-spec code either.
 // DS-internal only (depends on .specs/), so it lives in _lib — not in the package.
 
-import { existsSync, readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import {
   componentRootName,
   extractAnimationClasses,
@@ -32,6 +32,44 @@ function loadCatalogAnimations(ROOT) {
   } catch {
     return null
   }
+}
+
+function animateClasses(vueText) {
+  return extractAnimationClasses(vueText).filter(
+    (c) => c.startsWith('animate-') && c !== 'animate-none'
+  )
+}
+
+// The folder that holds a component and all its parts: <category>/<name>/ or, for a
+// flat component, <name>/ directly under src/components/.
+function componentDir(abs, name) {
+  const rel = abs.split('/src/components/').pop()
+  const segs = rel.split('/')
+  const depth = segs[0] === name ? 1 : 2
+  return join(abs.slice(0, abs.length - rel.length), ...segs.slice(0, depth))
+}
+
+function vueFilesUnder(dir) {
+  if (!existsSync(dir)) return []
+  const out = []
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, entry.name)
+    if (entry.isDirectory()) out.push(...vueFilesUnder(p))
+    else if (entry.name.endsWith('.vue')) out.push(p)
+  }
+  return out
+}
+
+// Animations rendered anywhere in the component (root + every part): the spec's
+// Motion table describes the component as a whole, so a composition spreads its rows
+// over the parts that render them.
+function familyAnimations(abs, name, vueText) {
+  const found = new Set(animateClasses(vueText))
+  for (const file of vueFilesUnder(componentDir(abs, name))) {
+    if (file === abs) continue
+    for (const c of animateClasses(readFileSync(file, 'utf-8'))) found.add(c)
+  }
+  return found
 }
 
 function diff(actualSet, expectedSet) {
@@ -211,14 +249,14 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     }
   }
 
-  // ---- Animations cross-check (applies to both root and sub-components) ----
+  // ---- Animations cross-check ----
+  // Every file may render only animations the spec lists (extra), and must pair them
+  // with a motion-reduce escape. "Missing" is judged once, on the root, against the
+  // animations the whole component renders: a sub-component is compared only with
+  // the animations it renders itself, never flagged for its siblings' rows.
   const motionSection = getSection(body, 'Motion & Animations')
   if (motionSection !== null) {
-    const codeAnimClasses = new Set(
-      extractAnimationClasses(vueText)
-        .filter((c) => c.startsWith('animate-'))
-        .filter((c) => c !== 'animate-none')
-    )
+    const codeAnimClasses = new Set(animateClasses(vueText))
     const specAnimMatches = (motionSection.match(/animate-[a-z0-9-]+/g) ?? []).filter(
       (c) => c !== 'animate-none'
     )
@@ -233,9 +271,14 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
       }
     } else {
       const animDiff = diff(codeAnimClasses, specAnimClasses)
-      if (animDiff.missing.length) {
+      const missing = isRoot
+        ? [...specAnimClasses].filter(
+            (c) => !familyAnimations(abs, info.name, vueText).has(c)
+          )
+        : []
+      if (missing.length) {
         violations.push(
-          `Animation classes in spec but missing in .vue: ${animDiff.missing.join(', ')}`
+          `Animation classes in spec but missing in .vue: ${missing.join(', ')}`
         )
       }
       if (animDiff.extra.length) {

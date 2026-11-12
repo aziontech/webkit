@@ -27,6 +27,7 @@ import {
   templateSectionErrors,
   TEMPLATE_2_SECTIONS
 } from '../_lib/spec.mjs'
+import { collectSpecViolations } from '../_lib/spec-compliance-checks.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -430,6 +431,105 @@ group('hook: validate-spec-compliance.mjs', () => {
   })
 })
 
+const MOTION_ROOT = mkdtempSync(join(tmpdir(), 'webkit-motion-'))
+const motionSpec = (rows) =>
+  [
+    '---',
+    'name: demo-panel',
+    'category: overlay',
+    'structure: composition',
+    'status: implemented',
+    '---',
+    '',
+    '## Motion & Animations',
+    '',
+    '| Trigger | Animation / Transition | Token | Reduced-motion fallback |',
+    '| ------- | ---------------------- | ----- | ----------------------- |',
+    ...rows,
+    ''
+  ].join('\n')
+const motionVue = (cls) => `<template><div class="${cls}"></div></template>\n`
+const MOTION_DIR = 'packages/webkit/src/components/overlay/demo-panel'
+const writeMotion = (rel, text) => {
+  const abs = resolve(MOTION_ROOT, rel)
+  mkdirSync(dirname(abs), { recursive: true })
+  writeFileSync(abs, text)
+  return abs
+}
+writeMotion(
+  'packages/webkit/catalog.json',
+  JSON.stringify({ tokens: { animations: ['fade-in', 'fade-out', 'page-enter'] } })
+)
+const motionOf = (abs) =>
+  (collectSpecViolations(abs, MOTION_ROOT)?.violations ?? []).filter((v) =>
+    v.startsWith('Animation')
+  )
+
+group('lib: spec-compliance animations per part', () => {
+  writeMotion(
+    '.specs/demo-panel.md',
+    motionSpec([
+      '| open | `animate-fade-in` on the content | semantic | `motion-reduce:animate-none` |',
+      '| close | `animate-fade-out` on the content | semantic | `motion-reduce:animate-none` |'
+    ])
+  )
+  const root = writeMotion(`${MOTION_DIR}/demo-panel.vue`, motionVue('flex'))
+  const content = writeMotion(
+    `${MOTION_DIR}/demo-panel-content/demo-panel-content.vue`,
+    motionVue('animate-fade-in data-[closed]:animate-fade-out motion-reduce:animate-none')
+  )
+  const trigger = writeMotion(
+    `${MOTION_DIR}/demo-panel-trigger/demo-panel-trigger.vue`,
+    motionVue('inline-flex')
+  )
+  test('a part that renders no animation is not flagged for the root table', () => {
+    assertEqual(motionOf(trigger), [])
+  })
+  test('the part that renders the animations passes', () => {
+    assertEqual(motionOf(content), [])
+  })
+  test('the root passes when its parts render every row', () => {
+    assertEqual(motionOf(root), [])
+  })
+  test('the root is flagged for a row no file of the component renders', () => {
+    writeMotion(
+      `${MOTION_DIR}/demo-panel-content/demo-panel-content.vue`,
+      motionVue('animate-fade-in motion-reduce:animate-none')
+    )
+    assertEqual(motionOf(root), [
+      'Animation classes in spec but missing in .vue: animate-fade-out'
+    ])
+    assertEqual(motionOf(trigger), [])
+  })
+  test('a part rendering an animation the spec does not list is flagged', () => {
+    writeMotion(
+      `${MOTION_DIR}/demo-panel-trigger/demo-panel-trigger.vue`,
+      motionVue('animate-page-enter motion-reduce:animate-none')
+    )
+    assertEqual(motionOf(trigger), [
+      'Animation classes in .vue but not in spec: animate-page-enter'
+    ])
+  })
+  test('a part without a motion-reduce escape is flagged', () => {
+    writeMotion(
+      `${MOTION_DIR}/demo-panel-content/demo-panel-content.vue`,
+      motionVue('animate-fade-in animate-fade-out')
+    )
+    assertTrue(motionOf(content).some((v) => v.includes('motion-reduce')))
+  })
+  test('a single-file component still reports its own missing rows', () => {
+    writeMotion(
+      '.specs/demo-chip.md',
+      motionSpec(['| open | `animate-fade-in` | semantic | `motion-reduce:animate-none` |'])
+    )
+    const chip = writeMotion(
+      'packages/webkit/src/components/overlay/demo-chip/demo-chip.vue',
+      motionVue('flex')
+    )
+    assertEqual(motionOf(chip), ['Animation classes in spec but missing in .vue: animate-fade-in'])
+  })
+})
+
 group('hook: validate-authoring.mjs comments', () => {
   const write = (rel, content) =>
     runHook('.claude/hooks/validate-authoring.mjs', {
@@ -581,4 +681,5 @@ process.stdout.write(
   `\n${results.length} tests, ${results.length - failed.length} passed, ${failed.length} failed.\n`
 )
 rmSync(LEGACY_ROOT, { recursive: true, force: true })
+rmSync(MOTION_ROOT, { recursive: true, force: true })
 process.exit(failed.length === 0 ? 0 : 1)

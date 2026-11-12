@@ -137,6 +137,7 @@ function currentViolations() {
 }
 
 const update = process.argv.includes('--update')
+const prune = process.argv.includes('--prune')
 const current = currentViolations()
 
 if (update) {
@@ -173,9 +174,21 @@ for (const [k, n] of baseCounts) {
   for (let i = 0; i < gone; i++) fixed.push(k)
 }
 
-if (fixed.length) {
+if (prune) {
+  const drop = counts(fixed)
+  const kept = baseline.filter((k) => {
+    const n = drop.get(k) ?? 0
+    if (!n) return true
+    drop.set(k, n - 1)
+    return false
+  })
+  writeFileSync(BASELINE, JSON.stringify(kept, null, 2) + '\n')
   console.log(
-    `\n↓ ${fixed.length} baseline violation(s) fixed — prune with the authoring:update script:`
+    `authoring-baseline.json pruned: ${fixed.length} fixed violation(s) removed, nothing added.`
+  )
+} else if (fixed.length) {
+  console.log(
+    `\n↓ ${fixed.length} baseline violation(s) fixed — prune with \`node scripts/check-authoring.mjs --prune\`:`
   )
   for (const k of fixed) console.log(`  - ${k}`)
 }
