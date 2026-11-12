@@ -79,17 +79,9 @@
           <div
             v-if="$slots['leading'] || $slots['default']"
             :data-testid="`${testId}__message`"
-            class="flex min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-xs)"
+            class="flex min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-xs) text-body-sm text-(--text-default)"
           >
-            <slot name="leading">
-              <i
-                class="pi pi-info-circle shrink-0 text-body-sm text-(--text-muted)"
-                aria-hidden="true"
-              />
-              <p class="min-w-0 truncate text-body-sm text-(--text-default)">
-                <slot />
-              </p>
-            </slot>
+            <slot name="leading"><slot /></slot>
           </div>
           <div
             :data-testid="`${testId}__actions`"
