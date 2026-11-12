@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import { ref } from 'vue'

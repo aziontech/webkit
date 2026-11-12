@@ -153,11 +153,11 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -167,17 +167,68 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
+
+  type MetricFormat = 'currency' | 'count' | 'percentage' | 'uptime' | 'score' | 'cost'
+
+  interface Figure {
+    id: string
+    label: string
+    description: string
+    value: number | null
+    format: MetricFormat
+    delta: number | null
+    inverse: boolean
+  }
+
+  interface StatusTag {
+    label: string
+    severity: TagSeverity
+  }
+
+  interface Goal {
+    id: string
+    label: string
+    current: number
+    target: number
+    format: MetricFormat
+    status: StatusTag
+  }
+
+  interface TrendChange extends StatusTag {
+    icon: string
+  }
+
+  interface Trend {
+    id: string
+    title: string
+    description: string
+    mark: 'area' | 'line'
+    format: MetricFormat
+    min: number
+    change: TrendChange | null
+    series: ChartSeries[]
+  }
+
+  interface Note {
+    id: string
+    author: string
+    initials: string
+    role: string
+    date: string
+    dateLabel: string
+    body: string
+  }
 
   const loading = false
   const comparison = 'vs last quarter'
   const quarter = ref('Q3 2026')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
 
   const quarters = ['Q3 2026', 'Q2 2026', 'Q1 2026', 'Q4 2025', 'Q3 2025']
 
-  const figures = [
+  const figures: Figure[] = [
     {
       id: 'revenue',
       label: 'Revenue',
@@ -234,7 +285,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const goals = [
+  const goals: Goal[] = [
     {
       id: 'revenue',
       label: 'Quarterly revenue',
@@ -307,7 +358,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     'Sep 2026'
   ]
 
-  const trends = [
+  const trends: Trend[] = [
     {
       id: 'revenue',
       title: 'Revenue',
@@ -441,7 +492,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const notes = [
+  const notes: Note[] = [
     {
       id: 'note-04',
       author: 'Maria Santos',
@@ -489,7 +540,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     maximumFractionDigits: 2
   })
 
-  const formatters = {
+  const formatters: Record<MetricFormat, (value: number) => string> = {
     currency: (value) => money.format(value),
     count: (value) => compact.format(value),
     percentage: (value) => `${value.toFixed(0)}%`,

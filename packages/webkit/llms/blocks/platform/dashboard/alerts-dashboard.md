@@ -159,27 +159,64 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
+
+  type FigureFormat = 'count' | 'percentage'
+  type AlertStatus = 'Open' | 'Investigating'
+
+  interface Figure {
+    id: string
+    label: string
+    description: string
+    value: number | null
+    delta: number | null
+    inverse: boolean
+    format: FigureFormat
+  }
+
+  interface LevelCount {
+    id: SeverityTagSeverity
+    count: number
+  }
+
+  interface Entity {
+    id: string
+    name: string
+    type: string
+    score: number
+    level: SeverityTagSeverity
+    alerts: number
+  }
+
+  interface AlertRow {
+    id: string
+    level: SeverityTagSeverity
+    rank: number
+    title: string
+    entity: string
+    opened: string
+    status: AlertStatus
+  }
 
   const loading = false
   const comparison = 'vs previous period'
   const period = ref('30d')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
   const openTotal = 42
 
   const periods = [
@@ -197,7 +234,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const figures = [
+  const figures: Figure[] = [
     {
       id: 'open',
       label: 'Open',
@@ -269,7 +306,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     'Nov 10'
   ]
 
-  const series = [
+  const series: ChartSeries[] = [
     {
       id: 'critical',
       name: 'Critical',
@@ -315,7 +352,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const openByLevel = [
+  const openByLevel: LevelCount[] = [
     {
       id: 'critical',
       count: 3
@@ -338,7 +375,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const types = [
+  const types: BarListItem[] = [
     {
       id: 'unusual-location',
       name: 'Sign-in from an unusual location',
@@ -381,7 +418,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const entities = [
+  const entities: Entity[] = [
     {
       id: 'entity-01',
       name: 'ana.ribeiro',
@@ -432,7 +469,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const entityColumns = [
+  const entityColumns: TableColumn[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -466,7 +503,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const alerts = [
+  const alerts: AlertRow[] = [
     {
       id: 'alert-01',
       level: 'critical',
@@ -577,7 +614,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const alertColumns = [
+  const alertColumns: TableColumn[] = [
     {
       id: 'severity',
       accessorKey: 'rank',
@@ -617,14 +654,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const statusSeverity = {
+  const statusSeverity: Record<AlertStatus, TagSeverity> = {
     Open: 'secondary',
     Investigating: 'info'
   }
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatters = {
+  const formatters: Record<FigureFormat, (value: number) => string> = {
     count: (value) => compact.format(value),
     percentage: (value) => `${value.toFixed(0)}%`
   }
@@ -643,7 +680,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               v-model="period"
               size="medium"
               :display-value="
-                (value) => periods.find((option) => option.value === value)?.label ?? value
+                (value) => periods.find((option) => option.value === value)?.label ?? String(value)
               "
             >
               <Select.Trigger aria-label="Period" />

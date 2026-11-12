@@ -130,7 +130,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -168,7 +168,28 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
     javascript: 'JavaScript'
   }
 
-  const template = (slug, title, category, framework, icon, description, updated) => ({
+  type Framework = keyof typeof FRAMEWORKS
+
+  interface Template {
+    id: string
+    title: string
+    category: string
+    framework: Framework
+    icon: string
+    description: string
+    updated: string
+    repository: string
+  }
+
+  const template = (
+    slug: string,
+    title: string,
+    category: string,
+    framework: Framework,
+    icon: string,
+    description: string,
+    updated: string
+  ): Template => ({
     id: slug,
     title,
     category,
@@ -311,11 +332,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
 
   const selected = ref(templates[0])
   const previewOpen = ref(false)
-  const openPreview = (item) => {
+  const openPreview = (item: Template) => {
     selected.value = item
     previewOpen.value = true
   }
-  const categoryLabel = (id) => CATEGORIES.find((category) => category.id === id)?.label ?? id
+  const categoryLabel = (id: string) =>
+    CATEGORIES.find((category) => category.id === id)?.label ?? id
 </script>
 
 <template>

@@ -138,7 +138,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Cards from '@aziontech/webkit/cards'
@@ -149,11 +149,36 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tag from '@aziontech/webkit/tag'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, useId, watch } from 'vue'
 
-  const app = (n, name, status, domain, region, requests, owner) => ({
+  type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
+
+  type Application = {
+    id: string
+    name: string
+    status: ApplicationStatus
+    domain: string
+    region: string
+    requests: number
+    owner: string
+  }
+
+  interface Field {
+    id: Exclude<keyof Application, 'id' | 'name'>
+    header: string
+  }
+
+  const app = (
+    n: number,
+    name: string,
+    status: ApplicationStatus,
+    domain: string,
+    region: string,
+    requests: number,
+    owner: string
+  ): Application => ({
     id: `app-${String(n).padStart(2, '0')}`,
     name,
     status,
@@ -163,7 +188,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
     owner
   })
 
-  const applications = [
+  const applications: Application[] = [
     app(1, 'storefront', 'Active', 'shop.example.com', 'sa-east', 1240000, 'Robson Junior'),
     app(2, 'checkout', 'Active', 'pay.example.com', 'us-east', 310000, 'Isaque Böck'),
     app(3, 'blog', 'Inactive', 'blog.example.com', 'eu-west', 0, 'Gab Lisboa'),
@@ -180,7 +205,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
     app(14, 'admin', 'Inactive', 'admin.example.com', 'us-east', 300, 'Herbert Júlio')
   ]
 
-  const fields = [
+  const fields: Field[] = [
     { id: 'status', header: 'Status' },
     { id: 'domain', header: 'Domain' },
     { id: 'region', header: 'Region' },
@@ -188,7 +213,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
     { id: 'owner', header: 'Owner' }
   ]
 
-  const properties = [
+  const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'status',
@@ -203,7 +228,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
     { key: 'requests', label: 'Requests', type: 'number' }
   ]
 
-  const items = ref([...applications])
+  const items = ref<Application[]>([...applications])
 
   const {
     cardsProps,
@@ -235,11 +260,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
     preferences.value.columns
       .filter((column) => column.visible)
       .map((column) => fields.find((field) => field.id === column.id))
-      .filter(Boolean)
+      .filter((field): field is Field => field !== undefined)
   )
 
   const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
-  const severityOf = (value) =>
+  const asApplication = (item: Record<string, unknown>) => item as Application
+  const severityOf = (value: ApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'secondary'
 
   const CONFIRM_WORD = 'delete'
@@ -409,15 +435,15 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
                     <dd class="min-w-0 truncate">
                       <Tag
                         v-if="field.id === 'status'"
-                        :label="item.status"
-                        :severity="severityOf(item.status)"
+                        :label="asApplication(item).status"
+                        :severity="severityOf(asApplication(item).status)"
                         size="small"
                       />
                       <bdi v-else-if="field.id === 'domain'">{{ item.domain }}</bdi>
                       <span
                         v-else-if="field.id === 'requests'"
                         class="tabular-nums"
-                        >{{ requestsFormat.format(item.requests) }}</span
+                        >{{ requestsFormat.format(asApplication(item).requests) }}</span
                       >
                       <template v-else>{{ item[field.id] }}</template>
                     </dd>

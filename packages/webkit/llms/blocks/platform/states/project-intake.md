@@ -97,7 +97,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 ## Code (`DropZone`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import { ref } from 'vue'
 
   const active = ref(true)

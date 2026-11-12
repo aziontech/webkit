@@ -138,18 +138,41 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
-  import Chart from '@aziontech/webkit/chart'
+<script setup lang="ts">
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
+
+  interface Service {
+    id: string
+    name: string
+    status: { label: string; severity: StatusIndicatorSeverity }
+    latency: number | null
+    delta: number | null
+    trend: number[]
+  }
+
+  interface SeriesData {
+    labels: string[]
+    series: ChartSeries[]
+  }
+
+  interface MonitorAlert {
+    id: string
+    severity: TagSeverity
+    level: string
+    title: string
+    service: string
+    opened: string
+  }
 
   const loading = false
   const empty = false
@@ -157,8 +180,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const latencyWindow = ref('24h')
   const errorWindow = ref('24h')
 
-  const formatLatency = (value) => `${Math.round(value)} ms`
-  const formatRate = (value) => {
+  const formatLatency = (value: number) => `${Math.round(value)} ms`
+  const formatRate = (value: number) => {
     const digits = value === 0 || value >= 10 ? 0 : value >= 1 ? 1 : 2
     return `${value.toFixed(digits)}%`
   }
@@ -169,7 +192,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     { label: '24h', value: '24h' }
   ]
 
-  const services = [
+  const services: Service[] = [
     {
       id: 'web-app-prod',
       name: 'web-app-prod',
@@ -243,7 +266,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const latency = {
+  const latency: Record<string, SeriesData> = {
     '1h': {
       labels: [
         '10:05',
@@ -402,7 +425,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   }
 
-  const errorRate = {
+  const errorRate: Record<string, SeriesData> = {
     '1h': {
       labels: [
         '10:05',
@@ -531,7 +554,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   }
 
-  const alerts = [
+  const alerts: MonitorAlert[] = [
     {
       id: 'stage-5xx',
       severity: 'danger',

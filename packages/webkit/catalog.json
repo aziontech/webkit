@@ -30173,6 +30173,7 @@
     "Alert",
     "BarList",
     "Card",
+    "type",
     "ChartCard",
     "DonutChart",
     "EmptyState",
@@ -30185,12 +30186,14 @@
     "Skeleton",
     "StatTile",
     "Table",
-    "TableRoot"
+    "TableRoot",
+    "type"
    ],
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/empty-state",
@@ -30203,7 +30206,8 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root"
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tag"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all two exceptions: deliveries held until a verdict arrives, and items that were delivered before they were flagged. It ends in the submissions table, where the reader finds a specific item. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -33006,6 +33010,7 @@
     "Alert",
     "Badge",
     "Button",
+    "type",
     "CalendarRoot",
     "Chart",
     "Checkbox",
@@ -33040,6 +33045,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/badge",
     "@aziontech/webkit/button",
+    "@aziontech/webkit/calendar",
     "@aziontech/webkit/calendar-root",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/checkbox",

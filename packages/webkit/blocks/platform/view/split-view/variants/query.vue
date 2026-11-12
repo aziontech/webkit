@@ -1,10 +1,18 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, {
+    type ChartColor,
+    type ChartRange,
+    type ChartSeries
+  } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
+  import DateRangePicker, {
+    type DateRangeUnit,
+    type DateRangeValue,
+    type RelativeOption
+  } from '@aziontech/webkit/date-range-picker'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -17,18 +25,112 @@
   import Input from '@aziontech/webkit/input'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import PropertyFilter, {
+    type FilteringProperty,
+    type PropertyFilterQuery,
+    type PropertyFilterSubmit,
+    type PropertyFilterToken
+  } from '@aziontech/webkit/property-filter'
   import Sidebar from '@aziontech/webkit/sidebar'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { matchesQuery } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+  type EventSource = 'http' | 'security' | 'services' | 'access'
+  type EventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
+  type EventFieldCategory =
+    | 'request'
+    | 'response'
+    | 'cache'
+    | 'performance'
+    | 'geolocation'
+    | 'client'
+    | 'security'
+    | 'services'
+    | 'identifiers'
+
+  type EventRecord = {
+    id: string
+    at: Date
+    time: string
+    source: EventSource
+    sourceLabel: string
+    level: EventLevel
+    message: string
+    host?: string
+    requestMethod?: string
+    requestUri?: string
+    status?: number
+    requestTimeMs?: number
+    bytesSent?: number
+    cacheStatus?: string
+    country: string
+    remoteAddress: string
+    ruleName?: string
+    serviceName?: string
+    serviceDurationMs?: number
+    requestId: string
+    resourceId: string
+    userAgent?: string
+  }
+
+  type EventFieldId = Exclude<keyof EventRecord, 'id' | 'at' | 'source'>
+
+  type EventTemplate = Pick<EventRecord, 'source' | 'level' | 'message'> &
+    Partial<
+      Pick<
+        EventRecord,
+        'requestMethod' | 'requestUri' | 'status' | 'ruleName' | 'serviceName' | 'serviceDurationMs'
+      >
+    >
+
+  interface EventField {
+    id: EventFieldId
+    label: string
+    core?: boolean
+    principal?: boolean
+    category?: EventFieldCategory
+    grow?: TableColumn['grow']
+    minWidth?: number
+    align?: TableColumn['align']
+    mono?: boolean
+    format?: (value: number) => string
+  }
+
+  interface TimeWindow {
+    start: Date
+    end: Date
+  }
+
+  interface QueryEntry {
+    text: string
+    query: PropertyFilterQuery
+  }
+
+  interface SavedQuery extends QueryEntry {
+    id: string
+    name: string
+  }
+
+  interface EventBucket {
+    at: Date
+    end: Date
+    total: number
+    levels: Record<string, number>
+  }
+
+  interface ExportableTable {
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  }
+
+  type PopoverPlacement = NonNullable<InstanceType<typeof Popover>['$props']['placement']>
+
   const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
 
-  const minutesAgo = (minutes) => new Date(referenceNow - minutes * 60 * 1000)
+  const minutesAgo = (minutes: number) => new Date(referenceNow - minutes * 60 * 1000)
 
   const timeZone = ref('UTC')
 
@@ -54,16 +156,18 @@
     }
   })
 
-  const isDate = (value) => value instanceof Date && !Number.isNaN(value.getTime())
+  const isDate = (value: unknown): value is Date =>
+    value instanceof Date && !Number.isNaN(value.getTime())
 
-  const formatEventTime = (date) =>
+  const formatEventTime = (date: Date) =>
     isDate(date)
       ? `${zoneFormats.value.day.format(date)}, ${zoneFormats.value.clock.format(date)}`
       : ''
 
-  const formatEventClock = (date) => (isDate(date) ? zoneFormats.value.axis.format(date) : '')
+  const formatEventClock = (date: unknown) =>
+    isDate(date) ? zoneFormats.value.axis.format(date) : ''
 
-  const eventSources = {
+  const eventSources: Record<EventSource, string> = {
     http: 'HTTP Requests',
     security: 'Security',
     services: 'Services',
@@ -75,17 +179,22 @@
     label
   }))
 
-  const eventLevels = { Error: 'danger', Warning: 'warning', Info: 'info', Debug: 'secondary' }
+  const eventLevels: Record<EventLevel, TagSeverity> = {
+    Error: 'danger',
+    Warning: 'warning',
+    Info: 'info',
+    Debug: 'secondary'
+  }
 
-  const eventLevelSeverity = (level) => eventLevels[level] ?? 'secondary'
+  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'secondary'
 
-  const levelOrder = Object.keys(eventLevels)
+  const levelOrder = Object.keys(eventLevels) as EventLevel[]
 
   const eventLevelOptions = levelOrder.map((value) => ({ value, label: value }))
 
   const fullWindowMinutes = 1440
 
-  const formatPeriod = (value) => {
+  const formatPeriod = (value: TimeWindow) => {
     if (!value || typeof value !== 'object') return ''
     const { start, end } = value
     if (!start) return end ? `Until ${formatEventClock(end)}` : ''
@@ -97,7 +206,7 @@
       : `${from} to ${zoneFormats.value.day.format(end)}, ${formatEventClock(end)}`
   }
 
-  const eventFieldCategories = [
+  const eventFieldCategories: { id: EventFieldCategory; label: string }[] = [
     { id: 'request', label: 'Request' },
     { id: 'response', label: 'Response' },
     { id: 'cache', label: 'Cache' },
@@ -109,7 +218,7 @@
     { id: 'identifiers', label: 'Identifiers' }
   ]
 
-  const eventFields = [
+  const eventFields: EventField[] = [
     { id: 'time', label: 'Time', core: true, minWidth: 80, mono: true },
     { id: 'level', label: 'Level', core: true, minWidth: 104 },
     { id: 'sourceLabel', label: 'Source', core: true, minWidth: 80 },
@@ -156,11 +265,11 @@
 
   const optionalFields = eventFields.filter((field) => !field.core)
 
-  const eventField = (id) => eventFields.find((field) => field.id === id)
+  const eventField = (id: string) => eventFields.find((field) => field.id === id)
 
-  const formatEventValue = (field, value) => {
+  const formatEventValue = (field: EventField | undefined, value: unknown) => {
     if (value === undefined || value === null || value === '') return '—'
-    return field?.format ? field.format(value) : String(value)
+    return field?.format && typeof value === 'number' ? field.format(value) : String(value)
   }
 
   const hosts = [
@@ -189,7 +298,7 @@
   const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
   const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
-  const eventTemplates = [
+  const eventTemplates: EventTemplate[] = [
     {
       source: 'security',
       level: 'Error',
@@ -257,9 +366,9 @@
     }
   ]
 
-  const sequence = (seed) => {
+  const sequence = (seed: number) => {
     let state = seed
-    return (length) => {
+    return (length: number) => {
       state = (state * 1103515245 + 12345) % 2147483648
       return state % length
     }
@@ -268,13 +377,13 @@
   const eventCount = 1500
   const seedWindowMinutes = 1436
 
-  const ageFraction = (u) => (4 - Math.sqrt(16 - 15 * u)) / 3
+  const ageFraction = (u: number) => (4 - Math.sqrt(16 - 15 * u)) / 3
 
   const calmTemplates = eventTemplates.filter((template) => template.level !== 'Error')
   const errorTemplates = eventTemplates.filter((template) => template.level === 'Error')
   const rotation = [...calmTemplates, ...calmTemplates, ...errorTemplates]
 
-  const seedEvents = () => {
+  const seedEvents = (): EventRecord[] => {
     const pick = sequence(20260814)
     return Array.from({ length: eventCount }, (_, index) => {
       const template = rotation[index % rotation.length]
@@ -308,8 +417,8 @@
     })
   }
 
-  const fieldValueCounts = (list, id) => {
-    const counts = new Map()
+  const fieldValueCounts = (list: EventRecord[], id: EventFieldId) => {
+    const counts = new Map<string | number, number>()
     for (const event of list) {
       const value = event[id]
       if (value === undefined || value === null || value === '') continue
@@ -320,8 +429,8 @@
       .sort((a, b) => b.count - a.count)
   }
 
-  const countFieldValues = (list, id) => {
-    const values = new Set()
+  const countFieldValues = (list: EventRecord[], id: EventFieldId) => {
+    const values = new Set<string | number>()
     for (const event of list) {
       const value = event[id]
       if (value !== undefined && value !== null && value !== '') values.add(value)
@@ -329,13 +438,13 @@
     return values.size
   }
 
-  const bucketCountFor = (windowMinutes) => {
+  const bucketCountFor = (windowMinutes: number) => {
     if (windowMinutes <= 15) return 12
     if (windowMinutes <= 60) return 20
     return 32
   }
 
-  const eventBuckets = (list, range) => {
+  const eventBuckets = (list: EventRecord[], range: TimeWindow | null): EventBucket[] => {
     const end = (range?.end ?? new Date(referenceNow)).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
@@ -358,9 +467,12 @@
     return result
   }
 
-  const eventSummary = (list) => {
+  const eventSummary = (list: EventRecord[]) => {
     const errors = list.filter((event) => event.level === 'Error').length
-    const timed = list.filter((event) => typeof event.requestTimeMs === 'number')
+    const timed = list.filter(
+      (event): event is EventRecord & { requestTimeMs: number } =>
+        typeof event.requestTimeMs === 'number'
+    )
     return {
       total: list.length,
       errors,
@@ -375,10 +487,10 @@
 
   const valueFields = ['host', 'requestMethod', 'cacheStatus', 'country', 'ruleName', 'serviceName']
 
-  const queryProperties = [
+  const queryProperties: FilteringProperty[] = [
     { key: 'level', label: 'Level', options: eventLevelOptions },
     { key: 'source', label: 'Source', options: eventSourceOptions },
-    ...optionalFields.map((field) => {
+    ...optionalFields.map((field): FilteringProperty => {
       if (field.align === 'end') return { key: field.id, label: field.label, type: 'number' }
       if (!valueFields.includes(field.id)) return { key: field.id, label: field.label }
       return {
@@ -393,10 +505,10 @@
 
   const searchableFields = eventFields.map((field) => field.id)
 
-  const quoteValue = (value) =>
+  const quoteValue = (value: string) =>
     /[\s"'=!:^<>]/.test(value) ? `"${value.replaceAll('"', '')}"` : value
 
-  const queryToText = (query) =>
+  const queryToText = (query: PropertyFilterQuery) =>
     query.tokens
       .map((token) =>
         token.propertyKey
@@ -405,7 +517,7 @@
       )
       .join(query.operation === 'or' ? ' OR ' : ' AND ')
 
-  const initialQuery = {
+  const initialQuery: PropertyFilterQuery = {
     tokens: [
       { propertyKey: 'level', operator: '=', value: 'Error' },
       { propertyKey: 'host', operator: '=', value: 'api.example.com' }
@@ -414,14 +526,14 @@
   }
 
   const queryText = ref(queryToText(initialQuery))
-  const appliedQuery = ref(initialQuery)
+  const appliedQuery = ref<PropertyFilterQuery>(initialQuery)
   const appliedText = ref(queryText.value)
   const queryNotice = ref('')
   const pagination = ref({ pageIndex: 0, pageSize: 25 })
 
   const recentLimit = 8
 
-  const recentQueries = ref([
+  const recentQueries = ref<QueryEntry[]>([
     {
       text: 'status >= 500',
       query: { tokens: [{ propertyKey: 'status', operator: '>=', value: '500' }], operation: 'and' }
@@ -438,7 +550,7 @@
     }
   ])
 
-  const applyQuery = ({ text, query }) => {
+  const applyQuery = ({ text, query }: PropertyFilterSubmit) => {
     if (!query) {
       queryNotice.value =
         'This query mixes AND and OR. Use one of them throughout, then press Enter again.'
@@ -455,12 +567,12 @@
     ].slice(0, recentLimit)
   }
 
-  const runQuery = (entry) => {
+  const runQuery = (entry: QueryEntry) => {
     queryText.value = entry.text
     applyQuery(entry)
   }
 
-  const savedQueries = ref([
+  const savedQueries = ref<SavedQuery[]>([
     {
       id: 'q1',
       name: 'Server errors',
@@ -500,17 +612,17 @@
     savedStatus.value = `Saved “${name}”.`
   }
 
-  const deleteSavedQuery = (entry) => {
+  const deleteSavedQuery = (entry: SavedQuery) => {
     savedQueries.value = savedQueries.value.filter((saved) => saved.id !== entry.id)
     savedStatus.value = `Deleted “${entry.name}”.`
   }
 
-  const useSavedQuery = (entry) => {
+  const useSavedQuery = (entry: SavedQuery) => {
     runQuery(entry)
     savedOpen.value = false
   }
 
-  const useRecentQuery = (entry) => {
+  const useRecentQuery = (entry: QueryEntry) => {
     runQuery(entry)
     recentOpen.value = false
   }
@@ -521,7 +633,7 @@
   }
 
   const filters = computed(() => {
-    const out = {}
+    const out: Record<string, string[]> = {}
     const { tokens, operation } = appliedQuery.value
     if (operation === 'or' && tokens.length > 1) return out
     for (const token of tokens) {
@@ -531,18 +643,23 @@
     return out
   })
 
-  const relativeOptions = [
+  const relativeOptions: RelativeOption[] = [
     { key: 'last-15-minutes', amount: 15, unit: 'minute' },
     { key: 'last-1-hour', amount: 1, unit: 'hour' },
     { key: 'last-6-hours', amount: 6, unit: 'hour' },
     { key: 'last-24-hours', amount: 24, unit: 'hour' }
   ]
 
-  const range = ref({ type: 'relative', amount: 24, unit: 'hour', key: 'last-24-hours' })
+  const range = ref<DateRangeValue | null>({
+    type: 'relative',
+    amount: 24,
+    unit: 'hour',
+    key: 'last-24-hours'
+  })
   const rangeNow = new Date(referenceNow)
   const rangeMin = new Date(referenceNow - 7 * 24 * 3600000)
 
-  const unitMs = {
+  const unitMs: Record<DateRangeUnit, number> = {
     second: 1000,
     minute: 60000,
     hour: 3600000,
@@ -552,7 +669,7 @@
     year: 31536000000
   }
 
-  const activeWindow = computed(() => {
+  const activeWindow = computed<TimeWindow>(() => {
     const value = range.value
     if (!value) {
       return { start: new Date(referenceNow - fullWindowMinutes * 60000), end: rangeNow }
@@ -571,7 +688,7 @@
     return formatPeriod(activeWindow.value)
   })
 
-  const inWindow = (date) => {
+  const inWindow = (date: unknown) => {
     if (!isDate(date)) return false
     const time = date.getTime()
     return time >= activeWindow.value.start.getTime() && time <= activeWindow.value.end.getTime()
@@ -592,7 +709,7 @@
   })
 
   const loading = ref(false)
-  let refreshTimer = null
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -602,10 +719,10 @@
     }, 700)
   }
 
-  const tableRef = ref(null)
+  const tableRef = ref<ExportableTable | null>(null)
   const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
 
-  const selectTimeRange = ({ start, end }) => {
+  const selectTimeRange = ({ start, end }: TimeWindow) => {
     range.value = { type: 'absolute', start: start.toISOString(), end: end.toISOString() }
   }
 
@@ -620,13 +737,13 @@
   const fieldsCollapsed = ref(false)
   const fieldSearch = ref('')
 
-  const matchesFieldSearch = (field) => {
+  const matchesFieldSearch = (field: EventField) => {
     const term = fieldSearch.value.trim().toLowerCase()
     if (!term) return true
     return field.label.toLowerCase().includes(term) || field.id.toLowerCase().includes(term)
   }
 
-  const shownFields = computed(() => [
+  const shownFields = computed<Array<EventField & { locked?: boolean }>>(() => [
     ...coreFields.filter(matchesFieldSearch).map((field) => ({ ...field, locked: true })),
     ...optionalFields.filter(
       (field) => shownColumns.value.includes(field.id) && matchesFieldSearch(field)
@@ -651,12 +768,12 @@
     () => shownFields.value.length > 0 || fieldCategories.value.length > 0
   )
 
-  const categoryFilterCount = (category) =>
+  const categoryFilterCount = (category: { fields: EventField[] }) =>
     category.fields.filter((field) => filters.value[field.id]?.length).length
 
   const openCategories = ref(['request'])
 
-  const collapsedBeforeSearch = ref(null)
+  const collapsedBeforeSearch = ref<string[] | null>(null)
   watch(fieldSearch, (term, previous) => {
     const searching = Boolean(term.trim())
     if (searching && !previous.trim()) collapsedBeforeSearch.value = [...openCategories.value]
@@ -676,32 +793,35 @@
 
   const topValues = 6
 
+  const fieldValuesPlacement = 'right-start' as string as PopoverPlacement
+
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
-  const canFilterField = (field) => !unfilterableFields.has(field.id)
+  const canFilterField = (field: EventField) => !unfilterableFields.has(field.id)
 
-  const topFieldValues = (id) => fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
+  const topFieldValues = (id: EventFieldId) =>
+    fieldValueCounts(matchedEvents.value, id).slice(0, topValues)
 
-  const fieldValueOverflow = (id) =>
+  const fieldValueOverflow = (id: EventFieldId) =>
     Math.max(0, countFieldValues(matchedEvents.value, id) - topValues)
 
-  const isValueApplied = (id, value) =>
+  const isValueApplied = (id: string, value: string | number) =>
     (filters.value[id] ?? []).includes(String(value).toLowerCase())
 
-  const toggleColumn = (id) => {
+  const toggleColumn = (id: string) => {
     shownColumns.value = shownColumns.value.includes(id)
       ? shownColumns.value.filter((shown) => shown !== id)
       : [...shownColumns.value, id]
   }
 
-  const toggleFieldValue = (id, value) => {
+  const toggleFieldValue = (id: string, value: string | number) => {
     const text = String(value)
-    const same = (token) =>
+    const same = (token: PropertyFilterToken) =>
       token.propertyKey === id &&
       token.operator === '=' &&
       token.value.toLowerCase() === text.toLowerCase()
     const { tokens, operation } = appliedQuery.value
-    const next = tokens.some(same)
+    const next: PropertyFilterToken[] = tokens.some(same)
       ? tokens.filter((token) => !same(token))
       : [...tokens, { propertyKey: id, operator: '=', value: text }]
     const query = { tokens: next, operation }
@@ -709,7 +829,7 @@
     applyQuery({ text: queryText.value, query })
   }
 
-  const toColumn = (field) => ({
+  const toColumn = (field: EventField): TableColumn => ({
     accessorKey: field.id,
     header: field.label,
     enableSorting: true,
@@ -719,7 +839,7 @@
     ...(field.align ? { align: field.align } : {})
   })
 
-  const columns = computed(() => [
+  const columns = computed<TableColumn[]>(() => [
     { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
     ...coreFields.map(toColumn),
     ...optionalFields.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
@@ -734,7 +854,7 @@
 
   const statusField = eventField('status')
 
-  const statusTone = (status) => {
+  const statusTone = (status: unknown) => {
     if (typeof status !== 'number') return null
     if (status >= 500) return 'error'
     if (status >= 400) return 'warn'
@@ -745,7 +865,7 @@
   const selectedEvent = computed(
     () => matchedEvents.value.find((event) => event.id === selectedId.value) ?? null
   )
-  const documentEvent = ref(null)
+  const documentEvent = ref<EventRecord | null>(null)
   watch(selectedEvent, (event) => {
     if (event) documentEvent.value = event
   })
@@ -754,9 +874,9 @@
   const documentMinWidth = 348
   const fieldsPanelWidth = 268
 
-  const explorerEl = ref(null)
+  const explorerEl = ref<HTMLElement | null>(null)
   const explorerWidth = ref(0)
-  let explorerObserver = null
+  let explorerObserver: ResizeObserver | null = null
 
   const showFieldsPanel = computed(
     () => explorerWidth.value === 0 || explorerWidth.value >= fieldsPanelWidth + logMinWidth
@@ -788,7 +908,7 @@
     documentDrawerOpen.value = false
   }
 
-  const openDocument = (event, row) => {
+  const openDocument = (_event: MouseEvent, row: EventRecord) => {
     selectedId.value = row.id
     documentDrawerOpen.value = !isWide.value
   }
@@ -821,7 +941,7 @@
     { flush: 'sync' }
   )
 
-  const summaryPriority = [
+  const summaryPriority: EventFieldId[] = [
     'host',
     'requestMethod',
     'requestUri',
@@ -838,7 +958,7 @@
 
   const summaryLimit = 6
 
-  const hasEventValue = (event, id) => {
+  const hasEventValue = (event: EventRecord, id: EventFieldId) => {
     const value = event[id]
     return value !== undefined && value !== null && value !== ''
   }
@@ -851,7 +971,7 @@
       .slice(0, summaryLimit)
       .map((id) => {
         const field = eventField(id)
-        return { id, label: field.label, value: formatEventValue(field, event[id]) }
+        return { id, label: field?.label ?? id, value: formatEventValue(field, event[id]) }
       })
   })
 
@@ -873,11 +993,16 @@
     ]
   })
 
-  const levelColors = { Error: 'danger', Warning: 'warning', Info: 'info', Debug: 'other' }
+  const levelColors: Record<EventLevel, ChartColor> = {
+    Error: 'danger',
+    Warning: 'warning',
+    Info: 'info',
+    Debug: 'other'
+  }
 
   const volumeLabels = computed(() => buckets.value.map((bucket) => bucket.at))
 
-  const volumeSeries = computed(() =>
+  const volumeSeries = computed<ChartSeries[]>(() =>
     levelOrder.map((level) => ({
       id: level,
       name: level,
@@ -896,7 +1021,7 @@
 
   const busiestBucket = computed(() => buckets.value[busiestIndex.value] ?? null)
 
-  const selectVolume = (span) => {
+  const selectVolume = (span: ChartRange | null) => {
     if (!span) return
     const from = buckets.value[span[0]]
     const to = buckets.value[span[1]]
@@ -975,9 +1100,7 @@
                 class="flex flex-col gap-(--spacing-xs) p-(--spacing-xxs)"
                 data-testid="saved-queries"
               >
-                <h2
-                  class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                >
+                <h2 class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)">
                   Saved queries
                 </h2>
                 <ul
@@ -999,9 +1122,7 @@
                       <span class="max-w-full truncate text-label-sm text-(--text-default)">
                         {{ entry.name }}
                       </span>
-                      <span
-                        class="max-w-full truncate text-label-code-sm text-(--text-muted)"
-                      >
+                      <span class="max-w-full truncate text-label-code-sm text-(--text-muted)">
                         {{ entry.text }}
                       </span>
                     </button>
@@ -1076,9 +1197,7 @@
                 class="flex flex-col gap-(--spacing-xs) p-(--spacing-xxs)"
                 data-testid="recent-queries"
               >
-                <h2
-                  class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                >
+                <h2 class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)">
                   Recent queries
                 </h2>
                 <ul
@@ -1239,7 +1358,7 @@
 
               <Popover
                 v-if="canFilterField(field) && fieldCounts[field.id]"
-                placement="right-start"
+                :placement="fieldValuesPlacement"
               >
                 <div
                   class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1276,9 +1395,7 @@
                       >
                         {{ formatEventValue(field, entry.value) }}
                       </span>
-                      <span
-                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                      >
+                      <span class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)">
                         {{ entry.count }}
                       </span>
                       <i
@@ -1359,7 +1476,7 @@
 
                       <Popover
                         v-if="canFilterField(field) && fieldCounts[field.id]"
-                        placement="right-start"
+                        :placement="fieldValuesPlacement"
                       >
                         <div
                           class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1467,9 +1584,7 @@
               <div class="flex flex-col">
                 <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
                 <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{
-                    summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
-                  }}
+                  {{ summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms` }}
                 </dd>
               </div>
             </dl>
@@ -1529,9 +1644,7 @@
               </template>
 
               <template #cell-time="{ value }">
-                <span
-                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
-                >
+                <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
                   {{ value }}
                 </span>
               </template>
@@ -1615,9 +1728,7 @@
       >
         <template #header>
           <div class="flex items-center justify-between gap-(--spacing-xs)">
-            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
-              Event
-            </span>
+            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)"> Event </span>
             <Tooltip text="Close">
               <IconButton
                 icon="pi pi-times"
@@ -1665,9 +1776,7 @@
                   :key="row.id"
                 >
                   <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                  <dd
-                    class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
-                  >
+                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
                     {{ row.value }}
                   </dd>
                 </template>
@@ -1675,9 +1784,7 @@
             </div>
 
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                Event document
-              </h3>
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
               <div class="min-w-0">
                 <CodeBlock
                   :tabs="documentTabs"
@@ -1742,9 +1849,7 @@
                     :key="row.id"
                   >
                     <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                    <dd
-                      class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
-                    >
+                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
                       {{ row.value }}
                     </dd>
                   </template>

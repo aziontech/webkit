@@ -214,7 +214,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  ariaLabel="More options for Conversion funnel"
+                  aria-label="More options for Conversion funnel"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
@@ -251,7 +251,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  ariaLabel="More options for Retention by cohort"
+                  aria-label="More options for Retention by cohort"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                   icon="pi pi-ellipsis-h"
                   kind="transparent"
                   size="small"
-                  ariaLabel="More options for Weekly cohorts"
+                  aria-label="More options for Weekly cohorts"
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>

@@ -25,13 +25,56 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
 
+  interface DatabaseColumn {
+    id: string
+    name: string
+    type: string
+    primaryKey: boolean
+    notNull: boolean
+  }
+
+  interface DatabaseRow {
+    __k: string
+    [column: string]: string | number | null
+  }
+
+  interface DatabaseTable {
+    id: string
+    name: string
+    columns: DatabaseColumn[]
+    rows: DatabaseRow[]
+  }
+
+  interface ResultRow {
+    __k: number
+    [column: string]: string | number | null
+  }
+
+  type QueryResult =
+    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
+    | { type: 'error'; line: number; text: string }
+    | { type: 'message'; text: string }
+
+  interface HistoryEntry {
+    id: string
+    sql: string
+  }
+
+  interface QueryTemplate {
+    id: string
+    title: string
+    description: string
+    icon: string
+    sql: string
+  }
+
   const tabs = [
     { value: 'tables', label: 'Tables' },
     { value: 'editor', label: 'Editor' }
   ]
   const activeTab = ref('tables')
 
-  const tables = ref([
+  const tables = ref<DatabaseTable[]>([
     {
       id: 'tbl-customers',
       name: 'customers',
@@ -157,7 +200,7 @@
   email TEXT UNIQUE NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );`)
-  const history = ref([
+  const history = ref<HistoryEntry[]>([
     {
       id: 'q-0',
       sql: `CREATE TABLE IF NOT EXISTS customers (
@@ -186,12 +229,6 @@
 
   const running = ref(false)
   const templatesOpen = ref(false)
-  type ResultRow = Record<string, string | number>
-  type QueryResult =
-    | { type: 'rows'; columns: string[]; rows: ResultRow[] }
-    | { type: 'error'; line: number; text: string }
-    | { type: 'message'; text: string }
-
   const selectResult: QueryResult = {
     type: 'rows',
     columns: ['id', 'name', 'email', 'created_at'],
@@ -220,9 +257,9 @@
     ]
   }
   const results = ref<QueryResult | null>(null)
-  const resultColumns = computed(() => {
+  const resultColumns = computed<TableColumn[]>(() => {
     if (results.value?.type !== 'rows') return []
-    return results.value.columns.map((key: string, index: number) => ({
+    return results.value.columns.map((key, index) => ({
       accessorKey: key,
       header: key,
       principal: index === 0
@@ -262,11 +299,11 @@
   const applyTemplate = (sql: string) => {
     editorSql.value = sql
   }
-  const loadFromHistory = (item: { sql: string }) => {
+  const loadFromHistory = (item: HistoryEntry) => {
     editorSql.value = item.sql
     activeTab.value = 'editor'
   }
-  const deleteHistory = (_event: Event, item: { id: string }) => {
+  const deleteHistory = (_event: MouseEvent | KeyboardEvent, item: HistoryEntry) => {
     history.value = history.value.filter((entry) => entry.id !== item.id)
   }
   const SQL_VERBS = [
@@ -310,7 +347,7 @@
     }, 700)
   }
 
-  const templates = [
+  const templates: QueryTemplate[] = [
     {
       id: 'create-table',
       title: 'Create table',
@@ -414,7 +451,7 @@ LIMIT 3;`
   watch(templatesOpen, (value) => {
     if (value) templateQuery.value = ''
   })
-  const chooseTemplate = (template: { sql: string }) => {
+  const chooseTemplate = (template: QueryTemplate) => {
     applyTemplate(template.sql)
     templatesOpen.value = false
   }
@@ -458,7 +495,7 @@ LIMIT 3;`
                       icon="pi pi-refresh"
                       kind="outlined"
                       size="small"
-                      ariaLabel="Refresh tables"
+                      aria-label="Refresh tables"
                     />
                   </Tooltip>
                   <Tooltip text="Create Table">
@@ -466,7 +503,7 @@ LIMIT 3;`
                       icon="pi pi-plus"
                       kind="outlined"
                       size="small"
-                      ariaLabel="Create Table"
+                      aria-label="Create Table"
                     />
                   </Tooltip>
                 </div>
@@ -511,9 +548,7 @@ LIMIT 3;`
               >
                 <button
                   type="button"
-                  :data-selected="
-                    selectedTable && selectedTable.id === table.id ? true : null
-                  "
+                  :data-selected="selectedTable && selectedTable.id === table.id ? true : null"
                   class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
                   @click="selectTable(table.id)"
                 >
@@ -530,7 +565,7 @@ LIMIT 3;`
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        ariaLabel="Table actions"
+                        aria-label="Table actions"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -664,7 +699,7 @@ LIMIT 3;`
                     icon="pi pi-refresh"
                     kind="outlined"
                     size="medium"
-                    ariaLabel="Refresh"
+                    aria-label="Refresh"
                   />
                 </Tooltip>
                 <Button
@@ -801,7 +836,7 @@ LIMIT 3;`
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        ariaLabel="Query actions"
+                        aria-label="Query actions"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -910,7 +945,7 @@ LIMIT 3;`
                   icon="pi pi-refresh"
                   kind="outlined"
                   size="medium"
-                  ariaLabel="Refresh results"
+                  aria-label="Refresh results"
                   :loading="running"
                   @click="runQuery"
                 />
@@ -920,7 +955,7 @@ LIMIT 3;`
                   icon="pi pi-download"
                   kind="outlined"
                   size="medium"
-                  ariaLabel="Download results"
+                  aria-label="Download results"
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
@@ -929,7 +964,7 @@ LIMIT 3;`
                   icon="pi pi-table"
                   kind="outlined"
                   size="medium"
-                  ariaLabel="Toggle columns"
+                  aria-label="Toggle columns"
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
@@ -1039,13 +1074,9 @@ LIMIT 3;`
                       class="text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="text-label-md text-(--text-default)">{{
-                      template.title
-                    }}</span>
+                    <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
                   </span>
-                  <span class="text-body-xs text-(--text-muted)">{{
-                    template.description
-                  }}</span>
+                  <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
                 </button>
               </div>
 

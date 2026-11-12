@@ -25,8 +25,11 @@ const TYPESCRIPT_FOLDERS = [
   'blocks/platform/ai',
   'blocks/platform/auth',
   'blocks/platform/create',
+  'blocks/platform/dashboard',
   'blocks/platform/delete',
-  'blocks/platform/settings'
+  'blocks/platform/settings',
+  'blocks/platform/states',
+  'blocks/platform/view'
 ]
 
 // Type errors that come from a component's own typings, not from the copied file: { id, pattern }.

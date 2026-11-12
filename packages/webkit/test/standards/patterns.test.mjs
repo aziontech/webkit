@@ -327,6 +327,17 @@ test('primaryComponents leaves out type-only imports, which are no building bloc
   assert.deepEqual(primaryComponents(sfc), ['Tag', 'Toaster'])
 })
 
+test('primaryComponents leaves out type-only imports', () => {
+  const sfc = [
+    '<script setup lang="ts">',
+    "import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
+    "import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'",
+    "import TableRoot, { type TableColumn, TableCell } from '@aziontech/webkit/table-root'",
+    '</script>'
+  ].join('\n')
+  assert.deepEqual(primaryComponents(sfc), ['Tag', 'TableRoot', 'TableCell'])
+})
+
 test('checkGuidelines accepts a complete guide that matches the SFC and the variants', () => {
   assert.deepEqual(checkGuidelines('platform/x', pattern(guide())), [])
 })

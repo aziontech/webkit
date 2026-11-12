@@ -144,7 +144,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -158,10 +158,24 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, useId } from 'vue'
+
+  type ResourceStatus = 'Live' | 'Inactive'
+
+  type Resource = {
+    id: string
+    name: string
+    domain: string
+    domains: string[]
+    domainCount: number
+    status: ResourceStatus
+    owner: string
+    modifiedAt: Date
+    lastModified: string
+  }
 
   const avatars = {
     'Robson Junior': 'https://ca.slack-edge.com/TDVATDGUU-UDW2MSZAP-81cad567c9a1-512',
@@ -174,7 +188,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     'Gab Lisboa': 'https://ca.slack-edge.com/TDVATDGUU-U0279S2BC12-d09077d857f7-512'
   }
 
-  const properties = [
+  const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'owner',
@@ -185,7 +199,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     { key: 'domain', label: 'Domain' }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
@@ -195,9 +209,15 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
   ]
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysAgo = (days) => new Date(referenceTime - days * 86_400_000)
+  const daysAgo = (days: number) => new Date(referenceTime - days * 86_400_000)
 
-  const resource = (n, owner, days, lastModified, status = 'Live') => {
+  const resource = (
+    n: number,
+    owner: string,
+    days: number,
+    lastModified: string,
+    status: ResourceStatus = 'Live'
+  ): Resource => {
     const name = `resource-${String(n).padStart(2, '0')}`
     const domain = `${name}.example.com`
     return {
@@ -216,7 +236,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     }
   }
 
-  const rows = [
+  const rows: Resource[] = [
     resource(1, 'Robson Junior', 0, 'just now'),
     resource(2, 'Isaque Böck', 18, '3 weeks ago'),
     resource(3, 'Rafael Garbinatto', 36, '1 month ago'),
@@ -229,7 +249,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     resource(10, 'Isaque Böck', 162, '5 months ago')
   ]
 
-  const items = ref(rows)
+  const items = ref<Resource[]>(rows)
 
   const {
     tableProps,
@@ -253,7 +273,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
   })
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -263,18 +283,20 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     }, 700)
   }
 
-  const resourcesTable = ref(null)
+  const resourcesTable = ref<{
+    exportCsv: (options?: { filename?: string }) => Promise<void>
+  } | null>(null)
   const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
 
-  const pending = ref(null)
+  const pending = ref<Resource | null>(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
   const confirmLabelId = useId()
   const canDelete = computed(
-    () => Boolean(pending.value) && confirmation.value.trim() === pending.value.name
+    () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value, row) => {
+  const onRowAction = (value: string | number, row: Resource) => {
     if (value !== 'delete') return
     pending.value = row
     confirmation.value = ''
@@ -283,7 +305,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
 
   const confirmDelete = () => {
     if (!canDelete.value) return
-    items.value = items.value.filter((item) => item.id !== pending.value.id)
+    items.value = items.value.filter((item) => item.id !== pending.value?.id)
     deleteOpen.value = false
   }
 </script>
@@ -441,7 +463,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                   <template #cell-actions="{ row }">
                     <Table.CellActions
                       :name="row.name"
-                      @select="(event, value) => onRowAction(value, row)"
+                      @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenuGroup>
                         <DropdownMenuOption

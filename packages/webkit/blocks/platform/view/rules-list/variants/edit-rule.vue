@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
@@ -34,21 +34,162 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  const SUBJECT = 'application'
+  const SUBJECT: string = 'application'
   const PAGE_DESCRIPTION =
     'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
   const PHASES = [
     { value: 'request', label: 'Request' },
     { value: 'response', label: 'Response' }
-  ]
+  ] as const
 
-  const rule = (id, name, description, phase, author, modified, options = {}) => ({
+  type Phase = (typeof PHASES)[number]['value']
+  type Control = 'up' | 'down'
+
+  interface Rule {
+    id: string
+    name: string
+    description: string
+    phase: Phase
+    author: string
+    modified: string
+    active: boolean
+    locked: boolean
+  }
+
+  interface RuleOptions {
+    active?: boolean
+    locked?: boolean
+  }
+
+  interface RuleEdit {
+    phase: Phase
+    id: string
+    to?: number
+    active?: boolean
+  }
+
+  interface Snapshot {
+    order: Record<string, string[]>
+    active: Record<string, boolean>
+  }
+
+  interface ChangeLine {
+    key: string
+    name: string
+    text: string
+  }
+
+  type OptionSource = 'policies' | 'cache-settings' | 'services'
+  type ArgumentField =
+    'target' | 'policyId' | 'serviceId' | 'cacheId' | 'capturedArray' | 'subject' | 'regex'
+  type DragScope = 'behavior'
+
+  interface BuilderPhase {
+    value: Phase
+    label: string
+    description: string
+  }
+
+  interface TextArgument {
+    kind: 'text'
+    field: ArgumentField
+    placeholder: string
+    label: string
+  }
+
+  interface SelectArgument {
+    kind: 'select'
+    field: ArgumentField
+    source: OptionSource
+    label: string
+  }
+
+  interface GroupField {
+    field: ArgumentField
+    placeholder: string
+    label: string
+  }
+
+  interface GroupArgument {
+    kind: 'group'
+    fields: GroupField[]
+  }
+
+  type BehaviorArgument = TextArgument | SelectArgument | GroupArgument
+
+  interface BehaviorDefinition {
+    value: string
+    label: string
+    phases: Phase[]
+    argument: BehaviorArgument | null
+  }
+
+  type BehaviorFields = Partial<Record<ArgumentField, string>>
+
+  interface BehaviorSeed extends BehaviorFields {
+    type: string
+  }
+
+  interface Behavior extends BehaviorSeed {
+    id: number
+  }
+
+  type Condition = {
+    id: number
+    variable: string
+    operator: string
+    argument: string
+  }
+
+  interface SeedCondition {
+    join: string | null
+    variable: string
+    operator: string
+    argument: string
+  }
+
+  interface RuleDetails {
+    criteria: { conditions: SeedCondition[] }[]
+    behaviors: BehaviorSeed[]
+  }
+
+  interface RuleSeed extends RuleDetails {
+    name: string
+    description: string
+    phase: Phase
+    status: string
+  }
+
+  interface RuleForm {
+    name: string
+    description: string
+    phase: Phase
+    criteria: Condition[][]
+    behaviors: Behavior[]
+    active: boolean
+  }
+
+  interface DragState {
+    scope: DragScope | null
+    from: number
+    over: number
+  }
+
+  const rule = (
+    id: string,
+    name: string,
+    description: string,
+    phase: Phase,
+    author: string,
+    modified: string,
+    options: RuleOptions = {}
+  ): Rule => ({
     id,
     name,
     description,
@@ -59,7 +200,7 @@
     locked: options.locked ?? false
   })
 
-  const seed = () => ({
+  const seed = (): Record<Phase, Rule[]> => ({
     request: [
       rule(
         're-default',
@@ -133,7 +274,7 @@
     ]
   })
 
-  const INITIAL_EDITS = []
+  const INITIAL_EDITS: RuleEdit[] = []
   const INITIAL_SEARCH = ''
   const INITIAL_LOADING = false
   const REVIEW_ON_START = false
@@ -141,9 +282,9 @@
   const SAVE_FAILURES = 0
 
   const rules = reactive(seed())
-  const phaseLabel = (phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
+  const phaseLabel = (phase: Phase) => PHASES.find((item) => item.value === phase)?.label ?? phase
 
-  const snapshot = () => ({
+  const snapshot = (): Snapshot => ({
     order: Object.fromEntries(PHASES.map(({ value }) => [value, rules[value].map((r) => r.id)])),
     active: Object.fromEntries(
       PHASES.flatMap(({ value }) => rules[value].map((r) => [r.id, r.active]))
@@ -163,7 +304,7 @@
   const loading = ref(INITIAL_LOADING)
   const search = ref(INITIAL_SEARCH)
   const searching = computed(() => search.value.trim().length > 0)
-  const matches = (item) => {
+  const matches = (item: Rule) => {
     const term = search.value.trim().toLowerCase()
     if (!term) return true
     return [item.name, item.description, item.author].some((field) =>
@@ -171,7 +312,7 @@
     )
   }
 
-  const openPhases = ref(PHASES.map((item) => item.value))
+  const openPhases = ref<string[]>(PHASES.map((item) => item.value))
   watch(search, () => {
     if (!searching.value) return
     const hits = PHASES.filter(({ value }) => rules[value].some(matches)).map(({ value }) => value)
@@ -190,20 +331,20 @@
   )
 
   const saving = ref(false)
-  const pinned = (phase) => {
+  const pinned = (phase: Phase) => {
     const list = rules[phase]
     let count = 0
     while (count < list.length && list[count].locked) count += 1
     return count
   }
-  const canReorder = (phase) =>
+  const canReorder = (phase: Phase) =>
     !searching.value && !saving.value && rules[phase].length - pinned(phase) > 1
-  const canMove = (phase, index, direction) => {
+  const canMove = (phase: Phase, index: number, direction: number) => {
     if (!canReorder(phase) || index < pinned(phase)) return false
     const to = index + direction
     return to >= pinned(phase) && to < rules[phase].length
   }
-  const lockReason = (phase, item) => {
+  const lockReason = (phase: Phase, item: Rule) => {
     if (item.locked) return 'The default rule runs first and stays first.'
     if (searching.value) return 'Clear the search to change the order rules run in.'
     if (saving.value) return 'Wait for the save to finish.'
@@ -212,27 +353,27 @@
   }
 
   const announcement = ref('')
-  const announce = (text) => {
+  const announce = (text: string) => {
     announcement.value = ''
     nextTick(() => {
       announcement.value = text
     })
   }
 
-  const listEl = ref(null)
-  const focusControl = (id, control) =>
+  const listEl = ref<HTMLElement | null>(null)
+  const focusControl = (id: string, control: Control) =>
     nextTick(() => {
       const row = listEl.value?.querySelector(`[data-rule-id="${id}"]`)
-      const target = row?.querySelector(`[data-control="${control}"]`)
+      const target = row?.querySelector<HTMLButtonElement>(`[data-control="${control}"]`)
       const usable =
         target && !target.disabled
           ? target
-          : (row?.querySelector('[data-control]:not(:disabled)') ??
-            row?.closest('[data-reorder-row]')?.querySelector('[data-reorder-handle]'))
+          : (row?.querySelector<HTMLElement>('[data-control]:not(:disabled)') ??
+            row?.closest('[data-reorder-row]')?.querySelector<HTMLElement>('[data-reorder-handle]'))
       usable?.focus({ preventScroll: false })
     })
 
-  const moveTo = (phase, from, to, control) => {
+  const moveTo = (phase: Phase, from: number, to: number, control?: Control) => {
     const list = rules[phase]
     const head = pinned(phase)
     const target = Math.min(Math.max(to, head), list.length - 1)
@@ -244,19 +385,19 @@
     )
     if (control) focusControl(moved.id, control)
   }
-  const step = (phase, index, direction, control) => {
+  const step = (phase: Phase, index: number, direction: number, control?: Control) => {
     if (!canMove(phase, index, direction)) return
     moveTo(phase, index, index + direction, control)
   }
 
-  const position = (phase, item) => rules[phase].indexOf(item)
-  const reorderRows = (phase, next) => {
+  const position = (phase: Phase, item: Rule) => rules[phase].indexOf(item)
+  const reorderRows = (phase: Phase, next: Rule[]) => {
     if (searching.value) return
     rules[phase] = next
   }
-  const reorderable = (phase) => (row) => !lockReason(phase, row)
+  const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
-  const columns = [
+  const columns: TableColumn[] = [
     { id: 'move', header: 'Move', width: 96, hideable: false },
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 3 },
@@ -264,7 +405,7 @@
     { accessorKey: 'modified', header: 'Last modified', grow: 2 }
   ]
 
-  const setActive = (item, value) => {
+  const setActive = (item: Rule, value: boolean) => {
     item.active = value
   }
 
@@ -273,7 +414,7 @@
     PHASES.map((phase) => ({
       ...phase,
       items: rules[phase.value].flatMap((item, index) => {
-        const lines = []
+        const lines: ChangeLine[] = []
         const before = saved.value.order[phase.value].indexOf(item.id)
         if (before !== index) {
           lines.push({
@@ -334,12 +475,12 @@
   }
 
   const builderOpen = ref(false)
-  const editingRule = ref(null)
-  const editingRow = ref(null)
-  const newRulePhase = ref('request')
+  const editingRule = ref<RuleSeed | null>(null)
+  const editingRow = ref<Rule | null>(null)
+  const newRulePhase = ref<Phase>('request')
   const editing = computed(() => Boolean(editingRule.value))
 
-  const BUILDER_PHASES = [
+  const BUILDER_PHASES: BuilderPhase[] = [
     {
       value: 'request',
       label: 'Request phase',
@@ -361,7 +502,7 @@
     { value: 'exists', label: 'exists' },
     { value: 'does-not-exist', label: 'does not exist' }
   ]
-  const catalog = [
+  const catalog: BehaviorDefinition[] = [
     {
       value: 'add-request-cookie',
       label: 'Add Request Cookie',
@@ -573,7 +714,7 @@
     '${scheme}',
     '${uri}'
   ]
-  const phaseVariables = {
+  const phaseVariables: Record<Phase, string[]> = {
     request: ['${server_addr}', '${server_port}'],
     response: [
       '${sent_http_name}',
@@ -614,15 +755,21 @@
     "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
-  const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator) => operator !== 'exists' && operator !== 'does-not-exist'
-  const behaviorLabel = (value) => byValue[value]?.label ?? ''
-  const behaviorArgument = (value) => byValue[value]?.argument ?? null
-  const behaviorsFor = (phase) => catalog.filter((behavior) => behavior.phases.includes(phase))
-  const behaviorAllowedIn = (value, phase) => Boolean(byValue[value]?.phases.includes(phase))
-  const isTerminalBehavior = (value) =>
+  const operatorLabel = (value: unknown) => OPERATORS.find((o) => o.value === value)?.label ?? ''
+  const takesArgument = (operator: unknown) =>
+    operator !== 'exists' && operator !== 'does-not-exist'
+  const behaviorLabel = (value: unknown) => byValue[String(value)]?.label ?? ''
+  const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
+  const textArgument = (value: string) => behaviorArgument(value) as TextArgument
+  const selectArgument = (value: string) => behaviorArgument(value) as SelectArgument
+  const groupArgument = (value: string) => behaviorArgument(value) as GroupArgument
+  const behaviorsFor = (phase: Phase) =>
+    catalog.filter((behavior) => behavior.phases.includes(phase))
+  const behaviorAllowedIn = (value: string, phase: Phase) =>
+    Boolean(byValue[value]?.phases.includes(phase))
+  const isTerminalBehavior = (value: string) =>
     ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302'].includes(value)
-  const behaviorOptions = (source, phase) => {
+  const behaviorOptions = (source: OptionSource, phase: Phase) => {
     if (source === 'policies') {
       return policies
         .filter((policy) => phase !== 'response' || policy.scope === 'any')
@@ -630,18 +777,18 @@
     }
     return sources[source] ?? []
   }
-  const behaviorArgumentNote = (source, phase) =>
+  const behaviorArgumentNote = (source: OptionSource, phase: Phase) =>
     source === 'policies' && phase === 'response'
       ? 'Only policies scoped to any phase run in the response phase.'
       : ''
-  const variablesFor = (phase) =>
+  const variablesFor = (phase: Phase) =>
     [...variables, ...phaseVariables[phase]]
       .sort((a, b) => a.localeCompare(b))
       .map((value) => ({ value }))
 
   let nextId = 0
   const uid = () => (nextId += 1)
-  const newCondition = () => ({
+  const newCondition = (): Condition => ({
     id: uid(),
     variable: '',
     operator: 'is-equal',
@@ -652,8 +799,8 @@
     { key: 'operator', label: 'Operator' },
     { key: 'argument', label: 'Argument' }
   ]
-  const newBehavior = () => ({ id: uid(), type: 'deliver' })
-  const blankForm = () => ({
+  const newBehavior = (): Behavior => ({ id: uid(), type: 'deliver' })
+  const blankForm = (): RuleForm => ({
     name: '',
     description: '',
     phase: BUILDER_PHASES[0].value,
@@ -661,7 +808,7 @@
     behaviors: [newBehavior()],
     active: true
   })
-  const formFor = (seed) =>
+  const formFor = (seed: RuleSeed | null): RuleForm =>
     !seed
       ? blankForm()
       : {
@@ -710,25 +857,25 @@
   )
   const variablesForPhase = computed(() => variablesFor(form.phase))
 
-  const behaviorQuery = reactive({})
-  const behaviorMatches = (id) => {
+  const behaviorQuery = reactive<Record<number, string>>({})
+  const behaviorMatches = (id: number) => {
     const query = (behaviorQuery[id] ?? '').trim().toLowerCase()
     if (!query) return behaviorsForPhase.value
     return behaviorsForPhase.value.filter((option) => option.label.toLowerCase().includes(query))
   }
-  const onBehaviorPanel = (id, isOpen) => {
+  const onBehaviorPanel = (id: number, isOpen: boolean) => {
     if (!isOpen) behaviorQuery[id] = ''
   }
 
-  const optionsFor = (source) => behaviorOptions(source, form.phase)
-  const optionLabelIn = (source, value) =>
+  const optionsFor = (source: OptionSource) => behaviorOptions(source, form.phase)
+  const optionLabelIn = (source: OptionSource, value: unknown) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
 
-  const setBehaviorType = (index, type) => {
+  const setBehaviorType = (index: number, type: string) => {
     if (form.behaviors[index].type === type) return
     form.behaviors[index] = { id: form.behaviors[index].id, type }
   }
-  const argumentMissing = (behavior, field) =>
+  const argumentMissing = (behavior: Behavior, field: ArgumentField) =>
     submitted.value && !String(behavior[field] ?? '').trim()
   const canAddBehavior = computed(() => {
     if (form.behaviors.length >= 10) return false
@@ -753,34 +900,34 @@
     }
   )
 
-  const move = (list, index, direction) => {
+  const move = <T,>(list: T[], index: number, direction: number) => {
     const target = index + direction
     if (target < 0 || target >= list.length) return
     const [moved] = list.splice(index, 1)
     list.splice(target, 0, moved)
   }
   const addBehavior = () => form.behaviors.push(newBehavior())
-  const removeBehavior = (index) => {
+  const removeBehavior = (index: number) => {
     if (form.behaviors.length <= 1) return
     form.behaviors.splice(index, 1)
   }
-  const moveBehavior = (index, direction) => move(form.behaviors, index, direction)
+  const moveBehavior = (index: number, direction: number) => move(form.behaviors, index, direction)
 
-  const dnd = reactive({ scope: null, from: -1, over: -1 })
-  const isDragging = (scope, index) => dnd.scope === scope && dnd.from === index
-  const isDropTarget = (scope, index) =>
+  const dnd = reactive<DragState>({ scope: null, from: -1, over: -1 })
+  const isDragging = (scope: DragScope, index: number) => dnd.scope === scope && dnd.from === index
+  const isDropTarget = (scope: DragScope, index: number) =>
     dnd.scope === scope && dnd.over === index && dnd.from !== index
-  const onDragStart = (scope, index, event) => {
+  const onDragStart = (scope: DragScope, index: number, event: DragEvent) => {
     dnd.scope = scope
     dnd.from = index
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('text/plain', String(index))
-      const row = event.currentTarget?.closest?.('[data-drag-row]')
+      const row = (event.currentTarget as Element | null)?.closest?.('[data-drag-row]')
       if (row) event.dataTransfer.setDragImage(row, 12, 12)
     }
   }
-  const onDragEnter = (scope, index) => {
+  const onDragEnter = (scope: DragScope, index: number) => {
     if (dnd.scope === scope) dnd.over = index
   }
   const onDragEnd = () => {
@@ -788,21 +935,22 @@
     dnd.from = -1
     dnd.over = -1
   }
-  const reorder = (list, from, to) => {
+  const reorder = <T,>(list: T[], from: number, to: number) => {
     if (from < 0 || to < 0 || from === to || from >= list.length || to >= list.length) return
     const [moved] = list.splice(from, 1)
     list.splice(to, 0, moved)
   }
-  const dropOnBehavior = (index) => {
+  const dropOnBehavior = (index: number) => {
     if (dnd.scope !== 'behavior') return
     reorder(form.behaviors, dnd.from, index)
     onDragEnd()
   }
 
-  const behaviorFilled = (behavior) => {
+  const behaviorFilled = (behavior: Behavior) => {
     const argument = behaviorArgument(behavior.type)
     if (!argument) return true
-    const fields = argument.kind === 'group' ? argument.fields : [argument]
+    const fields: { field: ArgumentField }[] =
+      argument.kind === 'group' ? argument.fields : [argument]
     return fields.every(({ field }) => String(behavior[field] ?? '').trim())
   }
   const isValid = () =>
@@ -810,14 +958,14 @@
     form.criteria.every((group) => group.every((condition) => condition.variable.trim())) &&
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
-  const formEl = ref(null)
+  const formEl = ref<HTMLElement | null>(null)
   const submit = () => {
     submitted.value = true
     if (submitting.value) return
     if (!isValid()) {
       nextTick(() =>
         formEl.value
-          ?.querySelector(
+          ?.querySelector<HTMLElement>(
             ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
           )
           ?.focus()
@@ -832,7 +980,7 @@
     }, 900)
   }
 
-  const RULE_DETAILS = {
+  const RULE_DETAILS: Partial<Record<string, RuleDetails>> = {
     're-docs': {
       criteria: [
         {
@@ -865,7 +1013,7 @@
       behaviors: [{ type: 'bypass-cache' }]
     }
   }
-  const fallbackDetails = (row) => ({
+  const fallbackDetails = (row: Rule): RuleDetails => ({
     criteria: [
       {
         conditions: [{ join: null, variable: '${uri}', operator: 'starts-with', argument: '/' }]
@@ -873,7 +1021,7 @@
     ],
     behaviors: [{ type: row.phase === 'response' ? 'enable-gzip' : 'deliver' }]
   })
-  const seedFor = (row) => ({
+  const seedFor = (row: Rule): RuleSeed => ({
     name: row.name,
     description: row.description,
     phase: row.phase,
@@ -881,12 +1029,12 @@
     status: row.active ? 'Active' : 'Inactive'
   })
 
-  const openRule = (row) => {
+  const openRule = (row: Rule | null) => {
     editingRow.value = row
     editingRule.value = row ? seedFor(row) : null
     builderOpen.value = true
   }
-  const addRule = (phase = PHASES[0].value) => {
+  const addRule = (phase: Phase = PHASES[0].value) => {
     newRulePhase.value = phase
     openRule(null)
   }
@@ -1384,7 +1532,7 @@
                     <template #cell-variable="{ value, update, invalid }">
                       <div class="contents font-code">
                         <Combobox
-                          :model-value="value"
+                          :model-value="value as string"
                           :options="variablesForPhase"
                           size="large"
                           placeholder="${uri}"
@@ -1398,7 +1546,7 @@
                     </template>
                     <template #cell-operator="{ value, update }">
                       <Select
-                        :model-value="value"
+                        :model-value="value as string"
                         size="large"
                         class="w-full"
                         :disabled="submitting"
@@ -1421,7 +1569,7 @@
                       <Input
                         v-if="takesArgument(item.operator)"
                         key="argument"
-                        :model-value="value"
+                        :model-value="value as string"
                         size="large"
                         class="w-full"
                         autocomplete="off"
@@ -1479,7 +1627,7 @@
                                   class="w-full"
                                   :disabled="submitting"
                                   :display-value="behaviorLabel"
-                                  @update:model-value="setBehaviorType(bIdx, $event)"
+                                  @update:model-value="setBehaviorType(bIdx, $event as string)"
                                   @update:open="onBehaviorPanel(behavior.id, $event)"
                                 >
                                   <Select.Trigger aria-label="Behavior" />
@@ -1521,17 +1669,14 @@
                               <div class="min-w-0">
                                 <template v-if="behaviorArgument(behavior.type)?.kind === 'text'">
                                   <Input
-                                    v-model="behavior[behaviorArgument(behavior.type).field]"
+                                    v-model="behavior[textArgument(behavior.type).field]"
                                     size="large"
                                     class="w-full"
-                                    :aria-label="behaviorArgument(behavior.type).label"
-                                    :placeholder="behaviorArgument(behavior.type).placeholder"
+                                    :aria-label="textArgument(behavior.type).label"
+                                    :placeholder="textArgument(behavior.type).placeholder"
                                     :disabled="submitting"
                                     :required="
-                                      argumentMissing(
-                                        behavior,
-                                        behaviorArgument(behavior.type).field
-                                      )
+                                      argumentMissing(behavior, textArgument(behavior.type).field)
                                     "
                                   />
                                 </template>
@@ -1541,32 +1686,29 @@
                                 >
                                   <div class="flex flex-col gap-(--spacing-xxs)">
                                     <Select
-                                      v-model="behavior[behaviorArgument(behavior.type).field]"
+                                      v-model="behavior[selectArgument(behavior.type).field]"
                                       size="large"
                                       class="w-full"
                                       :disabled="submitting"
-                                      :placeholder="`Select a ${behaviorArgument(behavior.type).label.toLowerCase()}`"
+                                      :placeholder="`Select a ${selectArgument(behavior.type).label.toLowerCase()}`"
                                       :required="
                                         argumentMissing(
                                           behavior,
-                                          behaviorArgument(behavior.type).field
+                                          selectArgument(behavior.type).field
                                         )
                                       "
                                       :display-value="
                                         (value) =>
-                                          optionLabelIn(
-                                            behaviorArgument(behavior.type).source,
-                                            value
-                                          )
+                                          optionLabelIn(selectArgument(behavior.type).source, value)
                                       "
                                     >
                                       <Select.Trigger
-                                        :aria-label="behaviorArgument(behavior.type).label"
+                                        :aria-label="selectArgument(behavior.type).label"
                                       />
                                       <Select.Content>
                                         <Select.Option
                                           v-for="option in optionsFor(
-                                            behaviorArgument(behavior.type).source
+                                            selectArgument(behavior.type).source
                                           )"
                                           :key="option.value"
                                           :value="option.value"
@@ -1578,14 +1720,14 @@
                                     <HelperText
                                       v-if="
                                         behaviorArgumentNote(
-                                          behaviorArgument(behavior.type).source,
+                                          selectArgument(behavior.type).source,
                                           form.phase
                                         )
                                       "
                                     >
                                       {{
                                         behaviorArgumentNote(
-                                          behaviorArgument(behavior.type).source,
+                                          selectArgument(behavior.type).source,
                                           form.phase
                                         )
                                       }}
@@ -1598,7 +1740,7 @@
                                 >
                                   <div class="flex flex-col gap-(--spacing-xs)">
                                     <Input
-                                      v-for="part in behaviorArgument(behavior.type).fields"
+                                      v-for="part in groupArgument(behavior.type).fields"
                                       :key="part.field"
                                       v-model="behavior[part.field]"
                                       size="large"

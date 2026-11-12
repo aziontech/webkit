@@ -143,9 +143,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -154,12 +154,63 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { computed, ref } from 'vue'
+
+  type FigureFormat = 'number' | 'share'
+  type WeekKey = 'week1' | 'week2' | 'week3' | 'week4' | 'week5' | 'week6'
+
+  interface FilterOption {
+    value: string
+    label: string
+  }
+
+  interface PeriodOption extends FilterOption {
+    comparison: string
+  }
+
+  interface Figure {
+    id: string
+    label: string
+    description: string
+    value: number | null
+    format: FigureFormat
+    delta: number | null
+    trend: number[]
+  }
+
+  interface FunnelStep {
+    id: string
+    step: string
+    users: number
+    share: number
+    dropoff: number | null
+    from: string
+  }
+
+  interface Week {
+    key: WeekKey
+    label: string
+    slot: `cell-${WeekKey}`
+  }
+
+  interface CohortRow extends Record<WeekKey, number | null> {
+    id: string
+    cohort: string
+    size: number
+  }
+
+  interface DashboardView {
+    figures: Figure[]
+    funnel: ChartSeries[]
+    steps: FunnelStep[]
+    retention: ChartSeries[]
+    cohorts: CohortRow[]
+  }
 
   const loading = false
 
-  const periods = [
+  const periods: PeriodOption[] = [
     {
       value: '30d',
       label: 'Last 30 days',
@@ -177,7 +228,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const segments = [
+  const segments: FilterOption[] = [
     {
       value: 'all',
       label: 'All users'
@@ -198,7 +249,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const segmentsWithData = ['all', 'self-serve', 'sales-assisted']
 
-  const figures = [
+  const figures: Figure[] = [
     {
       id: 'visitors',
       label: 'Visitors',
@@ -249,7 +300,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const stages = ['Visited', 'Signed up', 'Activated', 'Paid']
 
-  const funnel = [
+  const funnel: ChartSeries[] = [
     {
       id: 'users',
       name: 'Users',
@@ -257,7 +308,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const steps = [
+  const steps: FunnelStep[] = [
     {
       id: 'visited',
       step: 'Visited',
@@ -292,7 +343,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const stepColumns = [
+  const stepColumns: TableColumn[] = [
     {
       id: 'step',
       accessorKey: 'step',
@@ -322,7 +373,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const weeks = [
+  const weeks: Week[] = [
     {
       key: 'week1',
       label: 'Week 1',
@@ -357,7 +408,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const weekLabels = weeks.map((week) => week.label)
 
-  const cohorts = [
+  const cohorts: CohortRow[] = [
     {
       id: 'sep-28',
       cohort: 'Sep 28',
@@ -426,7 +477,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const retention = [
+  const retention: ChartSeries[] = [
     {
       id: 'sep-28',
       name: 'Sep 28 cohort',
@@ -459,7 +510,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const cohortColumns = [
+  const cohortColumns: TableColumn[] = [
     {
       id: 'cohort',
       accessorKey: 'cohort',
@@ -515,17 +566,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters = {
-    number: (value) => grouped.format(value),
-    compact: (value) => compact.format(value),
-    percent: (value) => (value === null ? '—' : `${value.toFixed(0)}%`),
-    share: (value) => `${value.toFixed(1)}%`,
-    drop: (value) => `−${value.toFixed(1)}%`
+    number: (value: number) => grouped.format(value),
+    compact: (value: number) => compact.format(value),
+    percent: (value: number | null) => (value === null ? '—' : `${value.toFixed(0)}%`),
+    share: (value: number) => `${value.toFixed(1)}%`,
+    drop: (value: number) => `−${value.toFixed(1)}%`
   }
 
   const period = ref('6w')
   const segment = ref('all')
 
-  const optionLabel = (options) => (value) =>
+  const optionLabel = (options: FilterOption[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)
@@ -534,7 +585,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   )
 
   const matches = computed(() => segmentsWithData.includes(segment.value))
-  const view = computed(() =>
+  const view = computed<DashboardView>(() =>
     matches.value
       ? { figures, funnel, steps, retention, cohorts }
       : {
@@ -546,7 +597,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         }
   )
 
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
 
   const clearFilters = () => {
     period.value = '6w'

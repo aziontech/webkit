@@ -139,7 +139,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Matched requests over time"
+                  aria-label="Expand Matched requests over time"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -148,7 +148,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Matched requests over time"
+                    aria-label="More options for Matched requests over time"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -226,7 +226,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Blocked requests by attack category"
+                  aria-label="Expand Blocked requests by attack category"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -235,7 +235,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Blocked requests by attack category"
+                    aria-label="More options for Blocked requests by attack category"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -288,7 +288,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Blocked requests by country"
+                  aria-label="Expand Blocked requests by country"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -297,7 +297,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Blocked requests by country"
+                    aria-label="More options for Blocked requests by country"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -351,7 +351,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Top source IPs by blocked requests"
+                  aria-label="Expand Top source IPs by blocked requests"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -360,7 +360,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Top source IPs by blocked requests"
+                    aria-label="More options for Top source IPs by blocked requests"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

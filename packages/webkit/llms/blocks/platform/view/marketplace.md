@@ -180,7 +180,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -205,10 +205,38 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
-  const CONTEXTS = { application: 'Application', firewall: 'Firewall' }
+  type IntegrationContext = 'application' | 'firewall'
+
+  interface Integration {
+    id: string
+    name: string
+    vendor: string
+    logo: string
+    category: string
+    context: IntegrationContext
+    description: string
+    version: string
+    updated: string
+    featured: boolean
+    installedOn: string[]
+  }
+
+  const CONTEXTS: Record<IntegrationContext, string> = {
+    application: 'Application',
+    firewall: 'Firewall'
+  }
   const APPLICATIONS = ['storefront', 'checkout', 'docs', 'api']
 
-  const integration = (id, name, vendor, logo, category, context, description, extra = {}) => ({
+  const integration = (
+    id: string,
+    name: string,
+    vendor: string,
+    logo: string,
+    category: string,
+    context: IntegrationContext,
+    description: string,
+    extra: Partial<Integration> = {}
+  ): Integration => ({
     id,
     name,
     vendor,
@@ -352,12 +380,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     { id: 'rest-api', title: 'REST API', icon: 'ai ai-hono', framework: 'Hono' }
   ]
 
-  const withStatus = (item) => ({
+  const withStatus = (item: Integration) => ({
     ...item,
     status: item.installedOn.length ? 'installed' : 'available'
   })
 
-  const unique = (key) => [...new Set(catalog.value.map((item) => item[key]))].sort()
+  const unique = (key: 'vendor' | 'category') =>
+    [...new Set(catalog.value.map((item) => item[key]))].sort()
 
   const properties = computed(() => [
     { key: 'name', label: 'Name' },
@@ -399,7 +428,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
 
   const detailOpen = ref(false)
   const selectedId = ref('request-signer')
-  const selected = computed(() => catalog.value.find((item) => item.id === selectedId.value))
+  const selected = computed(
+    () => catalog.value.find((item) => item.id === selectedId.value) ?? catalog.value[0]
+  )
   const available = computed(() =>
     APPLICATIONS.filter((app) => !selected.value.installedOn.includes(app))
   )
@@ -410,9 +441,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
 
   const run = reactive({ state: 'idle', application: '', reason: '' })
   const INSTALL_TOAST = 'marketplace-install'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
-  const openDetail = (id) => {
+  const openDetail = (id: string) => {
     if (selectedId.value !== id) {
       selectedId.value = id
       form.application = ''
@@ -427,7 +458,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     openDetail(selectedId.value)
   }
 
-  const succeed = (item, application) => {
+  const succeed = (item: Integration, application: string) => {
     item.installedOn = [...item.installedOn, application]
     form.application = ''
     showErrors.value = false

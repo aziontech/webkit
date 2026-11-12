@@ -13,6 +13,9 @@ import { fileURLToPath } from 'node:url'
 const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
 const require = createRequire(import.meta.url)
 
+// create-vue's env.d.ts references `vite/client`, which types asset imports such as `*.svg`.
+const VITE_CLIENT_TYPES = join(dirname(require.resolve('vite/package.json')), 'client')
+
 export const CONSUMER_COMPILER_OPTIONS = {
   target: 'ES2022',
   module: 'ESNext',
@@ -28,7 +31,8 @@ export const CONSUMER_COMPILER_OPTIONS = {
   isolatedModules: true,
   resolveJsonModule: true,
   skipLibCheck: true,
-  noEmit: true
+  noEmit: true,
+  types: [VITE_CLIENT_TYPES]
 }
 
 // Runs vue-tsc over absolute file paths with the consumer options (and no vueCompilerOptions,

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Field from '@aziontech/webkit/field'
@@ -14,6 +14,11 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
+  interface FormErrors {
+    capacity?: string
+    title?: string
+  }
+
   const SESSION_OPTIONS = [
     { value: '5', label: '5 minutes' },
     { value: '15', label: '15 minutes' },
@@ -26,11 +31,11 @@
   const dirty = computed(() => JSON.stringify(form) !== JSON.stringify(saved.value))
   const submitted = ref(false)
   const saving = ref(false)
-  const formEl = ref(null)
+  const formEl = ref<HTMLElement | null>(null)
 
-  const errors = computed(() => {
+  const errors = computed((): FormErrors => {
     if (!submitted.value) return {}
-    const out = {}
+    const out: FormErrors = {}
     const capacity = Number(form.capacity)
     if (!form.capacity.trim()) out.capacity = 'Enter the requests per second to let in.'
     else if (!Number.isInteger(capacity) || capacity < 1)
@@ -48,7 +53,7 @@
     submitted.value = true
     if (saving.value) return
     if (Object.keys(errors.value).length) {
-      nextTick(() => formEl.value?.querySelector('[aria-invalid="true"]')?.focus())
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
     saving.value = true

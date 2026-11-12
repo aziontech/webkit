@@ -128,7 +128,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
@@ -385,8 +385,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                       >Set up your coding agent</span
                     >
                     <span class="text-pretty text-body-sm text-(--text-muted)"
-                      >Give your editor a prompt that teaches it to build and deploy
-                      here.</span
+                      >Give your editor a prompt that teaches it to build and deploy here.</span
                     >
                   </span>
                 </button>
@@ -460,12 +459,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                         class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
-                        <i
-                          class="pi pi-history text-body-xs leading-none text-(--text-muted)"
-                        />
+                        <i class="pi pi-history text-body-xs leading-none text-(--text-muted)" />
                       </span>
-                      <span
-                        class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
+                      <span class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
                         >{{ resource.typeLabel }} /</span
                       >
                     </template>

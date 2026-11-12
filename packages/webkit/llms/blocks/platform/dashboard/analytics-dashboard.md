@@ -176,8 +176,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
-  import Chart from '@aziontech/webkit/chart'
+<script setup lang="ts">
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -186,16 +186,47 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
+
+  type FigureFormat = 'count' | 'bytes' | 'percentage'
+
+  interface Figure {
+    id: string
+    label: string
+    description: string
+    value: number | null
+    format: FigureFormat
+    delta: number | null
+    inverse: boolean
+    trend: number[]
+  }
+
+  interface HostRow {
+    id: string
+    host: string
+    service: string
+    requests: number
+  }
+
+  interface Variation {
+    label: string
+    severity: TagSeverity
+    icon: string
+  }
+
+  interface Variations {
+    requests: Variation | null
+    statusCodes: Variation | null
+  }
 
   const loading = false
   const comparison = 'vs previous 24 hours'
 
-  const figures = [
+  const figures: Figure[] = [
     {
       id: 'requests',
       label: 'Requests',
@@ -259,7 +290,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     '09:00'
   ]
 
-  const requests = [
+  const requests: ChartSeries[] = [
     {
       id: 'requests',
       name: 'Requests',
@@ -270,7 +301,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const statusCodes = [
+  const statusCodes: ChartSeries[] = [
     {
       id: '2xx',
       name: 'Status 2xx',
@@ -299,9 +330,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const countries = ['Brazil', 'United States', 'Germany', 'India', 'Mexico', 'Argentina']
+  const countries: string[] = ['Brazil', 'United States', 'Germany', 'India', 'Mexico', 'Argentina']
 
-  const countryRequests = [
+  const countryRequests: ChartSeries[] = [
     {
       id: 'requests',
       name: 'Requests by country',
@@ -309,7 +340,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const hosts = [
+  const hosts: HostRow[] = [
     {
       id: 'www.example.com',
       host: 'www.example.com',
@@ -354,7 +385,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const hostColumns = [
+  const hostColumns: TableColumn[] = [
     {
       id: 'host',
       accessorKey: 'host',
@@ -379,7 +410,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const variations = {
+  const variations: Variations = {
     requests: {
       label: '+10.03%',
       severity: 'success',
@@ -392,7 +423,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   }
 
-  const forms = [
+  const forms: ToggleGroupOption[] = [
     {
       label: 'Line',
       value: 'line'
@@ -405,7 +436,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatters = {
+  const formatters: Record<FigureFormat, (value: number) => string> = {
     count: (value) => compact.format(value),
     bytes: (value) => {
       const steps = ['B', 'KB', 'MB', 'GB', 'TB']
@@ -422,7 +453,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const requestsForm = ref('line')
   const statusForm = ref('line')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
   const search = ref('')
 </script>
 

@@ -105,7 +105,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 ## Code (`Overview`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'

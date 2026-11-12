@@ -5894,7 +5894,7 @@ What each part takes: [blocks/platform/dashboard/project-status-dashboard.md](bl
 - Surface: product
 - Source: `blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/scan-results-dashboard")`
-- Components: Alert, BarList, Card, ChartCard, DonutChart, EmptyState, Hint, IconButton, Input, Link, PageHeader, Select, Skeleton, StatTile, Table, `TableRoot`
+- Components: Alert, BarList, Card, `type`, ChartCard, DonutChart, EmptyState, Hint, IconButton, Input, Link, PageHeader, Select, Skeleton, StatTile, Table, `TableRoot`, `type`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -9013,7 +9013,7 @@ What each part takes: [blocks/platform/view/rules-list.md](blocks/platform/view/
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: Accordion, Alert, Badge, Button, `CalendarRoot`, Chart, Checkbox, Chip, CodeBlock, CopyButton, DateRangePicker, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, `PanelHeader`, Popover, PropertyFilter, Sidebar, Table, `TableRoot`, Tabs, Tag, Tooltip, `use-collection`
+- Components: Accordion, Alert, Badge, Button, `type`, `CalendarRoot`, Chart, Checkbox, Chip, CodeBlock, CopyButton, DateRangePicker, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, `PanelHeader`, Popover, PropertyFilter, Sidebar, Table, `TableRoot`, Tabs, Tag, Tooltip, `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as

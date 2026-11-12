@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Illustration from '@aziontech/webkit/illustration'
@@ -26,10 +26,10 @@
   const domain = ref('')
   const check = reactive({ open: false, loading: false, name: '', registered: false })
   const fieldWidth = ref(0)
-  let checkTimer
+  let checkTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
-  const measureField = (event) => {
-    const form = event?.target?.closest?.('form')
+  const measureField = (event: Event) => {
+    const form = (event.target as Element | null)?.closest?.('form')
     if (form) fieldWidth.value = Math.round(form.offsetWidth)
   }
 
@@ -50,7 +50,7 @@
     }, CHECK_MS)
   })
 
-  const onCheckOpen = (value) => {
+  const onCheckOpen = (value: unknown) => {
     if (!value) check.open = false
   }
 </script>
@@ -95,8 +95,8 @@
                 <div class="flex flex-1 flex-col gap-(--spacing-xs)">
                   <h3 class="text-label-md text-(--text-default)">Ship something new</h3>
                   <p class="text-pretty text-body-sm text-(--text-muted)">
-                    Deploy a static site or a full-stack app, with compute, AI, storage and
-                    media on the same build.
+                    Deploy a static site or a full-stack app, with compute, AI, storage and media on
+                    the same build.
                   </p>
                 </div>
                 <div class="flex items-center gap-(--spacing-xs)">
@@ -125,8 +125,8 @@
                 <div class="flex flex-1 flex-col gap-(--spacing-xs)">
                   <h3 class="text-label-md text-(--text-default)">Add a domain</h3>
                   <p class="text-pretty text-body-sm text-(--text-muted)">
-                    Register a new one or bring your own. DNS, automatic HTTPS and DDoS
-                    protection come with it.
+                    Register a new one or bring your own. DNS, automatic HTTPS and DDoS protection
+                    come with it.
                   </p>
                 </div>
                 <div class="flex items-center gap-(--spacing-xs)">
@@ -219,8 +219,8 @@
                 <div class="flex flex-1 flex-col gap-(--spacing-xs)">
                   <h3 class="text-label-md text-(--text-default)">Onboard your agent</h3>
                   <p class="text-pretty text-body-sm text-(--text-muted)">
-                    Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your
-                    project up to deploy here.
+                    Give Claude, Cursor, Windsurf, Codex or OpenCode a prompt that sets your project
+                    up to deploy here.
                   </p>
                 </div>
                 <div class="flex items-center gap-(--spacing-xs)">

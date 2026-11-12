@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/scan-results-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), `type`, [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, `type`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -157,9 +157,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
+  import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -172,8 +173,25 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
+
+  type Verdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
+  type SubmissionSource = 'inline' | 'api' | 'upload' | 'scheduled'
+
+  interface Submission {
+    id: string
+    name: string
+    verdict: Verdict
+    category: string
+    score: number | null
+    type: string
+    size: number
+    source: SubmissionSource
+    submitter: string
+    lastSeen: string
+  }
 
   const loading = false
   const search = ref('')
@@ -227,7 +245,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const verdictSplit = [
+  const verdictSplit: ChartSeries[] = [
     {
       id: 'clean',
       name: 'Clean',
@@ -254,7 +272,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const sourceItems = [
+  const sourceItems: BarListItem[] = [
     {
       id: 'inline',
       name: 'Inline scan',
@@ -277,7 +295,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const verdicts = {
+  const verdicts: Record<Verdict, { label: string; severity: TagSeverity; color: ChartColor }> = {
     clean: {
       label: 'Clean',
       severity: 'success',
@@ -300,7 +318,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   }
 
-  const sources = {
+  const sources: Record<SubmissionSource, string> = {
     inline: 'Inline scan',
     api: 'API submission',
     upload: 'Manual upload',
@@ -364,7 +382,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const submissions = [
+  const submissions: Submission[] = [
     {
       id: 'submission-01',
       name: 'quarterly-report.pdf',
@@ -511,7 +529,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const submissionColumns = [
+  const submissionColumns: TableColumn[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -604,10 +622,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const UNITS = ['B', 'KB', 'MB', 'GB']
 
   const formatters = {
-    count: (value) => count.format(value),
-    compact: (value) => compact.format(value),
-    score: (value) => (value === null ? '—' : String(value)),
-    size: (value) => {
+    count: (value: number) => count.format(value),
+    compact: (value: number) => compact.format(value),
+    score: (value: number | null) => (value === null ? '—' : String(value)),
+    size: (value: number) => {
       let size = value
       let unit = 0
       while (size >= 1000 && unit < UNITS.length - 1) {
@@ -798,7 +816,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     size="medium"
                     :display-value="
                       (value) =>
-                        statusOptions.find((option) => option.value === value)?.label ?? value
+                        statusOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Status" />
@@ -819,7 +838,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     size="medium"
                     :display-value="
                       (value) =>
-                        verdictOptions.find((option) => option.value === value)?.label ?? value
+                        verdictOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Verdict" />
@@ -840,7 +860,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     size="medium"
                     :display-value="
                       (value) =>
-                        sourceOptions.find((option) => option.value === value)?.label ?? value
+                        sourceOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Source" />

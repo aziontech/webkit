@@ -1,5 +1,5 @@
-<script setup>
-  import Chart from '@aziontech/webkit/chart'
+<script setup lang="ts">
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -8,7 +8,7 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -16,9 +16,21 @@
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatCount = (value) => compact.format(value)
+  interface ProjectRow {
+    id: string
+    project: string
+    requests: number
+    dataTransferred: string
+  }
 
-  const formatBytes = (value) => {
+  interface SeriesData {
+    labels: string[]
+    series: ChartSeries[]
+  }
+
+  const formatCount = (value: number) => compact.format(value)
+
+  const formatBytes = (value: number) => {
     const steps = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     let current = value
     let index = 0
@@ -88,7 +100,7 @@
     }
   ]
 
-  const comparison = {
+  const comparison: SeriesData & { delta: number | null } = {
     delta: null,
     labels: [
       '00:00',
@@ -119,9 +131,9 @@
     series: []
   }
 
-  const ranking = { labels: [], series: [] }
+  const ranking: SeriesData = { labels: [], series: [] }
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       id: 'project',
       accessorKey: 'project',
@@ -148,10 +160,10 @@
     }
   ]
 
-  const rows = []
+  const rows: ProjectRow[] = []
 
   const form = ref('line')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
   const search = ref('')
 
   const FORMS = [

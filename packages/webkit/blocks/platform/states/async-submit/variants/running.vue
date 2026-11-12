@@ -1,17 +1,32 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import LogView from '@aziontech/webkit/log-view'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import PageHeader from '@aziontech/webkit/page-header'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+
+  interface StatusTag {
+    label: string
+    severity: TagSeverity
+  }
+  type StepStatus = 'done' | 'running' | 'failed' | 'skipped' | 'pending'
+  interface DeployStep {
+    key: string
+    title: string
+    description: string
+    status: StepStatus
+    duration: string
+    tag?: StatusTag
+    lines: LogViewLine[]
+  }
 
   const REPO = { name: 'web-app', scope: 'acme' }
 
@@ -37,14 +52,14 @@
     }
   }
 
-  const statusTag = computed(() => {
+  const statusTag = computed<StatusTag>(() => {
     if (status.value === 'running') return { label: 'Deploying', severity: 'info' }
     if (status.value === 'error') return { label: 'Failed', severity: 'danger' }
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
     return { label: 'Idle', severity: 'secondary' }
   })
 
-  const steps = [
+  const steps: DeployStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -201,9 +216,7 @@
         class="layout-section-start flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
       >
         <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-          <p class="m-0 text-overline-sm text-(--text-muted)">
-            Simulation: how this deploy ends
-          </p>
+          <p class="m-0 text-overline-sm text-(--text-muted)">Simulation: how this deploy ends</p>
           <Tag
             :label="`${REPO.scope}/${REPO.name}`"
             severity="secondary"
@@ -211,9 +224,9 @@
           />
         </div>
         <p class="m-0 text-body-sm text-(--text-muted)">
-          The ending is held in the URL (<code class="text-label-code-sm">?outcome=</code>), so
-          a run is linkable and survives a reload. Select one, press Deploy, and leave the page.
-          The toast follows you and settles wherever you are.
+          The ending is held in the URL (<code class="text-label-code-sm">?outcome=</code>), so a
+          run is linkable and survives a reload. Select one, press Deploy, and leave the page. The
+          toast follows you and settles wherever you are.
         </p>
         <div class="flex flex-wrap items-center gap-(--spacing-sm)">
           <ToggleGroup

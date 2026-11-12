@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'

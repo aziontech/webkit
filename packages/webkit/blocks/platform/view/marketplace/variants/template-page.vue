@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -10,6 +10,11 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
+
+  interface FormErrors {
+    name?: string
+    repository?: string
+  }
 
   const template = {
     title: 'Nuxt Storefront',
@@ -23,12 +28,12 @@
   const form = reactive({ name: 'nuxt-storefront', repository: 'acme/nuxt-storefront' })
   const submitted = ref(false)
   const deploying = ref(false)
-  const formEl = ref(null)
+  const formEl = ref<HTMLElement | null>(null)
   const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
   const REPO = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/
-  const errors = computed(() => {
+  const errors = computed((): FormErrors => {
     if (!submitted.value) return {}
-    const out = {}
+    const out: FormErrors = {}
     if (!form.name.trim()) out.name = 'Enter a name for the application.'
     else if (!SLUG.test(form.name.trim()))
       out.name = 'Use lowercase letters, numbers and single hyphens.'
@@ -38,7 +43,7 @@
   })
 
   const RUN_TOAST = 'template-deploy'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
   const focusForm = () => {
     toast.dismiss(RUN_TOAST)
     nextTick(() => formEl.value?.querySelector('input')?.focus())
@@ -47,7 +52,7 @@
     submitted.value = true
     if (deploying.value) return
     if (Object.keys(errors.value).length) {
-      nextTick(() => formEl.value?.querySelector('[aria-invalid="true"]')?.focus())
+      nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
     deploying.value = true

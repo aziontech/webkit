@@ -1,6 +1,7 @@
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Card from '@aziontech/webkit/card'
+  import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -13,8 +14,25 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
+
+  type Verdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
+  type SubmissionSource = 'inline' | 'api' | 'upload' | 'scheduled'
+
+  interface Submission {
+    id: string
+    name: string
+    verdict: Verdict
+    category: string
+    score: number | null
+    type: string
+    size: number
+    source: SubmissionSource
+    submitter: string
+    lastSeen: string
+  }
 
   const loading = false
   const search = ref('')
@@ -68,11 +86,11 @@
     }
   ]
 
-  const verdictSplit = []
+  const verdictSplit: ChartSeries[] = []
 
-  const sourceItems = []
+  const sourceItems: BarListItem[] = []
 
-  const verdicts = {
+  const verdicts: Record<Verdict, { label: string; severity: TagSeverity; color: ChartColor }> = {
     clean: {
       label: 'Clean',
       severity: 'success',
@@ -95,7 +113,7 @@
     }
   }
 
-  const sources = {
+  const sources: Record<SubmissionSource, string> = {
     inline: 'Inline scan',
     api: 'API submission',
     upload: 'Manual upload',
@@ -159,9 +177,9 @@
     }
   ]
 
-  const submissions = []
+  const submissions: Submission[] = []
 
-  const submissionColumns = [
+  const submissionColumns: TableColumn[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -254,10 +272,10 @@
   const UNITS = ['B', 'KB', 'MB', 'GB']
 
   const formatters = {
-    count: (value) => count.format(value),
-    compact: (value) => compact.format(value),
-    score: (value) => (value === null ? '—' : String(value)),
-    size: (value) => {
+    count: (value: number) => count.format(value),
+    compact: (value: number) => compact.format(value),
+    score: (value: number | null) => (value === null ? '—' : String(value)),
+    size: (value: number) => {
       let size = value
       let unit = 0
       while (size >= 1000 && unit < UNITS.length - 1) {
@@ -448,7 +466,8 @@
                     size="medium"
                     :display-value="
                       (value) =>
-                        statusOptions.find((option) => option.value === value)?.label ?? value
+                        statusOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Status" />
@@ -469,7 +488,8 @@
                     size="medium"
                     :display-value="
                       (value) =>
-                        verdictOptions.find((option) => option.value === value)?.label ?? value
+                        verdictOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Verdict" />
@@ -490,7 +510,8 @@
                     size="medium"
                     :display-value="
                       (value) =>
-                        sourceOptions.find((option) => option.value === value)?.label ?? value
+                        sourceOptions.find((option) => option.value === value)?.label ??
+                        String(value)
                     "
                   >
                     <Select.Trigger aria-label="Source" />

@@ -195,7 +195,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Data transferred, this period vs previous"
+                  aria-label="Expand Data transferred, this period vs previous"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -204,7 +204,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Data transferred, this period vs previous"
+                    aria-label="More options for Data transferred, this period vs previous"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -252,7 +252,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Data transferred by project"
+                  aria-label="Expand Data transferred by project"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -261,7 +261,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Data transferred by project"
+                    aria-label="More options for Data transferred by project"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -309,7 +309,7 @@
                   icon="pi pi-window-maximize"
                   kind="transparent"
                   size="small"
-                  ariaLabel="Expand Usage by project"
+                  aria-label="Expand Usage by project"
                 />
               </Tooltip>
               <DropdownMenu placement="bottom-end">
@@ -318,7 +318,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Usage by project"
+                    aria-label="More options for Usage by project"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Skeleton from '@aziontech/webkit/skeleton'
 </script>
 

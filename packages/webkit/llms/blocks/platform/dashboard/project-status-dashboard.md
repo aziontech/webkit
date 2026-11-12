@@ -162,10 +162,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -177,15 +177,66 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
+
+  type FigureFormat = 'count' | 'percentage'
+
+  interface SelectOption {
+    value: string
+    label: string
+  }
+
+  interface Figure {
+    id: string
+    label: string
+    description: string
+    value: number | null
+    format: FigureFormat
+    delta: number | null
+    inverse: boolean
+    trend: number[]
+  }
+
+  interface Variation {
+    label: string
+    severity: TagSeverity
+    icon: string
+  }
+
+  interface Milestone {
+    id: string
+    date: string
+    day: string
+    title: string
+    description: string
+    status: string
+    severity: StatusIndicatorSeverity
+  }
+
+  interface OwnerRow {
+    id: string
+    owner: string
+    initials: string
+    open: number
+    done: number
+    overdue: number
+  }
+
+  interface RiskItem {
+    id: string
+    title: string
+    reason: string
+    tag: string
+    severity: TagSeverity
+  }
 
   const loading = false
   const comparison = 'vs previous sprint'
 
-  const projects = [
+  const projects: SelectOption[] = [
     {
       value: 'product-launch',
       label: 'Product launch'
@@ -200,7 +251,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const sprints = [
+  const sprints: SelectOption[] = [
     {
       value: 'sprint-6',
       label: 'Sprint 6 · Oct 27 to Nov 7'
@@ -215,7 +266,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const figures = [
+  const figures: Figure[] = [
     {
       id: 'completion',
       label: 'Completion',
@@ -258,7 +309,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const completion = [
+  const completion: ChartSeries[] = [
     {
       id: 'done',
       name: 'Done',
@@ -295,7 +346,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     'Nov 7'
   ]
 
-  const burndown = [
+  const burndown: ChartSeries[] = [
     {
       id: 'actual',
       name: 'Actual',
@@ -308,13 +359,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const behind = {
+  const behind: Variation | null = {
     label: '23 pts behind',
     severity: 'warning',
     icon: 'pi pi-clock'
   }
 
-  const milestones = [
+  const milestones: Milestone[] = [
     {
       id: 'scope',
       date: '2026-10-06',
@@ -371,7 +422,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const owners = [
+  const owners: OwnerRow[] = [
     {
       id: 'ana-souza',
       owner: 'Ana Souza',
@@ -422,7 +473,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const ownerColumns = [
+  const ownerColumns: TableColumn[] = [
     {
       id: 'owner',
       accessorKey: 'owner',
@@ -454,7 +505,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const atRisk = [
+  const atRisk: RiskItem[] = [
     {
       id: 'payment-flow',
       title: 'Payment flow on older devices',
@@ -486,13 +537,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   ]
 
   const formatters = {
-    count: (value) => new Intl.NumberFormat('en-US').format(value),
-    percentage: (value) => `${value.toFixed(0)}%`,
-    points: (value) => `${value} pts`
+    count: (value: number) => new Intl.NumberFormat('en-US').format(value),
+    percentage: (value: number) => `${value.toFixed(0)}%`,
+    points: (value: number) => `${value} pts`
   }
 
-  const labelOf = (options) => (value) =>
-    options.find((option) => option.value === value)?.label ?? value
+  const labelOf = (options: SelectOption[]) => (value: unknown) =>
+    options.find((option) => option.value === value)?.label ?? String(value)
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')

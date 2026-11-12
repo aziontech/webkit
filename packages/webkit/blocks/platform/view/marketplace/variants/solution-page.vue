@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -50,8 +50,9 @@
     { application: 'checkout', version: '1.4.0' }
   ])
   const APPLICATIONS = ['storefront', 'checkout', 'docs', 'api']
-  const installedVersion = (app) => installs.value.find((item) => item.application === app)?.version
-  const outdated = (app) => {
+  const installedVersion = (app: string) =>
+    installs.value.find((item) => item.application === app)?.version
+  const outdated = (app: string) => {
     const version = installedVersion(app)
     return Boolean(version) && version !== integration.version
   }
@@ -69,9 +70,9 @@
   const applicationInvalid = computed(() => showErrors.value && !form.application)
   const running = ref('')
   const RUN_TOAST = 'marketplace-solution-run'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
-  const runOn = (app) => {
+  const runOn = (app: string) => {
     const updating = outdated(app)
     running.value = app
     toast.loading(

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Cards from '@aziontech/webkit/cards'
@@ -9,13 +9,30 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tag from '@aziontech/webkit/tag'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, useId, watch } from 'vue'
 
-  const applications = []
+  type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
 
-  const fields = [
+  type Application = {
+    id: string
+    name: string
+    status: ApplicationStatus
+    domain: string
+    region: string
+    requests: number
+    owner: string
+  }
+
+  interface Field {
+    id: Exclude<keyof Application, 'id' | 'name'>
+    header: string
+  }
+
+  const applications: Application[] = []
+
+  const fields: Field[] = [
     { id: 'status', header: 'Status' },
     { id: 'domain', header: 'Domain' },
     { id: 'region', header: 'Region' },
@@ -23,7 +40,7 @@
     { id: 'owner', header: 'Owner' }
   ]
 
-  const properties = [
+  const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'status',
@@ -38,7 +55,7 @@
     { key: 'requests', label: 'Requests', type: 'number' }
   ]
 
-  const items = ref([...applications])
+  const items = ref<Application[]>([...applications])
 
   const {
     cardsProps,
@@ -70,11 +87,12 @@
     preferences.value.columns
       .filter((column) => column.visible)
       .map((column) => fields.find((field) => field.id === column.id))
-      .filter(Boolean)
+      .filter((field): field is Field => field !== undefined)
   )
 
   const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
-  const severityOf = (value) =>
+  const asApplication = (item: Record<string, unknown>) => item as Application
+  const severityOf = (value: ApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'secondary'
 
   const CONFIRM_WORD = 'delete'
@@ -244,15 +262,15 @@
                     <dd class="min-w-0 truncate">
                       <Tag
                         v-if="field.id === 'status'"
-                        :label="item.status"
-                        :severity="severityOf(item.status)"
+                        :label="asApplication(item).status"
+                        :severity="severityOf(asApplication(item).status)"
                         size="small"
                       />
                       <bdi v-else-if="field.id === 'domain'">{{ item.domain }}</bdi>
                       <span
                         v-else-if="field.id === 'requests'"
                         class="tabular-nums"
-                        >{{ requestsFormat.format(item.requests) }}</span
+                        >{{ requestsFormat.format(asApplication(item).requests) }}</span
                       >
                       <template v-else>{{ item[field.id] }}</template>
                     </dd>

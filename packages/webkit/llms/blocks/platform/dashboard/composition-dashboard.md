@@ -160,9 +160,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Chart from '@aziontech/webkit/chart'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -173,10 +173,21 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
+
+  interface Contributor {
+    id: string
+    rank: number
+    name: string
+    icon: string
+    category: string
+    amount: number
+    share: number
+    change: number
+  }
 
   const loading = false
   const comparison = 'vs previous month'
@@ -231,7 +242,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     'Nov'
   ]
 
-  const series = [
+  const series: ChartSeries[] = [
     {
       id: 'compute',
       name: 'Compute',
@@ -259,7 +270,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const split = [
+  const split: ChartSeries[] = [
     {
       id: 'compute',
       name: 'Compute',
@@ -287,7 +298,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const contributors = [
+  const contributors: Contributor[] = [
     {
       id: 'web-app',
       rank: 1,
@@ -390,7 +401,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const contributorColumns = [
+  const contributorColumns: TableColumn[] = [
     {
       id: 'rank',
       accessorKey: 'rank',
@@ -482,10 +493,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   })
 
   const formatters = {
-    spend: (value) => spendFormat.format(value),
-    amount: (value) => amountFormat.format(value),
-    share: (value) => `${value.toFixed(1)}%`,
-    change: (value) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
+    spend: (value: number) => spendFormat.format(value),
+    amount: (value: number) => amountFormat.format(value),
+    share: (value: number) => `${value.toFixed(1)}%`,
+    change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
   const period = ref('12m')
@@ -505,7 +516,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               v-model="period"
               size="medium"
               :display-value="
-                (value) => periods.find((option) => option.value === value)?.label ?? value
+                (value) => periods.find((option) => option.value === value)?.label ?? String(value)
               "
             >
               <Select.Trigger aria-label="Period" />

@@ -186,7 +186,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Spend by category"
+                    aria-label="More options for Spend by category"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -221,7 +221,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Current split"
+                    aria-label="More options for Current split"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -258,7 +258,7 @@
                     icon="pi pi-ellipsis-h"
                     kind="transparent"
                     size="small"
-                    ariaLabel="More options for Top contributors"
+                    aria-label="More options for Top contributors"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>

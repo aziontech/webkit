@@ -172,9 +172,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ## Code (`Default`)
 
 ```vue
-<script setup>
-  import BarList from '@aziontech/webkit/bar-list'
-  import Chart from '@aziontech/webkit/chart'
+<script setup lang="ts">
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
@@ -183,12 +183,32 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
+
+  type Outcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
+
+  interface FilterOption {
+    value: string
+    label: string
+    disabled?: boolean
+  }
+
+  interface ActivityRow {
+    id: string
+    time: string
+    actor: string
+    outcome: Outcome
+    category: string
+    severity: SeverityTagSeverity
+    destination: string
+    method: string
+    rule: string
+  }
 
   const loading = false
   const comparison = 'vs prior day'
@@ -197,14 +217,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const outcome = ref('Any outcome')
   const category = ref('Any category')
   const destination = ref('')
-  const activeIndex = ref(null)
+  const activeIndex = ref<number | null>(null)
 
   const labels = Array.from(
     { length: 24 },
     (_, index) => new Date(Date.UTC(2026, 10, 9, 15 + index))
   )
 
-  const timeRanges = [
+  const timeRanges: FilterOption[] = [
     {
       value: 'Last hour',
       label: 'Last hour'
@@ -223,7 +243,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const actorOptions = [
+  const actorOptions: FilterOption[] = [
     {
       value: 'Any actor',
       label: 'Any actor'
@@ -258,7 +278,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const outcomeOptions = [
+  const outcomeOptions: FilterOption[] = [
     {
       value: 'Any outcome',
       label: 'Any outcome'
@@ -285,7 +305,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const categoryOptions = [
+  const categoryOptions: FilterOption[] = [
     {
       value: 'Any category',
       label: 'Any category'
@@ -375,7 +395,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const outcomes = [
+  const outcomes: ChartSeries[] = [
     {
       id: 'allowed',
       name: 'Allowed',
@@ -402,7 +422,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const actors = [
+  const actors: BarListItem[] = [
     {
       id: 'report-builder',
       name: 'report-builder',
@@ -440,7 +460,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const categories = [
+  const categories: BarListItem[] = [
     {
       id: 'Read',
       name: 'Read',
@@ -473,7 +493,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const destinations = [
+  const destinations: BarListItem[] = [
     {
       id: 'api.example.com',
       name: 'api.example.com',
@@ -506,7 +526,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       id: 'time',
       accessorKey: 'time',
@@ -573,7 +593,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const rows = [
+  const rows: ActivityRow[] = [
     {
       id: 'request-01',
       time: '14:52:08',
@@ -710,9 +730,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
-  const formatCount = (value) => compact.format(value)
+  const formatCount = (value: number) => compact.format(value)
 
-  const outcomeTags = {
+  const outcomeTags: Record<Outcome, { label: string; severity: TagSeverity }> = {
     allowed: {
       label: 'Allowed',
       severity: 'success'
@@ -735,7 +755,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   }
 
-  const outcomeTag = (outcome) => outcomeTags[outcome]
+  const outcomeTag = (outcome: Outcome) => outcomeTags[outcome]
 </script>
 
 <template>
