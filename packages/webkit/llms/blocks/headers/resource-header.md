@@ -1,6 +1,6 @@
 # ResourceHeader (`headers/resource-header`)
 
-> The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and the breadcrumb on every level from `md`. End: search first, then Create, the Agent button and the account avatar. The first level carries one unlinked crumb, the module; the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` the `SearchTrigger` widens into the field with its ⌘K / Ctrl K keycap. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `SearchTrigger`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.
+> The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and from the second level the breadcrumb from `md`. End: search first, then Create, the Agent button and the account avatar. The first level has no breadcrumb (the rail's active row names the module); the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` the `SearchTrigger` widens into the field with its ⌘K / Ctrl K keycap. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb` (second level), `IconButton`, `Tooltip`, `SearchTrigger`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.
 
 - Surface: product
 - Source: `blocks/headers/resource-header/resource-header.vue` in `@aziontech/webkit`
@@ -36,7 +36,7 @@ Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the 
 
 ### C. Brand — `Brand` (required)
 
-Linked to the home route with `aria-label="Azion home"`, before the breadcrumb.
+Linked to the home route with `aria-label="Azion home"`. At the first level nothing follows it: the rail's active row names the module and the page opens on its own `PageHeader`, so the bar carries no breadcrumb, never a single crumb. From the second level (`SecondLevel`) a `Breadcrumb` follows it from `md`: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
 ### D. Create — `Button` (required)
 
@@ -50,15 +50,11 @@ The AI assistant entry, medium, `ai-ask-azion` icon. It is the only highlight bu
 
 Inside a button labelled `Account settings`, always last.
 
-### G. Location — `Breadcrumb` (required)
-
-Shows from `md`, from the second level on. First level: no breadcrumb — the rail's active row names the module and the page opens on its own `PageHeader`; an empty trail, never a single crumb. Second level: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
-
-### H. Search — `SearchTrigger` (required)
+### G. Search — `SearchTrigger` (required)
 
 The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
 
-### I. Hints — `Tooltip` (required)
+### H. Hints — `Tooltip` (required)
 
 Names every icon-only control: the navigation trigger, and Create and Agent below `md`.
 
@@ -110,15 +106,12 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Tooltip from '@aziontech/webkit/tooltip'
-
-  const crumbs = [{ label: 'Applications' }]
 </script>
 
 <template>
@@ -149,12 +142,6 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
               size="small"
             />
           </a>
-          <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
-            <Breadcrumb
-              :items="crumbs"
-              class="w-full"
-            />
-          </div>
         </div>
       </GlobalHeader.Left>
       <GlobalHeader.Middle />

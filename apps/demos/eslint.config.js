@@ -3,7 +3,7 @@ import webkitPlugin from '@aziontech/webkit/eslint-plugin'
 import eslintConfig from '../../eslint.config.js'
 
 export default [
-  ...eslintConfig.filter((config) => !config.plugins?.webkit),
+  ...eslintConfig,
   ...webkitPlugin.configs.strict,
   {
     files: ['*.config.{js,cjs,mjs,ts,cts,mts}'],
