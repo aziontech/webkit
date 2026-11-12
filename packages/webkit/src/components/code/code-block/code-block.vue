@@ -31,8 +31,10 @@
     type CodeBlockHighlightToken,
     formatLineNumber,
     getHighlightTokenClass,
-    highlightCode
+    highlightCode,
+    plainLines
   } from './utils/highlight-code'
+  import { languageName, stripShellPrompts } from './utils/language-name'
   import {
     buildLineChangeMap,
     type CodeBlockLineChange,
@@ -42,6 +44,8 @@
   } from './utils/line-decorations'
 
   export type { CodeBlockLineChange }
+
+  export type CodeBlockKind = 'code' | 'output'
 
   export type CodeBlockTab = {
     label: string
@@ -68,8 +72,14 @@
     showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
-    /** Shows the copy control; turn it off for a decorative block nobody copies from. */
+    /** Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. */
     copyable?: boolean
+    /** What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. */
+    kind?: CodeBlockKind
+    /** Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it. */
+    showLabel?: boolean
+    /** Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. */
+    title?: string
     /** Staggered line entrance for website / marketing layouts (opacity + slide from -8 px). */
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
@@ -81,7 +91,10 @@
     defaultValue: undefined,
     showLineNumbers: true,
     copyAriaLabel: '',
-    copyable: true,
+    copyable: undefined,
+    kind: 'code',
+    showLabel: false,
+    title: '',
     animateLines: false,
     bordered: true
   })
@@ -155,6 +168,28 @@
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
 
+  const isOutput = computed(() => props.kind === 'output')
+
+  const canCopy = computed(() => props.copyable ?? !isOutput.value)
+
+  const showLabelBar = computed(
+    () =>
+      Boolean(activeTab.value) &&
+      !showTabHeader.value &&
+      !showFileNameBar.value &&
+      (props.showLabel || isOutput.value || Boolean(props.title))
+  )
+
+  const labelText = computed(() => {
+    if (props.title) return props.title
+    if (isOutput.value) return t('codeBlock.output')
+    return activeTab.value?.label || languageName(activeTab.value?.language)
+  })
+
+  const copyValue = computed(() =>
+    activeTab.value ? stripShellPrompts(activeTab.value.code, activeTab.value.language) : ''
+  )
+
   const showDiffGutter = computed(() => (activeTab.value?.lineChanges?.length ?? 0) > 0)
 
   const activeLineChangeMap = computed(() => buildLineChangeMap(activeTab.value?.lineChanges))
@@ -168,7 +203,9 @@
       return [] as CodeBlockHighlightToken[][]
     }
 
-    return highlightCode(activeTab.value.code, activeTab.value.language)
+    return isOutput.value
+      ? plainLines(activeTab.value.code)
+      : highlightCode(activeTab.value.code, activeTab.value.language)
   })
 
   const { split: splitLines, observe: observeLineChunk } = useLazyChunks({ rowHeight: 24 })
@@ -566,14 +603,37 @@
   <div
     :class="
       cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
         attrs.class as string | undefined
       )
     "
     :data-border="bordered || null"
-    :data-copyable="copyable || null"
+    :data-copyable="canCopy || null"
+    :data-kind="kind"
     :data-testid="testId"
   >
+    <div
+      v-if="showLabelBar"
+      class="flex h-10 shrink-0 items-center gap-(--spacing-xs) overflow-hidden border-b border-(--border-default) px-(--spacing-sm)"
+      :data-testid="`${testId}__label`"
+    >
+      <i
+        :class="
+          cn(
+            'text-label-code-sm shrink-0 text-(--text-muted)',
+            isOutput ? 'pi pi-align-left' : 'pi pi-code'
+          )
+        "
+        aria-hidden="true"
+      />
+      <span
+        class="text-label-code-sm min-w-0 flex-1 truncate text-(--text-muted)"
+        :data-testid="`${testId}__label-text`"
+      >
+        {{ labelText }}
+      </span>
+    </div>
+
     <div
       v-if="showTabHeader"
       class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)"
@@ -661,13 +721,13 @@
       @transitionend="onContentTransitionEnd"
     >
       <div
-        v-if="copyable"
+        v-if="canCopy"
         class="absolute end-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >
         <CopyButton
-          :value="activeTab?.code ?? ''"
+          :value="copyValue"
           :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
           kind="outlined"
           size="small"

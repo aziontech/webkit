@@ -21,6 +21,11 @@
       "name": "Groups",
       "summary": "Groups frame part of the layout under a small label, and edges can reach a group as a whole. The platform group holds a `grid` of tiles; the backend group is `dashed` and tinted with the secondary mask to mark it as outside the platform.",
       "file": "groups.vue"
+    },
+    {
+      "name": "Flow",
+      "summary": "A vertical flow in a docs column: one `row` that stacks below the wide breakpoint. The nodes sit centred on one axis, each connector runs from the bottom centre of a node to the top centre of the next, and the `azion deploy` chip sits centred on its line.",
+      "file": "flow.vue"
     }
   ]
 }

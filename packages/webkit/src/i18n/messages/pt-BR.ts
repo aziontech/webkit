@@ -216,7 +216,8 @@ export const ptBR: Messages = {
     removeNamed: 'Remover {label}'
   },
   codeBlock: {
-    copy: 'Copiar código'
+    copy: 'Copiar código',
+    output: 'Saída'
   },
   codeEditor: {
     label: 'Editor de código',

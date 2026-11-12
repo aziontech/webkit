@@ -3,17 +3,17 @@ name: diagram
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 528944c90b5c3ca7473a92a8e6993e220d3c1a069d985c36bb8f9d07bcc8fcac
+spec_version: 2
+checksum: 0304b90878fe2b38cc3704ee342e78a7337f12e92c47e91ff99fd7faf846a02a
 created: 2026-10-21
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 ---
 
 # Diagram — Component Spec
 
 ## Purpose
 
-A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked, indented tree and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
+A node-and-connector diagram for marketing pages: the request path of an architecture, a routing policy, a product's place in the platform. The consumer names one of the official diagrams with `name` — the closed library of 28 drawings in webkit's assets, one starter architecture per Azion product plus the page diagrams the product pages tab through — or passes a one-off `spec`: the nodes, how they are arranged, and the edges between them. The component lays the nodes out with real CSS (rows, branches, grids and framed groups), then measures the laid-out nodes and draws every connector, port and edge label on top. Nothing is drawn on a fixed canvas: the layout reflows below its container breakpoint into a stacked column — centred on one axis, or an indented tree where the row branches — and the connectors are re-measured, so a diagram stays legible from a phone to a wide band.
 
 ## When to use
 
@@ -42,6 +42,8 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 - Use `gap: 'wide'` on a row whose edges carry labels, so the chips have room between the nodes.
 - Name an official diagram instead of rebuilding its `spec`, so the same architecture is the same drawing on every page. Reach for `spec` only for a diagram the library does not have.
 - Every named diagram carries its own one-sentence description. Give a `spec` diagram an `ariaLabel` (in the prop or in the spec) that states what it shows; the drawing itself is hidden from assistive technology.
+- Do: for a vertical flow in a docs column (a command → the CLI → the API → the resources), use one `row`. In the column it stacks centred, every connector runs through the horizontal centre of both nodes and an edge label sits centred on its line.
+- Don't: nudge nodes or labels with wrappers, margins or spacer nodes to centre a flow; the layout does it.
 - Reach for `card` for platform pieces, `item` for models and providers, `pill` for a client, `tile` for an icon-only grid cell, and `app` for the consumer's own application.
 
 ## Usage
@@ -120,8 +122,8 @@ _None — every node is drawn from `spec`._
 
 ## States
 
-- **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
-- **Connectors.** After layout, the component measures every node and group (each carries `data-diagram-node` with its key) and draws each edge whose two ends exist: a curve when the target sits to the right of the source, an elbow from the source's bottom edge into the target's left edge when the target sits below and to the right, and a straight drop otherwise. Each end gets a port; ports at the same point merge. Edges whose ends are missing are skipped. The drawing is re-measured on every resize of the canvas or of any node, when the web fonts settle, and when the edges change.
+- **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches` stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
+- **Connectors.** After layout, the component measures every node and group (each carries `data-diagram-node` with its key) and draws each edge whose two ends exist: a curve from the source's right edge into the target's left edge, centre to centre on the vertical axis, when the target sits to the right of the source; when the target sits below, a connector from the **bottom centre** of the source to the **top centre** of the target — a straight line when the two centres align, otherwise an orthogonal path that turns at the gap's midline with rounded corners — with its label chip centred on the line (at the midpoint of the gap). Inside an indented tree (both ends in a `tree` stack) the tree rail is kept instead: an elbow from the source's bottom edge, one inset in from its start, into the target's start edge when the target is indented to the right, and a straight drop along that inset otherwise. Each end gets a port; ports at the same point merge. Edges whose ends are missing are skipped. The drawing is re-measured on every resize of the canvas or of any node, when the web fonts settle, and when the edges change.
 - **Named.** A `name` loads its spec on demand from the library; the root keeps its width and draws nothing until the spec arrives, and a `name` change clears the current drawing at once. A `name` outside the library (from untyped code), or a spec that fails to load, warns in development only and leaves the root empty; it never throws. With neither `name` nor `spec` the root is empty.
 - **Label.** The root is announced as one image named by `ariaLabel`, or, when that is empty, by the description the spec carries; with neither it is a plain figure.
 - **Ready.** The canvas sets `data-ready` once the first measure lands and fades in from transparent, so a diagram never shows unconnected nodes.
@@ -162,14 +164,14 @@ _None — every node is drawn from `spec`._
 
 ## Theme gaps
 
-| Figma variable                                                                                       | Temporary primitive                                                                                                                                      | Follow-up                                                                       |
-| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| — (documentation gap, not a token gap): active connector, port and chip, lit glow                    | `var(--accent)` — ships in the theme, used by `network-map`                                                                                              | `TODO: list --accent in DESIGN.md § Colors`                                     |
-| — (documentation gap): connector and node edge width                                                 | `var(--border-width-default)` — ships in the theme                                                                                                       | `TODO: list --border-width-* in DESIGN.md`                                      |
-| — (documentation gap): group tints                                                                   | `var(--primary-mask)`, `var(--secondary-mask)` — ship in the theme                                                                                       | `TODO: list the --*-mask surfaces in DESIGN.md § Colors`                        |
-| — (documentation gap): port corner                                                                   | `var(--radius-sm)` — ships in the theme                                                                                                                  | `TODO: list --radius-* in DESIGN.md § Shape`                                    |
-| — (documentation gap): node, port and placeholder sizes                                              | `var(--size-2)` … `var(--size-72)` — the theme size scale                                                                                                | `TODO: list the --size-* scale in DESIGN.md`                                    |
-| — (documentation gap): stacked branch indent                                                         | `var(--spacing-12)` — the numeric spacing scale                                                                                                          | `TODO: list the numeric --spacing-* steps in DESIGN.md § Spacing`               |
+| Figma variable                                                                    | Temporary primitive                                                | Follow-up                                                         |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| — (documentation gap, not a token gap): active connector, port and chip, lit glow | `var(--accent)` — ships in the theme, used by `network-map`        | `TODO: list --accent in DESIGN.md § Colors`                       |
+| — (documentation gap): connector and node edge width                              | `var(--border-width-default)` — ships in the theme                 | `TODO: list --border-width-* in DESIGN.md`                        |
+| — (documentation gap): group tints                                                | `var(--primary-mask)`, `var(--secondary-mask)` — ship in the theme | `TODO: list the --*-mask surfaces in DESIGN.md § Colors`          |
+| — (documentation gap): port corner                                                | `var(--radius-sm)` — ships in the theme                            | `TODO: list --radius-* in DESIGN.md § Shape`                      |
+| — (documentation gap): node, port and placeholder sizes                           | `var(--size-2)` … `var(--size-72)` — the theme size scale          | `TODO: list the --size-* scale in DESIGN.md`                      |
+| — (documentation gap): stacked branch indent                                      | `var(--spacing-12)` — the numeric spacing scale                    | `TODO: list the numeric --spacing-* steps in DESIGN.md § Spacing` |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -186,6 +188,7 @@ _None — every node is drawn from `spec`._
 - Spec — a one-off request path passed as `spec`, from a client through an application to the lit product and its outcomes, with labelled, active edges. Justified addition: `spec` is the second way in, for a diagram the library does not have, and Default shows only `name`.
 - NodeKinds — composite story drawing one node of each kind (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node kind is the component's one visual axis, carried in the data rather than a `kind` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
+- Flow — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
 
 <!-- Types/Sizes omitted: Diagram has no `kind` or `size` prop. Loading/Disabled omitted: it declares neither prop. -->
 
