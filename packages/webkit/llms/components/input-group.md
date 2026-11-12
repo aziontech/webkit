@@ -113,7 +113,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ```vue
 <script setup>
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  </script>
+</script>
 
 <template>
   <InputGroupRoot>

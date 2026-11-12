@@ -459,7 +459,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Alert>
 
-        <Card key="card-1"
+        <Card
+          key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -483,7 +484,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
 
-        <Card key="card-2"
+        <Card
+          key="card-2"
           v-else
           :padded="false"
         >
@@ -536,13 +538,19 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   :name="row.name"
                   @select="(event, value) => onAction(value, row)"
                 >
-                  <DropdownMenu.Group key="dropdown-menu.group-1" v-if="!row.revoked && row.status !== 'Expired'">
+                  <DropdownMenu.Group
+                    key="dropdown-menu.group-1"
+                    v-if="!row.revoked && row.status !== 'Expired'"
+                  >
                     <DropdownMenu.Option
                       value="revoke"
                       label="Revoke"
                     />
                   </DropdownMenu.Group>
-                  <DropdownMenu.Group key="dropdown-menu.group-2" v-else>
+                  <DropdownMenu.Group
+                    key="dropdown-menu.group-2"
+                    v-else
+                  >
                     <DropdownMenu.Option
                       value="delete"
                       label="Delete"

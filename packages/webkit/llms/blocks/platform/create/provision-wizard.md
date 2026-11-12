@@ -1217,7 +1217,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     v-for="field in originFields"
                                     :key="field.name"
                                   >
-                                    <Field key="field-1"
+                                    <Field
+                                      key="field-1"
                                       v-if="field.kind === 'select'"
                                       :data-field-invalid="!!errors['origin.' + field.name] || null"
                                       :required="!!errors['origin.' + field.name]"
@@ -1261,7 +1262,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                         {{ errors['origin.' + field.name] || field.description }}
                                       </HelperText>
                                     </Field>
-                                    <Field key="field-2"
+                                    <Field
+                                      key="field-2"
                                       v-else
                                       :required="!!errors['origin.' + field.name]"
                                     >
