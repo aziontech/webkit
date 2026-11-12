@@ -7,6 +7,7 @@ import { defineComponent, h } from 'vue'
 import CompactRows from '../../../../examples/setting-row/compact-rows.vue'
 import Default from '../../../../examples/setting-row/default.vue'
 import Nested from '../../../../examples/setting-row/nested.vue'
+import Stackable from '../../../../examples/setting-row/stackable.vue'
 import WithMessage from '../../../../examples/setting-row/with-message.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ItemList from '../../content/item/item-list.vue'
@@ -80,6 +81,14 @@ describe('SettingRow', () => {
     expect(getByTestId('layout-setting-row').getAttribute('data-level')).toBe(String(level))
   })
 
+  it('sets data-stackable only when stackable is on', () => {
+    const off = within(render(inList({ title: 'Name' })).container)
+    expect(off.getByTestId('layout-setting-row').hasAttribute('data-stackable')).toBe(false)
+
+    const on = within(render(inList({ title: 'Address', stackable: true })).container)
+    expect(on.getByTestId('layout-setting-row').hasAttribute('data-stackable')).toBe(true)
+  })
+
   it('renders rich title and description slots', () => {
     const { getByTestId } = within(
       render(
@@ -99,6 +108,7 @@ describe('SettingRow', () => {
       .getAllByTestId('layout-setting-row')
       .map((el) => el.dataset['level'])
     expect(levels).toEqual(['0', '0', '1', '1', '1', '2'])
+    expect(within(render(Stackable).container).getAllByRole('textbox')).toHaveLength(2)
   })
 
   it('has no accessibility violations', async () => {
@@ -115,28 +125,41 @@ const boxOf = (width: number) => {
 }
 
 describe('SettingRow in a narrow box', () => {
-  const mountIn = (width: number) =>
+  const mountIn = (width: number, props: Record<string, unknown> = {}) =>
     render(SettingRow, {
-      props: { title: 'Cache TTL', description: 'How long the edge keeps a copy.' },
+      props: { title: 'Cache TTL', description: 'How long the edge keeps a copy.', ...props },
       slots: { default: '<input aria-label="TTL" />' },
       container: boxOf(width)
     })
 
-  it('moves the control under the copy at full width', () => {
-    const view = mountIn(320)
+  const beside = (view: ReturnType<typeof mountIn>) => {
     const title = view.getByTestId('layout-setting-row__title')
     const control = view.getByTestId('layout-setting-row__control')
+    return control.getBoundingClientRect().top < title.getBoundingClientRect().bottom
+  }
 
-    expect(control.getBoundingClientRect().top).toBeGreaterThan(
-      title.getBoundingClientRect().bottom
-    )
+  it('keeps the control beside the copy by default, as the console does on a phone', () => {
+    expect(beside(mountIn(320))).toBe(true)
   })
 
-  it('keeps the control beside the copy in a wide box', () => {
-    const view = mountIn(900)
-    const title = view.getByTestId('layout-setting-row__title')
-    const control = view.getByTestId('layout-setting-row__control')
+  it('top-aligns the title with a tall control', () => {
+    const view = render(SettingRow, {
+      props: { title: 'Nameservers', description: 'Set Azion Edge DNS as the authority.' },
+      slots: { default: '<textarea aria-label="Nameservers" rows="8"></textarea>' },
+      container: boxOf(900)
+    })
+    const row = view.getByTestId('layout-setting-row').getBoundingClientRect()
+    const title = view.getByTestId('layout-setting-row__title').getBoundingClientRect()
+    const control = view.getByTestId('layout-setting-row__control').getBoundingClientRect()
 
-    expect(control.getBoundingClientRect().top).toBeLessThan(title.getBoundingClientRect().bottom)
+    expect(Math.abs(title.top - control.top)).toBeLessThan(row.height / 4)
+  })
+
+  it('moves a stackable field control under the copy at full width', () => {
+    expect(beside(mountIn(320, { stackable: true }))).toBe(false)
+  })
+
+  it('keeps a stackable control beside the copy in a wide box', () => {
+    expect(beside(mountIn(900, { stackable: true }))).toBe(true)
   })
 })

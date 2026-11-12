@@ -577,6 +577,12 @@ cell capped at `--container-3xs`, so every field on the card ends at the same ed
 editor, under the copy at the full measure. A setting that only applies while the row above it is on
 renders with `v-if` on that state and `:level="1"` (or `2`), indented under a rule.
 
+**The row keeps two columns on a phone and aligns to the top.** The copy and the control align to the
+top of the row (a title stays level with the first of three stacked inputs), and the row does not stack
+in a narrow box: the description clamps to two lines and the `field` control keeps its end cell. Set
+`stackable` on one row only when its field needs the full measure in a narrow box (a long URL in a side
+drawer); never wrap a row in your own flex box to restack or re-centre it.
+
 Canonical pattern:
 
 ```vue

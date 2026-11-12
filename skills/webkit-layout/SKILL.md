@@ -313,8 +313,8 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (rows
 stack into label/value cards below `--container-lg`; `:stackable="false"` keeps the scrolling grid),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (the
-control moves under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (keeps its
+two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (only previous / current / next in a narrow box), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer

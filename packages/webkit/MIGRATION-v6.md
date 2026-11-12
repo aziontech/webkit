@@ -236,8 +236,9 @@ split view or a card these change:
 - **Container-aware components.** `PageHeader` and `SectionHeader` drop their actions under the
   title below `@md` of the header (was: below the `md` viewport). `SaveBar` puts message and actions
   on one row from `@xl` of the bar (was: the `lg` viewport); `plain` stacks its actions below `@md`.
-  `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingRow` moves a
-  `field` control under its copy below `@md` of the row. `Alert` moves its action to its own line,
+  `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingRow` keeps its two
+  columns at every width and top-aligns the copy with the control (was: centred); set `stackable`
+  to move a `field` control under its copy below `@md` of the row. `Alert` moves its action to its own line,
   `EmptyState` stretches its actions and `Pagination` keeps only previous / current / next in a
   narrow box. `KeyValuePairs` picks its column count from its own width (a cell never gets narrower
   than `--container-3xs`) instead of the `md`/`lg` viewport. `Field orientation="responsive"`

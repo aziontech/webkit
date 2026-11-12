@@ -21,6 +21,11 @@
       "name": "Nested",
       "summary": "Protocol rows that depend on a switch above them: HTTPS rows indent one level (`level` 1) and HTTP/3 ports a second level (`level` 2), each behind a rule.",
       "file": "nested.vue"
+    },
+    {
+      "name": "Stackable",
+      "summary": "A drawer-width card: the Name row keeps its two columns with the description clamped, while the Address row sets `stackable` so its long URL field drops under the copy at full width.",
+      "file": "stackable.vue"
     }
   ]
 }
