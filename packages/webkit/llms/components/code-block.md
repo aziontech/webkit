@@ -1,6 +1,6 @@
 # Code Block
 
-> Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Regions render conditionally from tab data — the consumer does not pick a separate `kind`. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:
+> Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell: 1. **Language switcher** ([4567:33761](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761)) — tabbed snippets with a sliding pill, optional filename bar, syntax highlighting, and copy. 2. **Show filename** ([4567:30198](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-30198)) — single snippet with a raised filename bar (language icon + name), no tabs. 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar. 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar. Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** kind (`kind="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks. The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab. **Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:
 
 - Import: `import CodeBlock from '@aziontech/webkit/code-block'`
 - Category: code · Surface: product · Structure: monolithic
@@ -19,6 +19,9 @@
 - Use `default-value` for the initial tab, and `v-model` only when something outside the block must follow the selected tab.
 - Set `:copyable="false"` on decorative blocks, and `:bordered="false"` when the block sits inside a surface that already frames it.
 - Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
+- Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `kind="output"` (or in prose).
+- Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `webkit/no-output-in-command` lint warns on it.
+- Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title.
 
 ## Don’t
 
@@ -43,7 +46,10 @@
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). |
-| `copyable` | `boolean` | `true` | false | Shows the copy control; turn it off for a decorative block nobody copies from. |
+| `copyable` | `boolean` | `undefined` | false | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. |
+| `kind` | `'code' \| 'output'` | `'code'` | false | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. |
+| `showLabel` | `boolean` | `false` | false | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it. |
+| `title` | `string` | `''` | false | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
 | `bordered` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
 
@@ -71,15 +77,17 @@
 - `data-state` on tabs: `active` | `inactive`
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`
 - `data-disabled` not used (tabs are not disabled in v2)
+- `data-kind` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 #### Layout rules (derived from Figma)
 
-| Region                                                                     | Visible when                        |
-| -------------------------------------------------------------------------- | ----------------------------------- |
-| Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1`                   |
-| Filename bar (`FileName`, 40 px)                                           | active tab has `fileName`           |
-| Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                     | active tab `lineChanges.length > 0` |
-| Line highlight (info background + 2 px leading bar)                        | active tab `highlightedLine` is set |
+| Region                                                                     | Visible when                                                             |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset) | `tabs.length > 1`                                                        |
+| Filename bar (`FileName`, 40 px)                                           | active tab has `fileName`                                                |
+| Label header (40 px, `pi pi-code` / `pi pi-align-left` + label)            | no tab strip, no `fileName`, and `showLabel`, `title` or `kind="output"` |
+| Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                     | active tab `lineChanges.length > 0`                                      |
+| Line highlight (info background + 2 px leading bar)                        | active tab `highlightedLine` is set                                      |
 
 When only one tab is provided and it has no `fileName`, the shell is code content + copy only (minimal block).
 
@@ -94,7 +102,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on the CopyButton (native `<button>`); when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
 - ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
-- Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark. Row backgrounds for `added`, `removed` and `highlighted` are the feedback fills at 40% (`bg-(--success)/40`, `bg-(--danger)/40`, `bg-(--info)/40`): at full strength the light fills (`--danger` `#F3A5A5`, `--info` `#99C9FF`) put the line numbers and the `function` and `type` syntax colours under 4.5:1 (3.93:1 for a line number on a removed row); at 40% every syntax colour stays above 6:1 in light and dark.
+- Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark. Row backgrounds for `added`, `removed` and `highlighted` are the feedback fills at 40% (`bg-(--success)/40`, `bg-(--danger)/40`, `bg-(--info)/40`): at full strength the light fills (`--danger` `#F3A5A5`, `--info` `#99C9FF`) put the line numbers and the `function` and `type` syntax colours under 4.5:1 (3.93:1 for a line number on a removed row); at 40% every syntax colour clears 4.5:1 in light and dark (the lowest, the light `function` orange `#B03C02` on a removed row, is 4.6:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
 - Copy control uses CopyButton `size="small"` (28×28 px).

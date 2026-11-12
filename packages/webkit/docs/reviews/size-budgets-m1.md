@@ -383,3 +383,9 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 | table-root      | 52.35         | 53.61        | 53.8       | Raised: tree rows.                   |
 | listing-browser | 67.5          | 68.68        | 68.9       | Raised: carries `Table` (tree rows). |
 | listing-table   | 58.6          | 59.75        | 59.95      | Raised: carries `Table` (tree rows). |
+
+## M2.7 owner feedback — centred diagram connectors (2026-11-12)
+
+| Entry   | Budget before | Measured now | New budget | Note                                                                                               |
+| ------- | ------------- | ------------ | ---------- | -------------------------------------------------------------------------------------------------- |
+| diagram | 10            | 10.11        | 10.3       | Raised: stacked rows centre their nodes; connectors run centre to centre with an orthogonal route. |

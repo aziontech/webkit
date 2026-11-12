@@ -84,6 +84,10 @@ runs axe + screenshots), and taste is a review concern.
 - **Page layout.** One container class per band (`.layout-column`, `-form`, `-focused`,
   `.layout-form-create`, `-content`, `-site`) and two rhythm steps (`--layout-section-gap`,
   `--layout-group-gap`) — never a hand-rolled `max-w-*` page cap (rule `webkit-page-layout`).
+- **Code samples in docs.** `DocCodeGroup` with a `language` on every sample (the label header
+  names it: Shell, JavaScript); a command block holds only what the reader runs, and what it prints
+  goes in the sample's `output` (a muted "Output" block), never as a `# HTTP/2 200` comment (rule
+  `webkit-code-samples`).
 - **Forms that browsers understand.** E-mail fields set `type="email"` and `autocomplete`
   (`username` to sign in, `email` to sign up); passwords `current-password` / `new-password`; paste is
   never blocked. Auth screens never toast: every outcome is one `Alert` inside the card.

@@ -37,6 +37,8 @@ interface Box {
   top: number
   bottom: number
   middle: number
+  centre: number
+  tree: boolean
 }
 
 interface End {
@@ -94,9 +96,31 @@ const drop = (s: Box, t: Box, inset: number): Route => {
   }
 }
 
+const stack = (s: Box, t: Box, radius: number): Route => {
+  const from = s.centre
+  const to = t.centre
+  const mid = (s.bottom + t.top) / 2
+  const ends: [End, End] = [
+    { x: from, y: s.bottom, side: 'bottom' },
+    { x: to, y: t.top, side: 'top' }
+  ]
+  if (Math.abs(from - to) < 1) {
+    return { d: `M${from} ${s.bottom} V${t.top}`, label: { x: from, y: mid }, ends }
+  }
+  const way = to > from ? 1 : -1
+  const r = Math.max(0, Math.min(radius, Math.abs(to - from) / 2, (t.top - s.bottom) / 2))
+  return {
+    d: `M${from} ${s.bottom} V${mid - r} Q${from} ${mid} ${from + way * r} ${mid} H${to - way * r} Q${to} ${mid} ${to} ${mid + r} V${t.top}`,
+    label: { x: (from + to) / 2, y: mid },
+    ends
+  }
+}
+
 const route = (s: Box, t: Box, inset: number, radius: number): Route => {
   if (t.left >= s.right - 0.5) return curve(s, t)
-  if (t.top >= s.bottom - 0.5 && t.left - (s.left + inset) >= 2 * radius) {
+  const below = t.top >= s.bottom - 0.5
+  if (below && !(s.tree && t.tree)) return stack(s, t, radius)
+  if (below && t.left - (s.left + inset) >= 2 * radius) {
     return elbow(s, t, inset, radius)
   }
   return drop(s, t, inset)
@@ -138,7 +162,9 @@ export function useDiagramConnectors(
         right: r.right - frameBox.left,
         top: r.top - frameBox.top,
         bottom: r.bottom - frameBox.top,
-        middle: (r.top + r.bottom) / 2 - frameBox.top
+        middle: (r.top + r.bottom) / 2 - frameBox.top,
+        centre: (r.left + r.right) / 2 - frameBox.left,
+        tree: node.parentElement?.closest('[data-stack]')?.getAttribute('data-stack') === 'tree'
       }
     }
 

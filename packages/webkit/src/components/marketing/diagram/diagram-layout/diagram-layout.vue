@@ -10,9 +10,11 @@
     item: DiagramLayoutItem
     /** Every node of the diagram, by key. */
     nodes: Record<string, DiagramNodeData>
+    /** Lays a stacked row out as an indented tree, because the item sits inside one. */
+    tree?: boolean
   }
 
-  defineProps<Props>()
+  withDefaults(defineProps<Props>(), { tree: false })
 </script>
 
 <template>
@@ -25,18 +27,21 @@
     v-else-if="'row' in item"
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
-    class="flex flex-col items-start gap-(--spacing-xl) self-stretch @6xl:flex-row @6xl:gap-(--spacing-xl) @6xl:self-auto @6xl:data-[align=center]:items-center @6xl:data-[align=start]:items-start @6xl:data-[gap=wide]:gap-(--spacing-xxl)"
+    :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
+    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @6xl:flex-row @6xl:gap-(--spacing-xl) @6xl:self-auto @6xl:data-[align=center]:items-center @6xl:data-[align=start]:items-start @6xl:data-[gap=wide]:gap-(--spacing-xxl)"
   >
     <DiagramLayout
       v-for="(child, index) in item.row"
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="tree || item.row.some((entry) => 'branches' in entry)"
     />
   </div>
 
   <div
     v-else-if="'branches' in item"
+    data-stack="tree"
     class="ms-(--spacing-12) flex flex-col items-start gap-(--spacing-xl) self-stretch @6xl:ms-0 @6xl:self-auto"
   >
     <DiagramLayout
@@ -44,6 +49,7 @@
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="true"
     />
   </div>
 
@@ -57,6 +63,7 @@
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="tree"
     />
   </div>
 
@@ -78,6 +85,7 @@
         <DiagramLayout
           :item="item.content"
           :nodes="nodes"
+          :tree="tree"
         />
       </div>
     </FrameBox>

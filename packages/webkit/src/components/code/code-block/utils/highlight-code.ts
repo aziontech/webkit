@@ -1,5 +1,13 @@
 export type CodeBlockHighlightTokenType =
-  'keyword' | 'string' | 'function' | 'type' | 'punctuation' | 'identifier' | 'comment'
+  | 'keyword'
+  | 'string'
+  | 'function'
+  | 'type'
+  | 'punctuation'
+  | 'identifier'
+  | 'comment'
+  | 'prompt'
+  | 'output'
 
 export type CodeBlockHighlightToken = {
   text: string
@@ -13,7 +21,9 @@ const TOKEN_CLASS: Record<CodeBlockHighlightTokenType, string> = {
   type: 'text-(--code-sintax-type)',
   punctuation: 'text-(--code-sintax-punctuation)',
   identifier: 'text-(--code-sintax-identifier)',
-  comment: 'text-(--code-sintax-comment)'
+  comment: 'text-(--code-sintax-comment)',
+  prompt: 'text-(--code-sintax-line-number) select-none',
+  output: 'text-(--text-muted)'
 }
 
 export const getHighlightTokenClass = (type: CodeBlockHighlightTokenType): string =>
@@ -440,7 +450,13 @@ export const highlightCodeLine = (
     lang === 'zsh' ||
     lang === 'console'
   ) {
-    return withLineComment(line, LINE_COMMENT, highlightShellLine)
+    const prompt = /^\$ /.exec(line)
+    if (!prompt) return withLineComment(line, LINE_COMMENT, highlightShellLine)
+    const rest = line.slice(prompt[0].length)
+    return [
+      { text: prompt[0], type: 'prompt' },
+      ...(rest ? withLineComment(rest, LINE_COMMENT, highlightShellLine) : [])
+    ]
   }
 
   if (lang === 'hcl' || lang === 'terraform' || lang === 'tf') {
@@ -462,5 +478,8 @@ export const highlightCode = (
   code: string,
   language: string | undefined
 ): CodeBlockHighlightToken[][] => code.split('\n').map((line) => highlightCodeLine(language, line))
+
+export const plainLines = (code: string): CodeBlockHighlightToken[][] =>
+  code.split('\n').map((line) => [{ text: line || ' ', type: 'output' }])
 
 export const formatLineNumber = (lineNumber: number): string => String(lineNumber).padStart(2, '0')

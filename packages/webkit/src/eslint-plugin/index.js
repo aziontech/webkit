@@ -5,6 +5,7 @@ import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
+import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
@@ -27,7 +28,8 @@ const rules = {
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
   'authoring-standards': authoringStandards,
-  'container-needs-width': containerNeedsWidth
+  'container-needs-width': containerNeedsWidth,
+  'no-output-in-command': noOutputInCommand
 }
 
 const FILES = [
@@ -73,10 +75,11 @@ const RECOMMENDED = {
   'prefer-define-model': 'error',
   'no-style-override': 'error',
   'authoring-standards': 'error',
-  'container-needs-width': 'warn'
+  'container-needs-width': 'warn',
+  'no-output-in-command': 'warn'
 }
 
-export const HEURISTIC_RULES = Object.freeze(['container-needs-width'])
+export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
 
 const STRICT = Object.fromEntries(
   Object.keys(rules).map((r) => [r, HEURISTIC_RULES.includes(r) ? 'warn' : 'error'])

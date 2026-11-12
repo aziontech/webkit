@@ -145,7 +145,8 @@ export const chip = {
 } as const
 
 export const codeBlock = {
-  copy: 'Copy code'
+  copy: 'Copy code',
+  output: 'Output'
 } as const
 
 export const codeEditor = {

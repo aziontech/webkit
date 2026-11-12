@@ -5,6 +5,7 @@ import { h } from 'vue'
 
 import Default from '../../../../examples/doc-code-group/default.vue'
 import Group from '../../../../examples/doc-code-group/group.vue'
+import WithOutput from '../../../../examples/doc-code-group/with-output.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCodeGroup from './doc-code-group.vue'
 
@@ -24,7 +25,58 @@ describe('DocCodeGroup', () => {
     expect(container.textContent).toContain('pnpm add @aziontech/webkit')
   })
 
-  it('falls back to the language for a label', () => {
+  it('titles a single sample with the readable language name by default', () => {
+    const { getByTestId } = render(Default)
+    expect(getByTestId('documentation-doc-code-group__code__label-text').textContent?.trim()).toBe(
+      'Shell'
+    )
+  })
+
+  it('drops the label header when showLabel is off', () => {
+    const { queryByTestId } = render(DocCodeGroup, {
+      props: { samples: [{ language: 'bash', code: 'a' }], showLabel: false }
+    })
+    expect(queryByTestId('documentation-doc-code-group__code__label')).toBeNull()
+  })
+
+  it('draws a sample output as a separate Output block with no copy control', () => {
+    const { getByTestId } = render(WithOutput)
+    const code = getByTestId('documentation-doc-code-group__code')
+    const output = getByTestId('documentation-doc-code-group__output')
+    expect(code.textContent).toContain('curl -I')
+    expect(code.textContent).not.toContain('HTTP/2 200')
+    expect(output.textContent).toContain('HTTP/2 200')
+    expect(output.getAttribute('data-kind')).toBe('output')
+    expect(output.hasAttribute('data-copyable')).toBe(false)
+    expect(
+      getByTestId('documentation-doc-code-group__output__label-text').textContent?.trim()
+    ).toBe('Output')
+  })
+
+  it('follows the active tab with its output', async () => {
+    const { getAllByRole, getByTestId, queryByTestId } = render(DocCodeGroup, {
+      props: {
+        samples: [
+          { label: 'cURL', language: 'bash', code: 'curl -I https://x', output: 'HTTP/2 200' },
+          { label: 'JavaScript', language: 'js', code: 'await fetch(url)' }
+        ]
+      }
+    })
+    expect(getByTestId('documentation-doc-code-group__output').textContent).toContain('HTTP/2 200')
+    await userEvent.click(getAllByRole('tab')[1])
+    expect(queryByTestId('documentation-doc-code-group__output')).toBeNull()
+  })
+
+  it('renders a standalone printout with kind output', () => {
+    const { getByTestId } = render(DocCodeGroup, {
+      props: { kind: 'output', samples: [{ code: 'Deploy finished' }] }
+    })
+    const block = getByTestId('documentation-doc-code-group__code')
+    expect(block.getAttribute('data-kind')).toBe('output')
+    expect(block.hasAttribute('data-copyable')).toBe(false)
+  })
+
+  it('falls back to the language name for a label', () => {
     const { getAllByRole } = render(DocCodeGroup, {
       props: {
         samples: [
@@ -33,7 +85,10 @@ describe('DocCodeGroup', () => {
         ]
       }
     })
-    expect(getAllByRole('tab').map((tab) => tab.textContent?.trim())).toEqual(['bash', 'js'])
+    expect(getAllByRole('tab').map((tab) => tab.textContent?.trim())).toEqual([
+      'Shell',
+      'JavaScript'
+    ])
   })
 
   it('renders nothing inside the wrapper without samples', () => {
@@ -48,6 +103,11 @@ describe('DocCodeGroup', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(Group)
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no axe violations with an output block', async () => {
+    const { container } = render(WithOutput)
     await expectNoA11yViolations(container)
   })
 })

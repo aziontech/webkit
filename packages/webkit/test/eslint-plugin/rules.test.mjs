@@ -40,6 +40,8 @@ const authoringStandards = (await import('../../src/eslint-plugin/rules/authorin
   .default
 const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
   .default
+const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output-in-command.js'))
+  .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -815,4 +817,52 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
     assert.equal(isLayoutClass(bad), false, bad)
   }
   assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])
+})
+
+test('no-output-in-command', () => {
+  const sample = (code, language = 'bash') =>
+    `const samples = [{ label: 'Shell', language: '${language}', code: ${JSON.stringify(code)} }]`
+  js.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      sample('curl -I https://example.com'),
+      sample('# Install the CLI\ncurl -fsSL https://cli.azion.app/install.sh | bash'),
+      sample('# Install\nnpm install\n# Build\nnpm run build'),
+      sample('#!/bin/sh\nazion deploy'),
+      sample('$ azion login\n$ azion deploy'),
+      sample('$ azion deploy \\\n  --local'),
+      sample('curl -I https://example.com\n# HTTP/2 200', 'text'),
+      'const tab = { language: "bash", code: someCode }'
+    ],
+    invalid: [
+      {
+        code: sample('curl -I https://<your-azion-domain>\n# HTTP/2 200'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('azion version\n# Azion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: sample('azion deploy\n# => https://my-site.azion.app'),
+        errors: [{ messageId: 'output' }]
+      },
+      { code: sample('$ azion version\nAzion CLI 4.23.0'), errors: [{ messageId: 'output' }] },
+      {
+        code: 'const t = { lang: `sh`, code: `npm test\n# returns 0` }',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
+  vue.run('no-output-in-command', noOutputInCommand, {
+    valid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x', output: 'HTTP/2 200' }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><DocCodeGroup :samples="[{ language: 'bash', code: 'curl -I https://x\\n# HTTP/2 200' }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'output' }]
+      }
+    ]
+  })
 })
