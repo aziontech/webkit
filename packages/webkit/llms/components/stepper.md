@@ -83,6 +83,8 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 "./stepper-step": "./src/components/navigation/stepper/stepper-step/stepper-step.vue"
 ```
 
+`./stepper` and `./stepper-step` export the type `StepperStepState` (`'upcoming' | 'complete' | 'error' | 'loading'`), the type of `Stepper.Step`'s `state` prop, so an owner can type the state it derives.
+
 ## v-model
 
 | Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                            |

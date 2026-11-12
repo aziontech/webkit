@@ -38,7 +38,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `unknown` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
+| `modelValue` | `TModel` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
 | `value` | `unknown` | `undefined` | false | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
 | `binary` | `boolean` | `false` | false | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
 | `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
@@ -52,7 +52,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
+| `update:modelValue` | `TModel` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
 
 ## States
 

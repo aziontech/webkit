@@ -36,13 +36,6 @@
  ],
  "props": [
   {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open`."
-  },
-  {
    "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
@@ -69,15 +62,16 @@
    "default": "'medium'",
    "required": "false",
    "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:open",
-   "payload": "value: boolean",
-   "notes": "v-model:open."
+   "name": "open",
+   "type": "boolean | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "default",

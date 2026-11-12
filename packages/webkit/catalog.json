@@ -3734,7 +3734,7 @@
     },
     {
      "name": "modelValue",
-     "type": "string | undefined",
+     "type": "TValue | undefined",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -13088,14 +13088,14 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "string | number | undefined",
+     "type": "string | number",
      "default": "undefined",
      "required": "false",
      "doc": "Currently selected item value (v-model)."
     },
     {
      "name": "items",
-     "type": "RadioCardsItem[]",
+     "type": "TItem[]",
      "default": "undefined",
      "required": "true",
      "doc": "Options rendered as selectable cards; each entry must include `value` and `label`."
@@ -13111,19 +13111,19 @@
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "string | number",
+     "payload": "TItem['value']",
      "notes": "v-model when the user selects an option."
     }
    ],
    "slots": [
     {
      "name": "default",
-     "scope": "{ item: RadioCardsItem; selected: boolean }",
+     "scope": "{ item: TItem; selected: boolean }",
      "notes": "Overrides the entire card body for an option."
     },
     {
      "name": "tag",
-     "scope": "{ item: RadioCardsItem; selected: boolean }",
+     "scope": "{ item: TItem; selected: boolean }",
      "notes": "Trailing content below label/description (e.g. plan badge)."
     }
    ],
@@ -13229,7 +13229,7 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "unknown",
+     "type": "TModel",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting."
@@ -13294,7 +13294,7 @@
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "unknown",
+     "payload": "TModel",
      "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode)."
     }
    ],
@@ -13663,7 +13663,7 @@
     },
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
      "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
     }
    ],
@@ -13734,7 +13734,7 @@
     },
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
      "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
     }
    ],
@@ -13799,7 +13799,7 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "unknown[]",
+     "type": "TValue[]",
      "default": "() => []",
      "required": "false",
      "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
@@ -13862,7 +13862,7 @@
     },
     {
      "name": "displayValue",
-     "type": "(value: unknown[]) => string",
+     "type": "(value: TValue[]) => string",
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
@@ -13871,7 +13871,7 @@
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "unknown[]",
+     "payload": "TValue[]",
      "notes": "Fires when an option is toggled; payload is the next selection array."
     },
     {
@@ -13902,7 +13902,7 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "unknown[]",
+     "type": "TValue[]",
      "default": "() => []",
      "required": "false",
      "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
@@ -13965,7 +13965,7 @@
     },
     {
      "name": "displayValue",
-     "type": "(value: unknown[]) => string",
+     "type": "(value: TValue[]) => string",
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
@@ -13974,7 +13974,7 @@
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "unknown[]",
+     "payload": "TValue[]",
      "notes": "Fires when an option is toggled; payload is the next selection array."
     },
     {
@@ -14042,10 +14042,10 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "string | number | unknown[]",
+     "type": "TValue",
      "default": "undefined",
      "required": "false",
-     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`."
     },
     {
      "name": "multiple",
@@ -14119,16 +14119,16 @@
     },
     {
      "name": "displayValue",
-     "type": "(value: unknown) => string",
+     "type": "(value: TValue) => string",
      "default": "undefined",
      "required": "false",
-     "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+     "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model."
     }
    ],
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "unknown",
+     "payload": "TValue",
      "notes": "Fires when an option is selected (single) or toggled (multi)."
     },
     {
@@ -14159,10 +14159,10 @@
    "props": [
     {
      "name": "modelValue",
-     "type": "string | number | unknown[]",
+     "type": "TValue",
      "default": "undefined",
      "required": "false",
-     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode."
+     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`."
     },
     {
      "name": "multiple",
@@ -14236,16 +14236,16 @@
     },
     {
      "name": "displayValue",
-     "type": "(value: unknown) => string",
+     "type": "(value: TValue) => string",
      "default": "undefined",
      "required": "false",
-     "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`."
+     "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model."
     }
    ],
    "events": [
     {
      "name": "update:modelValue",
-     "payload": "unknown",
+     "payload": "TValue",
      "notes": "Fires when an option is selected (single) or toggled (multi)."
     },
     {
@@ -18718,13 +18718,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state. Use with `v-model:open`."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -18751,13 +18744,13 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:open",
-     "payload": "value: boolean",
-     "notes": "v-model:open."
+     "name": "open",
+     "type": "boolean | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [

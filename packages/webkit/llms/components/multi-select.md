@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `unknown[]` | `() => []` | false | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. |
+| `modelValue` | `TValue[]` | `() => []` | false | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. |
 | `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `placeholder` | `string` | `''` | false | Trigger placeholder shown when no option is selected. |
@@ -48,13 +48,13 @@
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
 | `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
-| `displayValue` | `(value: unknown[]) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array. |
+| `displayValue` | `(value: TValue[]) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `unknown[]` | Fires when an option is toggled; payload is the next selection array. |
+| `update:modelValue` | `TValue[]` | Fires when an option is toggled; payload is the next selection array. |
 | `update:open` | `boolean` | Fires when the dropdown opens or closes. |
 
 ## Slots

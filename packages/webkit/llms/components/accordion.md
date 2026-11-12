@@ -100,6 +100,8 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | --------- | ----------------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model` | `string \| string[] \| null \| undefined` | `undefined` | `update:modelValue` | Open item(s) via `defineModel`: a single `value` string in single mode, an array of values in multiple mode, `null` when none is open. While unbound (`undefined`) the accordion is uncontrolled and starts at `defaultValue`. |
 
+`./accordion` and `./accordion-root` export the type `AccordionValue` (`string | string[] | null`), the model's value without its unbound `undefined`.
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`

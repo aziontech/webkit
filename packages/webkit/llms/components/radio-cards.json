@@ -36,14 +36,14 @@
  "props": [
   {
    "name": "modelValue",
-   "type": "string | number | undefined",
+   "type": "string | number",
    "default": "undefined",
    "required": "false",
    "doc": "Currently selected item value (v-model)."
   },
   {
    "name": "items",
-   "type": "RadioCardsItem[]",
+   "type": "TItem[]",
    "default": "undefined",
    "required": "true",
    "doc": "Options rendered as selectable cards; each entry must include `value` and `label`."
@@ -59,19 +59,19 @@
  "events": [
   {
    "name": "update:modelValue",
-   "payload": "string | number",
+   "payload": "TItem['value']",
    "notes": "v-model when the user selects an option."
   }
  ],
  "slots": [
   {
    "name": "default",
-   "scope": "{ item: RadioCardsItem; selected: boolean }",
+   "scope": "{ item: TItem; selected: boolean }",
    "notes": "Overrides the entire card body for an option."
   },
   {
    "name": "tag",
-   "scope": "{ item: RadioCardsItem; selected: boolean }",
+   "scope": "{ item: TItem; selected: boolean }",
    "notes": "Trailing content below label/description (e.g. plan badge)."
   }
  ],

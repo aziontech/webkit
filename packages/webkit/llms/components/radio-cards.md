@@ -38,22 +38,22 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string \| number \| undefined` | `undefined` | false | Currently selected item value (v-model). |
-| `items` | `RadioCardsItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
+| `modelValue` | `string \| number` | `undefined` | false | Currently selected item value (v-model). |
+| `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `string \| number` | v-model when the user selects an option. |
+| `update:modelValue` | `TItem['value']` | v-model when the user selects an option. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | { item: RadioCardsItem; selected: boolean } | Overrides the entire card body for an option. |
-| `tag` | { item: RadioCardsItem; selected: boolean } | Trailing content below label/description (e.g. plan badge). |
+| `default` | { item: TItem; selected: boolean } | Overrides the entire card body for an option. |
+| `tag` | { item: TItem; selected: boolean } | Trailing content below label/description (e.g. plan badge). |
 
 ## States
 

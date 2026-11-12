@@ -36,7 +36,7 @@
  "props": [
   {
    "name": "modelValue",
-   "type": "unknown",
+   "type": "TModel",
    "default": "undefined",
    "required": "false",
    "doc": "Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting."
@@ -101,7 +101,7 @@
  "events": [
   {
    "name": "update:modelValue",
-   "payload": "unknown",
+   "payload": "TModel",
    "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode)."
   }
  ],

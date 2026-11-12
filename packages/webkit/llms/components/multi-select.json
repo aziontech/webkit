@@ -41,7 +41,7 @@
  "props": [
   {
    "name": "modelValue",
-   "type": "unknown[]",
+   "type": "TValue[]",
    "default": "() => []",
    "required": "false",
    "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
@@ -104,7 +104,7 @@
   },
   {
    "name": "displayValue",
-   "type": "(value: unknown[]) => string",
+   "type": "(value: TValue[]) => string",
    "default": "undefined",
    "required": "false",
    "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
@@ -113,7 +113,7 @@
  "events": [
   {
    "name": "update:modelValue",
-   "payload": "unknown[]",
+   "payload": "TValue[]",
    "notes": "Fires when an option is toggled; payload is the next selection array."
   },
   {

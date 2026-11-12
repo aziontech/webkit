@@ -10835,13 +10835,15 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
-| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
+| `modelValue` | `TValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 
 | Model     | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                     |
 | --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `string \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+| `v-model` | `TValue \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+
+**Generic.** The component is generic over `TValue extends string` (default `string`), inferred from the bound `v-model`: on a `Ref<'day' | 'week'>`, `update:modelValue` sends `'day' | 'week' | undefined` (the `undefined` of an unbound model), so `v-model` binds the union with no cast. `ToggleGroupOption<TOptionValue = string | number>` types a list against the same union (`ToggleGroupOption<'day' | 'week'>[]`); the `options` prop itself stays `ToggleGroupOption[]`, so a list typed `{ label: string; value: string }[]` still binds. `ToggleGroupOption` and `ToggleGroupSize` are exported by `@aziontech/webkit/toggle-group`.
 
 ## States
 
@@ -15470,6 +15472,8 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 | Model     | Type                                      | Default     | Emits               | Notes                                                                                                                                                                                                                          |
 | --------- | ----------------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model` | `string \| string[] \| null \| undefined` | `undefined` | `update:modelValue` | Open item(s) via `defineModel`: a single `value` string in single mode, an array of values in multiple mode, `null` when none is open. While unbound (`undefined`) the accordion is uncontrolled and starts at `defaultValue`. |
+
+`./accordion` and `./accordion-root` export the type `AccordionValue` (`string | string[] | null`), the model's value without its unbound `undefined`.
 
 ## States
 
@@ -24409,7 +24413,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `unknown` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
+| `modelValue` | `TModel` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
 | `value` | `unknown` | `undefined` | false | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
 | `binary` | `boolean` | `false` | false | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
 | `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
@@ -24423,7 +24427,7 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `unknown` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
+| `update:modelValue` | `TModel` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
 
 ## States
 
@@ -25878,7 +25882,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `unknown[]` | `() => []` | false | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. |
+| `modelValue` | `TValue[]` | `() => []` | false | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. |
 | `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `placeholder` | `string` | `''` | false | Trigger placeholder shown when no option is selected. |
@@ -25887,13 +25891,13 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
 | `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
-| `displayValue` | `(value: unknown[]) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array. |
+| `displayValue` | `(value: TValue[]) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `unknown[]` | Fires when an option is toggled; payload is the next selection array. |
+| `update:modelValue` | `TValue[]` | Fires when an option is toggled; payload is the next selection array. |
 | `update:open` | `boolean` | Fires when the dropdown opens or closes. |
 
 ## Slots
@@ -26350,7 +26354,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Password Requirements
 
-> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. It replaces the requirements row of the v5 `field-password`; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows.
+> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. It replaces the requirements row of the v5 `field-password`; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
 
 - Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -26676,22 +26680,22 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string \| number \| undefined` | `undefined` | false | Currently selected item value (v-model). |
-| `items` | `RadioCardsItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
+| `modelValue` | `string \| number` | `undefined` | false | Currently selected item value (v-model). |
+| `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `string \| number` | v-model when the user selects an option. |
+| `update:modelValue` | `TItem['value']` | v-model when the user selects an option. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | { item: RadioCardsItem; selected: boolean } | Overrides the entire card body for an option. |
-| `tag` | { item: RadioCardsItem; selected: boolean } | Trailing content below label/description (e.g. plan badge). |
+| `default` | { item: TItem; selected: boolean } | Overrides the entire card body for an option. |
+| `tag` | { item: TItem; selected: boolean } | Trailing content below label/description (e.g. plan badge). |
 
 ## States
 
@@ -26963,6 +26967,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 - Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
+- Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
 - With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 - A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
@@ -26986,7 +26991,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string \| number \| unknown[]` | `undefined` | false | Two-way bound selection. Scalar in single mode; array in multi mode. |
+| `modelValue` | `TValue` | `undefined` | false | Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`. |
 | `multiple` | `boolean` | `false` | false | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array. |
 | `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
@@ -26997,13 +27002,13 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; the current selection is visible but the dropdown cannot open. |
 | `required` | `boolean` | `false` | false | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
-| `displayValue` | `(value: unknown) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`. |
+| `displayValue` | `(value: TValue) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `unknown` | Fires when an option is selected (single) or toggled (multi). |
+| `update:modelValue` | `TValue` | Fires when an option is selected (single) or toggled (multi). |
 | `update:open` | `boolean` | Fires when the dropdown opens or closes. |
 
 ## Slots
@@ -34183,7 +34188,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `update:open` | `boolean` | Fires on every open/closed transition; supports `v-model:open`. |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
 
 ## Slots
 
@@ -35172,6 +35177,8 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 "./stepper-root": "./src/components/navigation/stepper/stepper.vue",
 "./stepper-step": "./src/components/navigation/stepper/stepper-step/stepper-step.vue"
 ```
+
+`./stepper` and `./stepper-step` export the type `StepperStepState` (`'upcoming' | 'complete' | 'error' | 'loading'`), the type of `Stepper.Step`'s `state` prop, so an owner can type the state it derives.
 
 ## v-model
 
@@ -36283,17 +36290,11 @@ packages/webkit/src/components/overlay/command/
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `dismissible` | `boolean` | `true` | false | When true, overlay click and Escape close the drawer. |
 | `side` | `DrawerSide` | `'right'` | false | Edge the drawer panel slides from. |
 | `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:open` | `value: boolean` | v-model:open. |
+| `open` | `boolean \| undefined` | `undefined` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -36320,6 +36321,12 @@ packages/webkit/src/components/overlay/command/
 - `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
 - `drawer-trigger.vue` — Public sub-component `drawer-trigger`.
+
+## v-model
+
+| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                    |
+| -------------- | ---------------------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Controlled open state through `defineModel('open')`, the single declaration of `open`, so `@update:open` carries the model type `boolean | undefined`(the`undefined`of an unbound model; a transition always sends a boolean), as on`dialog`and`popover`. Fires once per transition. While unbound the drawer is uncontrolled and starts at `defaultOpen`. |
 
 ## States
 

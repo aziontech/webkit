@@ -45,13 +45,15 @@
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
-| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
+| `modelValue` | `TValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 
 | Model     | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                     |
 | --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `string \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+| `v-model` | `TValue \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+
+**Generic.** The component is generic over `TValue extends string` (default `string`), inferred from the bound `v-model`: on a `Ref<'day' | 'week'>`, `update:modelValue` sends `'day' | 'week' | undefined` (the `undefined` of an unbound model), so `v-model` binds the union with no cast. `ToggleGroupOption<TOptionValue = string | number>` types a list against the same union (`ToggleGroupOption<'day' | 'week'>[]`); the `options` prop itself stays `ToggleGroupOption[]`, so a list typed `{ label: string; value: string }[]` still binds. `ToggleGroupOption` and `ToggleGroupSize` are exported by `@aziontech/webkit/toggle-group`.
 
 ## States
 
