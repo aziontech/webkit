@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -41,7 +41,7 @@
   }
 
   const discard = () => {
-    Object.assign(buildConfig, JSON.parse(baseline.value))
+    Object.assign(buildConfig, JSON.parse(baseline.value) as typeof buildConfig)
   }
 </script>
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -20,11 +20,45 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
+  import type { SelectValue } from '@aziontech/webkit/select-root'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
+
+  type Option = { value: string; label: string }
+  type ArgumentInput = { field: string; placeholder: string; label: string }
+  type BehaviorArgument =
+    | ({ kind: 'text' } & ArgumentInput)
+    | { kind: 'select'; field: string; source: string; label: string }
+    | { kind: 'group'; fields: ArgumentInput[] }
+  type BehaviorDefinition = {
+    value: string
+    label: string
+    phases: string[]
+    argument: BehaviorArgument | null
+  }
+  type Condition = { id: string; variable: string; operator: string; argument: string }
+  type RuleBehavior = { id: string; type: string; [field: string]: string }
+  type RuleSeed = {
+    name: string
+    description: string
+    phase: string
+    criteria: {
+      conditions: { join: string | null; variable: string; operator: string; argument: string }[]
+    }[]
+    behaviors: { type: string; [field: string]: string }[]
+    status: string
+  }
+  type RuleForm = {
+    name: string
+    description: string
+    phase: string
+    criteria: Condition[][]
+    behaviors: RuleBehavior[]
+    active: boolean
+  }
 
   const open = ref(false)
   const editing = false
@@ -52,7 +86,7 @@
     { value: 'exists', label: 'exists' },
     { value: 'does-not-exist', label: 'does not exist' }
   ]
-  const catalog = [
+  const catalog: BehaviorDefinition[] = [
     {
       value: 'add-request-cookie',
       label: 'Add Request Cookie',
@@ -264,7 +298,7 @@
     '${scheme}',
     '${uri}'
   ]
-  const phaseVariables = {
+  const phaseVariables: Record<string, string[]> = {
     request: ['${server_addr}', '${server_port}'],
     response: [
       '${sent_http_name}',
@@ -283,7 +317,7 @@
     { value: '4021887', label: 'ab-test-split', scope: 'request' },
     { value: '4021890', label: 'security-headers', scope: 'any' }
   ]
-  const sources = {
+  const sources: Record<string, Option[]> = {
     'cache-settings': [
       { value: 'cs-default', label: 'Default Cache' },
       { value: 'cs-static', label: 'Static Assets' }
@@ -305,15 +339,18 @@
     "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
-  const operatorLabel = (value) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator) => operator !== 'exists' && operator !== 'does-not-exist'
-  const behaviorLabel = (value) => byValue[value]?.label ?? ''
-  const behaviorArgument = (value) => byValue[value]?.argument ?? null
-  const behaviorsFor = (phase) => catalog.filter((behavior) => behavior.phases.includes(phase))
-  const behaviorAllowedIn = (value, phase) => Boolean(byValue[value]?.phases.includes(phase))
-  const isTerminalBehavior = (value) =>
-    ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302'].includes(value)
-  const behaviorOptions = (source, phase) => {
+  const operatorLabel = (value: unknown) => OPERATORS.find((o) => o.value === value)?.label ?? ''
+  const takesArgument = (operator: unknown) =>
+    operator !== 'exists' && operator !== 'does-not-exist'
+  const behaviorLabel = (value: unknown) => byValue[String(value)]?.label ?? ''
+  const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
+  const behaviorsFor = (phase: string) =>
+    catalog.filter((behavior) => behavior.phases.includes(phase))
+  const behaviorAllowedIn = (value: string, phase: string) =>
+    Boolean(byValue[value]?.phases.includes(phase))
+  const isTerminalBehavior = (value: string | undefined) =>
+    ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302'].includes(value ?? '')
+  const behaviorOptions = (source: string, phase: string): Option[] => {
     if (source === 'policies') {
       return policies
         .filter((policy) => phase !== 'response' || policy.scope === 'any')
@@ -321,18 +358,18 @@
     }
     return sources[source] ?? []
   }
-  const behaviorArgumentNote = (source, phase) =>
+  const behaviorArgumentNote = (source: string, phase: string) =>
     source === 'policies' && phase === 'response'
       ? 'Only policies scoped to any phase run in the response phase.'
       : ''
-  const variablesFor = (phase) =>
+  const variablesFor = (phase: string) =>
     [...variables, ...phaseVariables[phase]]
       .sort((a, b) => a.localeCompare(b))
       .map((value) => ({ value }))
 
   let nextId = 0
-  const uid = () => (nextId += 1)
-  const newCondition = () => ({
+  const uid = () => String((nextId += 1))
+  const newCondition = (): Condition => ({
     id: uid(),
     variable: '',
     operator: 'is-equal',
@@ -343,8 +380,8 @@
     { key: 'operator', label: 'Operator' },
     { key: 'argument', label: 'Argument' }
   ]
-  const newBehavior = () => ({ id: uid(), type: 'deliver' })
-  const blankForm = () => ({
+  const newBehavior = (): RuleBehavior => ({ id: uid(), type: 'deliver' })
+  const blankForm = (): RuleForm => ({
     name: '',
     description: '',
     phase: PHASES[0].value,
@@ -352,7 +389,7 @@
     behaviors: [newBehavior()],
     active: true
   })
-  const formFor = (seed) =>
+  const formFor = (seed: RuleSeed | null): RuleForm =>
     !seed
       ? blankForm()
       : {
@@ -399,26 +436,29 @@
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
   )
   const variablesForPhase = computed(() => variablesFor(form.phase))
+  const behaviorRows = computed(() =>
+    form.behaviors.map((behavior) => ({ behavior, argument: behaviorArgument(behavior.type) }))
+  )
 
-  const behaviorQuery = reactive({})
-  const behaviorMatches = (id) => {
+  const behaviorQuery = reactive<Record<string, string>>({})
+  const behaviorMatches = (id: string) => {
     const query = (behaviorQuery[id] ?? '').trim().toLowerCase()
     if (!query) return behaviorsForPhase.value
     return behaviorsForPhase.value.filter((option) => option.label.toLowerCase().includes(query))
   }
-  const onBehaviorPanel = (id, isOpen) => {
+  const onBehaviorPanel = (id: string, isOpen: boolean) => {
     if (!isOpen) behaviorQuery[id] = ''
   }
 
-  const optionsFor = (source) => behaviorOptions(source, form.phase)
-  const optionLabelIn = (source, value) =>
+  const optionsFor = (source: string) => behaviorOptions(source, form.phase)
+  const optionLabelIn = (source: string, value: unknown) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
 
-  const setBehaviorType = (index, type) => {
+  const setBehaviorType = (index: number, type: SelectValue) => {
     if (form.behaviors[index].type === type) return
-    form.behaviors[index] = { id: form.behaviors[index].id, type }
+    form.behaviors[index] = { id: form.behaviors[index].id, type: String(type) }
   }
-  const argumentMissing = (behavior, field) =>
+  const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
   const canAddBehavior = computed(() => {
     if (form.behaviors.length >= 10) return false
@@ -443,34 +483,38 @@
     }
   )
 
-  const move = (list, index, direction) => {
+  const move = <T,>(list: T[], index: number, direction: number) => {
     const target = index + direction
     if (target < 0 || target >= list.length) return
     const [moved] = list.splice(index, 1)
     list.splice(target, 0, moved)
   }
   const addBehavior = () => form.behaviors.push(newBehavior())
-  const removeBehavior = (index) => {
+  const removeBehavior = (index: number) => {
     if (form.behaviors.length <= 1) return
     form.behaviors.splice(index, 1)
   }
-  const moveBehavior = (index, direction) => move(form.behaviors, index, direction)
+  const moveBehavior = (index: number, direction: number) => move(form.behaviors, index, direction)
 
-  const dnd = reactive({ scope: null, from: -1, over: -1 })
-  const isDragging = (scope, index) => dnd.scope === scope && dnd.from === index
-  const isDropTarget = (scope, index) =>
+  const dnd = reactive<{ scope: string | null; from: number; over: number }>({
+    scope: null,
+    from: -1,
+    over: -1
+  })
+  const isDragging = (scope: string, index: number) => dnd.scope === scope && dnd.from === index
+  const isDropTarget = (scope: string, index: number) =>
     dnd.scope === scope && dnd.over === index && dnd.from !== index
-  const onDragStart = (scope, index, event) => {
+  const onDragStart = (scope: string, index: number, event: DragEvent) => {
     dnd.scope = scope
     dnd.from = index
     if (event.dataTransfer) {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('text/plain', String(index))
-      const row = event.currentTarget?.closest?.('[data-drag-row]')
+      const row = (event.currentTarget as HTMLElement | null)?.closest?.('[data-drag-row]')
       if (row) event.dataTransfer.setDragImage(row, 12, 12)
     }
   }
-  const onDragEnter = (scope, index) => {
+  const onDragEnter = (scope: string, index: number) => {
     if (dnd.scope === scope) dnd.over = index
   }
   const onDragEnd = () => {
@@ -478,18 +522,18 @@
     dnd.from = -1
     dnd.over = -1
   }
-  const reorder = (list, from, to) => {
+  const reorder = <T,>(list: T[], from: number, to: number) => {
     if (from < 0 || to < 0 || from === to || from >= list.length || to >= list.length) return
     const [moved] = list.splice(from, 1)
     list.splice(to, 0, moved)
   }
-  const dropOnBehavior = (index) => {
+  const dropOnBehavior = (index: number) => {
     if (dnd.scope !== 'behavior') return
     reorder(form.behaviors, dnd.from, index)
     onDragEnd()
   }
 
-  const behaviorFilled = (behavior) => {
+  const behaviorFilled = (behavior: RuleBehavior) => {
     const argument = behaviorArgument(behavior.type)
     if (!argument) return true
     const fields = argument.kind === 'group' ? argument.fields : [argument]
@@ -500,14 +544,14 @@
     form.criteria.every((group) => group.every((condition) => condition.variable.trim())) &&
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
-  const formEl = ref(null)
+  const formEl = ref<HTMLFormElement | null>(null)
   const submit = () => {
     submitted.value = true
     if (submitting.value) return
     if (!isValid()) {
       nextTick(() =>
         formEl.value
-          ?.querySelector(
+          ?.querySelector<HTMLElement>(
             ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
           )
           ?.focus()
@@ -661,7 +705,7 @@
                   <template #cell-variable="{ value, update, invalid }">
                     <div class="contents font-code">
                       <Combobox
-                        :model-value="value"
+                        :model-value="value as string"
                         :options="variablesForPhase"
                         size="large"
                         placeholder="${uri}"
@@ -675,7 +719,7 @@
                   </template>
                   <template #cell-operator="{ value, update }">
                     <Select
-                      :model-value="value"
+                      :model-value="value as SelectValue"
                       size="large"
                       class="w-full"
                       :disabled="submitting"
@@ -698,7 +742,7 @@
                     <Input
                       v-if="takesArgument(item.operator)"
                       key="argument"
-                      :model-value="value"
+                      :model-value="value as string"
                       size="large"
                       class="w-full"
                       autocomplete="off"
@@ -736,7 +780,7 @@
 
                         <div class="relative flex flex-col gap-(--spacing-sm)">
                           <div
-                            v-for="(behavior, bIdx) in form.behaviors"
+                            v-for="({ behavior, argument }, bIdx) in behaviorRows"
                             :key="behavior.id"
                             data-drag-row
                             :data-dragging="isDragging('behavior', bIdx) || null"
@@ -796,49 +840,35 @@
                             </div>
 
                             <div class="min-w-0">
-                              <template v-if="behaviorArgument(behavior.type)?.kind === 'text'">
+                              <template v-if="argument?.kind === 'text'">
                                 <Input
-                                  v-model="behavior[behaviorArgument(behavior.type).field]"
+                                  v-model="behavior[argument.field]"
                                   size="large"
                                   class="w-full"
-                                  :aria-label="behaviorArgument(behavior.type).label"
-                                  :placeholder="behaviorArgument(behavior.type).placeholder"
+                                  :aria-label="argument.label"
+                                  :placeholder="argument.placeholder"
                                   :disabled="submitting"
-                                  :required="
-                                    argumentMissing(behavior, behaviorArgument(behavior.type).field)
-                                  "
+                                  :required="argumentMissing(behavior, argument.field)"
                                 />
                               </template>
 
-                              <template
-                                v-else-if="behaviorArgument(behavior.type)?.kind === 'select'"
-                              >
+                              <template v-else-if="argument?.kind === 'select'">
                                 <div class="flex flex-col gap-(--spacing-xxs)">
                                   <Select
-                                    v-model="behavior[behaviorArgument(behavior.type).field]"
+                                    v-model="behavior[argument.field]"
                                     size="large"
                                     class="w-full"
                                     :disabled="submitting"
-                                    :placeholder="`Select a ${behaviorArgument(behavior.type).label.toLowerCase()}`"
-                                    :required="
-                                      argumentMissing(
-                                        behavior,
-                                        behaviorArgument(behavior.type).field
-                                      )
-                                    "
+                                    :placeholder="`Select a ${argument.label.toLowerCase()}`"
+                                    :required="argumentMissing(behavior, argument.field)"
                                     :display-value="
-                                      (value) =>
-                                        optionLabelIn(behaviorArgument(behavior.type).source, value)
+                                      (value) => optionLabelIn(argument.source, value)
                                     "
                                   >
-                                    <Select.Trigger
-                                      :aria-label="behaviorArgument(behavior.type).label"
-                                    />
+                                    <Select.Trigger :aria-label="argument.label" />
                                     <Select.Content>
                                       <Select.Option
-                                        v-for="option in optionsFor(
-                                          behaviorArgument(behavior.type).source
-                                        )"
+                                        v-for="option in optionsFor(argument.source)"
                                         :key="option.value"
                                         :value="option.value"
                                       >
@@ -847,29 +877,17 @@
                                     </Select.Content>
                                   </Select>
                                   <HelperText
-                                    v-if="
-                                      behaviorArgumentNote(
-                                        behaviorArgument(behavior.type).source,
-                                        form.phase
-                                      )
-                                    "
+                                    v-if="behaviorArgumentNote(argument.source, form.phase)"
                                   >
-                                    {{
-                                      behaviorArgumentNote(
-                                        behaviorArgument(behavior.type).source,
-                                        form.phase
-                                      )
-                                    }}
+                                    {{ behaviorArgumentNote(argument.source, form.phase) }}
                                   </HelperText>
                                 </div>
                               </template>
 
-                              <template
-                                v-else-if="behaviorArgument(behavior.type)?.kind === 'group'"
-                              >
+                              <template v-else-if="argument?.kind === 'group'">
                                 <div class="flex flex-col gap-(--spacing-xs)">
                                   <Input
-                                    v-for="part in behaviorArgument(behavior.type).fields"
+                                    v-for="part in argument.fields"
                                     :key="part.field"
                                     v-model="behavior[part.field]"
                                     size="large"

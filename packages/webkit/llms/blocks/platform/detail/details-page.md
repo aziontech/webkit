@@ -143,7 +143,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 ## Code (`ResourceOverview`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
@@ -29,8 +29,32 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import TopologyDiagram from '@aziontech/webkit/topology-diagram'
+  import TopologyDiagram, {
+    type TopologyBindOption,
+    type TopologyLevel,
+    type TopologyNode,
+    type TopologyNodeField
+  } from '@aziontech/webkit/topology-diagram'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  type ProductionStep = {
+    id: string
+    icon: string
+    title: string
+    description: string
+    actionLabel: string
+    done: boolean
+    doneNote?: string
+  }
+  type Target = {
+    kind: string
+    icon: string
+    options: TopologyBindOption[]
+    unbound?: string
+    bound?: string
+    removable?: boolean
+    fields?: TopologyNodeField[]
+  }
 
   const environments = [
     { name: 'Production', policy: 'Single' },
@@ -61,7 +85,7 @@
     'service-01-alias-6.example.com',
     'service-01-alias-7.example.com'
   ]
-  const productionSteps = [
+  const productionSteps: ProductionStep[] = [
     {
       id: 'domain',
       icon: 'pi pi-globe',
@@ -94,7 +118,7 @@
 
   const detailOpen = ref(false)
 
-  const targets = {
+  const targets: Record<string, Target> = {
     policy: {
       kind: 'Policy',
       icon: 'pi pi-shield',
@@ -140,13 +164,17 @@
     }
   }
 
-  const deployed = reactive({ policy: '', errorPage: '', origin: 'web-app-storage' })
-  const staged = reactive({})
-  const expanded = ref([])
+  const deployed = reactive<Record<string, string>>({
+    policy: '',
+    errorPage: '',
+    origin: 'web-app-storage'
+  })
+  const staged = reactive<Record<string, string>>({})
+  const expanded = ref<string[]>([])
   const stagedCount = computed(() => Object.keys(staged).length)
   const stagedNote = ref('')
 
-  const slotNode = (key) => {
+  const slotNode = (key: string): TopologyNode => {
     const target = targets[key]
     const pick = staged[key]
     const removing = pick === ''
@@ -183,7 +211,7 @@
     }
   }
 
-  const topologyLevels = computed(() => [
+  const topologyLevels = computed<TopologyLevel[]>(() => [
     {
       key: 'domains',
       nodes: [
@@ -282,22 +310,22 @@
     }))
   )
 
-  const bind = (key, value) => {
+  const bind = (key: string, value: string) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     stagedNote.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
   }
-  const unbind = (key) => {
+  const unbind = (key: string) => {
     if (staged[key] !== undefined && staged[key] !== '') delete staged[key]
     else if (deployed[key]) staged[key] = ''
     stagedNote.value = `${targets[key].kind} staged for removal.`
   }
-  const createTarget = (key) => {
+  const createTarget = (key: string) => {
     stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
 
-  const topologyRef = ref(null)
-  const showTopology = (key) => {
+  const topologyRef = ref<HTMLElement | null>(null)
+  const showTopology = (key: string) => {
     detailOpen.value = false
     if (!expanded.value.includes(key)) expanded.value = [...expanded.value, key]
     topologyRef.value?.scrollIntoView({ block: 'start' })
@@ -306,7 +334,7 @@
   const deployOpen = ref(false)
   const deploying = ref(false)
   const RUN_TOAST = 'service-deploy'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const editStaged = () => {
     toast.dismiss(RUN_TOAST)
@@ -367,7 +395,7 @@
         size="small"
         @update:model-value="
           (value) => {
-            if (value !== '__add-environment__') environment = value
+            if (value !== '__add-environment__') environment = String(value)
           }
         "
         @update:open="
@@ -565,8 +593,8 @@
                         <DropdownMenu
                           placement="bottom-end"
                           @select="
-                            (event, value) => {
-                              if (value !== '__add-environment__') environment = value
+                            (_event, value) => {
+                              if (value !== '__add-environment__') environment = String(value)
                             }
                           "
                         >

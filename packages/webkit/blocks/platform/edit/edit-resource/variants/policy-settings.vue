@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -51,7 +51,14 @@
     }
   ]
 
-  const record = {
+  type ResourceRecord = {
+    name: string
+    active: boolean
+    debugRules: boolean
+    modules: Record<string, boolean>
+  }
+
+  const record: ResourceRecord = {
     name: 'production-policy',
     active: true,
     debugRules: false,
@@ -90,7 +97,7 @@
     }, 900)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as ResourceRecord)
 </script>
 
 <template>

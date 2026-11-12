@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -17,10 +17,20 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+
+  type VersionEntry = {
+    id: string
+    name: string
+    state: string
+    tag: { label: string; severity: TagSeverity; icon: string }
+    comment: string
+    author: string
+    createdAgo: string
+  }
 
   const tabs = [
     { value: 'main-settings', label: 'Settings' },
@@ -30,7 +40,7 @@
     { value: 'custom-code', label: 'Custom Code' },
     { value: 'rules', label: 'Rules' }
   ]
-  const versions = [
+  const versions: VersionEntry[] = [
     {
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
@@ -95,7 +105,7 @@
       createdAgo: '1 week ago'
     }
   ]
-  const version = {
+  const version: VersionEntry = {
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'active',
@@ -104,7 +114,7 @@
     author: 'Rafael Umman',
     createdAgo: '1 day ago'
   }
-  const earlier = [
+  const earlier: VersionEntry[] = [
     {
       id: 'AG1VVDJP',
       name: 'AG1VVDJP',
@@ -184,7 +194,7 @@
   const versionId = ref('AK7D0ZX4')
   const query = ref('')
   const activeTab = ref('main-settings')
-  const settings = reactive({
+  const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({
     name: 'web-app',
     active: true,
     modules: {
@@ -213,10 +223,10 @@
   const deployedId = ref('AEO25I38')
   const confirmOpen = ref(false)
   const reverting = ref(false)
-  const addVersionHost = ref(null)
+  const addVersionHost = ref<HTMLElement | null>(null)
   let runTimer = 0
 
-  const tagFor = (entry) => {
+  const tagFor = (entry: VersionEntry): VersionEntry['tag'] => {
     if (entry.state === 'draft') return entry.tag
     return entry.id === deployedId.value
       ? { label: 'Deployed', severity: 'primary', icon: '' }
@@ -271,7 +281,7 @@
     versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
   )
 
-  const openHistory = (event, value) => {
+  const openHistory = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'history' && !historyCollapsed.value) {
       historyCollapsed.value = true
       return
@@ -297,9 +307,7 @@
         kind="transparent"
         size="small"
         :model-value="versionId"
-        :display-value="
-          (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
-        "
+        :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
         @update:open="
           (open) => {
             if (!open) query = ''

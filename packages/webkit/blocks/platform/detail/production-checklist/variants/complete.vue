@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Card from '@aziontech/webkit/card'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -7,9 +7,10 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
@@ -22,7 +23,7 @@
 
   const activeTab = ref('versions')
 
-  const columns = [
+  const columns: TableColumn[] = [
     {
       accessorKey: 'name',
       header: 'Version',
@@ -156,7 +157,7 @@
     }
   ]
 
-  const versionStates = {
+  const versionStates: Record<string, { label: string; severity: TagSeverity }> = {
     active: { label: 'Deployed', severity: 'primary' },
     ready: { label: 'Ready', severity: 'success' },
     archived: { label: 'Archived', severity: 'secondary' }
@@ -167,11 +168,11 @@
 
   const search = ref('')
   const pagination = ref({ pageIndex: 0, pageSize: 10 })
-  const tableRef = ref(null)
+  const tableRef = ref<{ exportCsv: (options?: { filename?: string }) => void } | null>(null)
   const columnVisibility = ref({})
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true

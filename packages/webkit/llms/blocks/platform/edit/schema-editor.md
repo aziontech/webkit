@@ -134,7 +134,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
 ## Code (`CreateTable`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -161,15 +161,59 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
+  interface ColumnType {
+    value: string
+    description: string
+    glyph: string
+  }
+  interface SchemaColumn {
+    name: string
+    type: string
+    primaryKey: boolean
+    notNull: boolean
+    defaultValue: string
+  }
+  interface SchemaTable {
+    name: string
+    columns: SchemaColumn[]
+    rowCount: number
+  }
+  interface DraftColumn {
+    key: string
+    name: string
+    type: string
+    primaryKey: boolean
+    defaultValue: string
+  }
+  interface DraftRelation {
+    key: string
+    column: string
+    table: string
+    references: string
+    onDelete: string
+  }
+  interface DraftTable {
+    name: string
+    columns: DraftColumn[]
+    relations: DraftRelation[]
+  }
+  interface CsvFile {
+    name: string
+    size: number
+    type: string
+  }
+  type CsvRow = Record<string, string>
+
   const DATABASE = 'acme-store'
 
-  const TYPES = [
+  const TYPES: ColumnType[] = [
     { value: 'int2', description: 'Signed two-byte integer', glyph: '#' },
     { value: 'int4', description: 'Signed four-byte integer', glyph: '#' },
     { value: 'int8', description: 'Signed eight-byte integer', glyph: '#' },
@@ -187,8 +231,8 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     { value: 'timestamptz', description: 'Date and time, with time zone', glyph: '@' }
   ]
   const INTEGER_TYPES = ['int2', 'int4', 'int8']
-  const glyphOf = (value) => TYPES.find((type) => type.value === value)?.glyph ?? '#'
-  const filterTypes = (query) => {
+  const glyphOf = (value: string) => TYPES.find((type) => type.value === value)?.glyph ?? '#'
+  const filterTypes = (query: string) => {
     const term = query.trim().toLowerCase()
     if (!term) return TYPES
     return TYPES.filter(
@@ -196,7 +240,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     )
   }
 
-  const tables = ref([
+  const tables = ref<SchemaTable[]>([
     {
       name: 'customers',
       columns: [
@@ -226,7 +270,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   const tableName = ref('customers')
   const table = computed(() => tables.value.find((item) => item.name === tableName.value))
 
-  const definitionColumns = [
+  const definitionColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', minWidth: 120 },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 },
@@ -248,8 +292,8 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   )
 
   const SCHEMA_TOAST = 'schema-editor'
-  const timers = new Set()
-  const later = (fn, ms) => {
+  const timers = new Set<ReturnType<typeof setTimeout>>()
+  const later = (fn: () => void, ms: number) => {
     const id = setTimeout(() => {
       timers.delete(id)
       fn()
@@ -262,14 +306,19 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   })
 
   let uid = 0
-  const newColumn = (name = '', type = 'text', primaryKey = false, defaultValue = '') => ({
+  const newColumn = (
+    name = '',
+    type = 'text',
+    primaryKey = false,
+    defaultValue = ''
+  ): DraftColumn => ({
     key: `c-${(uid += 1)}`,
     name,
     type,
     primaryKey,
     defaultValue
   })
-  const blankTable = () => ({
+  const blankTable = (): DraftTable => ({
     name: '',
     columns: [
       newColumn('id', 'int8', true),
@@ -278,7 +327,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     relations: []
   })
 
-  const CSV_ON_START = null
+  const CSV_ON_START = null as { file: CsvFile; text: string } | null
   const createOpen = ref(true)
   const createForm = reactive(blankTable())
   const createSubmitted = ref(false)
@@ -289,7 +338,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
 
   const namedColumns = computed(() => createForm.columns.filter((column) => column.name.trim()))
   const duplicateNames = computed(() => {
-    const seen = new Map()
+    const seen = new Map<string, number>()
     for (const column of namedColumns.value) {
       const name = column.name.trim().toLowerCase()
       seen.set(name, (seen.get(name) ?? 0) + 1)
@@ -305,7 +354,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     }
     return ''
   })
-  const columnError = (column) =>
+  const columnError = (column: DraftColumn) =>
     createSubmitted.value && duplicateNames.value.has(column.name.trim().toLowerCase())
       ? `Another column is also named ${column.name.trim()}.`
       : ''
@@ -325,40 +374,45 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     createForm.columns.push(newColumn())
     await nextTick()
     globalThis.document
-      ?.querySelector(`[data-column-key="${createForm.columns.at(-1).key}"] input`)
+      ?.querySelector<HTMLElement>(`[data-column-key="${createForm.columns.at(-1)?.key}"] input`)
       ?.focus()
   }
-  const removeColumnRow = (index) => {
+  const removeColumnRow = (index: number) => {
     if (createForm.columns.length > 1) createForm.columns.splice(index, 1)
   }
   const columnMove = ref('')
-  const columnLabel = (column, index) => column.name.trim() || `column ${index + 1}`
-  const placeColumn = async (from, target, verb) => {
+  const columnLabel = (column: DraftColumn, index: number) =>
+    column.name.trim() || `column ${index + 1}`
+  const placeColumn = async (from: number, target: number, verb: string) => {
     if (target < 0 || target >= createForm.columns.length || target === from) return
     const [moved] = createForm.columns.splice(from, 1)
     createForm.columns.splice(target, 0, moved)
     columnMove.value = `${verb} ${columnLabel(moved, target)} to position ${target + 1} of ${createForm.columns.length}.`
     await nextTick()
-    globalThis.document?.querySelector(`[data-column-key="${moved.key}"] [data-grip]`)?.focus()
+    globalThis.document
+      ?.querySelector<HTMLElement>(`[data-column-key="${moved.key}"] [data-grip]`)
+      ?.focus()
   }
-  const moveColumnRow = (index, step) => placeColumn(index, index + step, 'Moved')
+  const moveColumnRow = (index: number, step: number) => placeColumn(index, index + step, 'Moved')
 
-  const dragKey = ref(null)
-  const overKey = ref(null)
-  const indexOfKey = (key) => createForm.columns.findIndex((column) => column.key === key)
-  const dropSide = (key) => {
+  const dragKey = ref<string | null>(null)
+  const overKey = ref<string | null>(null)
+  const indexOfKey = (key: string | null) =>
+    createForm.columns.findIndex((column) => column.key === key)
+  const dropSide = (key: string) => {
     if (!dragKey.value || overKey.value !== key || dragKey.value === key) return null
     return indexOfKey(dragKey.value) < indexOfKey(key) ? 'after' : 'before'
   }
-  const onGripDown = (event, key) => {
+  const onGripDown = (event: PointerEvent, key: string) => {
     if (event.button !== 0 || createSubmitting.value) return
-    if (event.isTrusted) event.currentTarget.setPointerCapture?.(event.pointerId)
+    const grip = event.currentTarget as HTMLElement
+    if (event.isTrusted) grip.setPointerCapture?.(event.pointerId)
     event.preventDefault()
-    event.currentTarget.focus({ preventScroll: true })
+    grip.focus({ preventScroll: true })
     dragKey.value = key
     overKey.value = key
   }
-  const onGripMove = (event) => {
+  const onGripMove = (event: PointerEvent) => {
     if (!dragKey.value) return
     const rows = Array.from(globalThis.document?.querySelectorAll('[data-column-key]') ?? [])
     const hit = rows.find((row) => {
@@ -381,13 +435,13 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     columnMove.value = 'Reorder cancelled.'
   }
 
-  const csvInput = ref(null)
-  const csvFile = ref(null)
-  const csvHeaders = ref([])
-  const csvRows = ref([])
+  const csvInput = ref<HTMLInputElement | null>(null)
+  const csvFile = ref<CsvFile | null>(null)
+  const csvHeaders = ref<string[]>([])
+  const csvRows = ref<CsvRow[]>([])
   const csvError = ref('')
-  const splitCsvLine = (line) => {
-    const cells = []
+  const splitCsvLine = (line: string) => {
+    const cells: string[] = []
     let cell = ''
     let quoted = false
     for (let i = 0; i < line.length; i += 1) {
@@ -404,7 +458,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     cells.push(cell.trim())
     return cells
   }
-  const inferType = (values) => {
+  const inferType = (values: string[]) => {
     const filled = values.filter((value) => value !== '')
     if (!filled.length) return 'text'
     if (filled.every((value) => /^-?\d+$/.test(value))) return 'int8'
@@ -420,7 +474,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     csvRows.value = []
     csvError.value = ''
   }
-  const applyCsv = (file, text) => {
+  const applyCsv = (file: CsvFile, text: string) => {
     clearCsv()
     const lines = text.split(/\r?\n/).filter((line) => line.trim())
     const headers = lines.length ? splitCsvLine(lines[0]) : []
@@ -431,7 +485,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     }
     const rows = lines
       .slice(1)
-      .map((line) =>
+      .map((line): CsvRow =>
         Object.fromEntries(splitCsvLine(line).map((value, index) => [headers[index], value]))
       )
     csvFile.value = file
@@ -446,7 +500,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     )
     if (!createForm.name.trim()) createForm.name = file.name.replace(/\.csv$/i, '')
   }
-  const onCsvFiles = async (files) => {
+  const onCsvFiles = async (files: FileList | File[] | null) => {
     const file = Array.from(files ?? [])[0]
     if (!file) return
     if (!/\.csv$/i.test(file.name)) {
@@ -457,9 +511,10 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     }
     applyCsv({ name: file.name, size: file.size, type: 'text/csv' }, await file.text())
   }
-  const onCsvPick = (event) => {
-    onCsvFiles(event.target.files)
-    event.target.value = ''
+  const onCsvPick = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    onCsvFiles(input.files)
+    input.value = ''
   }
   const csvTokens = computed(() =>
     csvFile.value
@@ -472,7 +527,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
       : []
   )
   const csvPreviewColumns = computed(() =>
-    csvHeaders.value.map((header) => ({ accessorKey: header, header, minWidth: 120 }))
+    csvHeaders.value.map((header): TableColumn => ({ accessorKey: header, header, minWidth: 120 }))
   )
   const csvPreview = computed(() =>
     csvRows.value.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
@@ -484,18 +539,18 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     { value: 'CASCADE', label: 'Cascade' },
     { value: 'SET NULL', label: 'Set null' }
   ]
-  const newRelation = () => ({
+  const newRelation = (): DraftRelation => ({
     key: `fk-${(uid += 1)}`,
     column: '',
     table: '',
     references: '',
     onDelete: 'NO ACTION'
   })
-  const referenceColumns = (relation) =>
+  const referenceColumns = (relation: DraftRelation) =>
     tables.value.find((item) => item.name === relation.table)?.columns ?? []
   const addRelation = () => createForm.relations.push(newRelation())
-  const removeRelation = (index) => createForm.relations.splice(index, 1)
-  const relationError = (relation) =>
+  const removeRelation = (index: number) => createForm.relations.splice(index, 1)
+  const relationError = (relation: DraftRelation) =>
     createSubmitted.value && (!relation.column || !relation.table || !relation.references)
       ? 'Choose the column, the table and the column it references.'
       : ''
@@ -627,11 +682,11 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
   }
 
   const rowOpen = ref(false)
-  const rowForm = reactive({})
+  const rowForm = reactive<Record<string, string>>({})
   const rowSubmitted = ref(false)
   const rowSubmitting = ref(false)
-  const isAuto = (column) => column.primaryKey && INTEGER_TYPES.includes(column.type)
-  const rowError = (column) =>
+  const isAuto = (column: SchemaColumn) => column.primaryKey && INTEGER_TYPES.includes(column.type)
+  const rowError = (column: SchemaColumn) =>
     rowSubmitted.value &&
     column.notNull &&
     !isAuto(column) &&
@@ -639,7 +694,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     !String(rowForm[column.name] ?? '').trim()
       ? `${column.name} cannot be NULL. Enter a value.`
       : ''
-  const rowHint = (column) => {
+  const rowHint = (column: SchemaColumn) => {
     if (isAuto(column)) return 'Generated by the database.'
     if (column.defaultValue) return `Empty uses the default, ${column.defaultValue}.`
     return column.notNull ? 'Required.' : 'Empty stores NULL.'
@@ -691,7 +746,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
       'COMMIT;'
     ].join('\n')
   })
-  const openAlter = (name) => {
+  const openAlter = (name: string) => {
     alterColumn.value = name
     alterType.value = table.value?.columns.find((column) => column.name === name)?.type ?? 'text'
     typeQuery.value = ''
@@ -740,11 +795,11 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     }, 700)
   }
 
-  const onTableAction = (event, value) => {
+  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'truncate') openTruncate()
     if (value === 'create') createOpen.value = true
   }
-  const onColumnAction = (value, row) => {
+  const onColumnAction = (value: string | number, row: { name: string }) => {
     if (value === 'alter') openAlter(row.name)
   }
 </script>
@@ -849,7 +904,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
           <template #cell-actions="{ row }">
             <Table.CellActions
               :name="row.name"
-              @select="(event, value) => onColumnAction(value, row)"
+              @select="(_event, value) => onColumnAction(value, row)"
             >
               <DropdownMenu.Group>
                 <DropdownMenu.Option
@@ -938,7 +993,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                       v-if="!csvFile"
                       accept=".csv,text/csv"
                       description="One .csv file, comma-separated, up to 10 MB."
-                      @drop="(event, files) => onCsvFiles(files)"
+                      @drop="(_event, files) => onCsvFiles(files)"
                     >
                       <Button
                         type="button"
@@ -1542,7 +1597,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
     <ConfirmDialog
       v-model:open="alterOpen"
       :title="`Change the type of ${alterColumn}`"
-      size="large"
+      size="medium"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert

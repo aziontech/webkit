@@ -110,15 +110,25 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 ## Code (`Running`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
-  import LogView from '@aziontech/webkit/log-view'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import { ref } from 'vue'
 
-  const steps = [
+  type StepStatus = 'done' | 'failed' | 'skipped' | 'running' | 'pending'
+  type DeployStep = {
+    key: string
+    title: string
+    description: string
+    status: StepStatus
+    duration: string
+    lines: LogViewLine[]
+  }
+
+  const steps: DeployStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -278,7 +288,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 
   const openStep = ref('build')
 
-  const stepStatusLabels = {
+  const stepStatusLabels: Record<StepStatus, string> = {
     done: 'Done',
     failed: 'Failed',
     skipped: 'Skipped',

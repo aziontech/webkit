@@ -40,7 +40,7 @@ A thin bar above the editor with a `ToggleGroup` labeled Editor document that sw
 
 ### C. Code document — `CodeEditor`, `HelperText` (required)
 
-A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
@@ -154,10 +154,10 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
 ## Code (`Code`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CodeEditor from '@aziontech/webkit/code-editor'
+  import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -182,7 +182,28 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId } from 'vue'
 
-  const loadMonaco = async () => {
+  type FieldBase = {
+    id: string
+    key: string
+    title: string
+    description: string
+    required: boolean
+    minLength: string
+    maxLength: string
+    pattern: string
+    minimum: string
+    maximum: string
+    options: string[]
+    itemType: string
+  }
+  type SchemaField = FieldBase &
+    (
+      | { type: 'boolean'; default: boolean }
+      | { type: 'array'; default: string[] }
+      | { type: 'string' | 'integer' | 'number' | 'select'; default: string }
+    )
+
+  const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
     const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
       await Promise.all([
         import('monaco-editor/editor/editor.worker?worker'),
@@ -196,7 +217,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
         return new EditorWorker()
       }
     }
-    return import('monaco-editor')
+    return (await import('monaco-editor')) as unknown as CodeEditorMonacoModule
   }
 
   const tabs = [
@@ -268,7 +289,7 @@ export async function handleRequest(request, args = {}) {
     code,
     schema: JSON.stringify(formSchema, null, 2)
   })
-  const fields = ref([
+  const fields = ref<SchemaField[]>([
     {
       id: 'field-1',
       key: 'defaultFormat',
@@ -303,8 +324,8 @@ export async function handleRequest(request, args = {}) {
       itemType: 'string'
     }
   ])
-  const expanded = ref(new Set())
-  const touched = ref(new Set())
+  const expanded = ref(new Set<string>())
+  const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
   const schemaCollapsed = ref(false)
   const nameError = ref('')
@@ -314,7 +335,7 @@ export async function handleRequest(request, args = {}) {
   const groupName = useId()
 
   let sequence = 2
-  const newField = () => ({
+  const newField = (): SchemaField => ({
     id: 'field-' + (sequence += 1),
     key: '',
     type: 'string',
@@ -331,12 +352,14 @@ export async function handleRequest(request, args = {}) {
     itemType: 'string'
   })
 
-  const fieldTypeLabel = (type) => fieldTypes.find((option) => option.value === type)?.label ?? type
-  const itemTypeLabel = (type) => itemTypes.find((option) => option.value === type)?.label ?? type
-  const summary = (field) =>
+  const fieldTypeLabel = (type: unknown) =>
+    fieldTypes.find((option) => option.value === type)?.label ?? String(type)
+  const itemTypeLabel = (type: unknown) =>
+    itemTypes.find((option) => option.value === type)?.label ?? String(type)
+  const summary = (field: SchemaField) =>
     field.type === 'array' ? 'List of ' + itemTypeLabel(field.itemType) : fieldTypeLabel(field.type)
 
-  const keyError = (field) => {
+  const keyError = (field: SchemaField) => {
     const key = field.key.trim()
     if (!key) return touched.value.has(field.id) ? 'Give the field a name.' : ''
     if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key))
@@ -345,18 +368,18 @@ export async function handleRequest(request, args = {}) {
       ? 'Another field already uses this name.'
       : ''
   }
-  const touch = (id) => {
+  const touch = (id: string) => {
     touched.value = new Set(touched.value).add(id)
   }
 
-  const isExpanded = (id) => expanded.value.has(id)
-  const toggle = (id) => {
+  const isExpanded = (id: string) => expanded.value.has(id)
+  const toggle = (id: string) => {
     const next = new Set(expanded.value)
     if (next.has(id)) next.delete(id)
     else next.add(id)
     expanded.value = next
   }
-  const open = (id) => {
+  const open = (id: string) => {
     expanded.value = new Set(expanded.value).add(id)
   }
 
@@ -366,19 +389,19 @@ export async function handleRequest(request, args = {}) {
     open(field.id)
     nextTick(() => document.getElementById(formId + '-key-' + field.id)?.focus())
   }
-  const removeField = (index) => {
+  const removeField = (index: number) => {
     const [removed] = fields.value.splice(index, 1)
     if (!removed) return
     const next = new Set(expanded.value)
     next.delete(removed.id)
     expanded.value = next
   }
-  const duplicateField = (index) => {
+  const duplicateField = (index: number) => {
     const copy = { ...fields.value[index], id: newField().id, key: '' }
     fields.value.splice(index + 1, 0, copy)
     open(copy.id)
   }
-  const move = (index, direction) => {
+  const move = (index: number, direction: number) => {
     const to = index + direction
     if (to < 0 || to >= fields.value.length) return
     const [moved] = fields.value.splice(index, 1)
@@ -389,27 +412,27 @@ export async function handleRequest(request, args = {}) {
     fields.value = []
   }
 
-  const onTypeChange = (field) => {
-    for (const constraint of ['minLength', 'maxLength', 'pattern', 'minimum', 'maximum']) {
+  const onTypeChange = (field: SchemaField) => {
+    for (const constraint of ['minLength', 'maxLength', 'pattern', 'minimum', 'maximum'] as const) {
       field[constraint] = ''
     }
     if (field.type !== 'select') field.options = []
     if (field.type === 'boolean') field.default = false
     else if (field.type === 'array') field.default = []
-    else if (typeof field.default !== 'string') field.default = ''
+    else field.default = typeof field.default === 'string' ? field.default : ''
   }
-  const linesToList = (text) =>
+  const linesToList = (text: unknown) =>
     String(text)
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
-  const listToLines = (list) => (Array.isArray(list) ? list.join('\n') : '')
+  const listToLines = (list: unknown) => (Array.isArray(list) ? list.join('\n') : '')
 
   const snapshot = () => JSON.stringify({ form, fields: fields.value })
   const baseline = ref(snapshot())
   const dirty = computed(() => snapshot() !== baseline.value)
   const discard = () => {
-    const saved = JSON.parse(baseline.value)
+    const saved: { form: typeof form; fields: SchemaField[] } = JSON.parse(baseline.value)
     Object.assign(form, saved.form)
     fields.value = saved.fields
   }
@@ -727,7 +750,7 @@ export async function handleRequest(request, args = {}) {
                                                         size="medium"
                                                         placeholder="cookie_name"
                                                         autocomplete="off"
-                                                        spellcheck="false"
+                                                        :spellcheck="false"
                                                         class="w-full"
                                                         aria-label="Name"
                                                         :invalid="!!keyError(field)"
@@ -946,7 +969,7 @@ export async function handleRequest(request, args = {}) {
                                                         size="medium"
                                                         placeholder="^[a-z0-9_-]+$"
                                                         autocomplete="off"
-                                                        spellcheck="false"
+                                                        :spellcheck="false"
                                                         class="w-full"
                                                         aria-label="Pattern"
                                                       />

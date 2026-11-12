@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -16,13 +16,18 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import TopologyDiagram from '@aziontech/webkit/topology-diagram'
+  import TopologyDiagram, {
+    type TopologyBindOption,
+    type TopologyLevel,
+    type TopologyNode
+  } from '@aziontech/webkit/topology-diagram'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   const APP = {
@@ -47,7 +52,7 @@
     { label: 'Created', value: '2 weeks ago by Mara Lin', author: 'Mara Lin' }
   ]
 
-  const versionColumns = [
+  const versionColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Version', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'state', header: 'Status', minWidth: 104 },
@@ -76,9 +81,13 @@
       createdAgo: '4 days ago'
     }
   ]
-  const versionSeverity = { Active: 'success', Ready: 'secondary', Draft: 'warning' }
+  const versionSeverity: Record<string, TagSeverity> = {
+    Active: 'success',
+    Ready: 'secondary',
+    Draft: 'warning'
+  }
 
-  const deploymentColumns = [
+  const deploymentColumns: TableColumn[] = [
     { accessorKey: 'id', header: 'Deployment', principal: true, hideable: false },
     { accessorKey: 'version', header: 'Version' },
     { accessorKey: 'environment', header: 'Environment' },
@@ -108,9 +117,16 @@
       createdAgo: 'Yesterday'
     }
   ]
-  const deploymentSeverity = { Live: 'success', Failed: 'danger', Building: 'info' }
+  const deploymentSeverity: Record<string, StatusIndicatorSeverity> = {
+    Live: 'success',
+    Failed: 'danger',
+    Building: 'info'
+  }
 
-  const targets = {
+  const targets: Record<
+    string,
+    { kind: string; icon: string; options: TopologyBindOption[]; unbound: string }
+  > = {
     firewall: {
       kind: 'Firewall',
       icon: 'pi pi-shield',
@@ -131,13 +147,13 @@
     }
   }
 
-  const deployed = reactive({ firewall: 'edge-guard', function: '' })
-  const staged = reactive({})
+  const deployed = reactive<Record<string, string>>({ firewall: 'edge-guard', function: '' })
+  const staged = reactive<Record<string, string>>({})
   const expanded = ref(['firewall'])
   const stagedCount = computed(() => Object.keys(staged).length)
   const stagedNote = ref('')
 
-  const slotNode = (key) => {
+  const slotNode = (key: string): TopologyNode => {
     const target = targets[key]
     const pick = staged[key]
     const removing = pick === ''
@@ -170,7 +186,7 @@
     }
   }
 
-  const levels = computed(() => [
+  const levels = computed<TopologyLevel[]>(() => [
     {
       key: 'domain',
       nodes: [
@@ -223,24 +239,24 @@
     }))
   )
 
-  const bind = (key, value) => {
+  const bind = (key: string, value: string) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     stagedNote.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
   }
-  const unbind = (key) => {
+  const unbind = (key: string) => {
     if (staged[key] !== undefined && staged[key] !== '') delete staged[key]
     else if (deployed[key]) staged[key] = ''
     stagedNote.value = `${targets[key].kind} staged for removal.`
   }
-  const createTarget = (key) => {
+  const createTarget = (key: string) => {
     stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
 
   const deployOpen = ref(false)
   const deploying = ref(false)
   const RUN_TOAST = 'application-deploy'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const editStaged = () => {
     toast.dismiss(RUN_TOAST)

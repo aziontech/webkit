@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
@@ -21,12 +21,15 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, ref, useId, watch } from 'vue'
 
+  type ListEntry = { value: string; note: string; pasted: boolean }
+  type ListCopy = { column: string; placeholder: string; noun: string; rule: string; hint: string }
+
   const TYPES = [
     { label: 'IP/CIDR', value: 'ip' },
     { label: 'ASN', value: 'asn' },
     { label: 'Countries', value: 'countries' }
   ]
-  const TYPE_COPY = {
+  const TYPE_COPY: Record<string, ListCopy | undefined> = {
     ip: {
       column: 'Address',
       placeholder: '203.0.113.0/24',
@@ -69,23 +72,23 @@
   const drawerOpen = ref(false)
   const name = ref('')
   const type = ref('ip')
-  const countries = ref([])
+  const countries = ref<string[]>([])
   const submitted = ref(false)
   const submitting = ref(false)
-  const formEl = ref(null)
+  const formEl = ref<HTMLFormElement | null>(null)
 
-  const isIPv4 = (value) => {
+  const isIPv4 = (value: string) => {
     const parts = value.split('.')
     return (
       parts.length === 4 && parts.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255)
     )
   }
-  const isIPv6 = (value) =>
+  const isIPv6 = (value: string) =>
     /^[0-9a-f:]+$/i.test(value) &&
     value.includes(':') &&
     (value.match(/::/g) ?? []).length <= 1 &&
     value.split(':').every((group) => group.length <= 4)
-  const validIp = (raw) => {
+  const validIp = (raw: string) => {
     const [address, prefix, extra] = raw.split('/')
     if (extra !== undefined) return false
     const v4 = isIPv4(address)
@@ -94,24 +97,28 @@
     if (!/^\d{1,3}$/.test(prefix)) return false
     return Number(prefix) <= (v4 ? 32 : 128)
   }
-  const validAsn = (raw) => {
+  const validAsn = (raw: string) => {
     const digits = raw.replace(/^AS/i, '')
     return /^\d{1,10}$/.test(digits) && Number(digits) >= 1 && Number(digits) <= 4294967295
   }
-  const entryError = (kind, value) => {
+  const entryError = (kind: string, value: string) => {
     const text = value.trim()
     if (!text) return `Enter ${kind === 'ip' ? 'an address' : 'an ASN'}.`
     const ok = kind === 'ip' ? validIp(text) : validAsn(text)
-    return ok ? '' : `${text} is not ${TYPE_COPY[kind].rule}.`
+    return ok ? '' : `${text} is not ${TYPE_COPY[kind]?.rule}.`
   }
-  const normalize = (kind, value) =>
+  const normalize = (kind: string, value: string) =>
     kind === 'asn' ? value.trim().replace(/^AS/i, '') : value.trim().toLowerCase()
 
-  const createEntry = (value = '', note = '', pasted = false) => ({ value, note, pasted })
-  const entries = ref({ ip: [createEntry()], asn: [createEntry()] })
+  const createEntry = (value = '', note = '', pasted = false): ListEntry => ({
+    value,
+    note,
+    pasted
+  })
+  const entries = ref<Record<string, ListEntry[]>>({ ip: [createEntry()], asn: [createEntry()] })
   const rows = computed({
     get: () => entries.value[type.value] ?? [],
-    set: (next) => {
+    set: (next: ListEntry[]) => {
       entries.value = { ...entries.value, [type.value]: next }
     }
   })
@@ -130,7 +137,7 @@
       : []
   )
   const filled = computed(() => rows.value.filter((entry) => entry.value.trim()))
-  const checked = (entry) =>
+  const checked = (entry: ListEntry) =>
     Boolean(entry.value.trim() || entry.note.trim() || !filled.value.length)
   const rowErrors = computed(() =>
     rows.value.map((entry) => {
@@ -148,16 +155,16 @@
   const pasteOpen = ref(false)
   const pasteText = ref('')
   const status = ref('')
-  const pasteToggle = ref(null)
+  const pasteToggle = ref<{ $el?: HTMLElement } | null>(null)
 
   const pasteReport = computed(() => {
     const kind = type.value
     const seen = new Set(
       rows.value.filter((entry) => entry.value.trim()).map((entry) => normalize(kind, entry.value))
     )
-    const lines = []
-    const duplicates = []
-    const invalid = []
+    const lines: ListEntry[] = []
+    const duplicates: number[] = []
+    const invalid: number[] = []
     pasteText.value.split(/\r?\n/).forEach((line, index) => {
       const [body, ...comment] = line.split('#')
       const value = body.trim()
@@ -173,7 +180,7 @@
     })
     return { lines, duplicates, invalid }
   })
-  const lineList = (numbers) =>
+  const lineList = (numbers: number[]) =>
     numbers.length === 1
       ? `Line ${numbers[0]} is`
       : `Lines ${numbers.slice(0, -1).join(', ')} and ${numbers[numbers.length - 1]} are`
@@ -208,10 +215,10 @@
     pasteText.value = SAMPLE_LIST
   })
 
-  const countryDisplay = (ids) => {
+  const countryDisplay = (ids: unknown[]) => {
     if (!ids?.length) return ''
     if (ids.length > 1) return `${ids.length} countries`
-    return COUNTRIES.find((option) => option.value === ids[0])?.label ?? ids[0]
+    return COUNTRIES.find((option) => option.value === ids[0])?.label ?? String(ids[0])
   }
 
   const isValid = computed(() => {
@@ -229,7 +236,7 @@
     if (!isValid.value) {
       await nextTick()
       formEl.value
-        ?.querySelector(
+        ?.querySelector<HTMLElement>(
           ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
         )
         ?.focus()
@@ -413,7 +420,7 @@
                       <template #cell-value="{ value, update, invalid }">
                         <div class="contents font-code">
                           <Input
-                            :model-value="value"
+                            :model-value="value as string"
                             size="large"
                             :placeholder="copy.placeholder"
                             autocomplete="off"

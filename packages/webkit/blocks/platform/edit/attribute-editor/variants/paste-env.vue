@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -10,7 +10,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
@@ -26,6 +26,23 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
+  type ScopeRef = { type: string; id: string; name: string }
+  type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
+  type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
+  type EntryProblem = { kind: HelperTextKind; message: string }
+  type Pair = { key: string; value: string }
+  type ScopeOption = { value: string; label: string }
+  type ScopeState = {
+    type: string
+    label: string
+    plural: string
+    placeholder: string
+    enabled: boolean
+    ids: string[]
+    query: string
+    options: ScopeOption[]
+  }
+
   const existingKeys = ref([
     'API_BASE_URL',
     'PAYMENT_SECRET_KEY',
@@ -33,7 +50,7 @@
     'DATABASE_PASSWORD',
     'MAX_UPLOAD_MB'
   ])
-  const onCreated = () => {}
+  const onCreated = (_created: VariableDraft[]) => {}
 
   const SECRET_MASK = '••••••••'
   const SECRET_HINT =
@@ -46,19 +63,19 @@
     'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   const formId = useId()
-  const fieldId = (entry, part) => `${formId}-${part}-${entry.id}`
-  const messageId = (entry, part) => `${fieldId(entry, part)}-message`
+  const fieldId = (entry: Entry, part: string) => `${formId}-${part}-${entry.id}`
+  const messageId = (entry: Entry, part: string) => `${fieldId(entry, part)}-message`
 
   let nextEntryId = 0
-  const createEntry = (key = '', value = '', secret = false) => ({
+  const createEntry = (key = '', value = '', secret = false): Entry => ({
     id: (nextEntryId += 1),
     key,
     value,
     secret,
     visible: false
   })
-  const isEmptyEntry = (entry) => !entry.key.trim() && !entry.value.trim()
-  const formatKey = (value) =>
+  const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
+  const formatKey = (value: unknown) =>
     String(value ?? '')
       .replace(/\s/g, '_')
       .toUpperCase()
@@ -70,7 +87,7 @@
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInput = ref(null)
+  const fileInput = ref<HTMLInputElement | null>(null)
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -78,25 +95,25 @@
       const key = entry.key.trim()
       counts.set(key, (counts.get(key) ?? 0) + 1)
       return counts
-    }, new Map())
+    }, new Map<string, number>())
   )
   const duplicatedKeys = computed(() =>
     [...keyCounts.value].filter(([, count]) => count > 1).map(([key]) => key)
   )
 
-  const keyError = (entry) => {
+  const keyError = (entry: Entry): EntryProblem | null => {
     if (!submitted.value || isEmptyEntry(entry)) return null
     const key = entry.key.trim()
     if (!key) return { kind: 'required', message: 'Key is required.' }
     if (!/^[A-Z0-9_]+$/.test(key))
       return { kind: 'invalid', message: 'Use only uppercase letters, numbers, and underscores.' }
-    if (keyCounts.value.get(key) > 1)
+    if ((keyCounts.value.get(key) ?? 0) > 1)
       return { kind: 'invalid', message: `Duplicated key: ${duplicatedKeys.value.join(', ')}` }
     if (existingKeys.value.includes(key))
       return { kind: 'invalid', message: `${key} already exists in this list.` }
     return null
   }
-  const valueError = (entry) => {
+  const valueError = (entry: Entry): EntryProblem | null => {
     if (!submitted.value || isEmptyEntry(entry) || entry.value.trim()) return null
     return { kind: 'required', message: 'Value is required.' }
   }
@@ -111,24 +128,24 @@
     const last = entries.value.at(-1)
     return Boolean(last?.key.trim() && last?.value.trim())
   })
-  const setKey = (entry, value) => {
+  const setKey = (entry: Entry, value: string) => {
     entry.key = formatKey(value)
   }
 
-  const secretTooltip = (entry) =>
+  const secretTooltip = (entry: Entry) =>
     entry.secret ? 'The value is hidden and write-only.' : 'Mark as secret'
-  const secretAriaLabel = (entry) => (entry.secret ? 'Unmark as secret' : 'Mark as secret')
+  const secretAriaLabel = (entry: Entry) => (entry.secret ? 'Unmark as secret' : 'Mark as secret')
 
-  const unquote = (value) => {
+  const unquote = (value: string) => {
     const quote = value[0]
     if ((quote === '"' || quote === "'") && value.length > 1 && value.at(-1) === quote) {
       return value.slice(1, -1)
     }
     return value
   }
-  const parseEnvFile = (content) => {
-    const parsed = []
-    const invalidLines = []
+  const parseEnvFile = (content: string | undefined) => {
+    const parsed: Pair[] = []
+    const invalidLines: number[] = []
     String(content ?? '')
       .split(/\r?\n/)
       .forEach((line, index) => {
@@ -144,8 +161,8 @@
       })
     return { parsed, invalidLines }
   }
-  const parseJsonObject = (content) => {
-    const parsed = JSON.parse(content)
+  const parseJsonObject = (content: string): Pair[] | null => {
+    const parsed: unknown = JSON.parse(content)
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
     return Object.entries(parsed)
       .filter(([key]) => key.trim())
@@ -161,7 +178,7 @@
                 : String(value)
       }))
   }
-  const parsePasted = (content) => {
+  const parsePasted = (content: string | undefined) => {
     const text = String(content ?? '').trim()
     if (!text) return null
     if (text.startsWith('{')) {
@@ -175,10 +192,10 @@
     const { parsed, invalidLines } = parseEnvFile(text)
     return invalidLines.length || !parsed.length ? null : parsed
   }
-  const toEntries = (pairs, secrets = new Set()) =>
+  const toEntries = (pairs: Pair[], secrets = new Set<string>()) =>
     pairs.map((pair) => createEntry(pair.key, pair.value, secrets.has(pair.key)))
 
-  const pasteIntoKey = (event, index) => {
+  const pasteIntoKey = (event: ClipboardEvent, index: number) => {
     if (!isEmptyEntry(entries.value[index])) return
     const pairs = parsePasted(event.clipboardData?.getData('text/plain'))
     if (!pairs) return
@@ -186,9 +203,10 @@
     entries.value.splice(index, 1, ...toEntries(pairs))
   }
 
-  const onFilePicked = async (event) => {
-    const [file] = event.target.files ?? []
-    event.target.value = ''
+  const onFilePicked = async (event: Event) => {
+    const input = event.target as HTMLInputElement
+    const [file] = input.files ?? []
+    input.value = ''
     if (!file) return
     const { parsed, invalidLines } = parseEnvFile(await file.text())
     if (!parsed.length && invalidLines.length) return
@@ -234,7 +252,7 @@
     { type: 'service', label: 'Service', plural: 'services' },
     { type: 'policy', label: 'Policy', plural: 'policies' }
   ]
-  const scopeOptions = {
+  const scopeOptions: Record<string, ScopeOption[]> = {
     environment: [
       { value: 'env-production', label: 'Production' },
       { value: 'env-preview', label: 'Preview' },
@@ -259,7 +277,7 @@
       { value: '5540120', label: 'checkout-shield' }
     ]
   }
-  const createScopes = () =>
+  const createScopes = (): ScopeState[] =>
     scopeTypes.map((scope) => ({
       ...scope,
       placeholder: scope.plural ? `Select ${scope.plural}` : '',
@@ -270,26 +288,27 @@
     }))
   const scopes = reactive(createScopes())
 
-  const setScopeEnabled = (scope, enabled) => {
+  const setScopeEnabled = (scope: ScopeState, enabled: boolean) => {
     if (scope.type === 'global') return
     scope.enabled = enabled
     scope.ids = enabled ? scope.options.map((option) => option.value) : []
     scope.query = ''
     scopes[0].enabled = !scopes.some((item) => item.type !== 'global' && item.enabled)
   }
-  const scopeMissing = (scope) => scope.enabled && scope.type !== 'global' && scope.ids.length === 0
-  const scopeError = (scope) => submitted.value && scopeMissing(scope)
-  const scopeDisplay = (scope) => (ids) => {
+  const scopeMissing = (scope: ScopeState) =>
+    scope.enabled && scope.type !== 'global' && scope.ids.length === 0
+  const scopeError = (scope: ScopeState) => submitted.value && scopeMissing(scope)
+  const scopeDisplay = (scope: ScopeState) => (ids: unknown[]) => {
     if (!ids?.length) return ''
     if (ids.length > 1) return `Selected ${ids.length} ${scope.plural}`
-    return scope.options.find((option) => option.value === ids[0])?.label ?? ids[0]
+    return scope.options.find((option) => option.value === ids[0])?.label ?? String(ids[0])
   }
-  const visibleScopeOptions = (scope) => {
+  const visibleScopeOptions = (scope: ScopeState) => {
     const query = scope.query.trim().toLowerCase()
     if (!query) return scope.options
     return scope.options.filter((option) => option.label.toLowerCase().includes(query))
   }
-  const scopePayload = () =>
+  const scopePayload = (): ScopeRef[] =>
     scopes.flatMap((scope) => {
       if (!scope.enabled) return []
       if (scope.type === 'global') return [{ type: 'global', id: '', name: '' }]
@@ -313,7 +332,7 @@
   const pasteOpen = ref(false)
   const pasteText = ref('')
   const pasteStatus = ref('')
-  const pasteToggle = ref(null)
+  const pasteToggle = ref<{ $el?: HTMLElement } | null>(null)
 
   const pasteReport = computed(() => {
     const { parsed, invalidLines } = parseEnvFile(pasteText.value)
@@ -326,7 +345,7 @@
     return { pairs: [...byKey.values()], invalidLines, repeated, replaced }
   })
 
-  const lineList = (lines) =>
+  const lineList = (lines: number[]) =>
     lines.length === 1
       ? `Line ${lines[0]} is`
       : `Lines ${lines.slice(0, -1).join(', ')} and ${lines.at(-1)} are`
@@ -367,7 +386,7 @@
     submitting.value = false
   })
 
-  const formEl = ref(null)
+  const formEl = ref<HTMLFormElement | null>(null)
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -379,7 +398,7 @@
     if (!isValid.value || scopes.some(scopeMissing)) {
       await nextTick()
       formEl.value
-        ?.querySelector(
+        ?.querySelector<HTMLElement>(
           ':is(input, textarea, button)[aria-invalid="true"], :is(input, textarea, button)[aria-required="true"]'
         )
         ?.focus()
@@ -562,32 +581,38 @@
                       remove-button-label="Remove variable"
                       aria-label="Variables"
                     >
-                      <template #row="{ item: entry, index, remove, removable, removeLabel }">
+                      <template #row="{ index, remove, removable, removeLabel }">
                         <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                           <Field>
                             <InputGroupRoot
                               size="large"
-                              :required="keyError(entry)?.kind === 'required'"
-                              :invalid="keyError(entry)?.kind === 'invalid'"
+                              :required="keyError(entries[index])?.kind === 'required'"
+                              :invalid="keyError(entries[index])?.kind === 'invalid'"
                             >
                               <InputGroupAddon>
                                 <span class="inline-block w-20">
-                                  <Field.Label :for="fieldId(entry, 'key')">Key</Field.Label>
+                                  <Field.Label :for="fieldId(entries[index], 'key')"
+                                    >Key</Field.Label
+                                  >
                                 </span>
                               </InputGroupAddon>
                               <input
-                                :id="fieldId(entry, 'key')"
-                                :value="entry.key"
+                                :id="fieldId(entries[index], 'key')"
+                                :value="entries[index].key"
                                 placeholder="MY_VARIABLE"
                                 autocomplete="off"
                                 spellcheck="false"
-                                :aria-invalid="!!keyError(entry) || undefined"
+                                :aria-invalid="!!keyError(entries[index]) || undefined"
                                 :aria-describedby="
-                                  keyError(entry) ? messageId(entry, 'key') : undefined
+                                  keyError(entries[index])
+                                    ? messageId(entries[index], 'key')
+                                    : undefined
                                 "
                                 :class="fieldClass"
                                 class="text-label-code-sm"
-                                @input="setKey(entry, $event.target.value)"
+                                @input="
+                                  setKey(entries[index], ($event.target as HTMLInputElement).value)
+                                "
                                 @paste="pasteIntoKey($event, index)"
                               />
                               <Tooltip
@@ -608,51 +633,61 @@
                           <Field>
                             <InputGroupRoot
                               size="large"
-                              :required="!!valueError(entry)"
+                              :required="!!valueError(entries[index])"
                             >
                               <InputGroupAddon>
                                 <span class="inline-block w-20">
-                                  <Field.Label :for="fieldId(entry, 'value')">Value</Field.Label>
+                                  <Field.Label :for="fieldId(entries[index], 'value')"
+                                    >Value</Field.Label
+                                  >
                                 </span>
                               </InputGroupAddon>
                               <input
-                                :id="fieldId(entry, 'value')"
-                                v-model="entry.value"
-                                :type="entry.secret && !entry.visible ? 'password' : 'text'"
-                                :placeholder="entry.secret ? SECRET_MASK : 'my-variable-value'"
+                                :id="fieldId(entries[index], 'value')"
+                                v-model="entries[index].value"
+                                :type="
+                                  entries[index].secret && !entries[index].visible
+                                    ? 'password'
+                                    : 'text'
+                                "
+                                :placeholder="
+                                  entries[index].secret ? SECRET_MASK : 'my-variable-value'
+                                "
                                 autocomplete="off"
                                 spellcheck="false"
-                                :aria-invalid="!!valueError(entry) || undefined"
+                                :aria-invalid="!!valueError(entries[index]) || undefined"
                                 :aria-describedby="
-                                  valueError(entry) ? messageId(entry, 'value') : undefined
+                                  valueError(entries[index])
+                                    ? messageId(entries[index], 'value')
+                                    : undefined
                                 "
                                 :class="fieldClass"
                                 class="text-label-sm"
                               />
                               <Tooltip
-                                v-if="entry.secret"
-                                :text="entry.visible ? 'Hide value' : 'Show value'"
+                                v-if="entries[index].secret"
+                                :text="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
-                                  :icon="entry.visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                  :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
                                   kind="outlined"
                                   size="large"
-                                  :aria-label="entry.visible ? 'Hide value' : 'Show value'"
-                                  :aria-pressed="entry.visible"
-                                  @click="entry.visible = !entry.visible"
+                                  :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
+                                  :aria-pressed="entries[index].visible"
+                                  @click="entries[index].visible = !entries[index].visible"
                                 />
                               </Tooltip>
                               <InputGroupAddon>
-                                <Tooltip :text="secretTooltip(entry)">
+                                <Tooltip :text="secretTooltip(entries[index])">
                                   <Field orientation="horizontal">
-                                    <Field.Label :for="fieldId(entry, 'secret')"
+                                    <Field.Label :for="fieldId(entries[index], 'secret')"
                                       >Secret</Field.Label
                                     >
                                     <Checkbox
-                                      v-model="entry.secret"
+                                      v-model="entries[index].secret"
                                       binary
-                                      :input-id="fieldId(entry, 'secret')"
-                                      :aria-label="secretAriaLabel(entry)"
+                                      :input-id="fieldId(entries[index], 'secret')"
+                                      :aria-label="secretAriaLabel(entries[index])"
                                     />
                                   </Field>
                                 </Tooltip>
@@ -662,17 +697,17 @@
                         </div>
 
                         <HelperText
-                          v-if="keyError(entry)"
-                          :id="messageId(entry, 'key')"
-                          :kind="keyError(entry).kind"
-                          :label="keyError(entry).message"
+                          v-if="keyError(entries[index])"
+                          :id="messageId(entries[index], 'key')"
+                          :kind="keyError(entries[index])?.kind"
+                          :label="keyError(entries[index])?.message"
                         />
                         <HelperText
                           key="helper-text-2"
-                          v-if="valueError(entry)"
-                          :id="messageId(entry, 'value')"
-                          :kind="valueError(entry).kind"
-                          :label="valueError(entry).message"
+                          v-if="valueError(entries[index])"
+                          :id="messageId(entries[index], 'value')"
+                          :kind="valueError(entries[index])?.kind"
+                          :label="valueError(entries[index])?.message"
                         />
                       </template>
                       <template #info>

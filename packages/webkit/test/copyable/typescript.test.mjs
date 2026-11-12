@@ -13,7 +13,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { CONSUMER_COMPILER_OPTIONS } from './consumer-app.mjs'
+import { CONSUMER_COMPILER_OPTIONS, CONSUMER_ENV_FILES } from './consumer-app.mjs'
 
 const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
 const require = createRequire(import.meta.url)
@@ -27,6 +27,8 @@ const TYPESCRIPT_FOLDERS = [
   'blocks/platform/create',
   'blocks/platform/dashboard',
   'blocks/platform/delete',
+  'blocks/platform/detail',
+  'blocks/platform/edit',
   'blocks/platform/settings',
   'blocks/platform/states',
   'blocks/platform/view'
@@ -66,7 +68,7 @@ test('every TypeScript block, variant and example type-checks in a strict consum
       tsconfig,
       JSON.stringify({
         compilerOptions: CONSUMER_COMPILER_OPTIONS,
-        files: typed.map((file) => join(PKG_DIR, file))
+        files: [...CONSUMER_ENV_FILES, ...typed.map((file) => join(PKG_DIR, file))]
       })
     )
     const vueTsc = join(dirname(require.resolve('vue-tsc/package.json')), 'bin/vue-tsc.js')

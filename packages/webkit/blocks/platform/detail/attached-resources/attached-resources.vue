@@ -1,9 +1,10 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import Table from '@aziontech/webkit/table'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -35,7 +36,7 @@
     }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'domain', header: 'Domain', principal: true, grow: 2 },
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'policy', header: 'Policy' },

@@ -188,7 +188,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
 ## Code (`ProjectSettings`)
 
 ```vue
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -256,7 +256,13 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
     }
   ]
 
-  const record = {
+  type ResourceRecord = {
+    name: string
+    active: boolean
+    modules: Record<string, boolean>
+  }
+
+  const record: ResourceRecord = {
     name: 'web-app',
     active: true,
     modules: {
@@ -296,7 +302,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ed
     }, 900)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as ResourceRecord)
 </script>
 
 <template>

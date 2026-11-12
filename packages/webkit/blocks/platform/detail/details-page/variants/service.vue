@@ -1,12 +1,12 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Alert from '@aziontech/webkit/alert'
   import Popover from '@aziontech/webkit/popover'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
@@ -125,8 +125,8 @@
               <DropdownMenu
                 placement="bottom-end"
                 @select="
-                  (event, value) => {
-                    if (value !== '__add-environment__') environment = value
+                  (_event, value) => {
+                    if (value !== '__add-environment__') environment = String(value)
                   }
                 "
               >

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -12,16 +12,26 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectValue } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
+
+  type VersionEntry = {
+    id: string
+    name: string
+    state: string
+    tag: { label: string; severity: TagSeverity; icon: string }
+    comment: string
+    author: string
+    createdAgo: string
+  }
 
   const tabs = [
     { value: 'main-settings', label: 'Settings' },
@@ -31,7 +41,7 @@
     { value: 'custom-code', label: 'Custom Code' },
     { value: 'rules', label: 'Rules' }
   ]
-  const versions = [
+  const versions: VersionEntry[] = [
     {
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
@@ -96,7 +106,7 @@
       createdAgo: '1 week ago'
     }
   ]
-  const version = {
+  const version: VersionEntry = {
     id: 'ADA8FMMR',
     name: 'ADA8FMMR',
     state: 'draft',
@@ -105,7 +115,7 @@
     author: 'Herbert Júlio',
     createdAgo: '14 hours ago'
   }
-  const earlier = [
+  const earlier: VersionEntry[] = [
     {
       id: 'AEO25I38',
       name: 'AEO25I38',
@@ -211,19 +221,19 @@
     if (!needle) return environments
     return environments.filter((entry) => entry.name.toLowerCase().includes(needle))
   })
-  const servedIn = (id) =>
+  const servedIn = (id: string) =>
     environments.filter((entry) => entry.serves === id).map((entry) => entry.name)
-  const pickEnvironment = (value) => {
+  const pickEnvironment = (value: SelectValue) => {
     if (value === '__create-environment__') return
-    environment.value = value
+    environment.value = String(value)
     const served = environments.find((entry) => entry.name === value)?.serves
     if (served) versionId.value = served
   }
-  const pickVersion = (value) => {
-    if (value !== '__create-version__') versionId.value = value
+  const pickVersion = (value: SelectValue) => {
+    if (value !== '__create-version__') versionId.value = String(value)
   }
   const activeTab = ref('main-settings')
-  const settings = reactive({
+  const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({
     name: 'web-app',
     active: true,
     modules: {
@@ -236,7 +246,7 @@
       web_socket_proxy: false
     }
   })
-  const saveAction = ref('deploy')
+  const saveAction = ref<string | undefined>('deploy')
   const historyCollapsed = ref(true)
   const historyBasis = ref(348)
   const description = ref('Cache static assets for 30 days')
@@ -248,7 +258,7 @@
     versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
   )
 
-  const openHistory = (event, value) => {
+  const openHistory = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'history' && !historyCollapsed.value) {
       historyCollapsed.value = true
       return
@@ -343,9 +353,7 @@
         size="small"
         :model-value="versionId"
         @update:model-value="pickVersion"
-        :display-value="
-          (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
-        "
+        :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
         @update:open="
           (open) => {
             if (!open) query = ''
@@ -815,12 +823,12 @@
 
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <SplitButton
-                      :label="saveOptions.find((option) => option.value === saveAction).label"
+                      :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'pi pi-cloud-upload' : ''"
                       kind="primary"
                       size="medium"
                       :model="saveOptions"
-                      @item-click="(event, item) => (saveAction = item.value)"
+                      @item-click="(_event, item) => (saveAction = item.value)"
                     />
                   </div>
                 </div>
