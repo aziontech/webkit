@@ -151,7 +151,7 @@
           <tr>
             <th
               scope="col"
-              class="sticky top-(--layout-header-height) z-20 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-md) text-start align-top lg:p-(--spacing-lg) font-normal"
+              class="sticky top-(--layout-header-height) z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-sm) py-(--spacing-md) text-start align-top lg:p-(--spacing-lg) font-normal"
             >
               <span class="text-overline-md text-(--text-muted) max-lg:sr-only">{{
                 columnLabel
@@ -180,7 +180,7 @@
               scope="col"
               :data-folded="tier.id !== visibleTier || null"
               :data-highlighted="tier.highlighted || null"
-              class="sticky top-(--layout-header-height) z-20 h-px border-b border-s border-(--border-default) bg-(--bg-canvas) p-(--spacing-md) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
+              class="sticky top-(--layout-header-height) z-20 h-px border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-sm) py-(--spacing-md) align-top lg:p-(--spacing-lg) font-normal max-lg:data-folded:hidden"
             >
               <span
                 v-if="tier.highlighted"
