@@ -344,10 +344,16 @@ only.
 
 Use `Tag` for a chip; for status, map the value to a semantic `severity` — **never a raw color**.
 
-**One chip per row.** A row where three columns are chips has no emphasis left to spend on the one
-fact a reader scans the list for. Chip the thing that is genuinely a _status_ — what happened, what
-is live — and render every other enumerable value as a glyph plus plain text. If two chips both
-survive that test, check whether they are restating one fact.
+**One status chip per row.** A row where three columns are chips has no emphasis left to spend on
+the one fact a reader scans the list for. Chip the thing that is genuinely a _status_ — what
+happened, what is live — and render every other enumerable value as a glyph plus plain text, with
+two exceptions the console uses: one **category** chip (the environment, below) and one **marker**
+tag on the version that is live (`Current`). If two chips both survive that test, check whether they
+are restating one fact.
+
+The one highlighted value of a set (the `Owner` role among Admin / Member) is
+`severity="highlight"`, the orange tint; an `Inactive` state is `secondary`, never `danger` — nothing
+failed.
 
 **A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it
 is going_ — an environment, a type, a tier. Branching its colour (`Production` blue, everything else
@@ -542,7 +548,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen is `Table.CellLink` (12px `pi-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
-- [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
+- [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
 - [ ] Domain cell = `Table.CellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
 - [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
