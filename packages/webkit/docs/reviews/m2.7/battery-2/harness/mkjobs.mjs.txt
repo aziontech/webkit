@@ -1,0 +1,39 @@
+import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
+
+const KIT = '/data/claude/webkit/packages/webkit/docs/reviews/m2.7/battery-2-kit'
+const pages = JSON.parse(fs.readFileSync(`${KIT}/pages.eval.json`, 'utf8'))
+const S = pages.filter((p) => p.surface === 'site').map((p) => p.id)
+const C = pages.filter((p) => p.surface === 'console').map((p) => p.id)
+const groups = {
+  S1: S.slice(0, 11),
+  S2: S.slice(11, 22),
+  S3: S.slice(22, 34),
+  S4: S.slice(34),
+  C1: C.slice(0, 10),
+  C2: C.slice(10)
+}
+const ports = { S1: 5101, S2: 5102, S3: 5103, S4: 5104, C1: 5111, C2: 5112 }
+for (const [j, list] of Object.entries(groups)) {
+  const d = `/data/eval-m27b/jobs/${j}`
+  fs.mkdirSync(`${d}/ref/tiles`, { recursive: true })
+  fs.mkdirSync(`${d}/pkgs`, { recursive: true })
+  const sub = pages
+    .filter((p) => list.includes(p.id))
+    .map((p) => ({ ...p, screenshots: { desktop: `ref/${p.id}--desktop.png`, iphone: `ref/${p.id}--iphone.png` } }))
+  fs.writeFileSync(`${d}/pages.json`, JSON.stringify(sub, null, 1))
+  for (const id of list)
+    for (const v of ['desktop', 'iphone'])
+      fs.copyFileSync(`/data/eval-m27b/ref/shots/${id}--${v}.png`, `${d}/ref/${id}--${v}.png`)
+  for (const f of fs.readdirSync('/data/eval-m27b/pkgs')) fs.copyFileSync(`/data/eval-m27b/pkgs/${f}`, `${d}/pkgs/${f}`)
+  execFileSync('/data/eval-m27b/venv/bin/python', [
+    '/data/eval-m27b/bin/tile.py',
+    `${d}/ref/tiles`,
+    ...list.flatMap((id) => [`${d}/ref/${id}--desktop.png`, `${d}/ref/${id}--iphone.png`])
+  ])
+  fs.writeFileSync(
+    `${d}/job.json`,
+    JSON.stringify({ job: j, port: ports[j], surface: j[0] === 'S' ? 'site' : 'console', pages: list }, null, 1)
+  )
+  console.log(j, list.length, list.join(' '))
+}

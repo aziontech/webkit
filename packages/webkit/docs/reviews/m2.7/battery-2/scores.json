@@ -1,0 +1,2074 @@
+{
+ "console-overview": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "KPI strip is four separate bordered StatTiles instead of one card split into four cells, with the delta pill beside the figure instead of right-aligned; deltas read '+12.40%' and units sit in the large mono face ('/S'). Quick-link columns, Recents and the shell match the reference almost exactly.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "stat-tile (src/components/chart/stat-tile/stat-tile.vue)",
+    "text": "StatTile always draws its own border card and puts the delta Tag inline after the figure; there is no grouped/joined strip, so a one-card 4-cell KPI band cannot be built.",
+    "fix": "Add a StatTile group (or kind='cell') that renders tiles as dividers inside one card with the delta aligned to the end."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "stat-tile",
+    "text": "The delta is formatted with formatSignedPercent(delta, 2) (fixed two decimals) and the unit uses the same text-big-number-sm mono face as the figure, so '+12.4%' becomes '+12.40%' and '/s' renders like '/S'.",
+    "fix": "Add a delta precision prop (or trim trailing zeros) and render the unit in a smaller muted sans."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-home-empty": {
+  "desktop": 5,
+  "iphone": 4.5,
+  "page": 4.75,
+  "notes": "Practically identical: greeting, H1, palette search, three door cards with the same illustrations and controls. Only the iPhone header search button is a 44px square.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-functions-empty": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Same empty-state card, three start rows and two promo cards. The CLI command field is sans instead of mono and its icon is a desktop glyph instead of a terminal; on iPhone the Documentation link and body sit left-aligned with less top padding.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "input (src/components/inputs/input/input.vue)",
+    "text": "Input has no mono/code variant, and the first-use block's own CLI row uses a plain readonly Input, so a command field cannot match the reference's mono read-only field.",
+    "fix": "Add a mono (code) kind to Input or ship a read-only command field (Input + CopyButton) and use it in platform/states/first-use."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "@aziontech/icons (dist/azionicons.css: .ai-azion-cli)",
+    "text": "The builder used 'pi pi-desktop' for the CLI row, saying no terminal glyph exists, but azionicons ships 'ai ai-azion-cli' (the first-use block itself uses 'pi pi-code').",
+    "fix": "Use ai-azion-cli; WebKit could reference it from the first-use block."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-real-time-metrics": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Same header, Filter with count badge, chip, four KPI cards and 2×2 sparkline cards. KPI figures are small mono (StatTile) instead of 28px sans, the Period chip is white with a shadow instead of grey, and the KPI labels are smaller.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "stat-tile",
+    "text": "StatTile has no figure size/face option (always text-big-number-sm mono), so a large sans KPI figure is impossible without leaving the component.",
+    "fix": "Add a size (small|medium|large) for the figure and allow the sans figure face."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "chip (src/components/content/chip/chip.vue)",
+    "text": "Chip kinds are filled|outlined|dashed and 'filled' is bg-surface (white) + shadow; there is no muted grey fill for an applied-filter chip.",
+    "fix": "Give the filled kind a muted fill (bg-(--bg-muted)) or add a 'muted' kind for filter chips."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "button / platform/view/split-view",
+    "text": "A Filter button with a count is not a component: the count Badge is hand-positioned (copied from split-view).",
+    "fix": "Add a count/badge prop to Button or a FilterButton."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-edge-dns-zone": {
+  "desktop": 4.5,
+  "iphone": 3.5,
+  "page": 4,
+  "notes": "Desktop matches (tabs, four groups, read-only copy fields, switches); only the Nameservers copy is vertically centred instead of top-aligned. On iPhone every row stacks the control under the copy, so the page is much taller than the reference's two-column rows with truncated descriptions.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "setting-row (src/components/layout/setting-row/setting-row.vue)",
+    "text": "SettingRow kind=field always stacks the control under the copy below @md and centres the copy against tall controls; there is no prop to keep the two-column row with ellipsis or to top-align, which the reference does on iPhone.",
+    "fix": "Add a layout option (e.g. keep-inline / align='start') or top-align by default; document the narrow behaviour."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-sql-database": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Tabs, collapsible tables panel with search/refresh/+, and the dashed empty card with black Create Table all match; the panel is 300px vs 288px and the empty card is slightly wider. The reference's cramped iPhone layout is reproduced faithfully.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "platform/view/query-editor",
+    "text": "Inner panel width set to 300px instead of the reference's 288px.",
+    "fix": "Keep the block's panel width."
+   }
+  ]
+ },
+ "console-bucket-browser": {
+  "desktop": 5,
+  "iphone": 4.5,
+  "page": 4.75,
+  "notes": "Identical file browser: header, search, Refresh/Download/Columns, breadcrumb path, orange Add to files split button, three rows. The author photo shows initials (no image offline); on iPhone the sort glyphs are always visible in the header cells.",
+  "causes": [
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "data",
+    "text": "Author avatar renders initials because the photo URL is not available offline.",
+    "fix": ""
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "table-head-cell (src/components/data/table/table-head-cell/table-head-cell.vue)",
+    "text": "The sort affordance is forced visible with [@media(hover:none)]:opacity-100, so on touch the header shows sort glyphs the reference does not.",
+    "fix": "Show the glyph only for the sorted column on touch, or make it opt-in."
+   }
+  ]
+ },
+ "console-account-settings": {
+  "desktop": 4.5,
+  "iphone": 3.5,
+  "page": 4,
+  "notes": "Desktop matches the drill sidebar and all seven groups; title-only rows centre the title instead of top-aligning. On iPhone every row stacks (page ~400px taller) and the read-only Client ID is a dashed transparent field.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "setting-row (src/components/layout/setting-row/setting-row.vue)",
+    "text": "SettingRow kind=field always stacks the control under the copy below @md and centres the copy against tall controls; there is no prop to keep the two-column row with ellipsis or to top-align, which the reference does on iPhone.",
+    "fix": "Add a layout option (e.g. keep-inline / align='start') or top-align by default; document the narrow behaviour."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "input (src/components/inputs/input/input.vue)",
+    "text": "readonly Input is styled data-[readonly]:border-dashed bg-transparent, which differs from the reference's normal field for a read-only value.",
+    "fix": "Document the readonly look; offer a plain read-only field or a read-only value + copy pattern."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-billing": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Very close: header with Documentation/Last Update/refresh, tabs, Subscription Plan and Upgrade cards, invoices toolbar, 8-row table, pager. Differences: 'Pricing and Plans' link is underlined, the tab bar sits slightly lower, and on iPhone the pager collapses to '‹ 1 ›' with 44px buttons.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "pagination (src/components/data/pagination/pagination.vue, pagination-button.vue)",
+    "text": "Under @max-sm the pager hides every page but the selected one and coarse pointers get 44px buttons, so the iPhone footer becomes '‹ 1 ›' with oversized buttons wrapping onto its own line; the reference keeps the full 1 2 3 … 8 row at 28px.",
+    "fix": "Offer a compact-but-numbered mode (or a prop) so the narrow pager can keep page numbers, and keep the footer on one line."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "card / docs",
+    "text": "No key/value row or feature check-list component; both were hand-built with tokens (they match closely).",
+    "fix": "Add a DescriptionList/KeyValue and a CheckList pattern."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-users": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Same header, toolbar, table with avatar initials, role/status pills, kebabs and pager. The Owner role pill is solid blue (accent) instead of the light orange tint; on iPhone the pager wraps to its own line with 44px buttons.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "tag (src/components/content/tag/tag.vue)",
+    "text": "Tag severities are accent|contrast|danger|info|primary|secondary|success|warning; there is no orange tint, and 'primary' is the solid brand fill, so the reference's light-orange Owner pill cannot be matched.",
+    "fix": "Add a tinted brand severity (or a tint modifier) to Tag."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "pagination (src/components/data/pagination/pagination.vue, pagination-button.vue)",
+    "text": "Under @max-sm the pager hides every page but the selected one and coarse pointers get 44px buttons, so the iPhone footer becomes '‹ 1 ›' with oversized buttons wrapping onto its own line; the reference keeps the full 1 2 3 … 8 row at 28px.",
+    "fix": "Offer a compact-but-numbered mode (or a prop) so the narrow pager can keep page numbers, and keep the footer on one line."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-team-create": {
+  "desktop": 4.5,
+  "iphone": 3.5,
+  "page": 4,
+  "notes": "Desktop matches heading, General card and the full permissions matrix; the Cancel/Create bar is a full-width bottom bar instead of a centred floating pill. On iPhone the Name row stacks, the bar becomes full-width stacked Create/Cancel buttons covering the end of the list and the Advanced toggle is not visible, and the checkbox columns are slightly misaligned.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "save-bar (src/components/layout/save-bar/save-bar.vue)",
+    "text": "SaveBarKind is floating|docked|plain|fade and 'floating' is an absolute full-width bar with a top border; no centred floating pill exists, which the reference uses on desktop and iPhone.",
+    "fix": "Add a 'pill' (centred, shadowed, content-width) kind to SaveBar and use it in platform/account/team-permissions."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "setting-row (src/components/layout/setting-row/setting-row.vue)",
+    "text": "SettingRow kind=field always stacks the control under the copy below @md and centres the copy against tall controls; there is no prop to keep the two-column row with ellipsis or to top-align, which the reference does on iPhone.",
+    "fix": "Add a layout option (e.g. keep-inline / align='start') or top-align by default; document the narrow behaviour."
+   }
+  ]
+ },
+ "console-marketplace": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Same header, centred tabs, search and 4-column (2 on iPhone) template grid with all 25 cards. Icons differ: the JavaScript and TypeScript tiles are empty, Nitro/Stencil/Rust use generic glyphs, Svelte is the colour mark and most marks are black where the reference uses muted grey.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "@aziontech/icons (dist/azionicons-color.css: .ai-cor.ai-js / .ai-cor.ai-ts)",
+    "text": "The builder wrote 'ai ai-js' and 'ai ai-ts', which do not exist in the monochrome font; the marks exist only as colour icons ('ai-cor ai-js', 'ai-cor ai-ts'), so two tiles render blank.",
+    "fix": "Use the colour classes; WebKit should document which framework marks are colour-only and give the template-browser block a full icon map."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "@aziontech/icons / docs",
+    "text": "Icon class naming for colour marks is documented inconsistently (builder found three spellings) and Svelte, Nitro, Stencil, Rust have no monochrome glyph.",
+    "fix": "Unify the colour-icon docs and add the missing monochrome framework marks."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-creation-center": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Nearly identical to the reference at the same height, with all 39 templates. The 'file'/'folder' links are underlined and on iPhone 'Continue with GitHub' is full-width instead of content-width.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "platform/create/create-hub",
+    "text": "The block renders the file/folder triggers as underlined text-link buttons and stretches the GitHub button to full width on narrow screens, unlike the reference.",
+    "fix": "Match the console: non-underlined inline links and an auto-width primary button in the empty state."
+   }
+  ]
+ },
+ "console-deployments": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Desktop matches the list view row for row; Last Editor shows initials instead of photos. On iPhone the pager collapses to '‹ 1 ›' with 44px buttons instead of the numbered row, and the search icon is a 44px square.",
+  "causes": [
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "data",
+    "text": "Editor photos are external Slack URLs in the block, replaced with initials to avoid runtime network calls.",
+    "fix": ""
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "pagination (src/components/data/pagination/pagination.vue, pagination-button.vue)",
+    "text": "Under @max-sm the pager hides every page but the selected one and coarse pointers get 44px buttons, so the iPhone footer becomes '‹ 1 ›' with oversized buttons wrapping onto its own line; the reference keeps the full 1 2 3 … 8 row at 28px.",
+    "fix": "Offer a compact-but-numbered mode (or a prop) so the narrow pager can keep page numbers, and keep the footer on one line."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes pointer-coarse:min-h-11/min-w-11 (44px) while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "site-professional-services": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Same section run (hero + ticker, capability grid, three media bands, client quotes, FAQ, split CTA, footer), but the three media illustrations are different art, the client grid has 4 logos instead of 6 (no GPA / Global Fashion Group), and the iPhone bar adds a Login button. The quote shows Axur instead of Contabilizei only because the tabs autoplay.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry (src/assets/illustrations/white-gloves-when-it-matters.svg, stay-in-control.svg)",
+    "text": "The registry illustrations named after these bands draw different art (chat + headset tiles, traffic/cost chart) from the framed schematic diagrams azion.com shows for the same three bands.",
+    "fix": "Re-sync the registry art with the live site's professional-services diagrams (or add the framed-diagram variants)."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "client-quotes items",
+    "text": "Only 4 quote items were passed, so the client card grid has 4 cells instead of the reference's 6; the brief lists only the Contabilizei quote, and the builder dropped GPA and Global Fashion Group rather than supplying copy for them."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "quote-tabs autoplay (5000ms)",
+    "text": "QuoteTabs autoplays, so the capture caught the second quote (Axur) instead of Contabilizei."
+   }
+  ]
+ },
+ "site-about-us": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Nearly identical: hero, Builders split, photo marquee, recognition marquee, investors, closing CTA and footer all match. The desktop h1 sits on one line instead of two, the hero is shorter, and the iPhone bar adds Login.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "hero-band (src/components/sections/hero-band/hero-band.vue, titleWidth)",
+    "text": "HeroBand sets the h1 column from kind/titleLength only (centered → container-xl, title-band → 4xl); the azion.com hero wraps the same headline on a narrower measure, so the rebuild sets it on one line.",
+    "fix": "Match the site's hero h1 measure (or expose a title width), so a short two-line headline breaks like the site."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "photo-marquee / recognition-marquee",
+    "text": "Marquee offsets and photo crops differ only by frozen scroll position."
+   }
+  ]
+ },
+ "site-careers": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Hiring process is a compact five-card row instead of the reference's tall cards in a pinned sideways scroll (so the page is about 1000px shorter); the values globe carries media icons instead of the Azion mark; the iPhone bar adds Login. Hero, Work at Azion, photos, Latest roles and closing CTA match.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "process-scroll (src/components/sections/process-scroll/process-scroll.vue)",
+    "text": "ProcessScroll's list switches to lg:w-full lg:auto-cols-fr, so on desktop every step fits in one row and nothing scrolls; there is no pinned (sticky, scroll-driven) sideways mode like the careers page's hiring process.",
+    "fix": "Add a pinned kind that keeps the min(22rem,80vw)-style card width on desktop and scrolls the row sideways while the band is stuck."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "media-split-band scene prop (src/components/sections/media-split-band/media-split-band.vue → assets/globe/brand-globe-scene.vue)",
+    "text": "The builder used the illustration 'content-and-media-delivery-globe' (media icons); MediaSplitBand's scene prop offers BrandGlobeScene, the globe with the Azion mark."
+   }
+  ]
+ },
+ "site-compliance": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Same hero, badge grid and data-privacy links, but the lone CPRA badge cell and the Privacy Policy link cell stretch across the empty grid tracks instead of leaving them empty; the h1 sits on one line; the iPhone bar adds Login.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "compliance-badges, resource-grid → card-grid (src/components/marketing/card-grid/card-grid.vue)",
+    "text": "Both sections render CardGrid without a layout prop, so it defaults to 'balanced' (flex-grow), which stretches a short last row across the empty tracks; neither section exposes layout, so a consumer cannot get the fixed grid the site uses.",
+    "fix": "Use layout='fixed' inside ComplianceBadges and ResourceGrid (the site leaves the trailing cells empty), or pass layout through."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "hero-band (src/components/sections/hero-band/hero-band.vue, titleWidth)",
+    "text": "HeroBand sets the h1 column from kind/titleLength only (centered → container-xl, title-band → 4xl); the azion.com hero wraps the same headline on a narrower measure, so the rebuild sets it on one line.",
+    "fix": "Match the site's hero h1 measure (or expose a title width), so a short two-line headline breaks like the site."
+   }
+  ]
+ },
+ "site-privacy-policy": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Docs shell, rail, page header, full policy prose, pagination, On this page and footer all match. Small deviations: 'Developer tools' lacks its chevron, the Ready to build? card adds two buttons, the iPhone header shows a DOCS chip, and the mobile footer adds a wordmark row and puts language and status on one line.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "doc-cta / global-header in the shells/documentation block",
+    "text": "The builder kept the block's DocCta actions and plain 'Developer tools' link; the reference card has no buttons and the link is a dropdown trigger."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "shells/documentation block (scroll model)",
+    "text": "The block scrolls the article inside an h-screen ScrollArea while docs pages scroll the document, so the builder had to restructure the block (reported in DONE.md); the visible result still matches.",
+    "fix": "Let the documentation shell scroll the document (sticky rails) instead of an inner ScrollArea."
+   }
+  ]
+ },
+ "site-learning": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Hero + client strip, 16 subject cards and the closing CTA all match, but the Next step CTA takes half of the last row instead of two thirds; on iPhone the bar adds Login and the footer's bottom bar is ordered differently.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "subject-library → card-grid (src/components/sections/subject-library/subject-library.vue)",
+    "text": "SubjectLibrary puts the closing cell in a CardGrid with the default layout='balanced' (flex-grow basis), so its sm:col-span-2 has no effect and the CTA shares the last row 50/50 with the last subject, contradicting its own doc ('spanning the grid's last two cells').",
+    "fix": "Render SubjectLibrary's CardGrid with layout='fixed' so the closing cell really spans two columns."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   }
+  ]
+ },
+ "site-recognitions": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "Every one of the nine G2 bands shows a giant G2 logo filling the media cell instead of the framed 'Leader' / 'High Performer' badge cards, which changes the look of most of the page. The hero, marquee, section title, copy and closing CTA match; the iPhone bar adds Login.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "assets (src/assets/logos/analysts/) + media-split-stack (src/components/sections/media-split-stack/media-split-stack.vue)",
+    "text": "WebKit ships no G2 Leader / High Performer badge art (only g2-symbol-color.svg), and MediaSplitStack draws any band image at 60.81% of the cell width with no framed or contained mode, so the square G2 symbol becomes a huge orange disc.",
+    "fix": "Ship the G2 seasonal badge assets the recognitions page uses, and give MediaSplitStack a framed or contained image mode (a dark card with a max height) for badges."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "SiteNav renders the secondaryAction (Login) Button in GlobalHeaderRight at every width with no responsive class, so the 393px bar shows hamburger + wordmark + Login + Start for free + search; the reference bar drops Login on phones (it lives in the sheet footer).",
+    "fix": "Hide the bar's secondaryAction below lg (keep it in the sheet footer), as the Contact link already is with hidden xl:flex."
+   }
+  ]
+ },
+ "site-scale-up": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Brand-only header, form hero, four reason bands, analyst marquee and footer match closely. The phone field has an extra 'Phone' label, the orange submit has dark text instead of white, and on iPhone the h1 sits on one line with smaller body text.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "hero-form (src/components/sections/hero-form/hero-form.vue)",
+    "text": "HeroForm always renders a Label above every field (no visually-hidden label option for the phone field), and its submit is Button kind='primary', whose contrast token renders dark text on orange where the site uses white.",
+    "fix": "Allow a visually-hidden label per field, and align the primary button's contrast ink with the site's orange CTA."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "hero-band (src/components/sections/hero-band/hero-band.vue, titleWidth)",
+    "text": "HeroBand sets the h1 column from kind/titleLength only (centered → container-xl, title-band → 4xl); the azion.com hero wraps the same headline on a narrower measure, so the rebuild sets it on one line.",
+    "fix": "Match the site's hero h1 measure (or expose a title width), so a short two-line headline breaks like the site."
+   }
+  ]
+ },
+ "console-real-time-events": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Shell, filter bar, field panel, summary and event table match. The histogram draws thin segmented columns with gaps and headroom instead of solid full-width stacked bars. On iPhone the table headers show sort glyphs, pagination collapses to the current page, and the header search is a 44px square.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "chart Bar stacked (src/components/chart/chart/chart-bar/chart-bar.vue)",
+    "text": "Stacked bars are drawn at 60% of the band (MAX_THICKNESS 24) with a fixed 2px GAP between segments and no prop to change either, so a dense histogram becomes separated, gapped bars.",
+    "fix": "Add bar thickness / segment-gap options (or a histogram kind) so stacked columns can touch and fill the band."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "table-head-cell (src/components/data/table/table-head-cell/table-head-cell.vue)",
+    "text": "The sort glyph is forced visible with [@media(hover:none)]:opacity-100, so every sortable header shows arrows on phones; the reference shows none until sorted.",
+    "fix": "Show the glyph on touch only for the sorted column (or behind a prop)."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "pagination (src/components/data/pagination/pagination.vue)",
+    "text": "Below the sm container, non-selected page buttons are hidden (@max-sm/pagination:not-data-selected:hidden) and buttons take 44px, so the phone footer shows '‹ 1 ›' where the reference keeps 1 2 3 4 5 … 60.",
+    "fix": "Keep a compact page list on phones (e.g. current ±1 + last) instead of only the selected page."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes a 44px coarse-pointer target while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-applications-list": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Practically the same page: header, toolbar, eight rows, status and pagination. Last Editor shows initials instead of photos, Repository truncates more, and one cell reads 'yesterday' instead of '1 day ago'. On iPhone the Name header shows a sort glyph, pagination collapses to one page, and the search is a 44px square.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "table-head-cell (src/components/data/table/table-head-cell/table-head-cell.vue)",
+    "text": "The sort glyph is forced visible on hover:none devices, so a phone header shows arrows the reference does not.",
+    "fix": "Show the glyph on touch only for the sorted column."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "pagination (src/components/data/pagination/pagination.vue)",
+    "text": "Pagination hides every non-selected page under the sm container query, so '1 2 3' becomes '‹ 1 ›' on the phone.",
+    "fix": "Keep a short page list on phones."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes a 44px coarse-pointer target while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "avatars / relative time",
+    "text": "No external photos in the harness (initials instead), and relative time drifts with the capture clock."
+   }
+  ]
+ },
+ "console-application-create": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Creation header, stepper rail, workload chooser and links match. The picker rows are about 45px with small text, where the reference uses tighter rows with larger names.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "item (src/components/content/item/item.vue, ItemSize 'small' | 'medium')",
+    "text": "Even at size='small' (which the builder used), Item's row is taller and its title smaller than the reference's 38px picker row; there is no compact list-row density.",
+    "fix": "Add a compact Item density for picker lists (around 38px row, label-md title)."
+   }
+  ]
+ },
+ "console-workload-detail": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Same breadcrumb, tabs, summary card, Ship to production checklist and topology. Differences: the Production environment selector has a border, topology node names lack the external-link glyph and the Domains '+' button, the Created avatar is initials, and the Deployment topology heading is smaller. The iPhone search is a 44px square.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "select (src/components/inputs/select/select.vue)",
+    "text": "Select has no borderless or transparent trigger kind, so the breadcrumb environment switcher always draws a bordered field.",
+    "fix": "Add a borderless (breadcrumb) trigger kind."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "topology-diagram node (src/components/data/topology-diagram/topology-node)",
+    "text": "A node with href renders a plain underlined link with no external-link glyph, unlike the reference node names.",
+    "fix": "Add a trailing external glyph for href nodes (or an external flag)."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "topology-diagram #actions slot",
+    "text": "TopologyDiagram exposes an actions slot for extra identity-row controls; the builder did not use it for the Domains '+' button."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes a 44px coarse-pointer target while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-function-detail": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Tabs, Code/Arguments toggle, caption and the exact code all match. The gutter reads 1…15 instead of 01…15, lines are slightly taller, and function names are not orange. On iPhone the caption sits inline instead of on its own line, and the search is a 44px square.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-editor (src/components/code/code-editor/code-editor.vue, monaco.ts)",
+    "text": "The Monaco options pass lineNumbers 'on' with no formatter, so the gutter cannot zero-pad. The theme maps function colour only to TextMate scopes (entity.name.function) that Monaco's Monarch JavaScript tokenizer never emits, so calls stay default ink.",
+    "fix": "Expose a zero-padded line-number option, and add a Monarch rule (or semantic tokens) that colours identifiers before '(' with --code-sintax-function."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes a 44px coarse-pointer target while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "console-firewall-rules": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Breadcrumb, tabs, PageHeader, search and the ordered table with move controls match. The Inactive pill is red instead of the light orange the brief asks for, and the move-button disabled states differ slightly. The iPhone search is a 44px square.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "tag severity (src/components/content/tag/tag.vue: 'warning' | 'accent' …)",
+    "text": "The builder mapped Inactive to severity 'danger'; the brief asks for an orange pill and Tag offers warning and accent severities."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "search-trigger (src/components/navigation/search-trigger/search-trigger.vue)",
+    "text": "The collapsed SearchTrigger takes a 44px coarse-pointer target while the neighbouring header IconButtons stay 32px, so the iPhone top bar has one oversized square that the reference does not.",
+    "fix": "Size the collapsed trigger like the GlobalHeader's other icon buttons (or give all header actions the same coarse target)."
+   }
+  ]
+ },
+ "site-solution-performance": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "Every region matches section-for-section, but all four media-split bands show generic WebKit illustrations instead of the reference's request-flow diagrams (CDN cache flow, load-balancer tree, image-format comparison, observability tiles), so about half of each band shows different content. The client quote has autoplayed to Axur instead of the Dafiti/GFG quote. On iPhone the nav also shows an extra Login button.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "media-split-stack (src/components/sections/media-split-stack/media-split-stack.vue)",
+    "text": "MediaSplitStackBand only takes `image` (URL) or `illustration` (registry name). The product diagrams the reference shows ship as `src/assets/diagrams/{cache,load-balancer,image-processor,real-time-metrics}.ts`, and MediaSplitBand accepts them as `scene`, but the stacked section cannot.",
+    "fix": "Add a `scene` (diagram) field to MediaSplitStackBand, as MediaSplitBand already has, and document which diagrams exist."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes (src/components/sections/client-quotes/client-quotes.vue)",
+    "text": "ClientQuotes renders QuoteTabs without forwarding `autoplay`/`autoplayInterval` (QuoteTabs defaults autoplay: true, 5000 ms), so the visible quote at load time depends on timing and lands on Axur instead of the first entry.",
+    "fix": "Expose `autoplay`, `autoplayInterval` and an initial-index/model on ClientQuotes and pass them through to QuoteTabs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "secondaryAction (Login) renders at every width, while the reference drops it at phone width.",
+    "fix": "Hide secondaryAction below md (or add a prop for it), as the reference header does."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-footer (SiteFooterLink type)",
+    "text": "Footer links are `{ label, href }` only, so 'Our Community' cannot carry its external-link glyph.",
+    "fix": "Add an `external` flag that draws the arrow icon and sets target/rel."
+   }
+  ]
+ },
+ "site-solution-ai": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Hero, capability grid, template gallery with ticker, directory, network map with the benefit floor, recognition, FAQ and the split CTA all match. The three media bands use different illustrations (window and sparkle scenes instead of the icon-node scenes). The quote shows Axur instead of GFG. The network floor has 3 cells, not the reference's 4-column grid.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "No autoplay or initial-tab prop on ClientQuotes, so the screenshot lands on a later quote.",
+    "fix": "Forward autoplay/initial index to QuoteTabs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry (llms/components/illustration.md)",
+    "text": "The illustration docs show a handful of names in examples but no list or preview of the ~60 registered scenes, so builders pick by filename and get near-miss scenes.",
+    "fix": "Publish a visual index (name plus thumbnail plus alt text) of the illustration registry in llms/ and the docs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-solution-security": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Structure, copy and section components match the reference band for band. All four media bands use different security illustrations (WAF families list, icon rows, bot-manager scene) than the reference's. The quote shows Axur instead of GFG, and the nav has an extra Login on iPhone.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "Autoplay cannot be disabled or seeded, so the wrong quote is visible.",
+    "fix": "Forward autoplay/initial index to QuoteTabs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry docs",
+    "text": "There is no browsable list of illustration names, so the builder guessed from filenames (enable-owasp-protection…, implement-api-gateway-security…) and got different scenes.",
+    "fix": "Ship a visual registry index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-solution-streaming": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "Both media bands (Live streaming, VOD) show illustrations (globe with media icons, a player window) where the reference shows request-flow diagrams (User → Azion → Encoder/Origin). The quote is Axur instead of GFG. Everything else (hero, 3×2 grid, directory, network outcomes, recognition, FAQ, split CTA, footer) matches.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "media-split-stack",
+    "text": "The section cannot render a diagram/scene, only an image URL or an illustration, although the diagrams exist in src/assets/diagrams and MediaSplitBand takes `scene`.",
+    "fix": "Add `scene` to MediaSplitStackBand."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "No autoplay control.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-solution-financial-services": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "All regions are present, including the compliance-badge grid and the centred orange-texture closing CTA. Three of the four media bands use different illustrations (only 'Security audit readiness' matches). The client wall shows a single GFG tab and five empty cells instead of six client logos.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "Because ClientQuotes autoplays with no prop to stop it, the builder dropped the other five client entries to keep the briefed Dafiti quote visible. That leaves a one-logo wall.",
+    "fix": "Forward autoplay/initial index so a full wall can show the first quote deterministically."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "client-quotes items",
+    "text": "The builder chose one item over a full wall. Five tabs with the first selected would have matched better if autoplay could be controlled. This is a trade-off forced by the cause above.",
+    "fix": "n/a"
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry docs",
+    "text": "There is no visual index, so near-miss scenes were chosen for the WAF, API and account-takeover bands.",
+    "fix": "Ship a visual registry index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-solution-technology": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Same skeleton and copy as the reference. The media for SaaS platforms, AI agents and AI model governance are swapped or different scenes (the reference's governance scene appears under AI agents here); only APIs matches. The client wall has one GFG tab instead of six.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "Autoplay is uncontrollable, so the builder reverted to a single quote and the wall is mostly empty.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "media-split-stack bands",
+    "text": "`ai-applications` (the reference's governance art) was used for AI agents, and `intent-to-policy` for governance. The registry did have the scenes, but they were mis-assigned.",
+    "fix": "n/a"
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry docs",
+    "text": "There is no visual index of scenes, which made the mis-assignment likely.",
+    "fix": "Ship a visual registry index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-solution-retail": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The hero grid, template gallery with its 30-mark ticker, compliance badges, directory, FAQ and CTA match closely. None of the four media bands match: E-commerce and Account takeover use other scenes, and Image processing and CDN show illustrations where the reference has the format-comparison and CDN-flow diagrams. The client wall has one tab instead of six.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "media-split-stack",
+    "text": "The Image processing and CDN bands need the image-processor and cache diagrams, which the stacked section cannot take.",
+    "fix": "Add `scene` to MediaSplitStackBand."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "Autoplay is uncontrollable, which forced a single-entry wall.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "illustration registry docs",
+    "text": "The E-commerce scene in the reference is the shopping-icons scene (used as `saas-platforms` elsewhere). Without an index the builder used retail-application-modernization.",
+    "fix": "Ship a visual registry index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-product-functions": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Near-identical: centred hero with the 30-mark stack strip, both alternating media bands with the exact illustrations, the CodeSplit tabs, directory, FAQ and split CTA. The only visible differences are that the quote shows Axur instead of Contabilizei, and Login appears in the iPhone nav.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "QuoteTabs autoplay is not controllable through ClientQuotes, so capture lands on the second quote.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-product-cache": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Matches band for band, including the exact illustrations and the UseCaseLinks grid. CodeSplit's 'Learn More' is a filled white button where the reference has a transparent text button, and the code card sits on the orange pixel texture instead of a flat panel. The quote shows Axur instead of Contabilizei.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "No autoplay control.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split (src/components/sections/code-split/code-split.vue)",
+    "text": "primaryAction is hard-wired to Button kind=\"secondary\" (filled); CodeSplitAction has no `kind`, so the reference's transparent 'Learn More ›' cannot be reproduced.",
+    "fix": "Add `kind` to CodeSplitAction (default secondary, allow transparent)."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-product-application-accelerator": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Matches band for band, with exact illustrations and the 'See how to use' linked grid. The deviations are the filled 'Learn More' in CodeSplit, the textured code panel, and the Axur quote instead of Contabilizei.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "No autoplay control.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split",
+    "text": "CodeSplitAction has no `kind`; the primary action is always filled.",
+    "fix": "Add `kind` to CodeSplitAction."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav / site-footer",
+    "text": "Login is shown on iPhone, and the footer has no external-link glyph.",
+    "fix": "As above."
+   }
+  ]
+ },
+ "site-product-image-processor": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The hero has a 'Your stack, your way' logo strip that the reference does not. The first media band shows an illustration instead of the request-architecture diagram. The hand-composed 'See how to use' carousel reads as one ruled strip with the arrows above it and blue 'See example' links, where the reference has separate cards, arrows on the title row and mono links. Also: a filled 'Learn More', a tall textured code card for a one-line snippet, and the Axur quote.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "marketing sections (no card-carousel section); carousel (src/components/*/carousel)",
+    "text": "No section renders a titled horizontal carousel of eyebrow cards with prev/next on the title row. Composing Carousel + SectionModule cannot match it: the items have no gutter, the controls must live inside Carousel, and Link has no mono eyebrow style.",
+    "fix": "Ship a card-carousel section (e.g. UseCaseLinks kind=\"carousel\") with gutters and header-row controls."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "media-split-stack",
+    "text": "The URL-based transformations band needs the image-processor diagram (src/assets/diagrams/image-processor.ts), but the stacked section takes no scene.",
+    "fix": "Add `scene` to MediaSplitStackBand."
+   },
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "hero-band carouselMarks",
+    "text": "The builder spread a shared heroBase with 30 brand marks into this hero. The brief's tree for this page has no stack strip. HeroBand renders no strip when carouselMarks is empty.",
+    "fix": "n/a"
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "No autoplay control.",
+    "fix": "Forward autoplay/initial index."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split",
+    "text": "The primary action is always filled (no `kind`), and the media cell always paints the pixel texture with a fixed-height card, which looks empty for a one-line snippet.",
+    "fix": "Add `kind` to CodeSplitAction; size the code card to content (or offer a flat panel)."
+   }
+  ]
+ },
+ "site-product-ai-inference": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Every region and its copy match. The 'Deploy from your local environment' art is a generic framework diagram instead of the terminal + AZION INIT/BUILD/DEPLOY scene, the CodeSplit 'Docs' action is a filled white button instead of a borderless text link, and the client-logo wall is monochrome where the reference shows brand colours. On iPhone the nav also shows Login. The quote landing on Zoop instead of Axur is autoplay timing (harness).",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry (src/assets/illustrations/registry.ts)",
+    "text": "No CLI-terminal scene exists for 'Deploy from your local environment'; the builder had to fall back to build-applications.",
+    "fix": "Ship the live product-page scenes in the registry, or document which page each scene belongs to."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split (src/components/sections/code-split/code-split.vue)",
+    "text": "primaryAction is hard-coded kind='secondary' (filled), so the reference's borderless 'Docs >' link cannot be reproduced.",
+    "fix": "Add a kind (or 'transparent' option) to CodeSplitAction."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example (examples/client-quotes/default.vue)",
+    "text": "The example gives colour logos as '/marketing-components/logos/*.svg' URLs, which do not exist in a consumer app, and otherwise uses one-ink 'mark's. The colour files are in fact exported as '@aziontech/webkit/assets/<client>-extended-color.svg', but nothing points there, so builders end up with a white logo wall.",
+    "fix": "Make the example import '@aziontech/webkit/assets/*-extended-color.svg' and document the client-logo asset exports in the ClientQuotes docs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "secondaryAction (Login) renders in the bar at every breakpoint; the live site hides it below xl.",
+    "fix": "Hide the secondary action in the phone bar (keep it in the sheet), or add a prop for that."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "client-quotes autoplay",
+    "text": "QuoteTabs autoplays (ClientQuotes does not forward autoplay), so the captured quote is a different client.",
+    "fix": "Forward autoplay from ClientQuotes so captures can be frozen."
+   }
+  ]
+ },
+ "site-product-durable-objects": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Hero, ticker, the 6-cell capability grid, use cases, the 3-tab CodeSplit, platform directory, FAQ and CTA all match. The 'One coordinator' globe with durable-object pins is replaced by a flat world-map scene, and the logo wall is monochrome. The different featured quote is autoplay timing.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "There is no globe-with-durable-object-pins scene; the closest registered scenes are global-network (flat map) and content-and-media-delivery-globe.",
+    "fix": "Add the product-page globe scene to the registry."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example",
+    "text": "Colour client logos are exported under @aziontech/webkit/assets/ but the example uses non-existent /marketing-components URLs, so the builder used one-ink marks.",
+    "fix": "Point the example and the docs at the exported asset paths."
+   }
+  ]
+ },
+ "site-product-orchestrator": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Hero, capability grid, quotes and CTA match. The 'Orchestration with Control' carousel is hand-composed. Its cards share edges in one bordered box instead of separate gapped cards, and on iPhone one card fills the width with no peek of the next. The logo wall is monochrome.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "sections (no titled card carousel) + carousel (src/components/marketing/carousel/carousel.vue)",
+    "text": "No section renders 'title + arrows + carousel of overline/title/text/link cards'. The Carousel primitive puts its controls in a row above the track (no title slot) and gives the track no item gap, so a hand-built version drifts.",
+    "fix": "Ship a 'card carousel' section (title row with controls, gapped cards, optional overline and mono link), or give Carousel a header slot and a gap prop."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example",
+    "text": "The monochrome logo wall comes from the example's non-resolving colour-logo URLs.",
+    "fix": "Use the exported @aziontech/webkit/assets/*-extended-color.svg in the example."
+   }
+  ]
+ },
+ "site-product-sql-database": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The skeleton matches. Both media-split illustrations use the right registry names but different art (a small code card and a plain globe, versus the reference's full code editor and replica diagram). The CodeSplit 'Learn More' is a filled button. In the 'See how to use' carousel the cards are joined and their links are blue sentence-case 'Learn more' instead of orange mono 'LEARN MORE →'. The logo wall is monochrome.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry (build-databases-from-code, distributed-sql-for-resilient-global-reads)",
+    "text": "The scenes registered under the live section names render different art from the live page.",
+    "fix": "Re-sync the registry SVGs with the current product-page art."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "sections (no titled card carousel)",
+    "text": "No section exists for the overline/title/text/link card carousel, and the Link component has no orange mono-uppercase arrow variant.",
+    "fix": "Add the card-carousel section with the site's mono CTA link."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split",
+    "text": "The CodeSplit action kind is fixed to 'secondary'.",
+    "fix": "Expose the action kind."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "client-quotes example",
+    "text": "The example's colour-logo paths do not resolve in a consumer app.",
+    "fix": "Use the exported asset paths."
+   }
+  ]
+ },
+ "site-product-object-storage": {
+  "desktop": 3,
+  "iphone": 3,
+  "page": 3,
+  "notes": "The client wall shows a single Contabilizei tile instead of six logos. 'Use Cases' is a 3x2 grid of links instead of a carousel of cards with category overlines and 'VIEW EXAMPLE →'. Both media-split illustrations are generic (a Terraform code card and an icon globe, versus the S3 architecture diagram and the storage-pin globe). The CodeSplit 'Learn More' is filled.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "client-quotes (src/components/sections/client-quotes/client-quotes.vue)",
+    "text": "The builder hand-built QuoteTabs in a FrameBox with one item. ClientQuotes with the WebKit example quotes (as S2b and S3a did) would have given the six-client wall.",
+    "fix": "WebKit guidance should say a quote band always shows the full client wall, and should give the default client set."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "sections (no titled card carousel) / use-case-links",
+    "text": "UseCaseLinks is a static topic grid; nothing renders a use-case carousel with a category label and a link label per card.",
+    "fix": "Add the card-carousel section (or a carousel kind on UseCaseLinks with eyebrow + linkLabel per item)."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "There are no Object Storage scenes (no stack diagram, no storage-pin globe).",
+    "fix": "Ship the product-page scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split",
+    "text": "The CodeSplit action kind is fixed to 'secondary'.",
+    "fix": "Expose the action kind."
+   }
+  ]
+ },
+ "site-product-kv-store": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "Every band is in order, but the client wall is a single tile. Both media-split illustrations are generic (a server icon and a code/table card, versus a code editor and a KV dashboard). The 3+2 use-case grid stretches its last row instead of leaving an empty cell, and the CodeSplit 'Learn More' is filled.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "The builder used single-item QuoteTabs instead of ClientQuotes with the full client set.",
+    "fix": "Document the default client wall in the ClientQuotes docs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "There are no KV Store scenes; runtime and read-at-the-edge are stand-ins.",
+    "fix": "Ship the product-page scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "use-case-links",
+    "text": "Five items are stretched across the last row; there is no fixed-column mode that leaves the trailing cell empty as the site does.",
+    "fix": "Use a fixed 3-column layout (CardGrid layout='fixed') in UseCaseLinks."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "code-split",
+    "text": "The CodeSplit action kind is fixed to 'secondary'.",
+    "fix": "Expose the action kind."
+   }
+  ]
+ },
+ "site-product-web-application-firewall": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "All bands are present, including the standalone 'Distributed protection' title and five media splits. The client wall is a single GPA tile, and the GPA mark is white instead of blue. The media illustrations are diagram scenes where the reference shows Console screenshots, even though the registry names match the section titles exactly. The 'Distributed protection' headline renders at size large rather than the reference's smaller size.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "client-quotes",
+    "text": "The builder used single-item QuoteTabs instead of ClientQuotes with the full client set and colour logos.",
+    "fix": "Document the default client wall and the colour-logo assets."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry (enable-owasp-protection-with-customizable-rules, stream-security-events-for-investigation-and-response, …)",
+    "text": "Registry entries named after the WAF sections draw different art from the live page (diagrams versus Console UI captures).",
+    "fix": "Re-sync the registry art with the live product pages."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "section-title",
+    "text": "The builder used SectionTitle with size='large'; the reference headline is the medium size.",
+    "fix": "—"
+   }
+  ]
+ },
+ "site-product-bot-manager": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Very close in structure and copy. The five media illustrations are WebKit's diagram scenes instead of the reference's Console captures. The 'Protect your business…' headline is a size larger, the logo wall is mostly monochrome (only GPA and Zoop in colour), and the iPhone nav shows Login. The featured quote is autoplay timing.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "The product-page art differs from, or is missing in, the registry (detect-and-classify, mitigation-actions and the others are diagrams, not the live captures).",
+    "fix": "Re-sync the registry with the live scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "media-split-stack (src/components/sections/media-split-stack/media-split-stack.vue)",
+    "text": "The stack's header SectionTitle is hard-coded size='large'; the live run headers on most product pages are medium.",
+    "fix": "Add a titleSize prop (or default to medium)."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example",
+    "text": "The colour-logo paths in the example do not resolve, so the builder copied two logos into public/ and used one-ink marks for the rest.",
+    "fix": "Use the exported @aziontech/webkit/assets/*-extended-color.svg."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav",
+    "text": "Login is always visible in the phone bar.",
+    "fix": "Hide the secondary action below xl."
+   }
+  ]
+ },
+ "site-product-network-shield": {
+  "desktop": 4,
+  "iphone": 4,
+  "page": 4,
+  "notes": "Hero, the 6-cell grid, quotes, the 'Stronger protection' run and the FAQ all match. The four media illustrations are generic WebKit scenes (rules engine, allowed/blocked, data stream) instead of the Console captures and logpush diagram. The run headline is set large and wider, and the logo wall is mostly monochrome.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "There are no Network Shield scenes matching the live page.",
+    "fix": "Ship the product-page scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "media-split-stack",
+    "text": "The header is hard-coded to SectionTitle size='large'.",
+    "fix": "Add a titleSize prop."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example",
+    "text": "The colour-logo paths do not resolve.",
+    "fix": "Use the exported asset paths."
+   }
+  ]
+ },
+ "site-product-edge-dns": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The skeleton and copy match, including the 'Built for reliability' run header. All four media illustrations are unrelated stand-ins: a world map for DNSSEC, an icon row for DDoS, a site-score mock for weighted policies and a build/deploy card for ANAME, versus the reference's chain-of-trust, DDoS, weighted-policy and zone-record diagrams. The logo wall is mostly monochrome.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "illustration registry (src/assets/illustrations/registry.ts)",
+    "text": "No DNS scenes are registered. ddos-protection.svg ships in the folder but is not in the registry (like 15 other shipped SVGs: ai-gateway, branches, real-time-metrics-*, …), so it silently renders the placeholder.",
+    "fix": "Register every shipped SVG, warn in dev on an unknown name, publish the name list, and add the DNS scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes example",
+    "text": "The colour-logo paths do not resolve.",
+    "fix": "Use the exported asset paths."
+   }
+  ]
+ },
+ "site-product-load-balancer": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "In the 'Optimize traffic distribution across industries' carousel the controls sit on their own row under the title, the cards are joined with no gutters, and the link is blue 'See solution' instead of orange mono 'SEE SOLUTION →'. The three media illustrations are generic (world maps and a site mock versus the load-balancer topology diagrams). The 'Maximize availability' header is a size larger.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "sections (no titled card carousel) + carousel",
+    "text": "There is no titled card-carousel section. Carousel renders its controls slot above the track with no title slot and no item gap.",
+    "fix": "Ship the card-carousel section, or add a header slot and a gap to Carousel."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry",
+    "text": "There are no load-balancer topology scenes.",
+    "fix": "Ship the product-page scenes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "media-split-stack",
+    "text": "The header is hard-coded to size='large'.",
+    "fix": "Add a titleSize prop."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "client-quotes example",
+    "text": "The colour-logo paths do not resolve.",
+    "fix": "Use the exported asset paths."
+   }
+  ]
+ },
+ "site-product-secure-internet-access": {
+  "desktop": 4,
+  "iphone": 3.5,
+  "page": 3.75,
+  "notes": "Every region is the same and in the same order: hero with client ticker, capability grid, two-band media stack, client quotes, use-case links, platform directory, FAQ, split CTA and footer. The two media bands show unrelated registry art (an attack-type tag panel and a traffic chart) where the reference has two SIA policy diagrams, and the quote tiles are one-ink instead of colour logos. On iPhone the nav adds Login and the footer bottom bar differs.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "high",
+    "where": "Illustration registry (src/assets/illustrations/registry.ts) + Diagram (src/components/marketing/diagram/diagram.vue)",
+    "text": "Neither registry has art for Secure Internet Access (users → one policy → web/SaaS/AI; teams → AI policy), so both media bands carry pictures that do not match the copy.",
+    "fix": "Add SIA illustrations or Diagram specs, and document which products each registry entry covers."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "ClientQuotes items (logo vs mark)",
+    "text": "The builder used one-ink mark for the quote tiles; the reference shows colour logos.",
+    "fix": "ClientQuotesItem.logo takes a colour-logo URL and the package ships assets/gpa-extended-color.svg, herospark-extended-color.svg, axur-extended-color.svg, contabilizei-extended-color.svg."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button always renders in the bar; the reference hides it on phones.",
+    "fix": "Hide secondaryAction below xl, as contact is; it is already in the drawer footer."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "SiteFooterLink is { label, href } only, so 'Our Community ↗' loses its glyph. On mobile the bottom bar puts locale and status on one row and adds a wordmark row.",
+    "fix": "Add an external flag to footer links and match the site's stacked mobile bottom bar."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "ClientQuotes → QuoteTabs autoplay",
+    "text": "The featured quote is Axur because of the autoplay offset at capture; not deducted.",
+    "fix": "-"
+   }
+  ]
+ },
+ "site-product-ai-gateway": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The hero, stack ticker, capability grid, code split, quotes, directory, FAQ, CTA and footer are close. The control-point band uses a tall vertical App→Firewall→Functions Diagram instead of the reference's horizontal chatbots/agents→gateway→models/MCP/APIs hub, about 250px taller. The 'Use cases' carousel is restyled (tall header, arrows above the track, a hairline strip instead of separate rounded cards), and quote tiles are one-ink; on iPhone the nav adds Login.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "Diagram name='ai-gateway' (src/assets/diagrams/ai-gateway.ts); assets/ai-gateway.svg not in the Illustration registry",
+    "text": "The only AI Gateway art in a registry is a vertical request flow, twice the reference's height and a different shape. The shipped ai-gateway.svg is a different scene that Illustration cannot load.",
+    "fix": "Add the site's horizontal clients → AI gateway → models/MCP/APIs hub as a Diagram spec or illustration, and register ai-gateway.svg."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "Carousel (src/components/marketing/carousel) + SectionModule; no titled-carousel section",
+    "text": "No section exists for a titled carousel of overline cards with prev/next in the title row. Carousel controls need Carousel context, so they cannot go into SectionModule's actions slot. Items render as an edge-to-edge ruled strip, and SectionModule's title opener is much taller than the reference row.",
+    "fix": "Ship a use-case-carousel section (or let Carousel controls render into a header actions slot), add a gapped/rounded Carousel.Item variant, and add a compact SectionModule header."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "ClientQuotes items (logo vs mark)",
+    "text": "The builder used one-ink marks; the reference tiles show colour logos.",
+    "fix": "Use ClientQuotesItem.logo with the shipped assets/*-extended-color.svg files."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button shows at phone width.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "There is no external arrow on 'Our Community', and the mobile bottom bar has a different layout.",
+    "fix": "Add an external flag to links and match the stacked mobile bottom bar."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "QuoteTabs autoplay",
+    "text": "The featured quote is Axur because of the autoplay offset; not deducted.",
+    "fix": "-"
+   }
+  ]
+ },
+ "site-product-data-stream": {
+  "desktop": 3,
+  "iphone": 3,
+  "page": 3,
+  "notes": "All three media bands are substituted. The reference has a small framed console window, a Data Stream → SIEM diagram and a dashboard chart mock; the rebuild draws full-cell ProductWidget form fragments (source, sampling, connector), two with fake 'Bianca'/'Diego' cursors. The integrations ticker mixes logos with plain wordmarks, and the 'Complete, not complex' title is larger; the rest, including the footer, matches apart from the shared iPhone chrome differences.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "ProductWidget data-stream-* fragments (src/components/content/product-widget/widgets/data-stream-*-fragment.vue)",
+    "text": "Data Stream widgets exist only as bare fragments. kind, chrome, width and fade are silently ignored for them, so they cannot be shown as the reference's framed console window, and their named cursors cannot be turned off.",
+    "fix": "Provide a framed Data Stream screen widget or allow window plating for fragments, add a prop to hide cursors, and state in product-widget.md which widgets are framed and which are fragments."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "MediaSplitStack (src/components/sections/media-split-stack/media-split-stack.vue)",
+    "text": "The band stack accepts only image or illustration media and has no media slot, so bands holding widgets or diagrams must be hand-built from MediaSplit, losing the stack's alternation and sticky stacking.",
+    "fix": "Add a per-band media slot (or widget/diagram fields) to MediaSplitStack."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "Brand registry (src/svg/brands/registry.ts) used by Ticker",
+    "text": "Datadog, Splunk, Google BigQuery, AWS S3 and Kinesis are not registered, so they render as typographic wordmarks in the logo row.",
+    "fix": "Register common integration marks, or let Ticker accept asset URLs."
+   },
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "DataStream.vue media bands 2 and 3",
+    "text": "The reference's band 2 is a flow diagram and band 3 an analytics dashboard; the builder used form fragments for both.",
+    "fix": "Diagram name='data-stream' (src/assets/diagrams/data-stream.ts) and ProductWidget 'real-time-metrics-dashboard' existed and are much closer."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "SectionTitle (src/components/marketing/section-title/section-title.vue)",
+    "text": "The builder set size='large'; the reference heading is medium.",
+    "fix": "Use SectionTitle size='medium'."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "ClientQuotes items (logo vs mark)",
+    "text": "The builder used one-ink marks; the reference tiles show colour logos.",
+    "fix": "Use ClientQuotesItem.logo with the shipped *-extended-color.svg assets."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button shows at phone width.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "There is no external arrow on 'Our Community', and the mobile bottom bar has a different layout.",
+    "fix": "Add an external flag to links and match the stacked mobile bottom bar."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "Ticker / QuoteTabs",
+    "text": "The marquee offset makes the logo row look sparse, and autoplay lands on Axur; not deducted.",
+    "fix": "-"
+   }
+  ]
+ },
+ "site-product-real-time-events": {
+  "desktop": 4,
+  "iphone": 3.5,
+  "page": 3.75,
+  "notes": "Every region is present and in order: hero, capability grid, quote tabs, title, four alternating media splits, use cases, FAQ and split CTA. The four band media are live ProductWidget console mocks (event log, filter, a sidebar-nav dashboard, a volume chart) instead of the reference's screenshots, GraphQL/Grafana tiles and GraphQL query panel, and they carry fake named cursors ('Lucas', 'Ana', 'Lia'). On iPhone the nav adds Login, a heading is larger, and the footer bottom bar differs.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "MediaSplitStack (src/components/sections/media-split-stack/media-split-stack.vue) + illustration registry (src/assets/illustrations/registry.ts)",
+    "text": "MediaSplitStack bands accept only an image or a registry illustration, and the registry has no observability art. The builder had to fall back to bare MediaSplit with ProductWidget mocks that show different screens.",
+    "fix": "Give MediaSplitStack bands a widget field or a per-band media slot, and add observability illustrations or document which ProductWidget stands in for each product screen."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "ProductWidget real-time fragments (src/components/content/product-widget/widgets, parts/mockup-cursor.vue)",
+    "text": "Widget fragments draw named collaborator cursors and open tooltips that the reference does not have, and no prop turns them off.",
+    "fix": "Add a prop that hides cursors and shows the settled state, or default to no cursor inside marketing bands."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "code block (as used by CodeSplit) / ProductWidget",
+    "text": "The GraphQL band shows a volume chart and the Grafana band a console sidebar, where the reference has a query panel and integration tiles. A code block would have shown the GraphQL query.",
+    "fix": "Use a code block for the GraphQL band and a closer widget for the Grafana band."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button stays visible at 393 px.",
+    "fix": "Hide secondaryAction below xl, as contact is."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "The mobile bottom bar puts EN and status on one row and adds a wordmark row; 'Our Community' has no ↗ icon because links are only { label, href }.",
+    "fix": "Stack status over the language select on mobile, make the brand row optional, and add an external flag to links."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "ClientQuotes → QuoteTabs autoplay",
+    "text": "QuoteTabs had auto-advanced to Axur at capture (autoplay defaults true and ClientQuotes doesn't expose it); not deducted.",
+    "fix": "Optional: pass autoplay through ClientQuotes."
+   }
+  ]
+ },
+ "site-product-edge-pulse": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The hero, capability grid, quote tabs, use cases, FAQ and split CTA match closely. All three media-split bands use generic registry illustrations (live debugging, a world map, a traffic chart) instead of the reference's tag code panel, HTTP requests table and Real-Time Events filter, and the hatched gap between the run title and the first band is missing. On iPhone the shared chrome issues recur: an extra Login button and a different footer bottom bar.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "MediaSplitStack (src/components/sections/media-split-stack/media-split-stack.vue) + illustration registry (src/assets/illustrations/registry.ts)",
+    "text": "Bands take only an image or a registry illustration, the registry has no Edge Pulse or RUM art, and several shipped SVGs (ai-gateway, ddos-protection, usage-chart) are not registered, so those names render the placeholder.",
+    "fix": "Allow a widget or media slot per band, register every shipped illustration, and list the valid names in the docs."
+   },
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "ProductWidget real-time-events-log / real-time-events-filter (src/components/content/product-widget) + MediaSplit + code block",
+    "text": "WebKit had console mocks matching two of the three reference screens and a code block for the tag snippet; job S3b composed MediaSplit + ProductWidget for the same template. This builder kept MediaSplitStack with unrelated illustrations.",
+    "fix": "Compose MediaSplit × 3 with those ProductWidgets and a code block."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "SectionTitle + SectionGap + MediaSplitStack",
+    "text": "The run title was passed to MediaSplitStack, so it sits directly on the first band instead of title, hatched gap, then bands.",
+    "fix": "Render SectionTitle, a SectionGap hatch and an untitled MediaSplitStack, as the evaluator structure shows."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button stays visible at 393 px.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "The mobile bottom bar layout differs (EN and status on one row plus a wordmark row) and 'Our Community' has no ↗ icon.",
+    "fix": "Stack status over language on mobile, make the brand row optional, add an external flag to links."
+   }
+  ]
+ },
+ "site-product-our-network": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Near-match: hero with the brand ticker, the NetworkSection dotted map with chips, four alternating media splits with the same illustrations, quote tabs, platform directory and the pixelate closing CTA. The four outcome cells add client logos the reference does not show. On iPhone the shared chrome adds Login and a different footer bottom bar, and Our Community has no ↗ icon on either profile.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "NetworkSection (src/components/sections/network-section/network-section.vue)",
+    "text": "Outcome cells require logo and logoAlt, but the reference cells show only the figure and text, so the builder had to add client marks.",
+    "fix": "Make logo optional and render no mark row when it is absent."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button stays visible at 393 px.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "The mobile bottom bar layout differs from the site and 'Our Community' has no external ↗ marker.",
+    "fix": "Stack status over language on mobile, make the brand row optional, add an external flag to links."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "ClientQuotes → QuoteTabs autoplay",
+    "text": "The capture shows the Axur quote instead of the first; the tab order matches, so this is timing and was not deducted.",
+    "fix": "Optional: expose autoplay on ClientQuotes."
+   }
+  ]
+ },
+ "site-blog": {
+  "desktop": 4,
+  "iphone": 3.5,
+  "page": 3.75,
+  "notes": "Same regions in the same order: hero band, featured article, highlight wall, category bar with search, byline rows, Show more, newsletter, footer. The highlight wall wraps 3 + 2 instead of one 5-column strip, and thumbnails are generic WebKit illustration SVGs, some cropped. On iPhone the category pill bar collapses into single truncated letters instead of scrolling sideways; the nav keeps 'Login' and the footer adds a wordmark row.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "ArticleIndexBlog (src/components/sections/article-index-blog/article-index-blog.vue) + ToggleGroup (src/components/actions/toggle-group/toggle-group.vue)",
+    "text": "The category ToggleGroup sits in an overflow-x-auto wrapper, but its root is inline-flex w-fit max-w-full min-w-0 and each label is min-w-0 truncate. At 393 px the group shrinks to the container and every label truncates to one letter; nothing scrolls.",
+    "fix": "Let the ToggleGroup in ArticleIndexBlog keep its intrinsic width (or add a scrollable mode with shrink-0 options) so the wrapper scrolls horizontally."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "ArticleHighlight (src/components/sections/article-highlight/article-highlight.vue)",
+    "text": "The column count is hard-coded (items.length >= 4 ? 4 : 3) and CardGrid's balanced layout wraps 5 cells into 3 + 2, so the 5-cell strip can't be built.",
+    "fix": "Use items.length as the column count up to 5, or expose a columns option."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button has no responsive hide, so it stays in the iPhone bar.",
+    "fix": "Hide secondaryAction below xl, as contact is; the sheet already carries it."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "On mobile the footer puts EN and status on one row and adds a standalone wordmark row; 'Our Community' loses its external-link icon because links have no external flag.",
+    "fix": "Match the azion.com mobile bottom bar and add an external flag to footer links."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "brief data / thumbnails",
+    "text": "The builder had no reference article art or author photos; it used illustration SVGs and initials avatars.",
+    "fix": "n/a"
+   }
+  ]
+ },
+ "site-resource-hub": {
+  "desktop": 4.5,
+  "iphone": 3.5,
+  "page": 4,
+  "notes": "Desktop matches region for region: dotted hero with two buttons, 'Explore all resources' with three selects, ruled rows, Load more, newsletter and footer. Only the thumbnail art and a smaller muted excerpt differ. On iPhone every excerpt is clamped to 2 lines in small text (the reference shows it full and larger), so the page is much shorter; the shared nav Login and footer differences recur.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "ArticleIndexResourceHub (src/components/sections/article-index-resource-hub/article-index-resource-hub.vue)",
+    "text": "Row excerpts are always line-clamp-2 text-body-sm. The reference shows them unclamped in a larger body size, most visibly on iPhone.",
+    "fix": "Show the full deck (or clamp only on desktop) at the site's body size."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button is visible in the iPhone bar.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "The mobile bottom bar puts EN and status on one row and adds a wordmark row; 'Our Community ↗' has no external icon.",
+    "fix": "Match the site's stacked bottom bar and add an external flag to links."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "thumbnails",
+    "text": "The builder had no reference resource art, so it used illustration SVGs, some cropped.",
+    "fix": "n/a"
+   }
+  ]
+ },
+ "site-success-cases": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Nearly identical skeleton: centred hero, three brand tiles, the story library with search, three facets and 12 cards, Load more, the recognition marquee and the closing CTA. Story summaries render small and muted instead of larger and white, and the brand tiles carry a glow gradient instead of flat colour. On iPhone the H1 stays on one line (the reference wraps), the nav shows Login, and the footer moves the wordmark to its own row.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "StoryLibrary (src/components/sections/story-library)",
+    "text": "Story card descriptions are fixed at text-body-sm text-(--text-muted); the reference uses a larger size in default text colour.",
+    "fix": "Use the site's body size and default text colour for the story summary."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "ClientMosaicColumns brand { base, glow } (src/components/sections/client-mosaic-columns)",
+    "text": "The builder passed a distinct glow colour, so the tiles show radial gradients instead of the reference's flat faces.",
+    "fix": "Set glow equal to base for flat faces."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button is visible on iPhone.",
+    "fix": "Hide secondaryAction below xl."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "The mobile bottom bar has a separate brand row and EN beside status, and 'Our Community' has no external icon.",
+    "fix": "Match the site's mobile bottom bar and add an external link flag."
+   }
+  ]
+ },
+ "site-partners": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Desktop is very close: the form hero, stats band and 'Why…' grid all match. The hero title sits on one line ('Grow as an Azion Partner') where the reference breaks it after 'an' in a narrower column, and the footer's 'Our Community' has lost its external-link glyph. On iPhone the nav shows a Login button the reference hides, and the footer bottom differs: language and status share one row and a centred AZION wordmark cell is added.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The secondaryAction (Login) Button in GlobalHeaderRight renders at every width. Contact is wrapped in 'hidden xl:flex' but Login is not, so it shows on iPhone, where the reference keeps only hamburger, wordmark, Start for free and search. Login is already in the sheet footer.",
+    "fix": "Hide secondaryAction below xl in the bar, as contact is, since the mobile sheet already carries it; or add a prop to control it."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "SiteFooterLink is only { label, href }, with no external flag or trailing icon, so 'Our Community ↗' cannot show its external glyph.",
+    "fix": "Add an optional external field to SiteFooterLink that renders the external icon and target=_blank."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter mobile bottom bar (site-footer.vue)",
+    "text": "Below lg the footer renders a separate centred brand cell and puts language and status side by side. The reference has no wordmark on mobile and stacks status above language.",
+    "fix": "Match the azion.com mobile footer: make the brand cell optional below lg and stack status over language."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "HeroForm (src/components/sections/hero-form/hero-form.vue)",
+    "text": "HeroTitle is hard-coded to max-width='lg' and size large, and there is no title-length prop (HeroBand has titleLength), so the headline cannot break into the reference's two lines.",
+    "fix": "Expose a titleLength (or width) prop on HeroForm, as HeroBand does."
+   }
+  ]
+ },
+ "site-marketplace": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Desktop has the same regions in the same order: dot-field hero with ticker, three value cells, 'What is the Azion Marketplace?' with checks, client-quotes wall and footer. The 'What is' description runs in a wider column than the reference. On iPhone the hero headline is smaller and wraps in 2 lines (reference: 3), the nav shows Login, and the footer bottom differs.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "HeroBand titleLength (src/components/sections/hero-band/hero-band.vue)",
+    "text": "The builder set title-length='long', which widens the centered title to 3xl. The reference matches the default 'short' (xl), so the iPhone headline wraps in 2 smaller lines instead of 3.",
+    "fix": "Leave titleLength at its default; the docs could tie titleLength to the reference's line count."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "CapabilityGrid / SectionTitle (src/components/marketing/section-title/section-title.vue)",
+    "text": "CapabilityGrid's title is always centred with no left kind, so the builder needed a SectionModule wrapper. SectionTitle's description is fixed at text-heading-sm inside max-w-(--container-2xl), wider than the reference measure.",
+    "fix": "Give CapabilityGrid a kind='left' and match the description measure to the site."
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button is visible on iPhone; it is not gated to xl like contact.",
+    "fix": "Hide secondaryAction below xl in the bar."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "There is no external-link flag, so 'Our Community' loses its glyph. The mobile bottom bar adds a wordmark cell and puts language beside status.",
+    "fix": "Add an external field to SiteFooterLink and match the reference mobile bottom bar."
+   }
+  ]
+ },
+ "site-support": {
+  "desktop": 4.5,
+  "iphone": 4,
+  "page": 4.25,
+  "notes": "Desktop is nearly identical: title-band hero, three icon pillars, the full CompareSupportTiers table, quotes, FAQ and the split closing CTA. The only differences are the footer external glyph and the 'SUPPORT' corner label centred rather than left. On iPhone, Login appears in the nav, the tier-picker row and band headings are tighter, and the footer bottom differs.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "SiteNav (src/components/sections/site-nav/site-nav.vue)",
+    "text": "The Login (secondaryAction) button is visible on iPhone; the reference hides it below xl.",
+    "fix": "Gate secondaryAction to xl in the bar, as contact is."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "SiteFooter (src/components/sections/site-footer/site-footer.vue)",
+    "text": "There is no external-link flag, so 'Our Community ↗' has no glyph. On mobile the bottom bar adds a wordmark cell and puts language beside status.",
+    "fix": "Add an external field to SiteFooterLink and align the mobile bottom bar with the site."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "CompareSupportTiers (src/components/sections/compare-support-tiers)",
+    "text": "The corner 'SUPPORT' label is centred where the reference has it left, and on mobile the picker row is shorter and the band headings set on one wide line. The builder also needed a type shim because the component fails vue-tsc (TS2304), according to their journal.",
+    "fix": "Left-align the corner label, match the mobile heading measure, and fix the TS2304 error in the shipped source."
+   }
+  ]
+ },
+ "site-home": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "All ten regions match in order and copy: hero, logo ticker, primitives directory, network band with proof cells, the four Why Azion artwork tiles, the five-band solutions stack, recognition marquee, client mosaic, closing CTA and footer. The 'Media and streaming content' band shows the player-window scene instead of the reference's flat dot-map with four icon tiles. On iPhone the footer bottom bar is laid out differently (wordmark row and EN/status on one row) and 'Our Community' carries a text '↗' instead of the icon; the extra Login button in the phone bar is not deducted here.",
+  "causes": [
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry (src/assets/illustrations/registry.ts) + media-split-stack example (llms/components/media-split-stack.md)",
+    "text": "No registered scene draws the reference's flat dot-matrix world map with the Azion/user/server/gear tiles. content-and-media-delivery is a player window and content-and-media-delivery-globe is a globe. The MediaSplitStack homepage example itself pairs 'Media and streaming content' with content-and-media-delivery, which is the scene the builder copied.",
+    "fix": "Add the live media-and-streaming map scene to the registry and use it in the MediaSplitStack homepage example."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-footer (src/components/sections/site-footer/site-footer.vue, SiteFooterLink)",
+    "text": "SiteFooterLink is { label, href } only, so the builder typed 'Our Community ↗' as text. The mobile bottom bar stacks differently from the site's.",
+    "fix": "Add an `external` flag that draws the arrow icon and sets target/rel, and match the site's phone bottom-bar order."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue:325)",
+    "text": "secondaryAction (Login) renders at every width; the reference drops it on phones. Listed only, not deducted in this batch (counted elsewhere).",
+    "fix": "Hide secondaryAction below md, or add a prop for it."
+   },
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "recognition marquee / ticker",
+    "text": "The marquee offsets differ at capture; not deducted."
+   }
+  ]
+ },
+ "site-pricing": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "Hero, monthly/annual switch, the three plan cards (Popular badge, lists, buttons), the three illustrated value props, the long comparison table with sticky plan header and grouped sections, primitives directory, FAQ (12 rows), closing CTA and footer all match. On iPhone the comparison table collapses to one plan column with the sticky Pro select bar, as on the site. In the table, the 'Workloads' sub-group header row is missing, so its rows run on under Access Security, and the Savings Plan row reads '— / Available / See on-demand pricing' instead of '— / — / Available'. The footer phone bar differs as on the other pages.",
+  "causes": [
+   {
+    "kind": "harness",
+    "severity": "low",
+    "where": "page brief (pages.json site-pricing structure)",
+    "text": "The brief's compressed table tree drops repeated cells and does not mark which `th` rows are group headers. It lists Savings Plan as 'Not included / Available / See on-demand pricing' and Workloads as both a header and a row, which the builder transcribed literally."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-footer (src/components/sections/site-footer/site-footer.vue, SiteFooterLink)",
+    "text": "There is no external-link flag on footer links, and the mobile bottom-bar layout differs from the site's.",
+    "fix": "Add `external` to SiteFooterLink and match the phone bottom bar."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-nav (src/components/sections/site-nav/site-nav.vue:325)",
+    "text": "Login shows in the phone bar. Listed only, not deducted.",
+    "fix": "Hide secondaryAction below md."
+   }
+  ]
+ },
+ "site-contact": {
+  "desktop": 4.5,
+  "iphone": 4.5,
+  "page": 4.5,
+  "notes": "The two-column hero (benefit list and lead form, with every label, placeholder, the +1 phone select and the orange submit), logo ticker, the 2×2 support grid, testimonial, recognition marquee, closing CTA and footer match. The quote's logo-tab wall has five clients instead of the reference's six (GPA is missing), which leaves an empty sixth cell in the 3×2 iPhone grid. The visible quote (Axur instead of GFG) and the Login button are not deducted.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "client-quotes items (app/src/data/quotes.ts)",
+    "text": "The builder passed five entries and dropped GPA, although the brand mark exists (src/svg/brands/registry.ts `gpa`).",
+    "fix": ""
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes (src/components/sections/client-quotes/client-quotes.vue:81)",
+    "text": "ClientQuotes renders QuoteTabs without forwarding autoplay/autoplayInterval or an initial index, so the captured quote is Axur instead of GFG. Listed only, not deducted (harness timing).",
+    "fix": "Expose autoplay, autoplayInterval and an initial-index/model on ClientQuotes."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-footer / site-nav",
+    "text": "There is no external flag on footer links and the phone bottom bar differs (deducted lightly). Login shows on phones (listed only).",
+    "fix": "Add `external` to SiteFooterLink; hide secondaryAction below md."
+   }
+  ]
+ },
+ "site-solution-web-apps": {
+  "desktop": 3.5,
+  "iphone": 3.5,
+  "page": 3.5,
+  "notes": "The skeleton matches (hero, 3×2 capability grid, four-band solutions stack, template gallery with stack ticker, quote with logo tabs, directory, network band, recognition, FAQ, split CTA, footer), but three of the four solution bands carry the wrong art. Websites shows the CLI-terminal scene instead of framework icons feeding Azion, E-commerce shows the client/costumer scene instead of the shopping-icon tiles, and SaaS shows those shopping tiles instead of users→Azion→databases. The network benefit floor has three icon-led columns with the heading on its own line, where the reference has four columns (one empty) with a bold run-in lead and no icons. The logo-tab wall again lacks GPA, and the capability icons differ slightly.",
+  "causes": [
+   {
+    "kind": "builder",
+    "severity": "medium",
+    "where": "media-split-stack bands (app/src/views/SiteSolutionWebApps.vue:53-76)",
+    "text": "Websites used the quick-start-with-templates image, but `build-applications` (src/assets/illustrations/build-applications.svg: React/Next icons wired to Azion, image-processor, edge-application and store) is the reference's scene. E-commerce used retail-application-modernization where the registry's `saas-platforms` draws the reference's shopping-icon tiles.",
+    "fix": ""
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "illustration registry (src/assets/illustrations/registry.ts, llms/components/illustration.md)",
+    "text": "Scene names do not describe the art. `saas-platforms` draws the e-commerce shopping tiles, no scene draws the SaaS users→Azion→databases flow, and the docs list the names without previews. The builder's journal says it read the names from filenames and found no list.",
+    "fix": "Add a visual index (thumbnail + name + the live section it illustrates), rename or alias saas-platforms → e-commerce, and add the multi-tenant SaaS scene."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "network-section kind='benefits' (src/components/sections/network-section/network-section.vue:40-82)",
+    "text": "NetworkSectionBenefit requires an `icon`, renders the title as a separate h3, and sets columns to the item count (3). The reference floor has 4 columns with a bold run-in lead sentence and no icon.",
+    "fix": "Make `icon` optional, offer a run-in lead layout, and allow a fixed 4-column floor that leaves trailing cells empty."
+   },
+   {
+    "kind": "builder",
+    "severity": "low",
+    "where": "client-quotes items (app/src/data/quotes.ts)",
+    "text": "There are five client tabs; the GPA mark (src/svg/brands/registry.ts) was available.",
+    "fix": ""
+   },
+   {
+    "kind": "webkit",
+    "severity": "medium",
+    "where": "client-quotes (src/components/sections/client-quotes/client-quotes.vue:81)",
+    "text": "No autoplay or initial-index control, so the captured quote is Axur. Listed only, not deducted.",
+    "fix": "Forward autoplay/autoplayInterval and an initial index to QuoteTabs."
+   },
+   {
+    "kind": "webkit",
+    "severity": "low",
+    "where": "site-footer / site-nav",
+    "text": "There is no external flag on footer links and the phone bottom bar differs. Login shows on phones (listed only).",
+    "fix": "Add `external` to SiteFooterLink; hide secondaryAction below md."
+   }
+  ]
+ }
+}

@@ -1,0 +1,10 @@
+import sys, os
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = None
+out = sys.argv[1]; os.makedirs(out, exist_ok=True)
+for f in sys.argv[2:]:
+    im = Image.open(f).convert('RGB'); w, h = im.size
+    ch = 1100 if w > 600 else 1000
+    base = os.path.basename(f)[:-4]
+    for k, y in enumerate(range(0, h, ch)):
+        im.crop((0, y, w, min(h, y + ch))).save(f'{out}/{base}-{k:02d}.jpg', quality=72)

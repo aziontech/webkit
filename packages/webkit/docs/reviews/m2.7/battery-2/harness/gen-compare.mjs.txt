@@ -1,0 +1,35 @@
+import fs from 'node:fs'
+
+const [profile, outDir] = process.argv.slice(2)
+const KIT = '/data/claude/webkit/packages/webkit/docs/reviews/m2.7/battery-2-kit'
+const pages = JSON.parse(fs.readFileSync(`${KIT}/pages.json`, 'utf8'))
+const scores = fs.existsSync('/data/eval-m27b/compare/scores.json')
+  ? JSON.parse(fs.readFileSync('/data/eval-m27b/compare/scores.json', 'utf8'))
+  : {}
+const dims = JSON.parse(fs.readFileSync(`${outDir}/dims.json`, 'utf8'))
+const data = pages.map((p) => ({
+  id: p.id,
+  surface: p.surface,
+  title: p.title,
+  route: p.url_or_route,
+  ref: `img/${p.id}--ref.webp`,
+  ai: dims[p.id]?.ai ? `img/${p.id}--ai.webp` : null,
+  refW: dims[p.id]?.ref?.[0],
+  refH: dims[p.id]?.ref?.[1],
+  aiW: dims[p.id]?.ai?.[0],
+  aiH: dims[p.id]?.ai?.[1],
+  score: scores[p.id]?.[profile] ?? null,
+  page: scores[p.id]?.page ?? null,
+  notes: scores[p.id]?.[`${profile}Notes`] ?? scores[p.id]?.notes ?? ''
+}))
+const isPhone = profile === 'iphone'
+const name = isPhone ? 'iPhone 15' : 'Desktop 1440'
+const other = isPhone ? 'desktop' : 'iPhone'
+const tpl = fs.readFileSync('/data/eval-m27b/bin/compare.template.html', 'utf8')
+const html = tpl
+  .replaceAll('%%PROFILE_NAME%%', name)
+  .replaceAll('%%OTHER%%', other)
+  .replaceAll('%%COLW%%', isPhone ? '393' : '1440')
+  .replace('%%DATA%%', JSON.stringify(data).replace(/</g, '\\u003c'))
+fs.writeFileSync(`${outDir}/${profile}.html`, html)
+console.log(`${outDir}/${profile}.html`, data.length, 'pages')

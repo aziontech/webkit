@@ -1,0 +1,124 @@
+// usage: node cap2.mjs <jobs.json> <outdir>
+// jobs: [{id, url, scheme?:'light'|'dark' (default light), wait?:ms, expand?:bool (grow viewport by inner scroll container), noDismiss?:bool, actions?:[js]}]
+// Two profiles: desktop 1440x900 DPR1, and Playwright `iPhone 15` (393x659 viewport, DPR3, mobile UA, touch) run in Chromium.
+// Full-page screenshots; the iPhone shot is saved at CSS-pixel scale (scale:'css') to keep files small.
+// Writes <id>--desktop.png, <id>--iphone.png, <id>--outline.txt (DOM outline) and <id>--sections.json (structured sections) from desktop.
+import { chromium, devices } from 'playwright'
+import fs from 'node:fs'
+import http from 'node:http'; import path from 'node:path'
+const [jobsFile, out] = process.argv.slice(2)
+const jobs = JSON.parse(fs.readFileSync(jobsFile, 'utf8'))
+fs.mkdirSync(out, { recursive: true })
+let srv = null
+if (process.env.SERVE) {
+  const [dir, port] = process.env.SERVE.split(':')
+  const types = { '.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.css':'text/css', '.svg':'image/svg+xml', '.woff2':'font/woff2', '.woff':'font/woff', '.ttf':'font/ttf', '.png':'image/png', '.webp':'image/webp', '.jpg':'image/jpeg', '.json':'application/json', '.wasm':'application/wasm' }
+  srv = http.createServer((q, r) => { let p = path.join(dir, decodeURIComponent(q.url.split('?')[0])); if (p.endsWith('/')) p += 'index.html'; if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { const ix = path.join(p, 'index.html'); p = fs.existsSync(ix) ? ix : path.join(dir, 'index.html') } r.writeHead(200, { 'content-type': types[path.extname(p)] || 'application/octet-stream' }); fs.createReadStream(p).pipe(r) }).listen(+port)
+}
+const b = await chromium.launch()
+const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36'
+const PROFILES = [
+  { n: 'desktop', opts: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, userAgent: UA } },
+  { n: 'iphone', opts: { ...devices['iPhone 15'] }, mobile: true },
+]
+async function scrollAll(pg) {
+  await pg.evaluate(async () => { const H = () => document.documentElement.scrollHeight; for (let y = 0; y < H() && y < 40000; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 120)) } window.scrollTo(0, 0) })
+  await pg.waitForTimeout(1000)
+}
+async function dismiss(pg) {
+  for (const re of [/^accept( all)?( cookies)?$/i, /^got it$/i, /^allow all$/i]) for (const role of ["button"]) {
+    const btn = pg.getByRole(role, { name: re }).first()
+    if (await btn.isVisible().catch(() => false)) { await btn.click().catch(() => {}); await pg.waitForTimeout(400); return }
+  }
+}
+const HIDE = '#hubspot-messages-iframe-container,#hs-eu-cookie-confirmation,[id^="onetrust"],.cky-consent-container{display:none!important}'
+const log = {}
+for (const j of jobs) {
+  log[j.id] = { url: j.url, shots: [], errors: [] }
+  for (const pr of PROFILES) {
+    const ctx = await b.newContext({ ...pr.opts, colorScheme: j.scheme || 'light', locale: 'en-US' })
+    if (j.init) await ctx.addInitScript(j.init)
+    const pg = await ctx.newPage()
+    pg.on('pageerror', e => log[j.id].errors.push(e.message.slice(0, 200)))
+    try {
+      const resp = await pg.goto(j.url, { waitUntil: 'load', timeout: 60000 })
+      log[j.id].status = resp?.status(); log[j.id].finalUrl = pg.url()
+      await pg.waitForTimeout(j.wait ?? 2500)
+      if (!j.noDismiss) await dismiss(pg)
+      await pg.addStyleTag({ content: HIDE }).catch(() => {})
+      if (j.actions) for (const a of j.actions) { await eval(`(async (pg) => { ${a} })`)(pg); await pg.waitForTimeout(800) }
+      await scrollAll(pg)
+      if (j.pin) { // pin fixed/sticky top bars to the document top (avoid the hide-on-scroll header reappearing mid-page) and finish reveal transitions
+        await pg.addStyleTag({ content: '*,*::before,*::after{transition:none!important}' })
+        await pg.evaluate(() => { for (const e of document.querySelectorAll('body *')) { const s = getComputedStyle(e); if ((s.position === 'fixed' || s.position === 'sticky') && e.getBoundingClientRect().height < 160 && e.getBoundingClientRect().width > innerWidth * 0.6 && e.getBoundingClientRect().top < 120) { e.style.setProperty('position', s.position === 'fixed' ? 'absolute' : 'relative', 'important'); e.style.setProperty('transform', 'none', 'important'); e.style.setProperty('top', '0', 'important') } } window.scrollTo(0, 0) })
+        await pg.waitForTimeout(1200)
+      }
+      if (j.expand) for (let k = 0; k < 3; k++) {
+        const extra = await pg.evaluate(() => { let best = 0; for (const e of document.querySelectorAll('*')) { const s = getComputedStyle(e); if (/(auto|scroll)/.test(s.overflowY) && e.clientHeight > 200) best = Math.max(best, e.scrollHeight - e.clientHeight) } return best })
+        if (extra < 2) break
+        const cur = pg.viewportSize(); await pg.setViewportSize({ width: cur.width, height: Math.min(cur.height + extra, 16000) }); await pg.waitForTimeout(800)
+      }
+      await pg.evaluate(() => document.querySelectorAll('#hubspot-messages-iframe-container,#hs-eu-cookie-confirmation').forEach(e => e.remove()))
+      const f = `${out}/${j.id}--${pr.n}.png`
+      await pg.screenshot({ path: f, fullPage: true, timeout: 90000, scale: 'css' })
+      log[j.id].shots.push(path.basename(f))
+      if (pr.n === 'desktop') {
+        const data = await pg.evaluate(() => {
+          const vis = e => { const r = e.getBoundingClientRect(); const s = getComputedStyle(e); return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity !== 0 }
+          const box = c => { const r = c.getBoundingClientRect(); return `[${Math.round(r.x)},${Math.round(r.y + scrollY)} ${Math.round(r.width)}x${Math.round(r.height)}]` }
+          const txt = e => (e.innerText || '').trim().replace(/\s+/g, ' ')
+          // ---- raw outline (same format as eval-m27) ----
+          const lines = []
+          const walk = (el, d) => {
+            for (const c of el.children) {
+              if (!vis(c) && c.tagName !== 'DETAILS') continue
+              const t = c.tagName.toLowerCase(); const role = c.getAttribute('role')
+              if (/^h[1-6]$/.test(t)) lines.push(`${'  '.repeat(d)}${t} ${box(c)}: ${txt(c).slice(0, 120)}`)
+              else if (['header','nav','main','footer','aside','section','form','table','dialog'].includes(t) || ['tablist','tab','dialog','navigation','banner','menu','tabpanel','grid','search'].includes(role)) { lines.push(`${'  '.repeat(d)}<${t}${role ? ' role=' + role : ''}${c.id ? ' #' + c.id : ''}> ${box(c)} ${(c.getAttribute('aria-label') || '').slice(0, 60)}`); walk(c, d + 1); continue }
+              else if (t === 'button' || role === 'button' || (t === 'a' && txt(c) && getComputedStyle(c).display !== 'inline')) { lines.push(`${'  '.repeat(d)}${t === 'a' ? 'link' : 'button'} ${box(c)}: ${(txt(c) || c.getAttribute('aria-label') || '').slice(0, 80)}`); continue }
+              else if (['input','select','textarea'].includes(t)) { const lab = c.labels?.[0]?.innerText || c.getAttribute('aria-label') || c.placeholder || c.name; lines.push(`${'  '.repeat(d)}${t}[${c.type || ''}] ${box(c)}: ${(lab || '').trim().slice(0, 60)} = ${(c.value || '').slice(0, 40)}`); continue }
+              else if (t === 'img' || t === 'video' || t === 'svg' && c.getBoundingClientRect().width > 120) { lines.push(`${'  '.repeat(d)}${t === 'video' ? 'video' : 'img'} ${box(c)}: ${(c.getAttribute('alt') || '').slice(0, 60)}`); continue }
+              else if ((t === 'p' || t === 'li' || t === 'td' || t === 'th' || t === 'label' || t === 'span' && c.children.length === 0) && txt(c)) { lines.push(`${'  '.repeat(d)}${t} ${box(c)}: ${txt(c).slice(0, 160)}`); if (t !== 'li') continue }
+              walk(c, d)
+            }
+          }
+          walk(document.body, 0)
+          // ---- structured sections: top-level vertical bands of <main> (or body) ----
+          const root = document.querySelector('main') || document.body
+          let bands = [...root.children].filter(vis)
+          while (bands.length === 1 && bands[0].children.length > 1) bands = [...bands[0].children].filter(vis)
+          const btnKind = a => { const s = getComputedStyle(a); const bg = s.backgroundColor; const filled = bg && !/rgba\(0, 0, 0, 0\)|transparent/.test(bg); const border = parseFloat(s.borderTopWidth) > 0 && !/rgba\(0, 0, 0, 0\)/.test(s.borderTopColor); return filled ? `filled ${bg}` : border ? 'outline' : 'text' }
+          const sections = bands.map(sec => {
+            const r = sec.getBoundingClientRect()
+            const heads = [...sec.querySelectorAll('h1,h2,h3,h4,h5,h6')].filter(vis).map(h => `${h.tagName.toLowerCase()}: ${txt(h).slice(0, 140)}`)
+            const paras = [...sec.querySelectorAll('p')].filter(vis).map(p => txt(p)).filter(Boolean).map(t => t.slice(0, 260))
+            const ctas = [...sec.querySelectorAll('a,button')].filter(vis).filter(a => txt(a) && txt(a).length < 60 && a.getBoundingClientRect().height < 70).map(a => `${txt(a)} (${a.tagName === 'A' ? 'link' : 'button'}, ${btnKind(a)})`)
+            const fields = [...sec.querySelectorAll('input,select,textarea')].filter(vis).map(c => `${c.tagName.toLowerCase()}[${c.type}] ${(c.labels?.[0]?.innerText || c.getAttribute('aria-label') || c.placeholder || c.name || '').trim().slice(0, 50)}`)
+            // repeated card grids: parents with >=3 visible children of ~equal width
+            const grids = []
+            for (const p of sec.querySelectorAll('*')) {
+              const kids = [...p.children].filter(vis); if (kids.length < 3) continue
+              const ws = kids.map(k => Math.round(k.getBoundingClientRect().width)); if (ws[0] < 120 || ws.some(w => Math.abs(w - ws[0]) > 6)) continue
+              const tops = new Set(kids.map(k => Math.round(k.getBoundingClientRect().top))); const cols = Math.round(kids.length / tops.size)
+              if (cols < 2) continue
+              if (grids.some(g => g.el.contains(p))) continue
+              grids.push({ el: p, desc: `${kids.length} items in ${cols} cols × ${tops.size} rows (item ~${ws[0]}px): ` + kids.slice(0, 24).map(k => { const h = k.querySelector('h1,h2,h3,h4,h5,h6,strong,b'); return (h ? txt(h) : txt(k)).slice(0, 60) }).join(' | ') })
+            }
+            const media = [...sec.querySelectorAll('img,video,svg,canvas,iframe')].filter(vis).filter(m => m.getBoundingClientRect().width > 160).length
+            const logos = [...sec.querySelectorAll('img')].filter(vis).filter(m => m.getBoundingClientRect().height < 70).map(m => m.alt).filter(Boolean).slice(0, 20)
+            const s = getComputedStyle(sec)
+            return { box: box(sec), bg: s.backgroundColor, heads: heads.slice(0, 30), paras: paras.slice(0, 20), ctas: [...new Set(ctas)].slice(0, 20), fields, grids: grids.map(g => g.desc).slice(0, 6), media, logos, tabs: [...sec.querySelectorAll('[role=tab]')].map(txt).slice(0, 12), accordions: [...sec.querySelectorAll('details summary,[aria-expanded]')].filter(vis).map(txt).filter(Boolean).slice(0, 20), tables: [...sec.querySelectorAll('table')].map(t => [...t.querySelectorAll('th')].map(txt).join(' | ')).slice(0, 4) }
+          })
+          return { title: document.title, h: document.documentElement.scrollHeight, bodyBg: getComputedStyle(document.body).backgroundColor, lines: lines.slice(0, 1200), sections }
+        })
+        fs.writeFileSync(`${out}/${j.id}--outline.txt`, `${data.title}\nheight=${data.h} bodyBg=${data.bodyBg}\n` + data.lines.join('\n'))
+        fs.writeFileSync(`${out}/${j.id}--sections.json`, JSON.stringify({ title: data.title, height: data.h, sections: data.sections }, null, 1))
+        log[j.id].title = data.title; log[j.id].h = data.h
+      } else log[j.id].iphoneH = await pg.evaluate(() => document.documentElement.scrollHeight)
+    } catch (e) { log[j.id].errors.push('CAPTURE ' + e.message.slice(0, 300)) }
+    await ctx.close()
+  }
+  console.log(j.id, JSON.stringify(log[j.id]))
+}
+fs.writeFileSync(`${out}/_log-${Date.now()}.json`, JSON.stringify(log, null, 2))
+await b.close(); srv?.close()
