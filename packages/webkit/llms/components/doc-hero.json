@@ -1,0 +1,81 @@
+{
+ "name": "doc-hero",
+ "binding": "DocHero",
+ "import": "@aziontech/webkit/doc-hero",
+ "treeShakeableImport": "@aziontech/webkit/doc-hero",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-xxl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.",
+ "setup": null,
+ "useWhen": [
+  "The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`)."
+ ],
+ "avoidWhen": [
+  "On an article or reference page → use `DocPageHeader` (breadcrumb, last updated, page actions).",
+  "On the marketing site → use `Hero` or a page section."
+ ],
+ "related": [
+  "DocPageHeader` — the article masthead.",
+  "CopyPromptButton` — the second action of the row.",
+  "DocAgentCard` — the agent card that usually opens the first section under the hero."
+ ],
+ "bestPractices": [
+  "Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.",
+  "Put `Button kind=\"primary\" size=\"large\"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.",
+  "Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`)."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The page title, set at display size as the page's `h1`."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The deck under the title: what the docs cover, in one or two sentences."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "title",
+   "scope": "",
+   "notes": "Replaces the title text, for a title that is more than a string."
+  },
+  {
+   "name": "default",
+   "scope": "",
+   "notes": "Replaces the description text."
+  },
+  {
+   "name": "actions",
+   "scope": "",
+   "notes": "The action row: the primary `Button` first, then `CopyPromptButton`."
+  },
+  {
+   "name": "note",
+   "scope": "",
+   "notes": "One muted line under the actions that says what the prompt does."
+  }
+ ],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n  import DocHero from '@aziontech/webkit/doc-hero'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocHero\n    title=\"Welcome to Azion Docs\"\n    description=\"We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Get started\"\n        kind=\"primary\"\n        size=\"large\"\n        href=\"#\"\n      />\n      <CopyPromptButton :value=\"prompt\" />\n    </template>\n    <template #note>\n      The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.\n    </template>\n  </DocHero>\n</template>"
+  },
+  {
+   "name": "Title only",
+   "sfc": "<script setup>\n  import DocHero from '@aziontech/webkit/doc-hero'\n</script>\n\n<template>\n  <DocHero\n    title=\"Guides\"\n    description=\"Step-by-step walkthroughs, from a first deploy to a hardened production setup.\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/doc-hero.md"
+}

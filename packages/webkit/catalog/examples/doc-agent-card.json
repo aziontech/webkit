@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The reference card from the catalog strings: the title, what the prompt gives the agent and the inline `CopyPromptButton` on the left; \"Prefer the guided route?\" and the orange `Agent setup` over the halftone on the right, behind a vertical divider.",
+   "sfc": "<script setup>\n  import DocAgentCard from '@aziontech/webkit/doc-agent-card'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocAgentCard\n    :prompt=\"prompt\"\n    action-href=\"#\"\n  />\n</template>"
+  },
+  {
+   "name": "Narrow",
+   "summary": "The same card in a phone-width container: the columns stack and the divider turns horizontal; the halftone stays in the guided row's corner.",
+   "sfc": "<script setup>\n  import DocAgentCard from '@aziontech/webkit/doc-agent-card'\n\n  const prompt = 'Set up the Azion CLI and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <DocAgentCard\n      :prompt=\"prompt\"\n      action-href=\"#\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

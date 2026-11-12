@@ -2,12 +2,13 @@
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
+  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocHero from '@aziontech/webkit/doc-hero'
   import DocPagination from '@aziontech/webkit/doc-pagination'
-  import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -38,67 +39,152 @@
     'KV Store'
   ]
 
+  const prompt =
+    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
+
   const interfaces = [
     {
       title: 'Console',
-      icon: 'pi pi-desktop',
+      icon: 'ai ai-azion',
       link: 'Access the Console',
-      text: 'Create and manage every resource in the browser.'
+      text: 'Configure it visually: applications, firewall rules, metrics, and events.'
     },
     {
       title: 'CLI',
-      icon: 'pi pi-code',
+      icon: 'ai ai-azion-cli',
       link: 'Install the CLI',
-      text: 'Build, link and deploy projects from your terminal.'
+      text: 'Stay in the terminal: link a project, run it locally, and deploy with a single binary.'
     },
     {
       title: 'API',
-      icon: 'pi pi-server',
+      icon: 'ai ai-azion-api',
       link: 'Call the API',
-      text: 'Automate the platform over REST with a personal token.'
+      text: 'Drive it from your own systems: create and change resources over REST, token authenticated.'
     }
   ]
   const objectives = [
     {
       title: 'Build your application',
       icon: 'pi pi-box',
-      text: 'Deploy a framework app or a function.'
+      text: 'Deploy from a template, a repo, or the CLI.'
     },
     {
       title: 'Accelerate your application',
-      icon: 'pi pi-bolt',
-      text: 'Cache, optimize images and route to origins.'
+      icon: 'pi pi-gauge',
+      text: 'Cache responses so your origin stops repeating itself.'
     },
     {
       title: 'Secure your application',
       icon: 'pi pi-shield',
-      text: 'Firewall, WAF, bot rules and TLS.'
+      text: 'A firewall in front, with a block rule you can verify.'
     },
     {
       title: 'Execute AI inference',
-      icon: 'pi pi-microchip-ai',
-      text: 'Run models close to your users.'
+      icon: 'pi pi-sparkles',
+      text: 'A hosted model behind an OpenAI-compatible endpoint.'
     }
   ]
   const templates = [
-    { title: 'React', icon: 'ai ai-react' },
-    { title: 'Next.js', icon: 'ai ai-next' },
-    { title: 'Astro', icon: 'ai ai-astro' },
-    { title: 'Vue.js', icon: 'ai ai-vue' },
-    { title: 'Angular', icon: 'ai ai-angular' },
+    { title: 'React', icon: 'ai-cor ai-react' },
+    { title: 'Next.js', icon: 'ai-cor ai-next' },
+    { title: 'Astro', icon: 'ai-cor ai-astro' },
+    { title: 'Vue.js', icon: 'ai-cor ai-vue' },
+    { title: 'Angular', icon: 'ai-cor ai-angular' },
     { title: 'Gatsby Blog', icon: 'ai ai-gatsby' },
     { title: 'Hono', icon: 'ai ai-hono' },
     { title: 'Hugo', icon: 'ai ai-hugo' }
+  ]
+  const attacks = [
+    {
+      title: 'Add a firewall',
+      icon: 'pi pi-shield',
+      text: 'Bind it to your workload and prove a deny rule with curl.'
+    },
+    {
+      title: 'Block injection attacks',
+      icon: 'pi pi-filter',
+      text: 'A SQL Injection rule set, with the blocks visible in events.'
+    },
+    {
+      title: 'Tune false positives',
+      icon: 'pi pi-list-check',
+      text: 'Turn WAF false positives into allowed rules.'
+    },
+    {
+      title: 'Deny bad bots',
+      icon: 'pi pi-microchip',
+      text: 'Deny automated requests that score above your threshold.'
+    },
+    {
+      title: 'Network blocklists',
+      icon: 'pi pi-map',
+      text: 'Drop unwanted traffic before it reaches your application.'
+    },
+    {
+      title: 'Install TLS certificates',
+      icon: 'pi pi-key',
+      text: 'Upload a certificate and key, then check the handshake.'
+    }
+  ]
+  const compliance = [
+    {
+      title: 'Shared Responsibility Model',
+      icon: 'pi pi-verified',
+      text: 'What Azion covers, and what stays yours.'
+    },
+    {
+      title: 'Governance, Risk and Compliance',
+      icon: 'pi pi-id-card',
+      text: 'The tools and certifications behind your compliance work.'
+    },
+    {
+      title: 'PCI DSS compliance',
+      icon: 'pi pi-wallet',
+      text: 'PCI DSS 4.0 Level 1, and what it covers for cardholder data.'
+    },
+    {
+      title: 'SOC compliance',
+      icon: 'pi pi-lock',
+      text: 'SOC 2 Type 2 and SOC 3 reports, twice a year.'
+    },
+    {
+      title: 'Activity History',
+      icon: 'pi pi-history',
+      text: 'The audit trail: who changed what, and when.'
+    },
+    {
+      title: 'Security Response Team',
+      icon: 'pi pi-users',
+      text: 'Azion security specialists to analyze threats and investigate attacks.'
+    }
   ]
   const followAlong = [
     {
       title: 'Release notes',
       icon: 'pi pi-megaphone',
-      link: 'Read the release notes',
-      target: '_self'
+      text: 'What changed in Azion products, as it ships.'
     },
-    { title: 'Blog', icon: 'pi pi-book', link: 'Read the blog', target: '_blank' },
-    { title: 'Discord', icon: 'pi pi-discord', link: 'Join the Discord', target: '_blank' }
+    {
+      title: 'Blog',
+      icon: 'pi pi-book',
+      text: 'Engineering posts and how customers run on Azion.',
+      link: 'Read the blog',
+      target: '_blank'
+    },
+    {
+      title: 'YouTube',
+      icon: 'pi pi-youtube',
+      text: 'Walkthroughs, demos, and recorded sessions.',
+      link: 'Watch on YouTube',
+      target: '_blank'
+    },
+    {
+      title: 'Discord',
+      icon: 'pi pi-discord',
+      text: 'Ask questions and compare notes with other builders.',
+      link: 'Join the Discord',
+      target: '_blank'
+    }
   ]
 
   const footerColumns = [
@@ -236,30 +322,28 @@
 
       <main class="flex min-h-0 min-w-0 flex-1 flex-col">
         <ScrollArea class="w-full">
-          <article
-            class="layout-column layout-boundary-inline flex flex-col gap-(--spacing-xl) pt-(--spacing-xl) pb-(--spacing-xxl)"
-          >
-            <header class="flex flex-col gap-(--spacing-md)">
-              <DocPageHeader
-                title="Welcome to Azion Docs"
-                description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
-              />
-              <div class="flex flex-wrap gap-(--spacing-sm)">
+          <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-xxl)">
+            <DocHero
+              title="Welcome to Azion Docs"
+              description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
+            >
+              <template #actions>
                 <Button
                   label="Get started"
                   kind="primary"
                   size="large"
                   href="#"
                 />
-              </div>
-              <DocPrompt title="Prompt for your coding agent">
-                Set up the Azion CLI, connect the Azion docs over MCP and link this project to my
-                Azion account.
-              </DocPrompt>
-            </header>
+                <CopyPromptButton :value="prompt" />
+              </template>
+              <template #note>
+                The prompt hands your coding agent the CLI, live docs over MCP, and this project
+                linked.
+              </template>
+            </DocHero>
 
             <DocProse>
-              <div class="flex flex-col gap-(--spacing-xl)">
+              <div class="flex flex-col gap-(--spacing-xxl)">
                 <section
                   aria-labelledby="start-by-interface"
                   class="flex flex-col gap-(--spacing-md)"
@@ -269,17 +353,14 @@
                     :level="2"
                     >Start by interface</DocHeading
                   >
-                  <DocCardGroup :cols="1">
-                    <DocCard
-                      eyebrow="Recommended"
-                      title="Your AI agent, fluent in Azion"
-                      icon="pi pi-sparkles"
-                      link-label="Agent setup"
-                      href="#"
-                      >Give your coding agent the CLI, the live docs and your project in one
-                      prompt.</DocCard
-                    >
-                  </DocCardGroup>
+                  <p>
+                    Hand the Console to a coding agent, or drive it yourself: visually, from the
+                    terminal, or over the API.
+                  </p>
+                  <DocAgentCard
+                    :prompt="prompt"
+                    action-href="#"
+                  />
                   <DocCardGroup :cols="3">
                     <DocCard
                       v-for="item in interfaces"
@@ -302,6 +383,7 @@
                     :level="2"
                     >Start by objective</DocHeading
                   >
+                  <p>Build something, make it faster, lock it down, or run AI on it.</p>
                   <DocCardGroup :cols="2">
                     <DocCard
                       v-for="item in objectives"
@@ -311,7 +393,17 @@
                       href="#"
                       >{{ item.text }}</DocCard
                     >
+                    <div class="sm:col-span-2">
+                      <DocCard
+                        title="Explore use cases"
+                        icon="pi pi-sitemap"
+                        href="#"
+                        >Validated designs that show how Azion products combine to solve each use
+                        case, grouped by solution.</DocCard
+                      >
+                    </div>
                   </DocCardGroup>
+                  <p>Also useful: <a href="#">Observe</a></p>
                 </section>
 
                 <section
@@ -323,6 +415,7 @@
                     :level="2"
                     >Ready-made templates</DocHeading
                   >
+                  <p>Deploy in one step, with CI/CD already wired up.</p>
                   <DocCardGroup
                     :cols="4"
                     :mobile-columns="2"
@@ -337,8 +430,62 @@
                   </DocCardGroup>
                   <p>
                     Also useful: <a href="#">First deploy</a>,
-                    <a href="#">Frameworks compatibility</a>.
+                    <a href="#">Frameworks compatibility</a>
                   </p>
+                </section>
+
+                <section
+                  aria-labelledby="stop-attacks"
+                  class="flex flex-col gap-(--spacing-md)"
+                >
+                  <DocHeading
+                    id="stop-attacks"
+                    :level="2"
+                    >Stop attacks</DocHeading
+                  >
+                  <p>
+                    Everything you need to protect applications, APIs, and the traffic that reaches
+                    them.
+                  </p>
+                  <DocCardGroup :cols="3">
+                    <DocCard
+                      v-for="item in attacks"
+                      :key="item.title"
+                      :title="item.title"
+                      :icon="item.icon"
+                      href="#"
+                      >{{ item.text }}</DocCard
+                    >
+                  </DocCardGroup>
+                  <p>
+                    Reference, when you need the details: <a href="#">DDoS Protection</a>,
+                    <a href="#">WAF Rule Sets</a>, <a href="#">Bot Manager</a>
+                  </p>
+                </section>
+
+                <section
+                  aria-labelledby="compliance"
+                  class="flex flex-col gap-(--spacing-md)"
+                >
+                  <DocHeading
+                    id="compliance"
+                    :level="2"
+                    >Assess risk and prove compliance</DocHeading
+                  >
+                  <p>
+                    What the platform covers, what stays with you, and where the evidence lives when
+                    an auditor asks for it.
+                  </p>
+                  <DocCardGroup :cols="3">
+                    <DocCard
+                      v-for="item in compliance"
+                      :key="item.title"
+                      :title="item.title"
+                      :icon="item.icon"
+                      href="#"
+                      >{{ item.text }}</DocCard
+                    >
+                  </DocCardGroup>
                 </section>
 
                 <section
@@ -350,6 +497,10 @@
                     :level="2"
                     >Follow along</DocHeading
                   >
+                  <p>
+                    Release notes as things ship, plus the blog, the YouTube channel, and the
+                    Discord where questions get answered.
+                  </p>
                   <DocCardGroup :cols="3">
                     <DocCard
                       v-for="item in followAlong"
@@ -359,12 +510,23 @@
                       :link-label="item.link"
                       :target="item.target"
                       href="#"
-                    />
+                      >{{ item.text }}</DocCard
+                    >
+                    <div class="lg:col-span-2">
+                      <DocCard
+                        title="Style guide"
+                        icon="pi pi-pencil"
+                        href="#"
+                        >How Azion writes documentation: voice, structure, and conventions.</DocCard
+                      >
+                    </div>
                   </DocCardGroup>
                 </section>
               </div>
             </DocProse>
-            <DocPagination :next="{ title: 'Agent setup', href: '#' }" />
+            <div class="mt-(--spacing-xxl)">
+              <DocPagination :next="{ title: 'Agent setup', href: '#' }" />
+            </div>
           </article>
 
           <div class="w-full border-t border-(--border-default)">

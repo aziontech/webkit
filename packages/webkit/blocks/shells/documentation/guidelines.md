@@ -79,6 +79,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 ## Do
 
 - For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
+- Build a docs home from the Landing variant: `DocHero` (display title with `--spacing-xxl` of air, deck, `Get started` then `CopyPromptButton`, a note on what the prompt does), then the first section opening on `DocAgentCard` above the Console / CLI / API `DocCardGroup`. Product cards use the Azion marks (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`) in the muted ink; framework templates use the brand-colour set (`ai-cor ai-react`, `ai-cor ai-vue`…).
 - Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
 - Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
@@ -91,7 +92,8 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
 - Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
 - Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
-- Don't use the marketing `Banner` on the landing; a full-width `DocCard` with an eyebrow does the job at docs scale.
+- Don't use the marketing `Banner` on the landing, and don't fake the agent card with a `DocCard` and an eyebrow or an `// AGENT SETUP` overline: the docs home's agent block is `DocAgentCard`.
+- Don't open the docs home with `DocPageHeader` or put the prompt text on it as a `DocPrompt`: the home is `DocHero` + `CopyPromptButton` (the prompt is copied, not shown).
 - Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
@@ -114,7 +116,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
 - Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
-- Landing: the documentation home; no outline rail, entry-point grids, pager forward to the first page.
+- Landing: the documentation home; no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
 
 ## Related
 

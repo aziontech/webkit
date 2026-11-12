@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — start a screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-12
 enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
@@ -28,6 +28,22 @@ B, C…) is for, do and don't, the copy rules and the accessibility rules. If "W
 matches your case, switch to the block it names. Then change only the content of the copy,
 keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
+
+## Headers and the docs home — never hand-build these
+
+- **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
+  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
+  it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
+  binds the shortcut. Start from a header or shell block and it is already there (rule
+  `webkit-header-search`, lint `webkit/header-search-trigger`).
+- **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
+  title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
+  chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
+  opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the
+  guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API
+  `DocCard`s (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`). Framework templates use the
+  brand-colour icons (`ai-cor ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
+  `DocCard` with an overline for these.
 
 ## Which skill for which task
 

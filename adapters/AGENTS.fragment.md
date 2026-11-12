@@ -85,6 +85,9 @@ runs axe + screenshots), and taste is a review concern.
   `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
   never a hand-rolled field or a bare magnifier button. Lint: `webkit/header-search-trigger`
   (rule `webkit-header-search`).
+- **Docs home.** Start from `shells/documentation` variant `Landing`: `DocHero` with `Get started`
+  and `CopyPromptButton` (the "Copy prompt" chip with the AI-agent marks), then `DocAgentCard`
+  above the Console / CLI / API cards — never `DocPageHeader` + `DocPrompt` on the home.
 - **Page layout.** One container class per band (`.layout-column`, `-form`, `-focused`,
   `.layout-form-create`, `-content`, `-site`) and two rhythm steps (`--layout-section-gap`,
   `--layout-group-gap`) — never a hand-rolled `max-w-*` page cap (rule `webkit-page-layout`).

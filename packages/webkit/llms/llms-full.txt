@@ -1174,6 +1174,22 @@ matches your case, switch to the block it names. Then change only the content of
 keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
 `webkit-sections`).
 
+## Headers and the docs home — never hand-build these
+
+- **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
+  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
+  it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
+  binds the shortcut. Start from a header or shell block and it is already there (rule
+  `webkit-header-search`, lint `webkit/header-search-trigger`).
+- **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
+  title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
+  chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
+  opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the
+  guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API
+  `DocCard`s (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`). Framework templates use the
+  brand-colour icons (`ai-cor ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
+  `DocCard` with an overline for these.
+
 ## Which skill for which task
 
 Structure and states first, polish last:
@@ -12076,17 +12092,17 @@ The code of every state is in [blocks/shells/console.md](blocks/shells/console.m
 
 # Documentation (`shells/documentation`)
 
-> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail: welcome `DocPageHeader`, Get started, a `DocPrompt`, then `DocCardGroup` entry points by interface, objective, template and follow-along). The variants carry search as a `SearchTrigger` that widens into the ⌘K field.
+> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail): a `DocHero` (display-size title, deck, `Get started` then the dark `CopyPromptButton` with the Claude, ChatGPT, Gemini and Cursor marks, and a note on what the prompt does), then Start by interface opening on a `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API `DocCard`s in the Azion product marks, then objectives, ready-made templates in their brand colours (`ai-cor`), Stop attacks, compliance and Follow along, and the pager forward. The variants carry search as a `SearchTrigger` that widens into the ⌘K field.
 
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Command](../../components/command.md), [Diagram](../../components/diagram.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Command](../../components/command.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
 
-docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação
+docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação; docs home with copy prompt and AI agent logos; your AI agent fluent in Azion card; botão copiar prompt com logos de IA
 
 The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the "On this page" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.
 
@@ -12167,6 +12183,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 ## Do
 
 - For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
+- Build a docs home from the Landing variant: `DocHero` (display title with `--spacing-xxl` of air, deck, `Get started` then `CopyPromptButton`, a note on what the prompt does), then the first section opening on `DocAgentCard` above the Console / CLI / API `DocCardGroup`. Product cards use the Azion marks (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`) in the muted ink; framework templates use the brand-colour set (`ai-cor ai-react`, `ai-cor ai-vue`…).
 - Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
 - Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
@@ -12179,7 +12196,8 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
 - Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
 - Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
-- Don't use the marketing `Banner` on the landing; a full-width `DocCard` with an eyebrow does the job at docs scale.
+- Don't use the marketing `Banner` on the landing, and don't fake the agent card with a `DocCard` and an eyebrow or an `// AGENT SETUP` overline: the docs home's agent block is `DocAgentCard`.
+- Don't open the docs home with `DocPageHeader` or put the prompt text on it as a `DocPrompt`: the home is `DocHero` + `CopyPromptButton` (the prompt is copied, not shown).
 - Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
@@ -12202,7 +12220,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
 - Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
-- Landing: the documentation home; no outline rail, entry-point grids, pager forward to the first page.
+- Landing: the documentation home; no outline rail, `DocHero` with `CopyPromptButton`, `DocAgentCard`, entry-point grids, pager forward to the first page.
 
 ## Related
 
@@ -12214,7 +12232,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 - `Default` — primary (the code below)
 - `Article` — A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.
 - `Reference` — A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.
-- `Landing` — The documentation home: no outline rail; the welcome masthead, Get started, a DocPrompt, then DocCardGroup entry points by interface, objective, template and follow-along, and the pager forward.
+- `Landing` — The documentation home, as Azion Docs draws it: no outline rail; a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard (Your AI agent, fluent in Azion / Prefer the guided route? with Agent setup over a halftone) above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
 
 Each variant is the same screen in another state: `get_pattern("shells/documentation", { variant })`, or the file under `blocks/shells/documentation/variants/`.
 
@@ -12825,6 +12843,127 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 ```
 
 1 more example(s) in [components/copy-button.md](https://github.com/aziontech/webkit/blob/main/.specs/components/copy-button.md).
+
+---
+
+<!-- components/copy-prompt-button.md -->
+
+# Copy Prompt Button
+
+> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip is dark in both themes (it renders under `data-theme="dark"`) with a faint accent glow on its top and bottom edges, so it reads as the AI entry point next to a primary button. The marks are single-colour and decorative; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor").
+
+- Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
+- Category: actions · Surface: product · Structure: monolithic
+- API as JSON: [copy-prompt-button.json](https://github.com/aziontech/webkit/blob/main/.specs/copy-prompt-button.json)
+
+## When to use
+
+- The hero of a documentation home or a product landing, beside the primary action (`Get started`), when the page hands its reader a prompt for their agent.
+- Inside `DocAgentCard`, the "Your AI agent, fluent in Azion" card of a docs home (it renders this button by default).
+
+## Do
+
+- Put it second, after the primary `Button` (`Get started`), and explain what the prompt does in one line below the row (`DocHero`'s `note` slot).
+- Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
+- Pass the exact prompt in `value`; the button copies it as it stands.
+- Do not recolour the marks: they are single-colour by design and follow the chip's ink.
+
+## Don’t
+
+- To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).
+- To copy a value, a token or a code snippet → use `CopyButton`.
+- As a generic dark button → use `Button kind="secondary"`.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- DocPrompt` — the prompt rendered in full, with a copy control.
+- DocAgentCard` — the docs-home card that places this button in its left column.
+- DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
+- CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
+| `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
+| `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
+| `agents` | `CopyPromptAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; an empty list draws no marks. |
+| `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `copy` | `string` | Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+
+## States
+
+- Visual states: `idle`, `hover` (a hover layer lightens the chip), `focus-visible` (outline ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled`.
+- `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
+- Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed`.
+
+## Accessibility
+
+- Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`Copy prompt`, then `Copied` while the copied state shows).
+- The agent marks are `aria-hidden`; their names form the description through `aria-describedby` ("Works with Claude, ChatGPT, Gemini, Cursor").
+- A polite `role="status"` region next to the button announces `Copied` after a successful copy.
+- Keyboard map: `Tab` focuses; `Enter` and `Space` copy.
+- Visible focus: `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`.
+- Contrast: label and marks ≥ 4.5:1 on the dark chip in both page themes.
+- Touch target: 40 px tall; `pointer-coarse:min-h-11` raises it to 44 px.
+- `motion-reduce:transition-none` on every transition.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-`/`pe-`, `gap-`, `inset-x-`); the label leads at the inline start and the marks follow it.
+- Icons: brand marks are not mirrored.
+- Keyboard: no arrow keys.
+
+## Internationalization
+
+| Key                          | English source       | Override prop |
+| ---------------------------- | -------------------- | ------------- |
+| `copyPromptButton.label`     | `Copy prompt`        | `label`       |
+| `copyPromptButton.copied`    | `Copied`             | `copiedLabel` |
+| `copyPromptButton.worksWith` | `Works with {agents}` | `agents`      |
+
+- Agent names are brand names and are not translated.
+
+## Responsive
+
+- The chip keeps its intrinsic width; the label truncates with an ellipsis before the marks shrink when the row is narrower than the chip.
+- Touch: 40 px tall, 44 px on `pointer: coarse`.
+- Reflow: no horizontal scroll at 320 px; the chip wraps to its own line inside a wrapping action row.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+
+  const prompt =
+    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-(--spacing-sm)">
+    <Button
+      label="Get started"
+      kind="primary"
+      size="large"
+      href="#"
+    />
+    <CopyPromptButton :value="prompt" />
+  </div>
+</template>
+```
+
+2 more example(s) in [components/copy-prompt-button.md](https://github.com/aziontech/webkit/blob/main/.specs/components/copy-prompt-button.md).
 
 ---
 
@@ -22670,6 +22809,120 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 ---
 
+<!-- components/doc-agent-card.md -->
+
+# Doc Agent Card
+
+> The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home. Two columns in one framed card: on the left the title, one or two sentences on what the prompt gives the agent, and the inline `CopyPromptButton` with the agent marks; on the right, behind a vertical divider, the question "Prefer the guided route?" over an orange `Agent setup` button, set on an orange halftone panel that fades in from the bottom corner. Below the card's `@3xl` container size the columns stack and the divider turns horizontal. All four strings default to the catalog, so `<DocAgentCard :prompt="…" />` is the whole reference card.
+
+- Import: `import DocAgentCard from '@aziontech/webkit/doc-agent-card'`
+- Category: documentation · Surface: docs · Structure: monolithic
+- API as JSON: [doc-agent-card.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-agent-card.json)
+
+## When to use
+
+- The first block under "Start by interface" (or the hero) of a documentation home, to hand the reader's coding agent the platform in one prompt and offer the guided setup next to it.
+
+## Do
+
+- Pass the exact prompt in `prompt`; leave the strings to the catalog unless the product differs.
+- Point `action-href` at the agent setup guide.
+- Follow it with a three-column `DocCardGroup` (Console, CLI, API) in the same section.
+- Do not add an overline or an eyebrow above the title; the card has none.
+
+## Don’t
+
+- To show the prompt text itself → use `DocPrompt`.
+- As a generic two-column banner → use `DocCard`, `DocCta` or a marketing `Banner`.
+- On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- CopyPromptButton` — the left column's action.
+- DocHero` — the masthead above it on a docs home.
+- DocCardGroup` — the Console / CLI / API cards that follow it; both share `FrameBox`'s corner marks.
+- TextureMaterial` — the `dither` halftone behind the guided action.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `prompt` | `string` | `—` | true | The prompt `CopyPromptButton` copies. |
+| `title` | `string` | `''` | false | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`. |
+| `description` | `string` | `''` | false | One or two sentences on what the prompt gives the agent; empty uses the catalog's. |
+| `agents` | `CopyPromptAgent[]` | `undefined` | false | The agents whose marks the copy button shows; unset keeps the button's default list. |
+| `asideTitle` | `string` | `''` | false | Question over the guided action; empty uses the catalog's `Prefer the guided route?`. |
+| `actionLabel` | `string` | `''` | false | Label of the guided action; empty uses the catalog's `Agent setup`. |
+| `actionHref` | `string` | `''` | false | Destination of the guided action; empty renders it as a button that only emits `action`. |
+
+## Events
+
+| Event | Payload | Notes |
+| --- | --- | --- |
+| `copy` | `string` | Re-emitted from `CopyPromptButton` after a successful copy. |
+| `action` | `MouseEvent` | The guided action was activated. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `actions` |  | Replaces the copy button in the left column. |
+
+## States
+
+- Wide (container ≥ `@3xl`): two columns, 7 : 3, vertical divider. Narrow: one column, horizontal divider.
+- The copy button carries its own `idle` / `copied` / `disabled` states.
+- Not applicable: `loading`, `empty`, `error`, `open`/`closed`.
+
+## Accessibility
+
+- A `<section>` named by its title (`aria-label`), with the title as an `h3` (it sits under the section's `h2`).
+- The halftone is `aria-hidden` and never sits under text that needs contrast: the question and the button keep ≥ 4.5:1 on the surface.
+- The actions keep their own roles, names and focus rings; reading order is left column, then right.
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `end-0`); the divider and the halftone move to the mirrored side, and the dither ramp runs toward the bottom-left.
+
+## Internationalization
+
+| Key                       | English source                   | Override prop |
+| ------------------------- | -------------------------------- | ------------- |
+| `docAgentCard.title`      | `Your AI agent, fluent in Azion` | `title`       |
+| `docAgentCard.description`| `One prompt teaches any coding agent the platform: …` | `description` |
+| `docAgentCard.asideTitle` | `Prefer the guided route?`       | `asideTitle`  |
+| `docAgentCard.action`     | `Agent setup`                    | `actionLabel` |
+
+## Responsive
+
+- Container query on the card itself (`@container`): two columns from `@3xl`, stacked below it.
+- Reflow: no horizontal scroll at 320 px; the copy button truncates its label before overflowing.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import DocAgentCard from '@aziontech/webkit/doc-agent-card'
+
+  const prompt =
+    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
+</script>
+
+<template>
+  <DocAgentCard
+    :prompt="prompt"
+    action-href="#"
+  />
+</template>
+```
+
+1 more example(s) in [components/doc-agent-card.md](https://github.com/aziontech/webkit/blob/main/.specs/components/doc-agent-card.md).
+
+---
+
 <!-- components/doc-callout.md -->
 
 # Doc Callout
@@ -23315,6 +23568,122 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 ---
 
+<!-- components/doc-hero.md -->
+
+# Doc Hero
+
+> The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-xxl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
+
+- Import: `import DocHero from '@aziontech/webkit/doc-hero'`
+- Category: documentation · Surface: docs · Structure: monolithic
+- API as JSON: [doc-hero.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-hero.json)
+
+## When to use
+
+- The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`).
+
+## Do
+
+- Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.
+- Put `Button kind="primary" size="large"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.
+- Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`).
+
+## Don’t
+
+- On an article or reference page → use `DocPageHeader` (breadcrumb, last updated, page actions).
+- On the marketing site → use `Hero` or a page section.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- DocPageHeader` — the article masthead.
+- CopyPromptButton` — the second action of the row.
+- DocAgentCard` — the agent card that usually opens the first section under the hero.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `title` | `string` | `''` | false | The page title, set at display size as the page's `h1`. |
+| `description` | `string` | `''` | false | The deck under the title: what the docs cover, in one or two sentences. |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `title` |  | Replaces the title text, for a title that is more than a string. |
+| `default` |  | Replaces the description text. |
+| `actions` |  | The action row: the primary `Button` first, then `CopyPromptButton`. |
+| `note` |  | One muted line under the actions that says what the prompt does. |
+
+## States
+
+- Static; renders only the parts it receives (no deck, no action row, no note when empty).
+- Not applicable: `hover`, `focus`, `disabled`, `loading`, `empty`, `error`, `open`/`closed`.
+
+## Accessibility
+
+- A `<header>` holding the page's single `h1`; the deck and note are paragraphs.
+- No interactive parts of its own; the actions bring their own roles and focus.
+- Contrast: muted deck and note ≥ 4.5:1 on the canvas in both themes.
+
+## Right-to-left
+
+- Layout: block flow and `gap-` only; the action row starts at the inline start.
+
+## Internationalization
+
+| Key    | English source | Override prop |
+| ------ | -------------- | ------------- |
+| _none_ | —              | —             |
+
+- All text is content passed in.
+
+## Responsive
+
+- The title steps 30 → 36 → 48 px with `.text-heading-2xl`; the top space is `--spacing-xl` on a phone and `--spacing-xxl` from `sm`.
+- The action row wraps; at 390 px `CopyPromptButton` drops under `Get started`.
+- Reflow: no horizontal scroll at 320 px.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import DocHero from '@aziontech/webkit/doc-hero'
+
+  const prompt =
+    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
+</script>
+
+<template>
+  <DocHero
+    title="Welcome to Azion Docs"
+    description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
+  >
+    <template #actions>
+      <Button
+        label="Get started"
+        kind="primary"
+        size="large"
+        href="#"
+      />
+      <CopyPromptButton :value="prompt" />
+    </template>
+    <template #note>
+      The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.
+    </template>
+  </DocHero>
+</template>
+```
+
+1 more example(s) in [components/doc-hero.md](https://github.com/aziontech/webkit/blob/main/.specs/components/doc-hero.md).
+
+---
+
 <!-- components/doc-item.md -->
 
 # Doc Item
@@ -23559,6 +23928,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 - For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.
 - For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome.
+- The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -23770,6 +24140,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - The payload is source code, a shell command, or configuration → use a code viewer, which owns languages, gutters, and highlighting; a prompt has none of them.
 - The payload is a short inline token (a key, a flag, a variable name) → use `kbd` or inline code in prose.
 - The block needs to run the prompt itself, or route it to a named vendor → out of scope; this component only puts the text on the clipboard.
+- The "Copy prompt" action of a docs home hero or agent card, where the prompt is copied and not shown → use `CopyPromptButton` (inside `DocHero` or `DocAgentCard`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -30050,6 +30421,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
 
 ## Don’t
 

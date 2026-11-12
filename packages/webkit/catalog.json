@@ -3588,6 +3588,61 @@
    "examplesFile": "catalog/examples/search-trigger.json",
    "docsFile": "catalog/components/search-trigger.json"
   },
+  "copy-prompt-button": {
+   "import": "@aziontech/webkit/copy-prompt-button",
+   "target": "./src/components/actions/copy-prompt-button/copy-prompt-button.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/copy-prompt-button",
+   "category": "actions",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The prompt copied to the clipboard on activation."
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`."
+    },
+    {
+     "name": "copiedLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible text announced after a copy; empty uses the catalog's `Copied`."
+    },
+    {
+     "name": "agents",
+     "type": "CopyPromptAgent[]",
+     "default": "Claude, ChatGPT, Gemini, Cursor",
+     "required": "false",
+     "doc": "The agents whose marks follow the label, in order; an empty list draws no marks."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the button; `copy` is not emitted."
+    }
+   ],
+   "events": [
+    {
+     "name": "copy",
+     "payload": "string",
+     "notes": "Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/copy-prompt-button.json",
+   "docsFile": "catalog/components/copy-prompt-button.json"
+  },
   "toggle-group": {
    "import": "@aziontech/webkit/toggle-group",
    "target": "./src/components/actions/toggle-group/toggle-group.vue",
@@ -9778,6 +9833,136 @@
    "surface": "docs",
    "examplesFile": "catalog/examples/doc-prompt.json",
    "docsFile": "catalog/components/doc-prompt.json"
+  },
+  "doc-hero": {
+   "import": "@aziontech/webkit/doc-hero",
+   "target": "./src/components/documentation/doc-hero/doc-hero.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-hero",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The page title, set at display size as the page's `h1`."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "The deck under the title: what the docs cover, in one or two sentences."
+    }
+   ],
+   "slots": [
+    {
+     "name": "title",
+     "scope": "",
+     "notes": "Replaces the title text, for a title that is more than a string."
+    },
+    {
+     "name": "default",
+     "scope": "",
+     "notes": "Replaces the description text."
+    },
+    {
+     "name": "actions",
+     "scope": "",
+     "notes": "The action row: the primary `Button` first, then `CopyPromptButton`."
+    },
+    {
+     "name": "note",
+     "scope": "",
+     "notes": "One muted line under the actions that says what the prompt does."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-hero.json",
+   "docsFile": "catalog/components/doc-hero.json"
+  },
+  "doc-agent-card": {
+   "import": "@aziontech/webkit/doc-agent-card",
+   "target": "./src/components/documentation/doc-agent-card/doc-agent-card.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/doc-agent-card",
+   "category": "documentation",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "prompt",
+     "type": "string",
+     "default": "—",
+     "required": "true",
+     "doc": "The prompt `CopyPromptButton` copies."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`."
+    },
+    {
+     "name": "description",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "One or two sentences on what the prompt gives the agent; empty uses the catalog's."
+    },
+    {
+     "name": "agents",
+     "type": "CopyPromptAgent[]",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The agents whose marks the copy button shows; unset keeps the button's default list."
+    },
+    {
+     "name": "asideTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Question over the guided action; empty uses the catalog's `Prefer the guided route?`."
+    },
+    {
+     "name": "actionLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the guided action; empty uses the catalog's `Agent setup`."
+    },
+    {
+     "name": "actionHref",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Destination of the guided action; empty renders it as a button that only emits `action`."
+    }
+   ],
+   "events": [
+    {
+     "name": "copy",
+     "payload": "string",
+     "notes": "Re-emitted from `CopyPromptButton` after a successful copy."
+    },
+    {
+     "name": "action",
+     "payload": "MouseEvent",
+     "notes": "The guided action was activated."
+    }
+   ],
+   "slots": [
+    {
+     "name": "actions",
+     "scope": "",
+     "notes": "Replaces the copy button in the left column."
+    }
+   ],
+   "surface": "docs",
+   "examplesFile": "catalog/examples/doc-agent-card.json",
+   "docsFile": "catalog/components/doc-agent-card.json"
   },
   "doc-prose": {
    "import": "@aziontech/webkit/doc-prose",
@@ -32285,7 +32470,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail: welcome `DocPageHeader`, Get started, a `DocPrompt`, then `DocCardGroup` entry points by interface, objective, template and follow-along). The variants carry search as a `SearchTrigger` that widens into the ⌘K field.",
+   "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail): a `DocHero` (display-size title, deck, `Get started` then the dark `CopyPromptButton` with the Claude, ChatGPT, Gemini and Cursor marks, and a note on what the prompt does), then Start by interface opening on a `DocAgentCard` (\"Your AI agent, fluent in Azion\" with the inline Copy prompt; \"Prefer the guided route?\" with the orange Agent setup over a halftone) above the Console, CLI and API `DocCard`s in the Azion product marks, then objectives, ready-made templates in their brand colours (`ai-cor`), Stop attacks, compliance and Follow along, and the pager forward. The variants carry search as a `SearchTrigger` that widens into the ⌘K field.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -32316,7 +32501,10 @@
     "guia de primeiros passos",
     "página de referência do produto",
     "página inicial da documentação",
-    "home da documentação"
+    "home da documentação",
+    "docs home with copy prompt and AI agent logos",
+    "your AI agent fluent in Azion card",
+    "botão copiar prompt com logos de IA"
    ],
    "skills": [
     "webkit-layout",
@@ -32327,13 +32515,16 @@
     "Button",
     "CodeBlock",
     "Command",
+    "CopyPromptButton",
     "Diagram",
+    "DocAgentCard",
     "DocCallout",
     "DocCard",
     "DocCardGroup",
     "DocCta",
     "DocFrame",
     "DocHeading",
+    "DocHero",
     "DocItem",
     "DocOnThisPage",
     "DocPageHeader",
@@ -32366,13 +32557,16 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/command",
+    "@aziontech/webkit/copy-prompt-button",
     "@aziontech/webkit/diagram",
+    "@aziontech/webkit/doc-agent-card",
     "@aziontech/webkit/doc-callout",
     "@aziontech/webkit/doc-card",
     "@aziontech/webkit/doc-card-group",
     "@aziontech/webkit/doc-cta",
     "@aziontech/webkit/doc-frame",
     "@aziontech/webkit/doc-heading",
+    "@aziontech/webkit/doc-hero",
     "@aziontech/webkit/doc-item",
     "@aziontech/webkit/doc-on-this-page",
     "@aziontech/webkit/doc-page-header",
@@ -32413,7 +32607,7 @@
     },
     {
      "name": "Landing",
-     "summary": "The documentation home: no outline rail; the welcome masthead, Get started, a DocPrompt, then DocCardGroup entry points by interface, objective, template and follow-along, and the pager forward."
+     "summary": "The documentation home, as Azion Docs draws it: no outline rail; a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard (Your AI agent, fluent in Azion / Prefer the guided route? with Agent setup over a halftone) above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward."
     }
    ],
    "file": "catalog/patterns/shells/documentation.json"

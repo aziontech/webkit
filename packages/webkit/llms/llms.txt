@@ -113,6 +113,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ButtonGroup](components/button-group.md): A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group.
 - [ButtonHighlight](components/button-highlight.md): Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button).
 - [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
+- [CopyPromptButton](components/copy-prompt-button.md): The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Curso…
 - [IconButton](components/icon-button.md): Interactive control for user actions.
 - [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
 - [SearchTrigger](components/search-trigger.md): The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`).
@@ -200,6 +201,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [DocAccordionGroup](components/doc-accordion-group.md): The FAQ and "expand for detail" block of a documentation page.
 - [DocAccordionItem](components/doc-accordion-item.md): One collapsible entry inside a `DocAccordionGroup`.
+- [DocAgentCard](components/doc-agent-card.md): The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home.
 - [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the…
 - [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
 - [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
@@ -207,6 +209,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocCta](components/doc-cta.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
 - [DocFrame](components/doc-frame.md): The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset.
 - [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
+- [DocHero](components/doc-hero.md): The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt…
 - [DocItem](components/doc-item.md): One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is.
 - [DocOnThisPage](components/doc-on-this-page.md): The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community).
 - [DocPageHeader](components/doc-page-header.md): The masthead of a documentation page: where the reader is (the breadcrumb), what the page is (the title), what they can do with it (a Copy Page control that hands the page to an AI tool — or, through the `actions` slo…
