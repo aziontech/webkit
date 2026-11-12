@@ -70,11 +70,13 @@ export function guidelinesSummary(md) {
 
 function namedWebkitImports(sfc) {
   const names = []
-  const re = /import\s+[^'"]*?\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
+  const re = /import\s+([^'"]*?)\{([^}]*)\}\s*from\s+['"]@aziontech\/webkit\/[^'"]+['"]/g
   for (const m of String(sfc).matchAll(re)) {
-    for (const part of m[1].split(',')) {
-      const local = part
-        .trim()
+    if (/^type\s/.test(m[1])) continue
+    for (const part of m[2].split(',')) {
+      const spec = part.trim()
+      if (/^type\s/.test(spec)) continue
+      const local = spec
         .split(/\s+as\s+/)
         .pop()
         .trim()

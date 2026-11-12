@@ -315,6 +315,19 @@ test('primaryComponents keeps the component bindings the SFC imports from webkit
   assert.deepEqual(primaryComponents(SFC), ['PageHeader', 'Button'])
 })
 
+test('primaryComponents leaves out the types a TypeScript SFC imports from webkit', () => {
+  const typed = SFC.replace(
+    '<script setup>',
+    [
+      '<script setup lang="ts">',
+      "  import type { TableColumn } from '@aziontech/webkit/table-root'",
+      "  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
+      "  import { toast, Toaster } from '@aziontech/webkit/toast'"
+    ].join('\n')
+  )
+  assert.deepEqual(primaryComponents(typed), ['Tag', 'PageHeader', 'Button', 'Toaster'])
+})
+
 test('checkGuidelines accepts a complete guide that matches the SFC and the variants', () => {
   assert.deepEqual(checkGuidelines('platform/x', pattern(guide())), [])
 })
