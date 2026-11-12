@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: 702bd17ca7e94bd1bb436b292c9c8e7bc8d962e551d8e89f914d70221c0eac4b
+checksum: 3d4a0d039bb9283c5c35c75ef4fc4122550e7310fcd02da28fed629df1b35719
 ---
 
 # ArticleHighlight — Component Spec
@@ -31,7 +31,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ## Best practices
 
-- Feature three or four articles; four fill the wall four across.
+- Feature three to five articles; the wall sets one column per article from `lg`, so five sit in one row of five as on azion.com's blog.
 - Give a `highlightImage` cropped for the panel when the cover does not read at that size.
 - Bind `v-model` (the selected index) to open on an article other than the first; the band never advances on its own, so it holds whatever the reader or the page picked.
 
@@ -88,7 +88,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 ## States
 
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
-- `data-columns` on the wall: four columns with four or more articles, three otherwise
+- `data-columns` on the wall: one column per article from `lg`, three at least and five at most
 - Empty: when `items` is empty the band renders nothing
 - The band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.

@@ -16,7 +16,7 @@
   "site": [
     {
       "name": "Featured",
-      "summary": "The Blog page's band: its four newest posts, the first featured over the wall of titles. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "summary": "The Blog page's band: its five newest posts, the first featured over a wall of five titles in one row, as on azion.com. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "site-featured.vue",
       "json": "site-featured.json"
     }

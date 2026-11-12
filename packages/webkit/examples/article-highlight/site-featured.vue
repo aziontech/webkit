@@ -48,6 +48,17 @@
       description:
         'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
       readTime: '7 min read'
+    },
+    {
+      key: 'how-to-structure-an-ai-saas-with-security',
+      href: '/blog/how-to-structure-an-ai-saas-with-security',
+      image: placeholderImage,
+      highlightImage: placeholderImage,
+      meta: 'Security • SEP 18, 2026',
+      title: 'How to Structure an AI SaaS with Security on Azion',
+      description:
+        'Combine your application, database, AI inference and security on Azion, with Firewall and WAF policies versioned alongside the code.',
+      readTime: '10 min read'
     }
   ]
 </script>

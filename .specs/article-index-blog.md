@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: a848a77a214e722e848eefa001aa2f1109ba8b4274d4ceda30d45d6f64b81fbb
+last_updated: 2026-11-12
+checksum: 2e079e59c2bad006b69f15c19633ff7b104ae452735f403cd29018fd0b8882b7
 ---
 
 # ArticleIndexBlog — Component Spec
@@ -32,7 +32,7 @@ Every article of the blog as one ruled list, with the controls to narrow it on o
 ## Best practices
 
 - List the articles newest first; file every article under at least one of `categories`.
-- Keep the category list short enough to scroll on one row.
+- Keep the category list short enough to scroll on one row: the picker keeps every label at its full width and the row scrolls sideways on a phone instead of squeezing the labels.
 
 ## Usage
 

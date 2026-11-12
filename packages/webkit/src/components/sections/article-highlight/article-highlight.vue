@@ -4,6 +4,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import Button from '../../actions/button/button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -71,6 +72,12 @@
   const current = computed(() => props.items[selected.value] ?? props.items[0])
 
   const panelId = computed(() => `${baseId}-panel`)
+
+  const wallColumns = computed<CardGridColumns>(() => {
+    const count = props.items.length
+    if (count >= 5) return 5
+    return count === 4 ? 4 : 3
+  })
 
   const tabId = (index: number): string => `${baseId}-tab-${index}`
 
@@ -199,7 +206,7 @@
             <CardGrid
               kind="frame"
               flush
-              :columns="items.length >= 4 ? 4 : 3"
+              :columns="wallColumns"
               :mobile-columns="1"
               role="tablist"
               :aria-label="ariaLabel || undefined"
