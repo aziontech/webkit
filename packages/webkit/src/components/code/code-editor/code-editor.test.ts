@@ -16,6 +16,7 @@ import CodeEditor from './code-editor.vue'
 import {
   type CodeEditorMonaco,
   type CodeEditorMonacoModel,
+  fontFromTokens,
   highlightCalls,
   padLineNumber
 } from './monaco'
@@ -239,6 +240,30 @@ describe('CodeEditor', () => {
     expect(format(3)).toBe('03')
     await view.rerender({ padLineNumbers: false })
     expect(fake.calls.options.at(-1)?.['lineNumbers']).toBe('on')
+  })
+
+  it('creates Monaco at the editor line height token, 16 px when the theme is absent', async () => {
+    const fake = fakeMonaco()
+    const view = render(CodeEditor, {
+      props: { modelValue: 'a', loader: () => Promise.resolve(fake.api), ariaLabel: 'Script' }
+    })
+    await waitFor(() =>
+      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+    )
+    expect(fake.calls.options[0]?.['lineHeight']).toBe(16)
+  })
+
+  it('reads the editor line height from --code-editor-line-height, in px or rem', () => {
+    const host = document.createElement('div')
+    document.body.appendChild(host)
+    host.style.setProperty('--code-editor-line-height', '18px')
+    expect(fontFromTokens(host).lineHeight).toBe(18)
+    host.style.setProperty('--code-editor-line-height', '1.25rem')
+    const root = parseFloat(getComputedStyle(document.documentElement).fontSize)
+    expect(fontFromTokens(host).lineHeight).toBe(Math.round(1.25 * root))
+    host.style.setProperty('--code-editor-line-height', 'normal')
+    expect(fontFromTokens(host).lineHeight).toBe(16)
+    host.remove()
   })
 
   it('colours function calls: JavaScript and TypeScript grammars gain call rules once', async () => {

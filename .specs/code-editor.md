@@ -3,9 +3,9 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: a303d10ff5db03ebde40ff1809bcb91a6686a19b49c1bd923a939700873eb203
+checksum: 94aeb2f8798c54c87c55acf0cdecedf6b343da4f4d53ac59f28d12ca4ad2c0ff
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -163,6 +163,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 | invalid border           | `var(--danger-border)`                                                                                                                       |
 | gutter                   | `var(--bg-canvas)`, `var(--code-sintax-line-number)`                                                                                         |
 | code typography          | `.text-body-code-sm`                                                                                                                         |
+| Monaco line height       | `var(--code-editor-line-height)` (16 px, from `--line-height-4`); font family and size from `.text-body-code-sm`                             |
 | code text                | `var(--code-sintax-identifier)`                                                                                                              |
 | Monaco syntax            | `--code-sintax-keyword`, `-string`, `-type`, `-function` (function and method calls), `-punctuation`, `-identifier`, `--code-sintax-comment` |
 | Monaco chrome            | `--bg-surface`, `--bg-surface-raised`, `--bg-hover`, `--bg-selected`, `--border-default`, `--text-default`, `--ring-color`                   |
@@ -172,9 +173,9 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-| -------------- | ------------------- | --------- |
-| —              | —                   | —         |
+| Figma variable | Temporary primitive                                               | Follow-up                                                                                                        |
+| -------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| —              | `--code-editor-line-height` (theme token, `var(--line-height-4)`) | Not yet listed in DESIGN.md; add it to the code tokens row when DESIGN.md is next edited (needs human approval). |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -237,6 +238,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - **Worker wiring (monaco-editor 0.56+).** Since 0.56 the package `exports` map sends `monaco-editor/*` to `esm/vs/*.js`, so the long-documented `monaco-editor/esm/vs/editor/editor.worker?worker` resolves to `esm/vs/esm/vs/...` and the build fails ("failed to resolve import"). The working paths are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (the `language/...` paths still exist and re-export these). Verified 2026-11-12 in a fresh Vite 8.3 app with `monaco-editor` 0.57.0: `vite build` + `vite preview` and four cold `vite` dev starts, JSON and TypeScript workers producing their diagnostics. Before 0.56 there is no exports map: use `monaco-editor/esm/vs/editor/editor.worker?worker` and `monaco-editor/esm/vs/language/json/json.worker?worker`.
 - **Function calls are coloured by WebKit.** Monaco's Monarch JavaScript and TypeScript grammars tag a called name as a plain `identifier`, so a theme rule for `function` never matched and calls stayed default ink. When Monaco loads, CodeEditor takes each built-in grammar from `languages.getLanguages()` (its `loader`), prepends four rules to `tokenizer.common` (a member call after `.`, a bare call unless the word is a keyword, `true`/`false`/`null`/`undefined` as constants, CONSTANT_CASE as identifiers, as the design sample does) and registers it with `setMonarchTokensProvider`, once per Monaco instance. A module without `languages` (or a grammar without `tokenizer.common`) is left alone. It replaces the stock tokenizer for those two languages, so an app that registers its own Monarch grammar for them should do it after the editor's `ready`.
 - **Padded line numbers are opt-in.** The design sample pads (`String(line).padStart(2, '0')`) only its full-page function and arguments editors and keeps plain numbers on the small JSON field of a drawer, so `padLineNumbers` defaults to `false`; both the plain gutter and Monaco's `lineNumbers` formatter follow it. Lines past 99 show three digits.
+- **Code line height (M2.10 row 77).** Monaco draws code at the console's 16 px line, not at the `.text-body-code-sm` line height (12 px × 1.625 ≈ 20 px). The value is the theme token `--code-editor-line-height` (`var(--line-height-4)`), read from the host element when the editor is created; `px` and `rem` are converted to pixels, and an absent or unparseable value falls back to 16. The font size stays `--text-body-code-sm-font-size` (12 px), which the console reference also uses (7 px per character, 16 px lines). The plain editor keeps `.text-body-code-sm`.
 - **Theme is global in Monaco.** Every editor shares the `webkit` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
 - **Diff names.** Both sides of the diff are named after the editor (`<name>, Original` and `<name>, Modified`), since Monaco leaves them empty.
 - **Plain editor is the default.** Not a skeleton: it is fully usable, so the SSR markup is an editor and slow networks never block typing.

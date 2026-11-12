@@ -9,6 +9,7 @@ import { animateExtras, keyframes } from '../tokens/primitives/animations/keyfra
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
 import { compileThemeCss, compileThemeVars } from './compile-theme.js';
+import { codeData } from '../tokens/semantic/code.data.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.js';
 import { spacingsData } from '../tokens/semantic/spacings.data.js';
@@ -69,6 +70,7 @@ const buildFlatModel = () => ({
   spacings: flattenSingleValue(spacingsData, (k) => `--${k}`),
   zIndices: flattenSingleValue(zIndicesData, (k) => `--${k}`),
   layouts: flattenSingleValue(layoutsData, (k) => `--${k}`),
+  code: flattenSingleValue(codeData, (k) => `--${k}`),
   texts: flattenBundle(textsData),
 });
 
@@ -281,6 +283,7 @@ const emitCssV4 = () => {
     ...(m.spacings._ || {}),
     ...(m.zIndices._ || {}),
     ...(m.layouts._ || {}),
+    ...(m.code._ || {}),
     ...(m.texts._ || {}),
   };
 

@@ -110,6 +110,7 @@ src/
 │   │   ├── spacings.data.js
 │   │   ├── texts.js
 │   │   ├── texts.data.js        # font-size + line-height + letter-spacing bundles
+│   │   ├── code.data.js         # code editor metrics (derived, `var()` refs only)
 │   │   └── animations.js
 │   ├── theme.js                 # Tailwind theme.extend (colors + semantic mappings)
 │   └── index.js                 # public re-exports
@@ -201,7 +202,11 @@ spacing scale is already responsive (`--spacing-lg` is `1rem`, then `1.5rem` fro
 is substituted at **use** time on the element — so a layout token follows the breakpoint override for
 free. Giving it its own map would duplicate the spacing scale into layout and let the two drift.
 
-The group also ships `layoutsUtilities`, the container-system classes (`.layout-column`,
+`semantic/code` follows the same rule for code editors: `--code-editor-line-height` is
+`var(--line-height-4)` (16 px, the console's editor line). `CodeEditor` reads it when it creates
+Monaco, which takes the line height in pixels rather than from CSS.
+
+The layouts group also ships `layoutsUtilities`, the container-system classes (`.layout-column`,
 `.layout-boundary`, …) emitted as Tailwind v4 `@utility` blocks so they support variants
 (`md:layout-column`). Each entry is a rule body: a string value is a declaration, an object value is
 a nested rule keyed by a literal selector (`'&:first-child'`).

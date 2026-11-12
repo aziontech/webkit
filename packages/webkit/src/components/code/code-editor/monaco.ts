@@ -285,17 +285,31 @@ export function applyThemeOnce(
   return true
 }
 
+const CODE_EDITOR_LINE_HEIGHT = 16
+
+const toPixels = (raw: string, root: number, fallback: number): number => {
+  const amount = parseFloat(raw)
+  if (Number.isNaN(amount) || amount <= 0) return fallback
+  return raw.endsWith('rem') ? amount * root : amount
+}
+
 export function fontFromTokens(element: Element) {
   const style = getComputedStyle(element)
   const root = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
-  const raw = style.getPropertyValue('--text-body-code-sm-font-size').trim()
-  const amount = parseFloat(raw)
-  const fontSize = Number.isNaN(amount) ? 12 : raw.endsWith('rem') ? amount * root : amount
-  const factor = parseFloat(style.getPropertyValue('--text-body-code-sm-line-height')) || 1.625
+  const fontSize = toPixels(
+    style.getPropertyValue('--text-body-code-sm-font-size').trim(),
+    root,
+    12
+  )
+  const lineHeight = toPixels(
+    style.getPropertyValue('--code-editor-line-height').trim(),
+    root,
+    CODE_EDITOR_LINE_HEIGHT
+  )
   const family = style.getPropertyValue('--text-body-code-sm-font-family').trim()
   return {
     fontFamily: family ? `${family}, monospace` : 'monospace',
     fontSize,
-    lineHeight: Math.round(fontSize * factor)
+    lineHeight: Math.round(lineHeight)
   }
 }
