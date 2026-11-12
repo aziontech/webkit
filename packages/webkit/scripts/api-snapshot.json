@@ -15,6 +15,7 @@
     "article-highlight",
     "article-index-blog",
     "article-index-resource-hub",
+    "artifact-canvas",
     "artifact-preview",
     "assets/agi-extended-color.svg",
     "assets/agibank-extended-color.svg",
@@ -266,6 +267,8 @@
     "assets/petz-extended-color.png",
     "assets/petz-extended-mono.svg",
     "assets/petz-extended-reversed.svg",
+    "assets/placeholder-clip.webm",
+    "assets/placeholder-image.svg",
     "assets/planetscale-symbol-mono.svg",
     "assets/portobello-extended-mono.svg",
     "assets/portocred-extended-color.svg",
@@ -381,6 +384,7 @@
     "badge",
     "band-stack",
     "banner",
+    "banner-art",
     "bar-list",
     "bento-grid",
     "bento-grid-cell",
@@ -401,7 +405,9 @@
     "calendar-preset",
     "calendar-root",
     "call-to-action",
+    "capability-grid",
     "card",
+    "card-carousel",
     "card-grid",
     "card-grid-cell",
     "card-grid-root",
@@ -449,6 +455,7 @@
     "closing-call-to-action",
     "closing-call-to-action-agents",
     "closing-call-to-action-newsletter",
+    "closing-call-to-action-templates",
     "code-block",
     "code-editor",
     "code-split",
@@ -471,11 +478,18 @@
     "comparison-table",
     "compliance-badges",
     "confirm-dialog",
+    "console-layout",
+    "console-layout-breadcrumbs",
+    "console-layout-root",
+    "console-panel",
     "contact-hub",
     "content-columns",
     "conversation",
+    "conversation-history",
     "copy-button",
+    "copy-prompt-button",
     "currency",
+    "customer-spotlight",
     "date-range-picker",
     "diagram",
     "dialog",
@@ -486,11 +500,19 @@
     "dialog-portal",
     "dialog-title",
     "dialog-trigger",
+    "doc-accordion-group",
+    "doc-accordion-item",
+    "doc-agent-card",
     "doc-callout",
     "doc-card",
     "doc-card-group",
+    "doc-code-group",
+    "doc-cta",
     "doc-frame",
+    "doc-heading",
+    "doc-hero",
     "doc-item",
+    "doc-layout",
     "doc-on-this-page",
     "doc-page-header",
     "doc-pagination",
@@ -498,6 +520,8 @@
     "doc-prose",
     "doc-step",
     "doc-steps",
+    "doc-tab",
+    "doc-tabs",
     "doc-tooltip",
     "doc-update",
     "docs/STYLEGUIDE.md",
@@ -521,10 +545,12 @@
     "eslint-plugin",
     "faq",
     "faq-section",
+    "feature-list",
     "feature-scroll",
     "feature-tabs",
     "feature-tiles",
     "feature-widgets",
+    "feedback-reason-dialog",
     "field",
     "field-content",
     "field-description",
@@ -593,6 +619,7 @@
     "key-value-pairs-item",
     "key-value-pairs-root",
     "label",
+    "line-figure",
     "link",
     "listing-browser",
     "listing-table",
@@ -629,6 +656,7 @@
     "network-map",
     "network-section",
     "number-input",
+    "otp-input",
     "outcome-mark",
     "overflow-count",
     "overline",
@@ -646,6 +674,7 @@
     "panel-header",
     "password-input",
     "password-requirements",
+    "payment-brand",
     "phone-input",
     "photo-marquee",
     "pick-list",
@@ -664,10 +693,12 @@
     "popover-title",
     "popover-trigger",
     "pricing-plans",
+    "process-scroll",
     "product-widget",
     "progress",
     "prompt-input",
     "property-filter",
+    "qr-code",
     "quote",
     "quote-carousel",
     "quote-tabs",
@@ -680,9 +711,12 @@
     "resizable-pane",
     "resizable-root",
     "resource-grid",
+    "response-branches",
     "save-bar",
     "schema-form",
     "scroll-area",
+    "search-trigger",
+    "section-command",
     "section-container",
     "section-gap",
     "section-header",
@@ -706,6 +740,7 @@
     "sidebar-group",
     "sidebar-header",
     "site-footer",
+    "site-layout",
     "site-nav",
     "skeleton",
     "slider",
@@ -714,11 +749,13 @@
     "spinner",
     "split-button",
     "stat-tile",
+    "stat-tile-group",
     "stats-band",
     "status-indicator",
     "stepper",
     "stepper-root",
     "stepper-step",
+    "sticky-carousel",
     "sticky-scroll-code",
     "sticky-stack",
     "story-library",
@@ -790,11 +827,13 @@
     "use-case-links",
     "use-cases",
     "use-collection",
+    "use-console-layout",
     "use-controllable",
     "use-direction",
     "use-focus-trap",
     "use-heading-nav",
     "use-locale",
+    "use-pinned-row",
     "use-placement",
     "use-unsaved-changes",
     "utils/cn",
@@ -811,10 +850,16 @@
     "headers/docs-header",
     "headers/resource-header",
     "headers/site-header",
+    "platform/account/activity-history",
     "platform/account/change-plan-drawer",
+    "platform/account/manage-resources",
+    "platform/account/mfa-management",
     "platform/account/onboarding-form",
     "platform/account/payment-method-card",
     "platform/account/profile",
+    "platform/account/team-permissions",
+    "platform/account/tokens",
+    "platform/account/users",
     "platform/ai/ai-action-approval",
     "platform/ai/ai-chat",
     "platform/ai/ai-chat-drawer",
@@ -917,6 +962,20 @@
       ],
       "label": null
     },
+    "artifact-canvas": {
+      "copyValue": null,
+      "downloadHref": null,
+      "kind": [
+        "code",
+        "document",
+        "table"
+      ],
+      "meta": null,
+      "streaming": null,
+      "title": null,
+      "version": null,
+      "versions": null
+    },
     "artifact-preview": {
       "copyValue": null,
       "description": null,
@@ -967,6 +1026,12 @@
       "index": null,
       "title": null
     },
+    "feedback-reason-dialog": {
+      "loading": null,
+      "open": null,
+      "reasons": null,
+      "title": null
+    },
     "conversation": {
       "alignment": [
         "split",
@@ -974,13 +1039,24 @@
       ],
       "ariaLabel": null
     },
+    "conversation-history": {
+      "items": null,
+      "label": null,
+      "loading": null,
+      "modelValue": null,
+      "now": null,
+      "removable": null
+    },
     "prompt-input": {
       "ariaLabel": null,
       "disabled": null,
       "maxLength": null,
       "maxRows": null,
+      "menus": null,
       "minRows": null,
+      "modelValue": null,
       "placeholder": null,
+      "references": null,
       "state": [
         "ready",
         "streaming",
@@ -993,6 +1069,12 @@
       "open": null,
       "skippable": null,
       "streaming": null
+    },
+    "response-branches": {
+      "count": null,
+      "disabled": null,
+      "label": null,
+      "modelValue": null
     },
     "sources": {
       "anchor": null,
@@ -1040,6 +1122,7 @@
       ],
       "kind": [
         "danger",
+        "link",
         "outlined",
         "primary",
         "secondary",
@@ -1111,10 +1194,24 @@
       ],
       "value": null
     },
+    "search-trigger": {
+      "collapsible": null,
+      "disabled": null,
+      "label": null,
+      "shortcut": null
+    },
+    "copy-prompt-button": {
+      "agents": null,
+      "copiedLabel": null,
+      "disabled": null,
+      "label": null,
+      "value": null
+    },
     "toggle-group": {
       "ariaLabel": null,
       "defaultValue": null,
       "fluid": null,
+      "modelValue": null,
       "options": null,
       "size": [
         "large",
@@ -1166,6 +1263,7 @@
       "updateLabelOnSelect": null
     },
     "chart": {
+      "activeIndex": null,
       "ariaLabel": null,
       "cap": null,
       "emptyDescription": null,
@@ -1174,6 +1272,7 @@
       "formatLabel": null,
       "formatValue": null,
       "height": null,
+      "hiddenSeries": null,
       "labels": null,
       "labelScale": [
         "category",
@@ -1187,12 +1286,14 @@
         "vertical"
       ],
       "otherLabel": null,
+      "range": null,
       "refetching": null,
       "series": null,
       "tableView": null,
       "timeZone": null
     },
     "chart-root": {
+      "activeIndex": null,
       "ariaLabel": null,
       "cap": null,
       "emptyDescription": null,
@@ -1201,6 +1302,7 @@
       "formatLabel": null,
       "formatValue": null,
       "height": null,
+      "hiddenSeries": null,
       "labels": null,
       "labelScale": [
         "category",
@@ -1214,6 +1316,7 @@
         "vertical"
       ],
       "otherLabel": null,
+      "range": null,
       "refetching": null,
       "series": null,
       "tableView": null,
@@ -1222,28 +1325,34 @@
     "chart-card": {
       "ariaLabel": null,
       "draggable": null,
+      "height": null,
       "maxHeight": null,
       "maxSpan": null,
       "minHeight": null,
       "minSpan": null,
-      "resizable": null
+      "resizable": null,
+      "span": null
     },
     "chart-card-root": {
       "ariaLabel": null,
       "draggable": null,
+      "height": null,
       "maxHeight": null,
       "maxSpan": null,
       "minHeight": null,
       "minSpan": null,
-      "resizable": null
+      "resizable": null,
+      "span": null
     },
     "donut-chart": {
+      "activeIndex": null,
       "ariaLabel": null,
       "cap": null,
       "emptyDescription": null,
       "emptyTitle": null,
       "error": null,
       "formatValue": null,
+      "hiddenSeries": null,
       "kind": [
         "donut",
         "pie"
@@ -1280,6 +1389,7 @@
       "value": null
     },
     "map-chart": {
+      "activeId": null,
       "ariaLabel": null,
       "emptyDescription": null,
       "emptyTitle": null,
@@ -1306,11 +1416,15 @@
       "deltaLabel": null,
       "formatValue": null,
       "inverse": null,
+      "kind": null,
       "label": null,
       "loading": null,
       "trend": null,
       "unit": null,
       "value": null
+    },
+    "stat-tile-group": {
+      "ariaLabel": null
     },
     "bar-list": {
       "ariaLabel": null,
@@ -1355,6 +1469,7 @@
         "accent",
         "contrast",
         "danger",
+        "highlight",
         "info",
         "primary",
         "secondary",
@@ -1420,11 +1535,13 @@
       "address": null,
       "ariaLabel": null,
       "copyAriaLabel": null,
+      "height": null,
       "heightHandleAriaLabel": null,
       "maxHeight": null,
       "maxWidth": null,
       "minHeight": null,
       "minWidth": null,
+      "width": null,
       "widthHandleAriaLabel": null
     },
     "accordion": {
@@ -1434,6 +1551,7 @@
       ],
       "collapsible": null,
       "defaultValue": null,
+      "modelValue": null,
       "size": [
         "large",
         "medium"
@@ -1450,6 +1568,7 @@
       ],
       "collapsible": null,
       "defaultValue": null,
+      "modelValue": null,
       "size": [
         "large",
         "medium"
@@ -1552,6 +1671,7 @@
         "default",
         "inline",
         "muted",
+        "option",
         "outlined"
       ],
       "size": [
@@ -1565,6 +1685,7 @@
         "default",
         "inline",
         "muted",
+        "option",
         "outlined"
       ],
       "size": [
@@ -1586,9 +1707,16 @@
       "ariaLabel": null,
       "name": null
     },
+    "line-figure": {
+      "ariaLabel": null,
+      "intensity": null,
+      "name": null,
+      "play": null
+    },
     "product-widget": {
       "active": null,
       "chrome": null,
+      "cursor": null,
       "fade": [
         "bottom",
         "left",
@@ -1840,15 +1968,47 @@
     "key-value-pairs": {
       "ariaLabel": null,
       "columns": null,
+      "kind": [
+        "split",
+        "stacked"
+      ],
       "loading": null
     },
     "overflow-count": {
       "items": null,
       "noun": null
     },
+    "payment-brand": {
+      "brand": null,
+      "decorative": null,
+      "label": null,
+      "size": [
+        "medium",
+        "small"
+      ]
+    },
+    "qr-code": {
+      "errorCorrection": [
+        "H",
+        "L",
+        "M",
+        "Q"
+      ],
+      "label": null,
+      "size": [
+        "large",
+        "medium",
+        "small"
+      ],
+      "value": null
+    },
     "key-value-pairs-root": {
       "ariaLabel": null,
       "columns": null,
+      "kind": [
+        "split",
+        "stacked"
+      ],
       "loading": null
     },
     "network-map": {
@@ -1893,7 +2053,8 @@
         "south-america",
         "world"
       ],
-      "scale": null
+      "scale": null,
+      "traffic": null
     },
     "trace": {
       "ariaLabel": null,
@@ -1907,7 +2068,9 @@
       "lines": null,
       "loading": null,
       "loadingLabel": null,
-      "searchPlaceholder": null
+      "search": null,
+      "searchPlaceholder": null,
+      "warningsOnly": null
     },
     "code-block": {
       "animateLines": null,
@@ -1915,8 +2078,15 @@
       "copyable": null,
       "copyAriaLabel": null,
       "defaultValue": null,
+      "kind": [
+        "code",
+        "output"
+      ],
+      "modelValue": null,
+      "showLabel": null,
       "showLineNumbers": null,
-      "tabs": null
+      "tabs": null,
+      "title": null
     },
     "table": {
       "bordered": null,
@@ -1930,10 +2100,12 @@
       "enableRowSelection": null,
       "enableSorting": null,
       "estimateRowHeight": null,
+      "expanded": null,
       "exportFilename": null,
       "exportRows": null,
       "filterFields": null,
       "filters": null,
+      "getSubRows": null,
       "globalFilter": null,
       "headerKind": [
         "compact",
@@ -1951,6 +2123,8 @@
       "reorderable": null,
       "rowCount": null,
       "rowKey": null,
+      "rowReorderable": null,
+      "rowSelectable": null,
       "rowSelection": null,
       "rowsPerPageOptions": null,
       "selectOnRowClick": null,
@@ -1973,10 +2147,12 @@
       "enableRowSelection": null,
       "enableSorting": null,
       "estimateRowHeight": null,
+      "expanded": null,
       "exportFilename": null,
       "exportRows": null,
       "filterFields": null,
       "filters": null,
+      "getSubRows": null,
       "globalFilter": null,
       "headerKind": [
         "compact",
@@ -1994,6 +2170,8 @@
       "reorderable": null,
       "rowCount": null,
       "rowKey": null,
+      "rowReorderable": null,
+      "rowSelectable": null,
       "rowSelection": null,
       "rowsPerPageOptions": null,
       "selectOnRowClick": null,
@@ -2027,6 +2205,7 @@
         "drawer"
       ],
       "disabled": null,
+      "open": null,
       "pageSizeOptions": null,
       "preferences": null,
       "sections": null,
@@ -2036,6 +2215,7 @@
       "ariaLabel": null,
       "items": null,
       "loading": null,
+      "selectedKeys": null,
       "selectionMode": [
         "multi",
         "none",
@@ -2077,6 +2257,7 @@
     },
     "topology-diagram": {
       "ariaLabel": null,
+      "expanded": null,
       "levels": null,
       "loading": null
     },
@@ -2102,9 +2283,11 @@
       "ariaLabel": null,
       "emptyDescription": null,
       "emptyTitle": null,
+      "expanded": null,
       "items": null,
       "loading": null,
-      "selectable": null
+      "selectable": null,
+      "selected": null
     },
     "doc-callout": {
       "kind": [
@@ -2150,6 +2333,17 @@
       ],
       "title": null
     },
+    "doc-layout": {
+      "activeId": null,
+      "ariaLabel": null,
+      "home": null,
+      "navigation": null,
+      "outline": null,
+      "outlineGroups": null,
+      "rootLabel": null,
+      "searchOpen": null,
+      "sections": null
+    },
     "doc-on-this-page": {
       "activeId": null,
       "groups": null,
@@ -2178,6 +2372,19 @@
       "label": null,
       "title": null
     },
+    "doc-hero": {
+      "description": null,
+      "title": null
+    },
+    "doc-agent-card": {
+      "actionHref": null,
+      "actionLabel": null,
+      "agents": null,
+      "asideTitle": null,
+      "description": null,
+      "prompt": null,
+      "title": null
+    },
     "doc-step": {
       "title": null
     },
@@ -2199,6 +2406,38 @@
       "description": null,
       "label": null,
       "tags": null,
+      "title": null
+    },
+    "doc-accordion-group": {
+      "type": null
+    },
+    "doc-accordion-item": {
+      "defaultOpen": null,
+      "title": null
+    },
+    "doc-code-group": {
+      "kind": [
+        "code",
+        "output"
+      ],
+      "samples": null,
+      "showLabel": null,
+      "showLineNumbers": null
+    },
+    "doc-cta": {
+      "label": null,
+      "primaryHref": null,
+      "primaryLabel": null,
+      "secondaryHref": null,
+      "secondaryLabel": null,
+      "title": null
+    },
+    "doc-heading": {
+      "id": null,
+      "label": null,
+      "level": null
+    },
+    "doc-tab": {
       "title": null
     },
     "alert": {
@@ -2301,6 +2540,7 @@
     },
     "upload-progress": {
       "cancelable": null,
+      "collapsed": null,
       "floating": null,
       "items": null,
       "operation": [
@@ -2329,6 +2569,7 @@
       "disabled": null,
       "max": null,
       "min": null,
+      "modelValue": null,
       "now": null,
       "placeholder": null,
       "rangeSelectorMode": [
@@ -2344,6 +2585,7 @@
         "medium",
         "small"
       ],
+      "timeZone": null,
       "timeZones": null
     },
     "calendar": {
@@ -2408,6 +2650,7 @@
       "invalid": null,
       "maxLength": null,
       "modelValue": null,
+      "monospace": null,
       "placeholder": null,
       "readonly": null,
       "required": null,
@@ -2482,8 +2725,10 @@
     },
     "phone-input": {
       "countries": null,
+      "country": null,
       "disabled": null,
       "invalid": null,
+      "modelValue": null,
       "name": null,
       "placeholder": null,
       "readonly": null,
@@ -2520,6 +2765,19 @@
       "label": null,
       "required": null
     },
+    "otp-input": {
+      "autofocus": null,
+      "disabled": null,
+      "group": null,
+      "invalid": null,
+      "length": null,
+      "mode": [
+        "alphanumeric",
+        "numeric"
+      ],
+      "modelValue": null,
+      "required": null
+    },
     "password-input": {
       "autocomplete": [
         "current-password",
@@ -2530,6 +2788,7 @@
       "invalid": null,
       "maxLength": null,
       "modelValue": null,
+      "monospace": null,
       "placeholder": null,
       "readonly": null,
       "required": null,
@@ -2538,6 +2797,7 @@
     "file-dropzone": {
       "accept": null,
       "description": null,
+      "directories": null,
       "disabled": null,
       "icon": null,
       "invalid": null,
@@ -2581,6 +2841,7 @@
       "label": null,
       "removable": null,
       "selectable": null,
+      "selected": null,
       "size": [
         "medium",
         "small"
@@ -2619,6 +2880,7 @@
       "invalid": null,
       "max": null,
       "min": null,
+      "modelValue": null,
       "readonly": null,
       "referenceValues": null,
       "step": null,
@@ -2627,12 +2889,14 @@
     },
     "theme-switcher": {
       "ariaLabel": null,
-      "disabled": null
+      "disabled": null,
+      "modelValue": null
     },
     "textarea": {
       "disabled": null,
       "invalid": null,
       "modelValue": null,
+      "monospace": null,
       "placeholder": null,
       "readonly": null,
       "required": null,
@@ -2704,6 +2968,10 @@
       "disabled": null,
       "displayValue": null,
       "invalid": null,
+      "kind": [
+        "outlined",
+        "transparent"
+      ],
       "modelValue": null,
       "multiple": null,
       "open": null,
@@ -2721,6 +2989,10 @@
       "disabled": null,
       "displayValue": null,
       "invalid": null,
+      "kind": [
+        "outlined",
+        "transparent"
+      ],
       "modelValue": null,
       "multiple": null,
       "open": null,
@@ -2745,6 +3017,10 @@
       "kind": [
         "content",
         "site"
+      ],
+      "signature": [
+        "always",
+        "compact"
       ]
     },
     "footer-root": {
@@ -2752,6 +3028,10 @@
       "kind": [
         "content",
         "site"
+      ],
+      "signature": [
+        "always",
+        "compact"
       ]
     },
     "frame-box": {
@@ -2784,10 +3064,43 @@
       "toolsOpen": null,
       "toolsWidth": null
     },
+    "console-layout": {
+      "account": null,
+      "activeId": null,
+      "ariaLabel": null,
+      "breadcrumbs": null,
+      "home": null,
+      "navigation": null,
+      "navigationExpanded": null,
+      "searchOpen": null,
+      "searchPlaceholder": null,
+      "toolsLabel": null,
+      "toolsOpen": null
+    },
+    "console-layout-root": {
+      "account": null,
+      "activeId": null,
+      "ariaLabel": null,
+      "breadcrumbs": null,
+      "home": null,
+      "navigation": null,
+      "navigationExpanded": null,
+      "searchOpen": null,
+      "searchPlaceholder": null,
+      "toolsLabel": null,
+      "toolsOpen": null
+    },
+    "site-layout": {
+      "footer": null,
+      "navigation": null,
+      "searchOpen": null,
+      "searchPlaceholder": null
+    },
     "board": {
       "ariaLabel": null,
       "columns": null,
       "editing": null,
+      "layout": null,
       "maxHeight": null,
       "maxSpan": null,
       "minHeight": null,
@@ -2797,6 +3110,7 @@
       "ariaLabel": null,
       "columns": null,
       "editing": null,
+      "layout": null,
       "maxHeight": null,
       "maxSpan": null,
       "minHeight": null,
@@ -2849,6 +3163,7 @@
       "collapsible": null,
       "hint": null,
       "icon": null,
+      "open": null,
       "title": null
     },
     "setting-row": {
@@ -2859,10 +3174,12 @@
         "stacked"
       ],
       "level": null,
+      "stackable": null,
       "title": null
     },
     "save-bar": {
       "kind": [
+        "centered",
         "docked",
         "fade",
         "floating",
@@ -2879,12 +3196,14 @@
     "sidebar": {
       "ariaLabel": null,
       "collapseAriaLabel": null,
+      "collapsed": null,
       "collapsible": null,
       "expandAriaLabel": null,
       "maxWidthToken": null,
       "minWidthToken": null,
       "resizable": null,
-      "resizeAriaLabel": null
+      "resizeAriaLabel": null,
+      "width": null
     },
     "band-stack": {
       "flush": null,
@@ -2995,15 +3314,21 @@
       ]
     },
     "carousel": {
-      "ariaLabel": null
+      "ariaLabel": null,
+      "kind": null
     },
     "carousel-root": {
-      "ariaLabel": null
+      "ariaLabel": null,
+      "kind": null
     },
     "banner": {
       "description": null,
       "eyebrow": null,
       "title": null
+    },
+    "banner-art": {
+      "animated": null,
+      "art": null
     },
     "hero": {
       "align": null,
@@ -3153,29 +3478,40 @@
       "activeId": null,
       "ariaLabel": null,
       "enterOnMount": null,
-      "groups": null
+      "expanded": null,
+      "groups": null,
+      "path": null
     },
     "menu-root": {
       "activeId": null,
       "ariaLabel": null,
       "enterOnMount": null,
-      "groups": null
+      "expanded": null,
+      "groups": null,
+      "path": null
     },
     "tabs": {
       "defaultValue": null
     },
+    "page-tabs": {
+      "modelValue": null
+    },
     "stepper": {
-      "ariaLabel": null
+      "ariaLabel": null,
+      "modelValue": null
     },
     "stepper-root": {
-      "ariaLabel": null
+      "ariaLabel": null,
+      "modelValue": null
     },
     "wizard": {
+      "activeStep": null,
       "ariaLabel": null,
       "loading": null,
       "submitLabel": null
     },
     "wizard-root": {
+      "activeStep": null,
       "ariaLabel": null,
       "loading": null,
       "submitLabel": null
@@ -3230,6 +3566,7 @@
         "primary"
       ],
       "loading": null,
+      "open": null,
       "size": [
         "medium",
         "small"
@@ -3252,13 +3589,7 @@
       "dismissible": null,
       "offset": null,
       "open": null,
-      "placement": [
-        "auto",
-        "bottom-end",
-        "bottom-start",
-        "top-end",
-        "top-start"
-      ],
+      "placement": null,
       "width": [
         "large",
         "medium",
@@ -3270,13 +3601,7 @@
       "dismissible": null,
       "offset": null,
       "open": null,
-      "placement": [
-        "auto",
-        "bottom-end",
-        "bottom-start",
-        "top-end",
-        "top-start"
-      ],
+      "placement": null,
       "width": [
         "large",
         "medium",
@@ -3291,7 +3616,8 @@
         "rtl"
       ],
       "locale": null,
-      "messages": null
+      "messages": null,
+      "now": null
     },
     "architecture-tabs": {
       "anchor": null,
@@ -3323,7 +3649,8 @@
       "actionLabel": null,
       "anchor": null,
       "ariaLabel": null,
-      "items": null
+      "items": null,
+      "modelValue": null
     },
     "article-index-blog": {
       "allLabel": null,
@@ -3366,7 +3693,10 @@
     },
     "client-quotes": {
       "ariaLabel": null,
+      "autoplay": null,
+      "autoplayInterval": null,
       "items": null,
+      "modelValue": null,
       "primaryAction": null
     },
     "closing-call-to-action": {
@@ -3397,6 +3727,16 @@
       "form": null,
       "loading": null,
       "submitted": null,
+      "title": null
+    },
+    "closing-call-to-action-templates": {
+      "anchor": null,
+      "deployLabel": null,
+      "description": null,
+      "primaryAction": null,
+      "secondaryAction": null,
+      "templates": null,
+      "templatesAriaLabel": null,
       "title": null
     },
     "code-split": {
@@ -3497,9 +3837,68 @@
       "illustration": null,
       "illustrationAriaLabel": null,
       "kind": null,
+      "plain": null,
       "primaryAction": null,
       "secondaryAction": null,
       "size": null,
+      "title": null,
+      "titleLength": null
+    },
+    "capability-grid": {
+      "actions": null,
+      "anchor": null,
+      "columns": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null,
+      "titleKind": null
+    },
+    "console-panel": {
+      "actions": null,
+      "anchor": null,
+      "crop": null,
+      "description": null,
+      "eyebrow": null,
+      "kind": null,
+      "size": null,
+      "tabs": null,
+      "tabsAriaLabel": null,
+      "texture": null,
+      "textureFade": null,
+      "title": null,
+      "titleKind": null,
+      "titlePadding": null
+    },
+    "customer-spotlight": {
+      "anchor": null,
+      "ariaLabel": null,
+      "cards": null,
+      "storyLabel": null
+    },
+    "process-scroll": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "descriptionWidth": null,
+      "eyebrow": null,
+      "headerOffset": null,
+      "pinned": null,
+      "steps": null,
+      "title": null,
+      "titleKind": null
+    },
+    "section-command": {
+      "shell": null,
+      "value": null
+    },
+    "sticky-carousel": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "headerOffset": null,
+      "items": null,
       "title": null
     },
     "hero-copy-on-top-art": {
@@ -3561,15 +3960,19 @@
       "title": null
     },
     "logo-wall-quote": {
+      "anchor": null,
       "ariaLabel": null,
       "eyebrow": null,
+      "kind": null,
       "logos": null,
       "primaryAction": null,
       "quote": null,
+      "quoteKind": null,
       "title": null
     },
     "media-split-band": {
       "description": null,
+      "diagram": null,
       "eyebrow": null,
       "illustration": null,
       "illustrationAriaLabel": null,
@@ -3578,7 +3981,8 @@
       "scene": null,
       "secondaryAction": null,
       "size": null,
-      "title": null
+      "title": null,
+      "widget": null
     },
     "media-split-stack": {
       "bands": null,
@@ -3634,6 +4038,7 @@
       "home": null,
       "homeAriaLabel": null,
       "kind": null,
+      "language": null,
       "languageAriaLabel": null,
       "languages": null,
       "socials": null,
@@ -3645,7 +4050,8 @@
       "links": null,
       "menus": null,
       "primaryAction": null,
-      "secondaryAction": null
+      "secondaryAction": null,
+      "secondaryActionOnPhones": null
     },
     "stats-band": {
       "items": null
@@ -3702,6 +4108,7 @@
       "dividerColor": null,
       "flush": null,
       "kind": null,
+      "layout": null,
       "mobileColumns": null
     },
     "card-grid-root": {
@@ -3709,6 +4116,7 @@
       "dividerColor": null,
       "flush": null,
       "kind": null,
+      "layout": null,
       "mobileColumns": null
     },
     "texture-material": {
@@ -3770,6 +4178,7 @@
       "autoplay": null,
       "autoplayInterval": null,
       "items": null,
+      "modelValue": null,
       "showProgress": null
     },
     "attribute-editor": {
@@ -3819,6 +4228,7 @@
       "filter": null,
       "invalid": null,
       "loading": null,
+      "modelValue": null,
       "options": null,
       "placeholder": null,
       "readonly": null,
@@ -3840,7 +4250,9 @@
       "lineNumbers": null,
       "loader": null,
       "markers": null,
+      "modelValue": null,
       "original": null,
+      "padLineNumbers": null,
       "path": null,
       "readonly": null
     },
@@ -3859,6 +4271,7 @@
     "schema-form": {
       "disabled": null,
       "errors": null,
+      "modelValue": null,
       "readonly": null,
       "schema": null,
       "ui": null,
@@ -3866,6 +4279,19 @@
         "blur",
         "submit"
       ]
+    },
+    "feature-list": {
+      "ariaLabel": null,
+      "columns": null,
+      "items": null
+    },
+    "card-carousel": {
+      "anchor": null,
+      "ariaLabel": null,
+      "description": null,
+      "eyebrow": null,
+      "items": null,
+      "title": null
     }
   }
 }
