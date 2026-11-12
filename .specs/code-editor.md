@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 94aeb2f8798c54c87c55acf0cdecedf6b343da4f4d53ac59f28d12ca4ad2c0ff
+checksum: b0bc114e3192e362dd31b15366e23f345c6a4cdb7afb0368919d5a7777b12601
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -173,9 +173,9 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive                                               | Follow-up                                                                                                        |
-| -------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| —              | `--code-editor-line-height` (theme token, `var(--line-height-4)`) | Not yet listed in DESIGN.md; add it to the code tokens row when DESIGN.md is next edited (needs human approval). |
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| —              | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
