@@ -69,6 +69,8 @@ A few components need **one-time wiring in the app entry before first use** — 
 
 - **Toast**: fire-from-anywhere (`toast.success('Saved')`) only renders if a region is mounted. Wire the service once in the entry — `import { ToastPlugin } from '@aziontech/webkit/toast'` and chain `.use(ToastPlugin)` onto `createApp()`; the plugin mounts the region automatically (options: `app.use(ToastPlugin, { position: 'top-right' })`). A manually mounted Toaster also counts — never add both blindly (the store keeps only the first region active, but one wiring is enough). `npx webkit doctor` flags toast usage with no wired region.
 
+- **Theme (light or dark)**: the theme is light by default. An app that is always dark sets `data-theme="dark"` on `<html>` in `index.html` (`<html lang="en" data-theme="dark">`), so the first paint is dark; a toggle writes `document.documentElement.dataset.theme` (`'dark'` / `'light'`), and a `.dark` class on an ancestor works too. Every token switches with it — never add per-theme classes (`/webkit-theming-dark-mode`).
+
 - **WebkitProvider (languages)**: mount it once at the app root with the user's locale. Every built-in string a component ships (close buttons, pagination, empty states, assistive labels) then reads from the locale's catalog, and dates, numbers, file sizes and plurals format with `Intl` for that locale; `dir` follows the locale (`ar`, `he`, `fa`, `ur` are right-to-left). English is built in; Portuguese and Spanish are opt-in: import them from `@aziontech/webkit/locales/pt-BR` and `@aziontech/webkit/locales/es` and pass them through `catalogs` (`{ 'pt-BR': ptBR, es }`), or the provider falls back to English and warns in development. With no provider every component falls back to English. A label prop you pass still wins over the catalog; `messages` renames a built-in string for the whole app. Import it as `import WebkitProvider from '@aziontech/webkit/webkit-provider'`.
 
 ```vue
@@ -111,6 +113,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Barrel import: `import { Button } from '@aziontech/webkit'` (no barrel exists).
 - ❌ Binding that disagrees with the path: `import Chip from '@aziontech/webkit/chips'`.
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
+- ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only `w-full`, `max-w-*`, `self-*` and `shrink-0` may sit on the tag.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
 - ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.
@@ -119,13 +122,22 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 
 ### Import + tokens
 
+Tokens style **your own** markup around a component. The component keeps its own look and changes
+it only through its props (`kind`, `size`); a class or style on its tag is restyling it (rule
+`webkit-style-override`):
+
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
-  <Button class="bg-(--primary) text-(--primary-contrast)">Save</Button>
+  <section
+    class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-lg)"
+  >
+    <p class="text-body-sm text-(--text-muted)">Changes apply to every domain.</p>
+    <Button kind="primary">Save</Button>
+  </section>
 </template>
 ```
 
