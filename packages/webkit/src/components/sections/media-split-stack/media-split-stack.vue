@@ -127,14 +127,14 @@
               v-else-if="band.image"
               #media
             >
-              <div class="flex aspect-592/300 w-full items-center justify-center">
+              <div class="relative aspect-592/300 w-full">
                 <img
                   :src="band.image"
                   :alt="band.imageAlt ?? ''"
                   width="360"
                   height="165"
                   decoding="async"
-                  class="block h-auto w-[60.81%]"
+                  class="absolute inset-0 m-auto block h-full w-[60.81%] object-contain"
                 />
               </div>
             </template>
