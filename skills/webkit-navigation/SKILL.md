@@ -98,6 +98,7 @@ the webkit primitives and reuse it on every browse page:
     breadcrumb: { label: string; href?: string }[]
     collapsible?: boolean // default true — the sidebar toggle in GlobalHeader.Left
   }>()
+  defineSlots<{ default(): unknown }>()
 
   const searchOpen = ref(false)
 </script>
@@ -225,6 +226,7 @@ Again, **you compose this shell** — there is no `@aziontech/webkit/creation-he
     showBack?: boolean // default true — hide only on a terminal success screen
   }>()
   const emit = defineEmits<{ back: [event: MouseEvent]; navigate: [event: MouseEvent] }>()
+  defineSlots<{ default(): unknown }>()
 </script>
 
 <template>

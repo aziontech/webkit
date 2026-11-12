@@ -97,6 +97,10 @@ import '@aziontech/icons'
 registers WebKit's source with Tailwind so the component classes compile. Tailwind has to run in
 your build: `@tailwindcss/postcss` in `postcss.config.mjs` (what `init` writes) or `@tailwindcss/vite`.
 
+`@aziontech/webkit/vite` is optional: `webkitViteConfig` makes Vite pre-bundle `vee-validate`, which
+only an app that uses `vee-validate` itself needs (merge it with `mergeConfig`). See
+[`docs/toolkit/vite.md`](./docs/toolkit/vite.md).
+
 **Dark mode.** The theme is **light by default**. For an app that is always dark, set the attribute
 in `index.html`, so the first paint is already dark:
 

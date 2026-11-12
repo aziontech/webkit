@@ -81,7 +81,12 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
     v-bind="tableProps"
     :bordered="false"
   >
-    <!-- #cell-* slots -->
+    <template #cell-status="{ value }">
+      <Table.CellStatus
+        :label="value"
+        :severity="statusSeverity(value)"
+      />
+    </template>
   </Table>
 </template>
 ```
@@ -110,11 +115,21 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
     class="h-full"
     @row-click="openApp"
   >
-    <!-- toolbar · filters · #cell-* slots -->
+    <template #cell-status="{ value }">
+      <Table.CellStatus
+        :label="value"
+        :severity="statusSeverity(value)"
+      />
+    </template>
   </Table>
 </template>
 ```
 
+- Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`Table.CellStatus`
+  here; see Cell recipes), which is also why the import is the `table` compound. A table with no
+  cell slots and no toolbar imports `@aziontech/webkit/table-root`.
+- `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
+  body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
 - `enable-sorting` + per-column `enableSorting: true` turns on the sort affordance for that column.
@@ -383,6 +398,7 @@ colour _is_ the information.
 ```
 
 A status cell is `Table.CellStatus` (below).
+
 ### Cross-resource link — `Table.CellLink`
 
 A name that opens **something other than this row** — the workload a deployment belongs to, the
@@ -526,11 +542,20 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
     @select="(event, value) => onRowAction(event, value, row)"
   >
     <DropdownMenu.Group>
-      <DropdownMenu.Option value="edit" label="Edit" />
-      <DropdownMenu.Option value="clone" label="Clone" />
+      <DropdownMenu.Option
+        value="edit"
+        label="Edit"
+      />
+      <DropdownMenu.Option
+        value="clone"
+        label="Clone"
+      />
     </DropdownMenu.Group>
     <DropdownMenu.Group>
-      <DropdownMenu.Option value="delete" label="Delete" />
+      <DropdownMenu.Option
+        value="delete"
+        label="Delete"
+      />
     </DropdownMenu.Group>
   </Table.CellActions>
 </template>

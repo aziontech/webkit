@@ -95,13 +95,27 @@ npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint]
   line;
 - **lint** — the project's own ESLint on `src/` (or `.`), keeping the `webkit/*` rule hits as
   errors with file and line. When ESLint is not installed or not configured (or `--no-lint`), a
-  built-in scan of `.vue` files covers raw hex and palette colours and physical direction
-  utilities (the `no-physical-direction` helper), and a warning says the full rule set did not run;
+  built-in scan of `.vue` class attributes covers raw hex and palette colours and physical
+  direction utilities (the `no-physical-direction` helper), and a warning says the full rule set
+  did not run;
+- **stylelint** — the project's own Stylelint on `src/**/*.{css,scss,vue}` (or
+  `**/*.{css,scss,vue}` without `src/`), the same files the pre-commit hook `init` installs lints,
+  so `check` fails whenever that hook would. Every problem it reports is kept with its file, line
+  and rule: an `error` is an error, a `warning` a warning. When Stylelint is not installed or not
+  configured (or `--no-lint`), a built-in scan (source `css`) applies the
+  `@aziontech/webkit/stylelint-config` rules to `.css` / `.scss` files, `<style>` blocks and
+  `style="…"` attributes — hex colours, `rgb()`/`hsl()`, named colours, literal durations,
+  `cubic-bezier()`, `transition: all`, a zero with a unit — and a warning says Stylelint did not
+  run;
 - **blocks** — every copy in `webkit.blocks.json` whose canonical block changed since it was
   copied, whose file is gone, or whose source the installed version no longer ships (warnings).
 
-It exits 1 on any error, or when there are more warnings than `--max-warnings`; `--json` prints
-`{ errors, warnings, findings: [{ source, severity, file, line, rule, message }] }`.
+It exits 1 on any error, or when there are more warnings than `--max-warnings` (every warning
+counts: doctor `WARN`s, Stylelint warnings, a linter that did not run, block drift). `--json`
+prints `{ eslint, stylelint, errors, warnings, maxWarnings, exitCode, findings: [{ source,
+severity, file, line, rule, message }] }`; `eslint` / `stylelint` say whether the project's own
+linter ran, and `source` is one of `doctor`, `migration`, `imports`, `lint`, `style`,
+`stylelint`, `css`, `blocks`.
 
 ## `report` and `canary` — measure and verify webkit adoption
 

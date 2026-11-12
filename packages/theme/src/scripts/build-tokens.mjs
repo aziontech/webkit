@@ -367,4 +367,5 @@ const css = `${rawCss.slice(0, afterImport)}\n\n${fontsCss}${rawCss.slice(afterI
 assertNoZeroWithUnit(css, 'globals.css');
 await writeFile(resolve(dir, 'globals.css'), css, 'utf8');
 await writeFile(resolve(dir, 'globals.scss'), css, 'utf8');
+await writeFile(resolve(dir, 'globals.d.ts'), 'export {};\n', 'utf8');
 console.log(`✓ v4 → ${dir}`);
