@@ -53,11 +53,11 @@ const meta = {
       control: 'inline-radio',
       options: ['short', 'long'],
       description:
-        'Length of the headline in the `title-band` layout; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three.',
+        'Length of the headline in the `centered` and `title-band` layouts; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. Unset, each layout keeps its own width.',
       table: {
         category: 'props',
         type: { summary: "'short' | 'long'" },
-        defaultValue: { summary: "'long'" }
+        defaultValue: { summary: 'undefined' }
       }
     },
     eyebrow: {

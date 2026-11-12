@@ -34,7 +34,7 @@
     kind?: HeroBandKind
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroBandSize
-    /** Length of the headline in the `title-band` layout; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. */
+    /** Length of the headline in the `centered` and `title-band` layouts; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. Unset, each layout keeps its own width. */
     titleLength?: 'short' | 'long'
     /** Short overline above the headline. */
     eyebrow?: string
@@ -63,7 +63,7 @@
   const props = withDefaults(defineProps<Props>(), {
     kind: 'title-band',
     size: 'medium',
-    titleLength: 'long',
+    titleLength: undefined,
     eyebrow: '',
     highlight: '',
     title: '',
@@ -94,9 +94,9 @@
   })
 
   const titleWidth = computed(() => {
-    if (props.kind === 'centered' || props.kind === 'copy-beside-art') return 'xl'
-    if (props.kind === 'title-band' && props.titleLength === 'short') return 'xl'
-    return '4xl'
+    if (props.kind === 'centered') return props.titleLength === 'long' ? '3xl' : 'xl'
+    if (props.kind === 'title-band') return props.titleLength === 'short' ? 'xl' : '4xl'
+    return props.kind === 'copy-beside-art' ? 'xl' : '4xl'
   })
 
   const hasArt = computed(() => props.kind === 'copy-beside-art' && props.illustration.length > 0)

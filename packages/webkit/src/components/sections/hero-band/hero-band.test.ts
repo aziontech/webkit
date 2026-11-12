@@ -81,10 +81,34 @@ describe('HeroBand', () => {
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
   })
 
-  it('ignores titleLength outside the title-band layout', () => {
-    const { getByTestId } = band({ kind: 'pixel-floor', titleLength: 'short' })
+  it('keeps the title-band headline in the wide column with titleLength=long', () => {
+    const { getByTestId } = band({ titleLength: 'long' })
 
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('4xl')
+  })
+
+  it('sets the centered headline in the narrow column by default', () => {
+    const { getByTestId } = band({ kind: 'centered' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
+  })
+
+  it('widens the centered headline column with titleLength=long', () => {
+    const { getByTestId } = band({ kind: 'centered', titleLength: 'long' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('3xl')
+  })
+
+  it.each([
+    ['pixel-floor', '4xl'],
+    ['copy-beside-art', 'xl']
+  ] as const)('ignores titleLength with kind=%s', (kind, width) => {
+    const short = band({ kind, titleLength: 'short' })
+    expect(short.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
+    short.unmount()
+
+    const long = band({ kind, titleLength: 'long' })
+    expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
   })
 
   it.each(['centered', 'pixel-floor', 'copy-beside-art'] as const)(

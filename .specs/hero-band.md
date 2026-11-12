@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-12
-checksum: d3fb84f7a973def9a813a711a4fd030f6461e87db910f1c09db7eae5ff2085e5
+checksum: 157513fb3300f9098897a1fd0a040643423372497897bef7d52c75cb579311d0
 ---
 # HeroBand — Component Spec
 
@@ -32,7 +32,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 ## Best practices
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
-- Set `titleLength="short"` on a `title-band` whose headline and sentence are brief, such as an institutional page; keep `long` for a headline that would otherwise break into three lines. The other layouts ignore it.
+- Set `titleLength="short"` on a `title-band` whose headline and sentence are brief, such as an institutional page, and `titleLength="long"` on a `centered` band whose headline would otherwise break into three lines. Leave it unset to keep each layout's own width; the `pixel-floor` and `copy-beside-art` layouts ignore it.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
 - Set `headerOffset` to the height of the site header so a band that fills a screen fills exactly the first screen with it.
 
@@ -62,7 +62,7 @@ import HeroBand from '@aziontech/webkit/hero-band'
 |---|---|---|---|---|
 | `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration beside the copy. |
 | `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
-| `titleLength` | `'short' \| 'long'` | `'long'` | false | Length of the headline in the `title-band` layout; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. |
+| `titleLength` | `'short' \| 'long'` | `undefined` | false | Length of the headline in the `centered` and `title-band` layouts; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three. Unset, each layout keeps its own width. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
@@ -87,7 +87,7 @@ import HeroBand from '@aziontech/webkit/hero-band'
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
-- `titleLength` sets the width of the copy column in the `title-band` layout: `xl` when `short`, `4xl` when `long`
+- `titleLength` sets the width of the copy column in the `centered` layout (`xl` when `short` or unset, `3xl` when `long`) and in the `title-band` layout (`xl` when `short`, `4xl` when `long` or unset)
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `carouselMarks` has marks; each action renders only with a label and a link; the illustration renders only in the `copy-beside-art` layout with `illustration` set
 
