@@ -74,40 +74,40 @@
       accessorKey: 'remoteAddress',
       header: 'IP address',
       align: 'start',
-      enableSorting: 'true',
-      principal: 'true'
+      enableSorting: true,
+      principal: true
     },
     {
       id: 'asn',
       accessorKey: 'asn',
       header: 'Network',
       align: 'start',
-      enableSorting: 'true',
-      principal: 'false'
+      enableSorting: true,
+      principal: false
     },
     {
       id: 'country',
       accessorKey: 'country',
       header: 'Country',
       align: 'start',
-      enableSorting: 'true',
-      principal: 'false'
+      enableSorting: true,
+      principal: false
     },
     {
       id: 'category',
       accessorKey: 'category',
       header: 'Main attack',
       align: 'start',
-      enableSorting: 'true',
-      principal: 'false'
+      enableSorting: true,
+      principal: false
     },
     {
       id: 'requests',
       accessorKey: 'requests',
       header: 'Blocked requests',
       align: 'end',
-      enableSorting: 'true',
-      principal: 'false'
+      enableSorting: true,
+      principal: false
     }
   ]
   const ipRows = [

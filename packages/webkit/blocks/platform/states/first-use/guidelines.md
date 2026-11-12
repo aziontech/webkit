@@ -43,7 +43,8 @@ Joins the read-only command and its copy button into one control, full width.
 
 ### G. Command — `Input` (CLI method)
 
-`readonly`, `size="large"`, holding the command to run, with an `aria-label` that names it.
+`readonly`, `monospace`, `:spellcheck="false"` and `size="large"`, holding the command to run in the
+code face, with an `aria-label` that names it.
 
 ### H. Copy — `CopyButton` (CLI method)
 
@@ -59,6 +60,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## Don't
 
+- Don't write an agent mark's mask as an unquoted `url(...)`: the build inlines the SVG as a `data:` URI and the unquoted value renders the mark as a solid square. Quote it (`url('…')`).
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.

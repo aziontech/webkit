@@ -5,9 +5,6 @@
   "platform/create/single-page-create": {
     "webkit/menu-node-href": 70
   },
-  "platform/dashboard/home-dashboard": {
-    "webkit/menu-node-href": 70
-  },
   "platform/delete/delete-with-confirmation": {
     "webkit/menu-node-href": 35
   },
@@ -25,15 +22,6 @@
   },
   "platform/settings/settings-form": {
     "webkit/menu-node-href": 210
-  },
-  "platform/states/async-submit": {
-    "webkit/menu-node-href": 140
-  },
-  "platform/view/query-editor": {
-    "webkit/menu-node-href": 280
-  },
-  "platform/view/split-view": {
-    "webkit/menu-node-href": 245
   },
   "shells/console": {
     "webkit/menu-node-href": 140

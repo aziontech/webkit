@@ -229,35 +229,33 @@
               </SettingsSection>
             </fieldset>
           </div>
-        </div>
 
-        <SaveBar kind="plain">
-          <template #leading>
-            <p
+          <SaveBar kind="centered">
+            <template
               v-if="dirty"
-              class="min-w-0 text-body-sm text-(--text-muted)"
+              #leading
             >
-              Unsaved changes
-            </p>
-          </template>
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              :disabled="submitting"
-              @click="cancel"
-            />
-            <Button
-              label="Create Database"
-              kind="primary"
-              size="medium"
-              type="submit"
-              :loading="submitting"
-            />
-          </template>
-        </SaveBar>
+              <p class="min-w-0 text-body-sm text-(--text-muted)">Unsaved changes</p>
+            </template>
+            <template #actions>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="submitting"
+                @click="cancel"
+              />
+              <Button
+                label="Create Database"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="submitting"
+              />
+            </template>
+          </SaveBar>
+        </div>
       </form>
     </main>
     <Toaster position="bottom-right" />
