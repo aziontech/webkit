@@ -3,7 +3,7 @@
   "name": "Documentation",
   "title": "Templates/Shells/Documentation",
   "surface": "docs",
-  "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`.",
+  "summary": "The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail: welcome `DocPageHeader`, Get started, a `DocPrompt`, then `DocCardGroup` entry points by interface, objective, template and follow-along). The variants carry search as a `SearchTrigger` that widens into the ⌘K field.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -20,12 +20,46 @@
     "página de documentação",
     "estrutura da documentação",
     "documentation shell",
-    "docs layout"
+    "docs layout",
+    "documentation article",
+    "docs article page",
+    "tutorial page",
+    "getting started guide",
+    "how-to guide",
+    "product reference page",
+    "reference documentation",
+    "docs page with steps and code",
+    "documentation home",
+    "docs home page",
+    "docs landing page",
+    "developer portal home",
+    "artigo da documentação",
+    "página de tutorial",
+    "guia de primeiros passos",
+    "página de referência do produto",
+    "página inicial da documentação",
+    "home da documentação"
   ],
   "skills": ["webkit-layout", "webkit-navigation"],
   "primary": {
     "name": "Default",
     "file": "documentation.vue"
   },
-  "variants": []
+  "variants": [
+    {
+      "name": "Article",
+      "summary": "A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.",
+      "file": "variants/article.vue"
+    },
+    {
+      "name": "Reference",
+      "summary": "A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.",
+      "file": "variants/reference.vue"
+    },
+    {
+      "name": "Landing",
+      "summary": "The documentation home: no outline rail; the welcome masthead, Get started, a DocPrompt, then DocCardGroup entry points by interface, objective, template and follow-along, and the pager forward.",
+      "file": "variants/landing.vue"
+    }
+  ]
 }

@@ -1342,221 +1342,6 @@ has to reject the wrong one.
 
 ---
 
-<!-- blocks/docs/article.md -->
-
-# DocsArticle (`docs/article`)
-
-> A whole documentation article page, chrome included: the docs bar with a `SearchTrigger` that widens into the ⌘K field, the product rail (`Sidebar` + `MenuRoot`, a folding group for the current section, the `ThemeSwitcher` in its footer), the reading column and the “On this page” rail with the closing `DocCta`. Under the masthead the column is one `DocProse` (which gives `DocHeading` its scale) built only from the documentation parts, in reading order: `DocPageHeader` (breadcrumb, title, deck, last updated, Copy / View as Markdown, Agent setup), `DocProse` for running text, a `DocCardGroup` chooser of paths, `DocCallout` tips and notes, `DocHeading` sections that the outline links to, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`. The primary state is a tutorial (First deploy); the Reference variant is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock` and a term list). Built from `GlobalHeader`, `NavigationMenu`, `SearchTrigger`, `Sidebar`, `MenuRoot`, `ThemeSwitcher`, `ScrollArea`, the `Doc*` parts, `CodeBlock`, `Footer` and `StatusIndicator`.
-
-- Surface: docs
-- Source: `blocks/docs/article/article.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("docs/article")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Diagram](../../components/diagram.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
-- Skills: `webkit-layout`, `webkit-navigation`, `webkit-microcopy`
-
-## Asked as
-
-documentation article; docs article page; documentation page; docs page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; knowledge base article; artigo da documentação; página de documentação; página de tutorial; guia de primeiros passos; página de referência do produto
-
-One page of the documentation, from the bar to the footer. A reader lands here from search, from the console or from an agent, in the middle of a task. They need to know where they are (the breadcrumb and the rail), what the page gives them (the title and the deck), the shortest path through it (a chooser, steps and commands they can copy) and where to go next. The tutorial and the reference page share the chrome and the masthead; only the column's content changes.
-
-## When to use
-
-- A tutorial, a how-to guide or a getting-started page with steps and commands.
-- A product or tool reference page (overview, request path, rule structure, limits).
-- Any page that lives inside `shells/documentation` and reads top to bottom.
-
-## When not to use
-
-- The documentation home, with its grids of entry points and no reading order: use `docs/landing`.
-- A changelog: compose `DocUpdate` entries in the same shell.
-- Marketing pages: use `shells/website` and the page sections.
-- Help inside the product: use `HelpPanel` or `TutorialPanel`, never a full docs page.
-
-## Building blocks
-
-### A. Docs bar — `GlobalHeader`, `Brand`, `NavigationMenu`, `IconButton`, `SearchTrigger`, `Button`
-
-The bar of `headers/docs-header`, with Search as a `SearchTrigger` (`collapsible`, label `Search docs`) inside an `@container`, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow. GitHub is an outlined `IconButton`; Console is the secondary `Button`, last.
-
-### B. Product rail — `Sidebar`, `MenuRoot`, `MenuGroup`, `MenuItem`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, `ThemeSwitcher`
-
-From `lg`. One `MenuGroup` named after the product or section. The current page's section is a `MenuSub` opened by default (`kind="inline"`), and the current page is the `selected` `MenuItem`. The `ThemeSwitcher` sits in the rail footer.
-
-### C. Reading column — `ScrollArea`, `DocPageHeader`, `DocProse`, `DocHeading`
-
-The column scrolls inside its own `ScrollArea` with the `layout-column-content` measure. `DocPageHeader` opens it: the breadcrumb, the `h1`, one sentence of deck, `last-updated` and the meta actions (Copy as Markdown, View as Markdown, Agent setup). Everything under the masthead sits in one `DocProse`: it sets the running text and gives `DocHeading` its type scale, while the other `Doc*` parts mark themselves as chrome and keep their own styles. Every section is a `DocHeading` with an `id` that the outline links to.
-
-### D. Paths and asides — `DocCardGroup`, `DocCard`, `DocCallout`, `DocPrompt`
-
-When there is more than one way through the page, it opens with a `DocCardGroup` chooser that links to each path's heading. `DocCallout` holds a tip (`kind="tip"`) or a note (`kind="info"`), never the main instruction. `DocPrompt` holds the prompt the reader hands to a coding agent.
-
-### E. Steps and code — `DocSteps`, `DocStep`, `CodeBlock`
-
-Numbered instructions are `DocStep`s, each a short imperative title. A command sits inside its step as a `CodeBlock` (no line numbers for one-liners). Output and test commands get their own `CodeBlock` under a `Test it` heading.
-
-### F. Leaving the page — `FrameBox`, `ItemList`, `DocItem`, `DocPagination`
-
-Next steps is a `DocCardGroup` (three columns for a tutorial, two for a reference page). Related resources are `DocItem` rows in an `ItemList` inside a `FrameBox`. `DocPagination` closes the column with the previous and next pages in reading order.
-
-### G. Outline rail — `DocOnThisPage`, `DocCta`
-
-From `xl`. `DocOnThisPage` lists the `h2` and `h3` headings, lights the active one and carries the GitHub and Community link groups. `DocCta` is last in the rail, once per page.
-
-### H. Footer — `Footer`, `StatusIndicator`
-
-The `content` placement inside the column's scroller, so it spans the column and not the rails, with the system status.
-
-## Do
-
-- Write the deck as the outcome: what will be true when the reader finishes.
-- Give every `h2` and `h3` an `id` and list the same headings in `DocOnThisPage`.
-- Put one action in each step, and the command for that action inside the same step.
-- Link a chooser card to the heading of its path on the same page.
-
-## Don't
-
-- Don't hand-write the outline, the pager or the masthead. The `Doc*` parts own their markup, links and labels.
-- Don't put a `DocCallout` between a step and its command.
-- Don't add a second `DocCta` in the column; the rail carries the page's one offer.
-- Don't nest the rail menu more than three levels, and pass `icon=""` to its rows: `MenuItem` draws a home glyph by default.
-- Don't put a `DocHeading` outside `DocProse`; it renders at body size there.
-- Don't drop a `Button` row straight into `DocProse`: the prose restyles its `<a>` and the label loses contrast. Wrap the row in an element with `data-doc-chrome`.
-
-## Copy
-
-- **Title:** the task or the product, sentence case: `First deploy in a few minutes`, `Applications`.
-- **Deck:** one sentence that names the outcome: `By the end of this tutorial, an application will be live…`.
-- **Step titles:** imperative, ending with a period when the step is a sentence: `Open Azion Console.`.
-- **Headings:** nouns or short imperatives: `Before you start`, `Test it`, `Next steps`.
-- **Search:** short enough to fit the field: `Search docs`.
-
-## Accessibility
-
-- Heading order: one `h1` (`DocPageHeader`), then `h2` sections and `h3` subsections from `DocHeading`; no level skipped.
-- Landmarks: the bar (`GlobalHeader`, `Azion documentation`), the rail (`Sidebar`, named after the product), `main`, the outline rail (`complementary`) and the footer.
-- Focus order follows the reading order: bar, rail, column (masthead, content, pager), outline, footer. The ⌘K field is a real button with `aria-keyshortcuts`.
-- `DocOnThisPage` marks the active heading with `aria-current`; code blocks announce their copy result through their own live region.
-
-## States
-
-- `Tutorial`: the primary; a getting-started page with a chooser, steps, commands, an agent prompt and the pager in both directions.
-- `Reference`: a product reference page; an info callout, the request-path diagram, a JSON rule and the term list, with the pager forward only.
-
-## Related
-
-- `shells/documentation`: the chrome alone, without a page.
-- `headers/docs-header`: the bar alone.
-- `docs/landing`: the documentation home.
-
-## Variants
-
-- `Tutorial` — primary (the code below)
-- `Reference` — A product reference page: an info callout under the masthead, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list in DocProse and a two-column Next steps.
-
-Each variant is the same screen in another state: `get_pattern("docs/article", { variant })`, or the file under `blocks/docs/article/variants/`.
-
-The code of every state is in [blocks/docs/article.md](blocks/docs/article.md) and `blocks/docs/article/article.vue`.
-
----
-
-<!-- blocks/docs/landing.md -->
-
-# DocsLanding (`docs/landing`)
-
-> The documentation home, chrome included: the docs bar with a `SearchTrigger` that widens into the ⌘K field, the rail with the Getting started and Platform resources groups and the `ThemeSwitcher`, then a reading column with no outline rail. It opens on a `DocPageHeader` with no breadcrumb (the welcome title and one sentence), the Get started `Button` and a `DocPrompt` the reader hands to a coding agent. Then the entry points, each a `DocHeading` section: Start by interface (a full-width `DocCard` for agent setup over a three-column `DocCardGroup` of Console, CLI and API), Start by objective (two columns), Ready-made templates (four columns of framework glyphs, two on a phone, with an Also useful line in `DocProse`) and Follow along (release notes, blog, Discord). `DocPagination` points forward to the first page in reading order and the `Footer` closes the column. Built from `GlobalHeader`, `NavigationMenu`, `SearchTrigger`, `Sidebar`, `MenuRoot`, `ThemeSwitcher`, `ScrollArea`, `DocPageHeader`, `DocPrompt`, `DocCardGroup`, `DocCard`, `DocHeading`, `DocProse`, `DocPagination`, `Footer` and `StatusIndicator`.
-
-- Surface: docs
-- Source: `blocks/docs/landing/landing.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("docs/landing")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocHeading](../../components/doc-heading.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [Footer](../../components/footer.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `MenuGroup`, `MenuItem`, `MenuRoot`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
-- Skills: `webkit-layout`, `webkit-navigation`, `webkit-microcopy`
-
-## Asked as
-
-documentation home; docs home page; docs landing page; documentation landing; welcome to the docs; docs index with entry points; start here page; developer portal home; página inicial da documentação; home da documentação; portal do desenvolvedor
-
-The front door of the documentation. Readers arrive without a page in mind: a new user who wants the first step, a developer who knows the tool they want (Console, CLI, API), or someone with a goal (build, accelerate, secure). The landing sends each of them to one page in a click. It has no outline rail, because it has no reading order of its own; the column holds grids of entry points instead.
-
-## When to use
-
-- The home of a documentation site, or of one product's documentation.
-- A developer portal start page that routes to guides, tools and references.
-
-## When not to use
-
-- A page that teaches or describes one thing from top to bottom: use `docs/article`.
-- The marketing home: use `shells/website` and the page sections.
-- A list of every page: the rail already lists them; don't repeat it as a grid.
-
-## Building blocks
-
-### A. Docs bar — `GlobalHeader`, `Brand`, `NavigationMenu`, `IconButton`, `SearchTrigger`, `Button`
-
-The bar of `headers/docs-header`, with Search as a `collapsible` `SearchTrigger` (`Search docs`) inside an `@container`. On the landing, search is the most-used control, so it keeps its field form whenever the bar is wide enough.
-
-### B. Rail — `Sidebar`, `MenuRoot`, `MenuGroup`, `MenuItem`, `ThemeSwitcher`
-
-From `lg`. Getting started first, with Overview selected, then Platform resources. Rows pass `icon=""`. The `ThemeSwitcher` sits in the rail footer.
-
-### C. Welcome — `ScrollArea`, `DocPageHeader`, `Button`, `DocPrompt`
-
-`DocPageHeader` with no breadcrumb and no meta actions carries the page's `h1` and one sentence. Under it go one primary `Button` (Get started) and a `DocPrompt` the reader copies into a coding agent.
-
-### D. Entry points — `DocProse`, `DocHeading`, `DocCardGroup`, `DocCard`
-
-The groups sit in one `DocProse`, which gives `DocHeading` its type scale. Each group is a `section` labelled by its `DocHeading`. Start by interface opens with one full-width `DocCard` (eyebrow `Recommended`, agent setup) over three `DocCard`s with a `link-label`. Start by objective uses two columns. Templates use four columns with framework glyphs (`ai ai-react`, `ai ai-next`…) and two on a phone. An "Also useful" line in `DocProse` closes a group when it has more than the grid shows.
-
-### E. Footer — `DocPagination`, `Footer`, `StatusIndicator`
-
-`DocPagination` points forward to the first page in reading order. The `content` placement `Footer` follows inside the column's scroller.
-
-## Do
-
-- Name each card by its destination and give it one sentence on what the reader will do there.
-- Keep each group to one grid of at most eight cards.
-- Order the groups from the broadest entry (interface) to the narrowest (templates).
-
-## Don't
-
-- Don't add an outline rail; the landing has no headings to follow.
-- Don't use the marketing `Banner` here; at docs scale it outweighs the page title. A full-width `DocCard` with an eyebrow does the job.
-- Don't link a card to another landing; link to a page that starts the task.
-
-## Copy
-
-- **Title:** `Welcome to Azion Docs`, or the product name for a product landing.
-- **Group headings:** `Start by interface`, `Start by objective`, `Ready-made templates`, `Follow along`.
-- **Card titles:** the destination, sentence case: `Build your application`. **Link labels:** a verb and the object: `Install the CLI`.
-- **External cards:** say where the link goes in the label: `Join the Discord`.
-
-## Accessibility
-
-- Heading order: the `h1` from `DocPageHeader`, then one `h2` per group from `DocHeading`; cards carry no headings above `h3`.
-- Landmarks: the bar, the rail (`Documentation`), `main` with one `section` per group (`aria-labelledby` its heading), and the footer.
-- Focus order follows the reading order; every card is one link, and external ones open a new tab.
-- The `DocPrompt` copy result is announced by its own live region.
-
-## States
-
-- `Default`: the only state; the landing is static content and has no loading, empty or error form.
-
-## Related
-
-- `docs/article`: the pages the landing links to.
-- `shells/documentation`: the chrome alone.
-- `headers/docs-header`: the bar alone.
-
-## Variants
-
-- `Default` — primary (the code below)
-
-Each variant is the same screen in another state: `get_pattern("docs/landing", { variant })`, or the file under `blocks/docs/landing/variants/`.
-
-The code of every state is in [blocks/docs/landing.md](blocks/docs/landing.md) and `blocks/docs/landing/landing.vue`.
-
----
-
 <!-- blocks/headers/auth-header.md -->
 
 # AuthHeader (`headers/auth-header`)
@@ -12247,17 +12032,17 @@ The code of every state is in [blocks/shells/console.md](blocks/shells/console.m
 
 # Documentation (`shells/documentation`)
 
-> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`.
+> The documentation shell: a `GlobalHeader` in its `content` placement (see Templates › Headers › DocsHeader), a `Sidebar` rail from `lg` carrying a `MenuRoot` of the current product’s pages and the theme switcher in its footer, the reading column scrolling inside its own `ScrollArea`, and the “On this page” outline from `xl`. The `Footer` sits INSIDE the reading column’s scroller, in its `content` placement: the bands run full bleed across the zone between the rail and the outline and open on the page boundary, like the top bar above. Below `lg` the rail leaves and the footer takes the whole width; below `md` the footer stacks. The social buttons are small and row two sizes its bands by content, so the brand mark, seven icons and the status pair share one line in a zone as narrow as this column at 1024 wide; the brand leads that row from `lg` (answered by the `lg:` utility, so it follows the breakpoint token) and moves to the signature band below it. Built from `GlobalHeader`, `Sidebar`, `MenuRoot`, `ScrollArea`, `ThemeSwitcher` and `Footer`. Three variants fill the reading column with a real page, built only from the documentation parts: Article is a tutorial (First deploy) — `DocPageHeader` with breadcrumb, last updated and the Copy / View as Markdown and Agent setup actions, then one `DocProse` holding a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocHeading` sections, `DocSteps` with `CodeBlock` commands, a `DocPrompt` for the coding agent, Next steps as `DocCardGroup`, Related resources as `DocItem` rows in a `FrameBox`, then `DocPagination`, with the outline rail as `DocOnThisPage` plus the closing `DocCta`; Reference is a product reference page (an info callout, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home (no outline rail: welcome `DocPageHeader`, Get started, a `DocPrompt`, then `DocCardGroup` entry points by interface, objective, template and follow-along). The variants carry search as a `SearchTrigger` that widens into the ⌘K field.
 
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [Footer](../../components/footer.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `MenuGroup`, `MenuItem`, `MenuRoot`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [Diagram](../../components/diagram.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocItem](../../components/doc-item.md), [DocOnThisPage](../../components/doc-on-this-page.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), `ItemList`, `MenuGroup`, `MenuItem`, `MenuRoot`, `MenuSub`, `MenuSubContent`, `MenuSubTrigger`, [NavigationMenu](../../components/navigation-menu.md), [ScrollArea](../../components/scroll-area.md), [SearchTrigger](../../components/search-trigger.md), [Select](../../components/select.md), [Sidebar](../../components/sidebar.md), [StatusIndicator](../../components/status-indicator.md), [ThemeSwitcher](../../components/theme-switcher.md)
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
 
-docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout
+docs shell; documentation layout; docs page layout; documentation site; docs sidebar; on this page outline; knowledge base layout; layout da documentação; página de documentação; estrutura da documentação; documentation shell; docs layout; documentation article; docs article page; tutorial page; getting started guide; how-to guide; product reference page; reference documentation; docs page with steps and code; documentation home; docs home page; docs landing page; developer portal home; artigo da documentação; página de tutorial; guia de primeiros passos; página de referência do produto; página inicial da documentação; home da documentação
 
 The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close: the docs header on top, a rail of the current product's pages from `lg`, a reading column that scrolls on its own, the "On this page" outline from `xl`, and the footer inside the reading column's scroller so the bands sit between the rail and the outline.
 
@@ -12329,12 +12114,20 @@ In the footer's language slot, trigger labelled `Language`.
 
 ## Do
 
+- For a real page, start from a variant (Article, Reference, Landing), not from the primary: the primary's column is a placeholder, and the variants build it from the `Doc*` parts only.
+- Put everything under `DocPageHeader` in one `DocProse`: it sets the running text and gives `DocHeading` its type scale. Every `DocHeading` has an `id`, and `DocOnThisPage` lists the same headings.
+- Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
+- Use `SearchTrigger` (`collapsible`, `Search docs`) inside an `@container` for search, so it is the ⌘K field when the bar is wide and the magnifier when it is narrow.
 - Keep the outline's items equal to the article's `h2` headings.
 - Keep the rail scoped to the current product; the header links switch products.
 - Let the footer run full bleed across the zone between rail and outline.
 
 ## Don't
 
+- Don't hand-write the outline, the pager or the masthead; `DocOnThisPage`, `DocPagination` and `DocPageHeader` own their markup and labels.
+- Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`, or the prose restyles its `<a>` and the label loses contrast.
+- Don't leave the rail rows on `MenuItem`'s default glyph: pass `icon=""`.
+- Don't use the marketing `Banner` on the landing; a full-width `DocCard` with an eyebrow does the job at docs scale.
 - Don't put the footer outside the scroller: it would stay pinned and eat the reading height.
 - Don't reuse the console rail here; docs navigation is pages, not modules.
 
@@ -12343,6 +12136,8 @@ In the footer's language slot, trigger labelled `Language`.
 - **Outline heading:** `On this page`.
 - **Article headings:** verb-led tasks in sentence case: `Create the function`, `Verify the response`.
 - **Menu items:** page titles exactly as the `h1` reads.
+- **Step titles:** imperative, ending with a period when the step is a sentence: `Open Azion Console.`
+- **Landing groups:** `Start by interface`, `Start by objective`, `Ready-made templates`, `Follow along`; card link labels are a verb and the object (`Install the CLI`).
 
 ## Accessibility
 
@@ -12352,7 +12147,10 @@ In the footer's language slot, trigger labelled `Language`.
 
 ## States
 
-- Default: the only state; rail from `lg`, outline from `xl`, footer stacked below `md`.
+- Default: the chrome with a placeholder column; rail from `lg`, outline from `xl`, footer stacked below `md`.
+- Article: a tutorial page from the `Doc*` parts, pager in both directions, outline rail with `DocOnThisPage` and `DocCta`.
+- Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
+- Landing: the documentation home; no outline rail, entry-point grids, pager forward to the first page.
 
 ## Related
 
@@ -12362,6 +12160,9 @@ In the footer's language slot, trigger labelled `Language`.
 ## Variants
 
 - `Default` — primary (the code below)
+- `Article` — A tutorial page: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources, the pager, and the outline rail with DocOnThisPage and DocCta.
+- `Reference` — A product reference page: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps.
+- `Landing` — The documentation home: no outline rail; the welcome masthead, Get started, a DocPrompt, then DocCardGroup entry points by interface, objective, template and follow-along, and the pager forward.
 
 Each variant is the same screen in another state: `get_pattern("shells/documentation", { variant })`, or the file under `blocks/shells/documentation/variants/`.
 
