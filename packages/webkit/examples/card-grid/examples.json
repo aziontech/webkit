@@ -18,6 +18,11 @@
       "file": "columns.vue"
     },
     {
+      "name": "Balanced",
+      "summary": "Two, four and five cells under `columns: 3`. Every row is full: two split in halves, four make a 2 × 2, five make 3 + 2 with the last row sharing the width evenly. Pass `layout=\"fixed\"` only for tiles whose width must not change from row to row.",
+      "file": "balanced.vue"
+    },
+    {
       "name": "SeparatorColor",
       "summary": "The muted hairline weight, for rules one step back.",
       "file": "divider-color.vue"

@@ -13573,6 +13573,13 @@
      "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
     },
     {
+     "name": "signature",
+     "type": "'always' | 'compact'",
+     "default": "'always'",
+     "required": "false",
+     "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
+    },
+    {
      "name": "kind",
      "type": "'content' | 'site'",
      "default": "'content'",
@@ -13641,6 +13648,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`)."
+    },
+    {
+     "name": "signature",
+     "type": "'always' | 'compact'",
+     "default": "'always'",
+     "required": "false",
+     "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
     },
     {
      "name": "kind",
@@ -23831,6 +23845,13 @@
      "default": "false",
      "required": "false",
      "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+    },
+    {
+     "name": "layout",
+     "type": "CardGridLayout",
+     "default": "'balanced'",
+     "required": "false",
+     "doc": "How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty."
     }
    ],
    "slots": [
@@ -23888,6 +23909,13 @@
      "default": "false",
      "required": "false",
      "doc": "In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge."
+    },
+    {
+     "name": "layout",
+     "type": "CardGridLayout",
+     "default": "'balanced'",
+     "required": "false",
+     "doc": "How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty."
     }
    ],
    "slots": [

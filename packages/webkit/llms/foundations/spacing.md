@@ -208,6 +208,18 @@ allowed outside the frame, and it says so in a token of its own — which is wha
 reviewable in both directions. Nobody widens the bar by retuning the page, and nobody widens the page
 by retuning the bar.
 
+**A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
+built on it) takes `columns` as the most a row may hold, not how many it must: by default
+(`layout="balanced"`) it uses the fewest rows that cap allows, makes each row as narrow as that row
+count permits, and lets a short last row share the width evenly — under three columns 2 → halves,
+3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 7 → 3 + 3 + 1; under four, 5 → 3 + 2, 7 → 4 + 3. An empty cell in
+a framed grid reads as a missing card, so the rule has no exceptions for content cells;
+`layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
+
+**The footer closes the frame and nothing follows it.** `SiteFooter` is the page shell's last child,
+unwrapped; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
+the signature band that carries the brand.
+
 ## 7. The control cap in a field row
 
 An item-group field row is two columns: the content names the field (title + guidance) on the left,

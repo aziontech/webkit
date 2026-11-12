@@ -21,10 +21,11 @@ export const RULE_PURPOSE = {
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
   'no-style-override': 'class/style on a webkit component — restyling it',
   'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
-  'container-needs-width': 'Card, StatTile or ChartCard as a flex item with no width'
+  'container-needs-width': 'Card, StatTile or ChartCard as a flex item with no width',
+  'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper'
 }
 
-const TEMPLATE_ONLY_RULES = ['no-style-override', 'container-needs-width']
+const TEMPLATE_ONLY_RULES = ['no-style-override', 'container-needs-width', 'no-wrapped-page-chrome']
 
 export const FORMATS = new Set(['markdown', 'json'])
 export const FAIL_MODES = new Set(['never', 'any'])

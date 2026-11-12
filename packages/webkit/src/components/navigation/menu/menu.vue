@@ -77,7 +77,7 @@
   )
 
   const hasGroups = computed(() => props.groups.length > 0)
-  const hasContent = computed(() => hasGroups.value || Boolean(slots.default))
+  const hasContent = () => hasGroups.value || Boolean(slots.default)
 
   const rootClass = computed(() =>
     cn('relative flex w-full flex-col', attrs.class as string | undefined)
@@ -264,7 +264,7 @@
 
 <template>
   <div
-    v-if="hasContent"
+    v-if="hasContent()"
     v-bind="$attrs"
     :role="role"
     :aria-label="ariaLabelAttr"

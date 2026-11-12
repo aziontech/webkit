@@ -617,6 +617,18 @@ allowed outside the frame, and it says so in a token of its own — which is wha
 reviewable in both directions. Nobody widens the bar by retuning the page, and nobody widens the page
 by retuning the bar.
 
+**A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
+built on it) takes `columns` as the most a row may hold, not how many it must: by default
+(`layout="balanced"`) it uses the fewest rows that cap allows, makes each row as narrow as that row
+count permits, and lets a short last row share the width evenly — under three columns 2 → halves,
+3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 7 → 3 + 3 + 1; under four, 5 → 3 + 2, 7 → 4 + 3. An empty cell in
+a framed grid reads as a missing card, so the rule has no exceptions for content cells;
+`layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
+
+**The footer closes the frame and nothing follows it.** `SiteFooter` is the page shell's last child,
+unwrapped; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
+the signature band that carries the brand.
+
 ## 7. The control cap in a field row
 
 An item-group field row is two columns: the content names the field (title + guidance) on the left,
@@ -29522,6 +29534,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). |
+| `signature` | `'always' \| 'compact'` | `'always'` | false | Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same. |
 | `kind` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Slots
@@ -29551,6 +29564,8 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
 - Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
+- Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
 
 ## Accessibility
@@ -31930,6 +31945,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
+- **Do** hand the grid however many cells the content has. The default `balanced` layout fills every row: it takes the fewest rows `columns` allows, makes each row as narrow as that row count permits, and lets a short last row split the width evenly. Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
+- **Don't** pick `columns` from the item count, pad the list with placeholder cells, or leave a trailing empty cell: a framed or divided grid with an empty cell reads as a missing card. `columns` is the most a row may hold, not how many it must.
+- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
 - Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.
 - Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.
 - Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.
@@ -31964,6 +31982,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `mobileColumns` | `CardGridMobileColumns` | `1` | false | How many columns the grid holds below the small breakpoint. |
 | `dividerColor` | `CardGridDividerColor` | `'default'` | false | Weight of the hairline rules in the `divider` register. |
 | `flush` | `boolean` | `false` | false | In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
+| `layout` | `CardGridLayout` | `'balanced'` | false | How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty. |
 
 ## Slots
 
@@ -31993,6 +32012,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-mobile-columns` carries the small-breakpoint column count
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
+- `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
+- In `balanced`, the root sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the row width each breakpoint resolves to, and lays the cells out as a wrapping row whose cells grow to fill it; the counts come from the render, so the server HTML and the hydrated page lay out the same
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
 - Empty: a `frame` grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
@@ -40299,7 +40320,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Keep two lanes so they split the frame evenly, and three channels for the three-column row.
+- Give it as many lanes and channels as the page has: both rows balance themselves (`card-grid` `layout: 'balanced'`), so two channels split the row in halves, three in thirds, four into 2 × 2 and five into 3 + 2, with no empty cell.
+- Don't pad `channels` to three or drop one to make the row fit.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
 
@@ -40326,6 +40348,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Visual states: `default`
 - Empty: the lanes frame renders only when `lanes` is set and the channels frame only when `channels` is set; with neither the band renders nothing but its root
 - A lane's action and status link render only when given
+- Lanes fill rows of up to two and channels rows of up to three, each balanced so every row is full
 
 ## Accessibility
 
@@ -43375,7 +43398,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 # Site Footer
 
-> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The language select keeps its own value locally; its options are the labels the reader sees.
+> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.
 
 - Import: `import SiteFooter from '@aziontech/webkit/site-footer'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -43387,6 +43410,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
+- **Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.
+- **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
 - Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
@@ -43420,9 +43445,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the footer
-- From `lg` the Azion mark leads the social row; below `lg` it renders in the footer's signature band
+- From `lg` the Azion mark leads the social row and no signature band renders, so the footer ends on its bottom bar; below `lg` the mark renders in the footer's signature band
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- Server render and hydration: the `lg` check runs only after mount, so the server HTML and the first client render both place the Azion mark in the signature band and match; from `lg` it moves to the social row on mount.
+- Server render and hydration: both marks are always in the DOM and CSS shows one of them per width, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
 

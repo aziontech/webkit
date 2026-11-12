@@ -180,15 +180,13 @@
     compact.value ? 'bottom' : splitPosition.value
   )
 
-  const hasNavigation = computed(() => Boolean(slots.navigation))
-  const hasTools = computed(() => Boolean(slots.tools))
-  const hasSplit = computed(() => Boolean(slots['split-panel']))
+  const hasNavigation = () => Boolean(slots.navigation)
+  const hasTools = () => Boolean(slots.tools)
+  const hasSplit = () => Boolean(slots['split-panel'])
 
-  const showNavigation = computed(
-    () => hasNavigation.value && !compact.value && navigationOpen.value
-  )
-  const showTools = computed(() => hasTools.value && !compact.value && toolsOpen.value)
-  const showSplit = computed(() => hasSplit.value && splitOpen.value)
+  const showNavigation = () => hasNavigation() && !compact.value && navigationOpen.value
+  const showTools = () => hasTools() && !compact.value && toolsOpen.value
+  const showSplit = () => hasSplit() && splitOpen.value
 
   const minSize = computed(() => (position.value === 'side' ? 280 : 160))
   const maxSize = computed(() => {
@@ -340,14 +338,14 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-compact="compact || null"
-    :data-navigation="showNavigation ? 'open' : 'closed'"
-    :data-tools="toolsOpen && hasTools ? 'open' : 'closed'"
-    :data-split-panel="showSplit ? 'open' : 'closed'"
+    :data-navigation="showNavigation() ? 'open' : 'closed'"
+    :data-tools="toolsOpen && hasTools() ? 'open' : 'closed'"
+    :data-split-panel="showSplit() ? 'open' : 'closed'"
     :data-split-panel-position="position"
     class="@container/app-layout relative flex h-full min-h-0 w-full min-w-0 overflow-hidden bg-(--bg-canvas)"
   >
     <div
-      v-if="showNavigation"
+      v-if="showNavigation()"
       :data-testid="`${testId}__navigation`"
       class="flex h-full min-h-0 shrink-0"
     >
@@ -394,7 +392,7 @@
           </div>
 
           <section
-            v-if="showSplit && position === 'bottom'"
+            v-if="showSplit() && position === 'bottom'"
             :id="splitId"
             :aria-labelledby="splitTitleId"
             :data-testid="`${testId}__split-panel`"
@@ -456,7 +454,7 @@
         </div>
 
         <section
-          v-if="showSplit && position === 'side'"
+          v-if="showSplit() && position === 'side'"
           :id="splitId"
           :aria-labelledby="splitTitleId"
           :data-testid="`${testId}__split-panel`"
@@ -516,7 +514,7 @@
         </section>
 
         <section
-          v-if="showTools"
+          v-if="showTools()"
           :aria-labelledby="toolsTitleId"
           :data-testid="`${testId}__tools`"
           class="flex h-full min-h-0 shrink-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
@@ -553,7 +551,7 @@
     </div>
 
     <Drawer
-      v-if="hasNavigation && compact"
+      v-if="hasNavigation() && compact"
       key="navigation-drawer"
       v-model:open="navDrawerOpen"
       side="right"
@@ -576,7 +574,7 @@
     </Drawer>
 
     <Drawer
-      v-if="hasTools && compact"
+      v-if="hasTools() && compact"
       key="tools-drawer"
       v-model:open="toolsDrawerOpen"
       side="right"

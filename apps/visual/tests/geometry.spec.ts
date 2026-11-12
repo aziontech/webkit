@@ -156,3 +156,73 @@ for (const example of [
     )
   })
 }
+
+const BALANCED_ROWS: Record<number, number[][]> = {
+  768: [[2], [2, 2], [2, 2, 1]],
+  1280: [[2], [2, 2], [3, 2]]
+}
+
+for (const theme of THEMES) {
+  for (const width of [768, 1280]) {
+    const mode: Mode = { theme, width }
+    test(`geometry card grid balanced rows ${label(mode)}`, async ({ page }) => {
+      await prepare(page, mode)
+      const preview = await openExample(page, 'card-grid/balanced', mode)
+      const grids = await preview
+        .locator('[data-testid="marketing-card-grid"]')
+        .evaluateAll((nodes) =>
+          nodes.map((grid) => {
+            const box = grid.getBoundingClientRect()
+            const rows = new Map<number, DOMRect[]>()
+            for (const cell of Array.from(grid.children)) {
+              const rect = cell.getBoundingClientRect()
+              const top = Math.round(rect.top)
+              rows.set(top, [...(rows.get(top) ?? []), rect])
+            }
+            return [...rows.values()].map((cells) => ({
+              count: cells.length,
+              start: Math.min(...cells.map((c) => c.left)) - box.left,
+              end: box.right - Math.max(...cells.map((c) => c.right)),
+              spread:
+                Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width))
+            }))
+          })
+        )
+      expect(grids.map((rows) => rows.map((row) => row.count))).toEqual(BALANCED_ROWS[width])
+      for (const row of grids.flat()) {
+        expect(Math.abs(row.start)).toBeLessThanOrEqual(1)
+        expect(Math.abs(row.end)).toBeLessThanOrEqual(1)
+        expect(row.spread).toBeLessThanOrEqual(1)
+      }
+      await expect(preview).toHaveScreenshot(
+        shot(`geometry/card-grid-balanced--${label(mode)}.png`)
+      )
+    })
+  }
+
+  for (const width of [390, 1280]) {
+    const mode: Mode = { theme, width }
+    test(`geometry site footer ends on its bottom bar ${label(mode)}`, async ({ page }) => {
+      await prepare(page, mode)
+      const preview = await openExample(page, 'site-footer/default', mode)
+      const footer = preview.locator('footer[data-testid="layout-footer"]')
+      const signature = footer.locator('[data-testid="layout-footer__signature"]')
+      const social = footer.locator('[data-testid="layout-footer__social"]')
+      const home = 'a[aria-label="Azion home"]'
+      if (width >= 1024) {
+        await expect(signature).toBeHidden()
+        await expect(social.locator(home)).toBeVisible()
+        const footerBox = await footer.boundingBox()
+        const socialBox = await social.boundingBox()
+        if (!footerBox || !socialBox) throw new Error('no footer')
+        expect(
+          footerBox.y + footerBox.height - (socialBox.y + socialBox.height)
+        ).toBeLessThanOrEqual(1)
+      } else {
+        await expect(signature.locator(home)).toBeVisible()
+        await expect(social.locator(home)).toBeHidden()
+      }
+      await expect(footer).toHaveScreenshot(shot(`geometry/site-footer-end--${label(mode)}.png`))
+    })
+  }
+}

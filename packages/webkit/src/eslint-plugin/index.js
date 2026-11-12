@@ -8,6 +8,7 @@ import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
+import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
 import preferDefineModel from './rules/prefer-define-model.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
@@ -27,7 +28,8 @@ const rules = {
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
   'authoring-standards': authoringStandards,
-  'container-needs-width': containerNeedsWidth
+  'container-needs-width': containerNeedsWidth,
+  'no-wrapped-page-chrome': noWrappedPageChrome
 }
 
 const FILES = [
@@ -73,7 +75,8 @@ const RECOMMENDED = {
   'prefer-define-model': 'error',
   'no-style-override': 'error',
   'authoring-standards': 'error',
-  'container-needs-width': 'warn'
+  'container-needs-width': 'warn',
+  'no-wrapped-page-chrome': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width'])
