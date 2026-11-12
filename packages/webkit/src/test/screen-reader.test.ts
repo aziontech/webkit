@@ -149,11 +149,7 @@ describe('screen-reader smoke · overlays', () => {
   })
 
   it('Command', async () => {
-    const snapshot = await openAndRead(
-      CommandDefault,
-      () => document.querySelector<HTMLElement>('input[placeholder="Search…"]')!,
-      '[role="dialog"]'
-    )
+    const snapshot = await openAndRead(CommandDefault, () => button('Search'), '[role="dialog"]')
     expect(snapshot).toMatchInlineSnapshot(`
       "- dialog "Command menu":
         - heading "Command menu" [level=2]
