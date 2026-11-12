@@ -17,7 +17,13 @@ Pick the path by what you are about to do.
 
 1. Run `npx @aziontech/webkit init`. It installs the `webkit` MCP server, the lint, the skills and
    rules, and writes the WebKit block into `AGENTS.md` (and `CLAUDE.md`).
-2. A whole screen (login, signup, settings, a list, a create flow): start from a block.
+2. The app's chrome is one layout, composed once in `App.vue` around `RouterView`: `ConsoleLayout`
+   (console), `SiteLayout` (marketing site) or `DocLayout` (docs). Start it from its shell block
+   (`npx @aziontech/webkit add shells/console`, `shells/website`, `shells/documentation`) and
+   replace the stand-in body with `<RouterView />`. Every screen below is only a page body in that
+   layout's slot: no `<main>`, sidebar, header, footer or ⌘K palette of its own (a page opens the
+   console palette with `useConsoleLayout().openSearch()`).
+3. A whole screen (login, signup, settings, a list, a create flow): start from a block.
    `npx @aziontech/webkit search <the screen in plain words>`, then
    `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
    reviewed SFC into your views, checks its imports against the installed version, records it in
@@ -25,9 +31,9 @@ Pick the path by what you are about to do.
    screen from scratch. (The MCP gives an agent the same blocks: `search_patterns`, `get_pattern`.) Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
-3. A single piece: `suggest_component`, then `get_component`.
-4. Follow the `webkit-usage` skill, which points to the skill for each case.
-5. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
+4. A single piece: `suggest_component`, then `get_component`.
+5. Follow the `webkit-usage` skill, which points to the skill for each case.
+6. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 
 Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/skills) and [`rules/`](https://github.com/aziontech/webkit/tree/main/rules). Do not use `.claude/`,

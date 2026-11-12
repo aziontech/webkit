@@ -1,6 +1,6 @@
 ---
 name: webkit-usage
-description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — start a screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
+description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
 last_updated: 2026-11-12
@@ -13,7 +13,44 @@ enforced_by: [webkit-imports, webkit-tokens, webkit-style-override, webkit-prefe
 
 `@aziontech/webkit` is the Azion design system: a set of themed, accessible Vue 3 components. This project depends on it. When you build or review UI here, reach for a webkit component first, import it with the flat path, and style with `@aziontech/theme` tokens. This skill is the paste-safe reference for doing that right.
 
-## Start here: a screen begins from a pattern
+## Start here: one app layout, then each screen is a page body
+
+The chrome is composed **once**, in `App.vue`, around `RouterView`, from the layout of the surface:
+
+```vue
+<script setup>
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import { navigation } from './navigation'
+</script>
+
+<template>
+  <ConsoleLayout
+    :navigation="navigation"
+    :breadcrumbs="$route.meta.breadcrumbs ?? []"
+    :account="{ name: 'Ana Souza', email: 'ana@example.com' }"
+  >
+    <RouterView />
+  </ConsoleLayout>
+</template>
+```
+
+- **Console:** `ConsoleLayout` — navigation rows `{ id, label, icon, to }` (`to` is followed with
+  the app's router; `href` for plain URLs) and the active row follows the route; `actions`,
+  `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
+  opens the shared palette with `useConsoleLayout().openSearch()`
+  (`@aziontech/webkit/use-console-layout`).
+- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
+  site is dark: `<html data-theme="dark">`.
+- **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
+  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls.
+
+The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) are these layouts with
+the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
+A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
+`SiteFooter` or `Command`. Some platform blocks still inline a whole console shell around their body:
+keep what is inside their `<main>` and drop the rest.
+
+## A screen begins from a pattern
 
 Before composing anything, check whether the screen already exists as a block:
 `npx @aziontech/webkit search <the screen in plain words>` ("login", "account settings", "delete
@@ -34,8 +71,8 @@ keeping to the guidelines. Only when no pattern fits, compose from components (b
 - **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
   (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
-  binds the shortcut. Start from a header or shell block and it is already there (rule
-  `webkit-header-search`, lint `webkit/header-search-trigger`).
+  binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
+  their palette (rule `webkit-header-search`, lint `webkit/header-search-trigger`).
 - **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
   title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
