@@ -57,6 +57,8 @@ const noGapAfterClosingSection = (
   await import('../../src/eslint-plugin/rules/no-gap-after-closing-section.js')
 ).default
 const noClockInSetup = (await import('../../src/eslint-plugin/rules/no-clock-in-setup.js')).default
+const noDroppedChildren = (await import('../../src/eslint-plugin/rules/no-dropped-children.js'))
+  .default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -439,7 +441,9 @@ import FaqSection from '@aziontech/webkit/faq-section'
         filename: 'b.vue'
       },
       {
-        code: sfc('<ClosingCallToAction title="Go" /><FrameBox borders="y"><FaqSection /></FrameBox>'),
+        code: sfc(
+          '<ClosingCallToAction title="Go" /><FrameBox borders="y"><FaqSection /></FrameBox>'
+        ),
         filename: 'c.vue'
       },
       {
@@ -647,7 +651,161 @@ test('prefer-tree-shakeable-root', () => {
       {
         code: "<script setup>import Table from '@aziontech/webkit/table'</script><template><Table/></template>",
         filename: 'd.vue',
-        errors: [{ messageId: 'preferRoot', suggestions: 1 }]
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>import Table from "@aziontech/webkit/table-root"</script><template><Table/></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // named sub-component imports move to their own entries: the -root entry has no named exports
+      {
+        code: "<script setup>\nimport Table, { TableRow as Row } from '@aziontech/webkit/table';\n</script><template><Table><Row/></Table></template>",
+        filename: 'e.vue',
+        errors: [
+          {
+            messageId: 'preferRoot',
+            suggestions: [
+              {
+                messageId: 'useRoot',
+                output:
+                  '<script setup>\nimport Table from "@aziontech/webkit/table-root";\nimport Row from "@aziontech/webkit/table-row";\n</script><template><Table><Row/></Table></template>'
+              }
+            ]
+          }
+        ]
+      },
+      // a named binding the catalog cannot place: reported, but no suggestion that would break the import
+      {
+        code: "<script setup>import Table, { useTableHelper } from '@aziontech/webkit/table'</script><template><Table/></template>",
+        filename: 'f.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
+      }
+    ]
+  })
+  vueTs.run('prefer-tree-shakeable-root (type imports)', preferTreeShakeableRoot, {
+    valid: [],
+    invalid: [
+      {
+        code: '<script setup lang="ts">import Table, { type TableColumn } from \'@aziontech/webkit/table\'\nconst columns: TableColumn[] = []</script><template><Table :columns="columns"/></template>',
+        filename: 'g.vue',
+        errors: [{ messageId: 'preferRootNamed', suggestions: [] }]
+      }
+    ]
+  })
+})
+
+test('no-dropped-children', () => {
+  const imp = (n, s) => `<script setup>import ${n} from '@aziontech/webkit/${s}'</script>`
+  vue.run('no-dropped-children', noDroppedChildren, {
+    valid: [
+      // the text goes through the label prop
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Go home" href="/" /></template>`,
+        filename: 'a.vue'
+      },
+      // a named slot the spec lists, as a template child
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="pi pi-bolt" /></template></Button></template>`,
+        filename: 'b.vue'
+      },
+      // a named slot on the component tag itself
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="pi pi-bolt" /></Button></template>`,
+        filename: 'c.vue'
+      },
+      // whitespace between the tags renders nothing either way
+      {
+        code: `${imp('Button', 'button')}<template><Button label="Go">\n  </Button></template>`,
+        filename: 'd.vue'
+      },
+      // a component with a default slot
+      {
+        code: `${imp('Table', 'table')}<template><Table><Table.Row /></Table></template>`,
+        filename: 'e.vue'
+      },
+      // a sub-component the catalog has no slot data for is not judged
+      {
+        code: `${imp('TableRow', 'table-row')}<template><TableRow>cell</TableRow></template>`,
+        filename: 'f.vue'
+      },
+      // a native element and a non-webkit component are not judged
+      {
+        code: `<script setup>import Foo from './foo.vue'</script><template><button>Go</button><Foo>Go</Foo></template>`,
+        filename: 'g.vue'
+      },
+      // Card content in its #content slot
+      {
+        code: `${imp('Card', 'card')}<template><Card><template #content><p>Body</p></template></Card></template>`,
+        filename: 'h.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `${imp('Button', 'button')}<template><Button href="/">Go home</Button></template>`,
+        filename: 'i.vue',
+        errors: [
+          {
+            messageId: 'droppedText',
+            data: { tag: 'Button', prop: 'label' },
+            suggestions: [
+              {
+                messageId: 'useProp',
+                output: `${imp('Button', 'button')}<template><Button href="/" label="Go home" /></template>`
+              }
+            ]
+          }
+        ]
+      },
+      // an interpolation is dropped too; no suggestion (the value is not a static string)
+      {
+        code: `${imp('Button', 'button')}<template><Button>{{ text }}</Button></template>`,
+        filename: 'j.vue',
+        errors: [{ messageId: 'droppedText', suggestions: [] }]
+      },
+      // label already bound: report, but the suggestion would duplicate it
+      {
+        code: `${imp('Button', 'button')}<template><Button :label="name">Save</Button></template>`,
+        filename: 'k.vue',
+        errors: [{ messageId: 'droppedText', suggestions: [] }]
+      },
+      // a template with no slot directive is the default slot
+      {
+        code: `${imp('Button', 'button')}<template><Button label="A"><template><span>x</span></template></Button></template>`,
+        filename: 'l.vue',
+        errors: [{ messageId: 'droppedMarkup' }]
+      },
+      {
+        code: `${imp('Button', 'button')}<template><button label="A" /><Button label="A"><template #default>x</template></Button></template>`,
+        filename: 'm.vue',
+        errors: [{ messageId: 'droppedMarkup' }]
+      },
+      // markup inside Card goes to a named slot, not to the title prop
+      {
+        code: `${imp('Card', 'card')}<template><Card><div class="p-4">Body</div></Card></template>`,
+        filename: 'n.vue',
+        errors: [
+          {
+            messageId: 'droppedMarkup',
+            data: {
+              tag: 'Card',
+              slots: '#header, #content',
+              orProp: ', or pass text through its `title` prop'
+            }
+          }
+        ]
+      },
+      // a spec with no slots and no text prop
+      {
+        code: `${imp('TagChip', 'chip')}<template><tag-chip removable>Tag</tag-chip></template>`,
+        filename: 'o.vue',
+        errors: [{ messageId: 'dropped', data: { tag: 'tag-chip' } }]
       }
     ]
   })
@@ -665,6 +823,17 @@ test('no-deprecated-component', () => {
       {
         code: "import X from '@aziontech/webkit/chips'",
         errors: [{ messageId: 'deprecated', suggestions: 1 }]
+      },
+      // a non-component entry deprecated by its source JSDoc carries the note, no replacement
+      {
+        code: "import { webkitViteConfig } from '@aziontech/webkit/vite'",
+        errors: [
+          {
+            message:
+              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.0 — nothing to pre-bundle. Removed in 7.0.",
+            suggestions: []
+          }
+        ]
       }
     ]
   })

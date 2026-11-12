@@ -182,7 +182,8 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' }
+      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'lint', by: 'no-dropped-children' }
     ]
   },
   {

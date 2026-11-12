@@ -18915,6 +18915,7 @@
    "treeShakeableImport": "@aziontech/webkit/spinner",
    "category": "utils",
    "structure": "monolithic",
+   "styleSeam": true,
    "surface": "product",
    "examplesFile": "catalog/examples/spinner.json",
    "docsFile": "catalog/components/spinner.json"
@@ -22037,7 +22038,7 @@
      "type": "ClientMosaicColumnsCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
     }
    ],
    "surface": "marketing",
@@ -23317,7 +23318,7 @@
      "type": "CustomerSpotlightCard[]",
      "default": "[]",
      "required": "false",
-     "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused."
+     "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused."
     },
     {
      "name": "ariaLabel",
@@ -24995,7 +24996,9 @@
    "import": "@aziontech/webkit/vite",
    "target": "./src/vite/index.js",
    "kind": "other",
-   "treeShakeableImport": "@aziontech/webkit/vite"
+   "treeShakeableImport": "@aziontech/webkit/vite",
+   "deprecated": true,
+   "deprecation": "since 6.0 — WebKit no longer depends on vee-validate, so it has nothing to pre-bundle. An app that uses vee-validate sets `optimizeDeps: { include: ['vee-validate'] }` in its own Vite config instead. Removed in 7.0."
   },
   "card-grid": {
    "import": "@aziontech/webkit/card-grid",

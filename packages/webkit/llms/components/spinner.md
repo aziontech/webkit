@@ -14,6 +14,7 @@
 ## Do
 
 - It has no props: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
+- class` on its tag is its sizing API, not a restyle: the spec is a `style_seam`, so `webkit/no-style-override` accepts `<Spinner class="size-4" />`. Keep the class to a `size-*` and, when it must differ from the surrounding text, a text color token.
 - It is `aria-hidden`; announce the busy state on the surrounding element (`aria-busy`, a live region or visible text).
 - The spin stops under reduced motion, so pair it with text when the wait matters.
 
@@ -23,7 +24,7 @@
 - Content that is still loading → use `skeleton`.
 - Progress you can measure → use `progress`.
 - A status with a color and a label → use `status-indicator`.
-- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+- Built to be personalized (style seam): any class is accepted on the tag.
 
 ## Related
 

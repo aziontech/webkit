@@ -102,6 +102,21 @@ export const BUILD_OUTPUT_DIRS = [
 
 export const TOOL_CONFIG_FILES = '*.config.{js,cjs,mjs,ts,cts,mts}'
 
+export const LABEL_CONTROL_COMPONENTS = [
+  'Checkbox',
+  'Combobox',
+  'Input',
+  'MultiSelect',
+  'NumberInput',
+  'PasswordInput',
+  'PhoneInput',
+  'RadioButton',
+  'Select',
+  'Slider',
+  'Switch',
+  'Textarea'
+]
+
 function eslintFlatConfig(severityConfig) {
   const ignores = BUILD_OUTPUT_DIRS.map((dir) => `'**/${dir}/'`).join(', ')
   return `import webkitPlugin from '@aziontech/webkit/eslint-plugin'
@@ -128,7 +143,13 @@ export default [
       'vuejs-accessibility/aria-props': 'error',
       'vuejs-accessibility/aria-role': 'error',
       'vuejs-accessibility/click-events-have-key-events': 'error',
-      'vuejs-accessibility/label-has-for': 'error',
+      'vuejs-accessibility/label-has-for': [
+        'error',
+        {
+          required: { some: ['nesting', 'id'] },
+          controlComponents: [${LABEL_CONTROL_COMPONENTS.map((name) => `'${name}'`).join(', ')}]
+        }
+      ],
       'vuejs-accessibility/no-autofocus': 'error'
     }
   },

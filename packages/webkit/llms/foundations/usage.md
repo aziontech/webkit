@@ -176,7 +176,10 @@ it only through its props (`kind`, `size`); a class or style on its tag is resty
     class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-lg)"
   >
     <p class="text-body-sm text-(--text-muted)">Changes apply to every domain.</p>
-    <Button kind="primary">Save</Button>
+    <Button
+      kind="primary"
+      label="Save"
+    />
   </section>
 </template>
 ```

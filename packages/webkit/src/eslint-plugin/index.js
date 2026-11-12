@@ -6,6 +6,7 @@ import menuNodeHref from './rules/menu-node-href.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
+import noDroppedChildren from './rules/no-dropped-children.js'
 import noGapAfterClosingSection from './rules/no-gap-after-closing-section.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
@@ -41,7 +42,8 @@ const rules = {
   'no-root-relative-asset': noRootRelativeAsset,
   'menu-node-href': menuNodeHref,
   'no-gap-after-closing-section': noGapAfterClosingSection,
-  'accessible-name': accessibleName
+  'accessible-name': accessibleName,
+  'no-dropped-children': noDroppedChildren
 }
 
 const FILES = [
@@ -94,7 +96,8 @@ const RECOMMENDED = {
   'no-root-relative-asset': 'error',
   'menu-node-href': 'warn',
   'no-gap-after-closing-section': 'error',
-  'accessible-name': 'error'
+  'accessible-name': 'error',
+  'no-dropped-children': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze([

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: e071ef551db1fd9f6e41911001e0fa9a92a14be02ad8e8ae057ae894e80a886c
+checksum: 514745c7dadef996cadb2e28cd4c1d68f55051c669cab377f298cdc3009b446e
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # CustomerSpotlight — Component Spec
@@ -33,13 +33,15 @@ A row of client cards, each painted in the client's own colours with its reverse
 ## Best practices
 
 - Three or four cards.
-- Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.
+- Use the client's reversed (white) logo; the face paints the client's brand colours.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the card reads its colours by `name`. Add a missing client to the registry rather than writing its hex colours into the page. Pass `brand` only for a one-off client the registry does not carry; a card with neither paints a black face.
 - One sentence per story line.
 
 ## Usage
 
 ```vue
 <script setup>
+  import agibankLogo from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
 </script>
 
@@ -47,11 +49,10 @@ A row of client cards, each painted in the client's own colours with its reverse
   <CustomerSpotlight
     :cards="[
       {
-        name: 'Northwind',
-        logo: '/logos/northwind-white.svg',
-        href: '/customers/northwind',
-        description: 'Northwind cut page load time in half.',
-        brand: { base: '#0e89ff', glow: '#0e89ff' }
+        name: 'Agibank',
+        logo: agibankLogo,
+        href: '/customers/agibank',
+        description: 'Agibank moved its digital bank to a platform that scales with every campaign.'
       }
     ]"
   />
@@ -62,7 +63,7 @@ A row of client cards, each painted in the client's own colours with its reverse
 
 | Prop         | Type                      | Default | Required | JSDoc                                                                                                                                               |
 | ------------ | ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cards`      | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused. |
+| `cards`      | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
 | `ariaLabel`  | `string`                  | `''`    | false    | Accessible name of the list; empty uses the built-in "Customer stories".                                                                            |
 | `storyLabel` | `string`                  | `''`    | false    | Label revealed under the description while the card is open; empty uses the built-in "Read story".                                                  |
 | `anchor`     | `string`                  | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                            |

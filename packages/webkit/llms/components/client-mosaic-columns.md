@@ -13,7 +13,8 @@
 ## Do
 
 - Exactly three cells; the grid is three columns from the large breakpoint.
-- brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
+- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
 
 ## Don’t
 
@@ -31,12 +32,12 @@
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
 | `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
+| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
 
 ## States
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
-- The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`; `data-treatment` on every mark drives its ink
+- The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
 - Empty: when `cells` is empty the band renders nothing
 
 ## Accessibility
@@ -71,7 +72,6 @@
         href: 'https://www.azion.com/en/success-case/magalu/',
         story:
           'Explore how Magalu enhances cybersecurity with Azion\'s Firewall and WAF, improving threat intelligence and bot management in retail.',
-        brand: { base: '#0e89ff', glow: '#0e89ff' },
         logoTreatment: 'monochrome'
       },
       {
@@ -80,7 +80,6 @@
         href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
         story:
           'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
-        brand: { base: '#ffffff', glow: '#ffffff', ink: 'dark' },
         logoTreatment: 'knockout'
       },
       {
@@ -89,7 +88,6 @@
         href: 'https://www.azion.com/en/success-case/madeiramadeira/',
         story:
           'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',
-        brand: { base: '#ff9014', glow: '#ff9014' },
         logoTreatment: 'monochrome'
       }
     ]"

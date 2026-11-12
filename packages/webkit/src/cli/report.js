@@ -30,7 +30,8 @@ export const RULE_PURPOSE = {
   'menu-node-href': 'navigation node naming its destination path/to/url instead of href',
   'no-gap-after-closing-section':
     'SectionGap or closing frame after a section that draws its own close',
-  'accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby'
+  'accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
+  'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
 const TEMPLATE_ONLY_RULES = [
@@ -39,7 +40,8 @@ const TEMPLATE_ONLY_RULES = [
   'header-search-trigger',
   'no-wrapped-page-chrome',
   'no-gap-after-closing-section',
-  'accessible-name'
+  'accessible-name',
+  'no-dropped-children'
 ]
 
 export const FORMATS = new Set(['markdown', 'json'])

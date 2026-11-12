@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { clientBrand } from '../../../assets/logos/clients/brands'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -33,8 +34,8 @@
     href: string
     /** One-line story shown under the face. */
     story: string
-    /** Brand colours painting the face. */
-    brand: ClientMosaicColumnsBrand
+    /** Brand colours painting the face; defaults to the client registry's colours for `name`. */
+    brand?: ClientMosaicColumnsBrand
     /** How the mark is inked on the face; defaults to `as-is`. */
     logoTreatment?: ClientMosaicColumnsLogoTreatment
   }
@@ -44,7 +45,7 @@
     ariaLabel?: string
     /** Label the mark face reveals on hover and the link's accessible name. */
     linkLabel?: string
-    /** The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` and `logoTreatment` is `monochrome`, `knockout` or `as-is`. */
+    /** The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }`, defaulting to the client registry's colours for `name`, and `logoTreatment` is `monochrome`, `knockout` or `as-is`. */
     cells?: ClientMosaicColumnsCell[]
   }
 
@@ -60,10 +61,18 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-client-mosaic-columns'
   )
 
-  const faceStyle = (cell: ClientMosaicColumnsCell): Record<string, string> => ({
-    '--wall-face': `radial-gradient(354px 354px at -15% -15%, ${cell.brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${cell.brand.glow}, transparent 70%), ${cell.brand.base}`,
-    '--wall-ink': cell.brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
-  })
+  const NO_BRAND: ClientMosaicColumnsBrand = {
+    base: 'var(--color-base-black)',
+    glow: 'var(--color-base-black)'
+  }
+
+  const faceStyle = (cell: ClientMosaicColumnsCell): Record<string, string> => {
+    const brand = cell.brand ?? clientBrand(cell.name) ?? NO_BRAND
+    return {
+      '--wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
+      '--wall-ink': brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
+    }
+  }
 </script>
 
 <template>

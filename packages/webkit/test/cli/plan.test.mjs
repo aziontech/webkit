@@ -3,8 +3,11 @@ import assert from 'node:assert/strict'
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync, readFileSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME } from '../../src/cli/plan.js'
+import { ESLint } from 'eslint'
+
+import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME, _internals } from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { FRAGMENT_START } from '../../src/cli/bundle.js'
 
@@ -697,4 +700,58 @@ test('planInit leaves PostCSS out when the app runs Tailwind through @tailwindcs
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
+})
+
+async function lintWithInitConfig(code) {
+  process.env.WEBKIT_CATALOG_PATH ||= fileURLToPath(new URL('../../catalog.json', import.meta.url))
+  const dir = mkdtempSync(join(tmpdir(), 'webkit-init-lint-'))
+  try {
+    let source = _internals.eslintFlatConfig('strict')
+    for (const spec of [
+      '@aziontech/webkit/eslint-plugin',
+      'eslint-plugin-vuejs-accessibility',
+      'vue-eslint-parser',
+      '@typescript-eslint/parser'
+    ]) {
+      source = source.replace(`'${spec}'`, JSON.stringify(import.meta.resolve(spec)))
+    }
+    writeFileSync(join(dir, 'eslint.config.mjs'), source)
+    writeFileSync(join(dir, 'Field.vue'), code)
+    const eslint = new ESLint({ cwd: dir, overrideConfigFile: join(dir, 'eslint.config.mjs') })
+    const [result] = await eslint.lintFiles(['Field.vue'])
+    return result.messages.filter((m) => m.ruleId === 'vuejs-accessibility/label-has-for')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+}
+
+test('the init ESLint config accepts a label that points at its control with for, or wraps it', async () => {
+  const script = "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport Label from '@aziontech/webkit/label'\n</script>\n"
+  assert.deepEqual(
+    await lintWithInitConfig(`${script}<template><Label for="name" label="Name" /><Input id="name" /></template>\n`),
+    [],
+    'a standalone Label with for next to its Input must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig('<template><label for="email">Email</label><input id="email" /></template>\n'),
+    [],
+    'a native label with for must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig('<template><label>Email <input /></label></template>\n'),
+    [],
+    'a label wrapping its control must pass'
+  )
+  assert.deepEqual(
+    await lintWithInitConfig(
+      "<script setup>\nimport Checkbox from '@aziontech/webkit/checkbox'\n</script>\n<template><label>Accept <Checkbox /></label></template>\n"
+    ),
+    [],
+    'a label wrapping a WebKit control must pass'
+  )
+  assert.equal(
+    (await lintWithInitConfig(`${script}<template><Label label="Name" /><Input /></template>\n`)).length,
+    1,
+    'a label that neither wraps nor points at a control must fail'
+  )
 })

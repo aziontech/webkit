@@ -23,7 +23,8 @@
  ],
  "bestPractices": [
   "Three or four cards.",
-  "Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.",
+  "Use the client's reversed (white) logo; the face paints the client's brand colours.",
+  "Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the card reads its colours by `name`. Add a missing client to the registry rather than writing its hex colours into the page. Pass `brand` only for a one-off client the registry does not carry; a card with neither paints a black face.",
   "One sentence per story line."
  ],
  "props": [
@@ -32,7 +33,7 @@
    "type": "CustomerSpotlightCard[]",
    "default": "[]",
    "required": "false",
-   "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused."
+   "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused."
   },
   {
    "name": "ariaLabel",
@@ -63,7 +64,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'\n  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'\n  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'\n\n  const cards = [\n    {\n      name: 'Agibank',\n      logo: agibankExtendedReversed,\n      href: '/customers/agibank',\n      description: 'Agibank moved its digital bank to a platform that scales with every campaign.',\n      brand: { base: '#0e89ff', glow: '#0e89ff' }\n    },\n    {\n      name: 'Americanas',\n      logo: americanasExtendedReversed,\n      href: '/customers/americanas',\n      description: 'Americanas serves Black Friday traffic with no capacity planning.',\n      brand: { base: '#e60014', glow: '#ff4d5e' }\n    },\n    {\n      name: 'Arezzo',\n      logo: arezzoExtendedReversed,\n      href: '/customers/arezzo',\n      description: 'Arezzo cut image weight by half across its storefronts.',\n      brand: { base: '#2b2b2b', glow: '#6b6b6b' }\n    }\n  ]\n</script>\n\n<template>\n  <CustomerSpotlight :cards=\"cards\" />\n</template>"
+   "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'\n  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'\n  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'\n\n  const cards = [\n    {\n      name: 'Agibank',\n      logo: agibankExtendedReversed,\n      href: '/customers/agibank',\n      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'\n    },\n    {\n      name: 'Americanas',\n      logo: americanasExtendedReversed,\n      href: '/customers/americanas',\n      description: 'Americanas serves Black Friday traffic with no capacity planning.'\n    },\n    {\n      name: 'Arezzo',\n      logo: arezzoExtendedReversed,\n      href: '/customers/arezzo',\n      description: 'Arezzo cut image weight by half across its storefronts.'\n    }\n  ]\n</script>\n\n<template>\n  <CustomerSpotlight :cards=\"cards\" />\n</template>"
   }
  ],
  "docs": "components/customer-spotlight.md"

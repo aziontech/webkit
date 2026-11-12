@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: c095cd58c29ea73b5a6b68fad1934463785f99708bb8d88823785a8b244d17f6
+last_updated: 2026-11-12
+checksum: 02d6f1a9a56645203287df11fb34a2f66c5922a61f014aecbfc356cd683e2dce
 ---
 # ClientMosaicColumns — Component Spec
 
@@ -30,12 +30,15 @@ Three featured success stories side by side: each column is a client's mark on a
 ## Best practices
 
 - Exactly three cells; the grid is three columns from the large breakpoint.
-- `brand.base` and `brand.glow` are the client's colours and may be any CSS colour; set `brand.ink` to `'dark'` when the face is light enough that the link text must be dark.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
+- Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
 
 ## Usage
 
 ```vue
 <script setup>
+import dafitiLogo from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
+import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
 import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 </script>
 
@@ -44,8 +47,8 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
     aria-label="Featured success stories"
     link-label="Read story"
     :cells="[
-      { name: 'Magalu', logo: '/logos/magalu.svg', href: '/success-case/magalu', story: 'How Magalu enhances cybersecurity with Azion.', brand: { base: '#0e89ff', glow: '#0e89ff' } },
-      { name: 'Dafiti', logo: '/logos/dafiti.svg', href: '/success-case/dafiti', story: 'Dafiti modernized its digital architecture.', brand: { base: '#ffffff', glow: '#ffffff', ink: 'dark' }, logoTreatment: 'knockout' }
+      { name: 'Magalu', logo: magaluLogo, href: '/success-case/magalu', story: 'How Magalu enhances cybersecurity with Azion.', logoTreatment: 'monochrome' },
+      { name: 'Dafiti', logo: dafitiLogo, href: '/success-case/dafiti', story: 'Dafiti modernized its digital architecture.', logoTreatment: 'knockout' }
     ]"
   />
 </template>
@@ -57,7 +60,7 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 |---|---|---|---|---|
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
 | `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
+| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
 
 ## Events
 
@@ -70,7 +73,7 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 ## States
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
-- The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`; `data-treatment` on every mark drives its ink
+- The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
 - Empty: when `cells` is empty the band renders nothing
 
 ## Motion & Animations

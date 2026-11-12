@@ -17,7 +17,7 @@
     },
     {
       "name": "Columns",
-      "summary": "Three featured stories side by side, each mark on a face painted in the client brand colour over a one-line story that links to the case.",
+      "summary": "Three featured stories side by side, each mark on a face painted in the client brand colour (read from the client registry by name) over a one-line story that links to the case.",
       "file": "site-columns.vue",
       "json": "site-columns.json"
     }

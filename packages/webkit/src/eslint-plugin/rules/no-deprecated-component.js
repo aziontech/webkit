@@ -32,7 +32,14 @@ export default {
       context.report({
         node: sourceNode,
         messageId: 'deprecated',
-        data: { source, hint: replacement ? ` Use '${replacement}' instead.` : '' },
+        data: {
+          source,
+          hint: replacement
+            ? ` Use '${replacement}' instead.`
+            : entry.deprecation
+              ? ` ${entry.deprecation.charAt(0).toUpperCase()}${entry.deprecation.slice(1)}`
+              : ''
+        },
         suggest: replacement
           ? [
               {

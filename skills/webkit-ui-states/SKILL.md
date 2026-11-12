@@ -179,11 +179,13 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
     title="No workloads yet"
     description="Create your first workload to see it here."
   >
-    <Button
-      label="Create workload"
-      kind="primary"
-      @click="onCreate"
-    />
+    <template #actions>
+      <Button
+        label="Create workload"
+        kind="primary"
+        @click="onCreate"
+      />
+    </template>
   </EmptyState>
 
   <!-- Success: the data -->

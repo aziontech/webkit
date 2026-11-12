@@ -1,6 +1,27 @@
 import { loadCatalog } from '../catalog.js'
 import { ctxCwd } from '../util.js'
 
+function kebab(name) {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase()
+}
+
+function namedImportEntries(node, catalog) {
+  const named = node.specifiers.filter((s) => s.type === 'ImportSpecifier')
+  const lines = []
+  for (const spec of named) {
+    if (node.importKind === 'type' || spec.importKind === 'type') return null
+    const imported = spec.imported.type === 'Identifier' ? spec.imported.name : spec.imported.value
+    const sub = kebab(imported)
+    const entry = catalog.getEntry(sub)
+    if (!entry || entry.kind !== 'subcomponent') return null
+    lines.push(`import ${spec.local.name} from ${JSON.stringify(entry.import)}`)
+  }
+  return lines
+}
+
 function collectElementNames(node, out) {
   if (!node || typeof node !== 'object') return
   if (node.type === 'VElement') {
@@ -23,6 +44,8 @@ export default {
     messages: {
       preferRoot:
         "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import '{{root}}' to keep it tree-shakeable.",
+      preferRootNamed:
+        "'{{binding}}' is imported from the compound entry '{{compound}}' (bundles all sub-components) but only '<{{binding}}>' is used. Import it from '{{root}}', and import each named binding from its own entry: '{{root}}' has no named exports.",
       useRoot: "Import from '{{root}}'"
     }
   },
@@ -48,7 +71,8 @@ export default {
           binding: def.local.name,
           compound: entry.import,
           root: entry.treeShakeableImport,
-          sourceNode: node.source
+          declaration: node,
+          namedLines: namedImportEntries(node, catalog)
         })
       },
       MemberExpression(node) {
@@ -65,15 +89,34 @@ export default {
           const rootUsed = names.has(imp.binding)
           const compoundUsed = [...names].some((n) => n.startsWith(`${imp.binding}.`))
           if (compoundUsed || !rootUsed) continue
+          const data = { binding: imp.binding, compound: imp.compound, root: imp.root }
+          if (!imp.namedLines) {
+            context.report({ node: imp.declaration.source, messageId: 'preferRootNamed', data })
+            continue
+          }
+          const semi = context.sourceCode.getText(imp.declaration).trimEnd().endsWith(';')
+            ? ';'
+            : ''
+          const lines = [
+            `import ${imp.binding} from ${JSON.stringify(imp.root)}`,
+            ...imp.namedLines
+          ]
+          const indent = ' '.repeat(imp.declaration.loc.start.column)
           context.report({
-            node: imp.sourceNode,
+            node: imp.declaration.source,
             messageId: 'preferRoot',
-            data: { binding: imp.binding, compound: imp.compound, root: imp.root },
+            data,
             suggest: [
               {
                 messageId: 'useRoot',
                 data: { root: imp.root },
-                fix: (fixer) => fixer.replaceText(imp.sourceNode, JSON.stringify(imp.root))
+                fix: (fixer) =>
+                  imp.namedLines.length
+                    ? fixer.replaceText(
+                        imp.declaration,
+                        lines.map((line) => `${line}${semi}`).join(`\n${indent}`)
+                      )
+                    : fixer.replaceText(imp.declaration.source, JSON.stringify(imp.root))
               }
             ]
           })

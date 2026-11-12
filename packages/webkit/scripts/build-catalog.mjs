@@ -213,10 +213,42 @@ export function modelProps(target) {
       type: match[1].replace(/\s+/g, ' ').trim(),
       default: fallback,
       required: 'false',
-      doc: name === 'modelValue' ? 'Two-way value (`v-model`).' : `Two-way value (\`v-model:${name}\`).`
+      doc:
+        name === 'modelValue'
+          ? 'Two-way value (`v-model`).'
+          : `Two-way value (\`v-model:${name}\`).`
     })
   }
   return models
+}
+
+export function sourceDeprecation(source) {
+  const exports = [
+    ...source.matchAll(
+      /(\/\*\*(?:(?!\*\/)[\s\S])*\*\/\s*)?^export\s+(?:\{|\*|default\b|const\b|let\b|var\b|function\b|async\b|class\b)/gm
+    )
+  ]
+  if (!exports.length) return null
+  const notes = exports.map((match) => {
+    const doc = match[1] ?? ''
+    const tag = doc.match(/@deprecated\b([\s\S]*?)(?=\n\s*\*\s*@|\*\/)/)
+    return tag
+      ? tag[1]
+          .split('\n')
+          .map((line) => line.replace(/^\s*\*\s?/, '').trim())
+          .join(' ')
+          .trim()
+      : null
+  })
+  if (notes.some((note) => note === null)) return null
+  return notes[0] || 'Deprecated.'
+}
+
+function targetDeprecation(target) {
+  if (typeof target !== 'string' || !/\.(js|mjs|ts)$/.test(target)) return null
+  const file = resolve(PKG_ROOT, target)
+  if (!existsSync(file)) return null
+  return sourceDeprecation(readFileSync(file, 'utf-8'))
 }
 
 function _readSpec(subpath) {
@@ -385,8 +417,13 @@ export async function build() {
       if (spec.replacedBy) entry.replacedBy = spec.replacedBy
       if (spec.styleSeam) entry.styleSeam = true
       if (spec.setup) entry.setup = spec.setup
-    } else if (entry.kind === 'component') {
-      entry.category = categoryFromTarget(target)
+    } else {
+      if (entry.kind === 'component') entry.category = categoryFromTarget(target)
+      const deprecation = targetDeprecation(target)
+      if (deprecation) {
+        entry.deprecated = true
+        entry.deprecation = deprecation
+      }
     }
 
     const surface = surfaceFromTarget(target)

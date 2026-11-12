@@ -27,34 +27,7 @@ const IMPORTED_PACKAGES = [
 // Errors that cannot be fixed in the copied file itself: the component's own spec documents
 // the usage the preset rejects. Each entry names where the fix belongs. The last test fails
 // once an entry no longer matches anything, so the list only shrinks.
-const KNOWN_CONFLICTS = [
-  {
-    rule: 'webkit/no-style-override',
-    tags: ['Spinner'],
-    reason:
-      'the spec sizes the component through class (Spinner size-*, Carousel.Item w-72, ScrollArea max-h-80, LogView h-full, Sidebar h-screen w-[280px]) or through custom properties (Hero --banner-offset); the spec needs style_seam: true, or the rule needs to accept sizing utilities'
-  },
-  {
-    rule: 'webkit/no-hardcoded-color',
-    files: [
-      'examples/client-mosaic/site-columns.vue',
-      'examples/client-mosaic-columns/default.vue',
-      'examples/customer-spotlight/default.vue'
-    ],
-    reason:
-      "the component API takes the client's brand colours as CSS colours (brand: { base, glow }); every spelling of one is a hardcoded colour to the rule"
-  },
-  {
-    rule: 'vuejs-accessibility/label-has-for',
-    files: [
-      'examples/label/default.vue',
-      'examples/label/hinted.vue',
-      'examples/label/required.vue'
-    ],
-    reason:
-      "the init preset keeps the rule's default required: { every: ['nesting', 'id'] }, so the standalone Label component, which can only point at a control with for, never passes; plan.js should set required: { some: ['nesting', 'id'] }"
-  }
-]
+const KNOWN_CONFLICTS = []
 
 function conflictFor(error) {
   return KNOWN_CONFLICTS.find(

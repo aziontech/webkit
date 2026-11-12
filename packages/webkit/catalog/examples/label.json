@@ -2,18 +2,18 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Default label without the required indicator.",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label label=\"Label\" />\n</template>"
+   "summary": "Default label without the required indicator. The label points at its input with `for`.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-default-field\"\n      label=\"Label\"\n    />\n    <Input\n      id=\"label-default-field\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Required",
-   "summary": "Required label — appends the inline `* (Required)` indicator.",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Label\"\n    required\n  />\n</template>"
+   "summary": "Required label — appends the inline `* (Required)` indicator. The label points at its input with `for`.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-required-field\"\n      label=\"Label\"\n      required\n    />\n    <Input\n      id=\"label-required-field\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Hinted",
-   "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation.",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Sensitive\"\n    hint=\"Values are encrypted at rest and never displayed again after saving.\"\n  />\n</template>"
+   "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation. The label points at its input with `for`.",
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-hinted-secret\"\n      label=\"Sensitive\"\n      hint=\"Values are encrypted at rest and never displayed again after saving.\"\n    />\n    <Input\n      id=\"label-hinted-secret\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   }
  ]
 }

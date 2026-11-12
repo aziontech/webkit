@@ -269,26 +269,28 @@
           </template>
         </PageHeader>
         <Card>
-          <div class="p-(--spacing-md)">
-            <KeyValuePairs
-              :columns="3"
-              aria-label="Workload details"
-            >
-              <KeyValuePairs.Item label="Status">
-                <StatusIndicator
-                  severity="danger"
-                  label="Errors above 30%"
-                />
-              </KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Domains"
-                >www.example.com, shop.example.com</KeyValuePairs.Item
+          <template #content>
+            <div class="p-(--spacing-md)">
+              <KeyValuePairs
+                :columns="3"
+                aria-label="Workload details"
               >
-              <KeyValuePairs.Item label="Origin">api.example.com</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Cache hit ratio">91%</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Last deployment">Today, 13:58</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
-            </KeyValuePairs>
-          </div>
+                <KeyValuePairs.Item label="Status">
+                  <StatusIndicator
+                    severity="danger"
+                    label="Errors above 30%"
+                  />
+                </KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Domains"
+                  >www.example.com, shop.example.com</KeyValuePairs.Item
+                >
+                <KeyValuePairs.Item label="Origin">api.example.com</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Cache hit ratio">91%</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Last deployment">Today, 13:58</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+              </KeyValuePairs>
+            </div>
+          </template>
         </Card>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import { CLIENT_BRANDS } from '../../../assets/logos/clients/brands'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ClientMosaicColumns from './client-mosaic-columns.vue'
 
@@ -96,6 +97,28 @@ describe('ClientMosaicColumns', () => {
     const wall = getByAltText('Magalu').closest('section') as HTMLElement
 
     expect(wall.style.getPropertyValue('--wall-face')).toContain(cells[0].brand.base)
+  })
+
+  it('reads the face from the client registry by name when brand is left out', () => {
+    const { getByAltText } = render(ClientMosaicColumns, {
+      props: { cells: cells.map(({ brand: _brand, ...cell }) => cell) }
+    })
+
+    const face = (name: string) => (getByAltText(name).closest('section') as HTMLElement).style
+    expect(face('Magalu').getPropertyValue('--wall-face')).toContain(CLIENT_BRANDS['magalu']?.base)
+    expect(face('Dafiti').getPropertyValue('--wall-ink')).toBe('var(--color-base-black)')
+  })
+
+  it('paints a black face for a client the registry does not know and no brand', () => {
+    const { getByAltText } = render(ClientMosaicColumns, {
+      props: {
+        cells: [{ name: 'Northwind', logo: '/logos/northwind.svg', href: '/n', story: 'Story.' }]
+      }
+    })
+
+    const style = (getByAltText('Northwind').closest('section') as HTMLElement).style
+    expect(style.getPropertyValue('--wall-face')).toContain('var(--color-base-black)')
+    expect(style.getPropertyValue('--wall-ink')).toBe('var(--color-base-white)')
   })
 
   it('renders only the section when cells is empty', () => {

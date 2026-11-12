@@ -67,15 +67,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label label=\"Label\" />\n</template>"
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-default-field\"\n      label=\"Label\"\n    />\n    <Input\n      id=\"label-default-field\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Required",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Label\"\n    required\n  />\n</template>"
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-required-field\"\n      label=\"Label\"\n      required\n    />\n    <Input\n      id=\"label-required-field\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Hinted",
-   "sfc": "<script setup>\n  import Label from '@aziontech/webkit/label'\n</script>\n\n<template>\n  <Label\n    label=\"Sensitive\"\n    hint=\"Values are encrypted at rest and never displayed again after saving.\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import Label from '@aziontech/webkit/label'\n  import { ref } from 'vue'\n\n  const value = ref('')\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)\">\n    <Label\n      for=\"label-hinted-secret\"\n      label=\"Sensitive\"\n      hint=\"Values are encrypted at rest and never displayed again after saving.\"\n    />\n    <Input\n      id=\"label-hinted-secret\"\n      v-model=\"value\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/label.md"

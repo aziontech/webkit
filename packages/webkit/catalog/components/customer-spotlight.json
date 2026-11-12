@@ -13,7 +13,8 @@
  ],
  "bestPractices": [
   "Three or four cards.",
-  "Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.",
+  "Use the client's reversed (white) logo; the face paints the client's brand colours.",
+  "Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the card reads its colours by `name`. Add a missing client to the registry rather than writing its hex colours into the page. Pass `brand` only for a one-off client the registry does not carry; a card with neither paints a black face.",
   "One sentence per story line."
  ]
 }

@@ -9,22 +9,19 @@
       name: 'Agibank',
       logo: agibankExtendedReversed,
       href: '/customers/agibank',
-      description: 'Agibank moved its digital bank to a platform that scales with every campaign.',
-      brand: { base: '#0e89ff', glow: '#0e89ff' }
+      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'
     },
     {
       name: 'Americanas',
       logo: americanasExtendedReversed,
       href: '/customers/americanas',
-      description: 'Americanas serves Black Friday traffic with no capacity planning.',
-      brand: { base: '#e60014', glow: '#ff4d5e' }
+      description: 'Americanas serves Black Friday traffic with no capacity planning.'
     },
     {
       name: 'Arezzo',
       logo: arezzoExtendedReversed,
       href: '/customers/arezzo',
-      description: 'Arezzo cut image weight by half across its storefronts.',
-      brand: { base: '#2b2b2b', glow: '#6b6b6b' }
+      description: 'Arezzo cut image weight by half across its storefronts.'
     }
   ]
 </script>

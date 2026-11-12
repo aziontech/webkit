@@ -50,13 +50,15 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 
 <!-- prettier-ignore -->
 ```html
-<!-- compose in the slot: your markup, your classes -->
-<Button kind="primary" @click="submit">
-  <span class="inline-flex items-center gap-(--spacing-xs)">Create account</span>
-</Button>
+<!-- compose around it: your markup, your classes; the text goes through its props -->
+<div class="flex items-center gap-(--spacing-xs)">
+  <Button kind="primary" label="Create account" @click="submit" />
+</div>
 
-<!-- layout utilities only: fill the column, cap the width -->
-<Card class="w-full max-w-(--container-sm)">…</Card>
+<!-- layout utilities only: fill the column, cap the width; content in a named slot -->
+<Card class="w-full max-w-(--container-sm)">
+  <template #content>…</template>
+</Card>
 
 <!-- a styleSeam component accepts consumer classes by design -->
 <FrameBox class="bg-(--bg-canvas)">…</FrameBox>

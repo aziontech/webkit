@@ -33,7 +33,7 @@
     "token-generator"
   ],
   "devDependencies": {
-    "vue-tsc": "^3.2.5"
+    "vue-tsc": ">=3.2.5 <3.3.14 || >=3.3.15 <4.0.0"
   },
   "files": [
     "src/",

@@ -4,17 +4,17 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Default label without the required indicator.",
+      "summary": "Default label without the required indicator. The label points at its input with `for`.",
       "file": "default.vue"
     },
     {
       "name": "Required",
-      "summary": "Required label — appends the inline `* (Required)` indicator.",
+      "summary": "Required label — appends the inline `* (Required)` indicator. The label points at its input with `for`.",
       "file": "required.vue"
     },
     {
       "name": "Hinted",
-      "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation.",
+      "summary": "Hinted label — `hint` appends a Hint glyph after the text. Hover or focus it to read the explanation. The label points at its input with `for`.",
       "file": "hinted.vue"
     }
   ]

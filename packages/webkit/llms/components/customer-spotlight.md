@@ -13,7 +13,8 @@
 ## Do
 
 - Three or four cards.
-- Use the client's reversed (white) logo; the face colours are the client's brand, passed as data.
+- Use the client's reversed (white) logo; the face paints the client's brand colours.
+- Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the card reads its colours by `name`. Add a missing client to the registry rather than writing its hex colours into the page. Pass `brand` only for a one-off client the registry does not carry; a card with neither paints a black face.
 - One sentence per story line.
 
 ## Don’t
@@ -31,7 +32,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `cards` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand: { base, glow } }`. A card opens while hovered or focused. |
+| `cards` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list; empty uses the built-in "Customer stories". |
 | `storyLabel` | `string` | `''` | false | Label revealed under the description while the card is open; empty uses the built-in "Read story". |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
@@ -83,22 +84,19 @@
       name: 'Agibank',
       logo: agibankExtendedReversed,
       href: '/customers/agibank',
-      description: 'Agibank moved its digital bank to a platform that scales with every campaign.',
-      brand: { base: '#0e89ff', glow: '#0e89ff' }
+      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'
     },
     {
       name: 'Americanas',
       logo: americanasExtendedReversed,
       href: '/customers/americanas',
-      description: 'Americanas serves Black Friday traffic with no capacity planning.',
-      brand: { base: '#e60014', glow: '#ff4d5e' }
+      description: 'Americanas serves Black Friday traffic with no capacity planning.'
     },
     {
       name: 'Arezzo',
       logo: arezzoExtendedReversed,
       href: '/customers/arezzo',
-      description: 'Arezzo cut image weight by half across its storefronts.',
-      brand: { base: '#2b2b2b', glow: '#6b6b6b' }
+      description: 'Arezzo cut image weight by half across its storefronts.'
     }
   ]
 </script>

@@ -71,6 +71,7 @@
 ```vue
 <script setup>
   import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+  import { ref } from 'vue'
 
   const form = {
     placeholder: 'Your email',
@@ -81,8 +82,10 @@
     invalidMessage: 'Enter an email address like name@example.com.'
   }
 
+  const subscribedEmail = ref('')
+
   const onSubmit = (event, values) => {
-    console.log(event.type, values)
+    subscribedEmail.value = values.email
   }
 </script>
 
@@ -93,6 +96,7 @@
     title="Subscribe to our newsletter"
     description="Product updates, event highlights, and industry insights, delivered to your inbox."
     :form="form"
+    :submitted="subscribedEmail !== ''"
     @submit="onSubmit"
   />
 </template>
@@ -112,10 +116,6 @@
     requiredMessage: 'Enter your email address.',
     invalidMessage: 'Enter an email address like name@example.com.'
   }
-
-  const onSubmit = (event, values) => {
-    console.log(event.type, values)
-  }
 </script>
 
 <template>
@@ -126,7 +126,6 @@
     description="Product updates, event highlights, and industry insights, delivered to your inbox."
     :form="form"
     :loading="true"
-    @submit="onSubmit"
   />
 </template>
 ```
@@ -145,10 +144,6 @@
     requiredMessage: 'Enter your email address.',
     invalidMessage: 'Enter an email address like name@example.com.'
   }
-
-  const onSubmit = (event, values) => {
-    console.log(event.type, values)
-  }
 </script>
 
 <template>
@@ -159,7 +154,6 @@
     description="Product updates, event highlights, and industry insights, delivered to your inbox."
     :form="form"
     :submitted="true"
-    @submit="onSubmit"
   />
 </template>
 ```
