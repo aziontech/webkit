@@ -38,11 +38,15 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   followed with the app's router, no `@navigate` wiring needed) and the active row follows the
   route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
-  (`@aziontech/webkit/use-console-layout`).
+  (`@aziontech/webkit/use-console-layout`). Bind `v-model:navigation-expanded` to persist the rail or
+  to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
-  site is dark: `<html data-theme="dark">`.
+  site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
+  `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
-  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls.
+  `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls. A drill row
+  (`kind: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
+  never add a hand-made Back row.
 
 The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
