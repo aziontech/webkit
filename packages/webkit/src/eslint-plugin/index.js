@@ -8,6 +8,7 @@ import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
+import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
@@ -33,7 +34,8 @@ const rules = {
   'container-needs-width': containerNeedsWidth,
   'header-search-trigger': headerSearchTrigger,
   'no-wrapped-page-chrome': noWrappedPageChrome,
-  'no-output-in-command': noOutputInCommand
+  'no-output-in-command': noOutputInCommand,
+  'no-root-relative-asset': noRootRelativeAsset
 }
 
 const FILES = [
@@ -82,7 +84,8 @@ const RECOMMENDED = {
   'container-needs-width': 'warn',
   'header-search-trigger': 'error',
   'no-wrapped-page-chrome': 'error',
-  'no-output-in-command': 'warn'
+  'no-output-in-command': 'warn',
+  'no-root-relative-asset': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
