@@ -84,7 +84,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
 - `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
-- In `balanced`, the root sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the row width each breakpoint resolves to, and lays the cells out as a wrapping row whose cells grow to fill it; the counts come from the render, so the server HTML and the hydrated page lay out the same
+- In `balanced`, the root sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the row width each breakpoint resolves to, and lays the cells out as a wrapping row whose cells grow to fill it; every direct child is set to `height: auto` so it stretches to its row (a child's own `h-full` would not resolve in a wrapping row and would leave the `divider` rule showing under a shorter cell); the counts come from the render, so the server HTML and the hydrated page lay out the same
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
 - Empty: a `frame` grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page

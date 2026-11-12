@@ -193,6 +193,7 @@ for (const theme of THEMES) {
         expect(Math.abs(row.start)).toBeLessThanOrEqual(1)
         expect(Math.abs(row.end)).toBeLessThanOrEqual(1)
         expect(row.spread).toBeLessThanOrEqual(1)
+        expect(row.heights).toBeLessThanOrEqual(1)
       }
       await expect(preview).toHaveScreenshot(
         shot(`geometry/card-grid-balanced--${label(mode)}.png`)
