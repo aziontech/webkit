@@ -229,3 +229,91 @@ for (const theme of THEMES) {
     })
   }
 }
+
+const COMMAND_ORANGE = { light: 'rgb(176, 60, 2)', dark: 'rgb(243, 101, 43)' }
+
+for (const theme of THEMES) {
+  for (const width of [390, 1280]) {
+    const mode: Mode = { theme, width }
+    test(`geometry diagram flow centred connectors ${label(mode)}`, async ({ page }) => {
+      await prepare(page, mode)
+      const preview = await openExample(page, 'diagram/flow', mode)
+      const canvas = preview.locator('[data-testid="marketing-diagram__canvas"]')
+      await canvas.locator('path').nth(3).waitFor({ state: 'attached' })
+      const report = await canvas.evaluate((el) => {
+        const frame = el.getBoundingClientRect()
+        const box = (key: string) => {
+          const r = el.querySelector(`[data-diagram-node="${key}"]`)!.getBoundingClientRect()
+          return {
+            centre: (r.left + r.right) / 2 - frame.left,
+            top: r.top - frame.top,
+            bottom: r.bottom - frame.top
+          }
+        }
+        const keys = ['terminal', 'project', 'cli', 'api', 'resources']
+        const boxes = keys.map(box)
+        const paths = [...el.querySelectorAll('path')].map((p) => {
+          const numbers = (p.getAttribute('d') ?? '').match(/-?\d+(?:\.\d+)?/g)!.map(Number)
+          const length = (p as SVGPathElement).getTotalLength()
+          const start = (p as SVGPathElement).getPointAtLength(0)
+          const end = (p as SVGPathElement).getPointAtLength(length)
+          return { start: { x: start.x, y: start.y }, end: { x: end.x, y: end.y }, numbers }
+        })
+        const chip = [...el.querySelectorAll(':scope > span')].find(
+          (s) => s.textContent?.trim() === 'azion deploy'
+        )!
+        const c = chip.getBoundingClientRect()
+        return {
+          boxes,
+          paths,
+          chip: { x: (c.left + c.right) / 2 - frame.left, y: (c.top + c.bottom) / 2 - frame.top }
+        }
+      })
+      const centres = report.boxes.map((b) => b.centre)
+      for (const centre of centres) expect(Math.abs(centre - centres[0])).toBeLessThan(1)
+      for (let i = 0; i < 4; i++) {
+        const from = report.boxes[i]
+        const to = report.boxes[i + 1]
+        const path = report.paths.find(
+          (p) => Math.abs(p.start.y - from.bottom) < 1 && Math.abs(p.end.y - to.top) < 1
+        )
+        expect(path, `edge ${i}`).toBeTruthy()
+        expect(Math.abs(path!.start.x - from.centre)).toBeLessThan(1)
+        expect(Math.abs(path!.end.x - to.centre)).toBeLessThan(1)
+      }
+      const project = report.boxes[1]
+      const cli = report.boxes[2]
+      expect(Math.abs(report.chip.x - project.centre)).toBeLessThan(1)
+      expect(Math.abs(report.chip.y - (project.bottom + cli.top) / 2)).toBeLessThan(1)
+      await expect(preview).toHaveScreenshot(shot(`geometry/diagram-flow--${label(mode)}.png`))
+    })
+  }
+
+  test(`geometry docs command and output ${theme}`, async ({ page }) => {
+    const mode: Mode = { theme, width: 1280 }
+    await prepare(page, mode)
+    const preview = await openExample(page, 'doc-code-group/with-output', mode)
+    const code = preview.locator('[data-testid="documentation-doc-code-group__code"]')
+    const output = preview.locator('[data-testid="documentation-doc-code-group__output"]')
+    await expect(code.locator('[data-testid$="__label-text"]')).toHaveText('Shell')
+    await expect(output.locator('[data-testid$="__label-text"]')).toHaveText('Output')
+    await expect(output.locator('[data-testid$="__copy"]')).toHaveCount(0)
+    await expect(code).not.toContainText('HTTP/2 200')
+    const program = code.locator('code span', { hasText: /^\s*curl\s*$/ }).first()
+    await expect(program).toHaveCSS('color', COMMAND_ORANGE[theme])
+    await expect(preview).toHaveScreenshot(shot(`geometry/doc-code-output--${label(mode)}.png`))
+  })
+
+  test(`geometry code block command and output ${theme}`, async ({ page }) => {
+    const mode: Mode = { theme, width: 1280 }
+    await prepare(page, mode)
+    const preview = await openExample(page, 'code-block/command-and-output', mode)
+    const program = preview.locator('code span', { hasText: /^\s*curl\s*$/ }).first()
+    await expect(program).toHaveCSS('color', COMMAND_ORANGE[theme])
+    const prompt = preview.locator('code span', { hasText: /^\$\s*$/ }).first()
+    await expect(prompt).toHaveCSS('user-select', 'none')
+    await expect(preview).toHaveScreenshot(
+      shot(`geometry/code-block-command-output--${label(mode)}.png`)
+    )
+  })
+}

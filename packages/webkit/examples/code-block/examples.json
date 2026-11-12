@@ -61,6 +61,11 @@
       "name": "WithTabIcons",
       "summary": "One tab per coding agent, each opening its own config file with the agent mark beside its name. The `tab-icon` slot receives the tab, so the mark is chosen from `tab.value`; the marks are drawn as a mask so they take the tab text color in both themes.",
       "file": "with-tab-icons.vue"
+    },
+    {
+      "name": "CommandAndOutput",
+      "summary": "A docs command and what it prints, as two blocks. The command block is titled \"Shell\" by its label header and copies only the command (the `$ ` prompt is drawn, not copied); the printout sits in a second, muted block with `kind=\"output\"`, labelled \"Output\" and without a copy control.",
+      "file": "command-and-output.vue"
     }
   ]
 }

@@ -717,3 +717,125 @@ describe('CodeBlock', () => {
     })
   })
 })
+
+describe('CodeBlock docs surfaces', () => {
+  const shell = [{ label: 'Shell', value: 'sh', language: 'bash', code: 'azion deploy' }]
+
+  describe('label header', () => {
+    it('is off by default', () => {
+      const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
+      expect(queryByTestId('code-code-block__label')).toBeNull()
+    })
+
+    it('names the block with the tab label when showLabel is on', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Shell')
+    })
+
+    it('falls back to the readable language name when the tab label is empty', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: {
+          tabs: [{ label: '', value: 'js', language: 'js', code: 'const a = 1' }],
+          showLabel: true
+        }
+      })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+    })
+
+    it('uses title over the tab label', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: shell, title: 'Terminal' }
+      })
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Terminal')
+    })
+
+    it('gives way to the tab strip and to the filename bar', () => {
+      const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
+      expect(tabs.queryByTestId('code-code-block__label')).toBeNull()
+      tabs.unmount()
+      const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
+      expect(file.queryByTestId('code-code-block__label')).toBeNull()
+    })
+  })
+
+  describe('output kind', () => {
+    const output = [
+      { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
+    ]
+
+    it('labels the block Output, drops the copy control and marks the root', () => {
+      const { getByTestId, queryByTestId } = render(CodeBlock, {
+        props: { tabs: output, kind: 'output' }
+      })
+      const root = getByTestId('code-code-block')
+      expect(root.getAttribute('data-kind')).toBe('output')
+      expect(root.hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
+      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
+    })
+
+    it('draws every line flat, without syntax tokens', () => {
+      const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, kind: 'output' } })
+      for (const line of getAllByTestId('code-code-block__line-content')) {
+        expect(line.children).toHaveLength(1)
+      }
+    })
+
+    it('keeps a copy control when copyable is set explicitly', () => {
+      const { getByTestId } = render(CodeBlock, {
+        props: { tabs: output, kind: 'output', copyable: true }
+      })
+      expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
+    })
+
+    it('a code block stays copyable by default', () => {
+      const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+      expect(getByTestId('code-code-block').getAttribute('data-kind')).toBe('code')
+      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+    })
+
+    it('has no a11y violations beside its command', async () => {
+      const { container } = render({
+        components: { CodeBlock },
+        setup: () => ({ shell, output }),
+        template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" kind="output" data-testid="out" /></div>`
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('shell prompt', () => {
+    it('draws a leading $ as a prompt token and the rest as a command', () => {
+      const tokens = highlightCodeLine('bash', '$ azion deploy')
+      expect(tokens[0]).toEqual({ text: '$ ', type: 'prompt' })
+      expect(tokens.find((token) => token.text.trim() === 'azion')?.type).toBe('function')
+    })
+
+    it('copies the commands without their prompts, and skips unprompted lines', async () => {
+      const writeText = stubClipboardResolved()
+      const { getByTestId, emitted } = render(CodeBlock, {
+        props: {
+          tabs: [
+            {
+              label: 'Shell',
+              value: 'sh',
+              language: 'bash',
+              code: '$ azion login\n$ azion deploy \\\n  --local\nDeploy finished'
+            }
+          ]
+        }
+      })
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(emitted().copy).toBeTruthy())
+      expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
+    })
+
+    it('copies a block without prompts as written', async () => {
+      const writeText = stubClipboardResolved()
+      const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
+      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(emitted().copy).toBeTruthy())
+      expect(writeText).toHaveBeenCalledWith('azion deploy')
+    })
+  })
+})

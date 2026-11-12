@@ -22,7 +22,8 @@ export const RULE_PURPOSE = {
   'no-style-override': 'class/style on a webkit component — restyling it',
   'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
   'container-needs-width': 'Card, StatTile or ChartCard as a flex item with no width',
-  'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper'
+  'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper',
+  'no-output-in-command': 'shell code sample that mixes the command with what it prints'
 }
 
 const TEMPLATE_ONLY_RULES = ['no-style-override', 'container-needs-width', 'no-wrapped-page-chrome']

@@ -2,13 +2,18 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "One sample renders a plain code block with its copy control.",
+   "summary": "One sample renders a code block titled by its language (\"Shell\") with its copy control.",
    "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"[{ language: 'bash', code: 'azion link --preset vue' }]\" />\n</template>"
   },
   {
    "name": "Group",
    "summary": "The same install command for three package managers, joined in one tab strip labelled by what differs.",
    "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n\n  const samples = [\n    { label: 'npm', language: 'bash', code: 'npm install @aziontech/webkit' },\n    { label: 'pnpm', language: 'bash', code: 'pnpm add @aziontech/webkit' },\n    { label: 'yarn', language: 'bash', code: 'yarn add @aziontech/webkit' }\n  ]\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"samples\" />\n</template>"
+  },
+  {
+   "name": "WithOutput",
+   "summary": "A command and what it prints: `code` holds only the `curl` the reader runs, and the sample's `output` renders under it as a muted \"Output\" block with no copy control.",
+   "sfc": "<script setup>\n  import DocCodeGroup from '@aziontech/webkit/doc-code-group'\n\n  const samples = [\n    {\n      language: 'bash',\n      code: 'curl -I https://<your-azion-domain>',\n      output: 'HTTP/2 200'\n    }\n  ]\n</script>\n\n<template>\n  <DocCodeGroup :samples=\"samples\" />\n</template>"
   }
  ]
 }

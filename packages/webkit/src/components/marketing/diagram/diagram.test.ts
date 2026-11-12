@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/diagram/default.vue'
+import Flow from '../../../../examples/diagram/flow.vue'
 import Groups from '../../../../examples/diagram/groups.vue'
 import NodeKinds from '../../../../examples/diagram/node-kinds.vue'
 import Spec from '../../../../examples/diagram/spec.vue'
@@ -111,6 +112,19 @@ describe('Diagram', () => {
       const canvas = await ready(container)
 
       expect(canvas.querySelectorAll('svg path')).toHaveLength(spec.edges.length)
+    })
+  })
+
+  describe('stacking', () => {
+    it('centres a row of nodes and keeps a row with branches as an indented tree', async () => {
+      const { container } = render(Diagram, { props: { spec } })
+      await ready(container)
+      expect(container.querySelector('[data-stack]')?.getAttribute('data-stack')).toBe('tree')
+
+      const flow = render(Flow)
+      await ready(flow.container)
+      const rows = [...flow.container.querySelectorAll('[data-stack]')]
+      expect(rows.map((row) => row.getAttribute('data-stack'))).toEqual(['centre'])
     })
   })
 
@@ -243,7 +257,8 @@ describe('Diagram', () => {
       ['Default', Default],
       ['Spec', Spec],
       ['NodeKinds', NodeKinds],
-      ['Groups', Groups]
+      ['Groups', Groups],
+      ['Flow', Flow]
     ])('renders the %s story as a named image', async (_name, Story) => {
       const { findByRole } = render(Story)
 

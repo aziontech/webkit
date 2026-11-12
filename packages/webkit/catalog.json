@@ -7337,9 +7337,30 @@
     {
      "name": "copyable",
      "type": "boolean",
-     "default": "true",
+     "default": "undefined",
      "required": "false",
-     "doc": "Shows the copy control; turn it off for a decorative block nobody copies from."
+     "doc": "Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from."
+    },
+    {
+     "name": "kind",
+     "type": "'code' | 'output'",
+     "default": "'code'",
+     "required": "false",
+     "doc": "What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an \"Output\" label, without a copy control."
+    },
+    {
+     "name": "showLabel",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the label header; empty uses the tab label or the language name, or \"Output\" for an `output` block."
     },
     {
      "name": "animateLines",
@@ -9991,7 +10012,7 @@
      "type": "DocCodeSample[]",
      "default": "[]",
      "required": "false",
-     "doc": "The samples, in tab order: `{ label?, language?, fileName?, code }`. One renders a plain block, several render a joined tab strip; none renders nothing."
+     "doc": "The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing."
     },
     {
      "name": "showLineNumbers",
@@ -9999,6 +10020,20 @@
      "default": "false",
      "required": "false",
      "doc": "Shows the line-number gutter."
+    },
+    {
+     "name": "showLabel",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the label header (the sample label or the language name) on a single sample."
+    },
+    {
+     "name": "kind",
+     "type": "'code' | 'output'",
+     "default": "'code'",
+     "required": "false",
+     "doc": "What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an \"Output\" label, without a copy control."
     }
    ],
    "surface": "docs",

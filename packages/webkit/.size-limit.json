@@ -18,7 +18,7 @@
   {
     "name": "diagram",
     "path": "src/components/marketing/diagram/diagram.vue",
-    "limit": "10 KB",
+    "limit": "10.3 KB",
     "entryOnly": true
   },
   {

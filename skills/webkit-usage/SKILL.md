@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — start a screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-12
 enforced_by: [webkit-imports, webkit-tokens, webkit-prefer-over-custom, webkit-performance]
 ---
 
@@ -137,6 +137,20 @@ import { defineAsyncComponent } from 'vue'
 
 const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
 ```
+
+### Docs pages: code samples and diagrams
+
+- A code sample is `DocCodeGroup`. Set `language` on every sample; the block shows a label header
+  with its readable name (Shell, JavaScript, JSON) by default.
+- A **command** block holds only what the reader runs; its copy control copies exactly that (a
+  leading `$ ` prompt is drawn but not copied). What the command prints goes in the sample's
+  `output` field, drawn as a separate muted "Output" block with no copy control, or in prose. Never
+  write output into the command as `# HTTP/2 200` (lint `webkit/no-output-in-command`, rule
+  `webkit-code-samples`).
+- A standalone printout (a deploy log) is `<DocCodeGroup kind="output" …>`, not a "Text" sample.
+- A flow diagram in a docs column is `Diagram` with one `row`: in the docs column it stacks, the
+  nodes are centred, connectors run through the centre of each node and an edge label sits on its
+  line. Do not offset nodes or labels to fake that.
 
 ### Large data and server rendering
 

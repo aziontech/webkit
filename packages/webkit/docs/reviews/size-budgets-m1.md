@@ -392,3 +392,9 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 | ----------------- | ------------- | ------------ | ---------- | -------------------------------------- |
 | quote-tabs        | 20.6          | 20.89        | 21.1       | Raised: carries `CardGrid` (balanced). |
 | article-highlight | 7.2           | 7.41         | 7.6        | Raised: carries `CardGrid` (balanced). |
+
+## M2.7 owner feedback — centred diagram connectors (2026-11-12)
+
+| Entry   | Budget before | Measured now | New budget | Note                                                                                               |
+| ------- | ------------- | ------------ | ---------- | -------------------------------------------------------------------------------------------------- |
+| diagram | 10            | 10.11        | 10.3       | Raised: stacked rows centre their nodes; connectors run centre to centre with an orthogonal route. |
