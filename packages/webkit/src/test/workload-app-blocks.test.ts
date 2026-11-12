@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { type Component, defineComponent, h } from 'vue'
 
 import Review from '../../blocks/platform/create/multipage-create/variants/review.vue'
+import SourceWizard from '../../blocks/platform/create/source-wizard/source-wizard.vue'
+import SourceWizardMethod from '../../blocks/platform/create/source-wizard/variants/method.vue'
 import Application from '../../blocks/platform/detail/details-page/variants/application.vue'
 import ImportZoneFile from '../../blocks/platform/detail/record-table/variants/import-zone-file.vue'
 import EnvironmentCrumb from '../../blocks/platform/detail/version-detail/variants/environment-crumb.vue'
@@ -155,5 +157,32 @@ describe('record-table#ImportZoneFile', () => {
     await waitFor(() =>
       expect(screen.queryByRole('dialog', { name: 'Import zone file' })).toBeNull()
     )
+  })
+})
+
+describe('source-wizard', () => {
+  it('focuses the new service name field when Create Service opens it', async () => {
+    render(SourceWizard)
+    await fireEvent.click(screen.getByRole('button', { name: 'Create Service' }))
+    const name = await screen.findByRole('textbox', { name: 'New service' })
+    await waitFor(() => expect(document.activeElement).toBe(name))
+  })
+
+  it('focuses the name field, prefilled with the query, when Enter finds no service', async () => {
+    render(SourceWizard)
+    const search = screen.getByRole('textbox', { name: 'Search services' })
+    await fireEvent.update(search, 'billing-api')
+    await fireEvent.keyDown(search, { key: 'Enter' })
+    const name = await screen.findByRole<HTMLInputElement>('textbox', { name: 'New service' })
+    await waitFor(() => expect(document.activeElement).toBe(name))
+    expect(name.value).toBe('billing-api')
+  })
+
+  it('method: focuses the name field after going back to create a service', async () => {
+    render(SourceWizardMethod)
+    await fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    await fireEvent.click(await screen.findByRole('button', { name: 'Create Service' }))
+    const name = await screen.findByRole('textbox', { name: 'New service' })
+    await waitFor(() => expect(document.activeElement).toBe(name))
   })
 })
