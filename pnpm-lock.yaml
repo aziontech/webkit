@@ -314,9 +314,6 @@ importers:
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
-      vee-validate:
-        specifier: ^4.15.1
-        version: 4.15.1(vue@3.5.43(typescript@6.0.3))
       zod:
         specifier: ^4.6.7
         version: 4.6.7

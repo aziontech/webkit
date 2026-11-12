@@ -60,12 +60,17 @@ function applyAddDep(projectDir, action) {
   }
   const field = action.dev ? 'devDependencies' : 'dependencies'
   pkg[field] = pkg[field] || {}
-  if (pkg[field][action.dep]) {
+  const current = pkg[field][action.dep]
+  if (current && (current === action.version || current !== action.replace)) {
     return { action, result: 'skipped', detail: `${action.dep} already present` }
   }
   pkg[field][action.dep] = action.version
   writeJson(pkgPath, pkg)
-  return { action, result: 'written', detail: `${field}.${action.dep}@${action.version}` }
+  return {
+    action,
+    result: 'written',
+    detail: `${field}.${action.dep}@${action.version}${current ? ` (was ${current})` : ''}`
+  }
 }
 
 function applyWrite(projectDir, action) {

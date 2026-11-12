@@ -107,7 +107,7 @@
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
       'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0',
-      'data-[readonly]:bg-transparent data-[readonly]:border-dashed data-[readonly]:cursor-default',
+      'data-[readonly]:cursor-default',
       'data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none',
       attrs.class
     ]"

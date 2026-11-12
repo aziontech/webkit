@@ -105,9 +105,23 @@ Every `@aziontech/webkit/<name>` export now has a `types` condition that points 
 under `types/` (`{ "types": "./types/…/x.vue.d.ts", "default": "./src/…/x.vue" }`), so a fresh
 Vite `vue-ts` app builds with its default `vue-tsc -b && vite build`: no more TS2307 on a `.vue`
 export, and no WebKit source in your program, so `skipLibCheck` covers WebKit and your compiler
-options never type-check it. `@aziontech/icons` declares its CSS entries the same way. Remove any
-local `declare module '@aziontech/webkit/…'` or `declare module '@aziontech/icons'` shim you added
-as a workaround. Bundlers still load the `.vue` and `.ts` sources (`default`).
+options never type-check it. `@aziontech/theme` and `@aziontech/icons` declare their CSS entries
+the same way. Remove any local `declare module '@aziontech/webkit/…'` or
+`declare module '@aziontech/icons'` shim you added as a workaround. Bundlers still load the `.vue`
+and `.ts` sources (`default`).
+
+Keep `vue-tsc` off 3.3.14: that release types every template expression after a static attribute
+containing `//` on a component (`href="https://…"`) as a ref ("Property 'value' does not exist").
+`webkit init` pins `vue-tsc` to 3.3.13 when your range admits 3.3.14, and `webkit doctor` warns
+when 3.3.14 is installed.
+
+### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is deprecated
+
+Nothing in WebKit imports `vee-validate`, so v6 drops it from `dependencies`. An app that uses it
+installs it itself (`npm install vee-validate@^4`). `@aziontech/webkit/vite` (`webkitViteConfig`),
+which only pre-bundled `vee-validate`, still works but is deprecated and removed in 7.0: put
+`optimizeDeps: { include: ['vee-validate'] }` in your own Vite config, or drop the import if you do
+not use `vee-validate`.
 
 ### Form fields: one `Field` replaces the `field-*` family
 

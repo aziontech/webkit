@@ -380,8 +380,6 @@
   "packages/webkit/src/components/inputs/calendar/calendar-timezone/calendar-timezone.vue::spec:Animation classes in spec but missing in .vue: animate-popup-scale-in, animate-popup-scale-out",
   "packages/webkit/src/components/inputs/calendar/calendar.vue::manual-v-model",
   "packages/webkit/src/components/inputs/checkbox/checkbox.vue::manual-v-model",
-  "packages/webkit/src/components/inputs/input/input.vue::computed-slot-presence",
-  "packages/webkit/src/components/inputs/input/input.vue::computed-slot-presence",
   "packages/webkit/src/components/inputs/input/input.vue::manual-v-model",
   "packages/webkit/src/components/inputs/multi-select/multi-select-content/multi-select-content.vue::slot-without-defineslots",
   "packages/webkit/src/components/inputs/multi-select/multi-select-content/multi-select-content.vue::spec:Animation classes in .vue but not in spec: animate-popup-scale-in, animate-popup-scale-out",

@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import { VUE_TSC_KNOWN_GOOD } from '../src/cli/toolchain.js'
 import { buildWorkspace, packWorkspace, runLogged as run } from './lib/consumer-app.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
@@ -42,7 +43,7 @@ export const APP_VUE = `<script setup lang="ts">
     <SiteNav :menus="[]" />
     <!-- @vue-expect-error -->
     <SiteNav />
-    <HeroBand title="Ship" :class="heroClass" />
+    <HeroBand title="Ship" eyebrow="https://www.azion.com" :class="heroClass" />
     <Table>
       <Table.Body>
         <Table.Row v-for="edge in collection.items.value" :key="edge.id">
@@ -58,6 +59,7 @@ export const APP_VUE = `<script setup lang="ts">
 export const MAIN_TS = `import { createApp } from 'vue'
 import { createMemoryHistory, createRouter } from 'vue-router'
 import '@aziontech/icons'
+import '@aziontech/theme'
 import '@aziontech/webkit/styles'
 import { ToastPlugin } from '@aziontech/webkit/toast'
 import App from './App.vue'
@@ -129,6 +131,7 @@ function main() {
     '@aziontech/icons': `file:${tarballs.iconsTgz}`,
     'vue-router': '^5.5.0'
   }
+  appPkg.devDependencies = { ...appPkg.devDependencies, 'vue-tsc': VUE_TSC_KNOWN_GOOD }
   writeFileSync(appPkgPath, `${JSON.stringify(appPkg, null, 2)}\n`)
 
   const webkitPkg = JSON.parse(readFileSync(join(PKG, 'package.json'), 'utf8'))

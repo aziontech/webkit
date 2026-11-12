@@ -103,8 +103,9 @@ import '@aziontech/icons'
 registers WebKit's source with Tailwind so the component classes compile. Tailwind has to run in
 your build: `@tailwindcss/postcss` in `postcss.config.mjs` (what `init` writes) or `@tailwindcss/vite`.
 
-`@aziontech/webkit/vite` is optional: `webkitViteConfig` makes Vite pre-bundle `vee-validate`, which
-only an app that uses `vee-validate` itself needs (merge it with `mergeConfig`). See
+`@aziontech/webkit/vite` is deprecated since 6.0 and removed in 7.0: WebKit no longer depends on
+`vee-validate`, so `webkitViteConfig` has nothing of WebKit's to pre-bundle. An app that uses
+`vee-validate` puts `optimizeDeps: { include: ['vee-validate'] }` in its own Vite config. See
 [`docs/toolkit/vite.md`](./docs/toolkit/vite.md).
 
 **Dark mode.** The theme is **light by default**. For an app that is always dark, set the attribute
@@ -206,8 +207,7 @@ A new or moved export is written as a plain path and then typed by `pnpm --filte
 ## Requirements
 
 - Vue 3.5+ (components use `defineModel` and `useId`)
-- VeeValidate 4.x (form fields only)
-- TypeScript (optional): every export carries a `types` condition that points at a declaration in `types/` (built at pack time), so a fresh Vite `vue-ts` app type-checks WebKit with its default `vue-tsc -b`, under `strict`, without reading WebKit's sources; bundlers load the `.vue` and `.ts` sources. CSS entries (`@aziontech/webkit/styles`, `@aziontech/icons`) declare an empty module, so side-effect imports pass `noUncheckedSideEffectImports`. Required ARIA props such as `IconButton`'s `ariaLabel` are written `aria-label` in templates (as in the examples); add `"vueCompilerOptions": { "htmlAttributes": [] }` to your `tsconfig.json` so `vue-tsc` maps `aria-*` attributes to those props, as `apps/docs/tsconfig.json` does.
+- TypeScript (optional): every export carries a `types` condition that points at a declaration in `types/` (built at pack time), so a fresh Vite `vue-ts` app type-checks WebKit with its default `vue-tsc -b`, under `strict`, without reading WebKit's sources; bundlers load the `.vue` and `.ts` sources. CSS entries (`@aziontech/theme`, `@aziontech/webkit/styles`, `@aziontech/icons`) declare an empty module, so side-effect imports pass `noUncheckedSideEffectImports`. Required ARIA props such as `IconButton`'s `ariaLabel` are written `aria-label` in templates (as in the examples); add `"vueCompilerOptions": { "htmlAttributes": [] }` to your `tsconfig.json` so `vue-tsc` maps `aria-*` attributes to those props, as `apps/docs/tsconfig.json` does. Use `vue-tsc` 3.3.13 (or any 3.3.8–3.3.13), not 3.3.14: 3.3.14 (`@vue/language-core` 3.3.14) mistypes every template expression after a static attribute containing `//` on a component (`href="https://…"`, `eyebrow-prefix="//"`) as a ref ("Property 'value' does not exist"). `webkit init` pins `vue-tsc` to 3.3.13 when your range admits 3.3.14, and `webkit doctor` warns when 3.3.14 is installed.
 
 ## License
 

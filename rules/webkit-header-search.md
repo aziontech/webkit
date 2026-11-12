@@ -31,7 +31,15 @@ A header without it is incomplete, even when nobody asked for search.
           <!-- the header's other actions -->
         </GlobalHeader.Right>
       </GlobalHeader>
-      <Command v-model:open="searchOpen"><!-- Command.Input, Command.List … --></Command>
+      <Command v-model:open="searchOpen">
+        <Command.Input placeholder="Search…" />
+        <Command.List>
+          <Command.Group heading="Pages">
+            <Command.Item value="applications">Applications</Command.Item>
+          </Command.Group>
+          <Command.Empty>No results.</Command.Empty>
+        </Command.List>
+      </Command>
     </div>
   </template>
   ```

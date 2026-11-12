@@ -63,7 +63,7 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="isDisabled || null"
-    class="inline-flex w-fit shrink-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+    class="inline-flex w-fit shrink-0 cursor-pointer rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
     @click="toggle"
     @keydown="onKeydown"
     @control="onControl"

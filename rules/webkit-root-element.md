@@ -44,6 +44,11 @@ discipline inside class strings is enforced separately by the stylelint config a
   }
   const props = withDefaults(defineProps<Props>(), { href: '' })
 
+  defineSlots<{
+    /** The card's content. */
+    default(): unknown
+  }>()
+
   const attrs = useAttrs()
   const isLink = computed(() => props.href.length > 0)
 </script>

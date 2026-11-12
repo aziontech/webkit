@@ -7,15 +7,16 @@ makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks 
 
 ## The one exception: layout utilities
 
-A **static** `class` made only of these four families is allowed, because they place the
-component inside its parent and never change how it looks:
+A **static** `class` made only of layout utilities is allowed, because they set how the
+component's box sits in its parent (outer size and flex participation) and never change how it
+looks. The full list: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
 
-| Family     | Examples                                              |
-| ---------- | ----------------------------------------------------- |
-| `w-full`   | `w-full`                                              |
-| `max-w-*`  | `max-w-sm`, `max-w-(--container-sm)`, `max-w-[320px]` |
-| `self-*`   | `self-start`, `self-center`                           |
-| `shrink-0` | `shrink-0`                                            |
+| Purpose             | Families                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| Fill the parent     | `w-full`, `h-full`                                                                          |
+| Cap or floor a size | `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*` (`max-w-(--container-sm)`)                       |
+| Take part in a flex | `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0` |
+| Align itself        | `self-*` (`self-start`, `self-center`)                                                      |
 
 Any other class on the same tag still fails, and so does a bound `:class` or a variant prefix
 (`lg:w-full`). The list is the `LAYOUT_CLASS_FAMILIES` export of

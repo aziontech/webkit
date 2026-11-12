@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/input/default.vue'
 import Disabled from '../../../../examples/input/disabled.vue'
@@ -144,6 +145,38 @@ describe('Input', () => {
       expect(getByText('R')).toBeTruthy()
       const root = getByTestId('input').closest('[data-has-icon-right]')
       expect(root).not.toBeNull()
+    })
+
+    it('adds and removes the icon boxes when v-if slots toggle after mount', async () => {
+      const shown = ref(false)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            Input,
+            null,
+            shown.value
+              ? { iconLeft: () => h('i', null, 'L'), iconRight: () => h('i', null, 'R') }
+              : {}
+          )
+      })
+      const { getByTestId, queryByText } = render(Host)
+      const root = getByTestId('input').closest('[data-size]') as HTMLElement
+      expect(root.hasAttribute('data-has-icon-left')).toBe(false)
+      expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
+
+      shown.value = true
+      await nextTick()
+      expect(queryByText('L')).not.toBeNull()
+      expect(queryByText('R')).not.toBeNull()
+      expect(root.hasAttribute('data-has-icon-left')).toBe(true)
+      expect(root.hasAttribute('data-has-icon-right')).toBe(true)
+
+      shown.value = false
+      await nextTick()
+      expect(queryByText('L')).toBeNull()
+      expect(root.hasAttribute('data-has-icon-left')).toBe(false)
+      expect(root.hasAttribute('data-has-icon-right')).toBe(false)
+      expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
     })
   })
 
