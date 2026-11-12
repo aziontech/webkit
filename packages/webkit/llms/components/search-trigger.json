@@ -1,0 +1,88 @@
+{
+ "name": "search-trigger",
+ "binding": "SearchTrigger",
+ "import": "@aziontech/webkit/search-trigger",
+ "treeShakeableImport": "@aziontech/webkit/search-trigger",
+ "category": "actions",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads \"you can search here\", but it is one `<button>` that emits `click`; the consumer opens `Command` (or its own search) from it. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.",
+ "setup": null,
+ "useWhen": [
+  "The search entry of a console, demo or docs top bar (`GlobalHeader` end region) that opens the `Command` palette or a search dialog.",
+  "Anywhere a shortcut-backed launcher should look like a field without being one."
+ ],
+ "avoidWhen": [
+  "To type a query in place (filter a list, search a table) → use `Input` with a search icon, `PropertyFilter`, or the `Table` search part.",
+  "For the palette itself → use `Command`; this only opens it.",
+  "For an icon-only toolbar action that is not search → use `IconButton`."
+ ],
+ "related": [
+  "Command` — the palette this button opens; it owns the global ⌘K / Ctrl+K listener and `v-model:open`.",
+  "Kbd` — draws the keycap with the OS-aware modifier glyph.",
+  "IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.",
+  "GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`."
+ ],
+ "bestPractices": [
+  "Wire `@click` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree.",
+  "Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=\"\"`) when no shortcut exists.",
+  "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.",
+  "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name."
+ ],
+ "props": [
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Visible muted text and accessible name; empty uses the catalog's `Search`."
+  },
+  {
+   "name": "shortcut",
+   "type": "string",
+   "default": "'K'",
+   "required": "false",
+   "doc": "Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap."
+  },
+  {
+   "name": "collapsible",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables the button; `click` is not emitted."
+  }
+ ],
+ "events": [
+  {
+   "name": "click",
+   "payload": "MouseEvent",
+   "notes": "Fires when the button is activated (pointer, Enter or Space); not while `disabled`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import { ref } from 'vue'\n  import Command from '@aziontech/webkit/command'\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n\n  const open = ref(false)\n  const pages = ['Workloads', 'Applications', 'Functions', 'Firewall']\n</script>\n\n<template>\n  <SearchTrigger @click=\"open = true\" />\n  <Command\n    v-model:open=\"open\"\n    shortcut=\"meta+k\"\n    @select=\"open = false\"\n  >\n    <Command.Input placeholder=\"Search pages\" />\n    <Command.List>\n      <Command.Empty>No results.</Command.Empty>\n      <Command.Group heading=\"Pages\">\n        <Command.Item\n          v-for=\"page in pages\"\n          :key=\"page\"\n          :value=\"page\"\n          >{{ page }}</Command.Item\n        >\n      </Command.Group>\n    </Command.List>\n  </Command>\n</template>"
+  },
+  {
+   "name": "Collapsible",
+   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <SearchTrigger disabled />\n</template>"
+  }
+ ],
+ "docs": "components/search-trigger.md"
+}

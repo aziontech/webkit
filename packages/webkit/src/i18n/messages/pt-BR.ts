@@ -1007,5 +1007,8 @@ export const ptBR: Messages = {
     prompt: 'Prompt',
     copyCommand: 'Copiar comando',
     copyPrompt: 'Copiar prompt'
+  },
+  searchTrigger: {
+    label: 'Buscar'
   }
 }

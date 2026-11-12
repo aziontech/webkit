@@ -3540,6 +3540,54 @@
    "examplesFile": "catalog/examples/copy-button.json",
    "docsFile": "catalog/components/copy-button.json"
   },
+  "search-trigger": {
+   "import": "@aziontech/webkit/search-trigger",
+   "target": "./src/components/actions/search-trigger/search-trigger.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/search-trigger",
+   "category": "actions",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Visible muted text and accessible name; empty uses the catalog's `Search`."
+    },
+    {
+     "name": "shortcut",
+     "type": "string",
+     "default": "'K'",
+     "required": "false",
+     "doc": "Key drawn after the platform modifier in the keycap and announced through `aria-keyshortcuts`; empty hides the keycap."
+    },
+    {
+     "name": "collapsible",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables the button; `click` is not emitted."
+    }
+   ],
+   "events": [
+    {
+     "name": "click",
+     "payload": "MouseEvent",
+     "notes": "Fires when the button is activated (pointer, Enter or Space); not while `disabled`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/search-trigger.json",
+   "docsFile": "catalog/components/search-trigger.json"
+  },
   "toggle-group": {
    "import": "@aziontech/webkit/toggle-group",
    "target": "./src/components/actions/toggle-group/toggle-group.vue",

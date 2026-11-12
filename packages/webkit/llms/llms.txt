@@ -115,6 +115,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
 - [IconButton](components/icon-button.md): Interactive control for user actions.
 - [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
+- [SearchTrigger](components/search-trigger.md): The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`).
 - [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array.
 - [ToggleGroup](components/toggle-group.md): ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment.
 
