@@ -299,9 +299,6 @@ importers:
 
   packages/webkit:
     dependencies:
-      '@aziontech/theme':
-        specifier: ^4.0.0
-        version: 4.2.0(typescript@6.0.3)
       '@modelcontextprotocol/sdk':
         specifier: ^1.31.0
         version: 1.32.1(zod@4.6.7)
@@ -324,6 +321,9 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
+      '@aziontech/theme':
+        specifier: workspace:^
+        version: link:../theme
       '@figma/code-connect':
         specifier: ^2.1.0
         version: 2.1.0
@@ -482,9 +482,6 @@ packages:
   '@astrojs/compiler-rs@0.4.0':
     resolution: {integrity: sha512-koVikeon1kreEy+/JzLQRy3vzHHQVOjycs4degg4vFufKApZOwMZvSSAEztYNhmcQVfNVsVZZI4cEge3cexAbQ==}
     engines: {node: '>=22.12.0'}
-
-  '@aziontech/theme@4.2.0':
-    resolution: {integrity: sha512-BPOn4E9M7aDBLOUNxJNIOMLFZVDmdqzrsTtt0XyuSqRDG4CBuN1PjaJ2JHbYvehvPqCPJS9tm6Hc/ruLP0rdxg==}
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -5403,12 +5400,6 @@ snapshots:
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
-
-  '@aziontech/theme@4.2.0(typescript@6.0.3)':
-    dependencies:
-      vue-tsc: 3.3.8(typescript@6.0.3)
-    transitivePeerDependencies:
-      - typescript
 
   '@babel/code-frame@7.29.7':
     dependencies:

@@ -17,6 +17,7 @@ export function makeProject(files = {}, { installWebkit = false } = {}) {
   if (installWebkit) {
     mkdirSync(join(dir, 'node_modules', '@aziontech'), { recursive: true })
     symlinkSync(PKG_ROOT, join(dir, 'node_modules', '@aziontech', 'webkit'), 'dir')
+    symlinkSync(join(PKG_ROOT, '..', 'theme'), join(dir, 'node_modules', '@aziontech', 'theme'), 'dir')
   }
   return dir
 }

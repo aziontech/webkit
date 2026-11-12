@@ -165,3 +165,27 @@ test('doctor reports a malformed .mcp.json as a failure, not a crash', () => {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+test('doctor fails when a second theme copy is nested under webkit or the theme misses the peer range', () => {
+  const dir = makeProject({ name: 'demo', version: '1.0.0', dependencies: { '@aziontech/webkit': '^6.0.0', '@aziontech/theme': '^5.2.2' } })
+  try {
+    const nm = join(dir, 'node_modules', '@aziontech')
+    mkdirSync(join(nm, 'webkit', 'node_modules', '@aziontech', 'theme'), { recursive: true })
+    mkdirSync(join(nm, 'theme'), { recursive: true })
+    writeFileSync(join(nm, 'webkit', 'package.json'), JSON.stringify({ name: '@aziontech/webkit', version: '6.0.0', peerDependencies: { '@aziontech/theme': '^5.2.2' } }))
+    writeFileSync(join(nm, 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '5.2.2' }))
+    writeFileSync(join(nm, 'webkit', 'node_modules', '@aziontech', 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' }))
+    let c = planDoctor(dir).find((x) => x.check === 'theme version')
+    assert.equal(c.status, 'fail')
+    assert.match(c.detail, /second copy/)
+    rmSync(join(nm, 'webkit', 'node_modules'), { recursive: true, force: true })
+    c = planDoctor(dir).find((x) => x.check === 'theme version')
+    assert.equal(c.status, 'ok')
+    writeFileSync(join(nm, 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' }))
+    c = planDoctor(dir).find((x) => x.check === 'theme version')
+    assert.equal(c.status, 'fail')
+    assert.match(c.detail, /does not satisfy/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})

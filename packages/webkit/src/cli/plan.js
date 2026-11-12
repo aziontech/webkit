@@ -4,7 +4,23 @@ import { join } from 'node:path'
 import { LEGACY_MARKER, listBundle } from './bundle.js'
 import { planSync } from './sync.js'
 
-const DEP_VERSION = 'latest'
+const OWN = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'))
+
+const DEP_VERSIONS = {
+  '@aziontech/webkit': `^${OWN.version}`,
+  '@aziontech/theme': OWN.peerDependencies['@aziontech/theme'],
+  '@aziontech/icons': '^4.4.0',
+  eslint: '^9.39.3',
+  stylelint: '^17.7.0',
+  'vue-eslint-parser': '^10.4.0',
+  'eslint-plugin-vuejs-accessibility': '^2.5.0',
+  '@typescript-eslint/parser': '^8.58.2',
+  'postcss-html': '^1.8.1',
+  'postcss-scss': '^4.0.9',
+  husky: '^9.1.7'
+}
+
+const DEP_VERSION = (dep) => DEP_VERSIONS[dep]
 
 const RUNTIME_DEPS = ['@aziontech/webkit', '@aziontech/theme']
 const ICONS_DEP = '@aziontech/icons'
@@ -37,6 +53,28 @@ export const MCP_SERVER_ENTRY = {
 
 function read(path) {
   return existsSync(path) ? readFileSync(path, 'utf8') : null
+}
+
+const VITE_CONFIG_CANDIDATES = [
+  'vite.config.ts',
+  'vite.config.js',
+  'vite.config.mts',
+  'vite.config.mjs'
+]
+
+function usesTailwindVitePlugin(projectDir) {
+  const pkg = read(join(projectDir, 'package.json'))
+  if (pkg) {
+    try {
+      const j = JSON.parse(pkg)
+      if (j.dependencies?.['@tailwindcss/vite'] || j.devDependencies?.['@tailwindcss/vite'])
+        return true
+    } catch {
+      return false
+    }
+  }
+  const cfg = firstExisting(projectDir, VITE_CONFIG_CANDIDATES)
+  return Boolean(cfg && read(join(projectDir, cfg))?.includes('@tailwindcss/vite'))
 }
 
 function firstExisting(projectDir, candidates) {
@@ -139,12 +177,14 @@ export function planInit(projectDir, opts = {}) {
 
   const runtimeDeps = icons ? [...RUNTIME_DEPS, ICONS_DEP] : RUNTIME_DEPS
   for (const dep of runtimeDeps) {
-    actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: false })
+    actions.push({ type: 'add-dep', dep, version: DEP_VERSION(dep), dev: false })
   }
   for (const dep of DEV_DEPS) {
-    actions.push({ type: 'add-dep', dep, version: DEP_VERSION, dev: true })
+    actions.push({ type: 'add-dep', dep, version: DEP_VERSION(dep), dev: true })
   }
+  const tailwindVite = usesTailwindVitePlugin(projectDir)
   for (const { dep, version } of STYLE_DEV_DEPS) {
+    if (tailwindVite && dep === '@tailwindcss/postcss') continue
     actions.push({ type: 'add-dep', dep, version, dev: true })
   }
   actions.push({
@@ -154,7 +194,13 @@ export function planInit(projectDir, opts = {}) {
   })
 
   const existingPostcss = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
-  if (existingPostcss) {
+  if (tailwindVite) {
+    actions.push({
+      type: 'advise',
+      message:
+        'Tailwind already runs through @tailwindcss/vite, so no postcss.config.mjs is written (running both would process Tailwind twice).'
+    })
+  } else if (existingPostcss) {
     actions.push({
       type: 'advise',
       message: `${POSTCSS_SNIPPET_HEADER}\n${postcssConfig()}`
@@ -345,9 +391,11 @@ export const _internals = {
   DEV_DEPS,
   STYLE_DEV_DEPS,
   DEP_VERSION,
+  DEP_VERSIONS,
   CLAUDE_BUNDLE,
   eslintFlatConfig,
   postcssConfig,
+  usesTailwindVitePlugin,
   styleEntryContent,
   STYLELINT_CONTENT,
   HUSKY_PRECOMMIT

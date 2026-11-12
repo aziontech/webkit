@@ -91,6 +91,14 @@ component.
 
 ## 4. Manual changes
 
+### `@aziontech/theme` is a peer dependency
+
+v5 listed `@aziontech/theme@^4` as a dependency, so an app on theme 5 got a second, nested theme
+copy under `@aziontech/webkit/node_modules`. v6 declares it as a peer (`^5.2.2`): install it next to
+WebKit (`npm install @aziontech/theme@^5.2.2`; `npx @aziontech/webkit init` adds it). `webkit doctor`
+fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
+ranges for every dependency it adds, never `latest`.
+
 ### Form fields: one `Field` replaces the `field-*` family
 
 The codemod lists every `field-*` import as `MANUAL`. Replace each one with `Field` around the plain

@@ -643,3 +643,58 @@ test('applyPlan merges into an existing .mcp.json without dropping other servers
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+const caretSatisfies = (range, version) => {
+  const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(range)
+  const v = version.split('.').map(Number)
+  if (!m) return false
+  const r = m.slice(1).map(Number)
+  if (v[0] !== r[0]) return false
+  return v[1] > r[1] || (v[1] === r[1] && v[2] >= r[2])
+}
+
+test('planInit pins every dependency it adds to a caret range, never "latest"', () => {
+  const dir = makeProject()
+  try {
+    for (const a of planInit(dir, {}).filter((x) => x.type === 'add-dep')) {
+      assert.match(a.version ?? '', /^\^\d+\.\d+\.\d+$/, `${a.dep} is pinned as ${a.version}`)
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('the ranges init writes for webkit, theme and icons are satisfied by the workspace packages', () => {
+  const read = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), 'utf8'))
+  const own = read('../../package.json')
+  const theme = read('../../../theme/package.json')
+  const icons = read('../../../icons/package.json')
+  const dir = makeProject()
+  try {
+    const plan = planInit(dir, {})
+    const v = (dep) => plan.find((a) => a.type === 'add-dep' && a.dep === dep).version
+    assert.equal(v('@aziontech/webkit'), `^${own.version}`)
+    assert.equal(v('@aziontech/theme'), own.peerDependencies['@aziontech/theme'])
+    assert.ok(caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version), 'theme peer range must accept the workspace theme')
+    assert.ok(caretSatisfies(v('@aziontech/icons'), icons.version), 'icons range must accept the workspace icons')
+    assert.equal(own.dependencies['@aziontech/theme'], undefined, 'theme is a peer, never a nested dependency')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit leaves PostCSS out when the app runs Tailwind through @tailwindcss/vite', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, 'package.json'),
+      JSON.stringify({ name: 'demo', version: '1.0.0', devDependencies: { '@tailwindcss/vite': '^4.1.0' } })
+    )
+    const plan = planInit(dir, {})
+    assert.ok(!findAddDeps(plan).includes('@tailwindcss/postcss'))
+    assert.ok(!plan.some((a) => a.type === 'write' && a.path === 'postcss.config.mjs'))
+    assert.ok(plan.some((a) => a.type === 'advise' && /@tailwindcss\/vite/.test(a.message)))
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})

@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 
@@ -296,6 +296,56 @@ export function planDoctor(projectDir) {
     }
   }
 
+  const webkitPkgPath = join(projectDir, 'node_modules', '@aziontech', 'webkit', 'package.json')
+  const webkitPkg = existsSync(webkitPkgPath) ? JSON.parse(read(webkitPkgPath)) : null
+  const themeRange = webkitPkg?.peerDependencies?.['@aziontech/theme']
+  if (webkitPkg) {
+    const nestedDir = join(
+      projectDir,
+      'node_modules',
+      '@aziontech',
+      'webkit',
+      'node_modules',
+      '@aziontech',
+      'theme'
+    )
+    const topDir = join(projectDir, 'node_modules', '@aziontech', 'theme')
+    const sameCopy =
+      existsSync(nestedDir) &&
+      existsSync(topDir) &&
+      realpathSync(nestedDir) === realpathSync(topDir)
+    const nested = sameCopy
+      ? null
+      : installedVersion(
+          join(projectDir, 'node_modules', '@aziontech', 'webkit'),
+          '@aziontech/theme'
+        )
+    const theme = installedVersion(projectDir, '@aziontech/theme')
+    const fits = theme && themeRange ? caretSatisfies(themeRange, theme) : Boolean(theme)
+    const problems = [
+      ...(nested
+        ? [
+            `a second copy of @aziontech/theme (${nested}) is nested under @aziontech/webkit — remove it so one theme drives the tokens`
+          ]
+        : []),
+      ...(!theme
+        ? ['@aziontech/theme is not installed — install it next to @aziontech/webkit']
+        : []),
+      ...(theme && !fits
+        ? [
+            `@aziontech/theme ${theme} does not satisfy the ${themeRange} webkit ${webkitPkg.version} expects`
+          ]
+        : [])
+    ]
+    add(
+      'theme version',
+      problems.length ? 'fail' : 'ok',
+      problems.length
+        ? problems.join('\n')
+        : `@aziontech/theme ${theme} matches webkit ${webkitPkg.version} (${themeRange ?? 'any'})`
+    )
+  }
+
   const sync = planSync(projectDir)
   const missingOrStale = sync.entries.filter((e) => e.state === 'missing' || e.state === 'stale')
   const orphans = sync.entries.filter((e) => e.state === 'orphan')
@@ -335,4 +385,13 @@ export function planDoctor(projectDir) {
   }
 
   return checks
+}
+
+function caretSatisfies(range, version) {
+  const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(range)
+  if (!m) return true
+  const r = m.slice(1).map(Number)
+  const v = String(version).split('.').map(Number)
+  if (v[0] !== r[0]) return false
+  return v[1] > r[1] || (v[1] === r[1] && v[2] >= r[2])
 }
