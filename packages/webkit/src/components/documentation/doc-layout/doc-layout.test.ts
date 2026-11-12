@@ -202,3 +202,50 @@ describe('DocLayout', () => {
     await expectNoA11yViolations(container)
   })
 })
+
+describe('DocLayout — Back in the rail', () => {
+  const drill: DocLayoutNavGroup[] = [
+    {
+      label: 'Legal',
+      items: [
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        {
+          id: 'agreements',
+          label: 'Agreements and Policies',
+          kind: 'drill',
+          children: [
+            { id: 'privacy', label: 'Privacy Policy', href: '/docs/privacy' },
+            {
+              id: 'versions',
+              label: 'Previous versions',
+              kind: 'drill',
+              children: [{ id: 'privacy-2024', label: 'Privacy Policy 2024', href: '/docs/p24' }]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const back = (view: ReturnType<typeof mount>) =>
+    within(view.getByTestId('documentation-doc-layout__navigation')).getByTestId(
+      'navigation-menu-back'
+    )
+
+  it('names the docs root on the first drill level', async () => {
+    const view = mount({ navigation: drill, activeId: 'privacy' })
+    await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to Docs'))
+  })
+
+  it('takes rootLabel over the locale default', async () => {
+    const view = mount({ navigation: drill, activeId: 'privacy', rootLabel: 'API reference' })
+    await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to API reference'))
+  })
+
+  it('names the parent row on a deeper level', async () => {
+    const view = mount({ navigation: drill, activeId: 'privacy-2024' })
+    await waitFor(() =>
+      expect(back(view).textContent?.trim()).toBe('Back to Agreements and Policies')
+    )
+  })
+})

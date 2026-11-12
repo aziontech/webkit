@@ -345,7 +345,8 @@ wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every d
 The window still owns the shell:
 
 - `ConsoleLayout` measures its own width (through `AppLayout`): below 768 px the rail moves into
-  the layout's navigation drawer, opened from the header's menu button. `DocLayout` moves its rail
+  the layout's navigation drawer, opened from the header's menu button; on a header under its `@xs`
+  (a 320 px phone) the brand mark drops out of the header and stays in the drawer. `DocLayout` moves its rail
   into a drawer below `lg` and shows the outline rail from `xl`.
 - Below `md` a `Dialog` or `Drawer` is a bottom sheet; below `sm` it is a full-height, full-width
   sheet, and its `PanelFooter` actions stay pinned and stretch.

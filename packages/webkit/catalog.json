@@ -772,6 +772,7 @@
    "--text-link-font-size",
    "--text-link-hover",
    "--text-link-line-height",
+   "--text-link-text-decoration-color",
    "--text-link-text-decoration-line",
    "--text-link-text-underline-offset",
    "--text-link-transition",
@@ -1681,6 +1682,7 @@
     "--text-link-font-size",
     "--text-link-hover",
     "--text-link-line-height",
+    "--text-link-text-decoration-color",
     "--text-link-text-decoration-line",
     "--text-link-text-underline-offset",
     "--text-link-transition",
@@ -2790,17 +2792,17 @@
    "props": [
     {
      "name": "items",
-     "type": "{ id: string; title: string; updatedAt: string \\ | number \\ | Date }[]",
+     "type": "{ id: string; title: string; updatedAt: string | number | Date }[]",
      "default": "[]",
      "required": "false",
      "doc": "Conversations, any order; they are sorted newest first inside their group."
     },
     {
      "name": "now",
-     "type": "string \\ | number \\ | Date",
+     "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server."
+     "doc": "Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server."
     },
     {
      "name": "removable",
@@ -9982,6 +9984,13 @@
      "doc": "Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`)."
     },
     {
+     "name": "rootLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`)."
+    },
+    {
      "name": "searchOpen",
      "type": "boolean",
      "default": "false",
@@ -11507,7 +11516,7 @@
      "type": "Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference clock for relative ranges and stepping. Unset reads the real clock."
+     "doc": "Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock."
     },
     {
      "name": "placeholder",
@@ -12836,6 +12845,13 @@
      "default": "'current-password'",
      "required": "false",
      "doc": "Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows."
+    },
+    {
+     "name": "monospace",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`."
     }
    ],
    "events": [
@@ -13576,6 +13592,13 @@
      "default": "'vertical'",
      "required": "false",
      "doc": "Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior."
+    },
+    {
+     "name": "monospace",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
     }
    ],
    "events": [
@@ -14787,6 +14810,13 @@
      "default": "false",
      "required": "false",
      "doc": "Two-way value (`v-model:toolsOpen`)."
+    },
+    {
+     "name": "navigationExpanded",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Two-way value (`v-model:navigationExpanded`)."
     }
    ],
    "events": [
@@ -18961,7 +18991,7 @@
      "type": "string | number | Date",
      "default": "undefined",
      "required": "false",
-     "doc": "Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute."
+     "doc": "Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute."
     }
    ],
    "slots": [
@@ -24489,7 +24519,7 @@
      "type": "string[]",
      "default": "[]",
      "required": "false",
-     "doc": "Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty."
+     "doc": "Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty."
     },
     {
      "name": "languageAriaLabel",
@@ -24497,6 +24527,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`)."
+    },
+    {
+     "name": "language",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:language`)."
     }
    ],
    "surface": "marketing",

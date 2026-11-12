@@ -104,7 +104,7 @@
       >
         <span class="text-label-sm text-(--text-muted)">{{ name }}</span>
         <div
-          class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]"
+          class="h-80 w-full min-w-0 overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]"
           @pointerenter="hovered = name"
           @pointerleave="hovered = ''"
         >

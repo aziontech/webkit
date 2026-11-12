@@ -25,6 +25,8 @@
     required?: boolean
     /** Which axes the user can drag to resize the field. */
     resizable?: TextareaResize
+    /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
+    monospace?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -34,7 +36,8 @@
     readonly: false,
     invalid: false,
     required: false,
-    resizable: 'vertical'
+    resizable: 'vertical',
+    monospace: false
   })
 
   const emit = defineEmits<{
@@ -93,13 +96,14 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-readonly="readonly || null"
+    :data-monospace="monospace || null"
     :data-filled="isFilled || null"
     :data-resize="resizable"
     :class="[
       'relative block min-w-0 min-h-[80px]',
       'px-(--spacing-sm) py-(--spacing-sm)',
       'rounded-(--shape-elements)',
-      'border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default)',
+      'border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm',
       'placeholder:text-(--text-muted)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong)',

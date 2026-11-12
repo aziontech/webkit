@@ -113,6 +113,9 @@
   /** Whether the tools region is open. Use with `v-model:tools-open`. */
   const toolsOpen = defineModel<boolean>('toolsOpen', { default: false })
 
+  /** Whether the navigation rail is expanded on wide layouts; false collapses it. Use with `v-model:navigation-expanded`. */
+  const navigationExpanded = defineModel<boolean>('navigationExpanded', { default: true })
+
   defineSlots<{
     /** The page body, rendered inside the layout's main landmark. */
     default(): unknown
@@ -149,7 +152,12 @@
 
   const query = ref('')
   const railWidth = ref<number | null>(null)
-  const railCollapsed = ref(false)
+  const railCollapsed = computed({
+    get: () => !navigationExpanded.value,
+    set: (value: boolean) => {
+      navigationExpanded.value = !value
+    }
+  })
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
 
@@ -360,7 +368,7 @@
                   <a
                     :href="home"
                     :aria-label="t('consoleLayout.home')"
-                    class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                    class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                   >
                     <Brand
                       kind="default"

@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import LanguageExample from '../../../../examples/site-footer/language.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SiteFooter from './site-footer.vue'
 
@@ -181,6 +182,29 @@ describe('SiteFooter', () => {
     await userEvent.click(getByRole('option', { name: 'PT-BR' }))
 
     expect(trigger.textContent).toContain('PT-BR')
+  })
+
+  it('emits update:language with the chosen option', async () => {
+    const { getByRole, emitted } = footer()
+
+    await userEvent.click(getByRole('combobox', { name: 'Language' }))
+    await userEvent.click(getByRole('option', { name: 'ES' }))
+
+    expect(emitted()['update:language']).toEqual([['ES']])
+  })
+
+  it('shows the bound language and round-trips v-model:language in the Language example', async () => {
+    const { getByRole, getByText } = render(LanguageExample)
+
+    const trigger = getByRole('combobox', { name: 'Language' })
+    expect(trigger.textContent).toContain('PT-BR')
+    expect(getByText('Page language: PT-BR')).toBeTruthy()
+
+    await userEvent.click(trigger)
+    await userEvent.click(getByRole('option', { name: 'ES' }))
+
+    expect(getByText('Page language: ES')).toBeTruthy()
+    expect(trigger.textContent).toContain('ES')
   })
 
   it('renders no language select when languages is empty', () => {

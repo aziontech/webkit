@@ -1061,6 +1061,9 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 - **Code-like values take `monospace`**: a CLI command, an ID, a token, a hash, a path. A command the
   user copies is `readonly monospace` in an `InputGroupRoot` with a `CopyButton`
   (`Input` example ReadOnly). Prose values (names, e-mails, domains being typed) stay in the sans face.
+  The same `monospace` prop is on `PasswordInput` (an API token or client secret, with
+  `autocomplete="off"`) and on `Textarea` (a pasted zone file, certificate, JSON or list of IPs). Never
+  hand-apply `text-label-code-sm` / `text-body-code-sm` to a field.
 - **`disabled` is something else:** a control that is temporarily unavailable (a submit lock, a
   dependency not met). It greys the value out and drops it from the tab order. Never use it for a
   value that is permanently fixed.

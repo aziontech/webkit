@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/password-input/default.vue'
+import Monospace from '../../../../examples/password-input/monospace.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import PasswordInput from './password-input.vue'
 
@@ -322,5 +323,33 @@ describe('PasswordInput slot presence', () => {
     await nextTick()
     expect(container.querySelector('[data-has-icon-left]')).toBeNull()
     expect(queryByTestId('probe')).toBeNull()
+  })
+})
+
+describe('PasswordInput — monospace', () => {
+  it('omits data-monospace by default', () => {
+    const { container } = render(PasswordInput)
+    expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(false)
+  })
+
+  it('marks the field with data-monospace, still edits and reveals the value', async () => {
+    const { container, getByTestId, getByRole, emitted } = render(PasswordInput, {
+      props: { monospace: true, autocomplete: 'off' }
+    })
+    expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(true)
+    const input = getByTestId('password-input') as HTMLInputElement
+    await fireEvent.update(input, 'azn_token')
+    expect(emitted()['update:modelValue']).toEqual([['azn_token']])
+    await fireEvent.click(getByRole('button', { name: 'Show password' }))
+    expect(input.getAttribute('type')).toBe('text')
+  })
+
+  it('renders the Monospace example as a labelled token field with no a11y violations', async () => {
+    const { container, getByLabelText } = render(Monospace)
+    const input = getByLabelText('Personal token') as HTMLInputElement
+    expect(input.getAttribute('autocomplete')).toBe('off')
+    expect(input.getAttribute('spellcheck')).toBe('false')
+    expect(container.querySelector('[data-monospace]')).not.toBeNull()
+    await expectNoA11yViolations(container)
   })
 })

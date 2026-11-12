@@ -11,6 +11,11 @@
       "name": "PageOpensSearch",
       "summary": "A page inside the layout opens the shared ⌘K palette from its own button with `useConsoleLayout().openSearch()`; it never mounts a second palette.",
       "file": "page-opens-search.vue"
+    },
+    {
+      "name": "NavigationExpanded",
+      "summary": "`v-model:navigation-expanded` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value.",
+      "file": "navigation-expanded.vue"
     }
   ]
 }

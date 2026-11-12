@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 8a161c390fa47d1b0f6884a471ab121b3d952436e6fec0dd2e868cffdf0e5414
+checksum: 4eb84c9ad7d6c1e3861d9b9a48ecd9dc839746b06bb4bd555c921809564eca32
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # ConversationHistory — Component Spec
@@ -35,7 +35,7 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 ## Best practices
 
 - Title each conversation from its first prompt, short; the full title shows on hover through `title`.
-- Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.
+- Fix the reference time so the groups match on the server and the client: set `now` on the app's `WebkitProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.
 - Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler.
 
 ## Usage
@@ -59,13 +59,13 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 
 ## Props
 
-| Prop        | Type                                               | Default   | Required  | JSDoc                                                                                |
-| ----------- | -------------------------------------------------- | --------- | --------- | ------------------------------------------------------------------------------------ |
-| `items`     | `{ id: string; title: string; updatedAt: string \\ | number \\ | Date }[]` | `[]`                                                                                 | false | Conversations, any order; they are sorted newest first inside their group.                                              |
-| `now`       | `string \\                                         | number \\ | Date`     | `undefined`                                                                          | false | Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server. |
-| `removable` | `boolean`                                          | `false`   | false     | Shows a Delete button on each row that emits `remove`.                               |
-| `loading`   | `boolean`                                          | `false`   | false     | Shows placeholder rows while the history loads.                                      |
-| `label`     | `string`                                           | `''`      | false     | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+| Prop        | Type                                                                   | Default     | Required | JSDoc                                                                                                                                                      |
+| ----------- | ---------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | `{ id: string; title: string; updatedAt: string \| number \| Date }[]` | `[]`        | false    | Conversations, any order; they are sorted newest first inside their group.                                                                                 |
+| `now`       | `string \| number \| Date`                                             | `undefined` | false    | Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
+| `removable` | `boolean`                                                              | `false`     | false    | Shows a Delete button on each row that emits `remove`.                                                                                                     |
+| `loading`   | `boolean`                                                              | `false`     | false    | Shows placeholder rows while the history loads.                                                                                                            |
+| `label`     | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |
 
 ## v-model
 

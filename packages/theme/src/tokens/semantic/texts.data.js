@@ -232,12 +232,14 @@ export const textsData = {
     lineHeight: 'inherit',
     color: 'var(--text-link)',
     textDecorationLine: 'underline',
+    textDecorationColor: 'color-mix(in srgb, currentColor 40%, transparent)',
     textUnderlineOffset: '0.15em',
     borderRadius: 'var(--shape-elements)',
     transition: `all ${duration['fast-02']} ${curve['productive-entrance']}`,
     states: {
       hover: {
         color: 'var(--text-link-hover)',
+        textDecorationColor: 'currentColor',
         textDecorationThickness: '2px'
       },
       'focus-visible': {

@@ -3,7 +3,7 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: 295e69e6fe00fb4a81c7267ebbfbddc1c79d86bf107291cf161e755a02897096
+checksum: cc5cbe170edc1fb843c26d380ab0a07bad5a5fe584778db66472a1ceaad9cc4c
 spec_version: 1
 created: 2026-11-11
 last_updated: 2026-11-12
@@ -63,13 +63,13 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ## Props
 
-| Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                            |
-| ---------- | -------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `locale`   | `string`                   | `'en'`      | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats.                                  |
-| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English.   |
-| `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                            |
-| `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                     |
-| `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. |
+| Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
+| ---------- | -------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `locale`   | `string`                   | `'en'`      | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats.                                                                                                                                                   |
+| `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English.                                                                                                                    |
+| `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                             |
+| `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                                                                                                                                      |
+| `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
 
 ## Events
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 2de0b57f4dcb0ee241a332b5586fdb62f0b78fe2c8d8dccc3d9d143a1d6d1653
+checksum: 522dda33225bfe5d7e197f7dbc40202664aa35291b1a79cc8680af1e6e315c2c
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -42,6 +42,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
+- A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
 
 ## Usage
 
@@ -69,15 +70,16 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Props
 
-| Prop            | Type                  | Default | Required | JSDoc                                                                                                                                                                  |
-| --------------- | --------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`    | `DocLayoutNavGroup[]` | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router. |
-| `activeId`      | `string`              | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                      |
-| `sections`      | `DocLayoutSection[]`  | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                          |
-| `home`          | `string`              | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                       |
-| `outline`       | `DocTocItem[]`        | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.                    |
-| `outlineGroups` | `DocTocGroup[]`       | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                       |
-| `ariaLabel`     | `string`              | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                           |
+| Prop            | Type                  | Default | Required | JSDoc                                                                                                                                                                            |
+| --------------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`    | `DocLayoutNavGroup[]` | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router.           |
+| `activeId`      | `string`              | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                                |
+| `sections`      | `DocLayoutSection[]`  | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                                    |
+| `home`          | `string`              | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                                 |
+| `outline`       | `DocTocItem[]`        | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.                              |
+| `outlineGroups` | `DocTocGroup[]`       | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                                 |
+| `ariaLabel`     | `string`              | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                                     |
+| `rootLabel`     | `string`              | `''`    | false    | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 
 ## v-model
 
@@ -155,6 +157,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 | `docLayout.search`         | `Search docs`                   | —             |
 | `docLayout.searchEmpty`    | `No page matches your search.`  | —             |
 | `docLayout.pages`          | `Pages`                         | —             |
+| `docLayout.root`           | `Docs`                          | `rootLabel`   |
 
 - Formatting: none. Navigation and outline text is consumer data.
 

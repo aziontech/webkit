@@ -17,6 +17,7 @@
       :model-value="certificate"
       :spellcheck="false"
       readonly
+      monospace
     />
     <Field.Description>Issued by Azion. Upload a new certificate to replace it.</Field.Description>
   </Field>

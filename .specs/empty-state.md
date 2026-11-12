@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: c3d8ea957dff63a2073b86144356d00a99003798777b91cd8fbf73ea0e1c3b93
+checksum: 441065fb3f34752859582c664a9cd819a2514bf4fdd37f12a373e1420e2c3e91
 created: 2026-06-25
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Empty State — Component Spec
@@ -40,6 +40,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 
 - `title` is required. Say what is missing ("No domains yet"), not that something went wrong.
 - Keep the `actions` slot to one primary action, plus an optional documentation link.
+- Leave the actions at their own width, centred, on every screen size (the design sample's look). Do not add `w-full` to a button in the slot to make it span a phone screen.
 - Use the `icon` prop for the standard featured-icon tile. Use the `icon` slot only for custom art, and omit both when the context already explains the state.
 - Use `bordered` when the block sits directly on the page. Leave it off inside a card or panel that already has a border, and use `size="small"` there.
 
@@ -106,7 +107,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 - Visual states: `default`
 - `data-size` mirrors the `size` prop
 - `data-bordered` mirrors the `bordered` prop
-- Responsive: the root is the `@container/empty-state`; below `@xs` of its box (a narrow panel, a phone) the actions stretch to the full width.
+- Responsive: the actions keep their own width and stay centred at every box width, as the design sample draws them (a phone included); the action column is capped at `max-w-full`, so a long label wraps inside the box instead of overflowing it.
 
 ## Motion & Animations
 

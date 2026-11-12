@@ -17,6 +17,8 @@
 - Leave `toggleable` on; turn it off only when you need the `iconRight` slot, which is ignored while the toggle is shown.
 - The field is a fixed 40px tall with no `size` prop; align it with `size="large"` siblings in the same row.
 - Give it an accessible name: a `label` whose `for` matches an `id` passed to the input, or `aria-label`.
+- Set `monospace` on a secret that is code-like: an API token, a client secret, a signing key. Pair it with `autocomplete="off"` and `:spellcheck="false"`, so a revealed token reads character by character (`0`/`O`, `l`/`1`).
+- Do not set `monospace` on a person's own password: they typed it and never read it back character by character.
 
 ## Don’t
 
@@ -44,6 +46,7 @@
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
 | `toggleable` | `boolean` | `true` | false | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows. |
+| `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`. |
 
 ## Events
 
@@ -68,6 +71,7 @@
 - `data-has-icon-left` mirrors `$slots.iconLeft` presence
 - `data-has-icon-right` mirrors `$slots.iconRight` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
+- `data-monospace` mirrors the `monospace` prop: the value (masked or revealed) and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 

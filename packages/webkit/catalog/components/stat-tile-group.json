@@ -18,6 +18,7 @@
   "Put only `StatTile`s in the default slot, in reading order.",
   "Name the strip with `ariaLabel` when the page has more than one (`Usage`, `Traffic`).",
   "Give every tile in a strip the same `kind` and the same period.",
-  "Prefer four cells: they fill one row on a desktop and two rows of two on a tablet."
+  "Prefer four cells: they fill one row on a desktop and two rows of two on a tablet.",
+  "Next to a taller card in a row (a dashboard's usage band beside a chart), let the row stretch the group: it fills the height and the cells grow with it. Do not pin a height. Inside a wrapper element, give the group `h-full` (or make the wrapper a flex column) so the stretch reaches it."
  ]
 }

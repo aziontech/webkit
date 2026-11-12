@@ -21,6 +21,7 @@
   "Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.",
   "Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.",
   "Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind=\"content\"`) in `footer`.",
-  "The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls."
+  "The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.",
+  "A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`."
  ]
 }

@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `md` the Azion mark leads the social row and the status indicator sits beside the language select on the bottom bar; below `md`, as on azion.com, there is no mark and no signature band, and the status indicator stacks over the language select, both at the start. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value locally; its options are the labels the reader sees.",
+ "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `md` the Azion mark leads the social row and the status indicator sits beside the language select on the bottom bar; below `md`, as on azion.com, there is no mark and no signature band, and the status indicator stacks over the language select, both at the start. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.",
  "setup": null,
  "useWhen": [
   "As the last block of every marketing page."
@@ -84,7 +84,7 @@
    "type": "string[]",
    "default": "[]",
    "required": "false",
-   "doc": "Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty."
+   "doc": "Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty."
   },
   {
    "name": "languageAriaLabel",
@@ -92,6 +92,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`)."
+  },
+  {
+   "name": "language",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:language`)."
   }
  ],
  "events": [],
@@ -102,6 +109,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import SiteFooter from '@aziontech/webkit/site-footer'\n\n  const columns = [\n    {\n      title: 'Products',\n      links: [\n        {\n          label: 'Functions',\n          href: '#'\n        },\n        {\n          label: 'Cache',\n          href: '#'\n        },\n        {\n          label: 'Object Storage',\n          href: '#'\n        },\n        {\n          label: 'SQL Database',\n          href: '#'\n        },\n        {\n          label: 'WAF',\n          href: '#'\n        },\n        {\n          label: 'Edge DNS',\n          href: '#'\n        },\n        {\n          label: 'Data Stream',\n          href: '#'\n        }\n      ]\n    },\n    {\n      title: 'Solutions',\n      links: [\n        {\n          label: 'Web Apps',\n          href: '#'\n        },\n        {\n          label: 'AI',\n          href: '#'\n        },\n        {\n          label: 'Application Security',\n          href: '#'\n        },\n        {\n          label: 'Financial Services',\n          href: '#'\n        },\n        {\n          label: 'Retail',\n          href: '#'\n        },\n        {\n          label: 'Technology',\n          href: '#'\n        }\n      ]\n    },\n    {\n      title: 'Developers',\n      links: [\n        {\n          label: 'Docs',\n          href: '#'\n        },\n        {\n          label: 'API Reference',\n          href: '#'\n        },\n        {\n          label: 'Dev Tools',\n          href: '#'\n        },\n        {\n          label: 'Release Notes',\n          href: '#'\n        },\n        {\n          label: 'Marketplace',\n          href: '#'\n        },\n        {\n          label: 'Status',\n          href: '#',\n          external: true\n        }\n      ]\n    },\n    {\n      title: 'Company',\n      links: [\n        {\n          label: 'About',\n          href: '#'\n        },\n        {\n          label: 'Customers',\n          href: '#'\n        },\n        {\n          label: 'Partners',\n          href: '#'\n        },\n        {\n          label: 'Careers',\n          href: '#'\n        },\n        {\n          label: 'Blog',\n          href: '#'\n        },\n        {\n          label: 'Contact',\n          href: '#'\n        }\n      ]\n    }\n  ]\n\n  const socials = [\n    {\n      icon: 'pi pi-github',\n      label: 'Azion on GitHub',\n      href: 'https://github.com/aziontech'\n    },\n    {\n      icon: 'pi pi-linkedin',\n      label: 'Azion on LinkedIn',\n      href: 'https://www.linkedin.com/company/aziontech'\n    },\n    {\n      icon: 'pi pi-youtube',\n      label: 'Azion on YouTube',\n      href: 'https://www.youtube.com/aziontech'\n    },\n    {\n      icon: 'ai ai-x',\n      label: 'Azion on X',\n      href: 'https://x.com/aziontech'\n    },\n    {\n      icon: 'pi pi-instagram',\n      label: 'Azion on Instagram',\n      href: 'https://www.instagram.com/aziontech'\n    },\n    {\n      icon: 'pi pi-discord',\n      label: 'Azion on Discord',\n      href: 'https://discord.gg/azion'\n    },\n    {\n      icon: 'pi pi-reddit',\n      label: 'Azion on Reddit',\n      href: 'https://www.reddit.com/r/aziontech'\n    }\n  ]\n\n  const languages = ['EN', 'PT-BR', 'ES']\n</script>\n\n<template>\n  <SiteFooter\n    kind=\"site\"\n    aria-label=\"Footer\"\n    home=\"#\"\n    home-aria-label=\"Azion home\"\n    :columns=\"columns\"\n    :socials=\"socials\"\n    status-label=\"All Systems Operational\"\n    :languages=\"languages\"\n    language-aria-label=\"Language\"\n  />\n</template>"
+  },
+  {
+   "name": "Language",
+   "sfc": "<script setup>\n  import SiteFooter from '@aziontech/webkit/site-footer'\n  import { ref } from 'vue'\n\n  const columns = [\n    {\n      title: 'Company',\n      links: [\n        { label: 'About us', href: '#' },\n        { label: 'Careers', href: '#' }\n      ]\n    },\n    {\n      title: 'Resources',\n      links: [\n        { label: 'Documentation', href: '#' },\n        { label: 'Blog', href: '#' }\n      ]\n    }\n  ]\n\n  const language = ref('PT-BR')\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col gap-(--spacing-md)\">\n    <SiteFooter\n      v-model:language=\"language\"\n      kind=\"content\"\n      home=\"#\"\n      :columns=\"columns\"\n      :languages=\"['EN', 'PT-BR', 'ES']\"\n    />\n    <p class=\"px-(--spacing-md) text-body-sm text-(--text-muted)\">Page language: {{ language }}</p>\n  </div>\n</template>"
   }
  ],
  "docs": "components/site-footer.md"

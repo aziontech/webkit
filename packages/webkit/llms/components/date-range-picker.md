@@ -15,7 +15,7 @@
 ## Do
 
 - Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them.
-- Pass `now` in tests, demos and server-rendered pages so labels and step limits are deterministic.
+- Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `WebkitProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
 - Name the picker after what it filters (`aria-label="Events time range"`).
@@ -44,7 +44,7 @@
 | `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'` | false | Which kinds of range the panel offers. |
 | `min` | `Date` | `undefined` | false | Earliest instant an absolute range may start at. |
 | `max` | `Date` | `undefined` | false | Latest instant an absolute range may end at. |
-| `now` | `Date` | `undefined` | false | Reference clock for relative ranges and stepping. Unset reads the real clock. |
+| `now` | `Date` | `undefined` | false | Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock. |
 | `placeholder` | `string` | `''` | false | Trigger text with no range. Empty uses the locale catalog. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the trigger. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and the step buttons. |

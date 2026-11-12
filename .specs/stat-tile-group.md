@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4cb96c06067bc4a0d0806c671711bacbef9623a041890134f1224dc4b1927321
+checksum: d7ece73839205cebbb3d4f6011f7afb1baeda6bdf7c374b7b714685d5de9e9e5
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -39,6 +39,7 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 - Name the strip with `ariaLabel` when the page has more than one (`Usage`, `Traffic`).
 - Give every tile in a strip the same `kind` and the same period.
 - Prefer four cells: they fill one row on a desktop and two rows of two on a tablet.
+- Next to a taller card in a row (a dashboard's usage band beside a chart), let the row stretch the group: it fills the height and the cells grow with it. Do not pin a height. Inside a wrapper element, give the group `h-full` (or make the wrapper a flex column) so the stretch reaches it.
 
 ## Usage
 
@@ -146,6 +147,7 @@ _No events — the group is layout; each tile is content._
 ## Responsive
 
 - Container queries: the root is the `@container/stat-tile-group`; one cell per row below its `@md`, two per row from `@md`, every cell in one row (`grid-flow-col auto-cols-fr`) from `@3xl`.
+- Height: the root is a flex column and the cell grid is `flex-1`, so when a grid or flex row stretches the group to a taller neighbour, the cell rows share the extra height instead of leaving an empty band under them.
 - Touch: no targets of its own.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the cells stack.
 
@@ -158,6 +160,7 @@ _No events — the group is layout; each tile is content._
 ## Examples
 
 - Default — four tiles with deltas in one card: the overview's usage strip.
+- BesideCard — justification: the stretch to a taller neighbour is layout behaviour no prop shows; the strip sits beside a taller card in a dashboard row and fills its height.
 
 ## Constraints — DO NOT
 

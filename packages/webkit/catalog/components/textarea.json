@@ -13,6 +13,8 @@
  "bestPractices": [
   "Give it a sensible default size; avoid auto-growing beyond the viewport.",
   "Wrap it in a `Field` for the label, description and error.",
+  "Set `monospace` on a value that is code: a pasted zone file, a certificate, a JSON or YAML snippet, a list of IPs. Pair it with `:spellcheck=\"false\"`. Prose (a description, a message) stays in the sans face.",
+  "A value people edit as code with highlighting and line numbers belongs in `CodeEditor`; `monospace` is for a plain paste box.",
   "Do not restyle a read-only textarea (dashed border, transparent fill): it is the same filled field, made non-editable; the reason belongs in the field's description."
  ]
 }

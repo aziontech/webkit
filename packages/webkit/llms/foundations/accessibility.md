@@ -62,6 +62,10 @@ an icon-only control, which `webkit/accessible-name` requires on every `IconButt
   the webkit types already accept it.
 - Never disable browser zoom (`user-scalable=no`, `maximum-scale=1`).
 - Never rely on color alone for a status: pair it with a label or an icon with a name.
+- Never strip the underline from a link inside a sentence (`text-link`, `no-underline`): the link blue is
+  only 1.1–1.3:1 against muted body text and 3:1 against default text, so color alone fails WCAG 1.4.1.
+  `text-link` keeps a quiet underline at rest and strengthens it on hover. A standalone `Link` (not in a
+  sentence) underlines on hover only.
 
 ## Correct
 

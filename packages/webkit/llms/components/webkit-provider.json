@@ -67,7 +67,7 @@
    "type": "string | number | Date",
    "default": "undefined",
    "required": "false",
-   "doc": "Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute."
+   "doc": "Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute."
   }
  ],
  "events": [],

@@ -16,7 +16,7 @@
 ## Do
 
 - Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.
-- Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`.
+- Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`. The cell clips on both axes (`overflow-clip`, as a media split's media cell does): a fragment's collaborator cursor and shadows float onto the cell's padding, and at a large root font size (200% zoom) its mock text outgrows the drawing; clipping them at the cell's border keeps the page from scrolling sideways. Never frame a fragment with `overflow-x-visible`.
 - Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.
 - Never expect a fragment to become a console window. `kind`, `chrome`, `width` and `fade` re-plate only the workload screens listed under Props; a fragment is drawn bare at its own design width and ignores them, and the root warns in development when one is set on a widget that does not read it. For a framed console window pick a workload screen; for a fragment, give its host cell the padding and surface (a media split's inset media cell does).
 - Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.
@@ -91,7 +91,7 @@
 - Container queries: none; every widget scales its design width to fit its host (`shell-mockup`), with a narrower design width below `md`.
 - Narrow: the host sets the size; the widget scales down with it.
 - Touch: a fragment shows its finished beat on a device that cannot hover.
-- Reflow: no horizontal scroll; the frame scales instead.
+- Reflow: no horizontal scroll; the frame scales instead. A bare fragment's decorative overflow (cursor, mock text grown by a 200% root font) is clipped by its host cell, never by the page; the Library example's cells clip, and `src/test/reflow.test.ts` checks it on Chromium, Firefox and WebKit.
 
 ## Examples
 

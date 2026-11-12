@@ -6,6 +6,7 @@ import { nextTick } from 'vue'
 import Default from '../../../../examples/textarea/default.vue'
 import Disabled from '../../../../examples/textarea/disabled.vue'
 import Invalid from '../../../../examples/textarea/invalid.vue'
+import Monospace from '../../../../examples/textarea/monospace.vue'
 import ReadOnly from '../../../../examples/textarea/read-only.vue'
 import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -289,5 +290,34 @@ describe('Textarea — direction of the typed value', () => {
   it('lets a dir attribute override the default', () => {
     const { getByTestId } = render(Textarea, { attrs: { dir: 'ltr' } })
     expect(getByTestId('input-textarea').getAttribute('dir')).toBe('ltr')
+  })
+})
+
+describe('Textarea — monospace', () => {
+  it('omits data-monospace by default', () => {
+    const { getByTestId } = render(Textarea)
+    expect(getByTestId('input-textarea').hasAttribute('data-monospace')).toBe(false)
+  })
+
+  it('marks the field with data-monospace and still edits the value', async () => {
+    const { getByTestId, emitted } = render(Textarea, {
+      props: { monospace: true },
+      attrs: { 'aria-label': 'Zone file' }
+    })
+    const textarea = getByTestId('input-textarea')
+    expect(textarea.hasAttribute('data-monospace')).toBe(true)
+    await userEvent.type(textarea, '@ A')
+    expect(emitted()['update:modelValue']?.at(-1)).toEqual(['@ A'])
+  })
+
+  it('renders the Monospace and ReadOnly examples in the code face with no a11y violations', async () => {
+    const paste = render(Monospace)
+    const zone = paste.getByLabelText('Zone file') as HTMLTextAreaElement
+    expect(zone.hasAttribute('data-monospace')).toBe(true)
+    expect(zone.value).toContain('$ORIGIN example.com.')
+    await expectNoA11yViolations(paste.container)
+    paste.unmount()
+    const fixed = render(ReadOnly)
+    expect(fixed.getByLabelText('Certificate').hasAttribute('data-monospace')).toBe(true)
   })
 })

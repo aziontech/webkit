@@ -20,6 +20,7 @@
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
+- Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
 
@@ -52,6 +53,7 @@
 | `toolsLabel` | `string` | `''` | false | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
 | `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+| `navigationExpanded` | `boolean` | `true` | false | Two-way value (`v-model:navigationExpanded`). |
 
 ## Events
 
@@ -75,10 +77,11 @@
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                                                |
-| --------------------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.              |
-| `v-model:tools-open`  | `boolean` | `false` | `update:toolsOpen`  | Whether the tools region (help or notifications) is open beside the content; a drawer while compact. |
+| Model                         | Type      | Default | Emits                       | Notes                                                                                                                                                                     |
+| ----------------------------- | --------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
+| `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
+| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded on wide layouts; `false` collapses it (the Sidebar's collapsed rail). It has no effect while compact, where the rail is a drawer. |
 
 ## States
 
@@ -119,7 +122,7 @@
 ## Responsive
 
 - Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
-- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-start` and the actions fit; the brand stays in the navigation drawer.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
 
@@ -318,6 +321,65 @@
             <FindWorkload />
           </template>
         </PageHeader>
+      </div>
+    </div>
+  </ConsoleLayout>
+</template>
+```
+
+### NavigationExpanded
+
+```vue
+<script setup lang="ts">
+  import Command from '@aziontech/webkit/command'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import { ref } from 'vue'
+
+  const navigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: [
+        { id: 'overview', label: 'Overview', icon: 'ai ai-home', href: '/' },
+        { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' },
+        { id: 'functions', label: 'Functions', icon: 'ai ai-edge-functions', href: '/functions' }
+      ]
+    }
+  ]
+
+  const navigationExpanded = ref(true)
+
+  const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    if (value === 'action:sidebar') navigationExpanded.value = !navigationExpanded.value
+  }
+</script>
+
+<template>
+  <ConsoleLayout
+    v-model:navigation-expanded="navigationExpanded"
+    :navigation="navigation"
+    active-id="workloads"
+    @search-select="onSearchSelect"
+  >
+    <template #search>
+      <Command.Group heading="Actions">
+        <Command.Item value="action:sidebar">
+          <template #prefix>
+            <i
+              :class="navigationExpanded ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
+              aria-hidden="true"
+            />
+          </template>
+          {{ navigationExpanded ? 'Collapse sidebar' : 'Expand sidebar' }}
+        </Command.Item>
+      </Command.Group>
+    </template>
+
+    <div class="layout-boundary">
+      <div class="layout-column">
+        <PageHeader
+          title="Workloads"
+          description="Press ⌘K or Ctrl K and choose Collapse sidebar to fold the rail."
+        />
       </div>
     </div>
   </ConsoleLayout>

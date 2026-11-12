@@ -25,23 +25,23 @@
  ],
  "bestPractices": [
   "Title each conversation from its first prompt, short; the full title shows on hover through `title`.",
-  "Pass `now` from the server render (or a fixed reference) so the groups match on the server and the client.",
+  "Fix the reference time so the groups match on the server and the client: set `now` on the app's `WebkitProvider` once (every time-relative component below reads it), or pass `now` here to override it for this list.",
   "Confirm deletes of anything older than today with a `ConfirmDialog` in the `remove` handler."
  ],
  "props": [
   {
    "name": "items",
-   "type": "{ id: string; title: string; updatedAt: string \\ | number \\ | Date }[]",
+   "type": "{ id: string; title: string; updatedAt: string | number | Date }[]",
    "default": "[]",
    "required": "false",
    "doc": "Conversations, any order; they are sorted newest first inside their group."
   },
   {
    "name": "now",
-   "type": "string \\ | number \\ | Date",
+   "type": "string | number | Date",
    "default": "undefined",
    "required": "false",
-   "doc": "Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server."
+   "doc": "Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server."
   },
   {
    "name": "removable",

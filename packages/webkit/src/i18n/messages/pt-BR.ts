@@ -418,7 +418,8 @@ export const ptBR: Messages = {
     openNavigation: 'Abrir navegação da documentação',
     search: 'Buscar na documentação',
     searchEmpty: 'Nenhuma página corresponde à busca.',
-    pages: 'Páginas'
+    pages: 'Páginas',
+    root: 'Docs'
   },
   docOnThisPage: {
     title: 'Nesta página'

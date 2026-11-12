@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: af9e74cd9ef68404f51ae9e45e286de1a8371feac5a9041ce36557c3bf8c8aec
+checksum: fd3194e617a707e1b0dd63b5491e6feeeb4f280b8c91e56e59d167ccc1f2ea98
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -44,6 +44,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
+- Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
 
@@ -89,10 +90,11 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                                                |
-| --------------------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.              |
-| `v-model:tools-open`  | `boolean` | `false` | `update:toolsOpen`  | Whether the tools region (help or notifications) is open beside the content; a drawer while compact. |
+| Model                         | Type      | Default | Emits                       | Notes                                                                                                                                                                     |
+| ----------------------------- | --------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
+| `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
+| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded on wide layouts; `false` collapses it (the Sidebar's collapsed rail). It has no effect while compact, where the rail is a drawer. |
 
 ## Events
 
@@ -178,7 +180,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 ## Responsive
 
 - Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
-- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-start` and the actions fit; the brand stays in the navigation drawer.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
 
@@ -192,8 +194,9 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 - Default — the layout with console navigation (a drill level and a preview badge), breadcrumbs, header actions, the account menu and a list page body.
 - Page opens search — a page body that opens the shared palette with `useConsoleLayout().openSearch()` from its own button.
+- Navigation expanded — `v-model:navigation-expanded` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
 
-The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable.
+The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it.
 
 ## Constraints — DO NOT
 

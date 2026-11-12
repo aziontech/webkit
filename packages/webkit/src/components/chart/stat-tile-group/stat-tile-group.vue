@@ -34,10 +34,10 @@
     role="group"
     :aria-label="ariaLabel || undefined"
     :data-testid="testId"
-    class="@container/stat-tile-group min-w-0 overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="@container/stat-tile-group flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div
-      class="-me-px -mb-px grid grid-cols-1 @md/stat-tile-group:grid-cols-2 @3xl/stat-tile-group:auto-cols-fr @3xl/stat-tile-group:grid-flow-col @3xl/stat-tile-group:grid-cols-none"
+      class="-me-px -mb-px grid flex-1 grid-cols-1 @md/stat-tile-group:grid-cols-2 @3xl/stat-tile-group:auto-cols-fr @3xl/stat-tile-group:grid-flow-col @3xl/stat-tile-group:grid-cols-none"
       :data-testid="`${testId}__cells`"
     >
       <slot />
