@@ -61,6 +61,11 @@
       "name": "Inline",
       "summary": "kind=\"inline\" removes the outer padding so items sit flush; placed in a gapped ItemGroup directly on the page (no card, no dividers).",
       "file": "inline.vue"
+    },
+    {
+      "name": "Option",
+      "summary": "`kind=\"option\"` rows under a search field: the 38 px chooser row of a create flow (a workload, a host). Each row is an `as-child` button; the pressed one fills with the selected surface and shows a check. The kind sets its own density, so `size` does not change it.",
+      "file": "option.vue"
     }
   ]
 }

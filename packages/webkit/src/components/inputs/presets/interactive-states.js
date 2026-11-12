@@ -88,8 +88,9 @@ export const itemRowShellClasses = [
   'rounded-(--shape-button) border border-transparent text-body-sm text-(--text-default)',
   'data-[kind=outlined]:border-(--border-muted) data-[kind=outlined]:bg-(--bg-surface)',
   'data-[kind=muted]:bg-(--bg-hover)',
-  'data-[size=medium]:gap-(--spacing-md) [&:not([data-kind=inline])]:data-[size=medium]:p-(--spacing-md)',
-  'data-[size=small]:gap-(--spacing-xs) [&:not([data-kind=inline])]:data-[size=small]:px-(--spacing-md) [&:not([data-kind=inline])]:data-[size=small]:py-(--spacing-sm)'
+  '[&:not([data-kind=option])]:data-[size=medium]:gap-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=medium]:p-(--spacing-md)',
+  '[&:not([data-kind=option])]:data-[size=small]:gap-(--spacing-xs) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:px-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:py-(--spacing-sm)',
+  'data-[kind=option]:gap-(--spacing-sm) data-[kind=option]:px-(--spacing-sm) data-[kind=option]:py-(--spacing-xs) data-[kind=option]:aria-pressed:bg-(--bg-selected) data-[kind=option]:aria-selected:bg-(--bg-selected)'
 ]
 
 export const itemRowClasses = [...itemRowShellClasses]

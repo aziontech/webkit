@@ -1,8 +1,9 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/item/default.vue'
 import Muted from '../../../../examples/item/muted.vue'
+import Option from '../../../../examples/item/option.vue'
 import Outline from '../../../../examples/item/outline.vue'
 import Small from '../../../../examples/item/small.vue'
 import WithGroup from '../../../../examples/item/with-group.vue'
@@ -260,6 +261,27 @@ describe('Item (composition)', () => {
     it('WithGroup example has no violations', async () => {
       const { container } = render(WithGroup)
       await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('kind="option" — chooser rows', () => {
+    it('marks each row as an option row on its button and follows the pressed choice', async () => {
+      const { getByRole, getAllByRole, container } = render(Option)
+      const rows = getAllByRole('button')
+      expect(rows).toHaveLength(4)
+      for (const row of rows) expect(row.getAttribute('data-kind')).toBe('option')
+      expect(getByRole('button', { name: 'workload_02' }).getAttribute('aria-pressed')).toBe('true')
+
+      await fireEvent.click(getByRole('button', { name: 'workload_04' }))
+      expect(getByRole('button', { name: 'workload_04' }).getAttribute('aria-pressed')).toBe('true')
+      expect(getByRole('button', { name: 'workload_02' }).getAttribute('aria-pressed')).toBe('false')
+      await expectNoA11yViolations(container)
+    })
+
+    it('narrows the rows from the search field', async () => {
+      const { getByRole, getAllByRole } = render(Option)
+      await fireEvent.update(getByRole('textbox', { name: 'Find workload' }), '03')
+      expect(getAllByRole('button').map((row) => row.textContent?.trim())).toEqual(['workload_03'])
     })
   })
 
