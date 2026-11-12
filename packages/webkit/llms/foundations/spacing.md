@@ -9,14 +9,15 @@ another's.
 
 ```vue
 <template>
-  <main class="layout-column layout-boundary flex min-w-0 flex-col">
+  <!-- the page body, in the layout's <main> -->
+  <div class="layout-column layout-boundary flex min-w-0 flex-col">
     <PageHeader title="Applications" />
 
     <section class="layout-section-start flex flex-col gap-(--layout-section-gap)">
       <section class="flex flex-col gap-(--layout-group-gap)">…</section>
       <form class="flex flex-col gap-(--layout-group-gap)">…</form>
     </section>
-  </main>
+  </div>
 </template>
 ```
 
@@ -98,9 +99,10 @@ height, not a page boundary).
 
 Who carries it depends on the shell:
 
-- A **padded** page gets its boundary from the app shell, on the scroll box _outside_ the capped
-  block, so the measure lands as content width.
-- A page that carries the boundary **itself** puts it on the same block as the measure.
+- Inside `ConsoleLayout` (and every app layout) the page carries the boundary **itself**: the layout
+  pads nothing, so the body puts `layout-boundary` on the same block as the measure.
+- A **padded** container you own (a split view's pane, a scroll box around a capped block) can carry
+  the boundary _outside_ the capped block instead, so the measure lands as content width.
 
 Those two would normally disagree. With `box-sizing: border-box`, 1620px of cap minus 24px a side is
 a 1572px content column — 48px narrower than the same measure gives a padded page. That is the
@@ -114,11 +116,11 @@ This is automatic, and it is the reason a sticky bar works:
 
 ```vue
 <template>
-  <main class="overflow-auto">
+  <div class="overflow-auto">
     <form class="layout-column-form layout-boundary-inline flex flex-col pt-(--layout-section-gap)">
       …
     </form>
-  </main>
+  </div>
 
   <footer
     class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)"
