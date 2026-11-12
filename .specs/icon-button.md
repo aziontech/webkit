@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 149fac30ef4d8abfdd6fe4e4121e1afb95c50e61b04c0ae99190cc639916d26b
+checksum: 47b60e3b709cd4efb67edccfcfca95064e5d11cf26e3b46464cc64d695089609
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Icon Button — Component Spec
@@ -36,7 +36,8 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Best practices
 
-- `ariaLabel` is required and is the only accessible name; describe the action ("Delete domain"), not the glyph ("Trash").
+- Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
 - Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
@@ -71,18 +72,18 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Props
 
-| Prop             | Type                                                                  | Default     | Required | JSDoc                                                |
-| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------- |
-| `icon`           | `string`                                                              | `—`         | true     | PrimeIcons class for the leading/trailing icon.      |
-| `ariaLabel`      | `string`                                                              | `—`         | true     | Accessible name for icon-only controls.              |
-| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                      |
-| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography. |
-| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.    |
-| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.         |
-| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                 |
-| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                      |
-| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.    |
-| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.             |
+| Prop             | Type                                                                  | Default     | Required | JSDoc                                                                                                                                                               |
+| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon`           | `string`                                                              | `—`         | true     | PrimeIcons class for the leading/trailing icon.                                                                                                                     |
+| `ariaLabel`      | `string`                                                              | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
+| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                     |
+| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                |
+| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                   |
+| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                                                        |
+| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                |
+| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                     |
+| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                   |
+| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                            |
 
 ## Events
 
@@ -131,6 +132,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Right-to-left

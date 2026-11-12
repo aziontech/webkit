@@ -33,6 +33,8 @@ The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hook
 | Boolean (any) | no `is`/`has` prefix; **positive polarity** | `boolean` | `false` | `isX`, `hasX`; negatives `hidden`→`visible`, `closed`→`open`, `inactive`→`active`, `invisible`→`visible`, `collapsed`→`expanded` (`disabled`/`readonly` are accepted exceptions) |
 | Value change signal | `v-model` / `update:<x>` (no separate echo) | — | — | **`<x>-change` when `update:<x>` exists** (redundant echo — blocked). A genuinely distinct commit event (e.g. commit-on-blur) is a bare `change`, never `<x>-change`. |
 
+**Accessible name — the attribute the consumer writes.** The prop is `ariaLabel`, but templates pass it as the kebab attribute `aria-label="…"` (`:aria-label` when bound). vue-tsc does not camelize `aria-*` attributes onto props, so an `ariaLabel` prop is always **optional with a `''` default**: a required one makes `aria-label="…"` fail to type-check in a fresh create-vue app. Where a name is mandatory, `webkit/accessible-name` (lint) enforces it. See [`accessibility.md`](./accessibility.md).
+
 ## Shared values
 
 Value names are shared too. The same look gets the same token on every component:

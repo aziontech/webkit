@@ -89,6 +89,10 @@ identity, the `v-model` payload, or display text.
   the manual `modelValue` + `update:modelValue` pair.
 - When migrating code from another design system, rewrite its names to this vocabulary
   (`variant` → `kind`, `sm/md/lg` → `small/medium/large`) — never carry them over.
+- Pass the accessible name as the kebab attribute in templates — `aria-label="Close"`, bound
+  `:aria-label="label"` — even though the prop is `ariaLabel`. Declare your own `ariaLabel` prop
+  optional with a `''` default: vue-tsc leaves `aria-*` attributes uncamelized, so a required
+  `ariaLabel` fails `aria-label="…"` in a create-vue app.
 
 ## Do not
 
