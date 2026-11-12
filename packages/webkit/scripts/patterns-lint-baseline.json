@@ -20,9 +20,6 @@
   "platform/edit/edit-resource": {
     "webkit/menu-node-href": 386
   },
-  "platform/settings/settings-form": {
-    "webkit/menu-node-href": 210
-  },
   "shells/console": {
     "webkit/menu-node-href": 140
   }
