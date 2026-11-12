@@ -27,6 +27,16 @@ test('every breakpoint and container size ships in the stylesheet Tailwind reads
   }
 });
 
+test('both scales are declared in @theme, so Tailwind compiles its variants from them', () => {
+  const themeBlock = css.match(/^@theme \{\n([\s\S]*?)\n\}/m)?.[1] ?? '';
+  for (const [name, value] of Object.entries(breakpoints)) {
+    assert.ok(themeBlock.includes(`--breakpoint-${name}: ${value};`), `--breakpoint-${name}`);
+  }
+  for (const [name, value] of Object.entries(container)) {
+    assert.ok(themeBlock.includes(`--container-${name}: ${value};`), `--container-${name}`);
+  }
+});
+
 test('the README documents every size of both scales', () => {
   for (const [name, value] of Object.entries(breakpoints)) {
     assert.ok(readme.includes(`--breakpoint-${name}`), name);

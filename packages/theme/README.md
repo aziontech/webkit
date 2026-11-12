@@ -187,9 +187,12 @@ utilities.
 
 **Container sizes** (`@container`, then `@sm:`, `@md:` … and `@max-sm:` …) say how big the
 **component's own box** is. A table in a drawer, a header in a split view, a field in a card lay out
-for that box, not for the window. The variants read the same `--container-*` scale used for widths
-(this theme replaces Tailwind's default container scale), so `@md:` means "my container is at least
-472 px".
+for that box, not for the window. The variants read the same `--container-*` scale used for widths:
+the theme declares the scale in `@theme`, which replaces Tailwind's default container scale (where
+`@md` would be 448 px and `@2xl` 672 px), so `@md:` means "my container is at least 472 px" and
+`@2xl:` 752 px. Write the variant, never a raw `@min-[47rem]:` for a size the scale already has.
+`test/standards/container-scale.test.mjs` in `@aziontech/webkit` compiles every variant against
+this stylesheet and fails if one drifts from the table below.
 
 | Variant | Token             | Width  | Variant | Token             | Width   |
 | ------- | ----------------- | ------ | ------- | ----------------- | ------- |

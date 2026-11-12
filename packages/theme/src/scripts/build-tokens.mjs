@@ -261,6 +261,7 @@ const emitCssV4 = () => {
   for (const [k, v] of primitivesEntries) {
     if (k.startsWith('--color-') || k.startsWith('--breakpoint-')) themeVars[k] = v;
     else rootPrimitiveVars[k] = v;
+    if (k.startsWith('--container-')) themeVars[k] = v;
   }
 
   for (const [name, shorthand] of Object.entries(animate)) {
