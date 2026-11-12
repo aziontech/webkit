@@ -168,6 +168,48 @@ function link(from, to) {
   return posix.relative(posix.dirname(from), to)
 }
 
+function namesOnly(md) {
+  return String(md).replace(
+    /\[([^\]]+)\]\((?!https?:|components\/|blocks\/|foundations\/)[^)\s]+\.(?:md|json)(?:#[^)\s]*)?\)/g,
+    '$1'
+  )
+}
+
+function partNames(md, heading, more) {
+  let fence = false
+  const lines = String(md).split('\n')
+  const start = lines.findIndex((l) => l.trim() === heading)
+  if (start === -1) return md
+  let end = lines.length
+  const parts = []
+  for (let i = start + 1; i < lines.length; i++) {
+    if (/^\s*```/.test(lines[i])) fence = !fence
+    if (fence) continue
+    if (/^#{1,2}\s/.test(lines[i])) {
+      end = i
+      break
+    }
+    const h = lines[i].match(/^###\s+(.+)$/)
+    if (h) parts.push(h[1].trim())
+  }
+  if (!parts.length) return md
+  return [...lines.slice(0, start + 1), '', bullets(parts), '', more, '', ...lines.slice(end)].join(
+    '\n'
+  )
+}
+
+function firstSentences(md) {
+  let fence = false
+  return String(md)
+    .split('\n')
+    .map((line) => {
+      if (/^\s*```/.test(line)) fence = !fence
+      const m = !fence && line.match(/^- (.+)$/)
+      return m ? `- ${firstSentence(m[1])}` : line
+    })
+    .join('\n')
+}
+
 function loadCatalog() {
   return catalogView(JSON.parse(readFileSync(CATALOG_PATH, 'utf-8')), (file) =>
     JSON.parse(readFileSync(resolve(PKG_ROOT, file), 'utf-8'))
@@ -386,9 +428,9 @@ function componentPage(catalog, name, { full = true } = {}) {
   if (api.purpose) out.push(`> ${api.purpose}`, '')
   const facts = [
     `Import: \`import ${binding(api.treeShakeableImport.split('/').pop())} from '${api.treeShakeableImport}'\``,
-    `Category: ${api.category ?? '—'} · Surface: ${api.surface ?? '—'} · Structure: ${api.structure ?? '—'}`,
-    `API as JSON: [${name}.json](${name}.json)`
+    `Category: ${api.category ?? '—'} · Surface: ${api.surface ?? '—'} · Structure: ${api.structure ?? '—'}`
   ]
+  if (full) facts.push(`API as JSON: [${name}.json](${name}.json)`)
   if (api.treeShakeableImport !== api.import) {
     facts.splice(
       1,
@@ -400,12 +442,13 @@ function componentPage(catalog, name, { full = true } = {}) {
   if (api.setup) out.push('## Setup', '', api.setup, '')
   if (api.useWhen.length) out.push('## When to use', '', bullets(api.useWhen), '')
   if (api.bestPractices.length) out.push('## Do', '', bullets(api.bestPractices), '')
-  out.push('## Don\u2019t', '', bullets([...api.avoidWhen, allowedClasses(api)]), '')
+  const tagRule = full || api.styleSeam ? [allowedClasses(api)] : []
+  out.push('## Don\u2019t', '', bullets([...api.avoidWhen, ...tagRule]), '')
   if (api.related.length) {
     const names = new Set(componentNames(catalog))
     const related = api.related.map((r) =>
       r.replace(/^`?([a-z0-9-]+)`?/, (m, n) =>
-        names.has(n) ? `[${n}](${link(path, `components/${n}.md`)})` : m
+        names.has(n) ? (full ? `[${n}](${link(path, `components/${n}.md`)})` : `\`${n}\``) : m
       )
     )
     out.push('## Related', '', bullets(related), '')
@@ -454,13 +497,15 @@ function componentPage(catalog, name, { full = true } = {}) {
     out.push('## Sub-component imports', '', bullets(api.subcomponents.map((s) => `\`${s}\``)), '')
   }
   for (const heading of SPEC_SECTIONS) {
-    if (spec[heading])
-      out.push(
-        `## ${heading === 'Accessibility (WCAG 2.1 AA)' ? 'Accessibility' : heading}`,
-        '',
-        demote(spec[heading]),
-        ''
-      )
+    if (!spec[heading]) continue
+    const text =
+      !full && heading === 'Sub-components' ? firstSentences(spec[heading]) : spec[heading]
+    out.push(
+      `## ${heading === 'Accessibility (WCAG 2.1 AA)' ? 'Accessibility' : heading}`,
+      '',
+      demote(text),
+      ''
+    )
   }
   const examples = full ? api.examples : api.examples.slice(0, 1)
   if (examples.length) {
@@ -488,7 +533,10 @@ function blockPage(catalog, id, { full = true } = {}) {
   const path = `blocks/${id}.md`
   const names = new Set(componentNames(catalog))
   const out = [`# ${p.name} (\`${id}\`)`, '']
-  if (p.summary) out.push(`> ${p.summary.replace(/\n+/g, ' ')}`, '')
+  if (p.summary) {
+    const summary = full || !p.guidelines ? p.summary : firstSentence(p.summary)
+    out.push(`> ${summary.replace(/\n+/g, ' ')}`, '')
+  }
   const facts = [
     `Surface: ${p.surface ?? 'product'}`,
     `Source: \`${p.source}\` in \`@aziontech/webkit\``,
@@ -502,7 +550,8 @@ function blockPage(catalog, id, { full = true } = {}) {
             .replace(/^@aziontech\/webkit\//, '')
             .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
             .toLowerCase()
-          return names.has(n) ? `[${binding(n)}](${link(path, `components/${n}.md`)})` : `\`${c}\``
+          if (!names.has(n)) return `\`${c}\``
+          return full ? `[${binding(n)}](${link(path, `components/${n}.md`)})` : binding(n)
         })
         .join(', ')}`
     )
@@ -511,7 +560,17 @@ function blockPage(catalog, id, { full = true } = {}) {
   out.push(bullets(facts), '')
   if (p.intents?.length) out.push('## Asked as', '', p.intents.join('; '), '')
   if (p.guidelines) {
-    out.push(withoutTitle(stripComments(p.guidelines)), '')
+    const guidelines = withoutTitle(stripComments(p.guidelines))
+    out.push(
+      full
+        ? guidelines
+        : partNames(
+            guidelines,
+            '## Building blocks',
+            `What each part takes: [blocks/${id}.md](blocks/${id}.md).`
+          ),
+      ''
+    )
   } else if (p.guidelinesSummary) {
     out.push('## When to use', '', p.guidelinesSummary, '')
   }
@@ -523,23 +582,30 @@ function blockPage(catalog, id, { full = true } = {}) {
       ''
     )
   const variants = p.variants || []
-  out.push(
-    '## Variants',
-    '',
-    bullets([
-      `\`${p.primary}\` — primary (the code below)`,
-      ...variants.map((v) => `\`${v.name}\` — ${v.summary || ''}`.trim())
-    ]),
-    '',
-    `Each variant is the same screen in another state: \`get_pattern("${id}", { variant })\`, or the file under \`blocks/${id}/variants/\`.`,
-    ''
-  )
-  if (full) out.push(`## Code (\`${p.primary}\`)`, '', code(p.sfc), '')
-  else
+  if (!full) {
     out.push(
-      `The code of every state is in [blocks/${id}.md](blocks/${id}.md) and \`${p.source}\`.`,
+      '## Variants',
+      '',
+      `\`${p.primary}\` (primary)${variants.map((v) => ` · \`${v.name}\``).join('')}. Code: [blocks/${id}.md](blocks/${id}.md), \`get_pattern("${id}", { variant })\`.`,
       ''
     )
+  } else {
+    out.push(
+      '## Variants',
+      '',
+      bullets([
+        `\`${p.primary}\` — primary (the code below)`,
+        ...variants.map((v) => `\`${v.name}\` — ${v.summary || ''}`.trim())
+      ]),
+      '',
+      `Each variant is the same screen in another state: \`get_pattern("${id}", { variant })\`, or the file under \`blocks/${id}/variants/\`.`,
+      '',
+      `## Code (\`${p.primary}\`)`,
+      '',
+      code(p.sfc),
+      ''
+    )
+  }
   return (
     out
       .join('\n')
@@ -740,14 +806,21 @@ function header(catalog) {
 export function buildLlms(catalog = loadCatalog()) {
   const files = {}
   const index = [header(catalog)]
-  const fullParts = [header(catalog)]
+  const fullParts = [
+    `${header(catalog)}\n## How this file is cut\n\n${bullets([
+      'Each component appears with its first example only, its sub-component notes cut to their first sentence, and related names without links.',
+      'Each block appears with its guidelines, its building blocks as names and its variants as names; the code is on the block page.',
+      `Classes on a component tag: ${allowedClasses({})} A component marked style seam says so on its own entry.`,
+      'Every page under `llms/` is complete: open it (the path is in the comment above each entry) for every example, part and variant.'
+    ])}\n`
+  ]
 
   const found = foundations(catalog)
   index.push('## Foundations', '')
   for (const f of found) {
     files[`foundations/${f.slug}.md`] = f.md
     index.push(`- [${f.title}](foundations/${f.slug}.md): ${f.summary}`)
-    fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${f.compact ?? f.md}`)
+    fullParts.push(`<!-- foundations/${f.slug}.md -->\n\n${namesOnly(f.compact ?? f.md)}`)
   }
   index.push('')
 
@@ -762,7 +835,9 @@ export function buildLlms(catalog = loadCatalog()) {
       index.push(
         `- [${p.name} (${id})](blocks/${id}.md): ${firstSentence(p.guidelinesSummary || p.summary)}`
       )
-      fullParts.push(`<!-- blocks/${id}.md -->\n\n${blockPage(catalog, id, { full: false })}`)
+      fullParts.push(
+        `<!-- blocks/${id}.md -->\n\n${namesOnly(blockPage(catalog, id, { full: false }))}`
+      )
     }
     index.push('')
   }
@@ -781,7 +856,9 @@ export function buildLlms(catalog = loadCatalog()) {
       index.push(
         `- [${binding(n)}](components/${n}.md): ${firstSentence(catalog.imports[n].purpose)}`
       )
-      fullParts.push(`<!-- components/${n}.md -->\n\n${componentPage(catalog, n, { full: false })}`)
+      fullParts.push(
+        `<!-- components/${n}.md -->\n\n${namesOnly(componentPage(catalog, n, { full: false }))}`
+      )
     }
     index.push('')
   }
@@ -789,7 +866,7 @@ export function buildLlms(catalog = loadCatalog()) {
   index.push(
     '## Optional',
     '',
-    '- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines without their code and the first example of each component (the pages above hold the code and every example).',
+    '- [llms-full.txt](llms-full.txt): every foundation, block and component page in one file, sized for one context window: block guidelines with their parts and variants as names and without their code, and the first example of each component (the pages above hold the code, every example and every detail).',
     '- [catalog.json](../catalog.json): the machine catalog the pages are generated from (exports, props, tokens, blocks).',
     ''
   )
