@@ -43,16 +43,6 @@ const KNOWN_CONFLICTS = [
     ],
     reason:
       "the component API takes the client's brand colours as CSS colours (brand: { base, glow }); every spelling of one is a hardcoded colour to the rule"
-  },
-  {
-    rule: 'vuejs-accessibility/label-has-for',
-    files: [
-      'examples/label/default.vue',
-      'examples/label/hinted.vue',
-      'examples/label/required.vue'
-    ],
-    reason:
-      "the init preset keeps the rule's default required: { every: ['nesting', 'id'] }, so the standalone Label component, which can only point at a control with for, never passes; plan.js should set required: { some: ['nesting', 'id'] }"
   }
 ]
 

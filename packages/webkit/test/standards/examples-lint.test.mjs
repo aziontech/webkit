@@ -32,7 +32,7 @@ test('the gate lints with the exact config `webkit init` writes (strict preset)'
   const rules = Object.assign({}, ...config.map((c) => c.rules || {}))
   assert.equal(rules['webkit/prefer-tree-shakeable-root'], 'error')
   assert.equal(rules['webkit/no-style-override'], 'error')
-  assert.equal(rules['vuejs-accessibility/label-has-for'], 'error')
+  assert.equal([rules['vuejs-accessibility/label-has-for']].flat()[0], 'error')
 })
 
 test('the gate is wired into gates.mjs', () => {

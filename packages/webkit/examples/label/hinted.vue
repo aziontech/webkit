@@ -1,10 +1,21 @@
 <script setup>
+  import Input from '@aziontech/webkit/input'
   import Label from '@aziontech/webkit/label'
+  import { ref } from 'vue'
+
+  const value = ref('')
 </script>
 
 <template>
-  <Label
-    label="Sensitive"
-    hint="Values are encrypted at rest and never displayed again after saving."
-  />
+  <div class="flex w-full max-w-(--container-xs) flex-col gap-(--spacing-xs)">
+    <Label
+      for="label-hinted-secret"
+      label="Sensitive"
+      hint="Values are encrypted at rest and never displayed again after saving."
+    />
+    <Input
+      id="label-hinted-secret"
+      v-model="value"
+    />
+  </div>
 </template>
