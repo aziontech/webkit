@@ -28,7 +28,7 @@ export default [
 
 ## Presets
 
-Nothing out of standard is ever a warning — **every rule in every preset is `error`**, except the heuristics (`HEURISTIC_RULES`: `container-needs-width`, which reads only the template and cannot see the rendered layout, and `no-output-in-command`, which reads intent from comments), so they `warn` in every preset.
+Nothing out of standard is ever a warning — **every rule in every preset is `error`**, except the heuristics (`HEURISTIC_RULES`: `container-needs-width`, which reads only the template and cannot see the rendered layout, `no-output-in-command`, which reads intent from comments, and `menu-node-href`, which recognises a navigation node by its shape), so they `warn` in every preset.
 
 | Preset        | Rule set                                                                                               |
 | ------------- | ------------------------------------------------------------------------------------------------------ |
@@ -73,6 +73,7 @@ previously unmeasured by these presets — that's the fix working, not a regress
 | `no-wrapped-page-chrome`     | A `SiteFooter` or `SiteNav` whose parent element carries a border (`border`, `border-t`, `border-b`, …) or padding (`p-*`, `px-*`, `py-*`, …) in its static class, at any breakpoint. Both draw their own rules and frame: a bordered wrapper doubles the rule, a padded one pulls the frame off the page column. Render them as direct children of the page shell; a wrapper that only positions them (`sticky top-0 z-40`) is fine.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 | `no-output-in-command` | (warn) A shell code sample — an object with `language`/`lang` `bash`, `sh`, `shell`, `zsh` or `console` and a static `code` string, such as a `DocCodeGroup` sample or a `CodeBlock` tab, in a script or a template — that mixes the command with what it prints: a `#` comment after the command that reads as output (`# HTTP/2 200`, `# => …`, `# 4.23.0`, `# returns …`) or a trailing run of `#` lines, or, in a `$`-prompted transcript, a line without the prompt. A command block holds only what the reader runs, so its copy control copies exactly that. Fix with the sample's `output` field (`DocCodeGroup` draws it as a muted "Output" block), a `<CodeBlock kind="output">`, or prose. |
+| `menu-node-href` | (warn) A navigation node — an object with `id` and `label`, as a `Menu` `groups` tree holds — that names its destination `path`, `to`, `url` or `route` (a `/`-path string or a route object) and has no `href`. `Menu` reads only `href`, so the row renders as a button with nowhere to go. Rename the key to `href`; with Vue Router, call `router.push(node.href)` in `@navigate`. |
 
 Deterministic import rules (`valid-import-path`, `no-deep-internal-import`, `no-barrel-import`, `no-whole-icon-set-import`, `prefer-tree-shakeable-root`) and `no-physical-direction` are **autofixable**.
 

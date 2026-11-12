@@ -179,6 +179,35 @@ function bullets(section) {
     .filter((l) => l && l !== '_none_')
 }
 
+export function modelProps(target) {
+  if (typeof target !== 'string') return []
+  let file = resolve(PKG_ROOT, target)
+  if (/[\\/]index\.(ts|js)$/.test(file)) {
+    file = file.replace(/index\.(ts|js)$/, `${file.split(/[\\/]/).at(-2)}.vue`)
+  }
+  if (!file.endsWith('.vue') || !existsSync(file)) return []
+  const src = readFileSync(file, 'utf-8')
+  const models = []
+  const re = /defineModel<((?:[^<>]|<[^<>]*>)*)>\(\s*(?:'([^']+)')?/g
+  for (const match of src.matchAll(re)) {
+    const name = match[2] ?? 'modelValue'
+    const rest = src.slice(match.index + match[0].length, match.index + match[0].length + 200)
+    const options = rest.match(/^\s*,?\s*\{[^]*?default:\s*([^,}\n]+?)\s*[,}\n]/)
+    let fallback = options?.[1]?.trim() ?? 'undefined'
+    const opens = (fallback.match(/[([{]/g) ?? []).length
+    const closes = (fallback.match(/[)\]}]/g) ?? []).length
+    if (opens !== closes) fallback = '—'
+    models.push({
+      name,
+      type: match[1].replace(/\s+/g, ' ').trim(),
+      default: fallback,
+      required: 'false',
+      doc: name === 'modelValue' ? 'Two-way value (`v-model`).' : `Two-way value (\`v-model:${name}\`).`
+    })
+  }
+  return models
+}
+
 function _readSpec(subpath) {
   const specFile = resolve(SPECS_DIR, `${subpath.split('/').pop()}.md`)
   if (!existsSync(specFile)) return null
@@ -330,7 +359,8 @@ export async function build() {
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
       entry.structure = spec.structure
-      if (spec.props.length) entry.props = spec.props
+      const models = modelProps(target).filter((m) => !spec.props.some((p) => p.name === m.name))
+      if (spec.props.length || models.length) entry.props = [...spec.props, ...models]
       if (spec.events.length) entry.events = spec.events
       if (spec.slots.length) entry.slots = spec.slots
       if (spec.purpose) entry.purpose = spec.purpose

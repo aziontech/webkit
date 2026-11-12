@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 import { compileTemplate, parse } from 'vue/compiler-sfc'
 
+import ClientRouting from '../../../../examples/menu/client-routing.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Menu, {
   MenuBack,
@@ -240,6 +241,21 @@ describe('Menu (composition, drill stack + data mode)', () => {
     expect(events).toHaveLength(1)
     expect(events[0][0]).toBeInstanceOf(globalThis.MouseEvent)
     expect(events[0][1].id).toBe('end-user')
+  })
+
+  it('routes client-side from href rows: navigate hands the href to the router and moves the selection', async () => {
+    const view = render(ClientRouting)
+    const functions = view.getByRole('link', { name: 'Functions' })
+
+    expect(functions.getAttribute('href')).toBe('/functions')
+    expect(view.getByRole('link', { name: 'Applications' }).getAttribute('aria-current')).toBe(
+      'page'
+    )
+
+    await fireEvent.click(functions)
+
+    expect(view.getByTestId('client-routing-path').textContent).toContain('/functions')
+    expect(functions.getAttribute('aria-current')).toBe('page')
   })
 
   it('a drill label navigates without opening its level', async () => {

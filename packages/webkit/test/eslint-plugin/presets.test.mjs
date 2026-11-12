@@ -24,7 +24,11 @@ test('every rule ships in recommended or strict, never as warn except the layout
   const [performance] = webkitPlugin.configs.performance
 
   const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
-  assert.deepEqual([...HEURISTIC_RULES], ['container-needs-width', 'no-output-in-command'])
+  assert.deepEqual([...HEURISTIC_RULES], [
+    'container-needs-width',
+    'no-output-in-command',
+    'menu-node-href'
+  ])
   for (const preset of [recommended, strict, performance]) {
     for (const [key, severity] of Object.entries(preset.rules)) {
       assert.equal(severity, heuristics.has(key) ? 'warn' : 'error', key)

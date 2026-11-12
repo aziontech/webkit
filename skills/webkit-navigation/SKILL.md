@@ -532,6 +532,55 @@ Four rules hold across every row:
    _navigation within one page_, and it already has its own visible bar. It travels in `?tab=`, not in
    the trail.
 
+## Wiring Vue Router — `href` plus `@navigate`
+
+`Menu` (and its `MenuNode` data), `Breadcrumb` items and `Menu.Item` take their destination in
+**`href`**, and only there. There is no `to`, and a `path`, `to`, `url` or `route` key on a nav node
+is not read: the row renders as a button with nowhere to go (lint `webkit/menu-node-href`). Do not
+confuse it with `v-model:path` on `Menu`, which is the drill stack (ancestor node ids), not a URL.
+
+With Vue Router, keep the rows real links and let the router do the navigation:
+
+```vue
+<script setup lang="ts">
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
+  import { computed } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+
+  const router = useRouter()
+  const route = useRoute()
+
+  const groups = [
+    {
+      label: 'Build',
+      items: [
+        { id: 'applications', label: 'Applications', href: '/applications' },
+        { id: 'functions', label: 'Functions', href: router.resolve({ name: 'functions' }).href }
+      ]
+    }
+  ]
+  const activeId = computed(
+    () => groups.flatMap((group) => group.items).find((node) => route.path.startsWith(node.href))?.id ?? ''
+  )
+
+  const follow = (event: MouseEvent, href: string) => {
+    if (!href || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+    event.preventDefault()
+    router.push(href)
+  }
+</script>
+
+<template>
+  <Menu :groups="groups" :active-id="activeId" @navigate="(event: MouseEvent, node: MenuNode) => follow(event, node.href ?? '')" />
+  <Breadcrumb :items="[{ label: 'Applications', href: '/applications' }, { label: 'edge-app' }]" @navigate="follow" />
+</template>
+```
+
+- A named route becomes `href` through `router.resolve(to).href`; never put the route object on the node.
+- `active-id` follows the route, not the click, so Back / Forward and deep links select the right row.
+- A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser, so open-in-new-tab works.
+
 ## Hard rules
 
 - **One shell per page.** A page is either a persistent-console page or a focused-creation page —

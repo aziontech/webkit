@@ -26,6 +26,11 @@
       "name": "Disabled",
       "summary": "A disabled row and a disabled trigger alongside enabled ones. Both carry `aria-disabled`, drop their hover and active ghost layers, and are out of the tab order; a disabled trigger suppresses every control of the row — it neither reveals nor announces — so its children stay collapsed. Its arrow paints no fill either: `IconButton`'s filled disabled box would make the arrow the brightest thing on a row whose label had dimmed away. A disabled row that would otherwise be a link drops its `href` outright, since an anchor with no destination is not a link.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "ClientRouting",
+      "summary": "Vue Router wiring: every node carries its route path in `href` (the only destination field Menu reads; `path`, `to` or `url` are not read and lint as `webkit/menu-node-href`), so each row stays a real link. `@navigate` calls `event.preventDefault()` and hands `node.href` to the router — here a stand-in for `router.push` — and `active-id` follows the current route. A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser so open-in-new-tab keeps working.",
+      "file": "client-routing.vue"
     }
   ]
 }

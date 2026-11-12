@@ -3,10 +3,10 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: 5061b2867990bdd34a7682718f49fa174f99994e869cc2c2f254ff29b017ae1a
+checksum: f2020aec14e686dac503e888e100d1714d4b73acf7794137a77f8ccabe06c687
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # SettingsSection — Component Spec
@@ -90,6 +90,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 | `anchor`      | `string`  | `''`    | false    | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false    | Turns the title into a disclosure that folds the band body.                                                  |
 | `icon`        | `string`  | `''`    | false    | Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`).                                       |
+| `open`        | `boolean` | `false` | false    | `v-model:open`: whether a collapsible band is unfolded.                                                      |
 
 ## v-model
 
