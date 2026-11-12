@@ -80,6 +80,13 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     })
     const input = main!.host.querySelector<HTMLElement>('[role="textbox"]')!
     expect(input).toHaveAccessibleName('Cache settings')
+    // Monaco 0.57's JSON completion adapter ignores cancellation and reads the model after its
+    // worker answers, which can be seconds later; if cleanup disposed the model by then it throws
+    // `TextModelPart is disposed!` as an unhandled error. Completion is not under test here, so
+    // no completion request is ever sent.
+    const monaco = await import('monaco-editor')
+    for (const editor of monaco.editor.getEditors())
+      editor.updateOptions({ quickSuggestions: false, suggestOnTriggerCharacters: false })
     input.focus()
     await userEvent.keyboard('{Control>}{End}{/Control}// x')
     const text = (host: HTMLElement) =>
