@@ -115,6 +115,16 @@ describe('CompareSupportTiers', () => {
     expect(tierHeads(container)).toHaveLength(tiers.length)
   })
 
+  it('heads each band with its slash-prefixed eyebrow and title, in order', () => {
+    const { container } = band()
+
+    const heads = Array.from(container.querySelectorAll('th[scope="colgroup"]')).map((cell) =>
+      cell.textContent?.replace(/\s+/g, '')
+    )
+    expect(heads[0]?.startsWith('//Support')).toBe(true)
+    expect(heads[1]?.startsWith('//ProfessionalServices')).toBe(true)
+  })
+
   it('renders one row head per service, in order', () => {
     const { getAllByRole } = band()
 
