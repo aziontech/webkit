@@ -160,7 +160,7 @@
     }
   }
 
-  const args = ref({})
+  const args = ref({ greeting: 'Hello from the edge', timeout: 3000, debug: false })
 </script>
 
 <template>

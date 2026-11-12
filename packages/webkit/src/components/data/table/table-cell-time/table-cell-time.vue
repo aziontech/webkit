@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import * as en from '../../../../i18n/messages/en'
@@ -55,8 +55,16 @@
     if (Math.abs(diff) < HOUR_MS) return formatRelativeTime(Math.round(diff / MINUTE_MS), 'minute')
     return formatRelativeTime(date.value)
   })
+  const mounted = ref(false)
+  onMounted(() => (mounted.value = true))
   const absolute = computed<string>(() =>
-    date.value ? formatDate(date.value, { dateStyle: 'medium', timeStyle: 'short' }) : ''
+    date.value
+      ? formatDate(date.value, {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+          ...(mounted.value ? {} : { timeZone: 'UTC' })
+        })
+      : ''
   )
   const displayName = computed<string>(() => {
     const raw = props.author.trim()

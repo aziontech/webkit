@@ -104,7 +104,7 @@
         >
           <section
             :aria-label="title"
-            class="grid lg:grid-cols-2"
+            class="grid grid-cols-1 lg:grid-cols-2"
           >
             <div class="relative isolate flex items-center overflow-clip bg-(--bg-canvas)">
               <div

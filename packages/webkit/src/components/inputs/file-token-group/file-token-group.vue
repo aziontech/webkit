@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, onMounted, ref, useAttrs, useId } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../i18n/messages/en'
@@ -102,13 +102,19 @@
     return 'pi pi-file'
   }
 
+  const mounted = ref(false)
+  onMounted(() => (mounted.value = true))
+
   const metaOf = (file: FileTokenGroupFile): string => {
     const parts: string[] = []
     if (props.showFileSize && typeof file.size === 'number') parts.push(formatFileSize(file.size))
     if (props.showFileLastModified && typeof file.lastModified === 'number') {
       parts.push(
         t('fileTokenGroup.modified', {
-          date: formatDate(file.lastModified, { dateStyle: 'medium' })
+          date: formatDate(file.lastModified, {
+            dateStyle: 'medium',
+            ...(mounted.value ? {} : { timeZone: 'UTC' })
+          })
         })
       )
     }

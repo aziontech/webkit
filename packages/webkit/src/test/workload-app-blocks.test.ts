@@ -91,10 +91,10 @@ describe('edit-resource#Protocols', () => {
 describe('version-detail#EnvironmentCrumb', () => {
   it('names the environment and the version crumbs', () => {
     render(EnvironmentCrumb)
-    expect(screen.getByRole('combobox', { name: 'Switch environment' }).textContent).toContain(
-      'Production'
-    )
-    expect(screen.getByRole('combobox', { name: 'Switch version' })).toBeTruthy()
+    const environments = screen.getAllByRole('combobox', { name: 'Switch environment' })
+    expect(environments).toHaveLength(2)
+    for (const trigger of environments) expect(trigger.textContent).toContain('Production')
+    expect(screen.getAllByRole('combobox', { name: 'Switch version' })).toHaveLength(2)
   })
 })
 
