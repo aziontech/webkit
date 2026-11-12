@@ -22,7 +22,8 @@
   "code-editor` — the usual host of an editor toolbar (`toolbar` slot)."
  ],
  "bestPractices": [
-  "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\").",
+  "Give the toolbar an `aria-label` that names the surface (\"Editor actions\"), and every item a `label` that says what it does (\"Copy code\", not \"Copy\"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.",
+  "The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label=\"…\"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.",
   "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
   "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
   "Set `loading` on an action while its request runs instead of disabling the whole group.",

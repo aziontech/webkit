@@ -25695,9 +25695,9 @@
     {
      "name": "ariaLabel",
      "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "Accessible name of the toolbar."
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders."
     },
     {
      "name": "kind",
