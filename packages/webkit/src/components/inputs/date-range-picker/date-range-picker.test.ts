@@ -359,3 +359,49 @@ describe('DateRangePicker', () => {
     await expectNoA11yViolations(popover)
   })
 })
+
+describe('DateRangePicker — reference clock from WebkitProvider', () => {
+  const host = (pickerProps: Record<string, unknown>) => {
+    const values: (DateRangeValue | null)[] = []
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { catalogs: LOCALES, now: NOW },
+            {
+              default: () =>
+                h(DateRangePicker, {
+                  timeZone: 'UTC',
+                  showStep: true,
+                  modelValue: { type: 'relative', amount: 15, unit: 'minute' },
+                  'onUpdate:modelValue': (value: DateRangeValue | null) => values.push(value),
+                  ...pickerProps
+                })
+            }
+          )
+      })
+    )
+    return { view, values }
+  }
+
+  it('steps a relative range from the provider now when the now prop is unset', async () => {
+    const { view, values } = host({})
+    await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
+    expect(values.at(-1)).toEqual({
+      type: 'absolute',
+      start: '2026-11-10T15:30:00.000Z',
+      end: '2026-11-10T15:45:00.000Z'
+    })
+  })
+
+  it('lets the now prop override the provider', async () => {
+    const { view, values } = host({ now: new Date('2026-11-10T18:00:00.000Z') })
+    await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
+    expect(values.at(-1)).toEqual({
+      type: 'absolute',
+      start: '2026-11-10T17:30:00.000Z',
+      end: '2026-11-10T17:45:00.000Z'
+    })
+  })
+})

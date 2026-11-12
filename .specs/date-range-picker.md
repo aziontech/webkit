@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4cd5200d4f52f9a192f9322a5ead61056269819685676fdc7f6a520e904f86d5
+checksum: 97fd028d414d2210879d44aece022695af9337df6e2deb8794fa5cd03b0119d3
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # DateRangePicker — Component Spec
@@ -37,7 +37,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 ## Best practices
 
 - Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them.
-- Pass `now` in tests, demos and server-rendered pages so labels and step limits are deterministic.
+- Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `WebkitProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.
 - Name the picker after what it filters (`aria-label="Events time range"`).
@@ -65,20 +65,20 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
 ## Props
 
-| Prop                | Type                                              | Default                       | Required | JSDoc                                                                                  |
-| ------------------- | ------------------------------------------------- | ----------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d | false    | Quick ranges listed on the Relative tab.                                               |
-| `timeZones`         | `string[]`                                        | `[]`                          | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.          |
-| `showTimeZone`      | `boolean`                                         | `true`                        | false    | Shows the time zone selector in the panel.                                             |
-| `showStep`          | `boolean`                                         | `false`                       | false    | Shows Previous and Next buttons that move the range back or forward by its own length. |
-| `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                 |
-| `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                       |
-| `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                           |
-| `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset reads the real clock.          |
-| `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                             |
-| `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the locale catalog.                         |
-| `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                             |
-| `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                      |
+| Prop                | Type                                              | Default                       | Required | JSDoc                                                                                                                   |
+| ------------------- | ------------------------------------------------- | ----------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d | false    | Quick ranges listed on the Relative tab.                                                                                |
+| `timeZones`         | `string[]`                                        | `[]`                          | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.                                           |
+| `showTimeZone`      | `boolean`                                         | `true`                        | false    | Shows the time zone selector in the panel.                                                                              |
+| `showStep`          | `boolean`                                         | `false`                       | false    | Shows Previous and Next buttons that move the range back or forward by its own length.                                  |
+| `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                                                  |
+| `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                                                        |
+| `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                                                            |
+| `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock. |
+| `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                                                              |
+| `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the locale catalog.                                                          |
+| `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                                                              |
+| `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                                                       |
 
 Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string } | { type: 'absolute'; start: string; end: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }` (an empty `label` prints `Last {count} {unit}` from the catalog).
 

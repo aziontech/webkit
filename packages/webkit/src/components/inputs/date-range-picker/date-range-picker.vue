@@ -12,7 +12,11 @@
   } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import {
+    useLocaleContext,
+    usePortalLocale,
+    useTranslate
+  } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -73,7 +77,7 @@
     min?: Date
     /** Latest instant an absolute range may end at. */
     max?: Date
-    /** Reference clock for relative ranges and stepping. Unset reads the real clock. */
+    /** Reference clock for relative ranges and stepping. Unset uses the nearest WebkitProvider now, then the real clock. */
     now?: Date
     /** Trigger text with no range. Empty uses the locale catalog. */
     placeholder?: string
@@ -105,6 +109,7 @@
 
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ dateRangePicker: en.dateRangePicker, calendar: en.calendar })
+  const { context: localeContext } = useLocaleContext()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-date-range-picker'
@@ -124,7 +129,11 @@
   })
 
   const zone = computed<string>(() => timeZone.value || (mounted.value ? localTimezone() : 'UTC'))
-  const clock = (): Date => props.now ?? new Date()
+  const clock = (): Date => {
+    if (props.now) return props.now
+    const provided = localeContext?.now?.value
+    return provided === undefined ? new Date() : new Date(provided)
+  }
 
   const relativeText = (amount: number, unit: DateRangeUnit): string =>
     t(`dateRangePicker.${unit}`, { count: amount })

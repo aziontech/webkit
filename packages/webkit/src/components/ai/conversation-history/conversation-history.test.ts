@@ -92,3 +92,34 @@ describe('ConversationHistory', () => {
     await expectNoA11yViolations(states.container)
   })
 })
+
+describe('ConversationHistory — reference time from WebkitProvider', () => {
+  const groupNames = (view: ReturnType<typeof render>) =>
+    within(view.getByRole('navigation', { name: 'Conversation history' }))
+      .getAllByRole('list')
+      .map((list) =>
+        document.getElementById(list.getAttribute('aria-labelledby')!)!.textContent!.trim()
+      )
+
+  it('groups against the provider now when the now prop is unset', () => {
+    const view = render(WebkitProvider, {
+      props: { catalogs: LOCALES, now },
+      slots: { default: () => h(ConversationHistory, { items }) }
+    })
+    expect(groupNames(view)).toEqual([
+      'Today',
+      'Yesterday',
+      'Previous 7 days',
+      'Previous 30 days',
+      'Older'
+    ])
+  })
+
+  it('lets the now prop override the provider', () => {
+    const view = render(WebkitProvider, {
+      props: { catalogs: LOCALES, now: '2027-06-01T12:00:00' },
+      slots: { default: () => h(ConversationHistory, { items, now }) }
+    })
+    expect(groupNames(view)[0]).toBe('Today')
+  })
+})

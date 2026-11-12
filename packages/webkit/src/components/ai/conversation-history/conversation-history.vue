@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useLocaleContext, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -23,7 +23,7 @@
     defineProps<{
       /** Conversations, any order; they are sorted newest first inside their group. */
       items?: ConversationHistoryItem[]
-      /** Reference time for the groups. Empty uses the current time; pass a fixed value when the list is rendered on the server. */
+      /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
       now?: string | number | Date
       /** Shows a Delete button on each row that emits `remove`. */
       removable?: boolean
@@ -50,6 +50,7 @@
   const attrs = useAttrs()
   const uid = useId()
   const { t } = useTranslate({ conversationHistory: en.conversationHistory })
+  const { context: localeContext } = useLocaleContext()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-conversation-history'
@@ -74,7 +75,8 @@
   }
 
   const groups = computed(() => {
-    const today = startOfDay(new Date(props.now ?? Date.now()).getTime())
+    const reference = props.now ?? localeContext?.now?.value ?? Date.now()
+    const today = startOfDay(new Date(reference).getTime())
     const buckets = new Map<GroupKey, { item: ConversationHistoryItem; time: number }[]>()
     for (const item of props.items) {
       const time = new Date(item.updatedAt).getTime()
