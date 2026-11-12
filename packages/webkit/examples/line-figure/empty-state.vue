@@ -18,9 +18,8 @@
       <Button
         kind="secondary"
         href="/"
-      >
-        Go to home
-      </Button>
+        label="Go to home"
+      />
     </template>
   </EmptyState>
 </template>
