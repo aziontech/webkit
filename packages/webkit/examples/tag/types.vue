@@ -36,5 +36,9 @@
       label="Label"
       severity="contrast"
     />
+    <Tag
+      label="Label"
+      severity="highlight"
+    />
   </div>
 </template>

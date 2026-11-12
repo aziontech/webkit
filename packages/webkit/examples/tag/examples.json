@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "All severity variants side by side.",
+      "summary": "All severity variants side by side; `highlight` is the brand orange as a tint, for the one value a list singles out (the Owner role).",
       "file": "types.vue"
     },
     {
