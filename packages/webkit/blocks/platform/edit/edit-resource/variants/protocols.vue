@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
@@ -9,7 +9,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -20,6 +20,7 @@
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import type { SelectValue } from '@aziontech/webkit/select-root'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -27,7 +28,10 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  const port = (value, label = String(value)) => ({ value, label })
+  type FieldProblem = { kind: HelperTextKind; message: string }
+  type LabeledOption = { value: unknown; label: string }
+
+  const port = (value: number, label = String(value)) => ({ value, label })
   const httpPorts = [port(80, '80 (default)'), port(8008), port(8080), port(8880)]
   const httpsPorts = [port(443, '443 (default)'), port(8443), port(9440), port(9443)]
   const http3Ports = [port(443, '443 (default)'), port(8443), port(9443)]
@@ -64,11 +68,11 @@
     { value: 'devices-crl', label: 'devices-crl' }
   ]
 
-  const labelOf = (options) => (value) =>
+  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? String(value ?? '')
-  const caLabel = (value) => labelOf(trustedCas.value)(value)
-  const portsLabel = (values) => (values ?? []).join(', ')
-  const listLabel = (values) => (values ?? []).join(', ')
+  const caLabel = (value: unknown) => labelOf(trustedCas.value)(value)
+  const portsLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
+  const listLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
 
   const form = reactive({
     httpPorts: [80],
@@ -81,26 +85,26 @@
     mtls: false,
     mtlsMode: 'enforce',
     trustedCa: '',
-    crl: []
+    crl: [] as string[]
   })
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   const saving = ref(false)
-  const errors = reactive({})
+  const errors = reactive<Record<string, FieldProblem | undefined>>({})
   const armed = computed(() => form.useHttps && form.mtls)
 
-  const clear = (key) => {
+  const clear = (key: string) => {
     delete errors[key]
   }
 
-  const setHttps = (value) => {
+  const setHttps = (value: boolean) => {
     form.useHttps = value
     if (!value) {
       form.useHttp3 = false
       form.mtls = false
     }
   }
-  const setHttp3 = (value) => {
+  const setHttp3 = (value: boolean) => {
     form.useHttp3 = value
     if (value) form.useHttps = true
   }
@@ -112,18 +116,18 @@
       ? trustedCas.value.filter((option) => option.label.includes(needle))
       : trustedCas.value
   })
-  const pickCa = (value) => {
+  const pickCa = (value: SelectValue) => {
     if (value === '__upload__') {
       uploadOpen.value = true
       return
     }
-    form.trustedCa = value
+    form.trustedCa = String(value)
     clear('trustedCa')
   }
 
   const uploadOpen = ref(false)
   const upload = reactive({ name: '', pem: '' })
-  const uploadErrors = reactive({})
+  const uploadErrors = reactive<Record<string, FieldProblem | undefined>>({})
   const submitUpload = () => {
     Object.keys(uploadErrors).forEach((key) => delete uploadErrors[key])
     if (!/^[a-z0-9-]+$/.test(upload.name.trim())) {
@@ -174,7 +178,7 @@
     })
 
   const RUN_TOAST = 'protocols-deploy'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const editAgain = () => {
     toast.dismiss(RUN_TOAST)
@@ -215,7 +219,7 @@
   }
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value))
+    Object.assign(form, JSON.parse(baseline.value) as typeof form)
     Object.keys(errors).forEach((key) => delete errors[key])
   }
 

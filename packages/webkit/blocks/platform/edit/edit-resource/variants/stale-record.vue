@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -69,7 +69,13 @@
     }
   ]
 
-  const record = {
+  type ResourceRecord = {
+    name: string
+    active: boolean
+    modules: Record<string, boolean>
+  }
+
+  const record: ResourceRecord = {
     name: 'web-app',
     active: true,
     modules: {
@@ -83,20 +89,20 @@
     }
   }
 
-  const savedElsewhere = {
+  const savedElsewhere: ResourceRecord = {
     ...structuredClone(record),
     modules: { ...record.modules, image_optimization: true }
   }
 
-  const form = reactive({
+  const form = reactive<ResourceRecord>({
     ...structuredClone(record),
     modules: { ...record.modules, device_detection: true }
   })
   const saving = ref(false)
-  const freshness = ref('conflict')
+  const freshness = ref<string | null>('conflict')
   const overwriteOpen = ref(false)
-  const noticeRef = ref(null)
-  let editsBeforeReload = null
+  const noticeRef = ref<{ $el?: HTMLElement } | null>(null)
+  let editsBeforeReload: ResourceRecord | null = null
 
   const { isDirty: dirty, commit } = useUnsavedChanges(() => form, {
     onDiscard: (baseline) => Object.assign(form, baseline)

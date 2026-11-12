@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -69,7 +69,13 @@
     }
   ]
 
-  const record = {
+  type ResourceRecord = {
+    name: string
+    active: boolean
+    modules: Record<string, boolean>
+  }
+
+  const record: ResourceRecord = {
     name: 'web-app',
     active: true,
     modules: {
@@ -109,7 +115,7 @@
     }, 900)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as ResourceRecord)
 
   const deleteOpen = ref(false)
   const deleting = ref(false)
@@ -386,7 +392,7 @@
                   v-model="deleteConfirmation"
                   :aria-labelledby="deleteLabelId"
                   autocomplete="off"
-                  spellcheck="false"
+                  :spellcheck="false"
                   size="large"
                   class="w-full"
                   :disabled="deleting"

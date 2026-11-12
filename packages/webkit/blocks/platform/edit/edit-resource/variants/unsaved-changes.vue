@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
@@ -53,7 +53,14 @@
     }
   ]
 
-  const record = {
+  type ResourceRecord = {
+    name: string
+    active: boolean
+    debugRules: boolean
+    modules: Record<string, boolean>
+  }
+
+  const record: ResourceRecord = {
     name: 'production-policy',
     active: true,
     debugRules: false,
@@ -70,7 +77,7 @@
   const saving = ref(false)
 
   const commitSave = () =>
-    new Promise((resolve) => {
+    new Promise<void>((resolve) => {
       saving.value = true
       setTimeout(() => {
         guard.commit()

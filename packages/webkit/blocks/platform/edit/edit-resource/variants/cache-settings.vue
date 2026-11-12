@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -14,6 +14,9 @@
   import Switch from '@aziontech/webkit/switch'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
+
+  type FieldProblem = { kind: HelperTextKind; message: string }
+  type LabeledOption = { value: unknown; label: string }
 
   const browserBehaviors = [
     { value: 'honor', label: 'Honor origin cache headers' },
@@ -40,9 +43,9 @@
     { value: 'OPTIONS', label: 'OPTIONS' }
   ]
 
-  const labelOf = (options) => (value) =>
+  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? String(value ?? '')
-  const methodsLabel = (values) => (values?.length ? values.join(', ') : '')
+  const methodsLabel = (values: unknown[] | undefined) => (values?.length ? values.join(', ') : '')
 
   const form = reactive({
     name: 'static-assets',
@@ -55,7 +58,7 @@
     largeFileOffset: 1024,
     tieredCache: true,
     tieredTopology: 'nearest-region',
-    varyByMethod: [],
+    varyByMethod: [] as string[],
     queryStringBehavior: 'allowlist',
     queryStringFields: 'v, lang',
     cookieBehavior: 'ignore',
@@ -64,9 +67,9 @@
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
   const saving = ref(false)
-  const errors = reactive({})
+  const errors = reactive<Record<string, FieldProblem | undefined>>({})
 
-  const clear = (key) => {
+  const clear = (key: string) => {
     delete errors[key]
   }
 
@@ -108,7 +111,7 @@
     })
 
   const RUN_TOAST = 'cache-settings-deploy'
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const editAgain = () => {
     toast.dismiss(RUN_TOAST)
@@ -147,7 +150,7 @@
   }
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value))
+    Object.assign(form, JSON.parse(baseline.value) as typeof form)
     Object.keys(errors).forEach((key) => delete errors[key])
   }
 

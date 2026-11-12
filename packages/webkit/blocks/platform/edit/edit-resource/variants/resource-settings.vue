@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -12,6 +12,8 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
+
+  type FieldProblem = { kind: HelperTextKind; message: string }
 
   const typeOptions = [
     {
@@ -43,12 +45,12 @@
   const baseline = ref(JSON.stringify(record))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
 
-  const errors = reactive({})
+  const errors = reactive<Record<string, FieldProblem | undefined>>({})
 
   const LIST_PATTERN = /^[^\n]*\S[^\n]*(\n[^\n]*\S[^\n]*)*$/
   const COUNTRY_PATTERN = /^[^\S\n]*[A-Za-z]{2}[^\S\n]*(\n[^\S\n]*[A-Za-z]{2}[^\S\n]*)*$/
 
-  const clear = (id) => {
+  const clear = (id: string) => {
     if (errors[id]) delete errors[id]
   }
 
@@ -82,7 +84,7 @@
     }, 900)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
 </script>
 
 <template>

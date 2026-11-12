@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -16,14 +16,18 @@
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
+  import type { SelectValue } from '@aziontech/webkit/select-root'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
+
+  type LabeledOption = { value: unknown; label: string }
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -64,7 +68,7 @@
     }
   ]
 
-  const domainColumns = [
+  const domainColumns: TableColumn[] = [
     { accessorKey: 'domain', header: 'Domain', principal: true, grow: 2 },
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'policy', header: 'Policy' },
@@ -175,7 +179,7 @@
   const record = {
     name: 'resource-01',
     active: true,
-    deploymentSettings: {},
+    deploymentSettings: {} as Record<string, SelectValue>,
     protocols: {
       httpPorts: [80],
       useHttps: true,
@@ -185,7 +189,7 @@
       minimumTlsVersion: 'tls_1_3',
       cipherSuite: 7
     },
-    mtls: { enabled: false, mode: 'enforce', certificate: '', crl: [] }
+    mtls: { enabled: false, mode: 'enforce', certificate: '', crl: [] as string[] }
   }
 
   const form = reactive(structuredClone(record))
@@ -196,24 +200,24 @@
   const secure = computed(() => form.protocols.useHttps || form.protocols.useHttp3)
   const armed = computed(() => form.protocols.useHttps && form.mtls.enabled)
 
-  const optionLabel = (options) => (value) =>
+  const optionLabel = (options: LabeledOption[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? String(value ?? '')
 
-  const portsLabel = (values) =>
+  const portsLabel = (values: unknown[]) =>
     values.map((value) => optionLabel([...httpPortOptions, ...httpsPortOptions])(value)).join(', ')
   const tlsVersionLabel = optionLabel(tlsVersionOptions)
   const cipherSuiteLabel = optionLabel(cipherSuiteOptions)
-  const certificateName = (value) => (value ? optionLabel(trustedCaOptions)(value) : '')
-  const crlLabel = (values) => values.map(optionLabel(revocationListOptions)).join(', ')
-  const settingName = (value) =>
+  const certificateName = (value: unknown) => (value ? optionLabel(trustedCaOptions)(value) : '')
+  const crlLabel = (values: unknown[]) => values.map(optionLabel(revocationListOptions)).join(', ')
+  const settingName = (value: unknown) =>
     optionLabel(linkedEnvironments.flatMap((environment) => environment.options))(value)
 
-  const setHttps = (value) => {
+  const setHttps = (value: boolean) => {
     form.protocols.useHttps = value
     if (!value) form.protocols.useHttp3 = false
   }
 
-  const setHttp3 = (value) => {
+  const setHttp3 = (value: boolean) => {
     form.protocols.useHttp3 = value
     if (value) form.protocols.useHttps = true
   }
@@ -239,7 +243,7 @@
     }, 900)
   }
 
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
+  const discard = () => Object.assign(form, JSON.parse(baseline.value) as typeof form)
 
   const deleteOpen = ref(false)
   const deleteConfirmation = ref('')
@@ -271,7 +275,7 @@
         size="small"
         @update:model-value="
           (value) => {
-            if (value !== '__add-environment__') environment = value
+            if (value !== '__add-environment__') environment = String(value)
           }
         "
         @update:open="

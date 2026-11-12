@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import CodeEditor from '@aziontech/webkit/code-editor'
+  import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import NumberInput from '@aziontech/webkit/number-input'
@@ -20,7 +20,10 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, nextTick, reactive, ref } from 'vue'
 
-  const loadMonaco = async () => {
+  type FieldProblem = { kind: HelperTextKind; message: string }
+  type LabeledOption = { value: unknown; label: string }
+
+  const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
     const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
       await Promise.all([
         import('monaco-editor/editor/editor.worker?worker'),
@@ -34,7 +37,7 @@
         return new EditorWorker()
       }
     }
-    return import('monaco-editor')
+    return (await import('monaco-editor')) as unknown as CodeEditorMonacoModule
   }
 
   const sourceOptions = [
@@ -58,7 +61,7 @@
     }
   ]
 
-  const presetTemplates = {
+  const presetTemplates: Record<string, { label: string; dataSet: Record<string, string> }> = {
     'http-requests': {
       label: 'HTTP requests',
       dataSet: {
@@ -115,7 +118,7 @@
     { value: 'analytics', label: 'Log analytics service' }
   ]
 
-  const labelOf = (options) => (value) =>
+  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
     options.find((option) => option.value === value)?.label ?? ''
 
   const sourceLabel = labelOf(sourceOptions)
@@ -164,7 +167,7 @@
   const baseline = ref(JSON.stringify(record))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
 
-  const errors = reactive({})
+  const errors = reactive<Record<string, FieldProblem | undefined>>({})
   const destinationError = ref('')
 
   const URL_PATTERN = /^https?:\/\/[^\s/$.?#][^\s]*$/
@@ -186,16 +189,16 @@
     }
   ])
 
-  const clear = (id) => {
+  const clear = (id: string) => {
     if (errors[id]) delete errors[id]
   }
 
-  const onDestinationChange = (id) => {
+  const onDestinationChange = (id: string) => {
     clear(id)
     destinationError.value = ''
   }
 
-  const required = (id) => {
+  const required = (id: keyof typeof form) => {
     if (!String(form[id] ?? '').trim()) {
       errors[id] = { kind: 'required', message: 'This field is required.' }
       return false
@@ -284,7 +287,7 @@
       if (id) document.getElementById(`data-stream-${id}`)?.focus()
     })
 
-  const unreachable = (value) => {
+  const unreachable = (value: string) => {
     try {
       return new URL(value).hostname.endsWith('.invalid')
     } catch {
@@ -318,7 +321,7 @@
   }
 
   const discard = () => {
-    Object.assign(form, JSON.parse(baseline.value))
+    Object.assign(form, JSON.parse(baseline.value) as typeof form)
     Object.keys(errors).forEach((key) => delete errors[key])
     destinationError.value = ''
   }
