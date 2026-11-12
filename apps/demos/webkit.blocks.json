@@ -2,52 +2,52 @@
   "package": "@aziontech/webkit",
   "blocks": {
     "platform/account/onboarding-form": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/OnboardingForm.vue",
           "source": "blocks/platform/account/onboarding-form/onboarding-form.vue",
           "variant": "Organization",
-          "checksum": "sha256:33dde2f7318c1a88034de501b2d19c184fece20b5aac3f43f2019131f4edc5dc"
+          "checksum": "sha256:2021aee13393127441d2466d28eb4babf8208f2a0e25c38982afe32fa26da708"
         },
         {
           "path": "src/views/OnboardingFormPlan.vue",
           "source": "blocks/platform/account/onboarding-form/variants/plan.vue",
           "variant": "Plan",
-          "checksum": "sha256:7c8349586fcc8ffc8d619d101f6f828d48eeba583354592446031aa7c87d4242"
+          "checksum": "sha256:56599c19c9b2c93f8f8454ef34353f3ddc2a5c33af4b6024f58531cee9927ef4"
         },
         {
           "path": "src/views/OnboardingFormProfile.vue",
           "source": "blocks/platform/account/onboarding-form/variants/profile.vue",
           "variant": "Profile",
-          "checksum": "sha256:348fd22b959ba8cd4f7d75761c592a2bacbbfd5cb7271f675bfd352d027068e6"
+          "checksum": "sha256:d6a06aacfa1709a674157fbaa09015fe1785d04a5529b1740252e2a9be8310cd"
         }
       ]
     },
     "platform/ai/ai-chat": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/AiChat.vue",
           "source": "blocks/platform/ai/ai-chat/ai-chat.vue",
           "variant": "Empty",
-          "checksum": "sha256:d15255492187b677241d6f9abe3504928b9728bd66ba661e3a3dc20ab0f9e25f"
+          "checksum": "sha256:2b35cfb70d2d26c5aa1891c9b924cf567d45bef6545757a660ed1985bcf33054"
         }
       ]
     },
     "platform/create/single-page-create": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/SinglePageCreate.vue",
           "source": "blocks/platform/create/single-page-create/single-page-create.vue",
           "variant": "Default",
-          "checksum": "sha256:ffbefcf3bd3ce94ac8035f9086bd2a69d186dfc91941a9a10fe13e25e10c3f80"
+          "checksum": "sha256:293373f8a138a5bd1149ae4ef4488e0b6f3e3938ff7436eea9e3cb848fc6c3ba"
         }
       ]
     },
     "platform/delete/delete-with-confirmation": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/DeleteWithConfirmation.vue",
@@ -58,68 +58,68 @@
       ]
     },
     "platform/detail/details-page": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/DetailsPage.vue",
           "source": "blocks/platform/detail/details-page/details-page.vue",
           "variant": "ResourceOverview",
-          "checksum": "sha256:860d261493294d8f2ac4d6601e4aa793c0f000f6eac0a17c5eff2988b7d29c54"
+          "checksum": "sha256:60edf8fbac882ae8d02526d16ccb595c69bfda93370553a2a3993f5fe81ca6fa"
         }
       ]
     },
     "platform/edit/edit-resource": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/EditResource.vue",
           "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
           "variant": "ProjectSettings",
-          "checksum": "sha256:c13cea3f6ab1fd834129f7f268c0dce499b3d71d438c1aa7cf6f9bb31a7c809b"
+          "checksum": "sha256:c50b7f69e56c7ceb0738bb8f2f05323413e1bc4c4e1cd68fbec0f512db699d29"
         }
       ]
     },
     "platform/settings/settings-form": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/SettingsForm.vue",
           "source": "blocks/platform/settings/settings-form/settings-form.vue",
           "variant": "SaveAll",
-          "checksum": "sha256:815d2cf0a4121daf5e38e9ea7d3fb734aa5241dc1a277974c560c54c6ed01193"
+          "checksum": "sha256:9c2166cd4f130ec1113fee96371142b267c0c49cea2b12af46a84a9e4b9b7822"
         }
       ]
     },
     "platform/states/async-submit": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/AsyncSubmit.vue",
           "source": "blocks/platform/states/async-submit/async-submit.vue",
           "variant": "Idle",
-          "checksum": "sha256:1defdaa3d9abbeae6eaaae380cd2f47fc9a17a692aa03c2fa6794cc5743e0dc9"
+          "checksum": "sha256:73546be5ab4d42a3e060e3fccd3e71fd19cca21dce5fbb267c09d78b7a9ff8b8"
         }
       ]
     },
     "platform/view/table-view": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
           "path": "src/views/TableView.vue",
           "source": "blocks/platform/view/table-view/table-view.vue",
           "variant": "Default",
-          "checksum": "sha256:56095b7180735145d621faca83b63f3c41c78261a3816bd57b890802981b303a"
+          "checksum": "sha256:6ae55854f2646ab67d5f34ddbdc91691c466c3000c7539779b7dc6a30d015492"
         }
       ]
     },
     "shells/console": {
-      "version": "5.11.0",
+      "version": "5.12.0",
       "files": [
         {
-          "path": "src/layouts/Console.vue",
+          "path": "src/App.vue",
           "source": "blocks/shells/console/console.vue",
           "variant": "ListPage",
-          "checksum": "sha256:3587db4c0af7a9b29e6bc26377e99b13a072e92ef3e24c39cf71580edb588f27"
+          "checksum": "sha256:df0ed78bd3f64775b358b9f33fa934076674bc80beefdd2c60349ffb0e808667"
         }
       ]
     }

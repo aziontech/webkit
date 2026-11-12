@@ -177,6 +177,7 @@
     postalCode: '01310-100',
     state: 'São Paulo',
     city: 'São Paulo',
+    line1: 'Avenida Paulista, 1000',
     line2: ''
   }
   const blankAddress = {
@@ -184,6 +185,7 @@
     postalCode: '',
     state: undefined,
     city: undefined,
+    line1: '',
     line2: ''
   }
   const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
@@ -751,6 +753,15 @@
                                               </Field>
                                             </div>
 
+                                            <Field>
+                                              <Field.Label>Address</Field.Label>
+                                              <Input
+                                                v-model="address.line1"
+                                                name="addressLine1"
+                                                size="large"
+                                                autocomplete="address-line1"
+                                              />
+                                            </Field>
                                             <Field>
                                               <Field.Label>Address line 2</Field.Label>
                                               <Input

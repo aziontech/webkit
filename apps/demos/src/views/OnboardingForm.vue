@@ -8,7 +8,6 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
-  import Label from '@aziontech/webkit/label'
   import Progress from '@aziontech/webkit/progress'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import { computed, ref } from 'vue'
@@ -235,8 +234,8 @@
                           }}</Field.Description>
                         </Field>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Label>Organization mark</Label>
+                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
+                          <Field.Legend kind="label">Organization mark</Field.Legend>
                           <RadioCards
                             v-model="accent"
                             :items="accents"
@@ -260,7 +259,7 @@
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />
-                        </div>
+                        </fieldset>
                       </div>
                     </div>
                   </fieldset>

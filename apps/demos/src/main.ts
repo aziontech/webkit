@@ -1,4 +1,4 @@
-import '@aziontech/theme'
+import './webkit.css'
 import './styles.css'
 import '@aziontech/icons'
 

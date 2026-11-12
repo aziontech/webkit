@@ -1,41 +1,41 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
+const focused = { shell: 'focused' }
+
 export const routes: RouteRecordRaw[] = [
   { path: '/', redirect: '/resources' },
   {
     path: '/onboarding',
     name: 'onboarding',
-    component: () => import('./views/OnboardingForm.vue')
+    component: () => import('./views/OnboardingForm.vue'),
+    meta: focused
   },
   {
     path: '/onboarding/plan',
     name: 'onboarding-plan',
-    component: () => import('./views/OnboardingFormPlan.vue')
+    component: () => import('./views/OnboardingFormPlan.vue'),
+    meta: focused
   },
   {
     path: '/onboarding/profile',
     name: 'onboarding-profile',
-    component: () => import('./views/OnboardingFormProfile.vue')
+    component: () => import('./views/OnboardingFormProfile.vue'),
+    meta: focused
   },
+  { path: '/resources', name: 'resources', component: () => import('./views/TableView.vue') },
   {
-    path: '/resources',
-    component: () => import('./layouts/Console.vue'),
-    children: [
-      { path: '', name: 'resources', component: () => import('./views/TableView.vue') },
-      {
-        path: ':id/delete',
-        name: 'resource-delete',
-        components: {
-          default: () => import('./views/TableView.vue'),
-          dialog: () => import('./views/DeleteWithConfirmation.vue')
-        }
-      }
-    ]
+    path: '/resources/:id/delete',
+    name: 'resource-delete',
+    components: {
+      default: () => import('./views/TableView.vue'),
+      dialog: () => import('./views/DeleteWithConfirmation.vue')
+    }
   },
   {
     path: '/resources/new',
     name: 'resource-create',
-    component: () => import('./views/SinglePageCreate.vue')
+    component: () => import('./views/SinglePageCreate.vue'),
+    meta: focused
   },
   {
     path: '/resources/:id',
@@ -52,7 +52,12 @@ export const routes: RouteRecordRaw[] = [
     name: 'resource-deploy',
     component: () => import('./views/AsyncSubmit.vue')
   },
-  { path: '/settings', name: 'settings', component: () => import('./views/SettingsForm.vue') },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('./views/SettingsForm.vue'),
+    meta: { breadcrumbs: [{ label: 'Account settings' }, { label: 'Profile' }] }
+  },
   { path: '/assistant', name: 'assistant', component: () => import('./views/AiChat.vue') },
   { path: '/:path(.*)*', redirect: '/resources' }
 ]

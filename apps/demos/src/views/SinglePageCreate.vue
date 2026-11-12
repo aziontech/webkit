@@ -118,9 +118,9 @@
         novalidate
         @submit.prevent="submit"
       >
-        <div class="min-h-0 flex-1 overflow-auto">
+        <div class="flex min-h-0 flex-1 flex-col overflow-auto">
           <div
-            class="layout-column-form layout-boundary-inline flex flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
+            class="layout-column-form layout-boundary-inline flex flex-1 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
           >
             <PageHeader
               title="Create Resource"
@@ -227,48 +227,47 @@
               </SettingsSection>
             </fieldset>
           </div>
-        </div>
-
-        <SaveBar kind="plain">
-          <template #leading>
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+          <SaveBar kind="centered">
+            <template #leading>
+              <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+                <Button
+                  type="button"
+                  label="Import"
+                  kind="outlined"
+                  size="medium"
+                  icon="pi pi-upload"
+                  @click="openImport"
+                />
+                <p class="min-w-0 text-body-sm text-(--text-muted)">
+                  or paste zone file contents in Domain name
+                </p>
+                <input
+                  ref="fileRef"
+                  type="file"
+                  accept=".zone,.txt,.db,text/plain"
+                  class="sr-only"
+                  tabindex="-1"
+                  aria-hidden="true"
+                />
+              </div>
+            </template>
+            <template #actions>
               <Button
                 type="button"
-                label="Import"
+                label="Cancel"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-upload"
-                @click="openImport"
+                @click="router.push('/resources')"
               />
-              <p class="min-w-0 text-body-sm text-(--text-muted)">
-                or paste zone file contents in Domain name
-              </p>
-              <input
-                ref="fileRef"
-                type="file"
-                accept=".zone,.txt,.db,text/plain"
-                class="sr-only"
-                tabindex="-1"
-                aria-hidden="true"
+              <Button
+                label="Save"
+                kind="primary"
+                size="medium"
+                type="submit"
               />
-            </div>
-          </template>
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              @click="router.push('/resources')"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-              size="medium"
-              type="submit"
-            />
-          </template>
-        </SaveBar>
+            </template>
+          </SaveBar>
+        </div>
       </form>
     </main>
   </div>
