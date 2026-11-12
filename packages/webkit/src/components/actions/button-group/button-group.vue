@@ -70,8 +70,8 @@
   interface Props {
     /** Actions, toggles and menus, in reading order. */
     items?: ButtonGroupItem[]
-    /** Accessible name of the toolbar. */
-    ariaLabel: string
+    /** Accessible name of the toolbar; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the toolbar. */
+    ariaLabel?: string
     /** Visual variant of every button. */
     kind?: ButtonGroupKind
     /** Size token of every button. */
@@ -84,6 +84,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
+    ariaLabel: '',
     kind: 'transparent',
     size: 'medium',
     visibleCount: undefined,
@@ -210,7 +211,7 @@
     v-bind="rootAttrs"
     role="toolbar"
     aria-orientation="horizontal"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || undefined"
     :data-testid="testId"
     :data-kind="kind"
     :data-size="size"

@@ -15,15 +15,13 @@ const CAMEL_TO_KEBAB = new Map([
   ['ariaDescribedby', 'aria-describedby']
 ])
 
-const KEEP_CAMEL_ON = new Set(['ButtonGroup', 'button-group'])
-
 const USAGE = `Usage: node scripts/kebab-aria-label.mjs [--write] [dir ...]
 
 Rewrites camelCase accessible-name attributes in templates (ariaLabel=, :ariaLabel=,
 v-bind:ariaLabel=, and the same for ariaLabelledby / ariaDescribedby) to the canonical kebab
 form (aria-label=, :aria-label=). Vue maps the kebab attribute to the ariaLabel prop at runtime,
-and IconButton's ariaLabel is optional in its types, so the kebab form type-checks in a fresh
-create-vue app. ButtonGroup tags are left alone while its ariaLabel prop is still required.
+and the ariaLabel prop of IconButton and ButtonGroup is optional in their types, so the kebab
+form type-checks in a fresh create-vue app.
 
 Without --write it lists what it would change and exits 1 when anything would.
 Default dirs (in packages/webkit): ${DEFAULT_DIRS.join(', ')}`
@@ -64,7 +62,6 @@ export function rewrite(source) {
   const ast = parse(blankScripts(source), { sourceType: 'module', ecmaVersion: 2022 })
   const edits = []
   for (const element of elements(ast.templateBody)) {
-    if (KEEP_CAMEL_ON.has(element.rawName)) continue
     for (const attr of element.startTag.attributes) {
       const token = camelNameToken(attr)
       if (!token) continue
@@ -88,7 +85,9 @@ if (invoked) {
   }
   const write = args.includes('--write')
   const dirs = args.filter((arg) => !arg.startsWith('--'))
-  const targets = (dirs.length ? dirs.map((dir) => resolve(dir)) : DEFAULT_DIRS.map((dir) => join(PKG, dir)))
+  const targets = dirs.length
+    ? dirs.map((dir) => resolve(dir))
+    : DEFAULT_DIRS.map((dir) => join(PKG, dir))
   let files = 0
   let total = 0
   for (const dir of targets) {

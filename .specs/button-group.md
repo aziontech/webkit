@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: c498f069999ddba6ac448eea0a6216f9444382fd62a2c66c57b050d345364059
+checksum: 5a31ef1e5ebf5f9cd4b47cecba2c523cbaa8270d8318907f1aaa1f0cae550cd1
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # ButtonGroup — Component Spec
@@ -42,7 +42,8 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 
 ## Best practices
 
-- Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy").
+- Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
 - Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
 - Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
 - Set `loading` on an action while its request runs instead of disabling the whole group.
@@ -96,14 +97,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Props
 
-| Prop            | Type                             | Default         | Required | JSDoc                                                                                   |
-| --------------- | -------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------- |
-| `items`         | `ButtonGroupItem[]`              | `[]`            | false    | Actions, toggles and menus, in reading order.                                           |
-| `ariaLabel`     | `string`                         | —               | true     | Accessible name of the toolbar.                                                         |
-| `kind`          | `'transparent' \| 'outlined'`    | `'transparent'` | false    | Visual variant of every button.                                                         |
-| `size`          | `'small' \| 'medium' \| 'large'` | `'medium'`      | false    | Size token of every button.                                                             |
-| `visibleCount`  | `number`                         | `undefined`     | false    | Items shown as buttons; the rest go into the More actions menu. Unset shows every item. |
-| `overflowLabel` | `string`                         | `''`            | false    | Label of the overflow button. Empty uses the locale catalog (`More actions`).           |
+| Prop            | Type                             | Default         | Required | JSDoc                                                                                                                                                     |
+| --------------- | -------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`         | `ButtonGroupItem[]`              | `[]`            | false    | Actions, toggles and menus, in reading order.                                                                                                             |
+| `ariaLabel`     | `string`                         | `''`            | false    | Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders. |
+| `kind`          | `'transparent' \| 'outlined'`    | `'transparent'` | false    | Visual variant of every button.                                                                                                                           |
+| `size`          | `'small' \| 'medium' \| 'large'` | `'medium'`      | false    | Size token of every button.                                                                                                                               |
+| `visibleCount`  | `number`                         | `undefined`     | false    | Items shown as buttons; the rest go into the More actions menu. Unset shows every item.                                                                   |
+| `overflowLabel` | `string`                         | `''`            | false    | Label of the overflow button. Empty uses the locale catalog (`More actions`).                                                                             |
 
 Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted or `'icon-button'`), `{ type: 'toggle', id, label, icon, pressedIcon?, pressed?, disabled? }`, `{ type: 'menu', id, label, icon, options: { id, label, disabled? }[], disabled? }`.
 
@@ -145,7 +146,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 
 ## Accessibility (WCAG 2.1 AA)
 
-- `role="toolbar"` with `aria-orientation="horizontal"` and the required `aria-label`.
+- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `webkit/accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
 - Keyboard map: one tab stop (the last focused item, else the first enabled); `ArrowRight` / `ArrowLeft` move and wrap (swapped under `dir="rtl"` through `logicalArrowKey`); `Home` / `End` jump to the ends; `Enter` / `Space` activate; on a menu item `Enter`, `Space` or `ArrowDown` open the menu, `Escape` closes it and returns focus to its button.
 - Each icon button's accessible name is its `label`; the tooltip shows the same text on hover and focus.
 - Toggles expose `aria-pressed`; the pressed fill is backed by an outline in forced colors.

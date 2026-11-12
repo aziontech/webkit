@@ -146,3 +146,53 @@ describe('ButtonGroup', () => {
     }
   })
 })
+
+describe('ButtonGroup accessible name', () => {
+  it('takes its name from the kebab aria-label attribute a template writes', () => {
+    const { getByRole } = render({
+      components: { ButtonGroup },
+      data: () => ({ items }),
+      template: '<ButtonGroup :items="items" aria-label="Editor actions" />'
+    })
+
+    expect(getByRole('toolbar', { name: 'Editor actions' })).toHaveAttribute(
+      'aria-label',
+      'Editor actions'
+    )
+  })
+
+  it('takes a bound :aria-label and follows its changes', async () => {
+    const { getByRole, getByTestId } = render({
+      components: { ButtonGroup },
+      data: () => ({ items, surface: 'Editor' }),
+      template: `
+        <div>
+          <ButtonGroup :items="items" :aria-label="surface + ' actions'" />
+          <button type="button" data-testid="rename" @click="surface = 'Preview'">rename</button>
+        </div>
+      `
+    })
+
+    expect(getByRole('toolbar', { name: 'Editor actions' })).toBeTruthy()
+    await fireEvent.click(getByTestId('rename'))
+    expect(getByRole('toolbar', { name: 'Preview actions' })).toBeTruthy()
+  })
+
+  it('renders no empty aria-label when aria-labelledby names it', async () => {
+    const { getByRole, container } = render({
+      components: { ButtonGroup },
+      data: () => ({ items }),
+      template: `
+        <div>
+          <h2 id="records-title">Records</h2>
+          <ButtonGroup :items="items" aria-labelledby="records-title" />
+        </div>
+      `
+    })
+
+    const toolbar = getByRole('toolbar', { name: 'Records' })
+    expect(toolbar).not.toHaveAttribute('aria-label')
+    expect(toolbar).toHaveAttribute('aria-labelledby', 'records-title')
+    await expectNoA11yViolations(container)
+  })
+})
