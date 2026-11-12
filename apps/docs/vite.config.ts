@@ -59,7 +59,7 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    include: ['vue', 'vue-router', 'vee-validate']
+    include: ['vue', 'vue-router']
   },
   ssr: {
     noExternal: ['@aziontech/webkit', '@aziontech/icons', '@aziontech/theme']

@@ -19,7 +19,6 @@
     "@aziontech/icons": "workspace:*",
     "@aziontech/theme": "workspace:*",
     "@aziontech/webkit": "workspace:*",
-    "vee-validate": "^4.15.1",
     "vue": "^3.5.29"
   },
   "devDependencies": {
@@ -33,7 +32,7 @@
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.4",
     "vite-ssg": "^28.3.0",
-    "vue-tsc": "^3.2.5",
+    "vue-tsc": ">=3.2.5 <3.3.14 || >=3.3.15 <4.0.0",
     "vue-router": "^4.6.4"
   }
 }

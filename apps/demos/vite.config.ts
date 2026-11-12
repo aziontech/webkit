@@ -15,7 +15,7 @@ export default defineConfig({
     ]
   },
   optimizeDeps: {
-    include: ['vue', 'vue-router', 'vee-validate']
+    include: ['vue', 'vue-router']
   },
   build: {
     chunkSizeWarningLimit: 2000
