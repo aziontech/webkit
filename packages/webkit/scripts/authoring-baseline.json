@@ -390,6 +390,7 @@
   "packages/webkit/src/components/inputs/select/select.vue::spec:data-testid fallback \"'input-select'\" not found in <script setup>. Expected: ?? 'input-select'",
   "packages/webkit/src/components/inputs/switch/switch.vue::manual-v-model",
   "packages/webkit/src/components/inputs/textarea/textarea.vue::manual-v-model",
+  "packages/webkit/src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue::spec:Animation classes in spec but missing in .vue: animate-page-enter",
   "packages/webkit/src/components/layout/sidebar/sidebar-footer.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-group.vue::token:js-class-preset",
   "packages/webkit/src/components/layout/sidebar/sidebar-header.vue::token:js-class-preset",

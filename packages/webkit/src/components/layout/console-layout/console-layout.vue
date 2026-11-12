@@ -1,5 +1,15 @@
 <script setup lang="ts">
-  import { computed, provide, readonly, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    type FunctionalComponent,
+    provide,
+    readonly,
+    ref,
+    shallowRef,
+    useAttrs,
+    type VNodeChild,
+    watch
+  } from 'vue'
 
   import {
     type AppNavGroup,
@@ -19,6 +29,9 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
+  import BreadcrumbList from '../../navigation/breadcrumb/breadcrumb-list.vue'
+  import BreadcrumbSeparator from '../../navigation/breadcrumb/breadcrumb-separator.vue'
+  import BreadcrumbItem from '../../navigation/breadcrumb-item/breadcrumb-item.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import type { MenuNode } from '../../navigation/menu/injection-key'
@@ -36,7 +49,11 @@
   import GlobalHeaderLeft from '../global-header/global-header-left.vue'
   import GlobalHeaderRight from '../global-header/global-header-right.vue'
   import Sidebar from '../sidebar/sidebar.vue'
-  import { ConsoleLayoutInjectionKey } from './injection-key'
+  import {
+    ConsoleLayoutInjectionKey,
+    type ConsoleLayoutTrail,
+    ConsoleLayoutTrailsKey
+  } from './injection-key'
 
   defineOptions({
     name: 'ConsoleLayout',
@@ -147,6 +164,17 @@
     searchOpen: readonly(searchOpen)
   })
 
+  const trails = shallowRef<ConsoleLayoutTrail[]>([])
+
+  provide(ConsoleLayoutTrailsKey, {
+    add: (trail) => {
+      trails.value = [...trails.value.filter((entry) => entry !== trail), trail]
+    },
+    remove: (trail) => {
+      trails.value = trails.value.filter((entry) => entry !== trail)
+    }
+  })
+
   const attrs = useAttrs()
   const { t } = useTranslate({ consoleLayout: en.consoleLayout })
 
@@ -182,12 +210,20 @@
 
   const paletteGroups = computed(() => navPaletteGroups(props.navigation))
 
+  const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
+
+  const activeCrumbs = computed(() => (pageTrail.value ? pageTrail.value.items() : props.breadcrumbs))
+
   const crumbItems = computed(() =>
-    props.breadcrumbs.map((crumb) => {
+    activeCrumbs.value.map((crumb) => {
       const href = hrefOf(crumb)
       return href ? { label: crumb.label, href } : { label: crumb.label }
     })
   )
+
+  const pageControl = computed(() => Boolean(pageTrail.value?.hasControl()))
+
+  const PageCrumbControl: FunctionalComponent = () => pageTrail.value?.control() as VNodeChild
 
   watch(
     currentId,
@@ -228,8 +264,12 @@
   }
 
   const onCrumbNavigate = (event: globalThis.MouseEvent, href: string) => {
-    const crumb = props.breadcrumbs.find((entry) => hrefOf(entry) === href)
+    const crumb = activeCrumbs.value.find((entry) => hrefOf(entry) === href)
     if (crumb) follow(event, crumb)
+  }
+
+  const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: ConsoleLayoutCrumb) => {
+    if (hrefOf(crumb)) follow(event, crumb)
   }
 
   const onPaletteSelect = (
@@ -381,7 +421,32 @@
                   :compact="compact"
                 />
                 <div
-                  v-if="!compact && $slots['breadcrumbs']"
+                  v-if="!compact && pageControl"
+                  class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
+                >
+                  <Breadcrumb class="w-full">
+                    <BreadcrumbList>
+                      <template
+                        v-for="(crumb, index) in activeCrumbs"
+                        :key="`${crumb.label}-${index}`"
+                      >
+                        <li class="inline-flex items-center">
+                          <BreadcrumbItem
+                            :label="crumb.label"
+                            :href="hrefOf(crumb) ?? '#'"
+                            @click="(event) => onPageCrumbClick(event, crumb)"
+                          />
+                        </li>
+                        <BreadcrumbSeparator />
+                      </template>
+                      <li class="inline-flex min-w-0 items-center">
+                        <PageCrumbControl />
+                      </li>
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
+                <div
+                  v-else-if="!compact && !pageTrail && $slots['breadcrumbs']"
                   class="-ms-(--spacing-xs) flex w-fit min-w-0 shrink"
                 >
                   <slot name="breadcrumbs" />
@@ -458,7 +523,7 @@
 
       <main
         :data-testid="`${testId}__main`"
-        class="flex min-h-full min-w-0 flex-col animate-page-enter motion-reduce:animate-none"
+        class="flex min-h-full min-w-0 flex-col animate-page-enter has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden motion-reduce:animate-none [&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1"
       >
         <slot />
       </main>
