@@ -152,6 +152,9 @@ surface (a drawer, a panel) and does not page through a collection.
 The toolbar is a fixed, ordered set of compound `Table.*` controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `Table.AppliedFilters`. `filterFields` (`{ id, label,
 type, options? }`) drives the `Table.Filter` builder.
+An applied filter is a `Chip` of the default `kind="filled"` (the grey `--bg-selected` fill),
+`clickable` to edit it and `removable` to drop it; a value it could still take is `outlined`, and
+"Add filter" is `dashed`. Never restyle a chip's fill with a class to get one of those looks.
 
 ```vue
 <template #toolbar>

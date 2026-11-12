@@ -1045,15 +1045,19 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 ```vue
 <Field>
   <Field.Label>Client ID</Field.Label>
-  <Input v-model="clientId" readonly :spellcheck="false" />
+  <Input v-model="clientId" readonly monospace :spellcheck="false" />
   <Field.Description>Can't be changed. Quote it when opening a support ticket.</Field.Description>
 </Field>
 ```
 
-- `readonly` keeps the value in `var(--text-default)`, focusable and copyable, and the field renders
-  **transparent with a dashed border and no hover**, so it never looks editable next to the fields
-  that are. `Input` and `Textarea` share that look.
-- Say **why** in the helper text (who owns the value, and how to change it if that is possible).
+- `readonly` keeps the value in `var(--text-default)`, focusable and copyable. The `Input` stays the
+  **same filled field** (surface, solid border) and only drops the hover border, as the design
+  sample draws it; never restyle it (dashed border, transparent fill) to make it look different.
+- Say **why** in the helper text (who owns the value, and how to change it if that is possible): the
+  description, not the chrome, tells the user the value is fixed.
+- **Code-like values take `monospace`**: a CLI command, an ID, a token, a hash, a path. A command the
+  user copies is `readonly monospace` in an `InputGroupRoot` with a `CopyButton`
+  (`Input` example ReadOnly). Prose values (names, e-mails, domains being typed) stay in the sans face.
 - **`disabled` is something else:** a control that is temporarily unavailable (a submit lock, a
   dependency not met). It greys the value out and drops it from the tab order. Never use it for a
   value that is permanently fixed.
@@ -1177,7 +1181,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in
       error; submit is never pre-disabled.
-- [ ] A value the user cannot change is `readonly` (dashed, transparent, with a helper saying why), never
+- [ ] A value the user cannot change is `readonly` (the filled field, with a helper saying why), never
       `disabled` and never an editable field the save ignores.
 - [ ] Leaving the page with unsaved edits asks first (or the edits survive the navigation).
 - [ ] `<form novalidate @submit.prevent>`; Enter submits; the scope locks off one flag

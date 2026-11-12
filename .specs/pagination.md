@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: ccab0f5e4be2643d2384c81379716554958280b47b107fe9a4632ab5d40767dc
+checksum: aab78d9938a910682bf899d31061d5da4d3bc07d3307b861f118b053eee8e323
 created: 2026-06-16
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Pagination — Component Spec
@@ -171,8 +171,8 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 - `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
 - Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
-- Responsive: the root is the `@container/pagination`. Below `@sm` of its box only Previous, the current page and Next stay visible (the other page numbers and the ellipsis hide); the page-size control wraps under them.
-- Touch: on a coarse pointer (`pointer-coarse:`) every page button and the page-size select grow to 44 px.
+- Responsive: the root is the `@container/pagination`. The page list stays whole at every width (`siblingCount` already caps it at seven slots, e.g. `1 2 3 4 5 … 60`), so a phone footer reads the same numbered strip as a desktop one, as in the design sample; when the box is too narrow for the info text and the controls on one line, the strip and the page-size control wrap together under the info text, aligned to the end.
+- Touch: the buttons and the page-size select are drawn at 28 px on every pointer. On a coarse pointer (`pointer-coarse:`) each button carries an invisible, `aria-hidden` hit area that extends it to 44 px tall (vertical only: the buttons are butted, so the width stays the drawn 28 px), and the select itself grows to 44 px tall inside its 28 px frame, which draws the border, surface and focus ring.
 
 ## Motion & Animations
 
@@ -215,7 +215,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 - ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target: each button is 28×28, a justified deviation from 44×44 — the design is a compact segmented strip sized to sit inside a table footer, and the buttons are butted with no gap, so there is no room to pad the hit area without breaking the strip.
+- Touch target: each button is drawn 28×28 (above the 24×24 minimum of WCAG 2.5.8) so the strip stays compact in a table footer; on a coarse pointer its hit area grows to 28×44 invisibly and the page-size select's to its full width × 44. The width cannot grow because the buttons are butted with no gap; growing the drawn size instead was rejected because it turned the phone footer into an oversized strip that no longer matched the design sample.
 
 ## Right-to-left
 

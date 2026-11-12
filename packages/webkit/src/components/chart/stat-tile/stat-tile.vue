@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, inject, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -8,11 +8,14 @@
   import Separator from '../../layout/separator/separator.vue'
   import { formatCompact, formatSignedPercent, isFiniteNumber } from '../_lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
+  import { StatTileGroupInjectionKey } from '../stat-tile-group/injection-key'
   import { useCountUp } from './composables/use-count-up'
 
   defineOptions({ name: 'StatTile', inheritAttrs: false })
 
   export type StatTileTrend = 'good' | 'bad' | 'flat'
+  /** Figure face: the big-number mono figure or the large heading figure. */
+  export type StatTileKind = 'mono' | 'sans'
 
   interface Props {
     /** Metric name, in sentence case. Fallback for the default slot. */
@@ -21,9 +24,11 @@
     value?: number | null
     /** Formats the figure. */
     formatValue?: (value: number) => string
-    /** Unit read after the figure, in a muted tone. Empty hides it. */
+    /** Figure face: mono is the big-number mono figure, sans the large heading figure. */
+    kind?: StatTileKind
+    /** Unit read after the figure, smaller and in a muted sans tone. Empty hides it. */
     unit?: string
-    /** Signed change against the named period, in percent. Null hides the delta. */
+    /** Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. */
     delta?: number | null
     /** The comparison period, read after the delta. */
     deltaLabel?: string
@@ -39,6 +44,7 @@
     label: '',
     value: null,
     formatValue: formatCompact,
+    kind: 'mono',
     unit: '',
     delta: null,
     deltaLabel: '',
@@ -55,6 +61,7 @@
   }>()
 
   const attrs = useAttrs()
+  const group = inject(StatTileGroupInjectionKey, null)
   const { t, locale } = useTranslate({ statTile: en.statTile })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
@@ -107,9 +114,11 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-loading="loading || null"
+    :data-kind="kind"
+    :data-grouped="group ? '' : null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
-    class="@container/stat-tile flex min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    class="group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b"
   >
     <div
       class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-xxs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
@@ -132,22 +141,22 @@
       />
       <div
         v-else
-        class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs)"
+        class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs) group-data-[grouped]/stat-tile:justify-between"
       >
         <span
           aria-hidden="true"
-          class="inline-flex shrink-0 items-baseline gap-(--spacing-xxs) whitespace-nowrap text-big-number-sm"
+          class="inline-flex shrink-0 items-baseline gap-(--spacing-xxs) whitespace-nowrap"
         >
           <span
             :data-testid="`${testId}__value`"
-            class="text-(--text-default)"
+            class="text-(--text-default) group-data-[kind=mono]/stat-tile:text-big-number-sm group-data-[kind=sans]/stat-tile:text-heading-lg"
           >
             {{ figure }}
           </span>
           <span
             v-if="unit && hasValue"
             :data-testid="`${testId}__unit`"
-            class="text-(--text-muted)"
+            class="text-(--text-muted) group-data-[kind=mono]/stat-tile:text-body-xs group-data-[kind=sans]/stat-tile:text-body-md"
           >
             {{ unit }}
           </span>

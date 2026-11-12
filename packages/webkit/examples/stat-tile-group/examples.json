@@ -1,0 +1,11 @@
+{
+  "component": "stat-tile-group",
+  "title": "Components/Primitives/Chart/StatTileGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "An overview's usage strip: four StatTiles in one card, split by dividers, each delta aligned to the end of its cell. One cell per row in a narrow box, two from the group's medium size, all four in a row on a wide one.",
+      "file": "default.vue"
+    }
+  ]
+}

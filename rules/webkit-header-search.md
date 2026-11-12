@@ -37,8 +37,11 @@ A header without it is incomplete, even when nobody asked for search.
   ```
 
 - Wrap the header in an `@container` and set `collapsible`: the trigger is the field
-  (`Search … ⌘K`) on a wide bar and folds to the magnifier on a narrow one. The site header keeps
-  the folded form (no `@container` around it), as azion.com does.
+  (`Search … ⌘K`) on a wide bar and folds to the magnifier, with its label as a tooltip, while
+  the bar is narrower than 47rem (752 px, `--container-2xl`). That is the one threshold for every
+  header: do not add your own `@min-[…]` around it. The folded square is drawn at 32 px like the
+  header's other icon buttons; its 44 px touch area is built in. The site header keeps the folded
+  form (no `@container` around it), as azion.com does.
 - Name the scope in `label` when it is narrow (`label="Search docs"`).
 - On the marketing site, `SiteNav` already carries the folded trigger: listen to its `search` event
   (`<SiteNav @search="searchOpen = true" />`) and mount the `Command` beside it.

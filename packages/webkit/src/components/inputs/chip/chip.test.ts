@@ -465,6 +465,34 @@ describe('Chip', () => {
     expect(getByTestId('input-chip')).toHaveAttribute('role', 'button')
   })
 
+  it('draws an applied filter (clickable + removable) as the default filled kind, with a body and a named remove control', async () => {
+    const { getByTestId, container } = render(Chip, {
+      props: { label: 'Period', clickable: true, removable: true }
+    })
+
+    const root = getByTestId('input-chip')
+    expect(root).toHaveAttribute('data-kind', 'filled')
+    expect(root).not.toHaveAttribute('data-selected')
+    expect(getByTestId('input-chip__body')).toHaveAttribute('role', 'button')
+    expect(getByTestId('input-chip__remove')).toHaveAccessibleName('Remove Period')
+    await expectNoA11yViolations(container)
+  })
+
+  it('keeps a filled toggle off until it is activated, so the fill never reads as selected', async () => {
+    const { getByTestId } = render(Chip, {
+      props: { label: 'Production', selectable: true }
+    })
+
+    const root = getByTestId('input-chip')
+    expect(root).toHaveAttribute('data-kind', 'filled')
+    expect(root).toHaveAttribute('aria-pressed', 'false')
+    expect(root).not.toHaveAttribute('data-selected')
+
+    await fireEvent.click(root)
+    expect(root).toHaveAttribute('aria-pressed', 'true')
+    expect(root).toHaveAttribute('data-selected')
+  })
+
   describe('accessibility of the new kinds', () => {
     it.each([['outlined' as const], ['dashed' as const]])(
       'has no a11y violations for a clickable %s chip',

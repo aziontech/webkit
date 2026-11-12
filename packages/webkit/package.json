@@ -382,6 +382,10 @@
       "types": "./types/components/chart/stat-tile/stat-tile.vue.d.ts",
       "default": "./src/components/chart/stat-tile/stat-tile.vue"
     },
+    "./stat-tile-group": {
+      "types": "./types/components/chart/stat-tile-group/stat-tile-group.vue.d.ts",
+      "default": "./src/components/chart/stat-tile-group/stat-tile-group.vue"
+    },
     "./bar-list": {
       "types": "./types/components/chart/bar-list/bar-list.vue.d.ts",
       "default": "./src/components/chart/bar-list/bar-list.vue"

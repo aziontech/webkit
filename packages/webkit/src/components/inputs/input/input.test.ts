@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -5,6 +6,7 @@ import Default from '../../../../examples/input/default.vue'
 import Disabled from '../../../../examples/input/disabled.vue'
 import Filled from '../../../../examples/input/filled.vue'
 import Invalid from '../../../../examples/input/invalid.vue'
+import ReadOnly from '../../../../examples/input/read-only.vue'
 import Sizes from '../../../../examples/input/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Input from './input.vue'
@@ -275,7 +277,7 @@ describe('Input — autocomplete and spellcheck', () => {
 })
 
 describe('Input — read-only look', () => {
-  it('marks a read-only field with data-readonly and the dashed, transparent look', () => {
+  it('marks a read-only field with data-readonly and keeps it focusable and copyable', () => {
     const { getByTestId, container } = render(Input, {
       props: { readonly: true, modelValue: '9757a' }
     })
@@ -283,13 +285,25 @@ describe('Input — read-only look', () => {
     const input = getByTestId('input') as HTMLInputElement
 
     expect(input.readOnly).toBe(true)
+    expect(input.disabled).toBe(false)
+    expect(input.value).toBe('9757a')
     expect(root.hasAttribute('data-readonly')).toBe(true)
-    expect(root.className).toContain('data-[readonly]:border-dashed')
-    expect(root.className).toContain('data-[readonly]:bg-transparent')
-    expect(root.className).toContain(':not([data-readonly])]:hover:border-(--border-strong)')
+    input.focus()
+    expect(document.activeElement).toBe(input)
   })
 
-  it('keeps the read-only look apart from the editable and disabled looks', () => {
+  it('does not emit update:modelValue from a read-only field', async () => {
+    const { getByTestId, emitted } = render(Input, {
+      props: { readonly: true, modelValue: '9757a' }
+    })
+    const input = getByTestId('input') as HTMLInputElement
+    input.focus()
+    await userEvent.keyboard('x')
+    expect(input.value).toBe('9757a')
+    expect(emitted()['update:modelValue']).toBeUndefined()
+  })
+
+  it('keeps the read-only state apart from the disabled state', () => {
     const readonly = render(Input, { props: { readonly: true } }).container
       .firstElementChild as HTMLElement
     const disabled = render(Input, { props: { disabled: true } }).container
@@ -298,12 +312,46 @@ describe('Input — read-only look', () => {
     expect(readonly.hasAttribute('data-readonly')).toBe(true)
     expect(readonly.hasAttribute('data-disabled')).toBe(false)
     expect(disabled.hasAttribute('data-readonly')).toBe(false)
-    expect(readonly.className).not.toContain('data-[readonly]:bg-(--bg-disabled)')
   })
 
   it('omits data-readonly on an editable field', () => {
     const { container } = render(Input)
     expect((container.firstElementChild as HTMLElement).hasAttribute('data-readonly')).toBe(false)
+  })
+})
+
+describe('Input — monospace', () => {
+  it('renders the ReadOnly example: read-only monospace fields with a copy action', async () => {
+    const { container, getByRole } = render(ReadOnly)
+    const roots = container.querySelectorAll('[data-readonly][data-monospace]')
+    expect(roots.length).toBe(2)
+    expect(getByRole('button', { name: 'Copy the create function command' })).toBeTruthy()
+    await expectNoA11yViolations(container)
+  })
+
+  it('omits data-monospace by default', () => {
+    const { container } = render(Input)
+    expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(false)
+  })
+
+  it('marks the field with data-monospace and still edits the value', async () => {
+    const { container, getByTestId, emitted } = render(Input, {
+      props: { monospace: true, spellcheck: false }
+    })
+    const root = container.firstElementChild as HTMLElement
+    expect(root.hasAttribute('data-monospace')).toBe(true)
+    const input = getByTestId('input') as HTMLInputElement
+    expect(input.getAttribute('spellcheck')).toBe('false')
+    await userEvent.type(input, 'ab')
+    expect(emitted()['update:modelValue']).toEqual([['a'], ['ab']])
+  })
+
+  it('has no a11y violations as a read-only monospace command field', async () => {
+    const { container } = render(Input, {
+      props: { readonly: true, monospace: true, modelValue: 'azion create edge-function' },
+      attrs: { 'aria-label': 'CLI command' }
+    })
+    await expectNoA11yViolations(container)
   })
 })
 

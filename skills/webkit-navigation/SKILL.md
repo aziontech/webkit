@@ -163,7 +163,8 @@ A browse page then imports **your** shell — not a webkit path — and renders 
 
 The persistent shell's header — and every docs or site header — puts `SearchTrigger` first in
 `GlobalHeader.Right`, opening a `Command` palette. Wrap the header in `@container` and set
-`collapsible`: a wide bar shows the field (`Search … ⌘K`), a narrow one the magnifier. Never
+`collapsible`: a bar of 47rem or more shows the field (`Search … ⌘K`), a narrower one the 32 px
+magnifier with its label as a tooltip (one threshold for every header; no `@min-[…]` of your own). Never
 hand-roll the field or use a bare magnifier `IconButton`; never bind ⌘K yourself. The focused
 creation shell has no search: it stays on the task. Enforced by `webkit/header-search-trigger`
 (rule `webkit-header-search`).

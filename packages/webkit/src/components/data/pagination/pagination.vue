@@ -177,7 +177,6 @@
             :key="item.key"
             :kind="item.type === 'more' ? 'more' : 'number'"
             :selected="item.type === 'page' && item.value === currentPage"
-            class="@max-sm/pagination:not-data-selected:hidden"
             @click="onItemClick(item)"
           >
             {{ item.type === 'page' ? item.value : '' }}
