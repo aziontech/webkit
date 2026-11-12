@@ -1296,7 +1296,7 @@
     },
     "./global-header": {
       "types": "./types/components/layout/global-header/index.d.ts",
-      "default": "./src/components/layout/global-header/index.js"
+      "default": "./src/components/layout/global-header/index.ts"
     },
     "./sidebar": {
       "types": "./types/components/layout/sidebar/sidebar.vue.d.ts",
@@ -1436,7 +1436,7 @@
     },
     "./breadcrumb": {
       "types": "./types/components/navigation/breadcrumb/index.d.ts",
-      "default": "./src/components/navigation/breadcrumb/index.js"
+      "default": "./src/components/navigation/breadcrumb/index.ts"
     },
     "./breadcrumb-item": {
       "types": "./types/components/navigation/breadcrumb-item/breadcrumb-item.vue.d.ts",
@@ -1480,7 +1480,7 @@
     },
     "./tabs": {
       "types": "./types/components/navigation/tabs/index.d.ts",
-      "default": "./src/components/navigation/tabs/index.js"
+      "default": "./src/components/navigation/tabs/index.ts"
     },
     "./page-tabs": {
       "types": "./types/components/navigation/page-tabs/page-tabs.vue.d.ts",
@@ -1512,7 +1512,7 @@
     },
     "./navigation-menu": {
       "types": "./types/components/navigation/navigation-menu/index.d.ts",
-      "default": "./src/components/navigation/navigation-menu/index.js"
+      "default": "./src/components/navigation/navigation-menu/index.ts"
     },
     "./tooltip": {
       "types": "./types/components/overlay/tooltip/tooltip.vue.d.ts",
