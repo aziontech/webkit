@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: ccebda06a18663636939c1af2d22872d7da09bafedc0220290f3e04719540ca2
+checksum: 6a02171bffba234cfbab63de1eb8d957ca6fefd9ad610e91876aa93670ee2fe7
 created: 2026-08-03
 last_updated: 2026-11-12
 ---
@@ -316,8 +316,6 @@ export type MenuGroupNode = {
 | `activeId`     | `string`          | `''`    | false    | Id of the node rendered as selected in data-driven mode.                                                                                                                            |
 | `enterOnMount` | `boolean`         | `false` | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
 | `ariaLabel`    | `string`          | `''`    | false    | Accessible name for the navigation region. Empty uses the locale catalog (`Menu`).                                                                                                  |
-| `path`         | `string[]`        | `[]`    | false    | `v-model:path`: the drill stack as ancestor node ids, outermost first; empty at the root level. Not a URL: a row's destination is `MenuNode.href`.                                  |
-| `expanded`     | `string[]`        | `[]`    | false    | `v-model:expanded`: ids of the inline subs currently open.                                                                                                                          |
 
 The root also owns **`v-model:expanded`** — `string[]`, default `[]` — the ids of the inline subs
 currently open. Expansion belongs to the root, not to each sub, for two reasons: one sub opening
