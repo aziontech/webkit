@@ -94,17 +94,13 @@ const RECOMMENDED = {
   'no-wrapped-page-chrome': 'error',
   'no-output-in-command': 'warn',
   'no-root-relative-asset': 'error',
-  'menu-node-href': 'warn',
+  'menu-node-href': 'error',
   'no-gap-after-closing-section': 'error',
   'accessible-name': 'error',
   'no-dropped-children': 'error'
 }
 
-export const HEURISTIC_RULES = Object.freeze([
-  'container-needs-width',
-  'no-output-in-command',
-  'menu-node-href'
-])
+export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
 
 const STRICT = Object.fromEntries(
   Object.keys(rules).map((r) => [r, HEURISTIC_RULES.includes(r) ? 'warn' : 'error'])

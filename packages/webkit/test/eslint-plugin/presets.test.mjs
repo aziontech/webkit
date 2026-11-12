@@ -24,11 +24,7 @@ test('every rule ships in recommended or strict, never as warn except the layout
   const [performance] = webkitPlugin.configs.performance
 
   const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
-  assert.deepEqual([...HEURISTIC_RULES], [
-    'container-needs-width',
-    'no-output-in-command',
-    'menu-node-href'
-  ])
+  assert.deepEqual([...HEURISTIC_RULES], ['container-needs-width', 'no-output-in-command'])
   for (const preset of [recommended, strict, performance]) {
     for (const [key, severity] of Object.entries(preset.rules)) {
       assert.equal(severity, heuristics.has(key) ? 'warn' : 'error', key)
@@ -87,5 +83,12 @@ const label = 'hi'
         `${presetName}: no-hardcoded-color should still fire on .astro frontmatter/markup`
       )
     }
+  }
+})
+
+test('menu-node-href is an error in recommended and strict', () => {
+  for (const name of ['recommended', 'strict']) {
+    const [config] = webkitPlugin.configs[name]
+    assert.equal(config.rules['webkit/menu-node-href'], 'error', name)
   }
 })

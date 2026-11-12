@@ -16,8 +16,5 @@
       "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"]
     }
   },
-  "include": ["src/**/*", "plugins/**/*", "vite.config.ts"],
-  "vueCompilerOptions": {
-    "htmlAttributes": []
-  }
+  "include": ["src/**/*", "plugins/**/*", "vite.config.ts"]
 }
