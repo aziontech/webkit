@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 0304b90878fe2b38cc3704ee342e78a7337f12e92c47e91ff99fd7faf846a02a
+checksum: b3a9b91526a150b83edd305c331e8c02bdace60afb577aa2a1dab7c440424a82
 created: 2026-10-21
 last_updated: 2026-11-12
 ---
@@ -122,7 +122,7 @@ _None — every node is drawn from `spec`._
 
 ## States
 
-- **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches` stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
+- **Layout.** The root is an inline-size container. At the `6xl` container width and up, `row` lays its items side by side and `branches` stacks its items beside the node before it; below that width every row stacks. A row with no `branches` in it stacks **centred** (`data-stack="centre"`): its nodes share one vertical axis. A row that holds `branches`, and any row nested inside a tree (a branch that is itself a row), stays an **indented tree** (`data-stack="tree"`, nodes at the start edge) and `branches` indents under the node it leaves, so the tree reads top to bottom. `grid` keeps its 2 or 3 columns at every width.
 - **Connectors.** After layout, the component measures every node and group (each carries `data-diagram-node` with its key) and draws each edge whose two ends exist: a curve from the source's right edge into the target's left edge, centre to centre on the vertical axis, when the target sits to the right of the source; when the target sits below, a connector from the **bottom centre** of the source to the **top centre** of the target — a straight line when the two centres align, otherwise an orthogonal path that turns at the gap's midline with rounded corners — with its label chip centred on the line (at the midpoint of the gap). Inside an indented tree (both ends in a `tree` stack) the tree rail is kept instead: an elbow from the source's bottom edge, one inset in from its start, into the target's start edge when the target is indented to the right, and a straight drop along that inset otherwise. Each end gets a port; ports at the same point merge. Edges whose ends are missing are skipped. The drawing is re-measured on every resize of the canvas or of any node, when the web fonts settle, and when the edges change.
 - **Named.** A `name` loads its spec on demand from the library; the root keeps its width and draws nothing until the spec arrives, and a `name` change clears the current drawing at once. A `name` outside the library (from untyped code), or a spec that fails to load, warns in development only and leaves the root empty; it never throws. With neither `name` nor `spec` the root is empty.
 - **Label.** The root is announced as one image named by `ariaLabel`, or, when that is empty, by the description the spec carries; with neither it is a plain figure.

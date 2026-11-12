@@ -10,9 +10,11 @@
     item: DiagramLayoutItem
     /** Every node of the diagram, by key. */
     nodes: Record<string, DiagramNodeData>
+    /** Lays a stacked row out as an indented tree, because the item sits inside one. */
+    tree?: boolean
   }
 
-  defineProps<Props>()
+  withDefaults(defineProps<Props>(), { tree: false })
 </script>
 
 <template>
@@ -25,7 +27,7 @@
     v-else-if="'row' in item"
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
-    :data-stack="item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
+    :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
     class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @6xl:flex-row @6xl:gap-(--spacing-xl) @6xl:self-auto @6xl:data-[align=center]:items-center @6xl:data-[align=start]:items-start @6xl:data-[gap=wide]:gap-(--spacing-xxl)"
   >
     <DiagramLayout
@@ -33,6 +35,7 @@
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="tree || item.row.some((entry) => 'branches' in entry)"
     />
   </div>
 
@@ -46,6 +49,7 @@
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="true"
     />
   </div>
 
@@ -59,6 +63,7 @@
       :key="index"
       :item="child"
       :nodes="nodes"
+      :tree="tree"
     />
   </div>
 
@@ -80,6 +85,7 @@
         <DiagramLayout
           :item="item.content"
           :nodes="nodes"
+          :tree="tree"
         />
       </div>
     </FrameBox>
