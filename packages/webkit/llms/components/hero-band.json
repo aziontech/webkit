@@ -25,6 +25,7 @@
  "bestPractices": [
   "Use `title-band` with `size=\"large\"` for a product page and `size=\"medium\"` for a page whose bands start right under the headline.",
   "Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.",
+  "Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `centered`, `title-band` and `centered-band` layouts set it on a narrower measure than the sentence under it, so \"Certifications and Compliance\" breaks over two lines. Use `long` only for a headline that would run to three lines.",
   "Leave `headerOffset` at its default under `SiteNav`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length."
  ],
  "props": [
@@ -124,7 +125,7 @@
    "type": "HeroBandTitleLength",
    "default": "'short'",
    "required": "false",
-   "doc": "Length of the headline; `long` widens its column so it breaks into two lines instead of three."
+   "doc": "Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column."
   },
   {
    "name": "plain",

@@ -370,7 +370,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Alert>
 
-        <Card key="card-1"
+        <Card
+          key="card-1"
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
@@ -393,7 +394,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </template>
         </Card>
 
-        <Card key="card-2"
+        <Card
+          key="card-2"
           v-else
           :padded="false"
         >

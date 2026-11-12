@@ -13,7 +13,7 @@
 ## Do
 
 - List the articles newest first; file every article under at least one of `categories`.
-- Keep the category list short enough to scroll on one row.
+- Keep the category list short enough to scroll on one row: the picker keeps every label at its full width and the row scrolls sideways on a phone instead of squeezing the labels.
 
 ## Don’t
 

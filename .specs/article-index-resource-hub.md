@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 80f4a7f6b0a77510f54e41802e8141d4c84de94cc84a13065d91133569de2778
+last_updated: 2026-11-12
+checksum: a0e2f222c3550319e022565f8f9b21f0dffac29b6c3169f4ebc9cc07b2170794
 ---
 
 # ArticleIndexResourceHub — Component Spec
@@ -93,6 +93,7 @@ Every resource of a hub as one ruled list, with a headline and one searchable dr
 
 ## States
 
+- Each row's deck shows in full in `text-body-lg`, never clamped, as on azion.com's Resource Hub
 - Visual states: `default`, `hover` (a row lights and its read cue rises in), `focus-visible` (inset ring on the row, the read cue rises in)
 - Filtered: each facet keeps the resources whose `facets[key]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Empty: when no resource matches, the list and the load-more button are not rendered
@@ -112,7 +113,7 @@ Every resource of a hub as one ruled list, with a headline and one searchable dr
 | row fill       | hover `var(--bg-hover)`                                                   |
 | cover cell     | `var(--bg-surface)`, rule `var(--border-default)`                         |
 | headline       | `text-heading-md` (band), `text-heading-sm` (rows), `var(--text-default)` |
-| overline, deck | `text-overline-sm` / `text-body-sm`, `var(--text-muted)`                  |
+| overline, deck | `text-overline-sm` / `text-body-lg`, `var(--text-muted)`                  |
 | read cue       | `text-overline-md`, `var(--text-default)`                                 |
 | focus ring     | `var(--ring-color)`                                                       |
 

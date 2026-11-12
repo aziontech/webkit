@@ -11,7 +11,7 @@
   /** Register of the grid. */
   export type CardGridKind = 'gap' | 'divider' | 'frame'
   /** Column count at the large breakpoint. */
-  export type CardGridColumns = 2 | 3 | 4
+  export type CardGridColumns = 2 | 3 | 4 | 5
   /** Column count below the small breakpoint. */
   export type CardGridMobileColumns = 1 | 2
   /** Weight of the hairline rules. */
@@ -30,7 +30,7 @@
     dividerColor?: CardGridDividerColor
     /** In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. */
     flush?: boolean
-    /** How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty. */
+    /** How the cells fill the rows: `balanced` picks the narrowest track count that keeps the fewest rows `columns` allows, so a count that splits evenly fills every row (2 → halves, 4 → 2 × 2), and a short last row keeps the track width with its trailing tracks left empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1); `fixed` keeps a strict `columns`-wide grid whatever the count. */
     layout?: CardGridLayout
   }
 
@@ -61,15 +61,34 @@
     return Math.ceil(count / Math.ceil(count / max))
   }
 
-  const balancedColumns = computed(() =>
-    props.layout === 'balanced'
-      ? {
-          '--card-grid-cols-base': rowWidth(props.mobileColumns),
-          '--card-grid-cols-sm': rowWidth(Math.min(props.columns, 2)),
-          '--card-grid-cols-lg': rowWidth(props.columns)
-        }
-      : undefined
+  const tracks = (max: number) => (props.layout === 'balanced' ? rowWidth(max) : max)
+
+  const trackCounts = computed(() => [
+    tracks(props.mobileColumns),
+    tracks(Math.min(props.columns, 2)),
+    tracks(props.columns)
+  ])
+
+  const fillsTrailingTracks = computed(
+    () => props.kind === 'divider' && props.layout === 'balanced' && hasCells.value
   )
+
+  const gridStyle = computed(() => {
+    const [base, sm, lg] = trackCounts.value
+    const style: Record<string, string | number> = {
+      '--card-grid-cols-base': base,
+      '--card-grid-cols-sm': sm,
+      '--card-grid-cols-lg': lg
+    }
+    if (!fillsTrailingTracks.value) return style
+    const breakpoints = { base, sm, lg }
+    for (const [name, width] of Object.entries(breakpoints)) {
+      const rest = (width - (cellCount.value % width)) % width
+      style[`--card-grid-rest-${name}`] = Math.max(rest, 1)
+      style[`--card-grid-fill-${name}`] = rest > 0 ? 'block' : 'none'
+    }
+    return style
+  })
 </script>
 
 <template>
@@ -84,8 +103,9 @@
     :data-layout="layout"
     :data-count="cellCount"
     :data-filled="hasCells || null"
-    :style="balancedColumns"
-    class="flex flex-wrap data-[layout=fixed]:grid [--card-grid-gap:0%] data-[kind=gap]:[--card-grid-gap:var(--spacing-md)] data-[kind=divider]:[--card-grid-gap:1px] [--card-grid-cols:var(--card-grid-cols-base)] sm:[--card-grid-cols:var(--card-grid-cols-sm)] lg:[--card-grid-cols:var(--card-grid-cols-lg)] [&>*]:h-auto [&>*]:min-w-0 [&>*]:grow [&>*]:basis-[calc((100%_-_(var(--card-grid-cols)_-_1)_*_var(--card-grid-gap))_/_var(--card-grid-cols))] data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4 data-[kind=gap]:gap-(--spacing-md) data-[kind=divider]:gap-px data-[kind=divider]:data-[divider-color=default]:bg-(--border-default) data-[kind=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[kind=frame]:border-(--border-default) data-[kind=frame]:data-[filled]:data-[flush=false]:border-s data-[kind=frame]:data-[filled]:data-[flush=false]:border-t data-[kind=frame]:data-[flush=true]:-mb-px data-[kind=frame]:data-[flush=true]:-me-px"
+    :data-fill-trailing="fillsTrailingTracks || null"
+    :style="gridStyle"
+    class="grid grid-cols-[repeat(var(--card-grid-cols),minmax(0,1fr))] [--card-grid-cols:var(--card-grid-cols-base)] sm:[--card-grid-cols:var(--card-grid-cols-sm)] lg:[--card-grid-cols:var(--card-grid-cols-lg)] [&>*]:h-auto [&>*]:min-w-0 data-[fill-trailing]:[--card-grid-rest:var(--card-grid-rest-base)] data-[fill-trailing]:sm:[--card-grid-rest:var(--card-grid-rest-sm)] data-[fill-trailing]:lg:[--card-grid-rest:var(--card-grid-rest-lg)] data-[fill-trailing]:[--card-grid-fill:var(--card-grid-fill-base)] data-[fill-trailing]:sm:[--card-grid-fill:var(--card-grid-fill-sm)] data-[fill-trailing]:lg:[--card-grid-fill:var(--card-grid-fill-lg)] data-[fill-trailing]:after:[display:var(--card-grid-fill)] data-[fill-trailing]:after:bg-(--bg-canvas) data-[fill-trailing]:after:content-[''] data-[fill-trailing]:after:[grid-column:span_var(--card-grid-rest)/span_var(--card-grid-rest)] data-[kind=gap]:gap-(--spacing-md) data-[kind=divider]:gap-px data-[kind=divider]:data-[divider-color=default]:bg-(--border-default) data-[kind=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[kind=frame]:border-(--border-default) data-[kind=frame]:data-[filled]:data-[flush=false]:border-s data-[kind=frame]:data-[filled]:data-[flush=false]:border-t data-[kind=frame]:data-[flush=true]:-mb-px data-[kind=frame]:data-[flush=true]:-me-px"
   >
     <slot />
   </div>

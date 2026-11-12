@@ -14,6 +14,7 @@
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
+- Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `centered`, `title-band` and `centered-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
 - Leave `headerOffset` at its default under `SiteNav`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Don’t
@@ -45,7 +46,7 @@
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it. |
-| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline; `long` widens its column so it breaks into two lines instead of three. |
+| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. |
 | `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
 
 ## Slots
@@ -64,6 +65,7 @@
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
+- `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `centered`, `title-band` and `centered-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `carouselMarks` has marks; each action renders only with a label and a link; the illustration renders only in the `copy-beside-art` layout with `illustration` set
 

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: c02f730727cd571c2ce977c3af5f536bc17eb81bcde14061bf7cda33ce55194c
+last_updated: 2026-11-12
+checksum: da6a1e676a878433b0e9c0a6d7dd6d9c7e3549e9b8da3784694421a75e55d519
 ---
 
 # HeroForm — Component Spec
@@ -33,6 +33,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 - Give every field a unique `name`; it is the key of the submitted value.
 - Mark half-width fields in pairs so each row stays full.
+- Set `visuallyHiddenLabel` on a field the page labels by its placeholder alone (azion.com's phone field): the label stays the control's accessible name for assistive tech but is not drawn, so give that field a `placeholder` that says what to type.
+- Keep the headline to a short phrase; the band sets it on a narrower measure than the description (`--container-md`), so "Grow as an Azion Partner" breaks over two lines as on the site. There is no width prop to tune.
 - Set `loading` while the values are sent, then `submitted` or `error` with the outcome.
 
 ## Usage
@@ -102,7 +104,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `description`   | `string`           | `''`    | false    | Sentence under the headline.                                                                                                        |
 | `items`         | `HeroFormItem[]`   | `[]`    | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string`           | `''`    | false    | Accessible name of the field group, read as its legend.                                                                             |
-| `fields`        | `HeroFormField[]`  | `[]`    | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`.                      |
+| `fields`        | `HeroFormField[]`  | `[]`    | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it.                      |
 | `submitLabel`   | `string`           | `''`    | false    | Label of the submit button.                                                                                                         |
 | `carouselLabel` | `string`           | `''`    | false    | Overline above the client strip.                                                                                                    |
 | `carouselMarks` | `string[]`         | `[]`    | false    | Registry names of the client marks, in order; the strip renders only when there are marks.                                          |
@@ -127,6 +129,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
 - `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
 - `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
+- A field with `visuallyHiddenLabel` renders its `Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
+- The headline caps at `--container-md` while the description and highlights keep the `lg` column
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
 
 ## Motion & Animations
@@ -158,6 +162,7 @@ _none_
 
 - Default
 - UnderAttack — the same block with the incident `fields` and `items`
+- ScaleUp (site) — no highlights or client strip, a two-line headline and a phone field labelled by its placeholder through `visuallyHiddenLabel`
 - Loading
 - Submitted
 - Failed

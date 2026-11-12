@@ -24,6 +24,8 @@
  "bestPractices": [
   "Give every field a unique `name`; it is the key of the submitted value.",
   "Mark half-width fields in pairs so each row stays full.",
+  "Set `visuallyHiddenLabel` on a field the page labels by its placeholder alone (azion.com's phone field): the label stays the control's accessible name for assistive tech but is not drawn, so give that field a `placeholder` that says what to type.",
+  "Keep the headline to a short phrase; the band sets it on a narrower measure than the description (`--container-md`), so \"Grow as an Azion Partner\" breaks over two lines as on the site. There is no width prop to tune.",
   "Set `loading` while the values are sent, then `submitted` or `error` with the outcome."
  ],
  "props": [
@@ -81,7 +83,7 @@
    "type": "HeroFormField[]",
    "default": "[]",
    "required": "false",
-   "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`."
+   "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
   },
   {
    "name": "submitLabel",

@@ -5,16 +5,16 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 58276c18c6192a5ac676405328ceac7b61362cc1ec281114eb9f4add1798de4c
+checksum: f64e9bd583e3548176dc854e5592c62b37aedcbc42e7ae6e59c5c3edc51ab03b
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # ProcessScroll — Component Spec
 
 ## Purpose
 
-The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.
+The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). From the design sample's site `ProcessScroll`.
 
 ## When to use
 
@@ -23,17 +23,18 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 ## When NOT to use
 
 - For more than five stages or stages with art — use `FeatureScroll`.
-- For a row that pins while the page scrolls — use `StickyCarousel`.
+- For five to eight short points with no section-title layout — use `StickyCarousel`; for ordered stages that pin while the page scrolls, set `pinned` here.
 
 ## Related
 
-- `StickyCarousel` — the same cards, pinned while the row travels.
+- `StickyCarousel` — the same cards, always pinned, under a plain section title.
 - `TextureMaterial`, `FrameBox`, `SectionTitle`.
 
 ## Best practices
 
 - Name each stage with a verb.
 - Keep descriptions to two lines.
+- Set `pinned` when the stages run wider than the page column (five tall cards, as the careers hiring process): the band stays on screen while the page scroll walks the row. Do not nest a pinned band in a container that clips overflow; sticky positioning needs the page scroll.
 
 ## Usage
 
@@ -66,6 +67,8 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 | `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'`     | false    | Column span of the paragraph: `wide` runs it across the middle column too.             |
 | `steps`            | `ProcessScrollStep[]`          | `[]`           | false    | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
 | `ariaLabel`        | `string`                       | `''`           | false    | Accessible name of the scrollable card row; defaults to the title.                     |
+| `pinned`           | `boolean`                      | `false`        | false    | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
+| `headerOffset`     | `string`                       | `'var(--layout-header-height)'` | false | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length. |
 
 ## Events
 
@@ -79,6 +82,7 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 
 - Renders nothing without a title or steps.
 - Cards are `data-theme="dark"` in both themes (the sample's design).
+- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` or under `prefers-reduced-motion` the band does not pin and the row scrolls inside itself. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
 
 ## Motion & Animations
 
@@ -119,15 +123,16 @@ None of its own; `TextureMaterial` animates its pixel field and stops under redu
 ## Responsive
 
 - Below large: cards are `min(22rem, 80vw)` wide and snap; the row scrolls inside itself, never the page.
-- From large: cards share the width.
+- From large: cards share the width; with `pinned`, cards keep a 26rem width and the pinned band slides them sideways.
 
 ## Performance
 
-- Bundle budget: 5.5 KB for `./process-scroll` gzip in `.size-limit.json` (measured + ~0.5 KB).
+- Bundle budget: 6.4 KB for `./process-scroll` gzip in `.size-limit.json` (measured 5.91 KB with the `pinned` runway logic + ~0.5 KB).
 
 ## Examples
 
 - Default — four stages.
+- Pinned — the careers hiring process: five stages, centered title, the band pinned while the row slides sideways.
 
 ## Constraints — DO NOT
 

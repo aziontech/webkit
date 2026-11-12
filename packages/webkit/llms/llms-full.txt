@@ -623,15 +623,17 @@ and a bare `Hero kind="screen"` takes `offset="var(--layout-header-height)"`. Ne
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default
-(`layout="balanced"`) it uses the fewest rows that cap allows, makes each row as narrow as that row
-count permits, and lets a short last row share the width evenly — under three columns 2 → halves,
-3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 7 → 3 + 3 + 1; under four, 5 → 3 + 2, 7 → 4 + 3. An empty cell in
-a framed grid reads as a missing card, so the rule has no exceptions for content cells;
-`layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
+(`layout="balanced"`) it uses the fewest rows that cap allows on the narrowest track count that keeps
+them, so a count that splits evenly fills every row — under three columns 2 → halves, 3 → thirds,
+4 → 2 × 2. A short last row keeps the column width and leaves its trailing tracks empty, as azion.com
+does (5 → 3 + 2, 7 → 3 + 3 + 1; under four, 7 → 4 + 3): a stretched last cell reads as a different,
+wider card. `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell
+spanning rows or columns, a floor that keeps its track count).
 
 **The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
-child, unwrapped — a page never adds one; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
-the signature band that carries the brand.
+child, unwrapped — a page never adds one. The page ends on its bottom bar at every width: the brand
+leads the social row from `md`; on phones there is no wordmark row and the status line stacks over
+the language select.
 
 ## 7. The control cap in a field row
 
@@ -1390,7 +1392,11 @@ Logos, compliance badges and illustrations ship in the package: import the file 
 (`import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'`, then
 `logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
 wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
-ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. Photos, covers,
+ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. A client wall
+(`ClientQuotes`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
+reads on black (GPA, Zoop, HeroSpark, Magalu), `-extended-reversed` where the colour logo has dark
+lettering (Axur, Contabilizei, Dafiti, `gfg`); a one-ink registry `mark` only for a client with no
+logo file. Photos, covers,
 banners and clips are your content: pass URLs your app serves, or
 `@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you have them.
 Never copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the docs
@@ -34167,9 +34173,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Do
 
-- **Do** hand the grid however many cells the content has. The default `balanced` layout fills every row: it takes the fewest rows `columns` allows, makes each row as narrow as that row count permits, and lets a short last row split the width evenly. Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
-- **Don't** pick `columns` from the item count, pad the list with placeholder cells, or leave a trailing empty cell: a framed or divided grid with an empty cell reads as a missing card. `columns` is the most a row may hold, not how many it must.
-- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
+- **Do** hand the grid however many cells the content has. The default `balanced` layout takes the fewest rows `columns` allows and the narrowest track count that keeps them, so a count that splits evenly fills every row; a short last row keeps the track width and starts at the start edge, its trailing tracks left empty, as azion.com lays out its grids (compliance badges, the use-case grid). Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3; under `columns: 5`, 5 → five across. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
+- **Don't** pick `columns` from the item count or pad the list with placeholder cells. `columns` is the most a row may hold, not how many it must; the track count already drops to the even split (2 → halves, 4 → 2 × 2), and a short last row is never stretched across the empty tracks — a stretched last cell reads as a different, wider card.
+- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`) or columns (`subject-library`'s closing cell), a floor that keeps its track count whatever it holds (`network-section` benefits), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
 - Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.
 - Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.
 - Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.
@@ -34204,7 +34210,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `mobileColumns` | `CardGridMobileColumns` | `1` | false | How many columns the grid holds below the small breakpoint. |
 | `dividerColor` | `CardGridDividerColor` | `'default'` | false | Weight of the hairline rules in the `divider` register. |
 | `flush` | `boolean` | `false` | false | In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
-| `layout` | `CardGridLayout` | `'balanced'` | false | How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty. |
+| `layout` | `CardGridLayout` | `'balanced'` | false | How the cells fill the rows: `balanced` picks the narrowest track count that keeps the fewest rows `columns` allows, so a count that splits evenly fills every row (2 → halves, 4 → 2 × 2), and a short last row keeps the track width with its trailing tracks left empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1); `fixed` keeps a strict `columns`-wide grid whatever the count. |
 
 ## Slots
 
@@ -34235,7 +34241,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
 - `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
-- In `balanced`, the root sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the row width each breakpoint resolves to, and lays the cells out as a wrapping row whose cells grow to fill it; every direct child is set to `height: auto` so it stretches to its row (a child's own `h-full` would not resolve in a wrapping row and would leave the `divider` rule showing under a shorter cell); the counts come from the render, so the server HTML and the hydrated page lay out the same
+- The root is a CSS grid of equal tracks; it sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
+- `data-fill-trailing` marks a `balanced` `divider` grid: its `::after` fills the trailing empty tracks of a short last row with `--bg-canvas` (spanning `--card-grid-rest`, hidden when the row is full), so the rule colour the gaps show through never shows as a block
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
 - Empty: a `frame` grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
@@ -40275,7 +40282,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Do
 
-- Feature three or four articles; four fill the wall four across.
+- Feature three to five articles; the wall sets one column per article from `lg`, so five sit in one row of five as on azion.com's blog.
 - Give a `highlightImage` cropped for the panel when the cover does not read at that size.
 - Bind `v-model` (the selected index) to open on an article other than the first; the band never advances on its own, so it holds whatever the reader or the page picked.
 
@@ -40309,7 +40316,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## States
 
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
-- `data-columns` on the wall: four columns with four or more articles, three otherwise
+- `data-columns` on the wall: one column per article from `lg`, three at least and five at most
 - Empty: when `items` is empty the band renders nothing
 - The band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
@@ -40415,7 +40422,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## Do
 
 - List the articles newest first; file every article under at least one of `categories`.
-- Keep the category list short enough to scroll on one row.
+- Keep the category list short enough to scroll on one row: the picker keeps every label at its full width and the row scrolls sideways on a phone instead of squeezing the labels.
 
 ## Don’t
 
@@ -40566,6 +40573,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## States
 
+- Each row's deck shows in full in `text-body-lg`, never clamped, as on azion.com's Resource Hub
 - Visual states: `default`, `hover` (a row lights and its read cue rises in), `focus-visible` (inset ring on the row, the read cue rises in)
 - Filtered: each facet keeps the resources whose `facets[key]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Empty: when no resource matches, the list and the load-more button are not rendered
@@ -41276,6 +41284,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
+- On azion.com the client wall is in each brand's colours, not one ink: give each client its logo file from the package, `import gpa from '@aziontech/webkit/assets/gpa-extended-color.svg'`, then `logo: gpa`. On the dark site use `-extended-color.svg` where the colour logo reads on black (GPA, Zoop, HeroSpark, Magalu) and `-extended-reversed.svg` where the colour logo has dark lettering (Axur, Contabilizei, Dafiti, Global Fashion Group as `gfg`); on a light page use `-extended-color.svg`. A registry `mark` (one ink, follows the theme) is for a client that ships no logo file. `catalog.json` lists every file under `imports` with `"kind": "asset"`.
 - Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-quote` for one quotation beside a logo wall.
 - The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
@@ -42149,6 +42158,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Visual states: `default`
 - The highlighted tier carries the accent bar and the secondary button; the others carry an outlined button
+- The header row is sticky under `--layout-header-height` (the SiteNav bar's token), so the tier names and buttons stay in view under the site header; the service column's label sits at the start of its corner cell, as on azion.com's Support page
+- Below `md` the band titles are set one step larger (`text-heading-xl`) and the header cells take `--spacing-md`, so a band title breaks over two lines and the picker row has the site's height
 - Below the large breakpoint only the picked tier's column shows (`data-folded` on the others); the picker opens on the highlighted tier, or the first
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Empty: when no tier has a name the band renders nothing but its root
@@ -43685,6 +43696,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
+- Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `centered`, `title-band` and `centered-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
 - Leave `headerOffset` at its default under `SiteNav`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Don’t
@@ -43716,7 +43728,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it. |
-| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline; `long` widens its column so it breaks into two lines instead of three. |
+| `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. |
 | `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
 
 ## Slots
@@ -43735,6 +43747,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
+- `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `centered`, `title-band` and `centered-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `carouselMarks` has marks; each action renders only with a label and a link; the illustration renders only in the `copy-beside-art` layout with `illustration` set
 
@@ -43933,6 +43946,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Give every field a unique `name`; it is the key of the submitted value.
 - Mark half-width fields in pairs so each row stays full.
+- Set `visuallyHiddenLabel` on a field the page labels by its placeholder alone (azion.com's phone field): the label stays the control's accessible name for assistive tech but is not drawn, so give that field a `placeholder` that says what to type.
+- Keep the headline to a short phrase; the band sets it on a narrower measure than the description (`--container-md`), so "Grow as an Azion Partner" breaks over two lines as on the site. There is no width prop to tune.
 - Set `loading` while the values are sent, then `submitted` or `error` with the outcome.
 
 ## Don’t
@@ -43957,7 +43972,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `items` | `HeroFormItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
-| `fields` | `HeroFormField[]` | `[]` | false | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`. |
+| `fields` | `HeroFormField[]` | `[]` | false | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel` | `string` | `''` | false | Label of the submit button. |
 | `carouselLabel` | `string` | `''` | false | Overline above the client strip. |
 | `carouselMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the strip renders only when there are marks. |
@@ -43982,6 +43997,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
 - `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
 - `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
+- A field with `visuallyHiddenLabel` renders its `Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
+- The headline caps at `--container-md` while the description and highlights keep the `lg` column
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
 
 ## Accessibility
@@ -45079,7 +45096,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 # Network Section
 
-> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same.
+> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and, when given, the client's mark) or benefits (a bold lead-in sentence running into its explanation, as on azion.com). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on a fixed four-column floor from `lg` (two from `sm`, one on a phone) whose trailing cells stay empty, as the site's three-benefit floor does. The band above is the same.
 
 - Import: `import NetworkSection from '@aziontech/webkit/network-section'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -45092,7 +45109,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## Do
 
 - Four short `claims`; they are chips, not sentences.
-- Two to four `outcomes` or `benefits`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
+- Two to four `outcomes`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
+- Three or four `benefits`, each a `title` written as a short sentence ending in a full stop ("Low latency everywhere.") and a `description` that continues it: the title is set bold and runs into the description, like azion.com. Leave `icon` out to match the site; an `icon` turns the benefit into an icon-led topic with its own `h3`.
+- Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.
 - Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
 
 ## Don’t
@@ -45110,19 +45129,21 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `NetworkSectionKind` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics. |
+| `kind` | `NetworkSectionKind` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the run-in benefit topics on a four-column floor. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `lead` | `string` | `''` | false | Overline-set line above the claims. |
 | `claims` | `string[]` | `[]` | false | Short figures rendered as chips under the lead, in order. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
-| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
+| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, on four columns from the large breakpoint; each is `{ title, description, icon? }` where `title` is set bold and runs into `description`, and an `icon` turns the topic into an icon-led one with its own heading. |
 
 ## States
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and selects the floor
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
+- An outcome without `logo` renders its quote with no mark row
+- The `benefits` floor is `card-grid`'s `fixed` layout with `columns: 4`, so three benefits leave the fourth cell empty from `lg`; a benefit without `icon` is one paragraph whose bold title runs into its description, a benefit with `icon` is a `topic` with an `h3`
 - The map renders twice: a faded top-right world from the medium breakpoint up, a centered masked world below it; both are `network-map`'s own animation
 
 ## Accessibility
@@ -45665,7 +45686,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 # Process Scroll
 
-> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.
+> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -45679,16 +45700,17 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Name each stage with a verb.
 - Keep descriptions to two lines.
+- Set `pinned` when the stages run wider than the page column (five tall cards, as the careers hiring process): the band stays on screen while the page scroll walks the row. Do not nest a pinned band in a container that clips overflow; sticky positioning needs the page scroll.
 
 ## Don’t
 
 - For more than five stages or stages with art — use `FeatureScroll`.
-- For a row that pins while the page scrolls — use `StickyCarousel`.
+- For five to eight short points with no section-title layout — use `StickyCarousel`; for ordered stages that pin while the page scrolls, set `pinned` here.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- StickyCarousel` — the same cards, pinned while the row travels.
+- StickyCarousel` — the same cards, always pinned, under a plain section title.
 - TextureMaterial`, `FrameBox`, `SectionTitle`.
 
 ## Props
@@ -45703,11 +45725,14 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'` | false | Column span of the paragraph: `wide` runs it across the middle column too. |
 | `steps` | `ProcessScrollStep[]` | `[]` | false | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrollable card row; defaults to the title. |
+| `pinned` | `boolean` | `false` | false | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
+| `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length. |
 
 ## States
 
 - Renders nothing without a title or steps.
 - Cards are `data-theme="dark"` in both themes (the sample's design).
+- `data-pinned` on the root mirrors `pinned`. From `lg` with motion allowed, the band is `sticky` under `headerOffset` and one screen tall, the root (the runway) grows by the row's overflow, and the row's `translate` follows the page scroll (mirrored in right-to-left); below `lg` or under `prefers-reduced-motion` the band does not pin and the row scrolls inside itself. The runway is measured on mount and on scroll/resize, so the server HTML is the unpinned band.
 
 ## Accessibility
 
@@ -45728,7 +45753,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ## Responsive
 
 - Below large: cards are `min(22rem, 80vw)` wide and snap; the row scrolls inside itself, never the page.
-- From large: cards share the width.
+- From large: cards share the width; with `pinned`, cards keep a 26rem width and the pinned band slides them sideways.
 
 ## Examples
 
@@ -45758,6 +45783,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   />
 </template>
 ```
+
+1 more example(s) in [components/process-scroll.md](https://github.com/aziontech/webkit/blob/main/.specs/components/process-scroll.md).
 
 ---
 
@@ -46107,7 +46134,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 # Site Footer
 
-> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.
+> The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `md` the Azion mark leads the social row and the status indicator sits beside the language select on the bottom bar; below `md`, as on azion.com, there is no mark and no signature band, and the status indicator stacks over the language select, both at the start. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value locally; its options are the labels the reader sees.
 
 - Import: `import SiteFooter from '@aziontech/webkit/site-footer'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -46155,10 +46182,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the footer
-- From `lg` the Azion mark leads the social row and no signature band renders, so the footer ends on its bottom bar; below `lg` the mark renders in the footer's signature band
+- The footer never renders a signature band, so it ends on its social row on every width; the Azion mark leads the social row from `md` and is not shown below it
+- Below `md` the status indicator stacks over the language select at the start of the bottom bar; from `md` they sit side by side at its end
 - The status indicator, the language select and the Azion mark each render only when their prop is set
 - An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
-- Server render and hydration: both marks are always in the DOM and CSS shows one of them per width, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
+- Server render and hydration: the mark is always in the DOM and CSS shows it from `md`, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
 
@@ -46990,7 +47018,7 @@ const searchOpen = ref(false)
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one; the closing cell spans two columns from the small breakpoint up
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Accessibility
@@ -47226,6 +47254,7 @@ const searchOpen = ref(false)
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; `eyebrow` and `description` ride with it
+- The items sit on `card-grid`'s balanced divider grid, three across from `lg`: a count that splits evenly fills every row (4 → 2 × 2), and a short last row keeps the column width with its trailing cell left empty, as on azion.com (5 → 3 + 2)
 - An item with an `href` is a link (the whole cell, with the topic's link cue); an item without one is a plain topic, so a band with no `href` at all has no links
 
 ## Accessibility

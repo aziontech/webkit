@@ -214,15 +214,17 @@ and a bare `Hero kind="screen"` takes `offset="var(--layout-header-height)"`. Ne
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default
-(`layout="balanced"`) it uses the fewest rows that cap allows, makes each row as narrow as that row
-count permits, and lets a short last row share the width evenly — under three columns 2 → halves,
-3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 7 → 3 + 3 + 1; under four, 5 → 3 + 2, 7 → 4 + 3. An empty cell in
-a framed grid reads as a missing card, so the rule has no exceptions for content cells;
-`layout="fixed"` is for tiles whose width must not change (square logo walls, a cell spanning rows).
+(`layout="balanced"`) it uses the fewest rows that cap allows on the narrowest track count that keeps
+them, so a count that splits evenly fills every row — under three columns 2 → halves, 3 → thirds,
+4 → 2 × 2. A short last row keeps the column width and leaves its trailing tracks empty, as azion.com
+does (5 → 3 + 2, 7 → 3 + 3 + 1; under four, 7 → 4 + 3): a stretched last cell reads as a different,
+wider card. `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell
+spanning rows or columns, a floor that keeps its track count).
 
 **The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
-child, unwrapped — a page never adds one; from `lg` the page ends on its bottom bar (the brand leads the social row), below `lg` on
-the signature band that carries the brand.
+child, unwrapped — a page never adds one. The page ends on its bottom bar at every width: the brand
+leads the social row from `md`; on phones there is no wordmark row and the status line stacks over
+the language select.
 
 ## 7. The control cap in a field row
 

@@ -6,13 +6,13 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-12
-checksum: a8ac2bcd801df02414cc039d45f5681f88e9600dc56db24b1bdc1b690f381b97
+checksum: 311ded0de2c666867e7401d5d87d28164c695b5420c8bcc84946780ab8e67807
 ---
 # NetworkSection — Component Spec
 
 ## Purpose
 
-The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same.
+The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and, when given, the client's mark) or benefits (a bold lead-in sentence running into its explanation, as on azion.com). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on a fixed four-column floor from `lg` (two from `sm`, one on a phone) whose trailing cells stay empty, as the site's three-benefit floor does. The band above is the same.
 
 ## When to use
 
@@ -31,7 +31,9 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 ## Best practices
 
 - Four short `claims`; they are chips, not sentences.
-- Two to four `outcomes` or `benefits`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
+- Two to four `outcomes`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.
+- Three or four `benefits`, each a `title` written as a short sentence ending in a full stop ("Low latency everywhere.") and a `description` that continues it: the title is set bold and runs into the description, like azion.com. Leave `icon` out to match the site; an `icon` turns the benefit into an icon-led topic with its own `h3`.
+- Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.
 - Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
 
 ## Usage
@@ -59,13 +61,13 @@ import NetworkSection from '@aziontech/webkit/network-section'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `NetworkSectionKind` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics. |
+| `kind` | `NetworkSectionKind` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the run-in benefit topics on a four-column floor. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `lead` | `string` | `''` | false | Overline-set line above the claims. |
 | `claims` | `string[]` | `[]` | false | Short figures rendered as chips under the lead, in order. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
-| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
+| `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, on four columns from the large breakpoint; each is `{ title, description, icon? }` where `title` is set bold and runs into `description`, and an `icon` turns the topic into an icon-led one with its own heading. |
 
 ## Events
 
@@ -80,6 +82,8 @@ import NetworkSection from '@aziontech/webkit/network-section'
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and selects the floor
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
+- An outcome without `logo` renders its quote with no mark row
+- The `benefits` floor is `card-grid`'s `fixed` layout with `columns: 4`, so three benefits leave the fourth cell empty from `lg`; a benefit without `icon` is one paragraph whose bold title runs into its description, a benefit with `icon` is a `topic` with an `h3`
 - The map renders twice: a faded top-right world from the medium breakpoint up, a centered masked world below it; both are `network-map`'s own animation
 
 ## Motion & Animations

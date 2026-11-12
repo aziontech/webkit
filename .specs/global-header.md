@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 8c49c76bac71f52abb266f6c78f94149e8a5a1ff52f08757d03def0d1fc76ac0
+checksum: f742220b9bc515a9ba0e667f41c3b2befdf197593c70a6a96c8269354e0854e1
 created: 2026-05-23
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Global Header — Component Spec
@@ -140,7 +140,7 @@ _none_
 
 | Region                             | Token (DESIGN.md)                                                                                                          |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| shell height                       | `h-14` (56px)                                                                                                              |
+| shell height                       | `h-(--layout-header-height)` (56px, the token `SiteNav`, `HeroBand` and the sticky bands offset by)                                                  |
 | shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)`                                                                                            |
 | shell padding-x (`kind="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
 | shell region gap                   | `var(--spacing-md)`                                                                                                        |

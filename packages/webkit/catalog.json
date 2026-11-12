@@ -23091,7 +23091,7 @@
      "type": "HeroBandTitleLength",
      "default": "'short'",
      "required": "false",
-     "doc": "Length of the headline; `long` widens its column so it breaks into two lines instead of three."
+     "doc": "Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column."
     },
     {
      "name": "plain",
@@ -23408,6 +23408,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the scrollable card row; defaults to the title."
+    },
+    {
+     "name": "pinned",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own."
+    },
+    {
+     "name": "headerOffset",
+     "type": "string",
+     "default": "'var(--layout-header-height)'",
+     "required": "false",
+     "doc": "Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length."
     }
    ],
    "surface": "marketing",
@@ -23627,7 +23641,7 @@
      "type": "HeroFormField[]",
      "default": "[]",
      "required": "false",
-     "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country? }`."
+     "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
     },
     {
      "name": "submitLabel",
@@ -24137,7 +24151,7 @@
      "type": "NetworkSectionKind",
      "default": "'outcomes'",
      "required": "false",
-     "doc": "Which floor closes the band: `outcomes` renders the client quotes, `benefits` the icon-led topics."
+     "doc": "Which floor closes the band: `outcomes` renders the client quotes, `benefits` the run-in benefit topics on a four-column floor."
     },
     {
      "name": "eyebrow",
@@ -24172,14 +24186,14 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo, logoAlt, logoTreatment?, text, highlights? }` where `logo` is the mark URL, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
      "type": "NetworkSectionBenefit[]",
      "default": "[]",
      "required": "false",
-     "doc": "Topics for the `benefits` floor, in order, one column each up to four; each is `{ icon, title, description }`."
+     "doc": "Topics for the `benefits` floor, in order, on four columns from the large breakpoint; each is `{ title, description, icon? }` where `title` is set bold and runs into `description`, and an `icon` turns the topic into an icon-led one with its own heading."
     }
    ],
    "surface": "marketing",
@@ -25035,7 +25049,7 @@
      "type": "CardGridLayout",
      "default": "'balanced'",
      "required": "false",
-     "doc": "How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty."
+     "doc": "How the cells fill the rows: `balanced` picks the narrowest track count that keeps the fewest rows `columns` allows, so a count that splits evenly fills every row (2 → halves, 4 → 2 × 2), and a short last row keeps the track width with its trailing tracks left empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1); `fixed` keeps a strict `columns`-wide grid whatever the count."
     }
    ],
    "slots": [
@@ -25099,7 +25113,7 @@
      "type": "CardGridLayout",
      "default": "'balanced'",
      "required": "false",
-     "doc": "How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty."
+     "doc": "How the cells fill the rows: `balanced` picks the narrowest track count that keeps the fewest rows `columns` allows, so a count that splits evenly fills every row (2 → halves, 4 → 2 × 2), and a short last row keeps the track width with its trailing tracks left empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1); `fixed` keeps a strict `columns`-wide grid whatever the count."
     }
    ],
    "slots": [

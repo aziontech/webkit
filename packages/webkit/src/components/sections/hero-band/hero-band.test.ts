@@ -77,6 +77,24 @@ describe('HeroBand', () => {
     expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe('')
   })
 
+  it('sets a short headline on the narrow measure in the centered layouts only', () => {
+    for (const kind of ['centered', 'title-band', 'centered-band']) {
+      const { getByTestId, unmount } = band({ kind })
+      expect(getByTestId(TESTID)).toHaveAttribute('data-title-measure', 'narrow')
+      unmount()
+    }
+    for (const props of [
+      { kind: 'centered', titleLength: 'long' },
+      { kind: 'compact-band' },
+      { kind: 'copy-beside-art' },
+      { kind: 'pixel-floor' }
+    ]) {
+      const { getByTestId, unmount } = band(props)
+      expect(getByTestId(TESTID)).not.toHaveAttribute('data-title-measure')
+      unmount()
+    }
+  })
+
   it('passes size to the hero rhythm', () => {
     const { getByTestId } = band({ size: 'large' })
 

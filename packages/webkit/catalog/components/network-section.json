@@ -1,5 +1,5 @@
 {
- "purpose": "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and the client's mark) or benefits (icon-led topics). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes, `benefits` the topics, and either floor takes one column per entry — two at least, four at most; the band above is the same.",
+ "purpose": "The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of either client outcomes (a quote with its highlights and, when given, the client's mark) or benefits (a bold lead-in sentence running into its explanation, as on azion.com). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote` and `topic`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on a fixed four-column floor from `lg` (two from `sm`, one on a phone) whose trailing cells stay empty, as the site's three-benefit floor does. The band above is the same.",
  "useWhen": [
   "To state the network's reach with figures and back it with either client results or product benefits."
  ],
@@ -13,7 +13,9 @@
  ],
  "bestPractices": [
   "Four short `claims`; they are chips, not sentences.",
-  "Two to four `outcomes` or `benefits`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.",
+  "Two to four `outcomes`: the floor sets one column per entry, so it closes the grid; a fifth entry wraps to a second row.",
+  "Three or four `benefits`, each a `title` written as a short sentence ending in a full stop (\"Low latency everywhere.\") and a `description` that continues it: the title is set bold and runs into the description, like azion.com. Leave `icon` out to match the site; an `icon` turns the benefit into an icon-led topic with its own `h3`.",
+  "Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.",
   "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark."
  ]
 }

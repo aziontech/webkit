@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row; below it the mark moves to the footer's signature band, so the icons get the row to themselves. The move is CSS only (`footer`'s `signature: 'compact'` hides the band from `lg`; the social-row mark shows from `lg`), so the page ends on the bottom bar from `lg` both in the server HTML and after hydration. The language select keeps its own value locally; its options are the labels the reader sees.",
+ "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `md` the Azion mark leads the social row and the status indicator sits beside the language select on the bottom bar; below `md`, as on azion.com, there is no mark and no signature band, and the status indicator stacks over the language select, both at the start. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value locally; its options are the labels the reader sees.",
  "setup": null,
  "useWhen": [
   "As the last block of every marketing page."

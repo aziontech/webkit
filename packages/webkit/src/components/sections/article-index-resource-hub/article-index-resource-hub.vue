@@ -250,7 +250,7 @@
                           {{ item.title }}
                         </a>
                       </h3>
-                      <p class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)">
+                      <p class="m-0 text-pretty text-body-lg text-(--text-muted)">
                         {{ item.description }}
                       </p>
                     </div>

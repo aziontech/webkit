@@ -12,7 +12,7 @@
   "card-grid` — the frame grid the wall of titles sits on."
  ],
  "bestPractices": [
-  "Feature three or four articles; four fill the wall four across.",
+  "Feature three to five articles; the wall sets one column per article from `lg`, so five sit in one row of five as on azion.com's blog.",
   "Give a `highlightImage` cropped for the panel when the cover does not read at that size.",
   "Bind `v-model` (the selected index) to open on an article other than the first; the band never advances on its own, so it holds whatever the reader or the page picked."
  ]

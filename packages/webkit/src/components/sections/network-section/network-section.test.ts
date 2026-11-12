@@ -171,11 +171,7 @@ describe('NetworkSection', () => {
     expect(container.querySelector('[data-columns]')?.getAttribute('data-columns')).toBe(columns)
   })
 
-  it.each([
-    [2, '2'],
-    [3, '3'],
-    [4, '4']
-  ])('sets the benefits floor columns from %i benefits to %s', (count, columns) => {
+  it.each([2, 3, 4])('keeps the benefits floor at four fixed columns with %i benefits', (count) => {
     const { container } = band({
       kind: 'benefits',
       benefits: Array.from({ length: count }, (_, index) => ({
@@ -184,7 +180,35 @@ describe('NetworkSection', () => {
       }))
     })
 
-    expect(container.querySelector('[data-columns]')?.getAttribute('data-columns')).toBe(columns)
+    const floor = container.querySelector('[data-columns]')
+    expect(floor?.getAttribute('data-columns')).toBe('4')
+    expect(floor?.getAttribute('data-layout')).toBe('fixed')
+  })
+
+  it('runs a benefit without an icon into its description after a bold lead-in', () => {
+    const plain = benefits.map(({ title, description }) => ({ title: `${title}.`, description }))
+    const { container, queryAllByRole } = band({ kind: 'benefits', benefits: plain })
+
+    expect(queryAllByRole('heading', { level: 3 })).toHaveLength(0)
+    const leads = Array.from(container.querySelectorAll('strong'))
+    expect(leads.map((lead) => lead.textContent)).toEqual(plain.map((benefit) => benefit.title))
+    leads.forEach((lead, index) => {
+      expect(lead.parentElement?.tagName).toBe('P')
+      expect(lead.parentElement?.textContent).toContain(plain[index]?.description)
+    })
+  })
+
+  it('renders an outcome without a logo as its quote alone', () => {
+    const { container, queryAllByRole } = band({
+      kind: 'outcomes',
+      outcomes: [
+        { text: '7x faster pages', highlights: ['7x'] },
+        { text: '90% lower cloud costs', highlights: ['90%'] }
+      ]
+    })
+
+    expect(queryAllByRole('img')).toHaveLength(0)
+    expect(container.querySelectorAll('blockquote')).toHaveLength(2)
   })
 
   it('renders the band without a floor when outcomes is empty', () => {

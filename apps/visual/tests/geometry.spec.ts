@@ -158,8 +158,8 @@ for (const example of [
 }
 
 const BALANCED_ROWS: Record<number, number[][]> = {
-  768: [[2], [2, 2], [2, 2, 1]],
-  1280: [[2], [2, 2], [3, 2]]
+  768: [[2], [2, 2], [2, 2, 1], [2, 2, 2, 1]],
+  1280: [[2], [2, 2], [3, 2], [3, 3, 1]]
 }
 
 for (const theme of THEMES) {
@@ -183,6 +183,7 @@ for (const theme of THEMES) {
               count: cells.length,
               start: Math.min(...cells.map((c) => c.left)) - box.left,
               end: box.right - Math.max(...cells.map((c) => c.right)),
+              cellWidth: cells[0]?.width ?? 0,
               spread:
                 Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width)),
               heights:
@@ -191,11 +192,16 @@ for (const theme of THEMES) {
           })
         )
       expect(grids.map((rows) => rows.map((row) => row.count))).toEqual(BALANCED_ROWS[width])
-      for (const row of grids.flat()) {
-        expect(Math.abs(row.start)).toBeLessThanOrEqual(1)
-        expect(Math.abs(row.end)).toBeLessThanOrEqual(1)
-        expect(row.spread).toBeLessThanOrEqual(1)
-        expect(row.heights).toBeLessThanOrEqual(1)
+      for (const rows of grids) {
+        const full = rows[0]
+        for (const row of rows) {
+          expect(Math.abs(row.start)).toBeLessThanOrEqual(1)
+          expect(row.spread).toBeLessThanOrEqual(1)
+          expect(row.heights).toBeLessThanOrEqual(1)
+          expect(Math.abs(row.cellWidth - (full?.cellWidth ?? 0))).toBeLessThanOrEqual(1)
+          if (row.count === full?.count) expect(Math.abs(row.end)).toBeLessThanOrEqual(1)
+          else expect(row.end).toBeGreaterThan(row.cellWidth / 2)
+        }
       }
       await expect(preview).toHaveScreenshot(
         shot(`geometry/card-grid-balanced--${label(mode)}.png`)

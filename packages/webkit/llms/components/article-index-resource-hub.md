@@ -40,6 +40,7 @@
 
 ## States
 
+- Each row's deck shows in full in `text-body-lg`, never clamped, as on azion.com's Resource Hub
 - Visual states: `default`, `hover` (a row lights and its read cue rises in), `focus-visible` (inset ring on the row, the read cue rises in)
 - Filtered: each facet keeps the resources whose `facets[key]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Empty: when no resource matches, the list and the load-more button are not rendered

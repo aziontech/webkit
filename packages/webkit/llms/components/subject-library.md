@@ -40,7 +40,7 @@
 ## States
 
 - Visual states: `default`
-- Three columns from the large breakpoint, one below the small one; the closing cell spans two columns from the small breakpoint up
+- Three columns from the large breakpoint, one below the small one, on `card-grid`'s `fixed` layout (equal tracks whatever the count), so the closing cell really spans two columns from the small breakpoint up and takes two thirds of the last row on desktop, as on azion.com's learning page
 - Empty: when no subject carries a title and a linked article the band renders nothing — not the grid, not the closing cell
 
 ## Accessibility

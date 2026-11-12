@@ -140,6 +140,7 @@
               :options="options"
               :aria-label="categoryLabel || undefined"
               size="medium"
+              class="w-max max-w-none"
             />
           </div>
 

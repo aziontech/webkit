@@ -1,18 +1,19 @@
 {
- "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width. From the design sample's site `ProcessScroll`.",
+ "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). From the design sample's site `ProcessScroll`.",
  "useWhen": [
   "How something works in three to five ordered stages (build, deploy, observe)."
  ],
  "avoidWhen": [
   "For more than five stages or stages with art — use `FeatureScroll`.",
-  "For a row that pins while the page scrolls — use `StickyCarousel`."
+  "For five to eight short points with no section-title layout — use `StickyCarousel`; for ordered stages that pin while the page scrolls, set `pinned` here."
  ],
  "related": [
-  "StickyCarousel` — the same cards, pinned while the row travels.",
+  "StickyCarousel` — the same cards, always pinned, under a plain section title.",
   "TextureMaterial`, `FrameBox`, `SectionTitle`."
  ],
  "bestPractices": [
   "Name each stage with a verb.",
-  "Keep descriptions to two lines."
+  "Keep descriptions to two lines.",
+  "Set `pinned` when the stages run wider than the page column (five tall cards, as the careers hiring process): the band stays on screen while the page scroll walks the row. Do not nest a pinned band in a container that clips overflow; sticky positioning needs the page scroll."
  ]
 }

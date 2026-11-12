@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 55f61c40893b059205ae33ba8e1d7597cf776d92d072b990fa5e950b39cdcf34
+checksum: a4bd77330ba107713eff09567b991cb8f6948a7a8a6c5c7eb477d3e3e5928ddf
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-12
@@ -42,9 +42,9 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 
 ## Best practices
 
-- **Do** hand the grid however many cells the content has. The default `balanced` layout fills every row: it takes the fewest rows `columns` allows, makes each row as narrow as that row count permits, and lets a short last row split the width evenly. Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
-- **Don't** pick `columns` from the item count, pad the list with placeholder cells, or leave a trailing empty cell: a framed or divided grid with an empty cell reads as a missing card. `columns` is the most a row may hold, not how many it must.
-- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
+- **Do** hand the grid however many cells the content has. The default `balanced` layout takes the fewest rows `columns` allows and the narrowest track count that keeps them, so a count that splits evenly fills every row; a short last row keeps the track width and starts at the start edge, its trailing tracks left empty, as azion.com lays out its grids (compliance badges, the use-case grid). Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3; under `columns: 5`, 5 → five across. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
+- **Don't** pick `columns` from the item count or pad the list with placeholder cells. `columns` is the most a row may hold, not how many it must; the track count already drops to the even split (2 → halves, 4 → 2 × 2), and a short last row is never stretched across the empty tracks — a stretched last cell reads as a different, wider card.
+- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`) or columns (`subject-library`'s closing cell), a floor that keeps its track count whatever it holds (`network-section` benefits), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
 - Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.
 - Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.
 - Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.
@@ -117,7 +117,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | `mobileColumns` | `CardGridMobileColumns` | `1`          | false    | How many columns the grid holds below the small breakpoint.                                                                                                                                                                                                                                                    |
 | `dividerColor`  | `CardGridDividerColor`  | `'default'`  | false    | Weight of the hairline rules in the `divider` register.                                                                                                                                                                                                                                                        |
 | `flush`         | `boolean`               | `false`      | false    | In the `frame` register, the surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge.                                                                             |
-| `layout`        | `CardGridLayout`        | `'balanced'` | false    | How the cells fill the rows: `balanced` keeps every row full — the fewest rows `columns` allows, each as narrow as that row count permits, with a short last row sharing the width evenly, so no cell is left empty; `fixed` keeps a strict `columns`-wide grid and leaves the last row's unused tracks empty. |
+| `layout`        | `CardGridLayout`        | `'balanced'` | false    | How the cells fill the rows: `balanced` picks the narrowest track count that keeps the fewest rows `columns` allows, so a count that splits evenly fills every row (2 → halves, 4 → 2 × 2), and a short last row keeps the track width with its trailing tracks left empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1); `fixed` keeps a strict `columns`-wide grid whatever the count. |
 
 ## Events
 
@@ -138,7 +138,8 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
 - `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
-- In `balanced`, the root sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the row width each breakpoint resolves to, and lays the cells out as a wrapping row whose cells grow to fill it; every direct child is set to `height: auto` so it stretches to its row (a child's own `h-full` would not resolve in a wrapping row and would leave the `divider` rule showing under a shorter cell); the counts come from the render, so the server HTML and the hydrated page lay out the same
+- The root is a CSS grid of equal tracks; it sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
+- `data-fill-trailing` marks a `balanced` `divider` grid: its `::after` fills the trailing empty tracks of a short last row with `--bg-canvas` (spanning `--card-grid-rest`, hidden when the row is full), so the rule colour the gaps show through never shows as a block
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
 - Empty: a `frame` grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
@@ -178,7 +179,7 @@ _none_
 - Default
 - Kinds — composite story rendering all three registers side-by-side (justified: gutters, hairline rules and framed cells are the same layout drawn three ways, legible only in comparison)
 - Columns — composite story rendering the column counts side-by-side (justified: a column count is only legible against another)
-- Balanced — composite rendering two, four and five framed cells under `columns: 3` (justified: the default row rule only reads across item counts, and it is the behaviour an author most needs to see)
+- Balanced — composite rendering two, four, five and seven framed cells under `columns: 3` (justified: the default row rule only reads across item counts, and it is the behaviour an author most needs to see)
 - DividerColor — the muted hairline weight (mutually-exclusive state of the `dividerColor` prop)
 - Frame — a framed grid whose cells carry a fill and an unpadded one (justified: `CardGrid.Cell`'s `kind` and `padded` only read as a set, on the register the sub-component exists for; one story shows the whole possibility space instead of three near-identical ones)
 

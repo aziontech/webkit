@@ -151,14 +151,27 @@ describe('ArticleHighlight', () => {
     expect(getAllByRole('tab').at(-1)?.getAttribute('aria-selected')).toBe('true')
   })
 
-  it('runs the wall four across with four or more articles', () => {
-    const fourth = { ...items[0], key: 'fourth', title: 'Fourth' }
+  it('runs the wall one column per article, three to five', () => {
+    const more = (count: number) =>
+      Array.from({ length: count }, (_, index) => ({
+        ...items[0],
+        key: `extra-${index}`,
+        title: `Extra ${index}`
+      }))
     const three = band()
     expect(three.getByRole('tablist').getAttribute('data-columns')).toBe('3')
     three.unmount()
 
-    const { getByRole } = band({ items: [...items, fourth] })
-    expect(getByRole('tablist').getAttribute('data-columns')).toBe('4')
+    const four = band({ items: [...items, ...more(1)] })
+    expect(four.getByRole('tablist').getAttribute('data-columns')).toBe('4')
+    four.unmount()
+
+    const five = band({ items: [...items, ...more(2)] })
+    expect(five.getByRole('tablist').getAttribute('data-columns')).toBe('5')
+    five.unmount()
+
+    const { getByRole } = band({ items: [...items, ...more(4)] })
+    expect(getByRole('tablist').getAttribute('data-columns')).toBe('5')
   })
 
   it('omits the button when actionLabel is empty', () => {

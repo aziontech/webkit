@@ -40,6 +40,12 @@
       "summary": "The incident field set, for a team under attack: the same block with other `fields`, no role and no message, a website instead. The highlights under the description carry the attack figures.",
       "file": "site-under-attack.vue",
       "json": "site-under-attack.json"
+    },
+    {
+      "name": "ScaleUp",
+      "summary": "The Scale Up landing page: no highlights and no client strip, a short headline that breaks over two lines, and a phone field labelled by its placeholder (`visuallyHiddenLabel` keeps \"Phone\" as its accessible name without drawing it).",
+      "file": "site-scale-up.vue",
+      "json": "site-scale-up.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Heroes/HeroForm",
@@ -47,5 +53,12 @@
     "layout": "fullscreen",
     "background": "dark"
   },
-  "siteStories": ["ContactSplit", "ContactSplitJson", "UnderAttack", "UnderAttackJson"]
+  "siteStories": [
+    "ContactSplit",
+    "ContactSplitJson",
+    "UnderAttack",
+    "UnderAttackJson",
+    "ScaleUp",
+    "ScaleUpJson"
+  ]
 }

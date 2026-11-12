@@ -461,12 +461,12 @@
   {
     "name": "article-highlight",
     "path": "src/components/sections/article-highlight/article-highlight.vue",
-    "limit": "7.6 KB"
+    "limit": "8.3 KB"
   },
   {
     "name": "article-index-blog",
     "path": "src/components/sections/article-index-blog/article-index-blog.vue",
-    "limit": "21.85 KB"
+    "limit": "22.5 KB"
   },
   {
     "name": "article-index-resource-hub",
@@ -507,7 +507,7 @@
   {
     "name": "process-scroll",
     "path": "src/components/sections/process-scroll/process-scroll.vue",
-    "limit": "5.5 KB"
+    "limit": "6.4 KB"
   },
   {
     "name": "section-command",
@@ -529,7 +529,7 @@
   {
     "name": "hero-form",
     "path": "src/components/sections/hero-form/hero-form.vue",
-    "limit": "40 KB",
+    "limit": "40.6 KB",
     "entryOnly": true
   },
   {

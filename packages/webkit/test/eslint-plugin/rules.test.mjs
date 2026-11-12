@@ -888,9 +888,34 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
           '<div><slot /></div>'
         ),
         filename: 'j.vue'
+      },
+      {
+        code: sfc(
+          "import Overline from './overline.vue'; const PREFIX = '//' as const",
+          '<div><a href="https://www.azion.com">x</a><Overline :prefix="PREFIX">Run</Overline></div>'
+        ),
+        filename: '/repo/packages/webkit/src/components/content/x/x.vue'
+      },
+      {
+        code: sfc(
+          "import Overline from './overline.vue'",
+          '<div><Overline prefix="//">Run</Overline></div>'
+        ),
+        filename: '/app/src/pages/page.vue'
       }
     ],
     invalid: [
+      {
+        code: sfc(
+          "import Overline from './overline.vue'; import Link from './link.vue'",
+          '<ul><li v-for="item in [1]" :key="item"><Overline v-if="item" prefix="//">Run</Overline><link-item href="https://www.azion.com/">Docs</link-item></li></ul>'
+        ),
+        filename: '/repo/packages/webkit/src/components/content/x/x.vue',
+        errors: [
+          { messageId: 'component-attr-double-slash' },
+          { messageId: 'component-attr-double-slash' }
+        ]
+      },
       // hand-rolled v-model
       {
         code: sfc(

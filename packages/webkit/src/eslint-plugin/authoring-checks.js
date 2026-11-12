@@ -45,6 +45,33 @@ const slotPresenceSites = (text) =>
     .filter(({ body }) => SLOT_PRESENCE.test(body))
     .map(({ start }) => start)
 
+const isShippedComponent = (rel) => /(^|\/)packages\/webkit\/src\/components\/.+\.vue$/.test(rel)
+
+const COMPONENT_TAG = /<([A-Z][\w.]*|[a-z][a-z0-9]*-[\w-]*)(?=[\s/>])/g
+
+function doubleSlashAttributeSites(text) {
+  const open = text.indexOf('<template')
+  const close = text.lastIndexOf('</template>')
+  if (open < 0 || close < open) return []
+  const sites = []
+  COMPONENT_TAG.lastIndex = open
+  let tag
+  while ((tag = COMPONENT_TAG.exec(text)) && tag.index < close) {
+    let i = tag.index + tag[0].length
+    while (i < close && text[i] !== '>') {
+      const quote = text[i]
+      if (quote === '"' || quote === "'") {
+        const end = text.indexOf(quote, i + 1)
+        if (end < 0) break
+        if (text.slice(i + 1, end).includes('//')) sites.push(i)
+        i = end + 1
+      } else i++
+    }
+    COMPONENT_TAG.lastIndex = i
+  }
+  return sites
+}
+
 export const CONTENT_CHECKS = [
   {
     id: 'manual-v-model',
@@ -82,6 +109,15 @@ export const CONTENT_CHECKS = [
     locate: (t) => slotPresenceSites(t),
     message:
       'Slot presence read inside `computed()`. `slots` is not reactive, so the cached value never sees a slot appear or disappear (a `v-if` slot, a server render that differs from the client) and leaves an empty band behind. Read it at render: `const hasX = () => Boolean(slots.x)` and `v-if="hasX()"`.'
+  },
+  {
+    id: 'component-attr-double-slash',
+    applies: isShippedComponent,
+    violated: (t) => doubleSlashAttributeSites(t).length > 0,
+    count: (t) => doubleSlashAttributeSites(t).length,
+    locate: (t) => doubleSlashAttributeSites(t),
+    message:
+      'An attribute value on a component tag contains `//` (a `"//"` eyebrow prefix, an `https://` URL). vue-tsc 3.3.9+ rewrites `//` in component props as a comment, so a consumer that type-checks the shipped `.vue` gets TS2304 for every `v-for` variable after it. Move the value into a script constant (`const EYEBROW_PREFIX = \'//\' as const`) and bind it (`:prefix="EYEBROW_PREFIX"`).'
   },
   {
     id: 'composable-return-reactive',
@@ -133,6 +169,7 @@ export const STANDARD_BY_CHECK = {
   'runtime-define-emits': 'emits',
   'slot-without-defineslots': 'slots',
   'computed-slot-presence': 'slots',
+  'component-attr-double-slash': 'props',
   'composable-return-reactive': 'composables',
   'composable-js': 'composables',
   'deprecated-without-replacement': 'deprecation',

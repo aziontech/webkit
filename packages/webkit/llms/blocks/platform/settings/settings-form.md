@@ -218,9 +218,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
                         class="w-full"
                         aria-label="Full name"
                         :required="submitted && nameEmpty"
-                        :aria-describedby="
-                          submitted && nameEmpty ? 'full-name-error' : undefined
-                        "
+                        :aria-describedby="submitted && nameEmpty ? 'full-name-error' : undefined"
                       />
                       <HelperText
                         v-if="submitted && nameEmpty"
@@ -247,18 +245,14 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
                         aria-label="Email"
                         :required="submitted && emailEmpty"
                         :invalid="submitted && !emailEmpty && emailInvalid"
-                        :aria-describedby="
-                          submitted && emailInvalid ? 'email-error' : undefined
-                        "
+                        :aria-describedby="submitted && emailInvalid ? 'email-error' : undefined"
                       />
                       <HelperText
                         v-if="submitted && emailInvalid"
                         id="email-error"
                         :kind="emailEmpty ? 'required' : 'invalid'"
                         :label="
-                          emailEmpty
-                            ? 'This field is required.'
-                            : 'Enter a valid email address.'
+                          emailEmpty ? 'This field is required.' : 'Enter a valid email address.'
                         "
                       />
                     </div>
@@ -336,9 +330,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
-            Notifications
-          </p>
+          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
           <Card :padded="false">
             <template #content>
               <Item.List>

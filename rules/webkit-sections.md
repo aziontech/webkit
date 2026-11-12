@@ -36,7 +36,10 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
   `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
-  `external`, `UseCaseLinks` items without `href` for a link-less grid.
+  `external`, `UseCaseLinks` items without `href` for a link-less grid, `ProcessScroll` `pinned`
+  (a band that pins while its tall cards slide sideways), a `HeroForm` field's
+  `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
+  `icon` (the bold run-in lead-in) and outcomes without `logo`.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
   `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Overline`.
@@ -45,9 +48,10 @@ JSON. Never rebuild a band from primitives when a section exists.
   `diagram` (a `Diagram` name) instead of an illustration. Do not drop to `MediaSplit` and its
   `media` slot for that.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
-  has. Its card grid balances the rows itself — the fewest rows the column cap allows, a short last
-  row sharing the width evenly: under three columns 2 → halves, 4 → 2 × 2, 5 → 3 + 2. No row ends
-  on an empty cell.
+  has. Its card grid balances the rows itself — the fewest rows the column cap allows on the
+  narrowest track count that keeps them, so an even count fills every row (under three columns
+  2 → halves, 4 → 2 × 2), and a short last row keeps the column width with its trailing cells left
+  empty, as azion.com does (5 → 3 + 2, 7 → 3 + 3 + 1). Never stretch the last row yourself.
 - Import the logos, badges and illustrations a section shows from
   `@aziontech/webkit/assets/<file>` (`import zoop from '@aziontech/webkit/assets/zoop-extended-color.svg'`)
   and pass the import as the item's `logo` / `src`; `catalog.json` lists the files under `imports`

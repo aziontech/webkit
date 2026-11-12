@@ -4,6 +4,11 @@
    "name": "Default",
    "summary": "Four numbered stages on dark textured cards. Below the large breakpoint the row scrolls sideways and snaps; focus the row and use the arrow keys to scroll it.",
    "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Push', description: 'Every push to the main branch builds a new version.' },\n    { title: 'Build', description: 'The build runs in an isolated worker with your settings.' },\n    {\n      title: 'Deploy',\n      description: 'The version goes live everywhere at once, with no regions to pick.'\n    },\n    { title: 'Observe', description: 'Metrics and logs for the new version arrive in seconds.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    eyebrow=\"How it works\"\n    title=\"From commit to production\"\n    description=\"Four stages, all automatic once the repository is connected.\"\n    :steps=\"steps\"\n  />\n</template>"
+  },
+  {
+   "name": "Pinned",
+   "summary": "The careers hiring process: five tall stages under a centered title. With `pinned`, from the large breakpoint the band stays under the site header while the page scroll slides the cards sideways until the last one is in view; below it, or under reduced motion, the row scrolls sideways on its own.",
+   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Role request', description: 'A hiring manager requests a new role.' },\n    {\n      title: 'Scope and posting',\n      description: 'People and the hiring manager scope the role and publish the opening.'\n    },\n    {\n      title: 'Recruiting and interviews',\n      description: 'Candidates meet the team in technical and culture interviews.'\n    },\n    { title: 'Calibration', description: 'The panel compares notes and decides together.' },\n    { title: 'Offer letter', description: 'The chosen candidate receives the offer.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    pinned\n    title-kind=\"centered\"\n    title=\"Hiring process\"\n    description=\"Every role goes through the same five stages, from the first request to the offer.\"\n    :steps=\"steps\"\n  />\n</template>"
   }
  ]
 }
