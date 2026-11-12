@@ -1,6 +1,6 @@
 # SplitView (`platform/view/split-view`)
 
-> The events explorer (the app marks its Events navigation entry active): the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The events explorer (the app marks its Events navigation entry active): the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
 
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
@@ -14,7 +14,7 @@ real-time events; events visualizer; event explorer; log explorer; logs viewer; 
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -96,6 +96,7 @@ The document lists every field of the event. Search in this event narrows the li
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
 - Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
+- Mark the page root with `data-layout-fill`, so the panes scroll on their own instead of the page.
 
 ## Don't
 
@@ -104,6 +105,7 @@ The document lists every field of the event. Search in this event narrows the li
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
 - Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
 - Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
 - Don't let investigation tabs grow without a limit, and never close the last one.
@@ -1342,7 +1344,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
     <header
       class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
     >

@@ -5701,7 +5701,7 @@ brand-new account it becomes the first-access screen: a greeting, the command pr
 to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on
 each resource's own dashboard.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`. The populated Home fits the screen at `xl` (each resource panel scrolls its own rows), so its root carries `data-layout-fill` and scrolls itself (`overflow-y-auto`): below `xl` the root scrolls as one page, its content centred while it fits (`justify-center-safe`). The first-access screen (Empty) is a centred page with nothing pinned; it does not fill, and the layout's `main` scrolls it (`h-dvh` on the populated root only sizes a standalone preview).
 
 ## When to use
 
@@ -5734,7 +5734,8 @@ What each part takes: [blocks/platform/dashboard/home-dashboard.md](blocks/platf
 - Make every resource row a single link with the actions menu as a separate control.
 - Let the user dismiss the agent card for good.
 - Show the first-access screen, not a grid of empty panels, when the account owns nothing.
-- Open the layout's palette from the first-access prompt with `useConsoleLayout().openSearch()`; never mount a second `Command`.
+- Open the layout's palette from the first-access prompt with `useConsoleLayout({ optional: true })` and `layout?.openSearch()` (the body also renders alone, in its preview and test, where the call returns `null`); never wrap `useConsoleLayout()` in `try` / `catch`, and never mount a second `Command`.
+- Mark the populated page root with `data-layout-fill` and let it scroll, so the panels scroll their rows at `xl` and the page scrolls as one below it.
 
 ## Don't
 
@@ -6115,7 +6116,7 @@ its state in words; latency percentiles and error rates sit in two charts with t
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. Its root carries `data-layout-fill`, so the layout's `main` stops scrolling and the root fills it: from `xl` the charts column and the alerts rail scroll on their own; below `xl` the root itself scrolls, so the page still scrolls as one (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -6150,6 +6151,7 @@ What each part takes: [blocks/platform/dashboard/service-monitoring-dashboard.md
 - Keep alerts in a rail that stays in view; fold it below the charts on narrow screens.
 - Title an alert with the threshold that tripped, not with a generic name.
 - Give each chart its own window.
+- Mark the page root with `data-layout-fill` and let it scroll (`overflow-y-auto`), so the panes scroll on their own at `xl` and the page scrolls as one below it.
 
 ## Don't
 
@@ -7718,6 +7720,10 @@ The async-action pattern, taken from the design sample (`/forms/async-deployment
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
+The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. A standalone preview of this block shows the inline states only; its toasts appear wherever an app has mounted the region.
+
+The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.
+
 ## When to use
 
 - Any action that takes long enough to leave: build, deploy, redeploy, import, provision, a bulk change.
@@ -7738,7 +7744,6 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - C. Run status — `Tag` (required)
 - D. Simulated ending — `ToggleGroup` (simulation only)
 - E. Nothing running — `EmptyState` (idle only)
-- F. Run toast — `Toaster` (required)
 
 What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/states/async-submit.md).
 
@@ -7747,6 +7752,7 @@ What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/s
 - Keep the run, its timer and its outcome outside the page component (a small module-scope store), so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
 - Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
+- Raise the toasts through `toast` only; the app mounts the region once (`ToastPlugin` or one `Toaster` at its root), so the page body never renders a `Toaster`.
 - Give both toasts the same two actions through `toast()`'s `actions` option: **Edit** for the item that was deployed, and **Redeploy**. Don't rebuild the toast body in the `Toaster` slot to get two actions.
 - On the page that started the run, show the outcome inline as well, with the same two actions as the toast: a danger `Alert` with the reason, **Edit** and **Redeploy** over the stopped logs, or a success `Alert` naming the new address with **Edit**, **Redeploy** and **Open service**.
 - Disable Deploy and the controls that would change the run while it is in progress, with Deploy in `loading`.
@@ -7777,7 +7783,7 @@ What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/s
 ## Accessibility
 
 - The run status is text in the heading's `Tag`, not color alone.
-- Toasts are announced politely by the `Toaster`; the progress toast must not steal focus.
+- Toasts are announced politely by the app's `Toaster` region; the progress toast must not steal focus.
 - The failure toast's actions and close button are reachable by keyboard, and it stays until closed.
 - The simulation panel is an `aside` with its own label so screen reader users can skip it.
 - The logs card (Running and Failed) streams into a `LogView`; do not announce every log line.
@@ -8796,7 +8802,7 @@ query editor; sql editor; run query; query results; sql query page; query histor
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The editor is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the side panel, the rows, the editor and the results each scroll on their own at every width (`h-dvh` only sizes a standalone preview). CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
 
 ## When to use
 
@@ -8837,6 +8843,7 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 - Show the outcome of a run in the Results band: the rows, a success `Alert` with what ran, or a danger `Alert` with why it failed.
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
+- Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
 
 ## Don't
 
@@ -8845,6 +8852,7 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 - Don't hide the tabs when the database is empty.
 - Don't put a second primary action in a pane; Insert on Data and Run query on Editor are the only ones.
 - Don't let the results scroll the page sideways; they scroll inside their band.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
 
 ## Copy
 
@@ -9022,7 +9030,7 @@ real-time events; events visualizer; event explorer; log explorer; logs viewer; 
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -9064,6 +9072,7 @@ What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
 - Let the document act on the log (Filter by, Exclude), so a pivot is one click from the value.
+- Mark the page root with `data-layout-fill`, so the panes scroll on their own instead of the page.
 
 ## Don't
 
@@ -9072,6 +9081,7 @@ What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
+- Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
 - Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
 - Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
 - Don't let investigation tabs grow without a limit, and never close the last one.

@@ -1,6 +1,6 @@
 # ServiceMonitoringDashboard (`platform/dashboard/service-monitoring-dashboard`)
 
-> The service monitoring dashboard pattern: status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts, each with its own window ToggleGroup, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as an Item in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The service monitoring dashboard pattern: status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts, each with its own window ToggleGroup, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as an Item in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue` in `@aziontech/webkit`
@@ -18,7 +18,7 @@ its state in words; latency percentiles and error rates sit in two charts with t
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
 
-This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. Its root carries `data-layout-fill`, so the layout's `main` stops scrolling and the root fills it: from `xl` the charts column and the alerts rail scroll on their own; below `xl` the root itself scrolls, so the page still scrolls as one (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -89,6 +89,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 - Keep alerts in a rail that stays in view; fold it below the charts on narrow screens.
 - Title an alert with the threshold that tripped, not with a generic name.
 - Give each chart its own window.
+- Mark the page root with `data-layout-fill` and let it scroll (`overflow-y-auto`), so the panes scroll on their own at `xl` and the page scrolls as one below it.
 
 ## Don't
 
@@ -591,7 +592,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 </script>
 
 <template>
-  <div class="flex min-w-0 flex-1 flex-col xl:flex-row">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-w-0 flex-col overflow-y-auto xl:flex-row"
+  >
     <div
       class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md) xl:overflow-y-auto"
     >
