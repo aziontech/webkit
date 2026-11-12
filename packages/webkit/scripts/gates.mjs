@@ -22,6 +22,11 @@ export const GATES = [
     label: 'Declarations for runtime .js modules in sync',
     steps: [['node', 'scripts/build-js-dts.mjs', '--check']]
   },
+  {
+    id: 'exports',
+    label: 'Every source export declares types',
+    steps: [['node', 'scripts/build-exports.mjs', '--check']]
+  },
   { id: 'naming', label: 'Naming', steps: [['node', 'scripts/check-naming.mjs']] },
   {
     id: 'migrations',

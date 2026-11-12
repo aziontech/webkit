@@ -72,9 +72,9 @@ jobs:
 
       - name: Build
         working-directory: packages/webkit
-        run: node scripts/build-catalog.mjs && pnpm exec vue-tsc --declaration --emitDeclarationOnly
+        run: node scripts/build-catalog.mjs && node scripts/build-exports.mjs --check
 
-      - name: Publish to npm
+      - name: Publish to npm (prepack builds types/ and the AI bundle)
         working-directory: packages/webkit
         run: npm publish --provenance --access public
         env:

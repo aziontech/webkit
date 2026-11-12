@@ -99,6 +99,16 @@ WebKit (`npm install @aziontech/theme@^5.2.2`; `npx @aziontech/webkit init` adds
 fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
 ranges for every dependency it adds, never `latest`.
 
+### TypeScript reads declarations
+
+Every `@aziontech/webkit/<name>` export now has a `types` condition that points at a declaration
+under `types/` (`{ "types": "./types/…/x.vue.d.ts", "default": "./src/…/x.vue" }`), so a fresh
+Vite `vue-ts` app builds with its default `vue-tsc -b && vite build`: no more TS2307 on a `.vue`
+export, and no WebKit source in your program, so `skipLibCheck` covers WebKit and your compiler
+options never type-check it. `@aziontech/icons` declares its CSS entries the same way. Remove any
+local `declare module '@aziontech/webkit/…'` or `declare module '@aziontech/icons'` shim you added
+as a workaround. Bundlers still load the `.vue` and `.ts` sources (`default`).
+
 ### Form fields: one `Field` replaces the `field-*` family
 
 The codemod lists every `field-*` import as `MANUAL`. Replace each one with `Field` around the plain

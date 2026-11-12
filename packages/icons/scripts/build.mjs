@@ -40,6 +40,8 @@ const barrelContent = `@import './azionicons.css';
 `
 writeFileSync(join(DIST_DIR, 'index.css'), barrelContent, CHARSET)
 console.log('  ✔ dist/index.css created')
+writeFileSync(join(DIST_DIR, 'index.d.ts'), 'export {}\n', CHARSET)
+console.log('  ✔ dist/index.d.ts created')
 
 console.log('\n📋 Step 5/9 — Generating dist/package.json...\n')
 const rootPkg = JSON.parse(readFileSync('./package.json', CHARSET))
@@ -53,11 +55,12 @@ const distPkg = {
   publishConfig: rootPkg.publishConfig ?? { access: 'public' },
   style: 'index.css',
   main: 'index.css',
+  types: 'index.d.ts',
   exports: {
-    '.': './index.css',
-    './azionicons': './azionicons.css',
-    './azionicons-color': './azionicons-color.css',
-    './primeicons': './primeicons.css',
+    '.': { types: './index.d.ts', default: './index.css' },
+    './azionicons': { types: './index.d.ts', default: './azionicons.css' },
+    './azionicons-color': { types: './index.d.ts', default: './azionicons-color.css' },
+    './primeicons': { types: './index.d.ts', default: './primeicons.css' },
     './catalog': './catalog.json',
     './color-catalog': './color-catalog.json'
   }
