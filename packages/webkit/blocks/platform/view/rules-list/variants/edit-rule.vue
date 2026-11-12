@@ -36,7 +36,7 @@
   import Switch from '@aziontech/webkit/switch'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -1874,7 +1874,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

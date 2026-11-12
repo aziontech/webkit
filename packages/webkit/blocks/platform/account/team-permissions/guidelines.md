@@ -49,9 +49,9 @@ On the Edit Team page, a Members section above the matrix: an Add member `Combob
 
 A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
 
-### I. Outcomes — `Toaster` (required)
+### Outcomes — through `toast`
 
-Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy.
+Duplicate and Delete end in a success toast. Team changes are not deploys, so the toast has no Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

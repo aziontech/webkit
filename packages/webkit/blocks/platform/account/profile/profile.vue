@@ -12,7 +12,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   const form = reactive({
@@ -161,7 +161,6 @@
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
   <div class="flex flex-1 flex-col">
     <div class="flex min-h-0 flex-1 flex-col">
       <form

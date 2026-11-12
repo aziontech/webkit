@@ -10,7 +10,7 @@
   import Table from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   const integration = {
@@ -363,7 +363,5 @@
         </aside>
       </div>
     </div>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

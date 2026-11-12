@@ -2,7 +2,7 @@
 name: webkit-ui-states
 description: Every data-backed view in a @aziontech/webkit app declares its full state surface — loading, empty, partial, error, success — not just the happy path, AND behaves correctly while an async action is in flight and when it fails. Use when building or reviewing any screen that fetches, filters, submits, or paginates. Maps each state to the shipped component (Skeleton, EmptyState, Alert), locks the scope off one flag while an action runs (trigger :loading + every field :disabled, released in finally), and reports request errors via toast.
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-component-states, webkit-prefer-over-custom, ui-verify]
 ---
@@ -329,8 +329,12 @@ toast.promise(exportReport(), {
 
 Rules:
 
-- **Mount `<Toaster>` exactly once** (via `ToastPlugin` or a single `<Toaster />` at the app root).
-  The store is a singleton — a second region does not duplicate toasts, but there must be one.
+- **Mount `<Toaster>` exactly once, at the app root** (via `ToastPlugin` or a single `<Toaster />`
+  in `App.vue`, beside the layout). **A page, a view or a copied block never renders a `<Toaster>`;
+  it only imports `toast`.** Only the first `Toaster` to mount is active, and it gives the role up
+  when it unmounts: a page's copy is either inert, or, when it mounted first, it silences every
+  toast in the app once the user leaves that page. A full page routed outside the console layout
+  (a create page, an onboarding step) is still a route of the same app, not a root.
 - **Use the typed shortcut for the severity:** `toast.error` for failures, `toast.success` for the
   happy path, `toast.promise` to track a request end-to-end.
 - **The message is actionable.** State what failed and the recovery; attach an
@@ -390,7 +394,7 @@ if you leave.' })`, not closable, no action. The failure is `toast.error` with `
 - Every async action locks its scope off **one** flag — trigger `:loading`, every field `:disabled`;
   the handler guards on the flag and releases it in `finally` (success **and** failure).
 - Request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover;
-  `<Toaster>` is mounted once. Never a silent `console.error`.
+  `<Toaster>` is mounted once, at the app root, never in a page. Never a silent `console.error`.
 - Hand-rolled "Nothing here" strings or bespoke spinners are forbidden when `EmptyState` / `Skeleton`
   / `Spinner` exist — resolve them via the MCP/catalog.
 - Field validation is inline (`Field` + `message`), never in this matrix and never a toast.
@@ -413,6 +417,10 @@ For `/webkit-ui-states <file>`, list gaps grouped by view / flow. Each:
 ✗ api.js:31  catch (e) { console.error(e) }
   behavior: Report request errors — the failure is silent; the user sees a spinner that never clears.
   fix: toast.error("Request failed.", { description: e.message, action: { label: "Retry", onClick } }); release the lock in finally.
+
+✗ DeployPage.vue:212  <Toaster position="bottom-right" /> in a page
+  behavior: One toast region — a page's Toaster is inert, or silences every toast after the user leaves the page.
+  fix: delete it and keep the toast calls; the app mounts the region once (ToastPlugin or one Toaster in App.vue).
 ```
 
 End with: `states + async sound` or `N gaps — fix before polish`.
@@ -424,6 +432,6 @@ End with: `states + async sound` or `N gaps — fix before polish`.
 - [ ] First-run empty ≠ no-results empty (distinct copy + action).
 - [ ] Every async action locks its scope off **one** flag: trigger `:loading`, every field `:disabled`.
 - [ ] The handler guards on the flag and releases it in `finally` (success **and** failure).
-- [ ] `<Toaster>` is mounted once; request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover (Retry where it applies).
+- [ ] `<Toaster>` is mounted once, at the app root, and no page or view renders one; request/API errors raise `toast.error` / `toast.promise` with what failed + how to recover (Retry where it applies).
 - [ ] Field validation stays inline (`Field` + `message`) — never a toast.
 - [ ] Every state component came from the MCP/catalog, not a guessed or borrowed path.

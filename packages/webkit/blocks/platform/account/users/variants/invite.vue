@@ -23,7 +23,7 @@
   import Table from '@aziontech/webkit/table'
   import type { TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -574,7 +574,5 @@
       :confirm-label="pending?.status === 'Invited' ? 'Cancel invitation' : 'Remove user'"
       @confirm="remove"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

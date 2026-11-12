@@ -8,7 +8,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 28739def4c0bc527810b85b0f9d2171322b97428e847f992dfe3bb87f87c860f
+checksum: f6ab4a51349800153077da6ec9a52df002917ab5f50155333c53e6bd6ec554a0
 created: 2026-06-23
 last_updated: 2026-11-11
 ---
@@ -41,7 +41,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 ## Best practices
 
-- Mount `Toaster` once near the app root, or install `ToastPlugin`. Don't mount one per page; the store renders only the first registered region.
+- Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `patterns:check` fails a block outside `blocks/shells/` that renders one.
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon; every type is announced once and politely by the Toaster's single live region (an error interrupting what the user is doing is worse than hearing it a moment later, and switching the region between polite and assertive made screen readers drop or repeat the stack).
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - `duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
@@ -74,7 +74,7 @@ Two interchangeable usage styles drive the **same** singleton stack — use whic
 </template>
 ```
 
-**2. Service (install once in main.js)** — `app.use(ToastPlugin)` mounts the toast region automatically on a dedicated host element (no manual `<Toaster />` needed; the vnode shares the app's context, and the host is torn down on `app.unmount()`), registers `<Toaster>` as a global component, and exposes the imperative API as `this.$toast` (Options API / templates) and through `inject`; inside `setup` use `useToast()` to get the same API. Region defaults (position, duration, …) ride the plugin options. A manually mounted `<Toaster />` alongside the plugin is harmless — the store activates only the first registered region, so toasts never render twice. SSR-safe: without a DOM the auto-mount is skipped:
+**2. Service (install once in main.js)** — `app.use(ToastPlugin)` mounts the toast region automatically on a dedicated host element (no manual `<Toaster />` needed; the vnode shares the app's context, and the host is torn down on `app.unmount()`), registers `<Toaster>` as a global component, and exposes the imperative API as `this.$toast` (Options API / templates) and through `inject`; inside `setup` use `useToast()` to get the same API. Region defaults (position, duration, …) ride the plugin options. The plugin's region mounts at install, before any component, so it is the active one; a second `<Toaster />` anywhere else is inert at best, and when the app has no plugin, a page's `Toaster` that mounts before the root one takes the role and drops it on unmount, leaving the app with no region. SSR-safe: without a DOM the auto-mount is skipped:
 
 ```ts
 // main.js

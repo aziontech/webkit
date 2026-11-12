@@ -140,3 +140,47 @@ export function checkGuidelines(id, pattern) {
   }
   return errors
 }
+
+const TOAST_SOURCE = /^@aziontech\/webkit\/toast(?:-root)?$/
+const APP_ROOT_BLOCKS = /^shells\//
+
+function toastRegionNames(sfc) {
+  const names = new Set(['Toaster'])
+  for (const m of String(sfc).matchAll(/^\s*import\s+([\s\S]*?)\s+from\s+['"]([^'"]+)['"]/gm)) {
+    if (!TOAST_SOURCE.test(m[2])) continue
+    const clause = m[1].trim()
+    if (/^type\s/.test(clause)) continue
+    const def = clause.match(/^([A-Za-z_$][\w$]*)/)
+    if (def) names.add(def[1])
+    const named = clause.match(/\{([^}]*)\}/)
+    for (const part of named ? named[1].split(',') : []) {
+      const [imported, local = imported] = part
+        .trim()
+        .split(/\s+as\s+/)
+        .map((s) => s.trim())
+      if (imported === 'Toaster') names.add(local)
+    }
+  }
+  return [...names]
+}
+
+export function rendersToastRegion(sfc) {
+  const template = String(sfc).replace(/<script\b[\s\S]*?<\/script>/g, '')
+  const tags = toastRegionNames(sfc).map((n) => n.replace(/\$/g, '\\$'))
+  const re = new RegExp(`<(?:(?:${tags.join('|')})(?:\\.Toaster)?|toaster)(?=[\\s/>])`)
+  return re.test(template)
+}
+
+export function checkToastRegion(id, pattern) {
+  if (APP_ROOT_BLOCKS.test(id)) return []
+  const sfcs = [
+    { name: pattern.primary, sfc: pattern.sfc },
+    ...(pattern.variants || []).map((v) => ({ name: v.name, sfc: v.sfc }))
+  ]
+  return sfcs
+    .filter((v) => rendersToastRegion(v.sfc))
+    .map(
+      (v) =>
+        `blocks/${id} (${v.name}): renders a \`Toaster\` in a page body. Only the first Toaster to mount is active and it gives the role up when it unmounts, so a page's copy is inert or silences every toast once the user leaves. Call \`toast\` only; the app mounts the one region (ToastPlugin, or one Toaster at its root, as blocks/shells/console does).`
+    )
+}

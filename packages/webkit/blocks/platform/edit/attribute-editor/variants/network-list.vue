@@ -17,7 +17,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, ref, useId, watch } from 'vue'
 
@@ -477,5 +477,4 @@
       </DrawerContent>
     </DrawerPortal>
   </Drawer>
-  <Toaster position="bottom-right" />
 </template>

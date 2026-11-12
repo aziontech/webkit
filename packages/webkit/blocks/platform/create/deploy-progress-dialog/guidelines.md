@@ -41,9 +41,9 @@ One bordered row per Deployment Setting: its name, the environments and projects
 
 Retry failed (outlined) appears only when the run settled with failures; Close (primary) is disabled while the run goes on.
 
-### G. Outcome toast — `Toaster` (required)
+### Outcome toast — through `toast`
 
-One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments.
+One toast id for the run: `toast.loading` with "It keeps running if you leave." when it starts, then `toast.success` or `toast.error` (`duration: 0`, `closable`) with **Edit** and **Redeploy**. Edit reopens the dialog on the failed rows; Redeploy runs every setting again. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

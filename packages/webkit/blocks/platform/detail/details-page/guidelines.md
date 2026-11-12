@@ -60,6 +60,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Put the one primary page action (Deploy) on the tab row, medium and outlined; keep Visit in the summary.
 - Give Versions and Deployments the same controls row and table shape as `platform/view/table-view`, scoped to this resource, with a small section heading.
 - On a deployment page, lead with a status banner (success, or danger with Redeploy) and disable Visit until the deployment is live.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

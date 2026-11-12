@@ -48,13 +48,13 @@ Description. Optionality is said in the description (`Optional. Up to 200 charac
 
 `Cancel` (`kind="outlined"`, resets the form) then `Create` (`kind="primary"`, `type="submit"`) at the end of the column. Create shows `loading` while submitting and is `disabled` while loading; Cancel is disabled while busy. Below `md` both stack at full width.
 
-### H. Result notices — `Toaster` (required)
-
-One `Toaster` mounted with the form, `position="bottom-right"`. It shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack.
-
-### I. Section notice — `Alert` (conflict and rejection only)
+### H. Section notice — `Alert` (conflict and rejection only)
 
 A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on a long form, under the section heading, as in `platform/states/form-error`), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
+
+### Result notices — through `toast`
+
+A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -91,7 +91,7 @@ A server rejection a field owns lands in two places, never in a toast: a danger 
 - Every control has a `Field.Label` bound by `for`; the description and message are wired to the control by `Field`.
 - The loading region is `role="status"` with an accessible name (`Loading the form`).
 - Focus moves to the first field in error, only after the lock is released, since a disabled control cannot take focus.
-- Toasts are announced by the `Toaster`; the error toast keeps its Retry reachable by keyboard.
+- Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
 - A section `Alert` sits in reading order before the fields it governs.
 
 ## States

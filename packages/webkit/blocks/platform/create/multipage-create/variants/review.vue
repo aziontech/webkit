@@ -21,7 +21,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ListType = 'asn' | 'ip_cidr' | 'countries'
@@ -881,6 +881,5 @@
         </div>
       </form>
     </div>
-    <Toaster position="bottom-right" />
   </div>
 </template>

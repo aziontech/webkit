@@ -10,6 +10,9 @@ import CacheSettings from '../../blocks/platform/edit/edit-resource/variants/cac
 import Protocols from '../../blocks/platform/edit/edit-resource/variants/protocols.vue'
 import ConsoleLayout from '../components/layout/console-layout/console-layout.vue'
 import { expectNoA11yViolations } from './axe'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const wait = { timeout: 4000 }
 

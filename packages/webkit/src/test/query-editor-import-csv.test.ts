@@ -3,6 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import ImportCsv from '../../blocks/platform/view/query-editor/variants/import-csv.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const drawer = () => document.querySelector('[role="dialog"]') as HTMLElement
 const trigger = (header: string) =>

@@ -4,6 +4,9 @@ import { userEvent } from 'vitest/browser'
 
 import ManageResources from '../../blocks/platform/account/manage-resources/manage-resources.vue'
 import Selected from '../../blocks/platform/account/manage-resources/variants/selected.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const rowNames = (): string[] =>
   Array.from(document.querySelectorAll<HTMLElement>('[data-tree-row]')).map(

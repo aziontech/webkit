@@ -9,6 +9,9 @@ import MfaCode from '../../blocks/platform/auth/variants/mfa-code.vue'
 import MfaSetup from '../../blocks/platform/auth/variants/mfa-setup.vue'
 import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
 import { expectNoA11yViolations } from './axe'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 afterEach(() => cleanup())
 

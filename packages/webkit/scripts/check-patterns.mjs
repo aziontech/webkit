@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { readBlocks } from './lib/blocks.mjs'
-import { checkGuidelines, primaryComponents } from './lib/guidelines.mjs'
+import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guidelines.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
@@ -51,6 +51,10 @@ export function checkSummaryComponents(patterns) {
     }
   }
   return errors
+}
+
+export function checkToastRegions(patterns) {
+  return Object.entries(patterns).flatMap(([id, p]) => checkToastRegion(id, p))
 }
 
 export function checkPatternGuidelines(patterns, { pending = [], only = [] } = {}) {
@@ -155,7 +159,8 @@ async function main() {
   const errors = [
     ...(warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]),
     ...guidelines.errors,
-    ...checkSummaryComponents(blocks)
+    ...checkSummaryComponents(blocks),
+    ...checkToastRegions(blocks)
   ]
   if (warnIntents) {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
@@ -190,7 +195,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, and SFCs that pass the consumer lint.\n'
+      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, and no Toaster outside an app root (blocks/shells).\n'
     )
     process.exit(1)
   }

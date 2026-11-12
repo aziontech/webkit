@@ -21,7 +21,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -368,7 +368,6 @@
 </script>
 
 <template>
-  <Toaster position="bottom-right" />
 
   <Button
     label="Change plan"

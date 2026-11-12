@@ -14,7 +14,7 @@
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
@@ -533,7 +533,5 @@
         </DialogContent>
       </DialogPortal>
     </Dialog>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

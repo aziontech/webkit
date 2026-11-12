@@ -12,7 +12,7 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   type FieldProblem = { kind: HelperTextKind; message: string }
@@ -610,7 +610,5 @@
         </SaveBar>
       </Transition>
     </form>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

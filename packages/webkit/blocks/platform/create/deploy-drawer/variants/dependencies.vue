@@ -24,7 +24,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
@@ -1427,6 +1427,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-    <Toaster position="bottom-right" />
   </div>
 </template>

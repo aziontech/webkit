@@ -47,9 +47,9 @@ The right column, sticky from `xl`. The `Card` header has the title Impact and, 
 
 The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
 
-### F. Footer and commit — `Button`, `ConfirmDialog`, `Toaster` (required)
+### F. Footer and commit — `Button`, `ConfirmDialog` (required)
 
-A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments.
+A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

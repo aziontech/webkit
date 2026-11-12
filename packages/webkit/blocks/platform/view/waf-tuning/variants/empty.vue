@@ -21,7 +21,7 @@
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, ref } from 'vue'
 
@@ -418,7 +418,5 @@
         </DialogContent>
       </DialogPortal>
     </Dialog>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

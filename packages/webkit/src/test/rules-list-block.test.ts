@@ -5,6 +5,9 @@ import RulesList from '../../blocks/platform/view/rules-list/rules-list.vue'
 import EditRule from '../../blocks/platform/view/rules-list/variants/edit-rule.vue'
 import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
 import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
 
 const namesIn = (root: HTMLElement, phase: string) =>
   Array.from(root.querySelectorAll(`[data-reorder-row^="${phase}"] a[data-rule-name]`)).map((a) =>

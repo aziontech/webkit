@@ -15,12 +15,13 @@ import './reflow.css'
 
 import { render } from '@testing-library/vue'
 import axe from 'axe-core'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, onTestFinished } from 'vitest'
 import { commands } from 'vitest/browser'
 import type { Component, ComponentInternalInstance, VNode } from 'vue'
 import { defineComponent, getCurrentInstance, h, nextTick } from 'vue'
 
 import KNOWN from './a11y-known.json'
+import { mountToastRegion } from './toast-region'
 
 export type A11yPass = 'light' | 'dark' | 'media'
 export type A11yScope = 'blocks' | 'examples'
@@ -119,6 +120,7 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
       { timeout: CASE_TIMEOUT },
       async (file) => {
         const mod = await modules[scope][`../../${file}`]!()
+        if (scope === 'blocks') onTestFinished(mountToastRegion())
         render(mod.default)
         await nextTick()
         await settle()
@@ -246,6 +248,7 @@ export function runA11yOpenSuite(scope: A11yScope, theme: 'light' | 'dark'): voi
       async (file) => {
         ran += 1
         const mod = await modules[scope][`../../${file}`]!()
+        if (scope === 'blocks') onTestFinished(mountToastRegion())
         let host: ComponentInternalInstance | null = null
         render(
           defineComponent({

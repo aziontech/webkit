@@ -34,9 +34,9 @@ A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high
 
 A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
 
-### E. Outcome — `Toaster`, `Alert` (required)
+### E. Outcome — `Alert` (required)
 
-Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`).
+Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

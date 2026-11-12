@@ -83,6 +83,7 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 - Keep the label of each field inside its `InputGroupAddon`, tied to the field by `for`.
 - Reset the drawer on open so a closed and reopened drawer never shows stale rows.
 - Follow `skills/webkit-form` for required states and `skills/webkit-lists` for the list page.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
