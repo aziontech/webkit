@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -11,130 +11,95 @@
   import FieldError from '../field/field-error/field-error.vue'
   import FieldLabel from '../field/field-label/field-label.vue'
   import Input from '../input/input.vue'
-
-  export type AttributeEditorItem = Record<string, unknown>
-
-  export type AttributeEditorColumn = {
-    key: string
-    label: string
-    placeholder?: string
-    required?: boolean
-  }
-
-  export type AttributeEditorRowErrors = Record<string, string | undefined>
-
-  export type AttributeEditorErrors =
-    (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]
-
-  export type AttributeEditorSize = 'small' | 'medium' | 'large'
-
-  export type AttributeEditorCellScope = {
-    item: AttributeEditorItem
-    index: number
-    groupIndex: number | undefined
-    value: unknown
-    update: (value: unknown) => void
-    invalid: boolean
-  }
-
-  export type AttributeEditorRowScope = {
-    item: AttributeEditorItem
-    index: number
-    groupIndex: number | undefined
-    errors: AttributeEditorRowErrors
-    update: (key: string, value: unknown) => void
-    remove: () => void
-    removable: boolean
-    removeLabel: string
-  }
-
-  export type AttributeEditorRowActionsScope = {
-    item: AttributeEditorItem
-    index: number
-    groupIndex: number | undefined
-    remove: () => void
-    removable: boolean
-    removeLabel: string
-  }
+  import type {
+    AttributeEditorCellSlots,
+    AttributeEditorColumn,
+    AttributeEditorErrors,
+    AttributeEditorRowActionsScope,
+    AttributeEditorRowErrors,
+    AttributeEditorRowScope,
+    AttributeEditorSize
+  } from './types'
 
   defineOptions({
     name: 'AttributeEditor',
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Rows in list mode. Supports v-model:items. */
-    items?: AttributeEditorItem[]
-    /** Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. */
-    groups?: AttributeEditorItem[][]
-    /** Columns of every row: key of the item field, label, placeholder, required. */
-    definition?: AttributeEditorColumn[]
-    /** Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. */
-    errors?: AttributeEditorErrors
-    /** Label of the Add button. Empty uses the locale catalog. */
-    addButtonLabel?: string
-    /** Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog. */
-    removeButtonLabel?: string
-    /** Label of the Add group button in grouped mode. Empty uses the locale catalog. */
-    addGroupLabel?: string
-    /** Text shown when there are no rows. Empty uses the locale catalog. */
-    empty?: string
-    /** Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. */
-    limit?: number
-    /** Most groups allowed in grouped mode. */
-    groupLimit?: number
-    /** Fewest rows kept; rows at the minimum lose their Remove button. */
-    minItems?: number
-    /** Builds a new row. Unset creates an item with an empty string per column key. */
-    newItem?: () => AttributeEditorItem
-    /** Hides Remove on the rows it returns false for. Unset makes every row removable. */
-    itemRemovable?: (item: AttributeEditorItem) => boolean
-    /** Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. */
-    size?: AttributeEditorSize
-    /** Disables every control, Add and Remove. */
-    disabled?: boolean
-    /** Disables Add only, for example until the last row is filled in. */
-    addDisabled?: boolean
-    /** Accessible name of the list of rows. */
-    ariaLabel?: string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    items: () => [],
-    groups: undefined,
-    definition: () => [],
-    errors: () => [],
-    addButtonLabel: '',
-    removeButtonLabel: '',
-    addGroupLabel: '',
-    empty: '',
-    limit: undefined,
-    groupLimit: undefined,
-    minItems: 0,
-    newItem: undefined,
-    itemRemovable: undefined,
-    size: 'medium',
-    disabled: false,
-    addDisabled: false,
-    ariaLabel: ''
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Rows in list mode. Supports v-model:items. */
+      items?: TItem[]
+      /** Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. */
+      groups?: TItem[][]
+      /** Columns of every row: key of the item field, label, placeholder, required. */
+      definition?: AttributeEditorColumn[]
+      /** Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. */
+      errors?: AttributeEditorErrors
+      /** Label of the Add button. Empty uses the locale catalog. */
+      addButtonLabel?: string
+      /** Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog. */
+      removeButtonLabel?: string
+      /** Label of the Add group button in grouped mode. Empty uses the locale catalog. */
+      addGroupLabel?: string
+      /** Text shown when there are no rows. Empty uses the locale catalog. */
+      empty?: string
+      /** Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. */
+      limit?: number
+      /** Most groups allowed in grouped mode. */
+      groupLimit?: number
+      /** Fewest rows kept; rows at the minimum lose their Remove button. */
+      minItems?: number
+      /** Builds a new row. Unset creates an item with an empty string per column key. */
+      newItem?: () => TItem
+      /** Hides Remove on the rows it returns false for. Unset makes every row removable. */
+      itemRemovable?: (item: TItem) => boolean
+      /** Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm. */
+      size?: AttributeEditorSize
+      /** Disables every control, Add and Remove. */
+      disabled?: boolean
+      /** Disables Add only, for example until the last row is filled in. */
+      addDisabled?: boolean
+      /** Accessible name of the list of rows. */
+      ariaLabel?: string
+    }>(),
+    {
+      items: () => [],
+      groups: undefined,
+      definition: () => [],
+      errors: () => [],
+      addButtonLabel: '',
+      removeButtonLabel: '',
+      addGroupLabel: '',
+      empty: '',
+      limit: undefined,
+      groupLimit: undefined,
+      minItems: 0,
+      newItem: undefined,
+      itemRemovable: undefined,
+      size: 'medium',
+      disabled: false,
+      addDisabled: false,
+      ariaLabel: ''
+    }
+  )
 
   const emit = defineEmits<{
-    'update:items': [items: AttributeEditorItem[]]
-    'update:groups': [groups: AttributeEditorItem[][]]
+    'update:items': [items: TItem[]]
+    'update:groups': [groups: TItem[][]]
     add: [detail: { index: number; groupIndex?: number }]
-    remove: [detail: { index: number; item: AttributeEditorItem; groupIndex?: number }]
+    remove: [detail: { index: number; item: TItem; groupIndex?: number }]
   }>()
 
   const slots = defineSlots<
     {
-      row?(scope: AttributeEditorRowScope): unknown
+      row?(scope: AttributeEditorRowScope<TItem>): unknown
       empty?(): unknown
       actions?(): unknown
       info?(): unknown
-      'row-actions'?(scope: AttributeEditorRowActionsScope): unknown
+      'row-actions'?(scope: AttributeEditorRowActionsScope<TItem>): unknown
       limit?(scope: { count: number; limit: number; left: number }): unknown
-    } & Record<`cell-${string}`, (scope: AttributeEditorCellScope) => unknown>
+    } & AttributeEditorCellSlots<TItem>
   >()
 
   const attrs = useAttrs()
@@ -149,14 +114,14 @@
   )
 
   const grouped = computed(() => props.groups !== undefined)
-  const groupList = computed<AttributeEditorItem[][]>(() =>
+  const groupList = computed<TItem[][]>(() =>
     grouped.value ? (props.groups ?? []) : [props.items]
   )
   const total = computed(() => groupList.value.reduce((sum, group) => sum + group.length, 0))
 
   const rowKeys = new WeakMap<object, string>()
   let nextKey = 0
-  const rowKey = (item: AttributeEditorItem) => {
+  const rowKey = (item: TItem) => {
     let key = rowKeys.get(item)
     if (!key) {
       nextKey += 1
@@ -180,14 +145,13 @@
     '--attribute-editor-columns': String(columnCount.value)
   }))
 
-  const atLimit = (group: AttributeEditorItem[]) =>
-    props.limit !== undefined && group.length >= props.limit
+  const atLimit = (group: TItem[]) => props.limit !== undefined && group.length >= props.limit
   const canAddGroup = computed(
     () =>
       !props.disabled &&
       (props.groupLimit === undefined || groupList.value.length < props.groupLimit)
   )
-  const limitText = (group: AttributeEditorItem[]) => {
+  const limitText = (group: TItem[]) => {
     if (props.limit === undefined) return ''
     const left = Math.max(props.limit - group.length, 0)
     return left === 0
@@ -203,7 +167,7 @@
       : {}
   }
 
-  const removable = (item: AttributeEditorItem) =>
+  const removable = (item: TItem) =>
     !props.disabled &&
     total.value > props.minItems &&
     (props.itemRemovable ? props.itemRemovable(item) : true)
@@ -215,15 +179,17 @@
     )
   }
 
-  const commit = (next: AttributeEditorItem[][]) => {
+  const fieldOf = (item: TItem, key: string): unknown => (item as Record<string, unknown>)[key]
+
+  const commit = (next: TItem[][]) => {
     if (grouped.value) emit('update:groups', next)
     else emit('update:items', next[0] ?? [])
   }
 
-  const createItem = () =>
+  const createItem = (): TItem =>
     props.newItem
       ? props.newItem()
-      : Object.fromEntries(props.definition.map((column) => [column.key, '']))
+      : (Object.fromEntries(props.definition.map((column) => [column.key, ''])) as TItem)
 
   const focusRow = async (selector: string) => {
     await nextTick()
@@ -294,12 +260,26 @@
     const target = groupIndex ?? 0
     const current = groupList.value[target]?.[index]
     if (!current) return
-    const changed = { ...current, [key]: value }
+    const changed = { ...current, [key]: value } as TItem
     rowKeys.set(changed, rowKey(current))
     const next = groupList.value.map((group) => [...group])
     next[target][index] = changed
     commit(next)
   }
+</script>
+
+<script lang="ts">
+  export type {
+    AttributeEditorCellScope,
+    AttributeEditorCellSlots,
+    AttributeEditorColumn,
+    AttributeEditorErrors,
+    AttributeEditorItem,
+    AttributeEditorRowActionsScope,
+    AttributeEditorRowErrors,
+    AttributeEditorRowScope,
+    AttributeEditorSize
+  } from './types'
 </script>
 
 <template>
@@ -423,7 +403,7 @@
                         :item="item"
                         :index="index"
                         :group-index="grouped ? groupIndex : undefined"
-                        :value="item[column.key]"
+                        :value="fieldOf(item, column.key)"
                         :update="
                           (value: unknown) =>
                             update(index, grouped ? groupIndex : undefined, column.key, value)
@@ -433,7 +413,7 @@
                         "
                       >
                         <Input
-                          :model-value="String(item[column.key] ?? '')"
+                          :model-value="String(fieldOf(item, column.key) ?? '')"
                           :placeholder="column.placeholder ?? ''"
                           :size="size"
                           autocomplete="off"
