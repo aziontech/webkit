@@ -60,7 +60,7 @@
     defaultProp: props.defaultOpen,
     onChange: (value) => emit('update:open', value)
   })
-  const expandable = computed<boolean>(() => Boolean(slots.input || slots.output))
+  const expandable = () => Boolean(slots.input || slots.output)
 
   const severity = computed<StatusIndicatorSeverity>(() => {
     if (props.state === 'success') return 'success'
@@ -80,12 +80,12 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-status="state"
-    :data-state="expandable ? (isOpen ? 'open' : 'closed') : undefined"
+    :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
     class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div class="flex min-h-10 items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
       <button
-        v-if="expandable"
+        v-if="expandable()"
         type="button"
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="panelId"
@@ -143,7 +143,7 @@
       />
     </div>
     <div
-      v-if="expandable"
+      v-if="expandable()"
       v-show="isOpen"
       :id="panelId"
       :data-testid="`${testId}__details`"

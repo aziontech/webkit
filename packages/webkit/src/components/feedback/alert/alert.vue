@@ -89,9 +89,7 @@
 
   const resolvedIcon = computed(() => props.icon || defaultIcons[normalizedSeverity.value])
 
-  const hasTrailingControl = computed(() =>
-    Boolean(props.actionLabel || slots.action || props.closable)
-  )
+  const hasTrailingControl = () => Boolean(props.actionLabel || slots.action || props.closable)
 
   const role = computed(() =>
     normalizedSeverity.value === 'danger' || normalizedSeverity.value === 'warning'
@@ -166,7 +164,7 @@
       :data-testid="testId"
       :data-severity="normalizedSeverity"
       :data-size="size"
-      :data-trailing="hasTrailingControl || null"
+      :data-trailing="hasTrailingControl() || null"
       :style="dismissTransitionStyle"
       tabindex="-1"
       class="@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pe-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"

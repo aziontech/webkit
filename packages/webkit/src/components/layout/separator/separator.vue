@@ -31,7 +31,7 @@
 
   const labelId = useId()
 
-  const hasContent = computed<boolean>(() => Boolean(slots['default']) || props.label.length > 0)
+  const hasContent = () => Boolean(slots['default']) || props.label.length > 0
 </script>
 
 <template>
@@ -39,14 +39,14 @@
     v-bind="$attrs"
     role="separator"
     :aria-orientation="orientation"
-    :aria-labelledby="hasContent ? labelId : undefined"
+    :aria-labelledby="hasContent() ? labelId : undefined"
     :data-testid="testId"
     :data-orientation="orientation"
-    :data-labelled="hasContent || null"
+    :data-labelled="hasContent() || null"
     class="flex shrink-0 items-center justify-center text-overline-sm text-(--text-muted) data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:h-full data-[orientation=vertical]:flex-col data-[labelled]:gap-(--spacing-xs) before:content-[''] before:flex-1 before:self-center before:border-(--border-default) after:content-[''] after:flex-1 after:self-center after:border-(--border-default) data-[orientation=horizontal]:before:border-t data-[orientation=horizontal]:after:border-t data-[orientation=vertical]:before:border-s data-[orientation=vertical]:after:border-s"
   >
     <span
-      v-if="hasContent"
+      v-if="hasContent()"
       :id="labelId"
       :data-testid="`${testId}__label`"
     >

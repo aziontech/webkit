@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/password-input/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -299,5 +300,27 @@ describe('PasswordInput — direction of the typed value', () => {
   it('lets a dir attribute override the default', () => {
     const { getByTestId } = render(PasswordInput, { attrs: { dir: 'ltr' } })
     expect(getByTestId('password-input').getAttribute('dir')).toBe('ltr')
+  })
+})
+
+describe('PasswordInput slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId, container } = render({
+      components: { PasswordInput },
+      setup: () => ({ shown }),
+      template: `<PasswordInput><template v-if="shown" #iconLeft><span data-testid="probe">Slotted</span></template></PasswordInput>`
+    })
+    expect(container.querySelector('[data-has-icon-left]')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(container.querySelector('[data-has-icon-left]')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(container.querySelector('[data-has-icon-left]')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })

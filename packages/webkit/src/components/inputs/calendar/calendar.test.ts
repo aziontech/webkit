@@ -865,3 +865,23 @@ describe('Calendar in another locale', () => {
     await waitFor(() => expect(end.value).toBe('Oct 12, 2026'))
   })
 })
+
+describe('Calendar slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { Calendar },
+      setup: () => ({ shown }),
+      template: `<Calendar><template v-if="shown" #presets><span data-testid="probe">Slotted</span></template></Calendar>`
+    })
+    expect(queryByTestId('input-calendar__presets-trigger')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('input-calendar__presets-trigger')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('input-calendar__presets-trigger')).toBeNull()
+  })
+})

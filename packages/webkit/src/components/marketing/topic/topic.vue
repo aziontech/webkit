@@ -38,9 +38,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-topic')
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const isLink = computed<boolean>(() => props.href.length > 0)
 </script>
@@ -52,7 +50,7 @@
     :href="isLink ? href : undefined"
     :data-testid="testId"
     :data-icon="icon ? true : null"
-    :data-described="hasDescription || null"
+    :data-described="hasDescription() || null"
     :data-linked="isLink || null"
     class="group flex flex-col gap-(--spacing-sm) text-(--text-default) no-underline transition-colors duration-150 ease-out motion-reduce:transition-none data-[linked]:hover:text-(--text-primary) data-[linked]:after:absolute data-[linked]:after:inset-0 data-[linked]:focus-visible:outline-none data-[linked]:focus-visible:after:ring-2 data-[linked]:focus-visible:after:ring-inset data-[linked]:focus-visible:after:ring-(--ring-color)"
   >
@@ -79,7 +77,7 @@
       </component>
     </div>
     <p
-      v-if="hasDescription"
+      v-if="hasDescription()"
       class="m-0 text-pretty text-body-md text-(--text-muted)"
     >
       <slot>{{ description }}</slot>

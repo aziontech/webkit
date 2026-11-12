@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import BandStack from '../band-stack/band-stack.vue'
@@ -552,5 +552,27 @@ describe('MediaSplit', () => {
     const { getByRole } = render(MediaSplit, { props: { title: TITLE, headingLevel: 3 } })
 
     expect(getByRole('heading', { level: 3 })).toHaveTextContent(TITLE)
+  })
+})
+
+describe('MediaSplit slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { MediaSplit },
+      setup: () => ({ shown }),
+      template: `<MediaSplit title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaSplit>`
+    })
+    expect(queryByTestId('marketing-media-split__media-cell')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('marketing-media-split__media-cell')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('marketing-media-split__media-cell')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })

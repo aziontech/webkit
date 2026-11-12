@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/card/default.vue'
 import Installed from '../../../../examples/card/installed.vue'
@@ -275,5 +275,27 @@ describe('Card integration kind', () => {
     one.unmount()
     const two = render(Installed)
     await expectNoA11yViolations(two.container)
+  })
+})
+
+describe('Card slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { Card },
+      setup: () => ({ shown }),
+      template: `<Card title="Plan"><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template></Card>`
+    })
+    expect(queryByTestId('content-card__footer')).toBeNull()
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('content-card__footer')).not.toBeNull()
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('content-card__footer')).toBeNull()
+    expect(queryByTestId('probe')).toBeNull()
   })
 })

@@ -112,10 +112,10 @@
   const canSubmit = computed<boolean>(
     () => !props.disabled && !busy.value && overBy.value === 0 && model.value.trim().length > 0
   )
-  const describedBy = computed<string | undefined>(() => {
+  const describedBy = () => {
     const ids = [props.maxLength > 0 ? counterId : '', slots.hint ? hintId : ''].filter(Boolean)
     return ids.join(' ') || undefined
-  })
+  }
 
   function resize(): void {
     const el = textarea.value
@@ -342,7 +342,7 @@
         :rows="minRows"
         :placeholder="placeholder || t('promptInput.placeholder')"
         :aria-label="ariaLabel || t('promptInput.label')"
-        :aria-describedby="describedBy"
+        :aria-describedby="describedBy()"
         :aria-invalid="overBy > 0 || undefined"
         :aria-controls="menuOpen ? listId : undefined"
         :aria-activedescendant="menuOpen ? optionId(activeIndex) : undefined"

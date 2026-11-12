@@ -6,21 +6,44 @@ export const isJsComposable = (rel) => /(^|\/)use-[^/]*\.js$/.test(rel)
 
 const SLOT_PRESENCE = /\b\$?slots(?:\.[\w$]+(?![\w$])|\[[^\]]+\])(?!\s*(?:\?\.)?\()/
 
+function skipTypeArguments(text, start) {
+  let i = start
+  while (/\s/.test(text[i] ?? '')) i++
+  if (text[i] !== '<') return i
+  let depth = 0
+  for (; i < text.length; i++) {
+    if (text[i] === '<') depth++
+    else if (text[i] === '>' && text[i - 1] !== '=') depth--
+    if (depth === 0) break
+  }
+  i++
+  while (/\s/.test(text[i] ?? '')) i++
+  return i
+}
+
 function computedBodies(text) {
   const bodies = []
-  const re = /\bcomputed\s*\(/g
-  while (re.exec(text)) {
+  const re = /\bcomputed\b/g
+  let match
+  while ((match = re.exec(text))) {
+    const open = skipTypeArguments(text, re.lastIndex)
+    if (text[open] !== '(') continue
     let depth = 1
-    let i = re.lastIndex
+    let i = open + 1
     while (i < text.length && depth > 0) {
       if (text[i] === '(') depth++
       else if (text[i] === ')') depth--
       i++
     }
-    bodies.push(text.slice(re.lastIndex, i - 1))
+    bodies.push({ start: match.index, body: text.slice(open + 1, i - 1) })
   }
   return bodies
 }
+
+const slotPresenceSites = (text) =>
+  computedBodies(text)
+    .filter(({ body }) => SLOT_PRESENCE.test(body))
+    .map(({ start }) => start)
 
 export const CONTENT_CHECKS = [
   {
@@ -54,7 +77,9 @@ export const CONTENT_CHECKS = [
   {
     id: 'computed-slot-presence',
     applies: isVue,
-    violated: (t) => computedBodies(t).some((body) => SLOT_PRESENCE.test(body)),
+    violated: (t) => slotPresenceSites(t).length > 0,
+    count: (t) => slotPresenceSites(t).length,
+    locate: (t) => slotPresenceSites(t),
     message:
       'Slot presence read inside `computed()`. `slots` is not reactive, so the cached value never sees a slot appear or disappear (a `v-if` slot, a server render that differs from the client) and leaves an empty band behind. Read it at render: `const hasX = () => Boolean(slots.x)` and `v-if="hasX()"`.'
   },

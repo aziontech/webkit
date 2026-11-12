@@ -69,9 +69,8 @@
       ({ code: 'pi pi-code', table: 'pi pi-table', document: 'pi pi-file' })[props.kind] ??
       'pi pi-file'
   )
-  const hasToolbar = computed<boolean>(
-    () => props.versions > 1 || !!props.copyValue || !!props.downloadHref || !!slots.actions
-  )
+  const hasToolbar = () =>
+    props.versions > 1 || !!props.copyValue || !!props.downloadHref || !!slots.actions
 
   function onKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Escape' || event.defaultPrevented) return
@@ -133,7 +132,7 @@
       />
     </header>
     <div
-      v-if="hasToolbar"
+      v-if="hasToolbar()"
       :data-testid="`${testId}__toolbar`"
       class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xxs)"
     >

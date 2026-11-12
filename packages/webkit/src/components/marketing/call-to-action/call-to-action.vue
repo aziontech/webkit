@@ -55,9 +55,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-call-to-action'
   )
 
-  const hasDescription = computed<boolean>(
-    () => Boolean(slots.default) || props.description.length > 0
-  )
+  const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
   const frame = computed(() => (props.framed ? FrameBox : 'div'))
   const frameProps = computed(() =>
@@ -113,7 +111,7 @@
           class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
         >
           <p
-            v-if="hasDescription"
+            v-if="hasDescription()"
             class="m-0 text-pretty text-heading-sm text-(--text-default)"
           >
             <slot>{{ description }}</slot>
@@ -148,7 +146,7 @@
             >
           </h2>
           <p
-            v-if="hasDescription"
+            v-if="hasDescription()"
             class="m-0 max-w-(--container-lg) text-balance text-heading-sm text-(--text-muted)"
           >
             <slot>{{ description }}</slot>

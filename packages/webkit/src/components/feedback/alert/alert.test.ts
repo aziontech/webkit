@@ -2,7 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { createSSRApp, h } from 'vue'
+import { createSSRApp, h, nextTick, ref } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import Default from '../../../../examples/alert/default.vue'
@@ -384,5 +384,27 @@ describe('Alert in a narrow box', () => {
     const view = render(Alert, { props: { label: 'Saved.' } })
 
     expect(view.container.querySelector('[data-slot="alert-action"]')).toBeNull()
+  })
+})
+
+describe('Alert slot presence', () => {
+  it('follows a v-if slot that appears and disappears after mount', async () => {
+    const shown = ref(false)
+    const { queryByTestId } = render({
+      components: { Alert },
+      setup: () => ({ shown }),
+      template: `<Alert><template #default>Saved.</template><template v-if="shown" #action><span data-testid="probe">Slotted</span></template></Alert>`
+    })
+    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+
+    shown.value = true
+    await nextTick()
+    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(true)
+    expect(queryByTestId('probe')).not.toBeNull()
+
+    shown.value = false
+    await nextTick()
+    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+    expect(queryByTestId('probe')).toBeNull()
   })
 })
