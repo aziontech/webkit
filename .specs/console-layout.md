@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 9432faca3779c33bef6a10076d17145c92ff15c3a13a763f0ab883165bd243f3
+checksum: 395767db00384b439d2cc0bcb3fce7e2bcf535fd394d421fb86872bb0f3d5d15
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -103,12 +103,16 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## Slots
 
-| Slot           | Scope                  | Notes                                                                                                          |
-| -------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `default`      | —                      | The page body, rendered inside the layout's `<main>`.                                                          |
-| `actions`      | `{ compact: boolean }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`.    |
-| `search`       | `{ query: string }`    | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette.         |
-| `account-menu` | —                      | `DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar. |
+| Slot            | Scope                                           | Notes                                                                                                                                                                               |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`       | —                                               | The page body, rendered inside the layout's `<main>`.                                                                                                                               |
+| `actions`       | `{ compact: boolean, toggleTools: () => void }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
+| `header-start`  | `{ compact: boolean }`                          | Content at the start of the header, before the breadcrumbs (an account or organization switcher).                                                                                   |
+| `breadcrumbs`   | —                                               | A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact.                                               |
+| `notifications` | —                                               | Flash messages (`Alert`) above the page, kept in view while the page scrolls.                                                                                                       |
+| `tools`         | —                                               | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`.                                                                                |
+| `search`        | `{ query: string }`                             | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette.                                                                              |
+| `account-menu`  | —                                               | `DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar.                                                                      |
 
 ## States
 
