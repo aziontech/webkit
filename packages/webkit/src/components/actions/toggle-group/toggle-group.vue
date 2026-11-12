@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TValue extends string = string">
   import {
     type ComponentPublicInstance,
     computed,
@@ -16,42 +16,34 @@
   import { cn } from '../../../utils/cn'
   import { getSegmentedButtonIndicatorTransitionStyle } from './presets/transitions'
 
-  export type ToggleGroupOption = {
-    label?: string | number
-    value?: string | number
-    disabled?: boolean
-  }
-
-  /** Size token. Sets the group's own height on the 28 / 32 / 40 rhythm. */
-  export type ToggleGroupSize = 'small' | 'medium' | 'large'
-
   defineOptions({
     name: 'ToggleGroup',
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Segmented choices shown as a mutually exclusive group. */
-    options?: ToggleGroupOption[]
-    /** Accessible name when no visible group label is associated. */
-    ariaLabel?: string
-    /** Initial selection when `v-model` is not set. */
-    defaultValue?: string
-    /** Size token, on the same 28 / 32 / 40 rhythm every other control uses. */
-    size?: ToggleGroupSize
-    /** Stretches the group to its container and lets the options share that width. */
-    fluid?: boolean
-  }
+  const props = withDefaults(
+    defineProps<{
+      /** Segmented choices shown as a mutually exclusive group. */
+      options?: ToggleGroupOption[]
+      /** Accessible name when no visible group label is associated. */
+      ariaLabel?: string
+      /** Initial selection when `v-model` is not set. */
+      defaultValue?: string
+      /** Size token, on the same 28 / 32 / 40 rhythm every other control uses. */
+      size?: ToggleGroupSize
+      /** Stretches the group to its container and lets the options share that width. */
+      fluid?: boolean
+    }>(),
+    {
+      options: () => [],
+      ariaLabel: undefined,
+      defaultValue: undefined,
+      size: 'large',
+      fluid: false
+    }
+  )
 
-  const props = withDefaults(defineProps<Props>(), {
-    options: () => [],
-    ariaLabel: undefined,
-    defaultValue: undefined,
-    size: 'large',
-    fluid: false
-  })
-
-  const model = defineModel<string | undefined>({ default: undefined })
+  const model = defineModel<TValue | undefined>({ default: undefined })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ toggleGroup: en.toggleGroup })
@@ -63,7 +55,7 @@
   const indicatorHeight = ref(0)
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
-  const internalValue = ref(props.defaultValue ?? '')
+  const internalValue = ref<string>(props.defaultValue ?? '')
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-toggle-group'
@@ -191,7 +183,7 @@
       internalValue.value = value
     }
 
-    model.value = value
+    model.value = value as TValue
   }
 
   const selectOption = (value: string, disabled: boolean) => {
@@ -323,6 +315,18 @@
   )
 
   watch(selectedValue, scheduleIndicatorSync)
+</script>
+
+<script lang="ts">
+  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. */
+  export type ToggleGroupOption<TOptionValue extends string | number = string | number> = {
+    label?: string | number
+    value?: TOptionValue
+    disabled?: boolean
+  }
+
+  /** Size token. Sets the group's own height on the 28 / 32 / 40 rhythm. */
+  export type ToggleGroupSize = 'small' | 'medium' | 'large'
 </script>
 
 <template>

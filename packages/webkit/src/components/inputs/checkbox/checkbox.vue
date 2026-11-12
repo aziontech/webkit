@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TModel = unknown">
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
@@ -8,41 +8,42 @@
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. */
-    modelValue?: unknown
-    /** Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). */
-    value?: unknown
-    /** When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). */
-    binary?: boolean
-    /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
-    indeterminate?: boolean
-    /** Disables interaction and applies disabled tokens. */
-    disabled?: boolean
-    /** Marks the field read-only; value is visible but cannot change via interaction. */
-    readonly?: boolean
-    /** Forwarded to the inner input id for label association. */
-    inputId?: string
-    /** HTML name for form submission. */
-    name?: string
-    /** Forwarded to the inner input tabindex. */
-    tabindex?: number
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    value: undefined,
-    binary: false,
-    indeterminate: false,
-    disabled: false,
-    readonly: false,
-    inputId: '',
-    name: '',
-    tabindex: 0
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting; update:modelValue sends the same type. */
+      modelValue?: TModel
+      /** Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). */
+      value?: unknown
+      /** When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). */
+      binary?: boolean
+      /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
+      indeterminate?: boolean
+      /** Disables interaction and applies disabled tokens. */
+      disabled?: boolean
+      /** Marks the field read-only; value is visible but cannot change via interaction. */
+      readonly?: boolean
+      /** Forwarded to the inner input id for label association. */
+      inputId?: string
+      /** HTML name for form submission. */
+      name?: string
+      /** Forwarded to the inner input tabindex. */
+      tabindex?: number
+    }>(),
+    {
+      modelValue: undefined,
+      value: undefined,
+      binary: false,
+      indeterminate: false,
+      disabled: false,
+      readonly: false,
+      inputId: '',
+      name: '',
+      tabindex: 0
+    }
+  )
 
   const emit = defineEmits<{
-    'update:modelValue': [value: unknown]
+    'update:modelValue': [value: TModel]
   }>()
 
   const attrs = useAttrs()
@@ -95,7 +96,7 @@
     }
 
     if (props.binary) {
-      emit('update:modelValue', !props.modelValue)
+      emit('update:modelValue', !props.modelValue as TModel)
       return
     }
 
@@ -108,7 +109,7 @@
       current.splice(index, 1)
     }
 
-    emit('update:modelValue', current)
+    emit('update:modelValue', current as TModel)
   }
 </script>
 

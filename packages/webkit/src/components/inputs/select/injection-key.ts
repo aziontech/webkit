@@ -7,6 +7,18 @@ export type SelectKind = 'outlined' | 'transparent'
 
 export type SelectValue = string | number | unknown[] | undefined
 
+/** One entry of an options list a consumer renders as Select.Option rows: the value, the label text and the option's own props. */
+export interface SelectOptionItem<TValue = string> {
+  /** Value the option writes to the model. */
+  value: TValue
+  /** Text of the option and of the trigger once selected. */
+  label: string
+  /** PrimeIcons class of the leading icon. */
+  icon?: string
+  /** Disables this option only. */
+  disabled?: boolean
+}
+
 export interface SelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string

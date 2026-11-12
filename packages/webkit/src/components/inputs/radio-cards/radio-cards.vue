@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TItem extends RadioCardsItem = RadioCardsItem">
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
@@ -10,35 +10,28 @@
     inheritAttrs: false
   })
 
-  export interface RadioCardsItem {
-    value: string | number
-    label: string
-    icon?: string
-    description?: string
-    ariaLabel?: string
-  }
-
-  interface Props {
-    /** Currently selected item value (v-model). */
-    modelValue?: string | number
-    /** Options rendered as selectable cards; each entry must include `value` and `label`. */
-    items: RadioCardsItem[]
-    /** Disables all options and applies disabled tokens. */
-    disabled?: boolean
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    disabled: false
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Currently selected item value (v-model); update:modelValue sends it typed as the items' value. */
+      modelValue?: RadioCardsItem['value']
+      /** Options rendered as selectable cards; each entry must include `value` and `label`, and may carry extra fields the slots read. */
+      items: TItem[]
+      /** Disables all options and applies disabled tokens. */
+      disabled?: boolean
+    }>(),
+    {
+      modelValue: undefined,
+      disabled: false
+    }
+  )
 
   const emit = defineEmits<{
-    'update:modelValue': [value: string | number]
+    'update:modelValue': [value: TItem['value']]
   }>()
 
   defineSlots<{
-    default(props: { item: RadioCardsItem; selected: boolean }): unknown
-    tag(props: { item: RadioCardsItem; selected: boolean }): unknown
+    default(props: { item: TItem; selected: boolean }): unknown
+    tag(props: { item: TItem; selected: boolean }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -73,7 +66,7 @@
 
   const labelRowClasses = 'flex items-center gap-(--spacing-xxs)'
 
-  function isSelected(item: RadioCardsItem): boolean {
+  function isSelected(item: TItem): boolean {
     return props.modelValue === item.value
   }
 
@@ -83,7 +76,7 @@
     return index === activeIndex ? 0 : -1
   }
 
-  function select(value: string | number): void {
+  function select(value: TItem['value']): void {
     if (props.disabled) return
     emit('update:modelValue', value)
   }
@@ -132,6 +125,16 @@
     select(props.items[nextIndex].value)
     const target = event.currentTarget as HTMLElement | null
     target?.parentElement?.querySelectorAll<HTMLElement>('[role="radio"]')[nextIndex]?.focus()
+  }
+</script>
+
+<script lang="ts">
+  export interface RadioCardsItem {
+    value: string | number
+    label: string
+    icon?: string
+    description?: string
+    ariaLabel?: string
   }
 </script>
 

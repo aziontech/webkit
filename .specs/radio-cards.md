@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 7d641826b2d1abd6bae5a1430e7fb074ebcc7c02053cf4ef817a48bf13545fa7
+checksum: a7f356a9b816751241cb5007f86180ebec6c14c24662587a056d49247cf8cd6b
 created: 2026-05-23
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Box Grid Selection — Component Spec
@@ -78,24 +78,26 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 ## Props
 
-| Prop         | Type                            | Default     | Required | JSDoc                                                                              |
-| ------------ | ------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------- |
-| `modelValue` | `string \| number \| undefined` | `undefined` | false    | Currently selected item value (v-model).                                           |
-| `items`      | `RadioCardsItem[]`              | `undefined` | true     | Options rendered as selectable cards; each entry must include `value` and `label`. |
-| `disabled`   | `boolean`                       | `false`     | false    | Disables all options and applies disabled tokens.                                  |
+| Prop         | Type               | Default     | Required | JSDoc                                                                              |
+| ------------ | ------------------ | ----------- | -------- | ---------------------------------------------------------------------------------- |
+| `modelValue` | `string \| number` | `undefined` | false    | Currently selected item value (v-model).                                           |
+| `items`      | `TItem[]`          | `undefined` | true     | Options rendered as selectable cards; each entry must include `value` and `label`. |
+| `disabled`   | `boolean`          | `false`     | false    | Disables all options and applies disabled tokens.                                  |
+
+**Generic.** The component is generic over `TItem extends RadioCardsItem` (default `RadioCardsItem`, `{ value: string | number; label: string; icon?: string; description?: string; ariaLabel?: string }`), inferred from `items`: an item that carries extra fields (a price, a plan id) reaches the `default` and `tag` slots as its own type, so `item.price` needs no cast, and `update:modelValue` sends the items' `value` type (`'free' | 'pro'` for a list typed that way). The `modelValue` input stays `string | number`, so a model declared wider than the items' values still binds. `RadioCardsItem` is exported by `@aziontech/webkit/radio-cards`.
 
 ## Events
 
-| Event               | Payload            | Notes                                    |
-| ------------------- | ------------------ | ---------------------------------------- |
-| `update:modelValue` | `string \| number` | v-model when the user selects an option. |
+| Event               | Payload          | Notes                                    |
+| ------------------- | ---------------- | ---------------------------------------- |
+| `update:modelValue` | `TItem['value']` | v-model when the user selects an option. |
 
 ## Slots
 
-| Slot      | Scope                                         | Notes                                                       |
-| --------- | --------------------------------------------- | ----------------------------------------------------------- |
-| `default` | `{ item: RadioCardsItem; selected: boolean }` | Overrides the entire card body for an option.               |
-| `tag`     | `{ item: RadioCardsItem; selected: boolean }` | Trailing content below label/description (e.g. plan badge). |
+| Slot      | Scope                                | Notes                                                       |
+| --------- | ------------------------------------ | ----------------------------------------------------------- |
+| `default` | `{ item: TItem; selected: boolean }` | Overrides the entire card body for an option.               |
+| `tag`     | `{ item: TItem; selected: boolean }` | Trailing content below label/description (e.g. plan badge). |
 
 ## States
 

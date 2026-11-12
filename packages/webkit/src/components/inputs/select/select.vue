@@ -1,5 +1,5 @@
-<script setup lang="ts">
-  import { computed, provide, ref, toRef, useAttrs, useId, watch } from 'vue'
+<script setup lang="ts" generic="TValue extends SelectValue = SelectValue">
+  import { computed, provide, type Ref, ref, toRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
@@ -10,57 +10,56 @@
     type SelectValue
   } from './injection-key'
 
-  export type { SelectKind, SelectSize, SelectValue } from './injection-key'
-
   defineOptions({
     name: 'Select',
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Two-way bound selection. Scalar in single mode; array in multi mode. */
-    modelValue?: SelectValue
-    /** When true, switches the component to multi-select. */
-    multiple?: boolean
-    /** Controlled open state for the dropdown. */
-    open?: boolean
-    /** Initial open state when uncontrolled. */
-    defaultOpen?: boolean
-    /** Trigger placeholder shown when no option is selected. */
-    placeholder?: string
-    /** Size token; affects trigger height. */
-    size?: SelectSize
-    /** Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
-    kind?: SelectKind
-    /** Disables the trigger and prevents opening. */
-    disabled?: boolean
-    /** Marks the field read-only; selection visible, dropdown locked. */
-    readonly?: boolean
-    /** Marks the field as required; applies the required (warning) border and sets aria-required on the trigger. */
-    required?: boolean
-    /** Applies invalid border + ring tokens and aria-invalid on the trigger. */
-    invalid?: boolean
-    /** Custom formatter for the trigger label; receives the current modelValue. */
-    displayValue?: (value: unknown) => string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
-    multiple: false,
-    open: undefined,
-    defaultOpen: false,
-    placeholder: undefined,
-    size: 'medium',
-    kind: 'outlined',
-    disabled: false,
-    readonly: false,
-    required: false,
-    invalid: false,
-    displayValue: undefined
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to displayValue and update:modelValue. */
+      modelValue?: TValue
+      /** When true, switches the component to multi-select. */
+      multiple?: boolean
+      /** Controlled open state for the dropdown. */
+      open?: boolean
+      /** Initial open state when uncontrolled. */
+      defaultOpen?: boolean
+      /** Trigger placeholder shown when no option is selected. */
+      placeholder?: string
+      /** Size token; affects trigger height. */
+      size?: SelectSize
+      /** Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
+      kind?: SelectKind
+      /** Disables the trigger and prevents opening. */
+      disabled?: boolean
+      /** Marks the field read-only; selection visible, dropdown locked. */
+      readonly?: boolean
+      /** Marks the field as required; applies the required (warning) border and sets aria-required on the trigger. */
+      required?: boolean
+      /** Applies invalid border + ring tokens and aria-invalid on the trigger. */
+      invalid?: boolean
+      /** Custom formatter for the trigger label; receives the current modelValue, typed as the bound model. */
+      displayValue?: (value: TValue) => string
+    }>(),
+    {
+      modelValue: undefined,
+      multiple: false,
+      open: undefined,
+      defaultOpen: false,
+      placeholder: undefined,
+      size: 'medium',
+      kind: 'outlined',
+      disabled: false,
+      readonly: false,
+      required: false,
+      invalid: false,
+      displayValue: undefined
+    }
+  )
 
   const emit = defineEmits<{
-    'update:modelValue': [value: SelectValue]
+    'update:modelValue': [value: TValue]
     'update:open': [value: boolean]
   }>()
 
@@ -107,9 +106,9 @@
     () => {
       const current = props.modelValue
       if (props.multiple && !Array.isArray(current) && current !== undefined) {
-        emit('update:modelValue', current === '' ? [] : [current])
+        emit('update:modelValue', (current === '' ? [] : [current]) as TValue)
       } else if (!props.multiple && Array.isArray(current)) {
-        emit('update:modelValue', current[0] as SelectValue)
+        emit('update:modelValue', current[0] as TValue)
       }
     }
   )
@@ -127,10 +126,10 @@
       const index = current.indexOf(value)
       if (index === -1) current.push(value)
       else current.splice(index, 1)
-      emit('update:modelValue', current)
+      emit('update:modelValue', current as TValue)
       return
     }
-    emit('update:modelValue', value as SelectValue)
+    emit('update:modelValue', value as TValue)
     setOpen(false)
   }
 
@@ -142,7 +141,7 @@
 
   const displayValueComputed = computed((): string => {
     const current = props.modelValue
-    if (props.displayValue) return props.displayValue(current)
+    if (props.displayValue) return props.displayValue(current as TValue)
     if (Array.isArray(current)) return current.length === 0 ? '' : current.join(', ')
     if (current === undefined || current === null) return ''
     return String(current)
@@ -153,7 +152,7 @@
     triggerRef: ref<globalThis.HTMLElement | null>(null),
     open: openState,
     setOpen,
-    modelValue: toRef(props, 'modelValue'),
+    modelValue: toRef(props, 'modelValue') as Ref<SelectValue>,
     toggleValue,
     isSelected,
     multiple: computed(() => props.multiple),
@@ -171,6 +170,10 @@
     displayValue: displayValueComputed,
     filled
   })
+</script>
+
+<script lang="ts">
+  export type { SelectKind, SelectOptionItem, SelectSize, SelectValue } from './injection-key'
 </script>
 
 <template>

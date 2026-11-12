@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 092d0f4f6f1ba5242dd41cfbc6502de0fa83bf4b1241ed2fd08597a7e17eee83
+checksum: a123b0b175da6abaef4ce596d346240767ca5dd7c812832ca07dd8730a65fb88
 created: 2026-06-15
 last_updated: 2026-11-12
 ---
@@ -44,6 +44,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
+- Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
 - With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 - A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
@@ -93,7 +94,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 | Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                              |
 | -------------- | -------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `modelValue`   | `string \| number \| unknown[]`  | `undefined`  | false    | Two-way bound selection. Scalar in single mode; array in multi mode.                                                                                                                                               |
+| `modelValue`   | `TValue`                         | `undefined`  | false    | Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`.                                                                                     |
 | `multiple`     | `boolean`                        | `false`      | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
 | `open`         | `boolean`                        | `undefined`  | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                                                                                   |
 | `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
@@ -104,13 +105,17 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 | `readonly`     | `boolean`                        | `false`      | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                          |
 | `required`     | `boolean`                        | `false`      | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
 | `invalid`      | `boolean`                        | `false`      | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                   |
-| `displayValue` | `(value: unknown) => string`     | `undefined`  | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`.                                                                                                           |
+| `displayValue` | `(value: TValue) => string`      | `undefined`  | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model.                                                                                 |
+
+**Generic.** The root is generic over `TValue extends SelectValue` (`string | number | unknown[] | undefined`, the default), inferred from the bound `modelValue`: with a `string` model, `displayValue` takes `(value: string) => string` and `update:modelValue` sends a `string`, so a handler needs no narrowing. With `multiple`, bind an array (`string[]`) and both follow it.
+
+**Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectKind`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Option` rows, so a list with disabled entries needs no local type.
 
 ## Events
 
 | Event               | Payload   | Notes                                                         |
 | ------------------- | --------- | ------------------------------------------------------------- |
-| `update:modelValue` | `unknown` | Fires when an option is selected (single) or toggled (multi). |
+| `update:modelValue` | `TValue`  | Fires when an option is selected (single) or toggled (multi). |
 | `update:open`       | `boolean` | Fires when the dropdown opens or closes.                      |
 
 ## Slots

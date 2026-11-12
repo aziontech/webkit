@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 8d16cea4717c074b8112899e7f92763eb25a876d0d4e2fa9a92cf112deca5be8
+checksum: 60c4128592778b759e9b3eb34e3cd6e512aab831285b499a310cc1594d7744b9
 created: 2026-06-25
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # MultiSelect — Component Spec
@@ -95,7 +95,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 | Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                     |
 | -------------- | -------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `unknown[]`                      | `() => []`  | false    | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`.                                                   |
+| `modelValue`   | `TValue[]`                       | `() => []`  | false    | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`.                                                   |
 | `open`         | `boolean`                        | `undefined` | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                          |
 | `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                     |
 | `placeholder`  | `string`                         | `''`        | false    | Trigger placeholder shown when no option is selected.                                                                                                     |
@@ -104,14 +104,16 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 | `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                 |
 | `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                          |
-| `displayValue` | `(value: unknown[]) => string`   | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                              |
+| `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                              |
+
+**Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the type `MultiSelectSize`.
 
 ## Events
 
-| Event               | Payload     | Notes                                                                 |
-| ------------------- | ----------- | --------------------------------------------------------------------- |
-| `update:modelValue` | `unknown[]` | Fires when an option is toggled; payload is the next selection array. |
-| `update:open`       | `boolean`   | Fires when the dropdown opens or closes.                              |
+| Event               | Payload    | Notes                                                                 |
+| ------------------- | ---------- | --------------------------------------------------------------------- |
+| `update:modelValue` | `TValue[]` | Fires when an option is toggled; payload is the next selection array. |
+| `update:open`       | `boolean`  | Fires when the dropdown opens or closes.                              |
 
 ## Slots
 

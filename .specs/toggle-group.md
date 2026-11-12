@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 45e0a219d721c21d7f29a3eebaf2fcd77c1157fbc7ecf7fbb6fa05db67a6b117
+checksum: c9583f883b74f098c950cdf28bb4a40d2989402eec426d5b507f9f82db40e8c7
 created: 2026-11-09
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # ToggleGroup — Component Spec
@@ -87,7 +87,9 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 | Model     | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                     |
 | --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `string \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+| `v-model` | `TValue \| undefined` | `undefined` | `update:modelValue` | Selected option value via `defineModel`. While unbound (`undefined`) the group is uncontrolled: it starts at `defaultValue`, else the first non-disabled option. Emits only when the selection changes to a different value, always as the string-coerced option `value`. |
+
+**Generic.** The component is generic over `TValue extends string` (default `string`), inferred from the bound `v-model`: on a `Ref<'day' | 'week'>`, `update:modelValue` sends `'day' | 'week' | undefined` (the `undefined` of an unbound model), so `v-model` binds the union with no cast. `ToggleGroupOption<TOptionValue = string | number>` types a list against the same union (`ToggleGroupOption<'day' | 'week'>[]`); the `options` prop itself stays `ToggleGroupOption[]`, so a list typed `{ label: string; value: string }[]` still binds. `ToggleGroupOption` and `ToggleGroupSize` are exported by `@aziontech/webkit/toggle-group`.
 
 ## Events
 
