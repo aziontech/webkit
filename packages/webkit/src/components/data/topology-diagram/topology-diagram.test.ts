@@ -112,6 +112,27 @@ describe('TopologyDiagram', () => {
     expect(view.getByText(/1 staged/)).toBeTruthy()
   })
 
+  it('links a named node with href and ends the link in the open glyph', () => {
+    const view = render(Default)
+    const link = view
+      .getAllByRole('link', { name: 'web-app' })
+      .find((node) => node.getAttribute('href') === '#project')!
+    expect(link).toHaveAttribute('data-testid', 'data-topology-diagram__node-link')
+    expect(link.querySelector('.pi-external-link')).toHaveAttribute('aria-hidden', 'true')
+    const plain = render(TopologyDiagram, { props: { levels } })
+    expect(within(plain.container).queryByRole('link')).toBeNull()
+    expect(plain.container.querySelector('.pi-external-link')).toBeNull()
+  })
+
+  it('puts the Domains add control from the actions slot in the identity row', async () => {
+    const view = render(Default)
+    const add = view.getByRole('button', { name: 'Add domain' })
+    const domains = view.getAllByTestId('data-topology-diagram__node')[0]!
+    expect(domains).toContainElement(add)
+    await fireEvent.click(add)
+    expect(view.getByText('Add a domain.')).toHaveAttribute('role', 'status')
+  })
+
   it('is busy while loading and shows the empty line without levels', () => {
     const loading = render(Loading)
     expect(loading.getByRole('region').getAttribute('aria-busy')).toBe('true')
