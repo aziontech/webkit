@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
@@ -24,13 +24,15 @@
     { label: 'HTTP only', value: 'http' },
     { label: 'Match the request', value: 'match' }
   ]
-  const protocolLabel = (value) => protocols.find((option) => option.value === value)?.label ?? ''
+  const protocolLabel = (value: unknown) =>
+    protocols.find((option) => option.value === value)?.label ?? ''
   const regions = [
     { label: 'US East (Washington)', value: 'us-east' },
     { label: 'South America (São Paulo)', value: 'sa-east' },
     { label: 'Europe (Frankfurt)', value: 'eu-west' }
   ]
-  const regionLabel = (value) => regions.find((option) => option.value === value)?.label ?? ''
+  const regionLabel = (value: unknown) =>
+    regions.find((option) => option.value === value)?.label ?? ''
 
   const origins = ref([
     { id: 'origin-1', name: 'storefront-bucket', protocol: 'https' },

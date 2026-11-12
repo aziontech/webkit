@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -7,14 +7,14 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
-  import { reactive, ref } from 'vue'
+  import { type Ref, reactive, ref } from 'vue'
 
   const toolbarOptions = [
     { label: 'Team default', value: 'default' },
     { label: 'Enabled', value: 'enabled' },
     { label: 'Disabled', value: 'disabled' }
   ]
-  const toolbarLabel = (value) =>
+  const toolbarLabel = (value: unknown) =>
     toolbarOptions.find((option) => option.value === value)?.label ?? ''
   const toolbar = reactive({ preprod: 'default', prod: 'default' })
   const savingToolbar = ref(false)
@@ -24,12 +24,12 @@
     { label: 'Only preview deployments', value: 'preview' },
     { label: 'All deployments', value: 'all' }
   ]
-  const protectionLabel = (value) =>
+  const protectionLabel = (value: unknown) =>
     protectionOptions.find((option) => option.value === value)?.label ?? ''
   const protection = reactive({ level: 'standard', shareableLinks: true })
   const savingProtection = ref(false)
 
-  const saveCard = (flag) => {
+  const saveCard = (flag: Ref<boolean>) => {
     if (flag.value) return
     flag.value = true
     setTimeout(() => {

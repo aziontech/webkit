@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'

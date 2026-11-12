@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
@@ -14,7 +14,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectValue } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { computed, reactive, ref, watch } from 'vue'
 
@@ -23,13 +23,24 @@
   const environmentSelectOpen = ref(false)
   const certificateTouched = ref(false)
 
+  type DeploymentPolicy = 'single_version' | 'versioned_urls'
+
+  interface EnvironmentOption {
+    value: string
+    label: string
+    deploymentPolicy: DeploymentPolicy
+  }
+
   const CREATE_ENVIRONMENT = '__create-environment__'
-  const environmentOptions = [
+  const environmentOptions: EnvironmentOption[] = [
     { value: 'Production', label: 'Production', deploymentPolicy: 'single_version' },
     { value: 'Preview', label: 'Preview', deploymentPolicy: 'versioned_urls' },
     { value: 'Stage', label: 'Stage', deploymentPolicy: 'versioned_urls' }
   ]
-  const policyLabels = { single_version: 'Single', versioned_urls: 'Versioned' }
+  const policyLabels: Record<DeploymentPolicy, string> = {
+    single_version: 'Single',
+    versioned_urls: 'Versioned'
+  }
   const resourceEnvironments = ['Production', 'Preview']
   const certificateOptions = [
     { value: '', label: 'Free platform certificate', subject: '' },
@@ -55,12 +66,12 @@
   const form = reactive(blankForm())
   const errors = reactive({ domain: '', environment: '' })
 
-  const environmentLabel = (value) =>
+  const environmentLabel = (value: unknown) =>
     environmentOptions.find((option) => option.value === value)?.label ?? ''
-  const certificateLabel = (value) =>
+  const certificateLabel = (value: unknown) =>
     certificateOptions.find((option) => option.value === value)?.label ?? ''
 
-  const subjectCovers = (subject, host) => {
+  const subjectCovers = (subject: string, host: string) => {
     const pattern = subject.toLowerCase()
     if (!pattern) return false
     if (pattern === host) return true
@@ -71,7 +82,7 @@
     )
   }
 
-  const certificateForDomain = (host) => {
+  const certificateForDomain = (host: string) => {
     const name = host.trim().toLowerCase()
     if (!name) return ''
     const candidates = certificateOptions.filter((option) => subjectCovers(option.subject, name))
@@ -106,7 +117,8 @@
     { immediate: true }
   )
 
-  const onCertificate = (value) => {
+  const onCertificate = (value: SelectValue) => {
+    if (typeof value !== 'string') return
     certificateTouched.value = true
     form.certificate = value
   }
@@ -137,7 +149,8 @@
       : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
   })
 
-  const onEnvironmentModel = (value) => {
+  const onEnvironmentModel = (value: SelectValue) => {
+    if (typeof value !== 'string') return
     if (value === CREATE_ENVIRONMENT) {
       environmentSelectOpen.value = false
       return

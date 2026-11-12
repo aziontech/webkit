@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
@@ -29,7 +29,54 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-  const version = (id, author, createdAgo, active = false) => ({
+  interface Version {
+    id: string
+    name: string
+    author: string
+    createdAgo: string
+    active?: boolean
+  }
+  interface Dependency {
+    key: string
+    label: string
+    name: string
+    icon: string
+    note: string
+    total: number
+    versions: Version[]
+  }
+  interface SharedDependency extends Dependency {
+    sharedWith: string[]
+  }
+  interface Resource extends Dependency {
+    owner: boolean
+  }
+  interface DomainGroup {
+    environment: string
+    total: number
+    summary: string
+    domains: string[]
+  }
+  interface ExistingProject {
+    id: string
+    name: string
+    detail: string
+    domains: DomainGroup[]
+  }
+  interface ProjectGroup {
+    key: string
+    label: string
+    projects: ExistingProject[]
+  }
+  interface ProjectView {
+    id?: string
+    name: string
+    domain?: string
+    detail?: string
+    domains?: DomainGroup[]
+  }
+
+  const version = (id: string, author: string, createdAgo: string, active = false): Version => ({
     id,
     name: id,
     author,
@@ -37,7 +84,7 @@
     active
   })
 
-  const authGateway = (prefix) => ({
+  const authGateway = (prefix: string): SharedDependency => ({
     key: `${prefix}:module-auth-gateway`,
     label: 'Module',
     name: 'auth-gateway',
@@ -52,7 +99,7 @@
     ]
   })
 
-  const paymentsApi = (prefix) => ({
+  const paymentsApi = (prefix: string): SharedDependency => ({
     key: `${prefix}:integration-payments-api`,
     label: 'Integration',
     name: 'payments-api',
@@ -63,7 +110,7 @@
     versions: []
   })
 
-  const geoRedirect = (prefix, ready) => ({
+  const geoRedirect = (prefix: string, ready: boolean): SharedDependency => ({
     key: `${prefix}:module-geo-redirect`,
     label: 'Module',
     name: 'geo-redirect',
@@ -80,12 +127,12 @@
       : []
   })
 
-  const dependenciesByVersion = (id) => {
+  const dependenciesByVersion = (id: string): SharedDependency[] => {
     const prefix = `service@${id}`
     return [authGateway(prefix), geoRedirect(prefix, id !== 'AG1VVDJP'), paymentsApi(prefix)]
   }
 
-  const resources = [
+  const resources: Resource[] = [
     {
       key: 'service',
       label: 'Service',
@@ -122,9 +169,9 @@
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject = { name: 'web-app', domain: 'web-app.example.com' }
+  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
 
-  const projectGroups = [
+  const projectGroups: ProjectGroup[] = [
     {
       key: 'serving',
       label: 'Serving web-app',
@@ -378,8 +425,8 @@
   const RUN_TOAST = 'deploy-drawer-dependencies-run'
 
   const open = ref(false)
-  const picks = reactive({ service: 'AG1VVDJP' })
-  const versionOpen = reactive({})
+  const picks = reactive<Record<string, string>>({ service: 'AG1VVDJP' })
+  const versionOpen = reactive<Record<string, boolean>>({})
   const projectMode = ref('existing')
   const projectId = ref('1020655')
   const environment = ref('Production')
@@ -390,33 +437,34 @@
   let keepChoices = false
   let attempts = 0
 
-  const project = computed(() =>
+  const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
       ? newProject
-      : projectGroups
+      : (projectGroups
           .flatMap((group) => group.projects)
-          .find((entry) => entry.id === projectId.value)
+          .find((entry) => entry.id === projectId.value) ?? projectGroups[0].projects[0])
   )
 
-  const versionOf = (row) =>
+  const versionOf = (row: Dependency) =>
     row.versions.find((entry) => entry.id === picks[row.key]) ?? row.versions[0]
 
-  const versionSummary = (row) =>
+  const versionSummary = (row: Dependency) =>
     row.total > row.versions.length
       ? `${row.versions.length} of ${row.total} Ready versions`
       : `${row.total} Ready versions`
 
-  const pickVersion = (row, id) => {
+  const pickVersion = (row: Dependency, id: string) => {
     picks[row.key] = id
     versionOpen[row.key] = false
   }
 
-  const listFormat = (names) =>
+  const listFormat = (names: string[]) =>
     names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : (names[0] ?? '')
 
   const serviceDependencies = computed(() => dependenciesByVersion(versionOf(resources[0]).id))
 
-  const dependenciesOf = (row) => (row.key === 'service' ? serviceDependencies.value : [])
+  const dependenciesOf = (row: Resource): SharedDependency[] =>
+    row.key === 'service' ? serviceDependencies.value : []
 
   const sharedDependency = computed(() =>
     serviceDependencies.value.find((dependency) => dependency.sharedWith.length)
@@ -595,7 +643,7 @@
                             <DropdownMenu
                               v-model:open="versionOpen[row.key]"
                               placement="bottom-end"
-                              @select="(event, id) => pickVersion(row, String(id))"
+                              @select="(_event, id) => pickVersion(row, String(id))"
                             >
                               <DropdownMenu.Trigger>
                                 <Button
@@ -686,7 +734,7 @@
                           <Accordion
                             type="single"
                             collapsible
-                            size="small"
+                            size="medium"
                             default-value="dependencies"
                           >
                             <Accordion.Item value="dependencies">
@@ -813,7 +861,7 @@
                                             v-model:open="versionOpen[dependency.key]"
                                             placement="bottom-end"
                                             @select="
-                                              (event, id) => pickVersion(dependency, String(id))
+                                              (_event, id) => pickVersion(dependency, String(id))
                                             "
                                           >
                                             <DropdownMenu.Trigger>
@@ -1092,7 +1140,7 @@
                           <Item.Actions v-if="projectMode === 'existing'">
                             <DropdownMenu
                               placement="bottom-end"
-                              @select="(event, id) => (projectId = String(id))"
+                              @select="(_event, id) => (projectId = String(id))"
                             >
                               <DropdownMenu.Trigger>
                                 <Button

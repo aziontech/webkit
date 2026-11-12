@@ -1,9 +1,19 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+
+  interface NextStep {
+    icon: string
+    title: string
+    description: string
+    href?: string
+    external?: boolean
+    action?: boolean
+    recommended?: boolean
+  }
 
   const resources = [
     {
@@ -37,7 +47,7 @@
     }
   ]
 
-  const nextSteps = [
+  const nextSteps: NextStep[] = [
     {
       icon: 'pi pi-globe',
       title: 'Customize domain',

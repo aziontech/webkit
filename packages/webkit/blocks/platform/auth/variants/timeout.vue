@@ -1,5 +1,5 @@
-<script setup>
-  import Alert from '@aziontech/webkit/alert'
+<script setup lang="ts">
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -14,6 +14,13 @@
   } from '@aziontech/webkit/password-requirements'
   import { nextTick, reactive, ref } from 'vue'
 
+  interface CardNotice {
+    severity: AlertSeverity
+    label: string
+    exits?: boolean
+    retry?: () => void
+  }
+
   const failure = ref('timeout')
   const screen = ref('signin')
 
@@ -27,24 +34,24 @@
     signupPassword: ''
   })
 
-  const cardNotice = ref(null)
+  const cardNotice = ref<CardNotice | null>(null)
   const verifying = ref(false)
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  const emailError = (value) =>
+  const emailError = (value: string) =>
     !value.trim()
       ? 'This field is required.'
       : emailPattern.test(value.trim())
         ? ''
         : 'Enter a valid email address.'
 
-  const passwordMeetsRequirements = (value) =>
+  const passwordMeetsRequirements = (value: string) =>
     DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
       typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
     )
 
-  const focusField = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const signIn = () => {
     errors.signinEmail = emailError(signin.email)

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -7,7 +7,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Alert from '@aziontech/webkit/alert'
@@ -16,16 +16,55 @@
   import RadioButton from '@aziontech/webkit/radio-button'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper from '@aziontech/webkit/stepper'
+  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
 
+  type ListType = 'asn' | 'ip_cidr' | 'countries'
+  type FieldName = 'name' | 'type' | 'items'
+  type Direction = 'forward' | 'back'
+
+  interface PolicyOption {
+    value: string
+    label: string
+    description: string
+    ready: boolean
+  }
+
+  interface ListField {
+    label: string
+    placeholder: string
+    helper: string
+  }
+
+  interface FieldError {
+    kind: HelperTextKind
+    message: string
+  }
+
+  interface StepDefinition {
+    value: string
+    title: string
+    description: string
+    heading?: boolean
+    fields: FieldName[]
+  }
+
+  interface StepItem {
+    value: string
+    title: string
+    description: string
+    state: StepperStepState
+    disabled: boolean
+  }
+
   const breadcrumb = [
     { label: 'Access Lists', href: '/access-lists' },
     { label: 'Create Access List' }
   ]
-  const policies = [
+  const policies: PolicyOption[] = [
     { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
     { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },
     { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },
@@ -84,7 +123,7 @@
       description: 'Group traffic by country, for location-based rules.'
     }
   ]
-  const listFields = {
+  const listFields: Record<ListType, ListField> = {
     asn: {
       label: 'List',
       placeholder: '13335\n53331',
@@ -107,19 +146,23 @@
   const VISIBLE = 6
 
   const current = ref('where-it-runs')
-  const direction = ref(null)
+  const direction = ref<Direction | null>(null)
   const choice = ref('')
   const enableModule = ref(false)
   const query = ref('')
-  const form = reactive({ name: '', type: 'asn', items: '' })
-  const errors = reactive({})
+  const form = reactive<{ name: string; type: ListType; items: string }>({
+    name: '',
+    type: 'asn',
+    items: ''
+  })
+  const errors = reactive<Partial<Record<FieldName, FieldError>>>({})
   const unlocked = ref(['where-it-runs'])
 
   const moduleMissing = computed(
     () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
   )
 
-  const definitions = computed(() => [
+  const definitions = computed((): StepDefinition[] => [
     {
       value: 'where-it-runs',
       title: 'Where it runs',
@@ -164,7 +207,7 @@
   const isLast = computed(() => index.value === definitions.value.length - 1)
 
   const steps = computed(() =>
-    definitions.value.map((entry, position) => ({
+    definitions.value.map((entry, position): StepItem => ({
       value: entry.value,
       title: entry.title,
       description: entry.description,
@@ -194,7 +237,7 @@
   })
   const hidden = computed(() => Math.max(0, matches.value.length - visible.value.length))
 
-  const validate = (fields) => {
+  const validate = (fields: FieldName[]) => {
     for (const field of fields) delete errors[field]
     if (fields.includes('name') && !form.name.trim()) {
       errors.name = { kind: 'required', message: 'This field is required.' }
@@ -221,7 +264,7 @@
     current.value = previous.value
   }
 
-  const choose = (option) => {
+  const choose = (option: PolicyOption) => {
     choice.value = option.value
     enableModule.value = false
     goNext()

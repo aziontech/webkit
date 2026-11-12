@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -25,7 +25,33 @@
   import Tag from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
 
-  const resources = [
+  interface Version {
+    id: string
+    name: string
+    author: string
+    createdAgo: string
+    active?: boolean
+  }
+  interface Dependency {
+    key: string
+    label: string
+    name: string
+    icon: string
+    note: string
+    total: number
+    versions: Version[]
+  }
+  interface Resource extends Dependency {
+    owner: boolean
+    dependencies: Dependency[]
+  }
+  interface ProjectView {
+    id?: string
+    name: string
+    domain: string
+  }
+
+  const resources: Resource[] = [
     {
       key: 'service',
       label: 'Service',
@@ -192,7 +218,7 @@
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject = { name: 'web-app', domain: 'web-app.example.com' }
+  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
 
   const boundProjects = [
     {
@@ -223,37 +249,37 @@
   ]
 
   const open = ref(false)
-  const picks = reactive({})
-  const versionOpen = reactive({})
+  const picks = reactive<Record<string, string>>({})
+  const versionOpen = reactive<Record<string, boolean>>({})
   const projectMode = ref('existing')
   const projectId = ref(boundProjects[0].id)
   const projectOpen = ref(false)
   const environment = ref('Production')
 
-  const project = computed(() =>
+  const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
       ? newProject
-      : boundProjects.find((entry) => entry.id === projectId.value)
+      : (boundProjects.find((entry) => entry.id === projectId.value) ?? boundProjects[0])
   )
 
   const isLastUsed = computed(
     () => projectMode.value === 'existing' && project.value.id === boundProjects[0].id
   )
 
-  const pickProject = (id) => {
+  const pickProject = (id: string) => {
     projectId.value = id
     projectOpen.value = false
   }
 
-  const versionOf = (row) =>
+  const versionOf = (row: Dependency) =>
     row.versions.find((entry) => entry.id === picks[row.key]) ?? row.versions[0]
 
-  const versionSummary = (row) =>
+  const versionSummary = (row: Dependency) =>
     row.total > row.versions.length
       ? `${row.versions.length} of ${row.total} Ready versions`
       : `${row.total} Ready versions`
 
-  const pickVersion = (row, id) => {
+  const pickVersion = (row: Dependency, id: string) => {
     picks[row.key] = id
     versionOpen[row.key] = false
   }
@@ -351,7 +377,7 @@
                           <DropdownMenu
                             v-model:open="versionOpen[row.key]"
                             placement="bottom-end"
-                            @select="(event, id) => pickVersion(row, String(id))"
+                            @select="(_event, id) => pickVersion(row, String(id))"
                           >
                             <DropdownMenu.Trigger>
                               <Button
@@ -442,7 +468,7 @@
                         <Accordion
                           type="single"
                           collapsible
-                          size="small"
+                          size="medium"
                         >
                           <Accordion.Item value="dependencies">
                             <Accordion.Trigger>
@@ -500,7 +526,9 @@
                                       <DropdownMenu
                                         v-model:open="versionOpen[dependency.key]"
                                         placement="bottom-end"
-                                        @select="(event, id) => pickVersion(dependency, String(id))"
+                                        @select="
+                                          (_event, id) => pickVersion(dependency, String(id))
+                                        "
                                       >
                                         <DropdownMenu.Trigger>
                                           <Button

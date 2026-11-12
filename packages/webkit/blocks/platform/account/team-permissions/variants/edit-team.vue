@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -17,7 +17,20 @@
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
-  const groups = [
+  type PermissionAction = 'view' | 'edit'
+
+  interface PermissionResource {
+    key: string
+    label: string
+    only?: PermissionAction
+  }
+
+  interface PermissionGroup {
+    label: string
+    resources: PermissionResource[]
+  }
+
+  const groups: PermissionGroup[] = [
     {
       label: 'Applications',
       resources: [
@@ -50,12 +63,12 @@
     }
   ]
 
-  const ACTIONS = ['view', 'edit']
-  const permissionsOf = (resource) =>
+  const ACTIONS: PermissionAction[] = ['view', 'edit']
+  const permissionsOf = (resource: PermissionResource): string[] =>
     ACTIONS.filter((action) => !resource.only || resource.only === action).map(
       (action) => `${resource.key}.${action}`
     )
-  const groupIds = (group) => group.resources.flatMap(permissionsOf)
+  const groupIds = (group: PermissionGroup): string[] => group.resources.flatMap(permissionsOf)
   const allIds = groups.flatMap(groupIds)
 
   const accountUsers = [
@@ -66,8 +79,8 @@
     { email: 'elisa.prado@example.com', name: 'Elisa Prado' },
     { email: 'felipe.souza@example.com', name: 'Felipe Souza' }
   ]
-  const userByEmail = (email) => accountUsers.find((user) => user.email === email)
-  const initials = (name) =>
+  const userByEmail = (email: string) => accountUsers.find((user) => user.email === email)
+  const initials = (name: string): string =>
     name
       .split(' ')
       .map((part) => part[0])
@@ -123,7 +136,7 @@
     candidate.value = ''
     errors.member = ''
   }
-  const removeMember = (email) => {
+  const removeMember = (email: string) => {
     const index = members.value.indexOf(email)
     members.value = members.value.filter((item) => item !== email)
     const next = members.value[Math.min(index, members.value.length - 1)]
@@ -141,10 +154,11 @@
     }, 700)
   }
 
-  const has = (resource, action) => permissionsOf(resource).includes(`${resource.key}.${action}`)
+  const has = (resource: PermissionResource, action: PermissionAction) =>
+    permissionsOf(resource).includes(`${resource.key}.${action}`)
 
-  const isChecked = (id) => selected.value.includes(id)
-  const setChecked = (id, checked) => {
+  const isChecked = (id: string) => selected.value.includes(id)
+  const setChecked = (id: string, checked: unknown) => {
     const next = new Set(selected.value)
     if (checked) next.add(id)
     else next.delete(id)
@@ -155,12 +169,12 @@
     errors.permissions = ''
   }
 
-  const groupState = (group) => {
+  const groupState = (group: PermissionGroup) => {
     const ids = groupIds(group)
     const count = ids.filter(isChecked).length
     return { all: count === ids.length, some: count > 0 && count < ids.length }
   }
-  const toggleGroup = (group, checked) => {
+  const toggleGroup = (group: PermissionGroup, checked: unknown) => {
     const ids = new Set(groupIds(group))
     selected.value = checked
       ? allIds.filter((id) => ids.has(id) || isChecked(id))
@@ -169,7 +183,7 @@
   }
 
   const query = ref('')
-  const visibleGroups = computed(() => {
+  const visibleGroups = computed<PermissionGroup[]>(() => {
     const needle = query.value.trim().toLowerCase()
     if (!needle) return groups
     return groups
@@ -190,7 +204,7 @@
     selected.value = []
   }
 
-  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const submit = () => {
     if (submitting.value) return
@@ -401,7 +415,7 @@
                         <Button
                           type="button"
                           label="Clear"
-                          kind="text"
+                          kind="transparent"
                           size="medium"
                           @click="clearAll"
                         />

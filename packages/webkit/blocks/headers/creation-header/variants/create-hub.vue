@@ -14,7 +14,7 @@
       <GlobalHeader.Left>
         <IconButton
           icon="pi pi-chevron-left"
-          ariaLabel="Back to Home"
+          aria-label="Back to Home"
           kind="outlined"
           size="small"
         />

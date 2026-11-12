@@ -26,7 +26,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Open navigation"
+                aria-label="Open navigation"
               />
             </Tooltip>
           </span>
@@ -60,7 +60,7 @@
               icon="pi pi-plus-circle"
               kind="primary"
               size="medium"
-              ariaLabel="Create"
+              aria-label="Create"
             />
           </Tooltip>
           <Tooltip
@@ -71,7 +71,7 @@
               icon="ai ai-ask-azion"
               kind="outlined"
               size="medium"
-              ariaLabel="Agent"
+              aria-label="Agent"
             />
           </Tooltip>
         </span>

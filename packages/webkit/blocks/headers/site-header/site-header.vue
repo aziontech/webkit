@@ -27,7 +27,7 @@
                 icon="pi pi-bars"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Open navigation"
+                aria-label="Open navigation"
               />
             </div>
             <GlobalHeader.Brand>

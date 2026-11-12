@@ -1,13 +1,24 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Card from '@aziontech/webkit/card'
-  import LogView from '@aziontech/webkit/log-view'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
-  const steps = [
+  type StepStatus = 'done' | 'running' | 'pending' | 'failed' | 'skipped'
+
+  interface DeploymentStep {
+    key: string
+    title: string
+    description: string
+    status: StepStatus
+    duration: string
+    lines: LogViewLine[]
+  }
+
+  const steps: DeploymentStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -245,13 +256,8 @@
   const lines = steps.flatMap((step, index) =>
     step.lines.map((line) => ({ ...line, id: `${index}-${line.id}` }))
   )
-  const logViews = [
-    { label: 'Phased', value: 'phased' },
-    { label: 'Complete', value: 'complete' }
-  ]
-
   const logView = ref('phased')
-  const openStep = ref(null)
+  const openStep = ref<string | null>(null)
 </script>
 
 <template>

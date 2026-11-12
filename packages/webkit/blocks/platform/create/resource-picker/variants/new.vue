@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
@@ -9,11 +9,23 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref } from 'vue'
 
+  interface PickerOption {
+    value: string
+    label: string
+    description?: string
+  }
+
+  interface PickerInitial {
+    chosen?: string
+    message?: string
+    loading?: boolean
+  }
+
   const projectModes = [
     { label: 'Existing project', value: 'existing' },
     { label: 'New project', value: 'new' }
   ]
-  const projects = [
+  const projects: PickerOption[] = [
     { value: 'web-app', label: 'web-app', description: 'Astro · acme/web-app' },
     {
       value: 'black-friday-2025',
@@ -54,7 +66,7 @@
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
   const wireSubWidths = ['84%', '66%', '78%', '58%', '72%']
 
-  const usePicker = (options, noun, initial = {}) => {
+  const usePicker = (options: PickerOption[], noun: string, initial: PickerInitial = {}) => {
     const query = ref('')
     const chosen = ref(initial.chosen ?? '')
     const message = ref(initial.message ?? '')

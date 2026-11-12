@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -21,7 +21,8 @@
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const labelOf = (list) => (value) => list.find((option) => option.value === value)?.label ?? ''
+  const labelOf = (list: { label: string; value: string }[]) => (value: unknown) =>
+    list.find((option) => option.value === value)?.label ?? ''
 
   const saved = ref({
     fullName: 'Alex Morgan',

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
@@ -24,14 +24,39 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 
+  interface DomainGroup {
+    environment: string
+    total: number
+    summary: string
+    domains: string[]
+  }
+  interface ExistingProject {
+    id: string
+    name: string
+    detail: string
+    domains: DomainGroup[]
+  }
+  interface ProjectGroup {
+    key: string
+    label: string
+    projects: ExistingProject[]
+  }
+  interface ProjectView {
+    id?: string
+    name: string
+    domain?: string
+    detail?: string
+    domains?: DomainGroup[]
+  }
+
   const projectModes = [
     { value: 'existing', label: 'Use existing' },
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject = { name: 'web-app', domain: 'web-app.example.com' }
+  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
 
-  const projectGroups = [
+  const projectGroups: ProjectGroup[] = [
     {
       key: 'serving',
       label: 'Serving web-app',
@@ -286,12 +311,12 @@
   const projectId = ref('1020655')
   const environment = ref('Production')
 
-  const project = computed(() =>
+  const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
       ? newProject
-      : projectGroups
+      : (projectGroups
           .flatMap((group) => group.projects)
-          .find((entry) => entry.id === projectId.value)
+          .find((entry) => entry.id === projectId.value) ?? projectGroups[0].projects[0])
   )
 
   watch(open, (isOpen) => {
@@ -548,7 +573,7 @@
                         <Item.Actions v-if="projectMode === 'existing'">
                           <DropdownMenu
                             placement="bottom-end"
-                            @select="(event, id) => (projectId = String(id))"
+                            @select="(_event, id) => (projectId = String(id))"
                           >
                             <DropdownMenu.Trigger>
                               <Button

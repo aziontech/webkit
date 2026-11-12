@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -22,17 +22,19 @@
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  const emailError = (value) =>
+  const emailError = (value: string) =>
     !value.trim()
       ? 'This field is required.'
       : emailPattern.test(value.trim())
         ? ''
         : 'Enter a valid email address.'
 
-  const newPasswordError = (value) =>
+  const newPasswordError = (value: string) =>
     !value
       ? 'This field is required.'
-      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
+      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
+            typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
+          )
         ? ''
         : 'Password does not meet requirements.'
 

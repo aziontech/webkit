@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -21,20 +21,41 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import Table from '@aziontech/webkit/table'
+  import Table, { type TableColumn } from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
 
-  const types = {
+  type ResourceType = 'organization' | 'group' | 'workspace'
+  type ResourceStatus = 'Active' | 'Suspended' | 'Pending'
+  interface ResourceTypeMeta {
+    label: string
+    icon: string
+    severity: TagSeverity
+  }
+  interface Resource {
+    id: string
+    name: string
+    type: ResourceType
+    parentId: string | null
+    labels?: string[]
+    lastAccessed?: string
+    status?: ResourceStatus
+    charges?: number
+  }
+  interface ResourceNode extends Resource {
+    children?: ResourceNode[]
+  }
+
+  const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'pi pi-building', severity: 'accent' },
     group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
   }
 
-  const seedResources = [
+  const seedResources: Resource[] = [
     {
       id: 'org-1001',
       name: 'Northwind Holdings',
@@ -106,16 +127,16 @@
 
   const uid = useId()
   const currentId = 'ws-30418'
-  const resources = ref(seedResources)
+  const resources = ref<Resource[]>(seedResources)
 
-  const tree = computed(() => {
-    const byParent = new Map()
+  const tree = computed<ResourceNode[]>(() => {
+    const byParent = new Map<string | null, Resource[]>()
     for (const item of resources.value) {
       const list = byParent.get(item.parentId) ?? []
       list.push(item)
       byParent.set(item.parentId, list)
     }
-    const build = (parentId) =>
+    const build = (parentId: string | null): ResourceNode[] =>
       (byParent.get(parentId) ?? []).map((item) => {
         const children = build(item.id)
         return children.length ? { ...item, children } : { ...item }
@@ -123,7 +144,7 @@
     return build(null)
   })
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
     { accessorKey: 'id', header: 'ID', minWidth: 128 },
     { accessorKey: 'type', header: 'Type', minWidth: 136 },
@@ -135,7 +156,7 @@
   ]
 
   const expanded = ref({ 'org-1001': true, 'grp-2101': true })
-  const selection = ref({})
+  const selection = ref<Record<string, boolean>>({})
 
   const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
   const selectedCount = computed(() => selected.value.length)
@@ -144,9 +165,9 @@
     selection.value = {}
   }
 
-  const descendantsOf = (id) => {
-    const out = []
-    const walk = (parentId) => {
+  const descendantsOf = (id: string): Resource[] => {
+    const out: Resource[] = []
+    const walk = (parentId: string) => {
       for (const item of resources.value)
         if (item.parentId === parentId) {
           out.push(item)
@@ -157,17 +178,23 @@
     return out
   }
 
-  const statusSeverity = (status) =>
-    ({ Active: 'success', Suspended: 'danger', Pending: 'warning' })[status] ?? 'secondary'
+  const statusSeverities: Record<ResourceStatus, TagSeverity> = {
+    Active: 'success',
+    Suspended: 'danger',
+    Pending: 'warning'
+  }
+  const statusSeverity = (status?: ResourceStatus): TagSeverity =>
+    status ? statusSeverities[status] : 'secondary'
   const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
-  const initials = (name) =>
+  const initials = (name: string) =>
     name
       .split(/\s+/)
       .filter(Boolean)
       .slice(0, 2)
       .map((word) => word[0].toUpperCase())
       .join('')
-  const plural = (count, one, other) => `${count} ${count === 1 ? one : other}`
+  const plural = (count: number, one: string, other: string) =>
+    `${count} ${count === 1 ? one : other}`
 
   const detailsOpen = ref(true)
   const detailsTab = ref('permissions')
@@ -203,7 +230,7 @@
   }
 
   const moveOpen = ref(false)
-  const moving = ref([])
+  const moving = ref<Resource[]>([])
   const destination = ref('')
   const destinationError = ref('')
   const destinationOptions = computed(() => {
@@ -214,7 +241,7 @@
       .filter((item) => item.type !== 'workspace' && !blocked.has(item.id))
       .map((item) => ({ value: item.id, label: item.name, type: item.type }))
   })
-  const openMove = (items) => {
+  const openMove = (items: Resource[]) => {
     moving.value = items
     destination.value = ''
     destinationError.value = ''
@@ -240,15 +267,15 @@
   }
 
   const deleteOpen = ref(false)
-  const deleting = ref([])
+  const deleting = ref<Resource[]>([])
   const deletingInside = computed(() => {
     const ids = new Set(deleting.value.map((item) => item.id))
-    const inside = new Set()
+    const inside = new Set<string>()
     for (const item of deleting.value)
       for (const child of descendantsOf(item.id)) if (!ids.has(child.id)) inside.add(child.id)
     return inside.size
   })
-  const openDelete = (items) => {
+  const openDelete = (items: Resource[]) => {
     deleting.value = items
     deleteOpen.value = true
   }
@@ -270,16 +297,16 @@
   }
 
   const labelsOpen = ref(false)
-  const labelling = ref([])
-  const addLabels = ref([])
-  const removeLabels = ref([])
+  const labelling = ref<Resource[]>([])
+  const addLabels = ref<string[]>([])
+  const removeLabels = ref<string[]>([])
   const knownLabels = computed(() =>
     [...new Set(resources.value.flatMap((item) => item.labels ?? []))].sort()
   )
   const presentLabels = computed(() =>
     [...new Set(labelling.value.flatMap((item) => item.labels ?? []))].sort()
   )
-  const openLabels = (items) => {
+  const openLabels = (items: Resource[]) => {
     labelling.value = items
     addLabels.value = []
     removeLabels.value = []
@@ -298,7 +325,7 @@
     toast.success(`Labels updated on ${plural(ids.size, 'resource', 'resources')}.`)
   }
 
-  const onRowAction = (value, row) => {
+  const onRowAction = (value: string | number, row: Resource) => {
     const item = resources.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
@@ -557,7 +584,7 @@
                 <template #cell-actions="{ row }">
                   <Table.CellActions
                     :name="row.name"
-                    @select="(event, value) => onRowAction(value, row)"
+                    @select="(_event, value) => onRowAction(value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Option

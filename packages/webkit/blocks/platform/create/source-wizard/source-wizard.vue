@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -12,7 +12,22 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Stepper from '@aziontech/webkit/stepper'
+  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
   import { computed, nextTick, ref } from 'vue'
+
+  interface ServiceOption {
+    value: string
+    label: string
+    description: string
+  }
+
+  interface WizardStep {
+    value: string
+    title: string
+    description: string
+    state: StepperStepState
+    disabled: boolean
+  }
 
   const breadcrumb = [{ label: 'Projects', href: '/projects' }, { label: 'Create Project' }]
   const wizardSteps = [
@@ -21,7 +36,7 @@
     { id: 'source', label: 'Select a source' },
     { id: 'configure', label: 'Create and deploy' }
   ]
-  const services = [
+  const services: ServiceOption[] = [
     { value: 'service-01', label: 'service-01', description: 'service-01.example.com' },
     { value: 'service-02', label: 'service-02', description: 'service-02.example.com' },
     { value: 'service-03', label: 'service-03', description: 'service-03.example.com' },
@@ -75,7 +90,7 @@
 
   const stepIndex = ref(0)
   const steps = computed(() =>
-    wizardSteps.map((entry, position) => ({
+    wizardSteps.map((entry, position): WizardStep => ({
       value: entry.id,
       title: entry.label,
       description: entry.description ?? '',
@@ -86,7 +101,7 @@
 
   const current = computed({
     get: () => wizardSteps[stepIndex.value].id,
-    set: (value) => {
+    set: (value: string) => {
       const position = wizardSteps.findIndex((entry) => entry.id === value)
       if (position !== -1 && position < stepIndex.value) stepIndex.value = position
     }
@@ -101,7 +116,7 @@
   const query = ref('')
   const creating = ref(false)
   const newName = ref('')
-  const nameField = ref(null)
+  const nameField = ref<{ focus?: () => void } | null>(null)
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
@@ -123,7 +138,7 @@
     stepIndex.value = 1
   }
 
-  const choose = (option) => {
+  const choose = (option: ServiceOption) => {
     service.value = option.value
     answerWhere()
   }
