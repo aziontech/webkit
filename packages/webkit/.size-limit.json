@@ -449,6 +449,26 @@
     "limit": "16 KB"
   },
   {
+    "name": "console-application-scene",
+    "path": "src/assets/scenes/console-application/console-application-scene.vue",
+    "limit": "110 KB"
+  },
+  {
+    "name": "console-trace-scene",
+    "path": "src/assets/scenes/console-trace/console-trace-scene.vue",
+    "limit": "62 KB"
+  },
+  {
+    "name": "runtime-api-cloud",
+    "path": "src/assets/scenes/runtime-api/runtime-api-cloud.vue",
+    "limit": "3.5 KB"
+  },
+  {
+    "name": "runtime-api-scene",
+    "path": "src/assets/scenes/runtime-api/runtime-api-scene.vue",
+    "limit": "4 KB"
+  },
+  {
     "name": "use-cases",
     "path": "src/components/sections/use-cases/use-cases.vue",
     "limit": "7 KB"

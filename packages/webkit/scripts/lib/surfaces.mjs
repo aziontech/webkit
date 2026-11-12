@@ -13,7 +13,7 @@ const BY_COMPONENT_FOLDER = {
 export function surfaceFromTarget(target) {
   const component = String(target).match(/^\.\/src\/components\/([^/]+)\//)
   if (component) return BY_COMPONENT_FOLDER[component[1]] ?? 'product'
-  if (/^\.\/src\/assets\/(logos|illustrations|globe)\//.test(target)) return 'marketing'
+  if (/^\.\/src\/assets\/(logos|illustrations|globe|scenes)\//.test(target)) return 'marketing'
   if (/^\.\/src\/assets\/diagrams\//.test(target)) return 'marketing'
   return null
 }

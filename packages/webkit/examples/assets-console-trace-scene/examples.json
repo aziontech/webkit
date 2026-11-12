@@ -1,0 +1,16 @@
+{
+  "component": "assets/console-trace-scene",
+  "title": "Components/Marketing/Scenes/ConsoleTraceScene",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "One function invocation in the `MediaTabs` `#media` slot, one document per tab: the span waterfall (`Trace`), the run's logs (`LogView`) and the request path (`Flow`).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Console panel",
+      "summary": "The same scene in a `ConsolePanel` `#scene` slot, switched by the panel's tabs.",
+      "file": "console-panel.vue"
+    }
+  ]
+}

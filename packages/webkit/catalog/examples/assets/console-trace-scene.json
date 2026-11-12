@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One function invocation in the `MediaTabs` `#media` slot, one document per tab: the span waterfall (`Trace`), the run's logs (`LogView`) and the request path (`Flow`).",
+   "sfc": "<script setup>\n  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'\n  import MediaTabs from '@aziontech/webkit/media-tabs'\n\n  const documents = [\n    {\n      value: 'trace',\n      title: 'Trace',\n      description:\n        'The run as a waterfall: each step placed against the invocation it belongs to, nested where it nested.'\n    },\n    {\n      value: 'logs',\n      title: 'Logs',\n      description: 'Structured output on the same clock as the trace, searchable in place.'\n    },\n    {\n      value: 'path',\n      title: 'Request path',\n      description:\n        'The workload, application, function and connector it travelled, each with the time spent there.'\n    }\n  ]\n</script>\n\n<template>\n  <MediaTabs\n    :items=\"documents\"\n    size=\"small\"\n    :autoplay-interval=\"5200\"\n  >\n    <template #media=\"{ index, active }\">\n      <ConsoleTraceScene\n        :tab=\"documents[index].value\"\n        :active=\"active\"\n        class=\"size-full\"\n      />\n    </template>\n  </MediaTabs>\n</template>"
+  },
+  {
+   "name": "Console panel",
+   "summary": "The same scene in a `ConsolePanel` `#scene` slot, switched by the panel's tabs.",
+   "sfc": "<script setup>\n  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n\n  const tabs = [\n    { value: 'trace', title: 'Trace' },\n    { value: 'logs', title: 'Logs' },\n    { value: 'path', title: 'Request path' }\n  ]\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Observability\"\n    title=\"Inspect every run end to end\"\n    description=\"Spans, logs and the path the request took, traced on the platform itself.\"\n    :tabs=\"tabs\"\n  >\n    <template #scene=\"{ tab }\">\n      <ConsoleTraceScene :tab=\"tab\" />\n    </template>\n  </ConsolePanel>\n</template>"
+  }
+ ]
+}

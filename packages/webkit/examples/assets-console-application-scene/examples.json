@@ -1,0 +1,16 @@
+{
+  "component": "assets/console-application-scene",
+  "title": "Components/Marketing/Scenes/ConsoleApplicationScene",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The console Application page in a `ConsolePanel` `#scene` slot: each tab plays its page, then opens the create drawer (list tabs) or raises the save bar (form tabs).",
+      "file": "default.vue"
+    },
+    {
+      "name": "Band",
+      "summary": "One scene per tab in the `MediaTabs` `#media` slot; `active` replays the second move when its tab comes back.",
+      "file": "band.vue"
+    }
+  ]
+}

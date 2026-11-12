@@ -4,6 +4,7 @@
     "sample:shared/ui/banners/GlobeDisc": "banner-art (art=\"globe\") on assets/spinning-globe",
     "sample:shared/ui/banners/MapBanner": "banner-art (art=\"map\") on network-map",
     "sample:shared/ui/banners/NetworkBanner": "banner-art (art=\"network\") on network-map",
+    "sample:shared/ui/flow/FlowCard": "flow-node (unstyled) with flow-anchor and a tag, as composed in assets/console-trace-scene",
     "sample:shared/ui/line-figure/LineFigure": "line-figure",
     "sample:shared/ui/line-figure/figures/ai-versioning": "line-figure (name=\"ai-versioning\")",
     "sample:shared/ui/line-figure/figures/applications-rules": "line-figure (name=\"applications-rules\")",
@@ -30,6 +31,13 @@
     "sample:shared/ui/line-figure/figures/secure-shield": "line-figure (name=\"secure-shield\")",
     "sample:shared/ui/line-figure/figures/store-replicas": "line-figure (name=\"store-replicas\")",
     "sample:shared/ui/line-figure/figures/variables-keys": "line-figure (name=\"variables-keys\")",
+    "sample:shared/ui/trace/RunLogs": "log-view (log-view-header and log-view-content), as composed in assets/console-trace-scene",
+    "sample:shared/ui/trace/RunTrace": "trace, as composed in assets/console-trace-scene",
+    "sample:site/components/ConsoleApplicationBand": "console-panel (tabs, assets/console-application-scene in #scene) or media-tabs (position=\"right\", the scene in #media)",
+    "sample:site/components/ConsoleTraceBand": "media-tabs (size=\"small\", assets/console-trace-scene in #media) or console-panel #scene",
+    "sample:site/composables/useScrollProgress": "internal to assets/runtime-api-cloud (composables/use-scroll-progress)",
+    "sample:site/data/console-application": "internal to assets/console-application-scene",
+    "sample:site/data/console-trace": "internal to assets/console-trace-scene",
     "sample:site/docs/ui/DocAccordionGroup": "doc-accordion-group",
     "sample:site/docs/ui/DocAccordionItem": "doc-accordion-item",
     "sample:site/docs/ui/DocCodeGroup": "doc-code-group",
@@ -38,8 +46,12 @@
     "sample:site/docs/ui/DocTab": "doc-tab",
     "sample:site/docs/ui/DocTabs": "doc-tabs",
     "sample:site/ui/BrandGlobeScene": "assets/brand-globe-scene",
+    "sample:site/ui/ConsoleApplicationScene": "assets/console-application-scene",
+    "sample:site/ui/ConsoleTraceScene": "assets/console-trace-scene",
     "sample:site/ui/FrameworkStackScene": "illustration (name=\"modern-frontends\") in a scene slot",
+    "sample:site/ui/FunctionsHeroCanvas": "assets/runtime-api-scene (hero-band #bottom or #top)",
     "sample:site/ui/RecognitionSealScene": "an <img> of the badge in a scene slot (hero-band #bottom or console-panel #scene)",
+    "sample:site/ui/RuntimeApiCloud": "assets/runtime-api-cloud",
     "sample:site/ui/SpinningGlobe": "assets/spinning-globe",
     "sample:site/ui/WorkloadTopologyScene": "product-widget (name=\"workload-topology-flow\") in hero-band #bottom",
     "sample:site/ui/diagram/DiagramSet": "diagram in console-panel kind=\"diagram\", picked by the #scene slot tab",
@@ -335,6 +347,14 @@
     },
     {
       "id": "assets/competitor-registry",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/console-application-scene",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/console-trace-scene",
       "surface": "marketing"
     },
     {
@@ -1259,6 +1279,14 @@
     },
     {
       "id": "assets/rocketchat-extended-reversed.svg",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/runtime-api-cloud",
+      "surface": "marketing"
+    },
+    {
+      "id": "assets/runtime-api-scene",
       "surface": "marketing"
     },
     {
