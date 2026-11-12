@@ -1,16 +1,16 @@
-<script setup>
+<script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import DocCta from '@aziontech/webkit/doc-cta'
   import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout from '@aziontech/webkit/doc-layout'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = [
@@ -19,7 +19,7 @@
     { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
-  const navigation = [
+  const navigation: DocLayoutNavGroup[] = [
     {
       label: 'Functions',
       items: [
@@ -82,7 +82,7 @@
     }
   ]
 
-  const theme = ref('dark')
+  const theme = ref<ThemeSwitcherValue>('dark')
 
   const columns = [
     {

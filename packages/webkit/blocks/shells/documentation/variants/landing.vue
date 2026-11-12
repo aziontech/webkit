@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
   import DocAgentCard from '@aziontech/webkit/doc-agent-card'
@@ -6,13 +6,13 @@
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocHero from '@aziontech/webkit/doc-hero'
-  import DocLayout from '@aziontech/webkit/doc-layout'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPagination from '@aziontech/webkit/doc-pagination'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = [
@@ -33,9 +33,9 @@
     'KV Store'
   ]
 
-  const slug = (label) => label.toLowerCase().replaceAll(' ', '-')
+  const slug = (label: string) => label.toLowerCase().replaceAll(' ', '-')
 
-  const navigation = [
+  const navigation: DocLayoutNavGroup[] = [
     {
       label: 'Getting started',
       items: [
@@ -49,7 +49,7 @@
     }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
   const prompt =
     'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'
@@ -202,7 +202,7 @@
       icon: 'pi pi-book',
       text: 'Engineering posts and how customers run on Azion.',
       link: 'Read the blog',
-      target: '_blank'
+      target: '_blank' as const
     },
     {
       title: 'YouTube',
@@ -210,7 +210,7 @@
       icon: 'pi pi-youtube',
       text: 'Walkthroughs, demos, and recorded sessions.',
       link: 'Watch on YouTube',
-      target: '_blank'
+      target: '_blank' as const
     },
     {
       title: 'Discord',
@@ -218,7 +218,7 @@
       icon: 'pi pi-discord',
       text: 'Ask questions and compare notes with other builders.',
       link: 'Join the Discord',
-      target: '_blank'
+      target: '_blank' as const
     }
   ]
 

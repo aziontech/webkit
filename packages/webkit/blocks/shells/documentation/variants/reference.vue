@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Diagram from '@aziontech/webkit/diagram'
@@ -8,14 +8,14 @@
   import DocCta from '@aziontech/webkit/doc-cta'
   import DocFrame from '@aziontech/webkit/doc-frame'
   import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout from '@aziontech/webkit/doc-layout'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPagination from '@aziontech/webkit/doc-pagination'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { ref } from 'vue'
 
   const sections = [
@@ -24,7 +24,7 @@
     { label: 'Dev tools', href: '/docs/dev-tools' }
   ]
 
-  const navigation = [
+  const navigation: DocLayoutNavGroup[] = [
     {
       label: 'Applications',
       items: [
@@ -50,7 +50,7 @@
     }
   ]
 
-  const theme = ref('system')
+  const theme = ref<ThemeSwitcherValue>('system')
 
   const crumbs = [{ label: 'Applications', href: '/docs/applications' }, { label: 'Overview' }]
 
