@@ -1,6 +1,6 @@
 # ActivityOutcomesDashboard (`platform/dashboard/activity-outcomes-dashboard`)
 
-> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with a Refresh IconButton sits over a filter row of `Field`s (time range, actor, outcome and category Selects, and a destination Input that matches an exact host). A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Its page-level parts are `PageHeader`.
+> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with a Refresh IconButton sits over a filter row of `Field`s (time range, actor, outcome and category Selects, and a destination Input that matches an exact host). A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
@@ -17,6 +17,8 @@ It counts every request by its outcome (allowed, blocked, held, approved, denied
 how those outcomes moved over time, breaks them down by actor, category and destination, and ends in
 the request log, where each row names the rule that decided it. Every region reads the same filters,
 so narrowing the time range or the actor moves the whole page at once.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -737,8 +739,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Request activity"
         description="What each actor requested through the rules: what was allowed, blocked or held for approval, and what went over budget, per actor, category and destination."
@@ -1012,7 +1014,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 ```

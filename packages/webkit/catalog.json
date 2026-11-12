@@ -29146,7 +29146,7 @@
    "title": "Templates/Platform/Dashboard/ActivityOutcomesDashboard",
    "source": "blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue",
    "surface": "product",
-   "summary": "An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with a Refresh IconButton sits over a filter row of `Field`s (time range, actor, outcome and category Selects, and a destination Input that matches an exact host). A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Its page-level parts are `PageHeader`.",
+   "summary": "An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with a Refresh IconButton sits over a filter row of `Field`s (time range, actor, outcome and category Selects, and a destination Input that matches an exact host). A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "activity outcomes dashboard",
     "requests and decisions",
@@ -29200,7 +29200,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page an operator opens to answer \"what did these actors ask for, and what did the rules decide?\". It counts every request by its outcome (allowed, blocked, held, approved, denied, over budget), shows how those outcomes moved over time, breaks them down by actor, category and destination, and ends in the request log, where each row names the rule that decided it. Every region reads the same filters, so narrowing the time range or the actor moves the whole page at once.",
+   "guidelinesSummary": "The page an operator opens to answer \"what did these actors ask for, and what did the rules decide?\". It counts every request by its outcome (allowed, blocked, held, approved, denied, over budget), shows how those outcomes moved over time, breaks them down by actor, category and destination, and ends in the request log, where each row names the rule that decided it. Every region reads the same filters, so narrowing the time range or the actor moves the whole page at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29222,7 +29222,7 @@
    "title": "Templates/Platform/Dashboard/AlertsDashboard",
    "source": "blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue",
    "surface": "product",
-   "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Its page-level parts are `PageHeader`.",
+   "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "alerts dashboard",
     "open alerts",
@@ -29274,7 +29274,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved. It leads with the open counts, shows how many alerts were raised each day by severity, and ends in the open alerts table, ordered from critical to info, where the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags and tables.",
+   "guidelinesSummary": "The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved. It leads with the open counts, shows how many alerts were raised each day by severity, and ends in the open alerts table, ordered from critical to info, where the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags and tables. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29296,7 +29296,7 @@
    "title": "Templates/Platform/Dashboard/AnalyticsDashboard",
    "source": "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue",
    "surface": "product",
-   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
+   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "metrics",
     "metric panel",
@@ -29363,7 +29363,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the table that explain those totals. Every tile, chart and the table read the same period, so one change of range moves every region together. It is the reference grammar for the other dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared card header.",
+   "guidelinesSummary": "The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the table that explain those totals. Every tile, chart and the table read the same period, so one change of range moves every region together. It is the reference grammar for the other dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared card header. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29389,7 +29389,7 @@
    "title": "Templates/Platform/Dashboard/CompositionDashboard",
    "source": "blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue",
    "surface": "product",
-   "summary": "A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`.",
+   "summary": "A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "composition dashboard",
     "spend breakdown",
@@ -29444,7 +29444,7 @@
     "@aziontech/webkit/toggle-group"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page that answers \"what is this total made of, and how did the mix move?\". The block's example is the organization's monthly spend: the total and its three largest categories first, then the mix over 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any total that breaks down into exclusive parts (storage by type, requests by product, seats by team).",
+   "guidelinesSummary": "The page that answers \"what is this total made of, and how did the mix move?\". The block's example is the organization's monthly spend: the total and its three largest categories first, then the mix over 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any total that breaks down into exclusive parts (storage by type, requests by product, seats by team). This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29466,7 +29466,7 @@
    "title": "Templates/Platform/Dashboard/ConfigurableDashboard",
    "source": "blocks/platform/dashboard/configurable-dashboard/configurable-dashboard.vue",
    "surface": "product",
-   "summary": "A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`.",
+   "summary": "A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "configurable dashboard",
     "custom dashboard",
@@ -29510,7 +29510,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.",
+   "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Editing",
@@ -29536,7 +29536,7 @@
    "title": "Templates/Platform/Dashboard/DataDashboard",
    "source": "blocks/platform/dashboard/data-dashboard/data-dashboard.vue",
    "surface": "product",
-   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`.",
+   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "data dashboard",
     "metrics dashboard",
@@ -29587,7 +29587,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The usage page: how much the account's projects consumed in the period, how that compares with the previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and the change against the previous 24 hours), then explains the headline number with this period against the previous one, a ranking of projects and a table of usage per project.",
+   "guidelinesSummary": "The usage page: how much the account's projects consumed in the period, how that compares with the previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and the change against the previous 24 hours), then explains the headline number with this period against the previous one, a ranking of projects and a table of usage per project. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29609,7 +29609,7 @@
    "title": "Templates/Platform/Dashboard/ExecutiveSummaryDashboard",
    "source": "blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue",
    "surface": "product",
-   "summary": "An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Its page-level parts are `PageHeader`.",
+   "summary": "An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "executive summary",
     "executive dashboard",
@@ -29661,7 +29661,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewed it. It favours a few numbers read in seconds over detail; every figure links back to its own dashboard for the breakdown.",
+   "guidelinesSummary": "The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewed it. It favours a few numbers read in seconds over detail; every figure links back to its own dashboard for the breakdown. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29683,7 +29683,7 @@
    "title": "Templates/Platform/Dashboard/FunnelCohortDashboard",
    "source": "blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue",
    "surface": "product",
-   "summary": "A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `TableRoot` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `TableRoot` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`.",
+   "summary": "A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `TableRoot` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `TableRoot` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "funnel dashboard",
     "conversion funnel",
@@ -29729,7 +29729,7 @@
     "@aziontech/webkit/table-root"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The growth page: how people move through the steps from a first visit to a paid plan, where they drop off, and how well each weekly sign-up cohort keeps coming back. One global filter bar (period and segment) drives every region, so the funnel, the tiles and the cohorts always describe the same slice of users.",
+   "guidelinesSummary": "The growth page: how people move through the steps from a first visit to a paid plan, where they drop off, and how well each weekly sign-up cohort keeps coming back. One global filter bar (period and segment) drives every region, so the funnel, the tiles and the cohorts always describe the same slice of users. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29751,7 +29751,7 @@
    "title": "Templates/Platform/Dashboard/HealthScoreDashboard",
    "source": "blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue",
    "surface": "product",
-   "summary": "A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`.",
+   "summary": "A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "health score",
     "health dashboard",
@@ -29798,7 +29798,7 @@
     "@aziontech/webkit/tracker"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page that answers \"how well does this work for the people who use it, and where is it worst?\". Experience is reduced to one score out of 100 with three bands (Good at 80 or more, Fair from 50 to 79, Poor under 50). The page shows the overall score and its trend, ranks applications and locations lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends in the open incidents that need someone's attention.",
+   "guidelinesSummary": "The page that answers \"how well does this work for the people who use it, and where is it worst?\". Experience is reduced to one score out of 100 with three bands (Good at 80 or more, Fair from 50 to 79, Poor under 50). The page shows the overall score and its trend, ranks applications and locations lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends in the open incidents that need someone's attention. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -29820,7 +29820,7 @@
    "title": "Templates/Platform/Dashboard/HomeDashboard",
    "source": "blocks/platform/dashboard/home-dashboard/home-dashboard.vue",
    "surface": "product",
-   "summary": "The whole Home page inside the platform shell, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the shell’s palette on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTileGroup`, `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets.",
+   "summary": "The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout().openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTileGroup`, `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "home",
     "home page",
@@ -29850,71 +29850,47 @@
     "codexMark",
     "cursorMark",
     "geminiMark",
-    "Avatar",
-    "Brand",
     "Button",
-    "ButtonHighlight",
     "Card",
-    "Command",
-    "Drawer",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "DropdownMenu",
-    "GlobalHeader",
     "IconButton",
     "Illustration",
     "Input",
     "Item",
-    "Menu",
     "Popover",
     "SearchTrigger",
-    "Sidebar",
     "Spinner",
     "StatTile",
     "StatTileGroup",
-    "StatusIndicator",
-    "ThemeSwitcher",
-    "Tooltip"
+    "Tooltip",
+    "use-console-layout"
    ],
    "imports": [
     "@aziontech/webkit/assets/claude-symbol-color.svg",
     "@aziontech/webkit/assets/codex-symbol-mono.svg",
     "@aziontech/webkit/assets/cursor-symbol-mono.svg",
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
-    "@aziontech/webkit/avatar",
-    "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/command",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/dropdown-menu",
-    "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/illustration",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/menu",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/search-trigger",
-    "@aziontech/webkit/sidebar",
     "@aziontech/webkit/spinner",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/stat-tile-group",
-    "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/theme-switcher",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-console-layout"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The Console's Home page inside the platform shell: the first screen a signed-in user lands on. Its job is to get them back to work fast. For an account that owns resources it shows a short usage band and the resources they touch most (projects, resources, domains, recents), every row a link. For a brand-new account it becomes the first-access screen: a greeting, the command prompt and three doors to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on each resource's own dashboard.",
+   "guidelinesSummary": "The Console's Home page: the first screen a signed-in user lands on. Its job is to get them back to work fast. For an account that owns resources it shows a short usage band and the resources they touch most (projects, resources, domains, recents), every row a link. For a brand-new account it becomes the first-access screen: a greeting, the command prompt and three doors to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on each resource's own dashboard. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`.",
    "variants": [
     {
      "name": "Empty",
-     "summary": "Home for a brand-new account: the first-access screen in the shell. Click the prompt (or press Enter on it) to open the command palette; type a domain such as example.com (taken) or my-new-site.dev (available) into the second door to run the availability check."
+     "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or my-new-site.dev (available) into the second door to run the availability check."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/home-dashboard.json"
@@ -29924,7 +29900,7 @@
    "title": "Templates/Platform/Dashboard/ProjectStatusDashboard",
    "source": "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue",
    "surface": "product",
-   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`.",
+   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "project status",
     "sprint dashboard",
@@ -29982,7 +29958,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Where one project stands against its plan, one project and sprint at a time. A lead or a team member opens it before a stand-up or a review to see completion, the sprint burndown, the next milestones, what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter row that picks the project and the sprint; every region reads that pair.",
+   "guidelinesSummary": "Where one project stands against its plan, one project and sprint at a time. A lead or a team member opens it before a stand-up or a review to see completion, the sprint burndown, the next milestones, what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter row that picks the project and the sprint; every region reads that pair. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -30004,7 +29980,7 @@
    "title": "Templates/Platform/Dashboard/ScanResultsDashboard",
    "source": "blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue",
    "surface": "product",
-   "summary": "A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated TableRoot: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `TableRoot`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`.",
+   "summary": "A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated TableRoot: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `TableRoot`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "scan results",
     "scan dashboard",
@@ -30058,7 +30034,7 @@
     "@aziontech/webkit/table-root"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all two exceptions: deliveries held until a verdict arrives, and items that were delivered before they were flagged. It ends in the submissions table, where the reader finds a specific item.",
+   "guidelinesSummary": "The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all two exceptions: deliveries held until a verdict arrives, and items that were delivered before they were flagged. It ends in the submissions table, where the reader finds a specific item. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -30080,7 +30056,7 @@
    "title": "Templates/Platform/Dashboard/SecurityDashboard",
    "source": "blocks/platform/dashboard/security-dashboard/security-dashboard.vue",
    "surface": "product",
-   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`.",
+   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "security dashboard",
     "waf dashboard",
@@ -30140,7 +30116,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresses sent the most, and the short list of settings and traffic that need a decision now. Needs attention is what makes it more than a report: every entry ends in one action.",
+   "guidelinesSummary": "The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresses sent the most, and the short list of settings and traffic that need a decision now. Needs attention is what makes it more than a report: every entry ends in one action. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -30162,7 +30138,7 @@
    "title": "Templates/Platform/Dashboard/ServiceMonitoringDashboard",
    "source": "blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue",
    "surface": "product",
-   "summary": "The service monitoring dashboard pattern: status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts, each with its own window ToggleGroup, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as an Item in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`.",
+   "summary": "The service monitoring dashboard pattern: status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts, each with its own window ToggleGroup, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as an Item in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "service monitoring",
     "monitoring dashboard",
@@ -30206,7 +30182,7 @@
     "@aziontech/webkit/toggle-group"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now. One tile per service states its p95 latency and its state in words; latency percentiles and error rates sit in two charts with their own window; the open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the reader studies a chart.",
+   "guidelinesSummary": "The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now. One tile per service states its p95 latency and its state in words; latency percentiles and error rates sit in two charts with their own window; the open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the reader studies a chart. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -31717,7 +31693,7 @@
    "title": "Templates/Platform/States/AsyncSubmit",
    "source": "blocks/platform/states/async-submit/async-submit.vue",
    "surface": "product",
-   "summary": "The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, the platform shell, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`).",
+   "summary": "The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`; a dashed simulation panel picks the ending with a `ToggleGroup` and starts the run; below it the page shows an `EmptyState` while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: one `Toaster` is mounted with the page, the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `ToggleGroup`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "async submit",
     "long running action",
@@ -31737,71 +31713,37 @@
    "components": [
     "Accordion",
     "Alert",
-    "Avatar",
-    "Brand",
-    "Breadcrumb",
     "Button",
-    "ButtonHighlight",
     "Card",
-    "Command",
-    "Drawer",
-    "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
-    "DropdownMenu",
     "EmptyState",
-    "GlobalHeader",
-    "IconButton",
     "LogView",
     "LogViewContent",
-    "Menu",
     "PageHeader",
     "Progress",
-    "SearchTrigger",
-    "Sidebar",
     "Spinner",
     "StatusIndicator",
     "Tag",
-    "ThemeSwitcher",
     "toast",
-    "ToggleGroup",
-    "Tooltip"
+    "ToggleGroup"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
     "@aziontech/webkit/alert",
-    "@aziontech/webkit/avatar",
-    "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/command",
-    "@aziontech/webkit/drawer",
-    "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
-    "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/global-header",
-    "@aziontech/webkit/icon-button",
     "@aziontech/webkit/log-view",
     "@aziontech/webkit/log-view-content",
-    "@aziontech/webkit/menu",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/progress",
-    "@aziontech/webkit/search-trigger",
-    "@aziontech/webkit/sidebar",
     "@aziontech/webkit/spinner",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/toggle-group"
    ],
    "primary": "Idle",
-   "guidelinesSummary": "The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.",
+   "guidelinesSummary": "The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Running",
@@ -31823,7 +31765,7 @@
    "title": "Templates/Platform/States/FirstUse",
    "source": "blocks/platform/states/first-use/first-use.vue",
    "surface": "product",
-   "summary": "The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by a bordered icon frame, with the promo cards below it: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link.",
+   "summary": "The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by a bordered icon frame, with the promo cards below it: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "empty state",
     "empty list",
@@ -31871,7 +31813,7 @@
     "@aziontech/webkit/skeleton"
    ],
    "primary": "Default",
-   "guidelinesSummary": "What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos.",
+   "guidelinesSummary": "What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Loading",
@@ -31885,7 +31827,7 @@
    "title": "Templates/Platform/States/FormError",
    "source": "blocks/platform/states/form-error/form-error.vue",
    "surface": "product",
-   "summary": "The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`.",
+   "summary": "The form-error pattern from the design sample (`/forms/error-validation`): a server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. A dashed simulation panel above the form plays the other user. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Tag`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`. A focused create page with its own creation header and no rail: render it outside ConsoleLayout.",
    "intents": [
     "form error",
     "server validation",
@@ -31958,7 +31900,7 @@
     "@aziontech/webkit/tag"
    ],
    "primary": "InSync",
-   "guidelinesSummary": "The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.",
+   "guidelinesSummary": "The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns. This block is a focused create page with its own creation header and no rail: render it outside `ConsoleLayout` (`shells/console`).",
    "variants": [
     {
      "name": "Rejected",
@@ -31980,7 +31922,7 @@
    "title": "Templates/Platform/States/FormValidation",
    "source": "blocks/platform/states/form-validation/form-validation.vue",
    "surface": "product",
-   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError).",
+   "summary": "A standalone form that walks through every state a submit can land in, one story per state, on a single Create Variable page with no card around it: a heading, then `Field`s wrapping `Input`, `Select` and `Textarea` straight on the canvas in the form column, with Cancel and Create at the end of the column. Validation runs only on submit. An empty field takes the `required` state, a filled but wrong one takes `invalid`, and its helper text swaps the guidance for the message, so each field speaks in one place and there is no summary. Submit moves focus to the first field in error. A rejected request that no field owns raises an error toast with Retry and keeps the entries. A rejection a field owns, a key already in use, lands on that field and in a danger `Alert` above the fields, and never toasts. A successful save raises a success toast and clears the form. One `Toaster` is mounted with the form. While the form loads, `Skeleton` rows stand in for the fields and Create is disabled. Every story is wired: press Create with API_TOKEN as the key to get the conflict, or any other valid key to get the success state. Below md the actions stack at full width. Its page-level parts are `PageHeader`. A rejection the server scopes to one section of a long form (a linked resource deleted while the form is open) is the FormError template (Templates/Platform/States/FormError). A page body for a create page: render it under the focused creation header (headers/creation-header), not in ConsoleLayout.",
    "intents": [
     "form validation",
     "validation errors",
@@ -32021,7 +31963,7 @@
     "@aziontech/webkit/toast"
    ],
    "primary": "Default",
-   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.",
+   "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`. This block is a page body for a create page: render it under the focused creation header (`headers/creation-header`), not in `ConsoleLayout`.",
    "variants": [
     {
      "name": "ValidationErrors",
@@ -32055,7 +31997,7 @@
    "title": "Templates/Platform/States/NotFound",
    "source": "blocks/platform/states/not-found/not-found.vue",
    "surface": "product",
-   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.",
+   "summary": "The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "404 page",
     "not found page",
@@ -32090,7 +32032,7 @@
     "@aziontech/webkit/svg/error-404"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.",
+   "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Forbidden",
@@ -32112,7 +32054,7 @@
    "title": "Templates/Platform/States/PageWires",
    "source": "blocks/platform/states/page-wires/page-wires.vue",
    "surface": "product",
-   "summary": "The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item.",
+   "summary": "The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item. Overview and Onboarding are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.",
    "intents": [
     "page skeleton",
     "loading skeleton",
@@ -32138,7 +32080,7 @@
     "@aziontech/webkit/skeleton"
    ],
    "primary": "Overview",
-   "guidelinesSummary": "The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home).",
+   "guidelinesSummary": "The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home). Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` (`shells/console`); the Session wires stand in for the whole app, layout included.",
    "variants": [
     {
      "name": "Onboarding",
@@ -32168,7 +32110,7 @@
    "title": "Templates/Platform/States/ProjectIntake",
    "source": "blocks/platform/states/project-intake/project-intake.vue",
    "surface": "product",
-   "summary": "The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `Card`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template.",
+   "summary": "The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `Card`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template. DropZone is a page-body overlay inside the default slot of ConsoleLayout; Initializing covers the whole screen.",
    "intents": [
     "drop zone",
     "drag and drop upload",
@@ -32193,7 +32135,7 @@
     "@aziontech/webkit/spinner"
    ],
    "primary": "DropZone",
-   "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over.",
+   "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.",
    "variants": [
     {
      "name": "Initializing",
@@ -32207,7 +32149,7 @@
    "title": "Templates/Platform/View/CardView",
    "source": "blocks/platform/view/card-view/card-view.vue",
    "surface": "product",
-   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`.",
+   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "card view",
     "cards view",
@@ -32259,7 +32201,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination.",
+   "guidelinesSummary": "The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Empty",
@@ -32273,7 +32215,7 @@
    "title": "Templates/Platform/View/FileBrowser",
    "source": "blocks/platform/view/file-browser/file-browser.vue",
    "surface": "product",
-   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`.",
+   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "file browser",
     "file manager",
@@ -32370,7 +32312,7 @@
     "@aziontech/webkit/upload-progress"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.",
+   "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "InsideAFolder",
@@ -32392,7 +32334,7 @@
    "title": "Templates/Platform/View/Marketplace",
    "source": "blocks/platform/view/marketplace/marketplace.vue",
    "surface": "product",
-   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons.",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "marketplace",
     "integration catalog",
@@ -32485,7 +32427,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need (\"block bots\", \"split traffic\"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.",
+   "guidelinesSummary": "The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need (\"block bots\", \"split traffic\"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Templates",
@@ -32535,7 +32477,7 @@
    "title": "Templates/Platform/View/QueryEditor",
    "source": "blocks/platform/view/query-editor/query-editor.vue",
    "surface": "product",
-   "summary": "The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.",
+   "summary": "The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it.",
    "intents": [
     "query editor",
     "sql editor",
@@ -32578,10 +32520,8 @@
     "Brand",
     "Breadcrumb",
     "Button",
-    "ButtonHighlight",
     "Card",
     "CodeEditor",
-    "Command",
     "Drawer",
     "DrawerClose",
     "DrawerContent",
@@ -32597,7 +32537,6 @@
     "IconButton",
     "Input",
     "Item",
-    "Menu",
     "PageHeader",
     "PageTabs",
     "PaginationRoot",
@@ -32605,17 +32544,14 @@
     "PanelFooter",
     "PanelHeader",
     "SaveBar",
-    "SearchTrigger",
     "Select",
     "SettingRow",
     "SettingsSection",
     "Sidebar",
-    "StatusIndicator",
     "Switch",
     "TableRoot",
     "Tabs",
     "Tag",
-    "ThemeSwitcher",
     "toast",
     "ToggleGroup",
     "Tooltip"
@@ -32626,10 +32562,8 @@
     "@aziontech/webkit/brand",
     "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",
-    "@aziontech/webkit/command",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
@@ -32645,7 +32579,6 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/menu",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/pagination-root",
@@ -32653,23 +32586,20 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/save-bar",
-    "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/sidebar",
-    "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Tables",
-   "guidelinesSummary": "The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.",
+   "guidelinesSummary": "The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.",
    "variants": [
     {
      "name": "Schema",
@@ -32711,7 +32641,7 @@
    "title": "Templates/Platform/View/RulesList",
    "source": "blocks/platform/view/rules-list/rules-list.vue",
    "surface": "product",
-   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (scrolling sideways when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`.",
+   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (scrolling sideways when narrow) with the grip, Move, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Move cell adds Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter` and `Toaster`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "rules list",
     "rules engine list",
@@ -32819,7 +32749,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Application",
-   "guidelinesSummary": "An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.",
+   "guidelinesSummary": "An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Firewall",
@@ -32857,7 +32787,7 @@
    "title": "Templates/Platform/View/SplitView",
    "source": "blocks/platform/view/split-view/split-view.vue",
    "surface": "product",
-   "summary": "The events explorer placed in the platform shell, with its navigation entry active: the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -32894,17 +32824,13 @@
    "components": [
     "Accordion",
     "Alert",
-    "Avatar",
     "Badge",
-    "Brand",
     "Button",
-    "ButtonHighlight",
     "CalendarRoot",
     "Chart",
     "Checkbox",
     "Chip",
     "CodeBlock",
-    "Command",
     "CopyButton",
     "DateRangePicker",
     "Drawer",
@@ -32916,38 +32842,29 @@
     "DropdownMenu",
     "EmptyState",
     "Field",
-    "GlobalHeader",
     "IconButton",
     "Input",
-    "Menu",
     "PanelHeader",
     "Popover",
     "PropertyFilter",
-    "SearchTrigger",
     "Sidebar",
-    "StatusIndicator",
     "Table",
     "TableRoot",
     "Tabs",
     "Tag",
-    "ThemeSwitcher",
     "Tooltip",
     "use-collection"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
     "@aziontech/webkit/alert",
-    "@aziontech/webkit/avatar",
     "@aziontech/webkit/badge",
-    "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
-    "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/calendar-root",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/chip",
     "@aziontech/webkit/code-block",
-    "@aziontech/webkit/command",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/drawer",
@@ -32959,26 +32876,21 @@
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
-    "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/menu",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover",
     "@aziontech/webkit/property-filter",
-    "@aziontech/webkit/search-trigger",
     "@aziontech/webkit/sidebar",
-    "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.",
+   "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Filtered",
@@ -33012,7 +32924,7 @@
    "title": "Templates/Platform/View/TableView",
    "source": "blocks/platform/view/table-view/table-view.vue",
    "surface": "product",
-   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary large Create Resource, the page's only large control (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert` and an `Input` that must match the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`.",
+   "summary": "The canonical first-level list page: a medium page heading with the resource name and its one-line description, the outlined medium Documentation action and a primary large Create Resource, the page's only large control (on a phone they stack below the copy, each at full width), then the controls row and the resource table, laid out with the console page column and section rhythm. The whole list runs on `useCollection` in client mode: a `PropertyFilter` grows to fill the controls row and turns Name, Author, Status, Domain or free text into removable tokens (Match all or Match any, Clear filters, the match count), the sortable headers sort, the footer pages, and the filter, the sort and the page live in the URL so a filtered list can be shared. Beside the filter sit Refresh (the table’s loading state), Download CSV (every matching row) and `CollectionPreferences`, a dialog for the page size, the columns (shown, hidden and ordered; Name always shows), wrapped lines, striped rows and density, saved in localStorage. Any resource index takes this shape with its own columns and properties. The row menu's Delete opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert` and an `Input` that must match the resource name). A filter that matches nothing shows a No matching resources `EmptyState` with Clear filters inside the table; when the account has no resources left, the page keeps its heading and the controls row, and the table, without its header and footer, gives way to a flush `Card` holding only a medium `EmptyState` (the resource glyph, then a small secondary Create Resource and a small outlined Documentation on one row), so the list survives its last row being deleted. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities carrying the inset, the measure and the vertical rhythm. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "list",
     "list page",
@@ -33159,7 +33071,7 @@
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows.",
+   "guidelinesSummary": "The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Empty",
@@ -33173,7 +33085,7 @@
    "title": "Templates/Platform/View/TemplateBrowser",
    "source": "blocks/platform/view/template-browser/template-browser.vue",
    "surface": "product",
-   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`.",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "template browser",
     "template gallery",
@@ -33241,7 +33153,7 @@
     "@aziontech/webkit/use-collection"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.",
+   "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Preview",
@@ -33267,7 +33179,7 @@
    "title": "Templates/Platform/View/WafTuning",
    "source": "blocks/platform/view/waf-tuning/waf-tuning.vue",
    "surface": "product",
-   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`.",
+   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, two shown and a `Tag` counting the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Tag`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea` and `Toaster`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "waf tuning",
     "web application firewall",
@@ -33342,7 +33254,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Default",
-   "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason.",
+   "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
      "name": "Allow",

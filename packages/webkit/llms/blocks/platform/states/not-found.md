@@ -1,6 +1,6 @@
 # NotFound (`platform/states/not-found`)
 
-> The page an app renders when it cannot show the address the user asked for. The primary is the 404: a full-height canvas centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures.
+> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/states/not-found/not-found.vue` in `@aziontech/webkit`
@@ -13,6 +13,8 @@
 404 page; not found page; page not found; 403 forbidden page; access denied page; 500 error page; server error page; error page; resource not found; página não encontrada; página de erro; acesso negado; erro 404; erro 500
 
 The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -37,7 +39,7 @@ The large numeral art in the `EmptyState` icon slot, 192 px wide on phones and 2
 
 ### B. Message — `EmptyState` (required)
 
-The title says what happened in the user's words (`Page not found`, `You don't have access to this page`); the description says why it may have happened and what to do next, in one or two sentences. Full-page variants centre it on the canvas, at most `--container-md` wide; ResourceNotFound uses `bordered` inside the content column, since the shell is still around it.
+The title says what happened in the user's words (`Page not found`, `You don't have access to this page`); the description says why it may have happened and what to do next, in one or two sentences. The 404, 403 and 500 variants centre it in the layout's content region, at most `--container-md` wide; ResourceNotFound uses `bordered` inside the content column.
 
 ### C. Actions — `Button` (required)
 
@@ -70,7 +72,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 ## Accessibility
 
 - Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
-- The full-page variants are the `main` landmark; ResourceNotFound sits in the shell's content column and renders its own `main` only as a stand-alone page.
+- Every variant is a body inside the layout's `main`, with no `main` of its own.
 - The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
 - Try again shows the `Button` loading state while the page reloads; the button keeps its label.
@@ -110,8 +112,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 </script>
 
 <template>
-  <main
-    class="flex min-h-dvh w-full flex-col items-center justify-center bg-(--bg-canvas) px-(--spacing-md) py-(--spacing-xl)"
+  <div
+    class="flex w-full flex-1 flex-col items-center justify-center px-(--spacing-md) py-(--spacing-xl)"
   >
     <h1 class="sr-only">Error 404</h1>
     <div class="w-full max-w-(--container-md)">
@@ -142,6 +144,6 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         </template>
       </EmptyState>
     </div>
-  </main>
+  </div>
 </template>
 ```

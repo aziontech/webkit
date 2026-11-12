@@ -1,6 +1,6 @@
 # CardView (`platform/view/card-view`)
 
-> The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`.
+> The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a link to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter, the sort and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a medium `EmptyState` with a Create action; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/card-view/card-view.vue` in `@aziontech/webkit`
@@ -13,6 +13,8 @@
 card view; cards view; card list; cards list; resource cards; grid of cards; card grid page; gallery of resources; applications as cards; selectable cards; cards with filters; cards with pagination; visualização em cards; lista em cards; cartões de recursos; grade de cards
 
 The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -103,7 +105,7 @@ When `status` is `empty`, the cards and the pagination give way to a medium `Emp
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the page's only `h1`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
 - `Cards` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
 - Select all items is a visible, labelled checkbox, not an icon; its state is mixed when part of the page is selected.
 - Field labels and values are a `dl`, so each value is read with its label; status is a `Tag` with text, never color alone.
@@ -268,8 +270,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-h-full flex-col">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Applications"
         description="Every application on this account, as cards."
@@ -447,7 +449,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
           </template>
         </section>
       </section>
-    </main>
+    </div>
   </div>
 </template>
 ```

@@ -1,6 +1,6 @@
 # FileBrowser (`platform/view/file-browser`)
 
-> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`.
+> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh, download and columns IconButtons, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders sort first with a link-coloured folder glyph and open on click, a .. row leads back up once inside a folder, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). Storage with nothing at its root renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `PopoverRoot`, `Switch`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
@@ -13,6 +13,8 @@
 file browser; file manager; storage browser; bucket browser; object storage; folders and files; upload files; navegador de arquivos; gerenciador de arquivos; arquivos do bucket; upload progress; move files; move objects; drag and drop upload; enviar arquivos; mover arquivos
 
 The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -128,7 +130,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 ## Accessibility
 
-- One `main` landmark holds the card; the storage name is the visible title of the surface.
+- The card sits in the layout's one `main` landmark; the storage name is the visible title of the surface.
 - Every icon-only button has an `aria-label`; file and folder glyphs carry `aria-hidden="true"`, so the name cell reads as the name alone.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
@@ -402,8 +404,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="flex h-full min-h-0 flex-col">
+  <div class="layout-boundary">
+    <div class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
           <template #content>
@@ -666,7 +668,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
           </template>
         </Card>
       </section>
-    </main>
+    </div>
     <ConfirmDialog
       v-model:open="deleteOpen"
       :title="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"

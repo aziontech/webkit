@@ -1,6 +1,6 @@
 # HealthScoreDashboard (`platform/dashboard/health-score-dashboard`)
 
-> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`.
+> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue` in `@aziontech/webkit`
@@ -17,6 +17,8 @@ Experience is reduced to one score out of 100 with three bands (Good at 80 or mo
 Poor under 50). The page shows the overall score and its trend, ranks applications and locations
 lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends
 in the open incidents that need someone's attention.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -1122,8 +1124,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Experience score"
         description="How people experience each application: the overall score, the score per application and location, each hour of the period and the incidents still open."
@@ -1420,7 +1422,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </div>
         </template>
       </Card>
-    </main>
+    </div>
   </div>
 </template>
 ```

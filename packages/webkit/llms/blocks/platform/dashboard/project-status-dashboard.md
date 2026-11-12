@@ -1,6 +1,6 @@
 # ProjectStatusDashboard (`platform/dashboard/project-status-dashboard`)
 
-> A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`.
+> A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue` in `@aziontech/webkit`
@@ -16,6 +16,8 @@ Where one project stands against its plan, one project and sprint at a time. A l
 opens it before a stand-up or a review to see completion, the sprint burndown, the next milestones,
 what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter
 row that picks the project and the sprint; every region reads that pair.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -497,8 +499,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+  <div class="layout-boundary">
+    <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
       <PageHeader
         title="Project status"
         description="Progress, milestones and risks for the selected project and sprint."
@@ -948,7 +950,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 ```

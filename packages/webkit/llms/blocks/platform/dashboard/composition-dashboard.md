@@ -1,6 +1,6 @@
 # CompositionDashboard (`platform/dashboard/composition-dashboard`)
 
-> A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`.
+> A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
@@ -16,6 +16,8 @@ The page that answers "what is this total made of, and how did the mix move?". T
 the organization's monthly spend: the total and its three largest categories first, then the mix over
 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any
 total that breaks down into exclusive parts (storage by type, requests by product, seats by team).
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -491,8 +493,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 </script>
 
 <template>
-  <div class="layout-boundary min-h-dvh bg-(--bg-canvas)">
-    <main class="layout-column flex flex-col gap-(--spacing-lg)">
+  <div class="layout-boundary">
+    <div class="layout-column flex flex-col gap-(--spacing-lg)">
       <PageHeader
         title="Cost breakdown"
         description="How the organization’s spend splits across categories and the resources that drive it."
@@ -755,7 +757,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Content>
         </ChartCard>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 ```

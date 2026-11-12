@@ -1,6 +1,6 @@
 # ProjectIntake (`platform/states/project-intake`)
 
-> The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `Card`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template.
+> The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `Card`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template. DropZone is a page-body overlay inside the default slot of ConsoleLayout; Initializing covers the whole screen.
 
 - Surface: product
 - Source: `blocks/platform/states/project-intake/project-intake.vue` in `@aziontech/webkit`
@@ -13,6 +13,8 @@
 drop zone; drag and drop upload; upload project; folder upload; initializing project; file drop; arrastar e soltar; enviar projeto; upload de arquivos
 
 The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over.
+
+DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.
 
 ## When to use
 
@@ -102,7 +104,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 </script>
 
 <template>
-  <div class="relative flex min-h-dvh flex-col">
+  <div class="relative flex min-h-full flex-1 flex-col">
     <Transition
       enter-active-class="animate-fade-in motion-reduce:animate-none"
       leave-active-class="animate-fade-out motion-reduce:animate-none"

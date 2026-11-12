@@ -4735,6 +4735,8 @@ how those outcomes moved over time, breaks them down by actor, category and dest
 the request log, where each row names the rule that decided it. Every region reads the same filters,
 so narrowing the time range or the actor moves the whole page at once.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A policy or rule engine decides on requests made by a known set of actors (agents, users, service
@@ -4846,6 +4848,8 @@ raised each day by severity, and ends in the open alerts table, ordered from cri
 the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags
 and tables.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Alerts carry a severity level and the reader has to decide which to handle first.
@@ -4950,6 +4954,8 @@ they handled it: requests, data transferred, success rate and server errors for 
 charts and the table that explain those totals. Every tile, chart and the table read the same period,
 so one change of range moves every region together. It is the reference grammar for the other
 dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared card header.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -5067,6 +5073,8 @@ the organization's monthly spend: the total and its three largest categories fir
 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any
 total that breaks down into exclusive parts (storage by type, requests by product, seats by team).
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - One total splits into a small number of exclusive categories (up to six, plus Other).
@@ -5172,6 +5180,8 @@ is, and keep that layout. It serves readers who come back to the same page every
 different cards than the default puts first. The page owns the layout (an array of id, span and
 height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the
 `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -5280,6 +5290,8 @@ previous period, and which projects drove it. It leads with six KPI tiles (each 
 the change against the previous 24 hours), then explains the headline number with this period against
 the previous one, a ranking of projects and a table of usage per project.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The reader checks consumption across several products or meters (requests, data, jobs, images).
@@ -5379,6 +5391,8 @@ The one page a lead reads to see how the quarter went: the headline results agai
 twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when
 they reviewed it. It favours a few numbers read in seconds over detail; every figure links back to its
 own dashboard for the breakdown.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -5481,6 +5495,8 @@ off, and how well each weekly sign-up cohort keeps coming back. One global filte
 segment) drives every region, so the funnel, the tiles and the cohorts always describe the same slice
 of users.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A sequence of steps where each one is a subset of the one before (visit, sign-up, activation, paid).
@@ -5580,6 +5596,8 @@ Poor under 50). The page shows the overall score and its trend, ranks applicatio
 lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends
 in the open incidents that need someone's attention.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Many raw signals (latency, packet loss, DNS time, Wi-Fi signal) are combined into one score the
@@ -5663,24 +5681,26 @@ What each part takes: [blocks/platform/dashboard/health-score-dashboard.md](bloc
 
 # HomeDashboard (`platform/dashboard/home-dashboard`)
 
-> The whole Home page inside the platform shell, in both of its states.
+> The whole Home page body, in both of its states.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Avatar, Brand, Button, ButtonHighlight, Card, Command, Drawer, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, DropdownMenu, GlobalHeader, IconButton, Illustration, Input, Item, Menu, Popover, SearchTrigger, Sidebar, Spinner, StatTile, StatTileGroup, StatusIndicator, ThemeSwitcher, Tooltip
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, Button, Card, DropdownMenu, IconButton, Illustration, Input, Item, Popover, SearchTrigger, Spinner, StatTile, StatTileGroup, Tooltip, `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 home; home page; home dashboard; console home; usage overview; página inicial; início do console; first access; home empty state; new account home; welcome screen; first run; brand-new account; getting started home; primeiro acesso; tela de boas-vindas; home vazia
 
-The Console's Home page inside the platform shell: the first screen a signed-in user lands on. Its job
+The Console's Home page: the first screen a signed-in user lands on. Its job
 is to get them back to work fast. For an account that owns resources it shows a short usage band and
 the resources they touch most (projects, resources, domains, recents), every row a link. For a
 brand-new account it becomes the first-access screen: a greeting, the command prompt and three doors
 to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on
 each resource's own dashboard.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`.
 
 ## When to use
 
@@ -5698,27 +5718,12 @@ each resource's own dashboard.
 
 ## Building blocks
 
-- A. Navigation rail — `Sidebar` (required)
-- B. Wordmark — `Brand` (required)
-- C. Command palette — `Command` (required)
-- D. Navigation — `Menu` (required)
-- E. Account identity — `Avatar` (required)
-- F. Account and row actions — `DropdownMenu` (required)
-- G. Control labels and metric definitions — `Tooltip` (required)
-- H. Icon-only controls — `IconButton` (required)
-- I. Theme — `ThemeSwitcher` (required)
-- J. Create and upgrade — `Button` (required)
-- K. System status — `StatusIndicator` (required)
-- L. Top bar — `GlobalHeader` (required)
-- M. Search — `SearchTrigger` (required)
-- N. Agent — `ButtonHighlight` (optional)
-- O. Usage band — `StatTileGroup`, `StatTile` (required)
-- P. Agent onboarding — `Card` (optional)
-- Q. Resource rows — `Item` (required)
-- R. Navigation drawer — `Drawer` (required on small screens)
-- S. Drawer layer — `DrawerPortal` (required with the drawer)
-- T. Drawer scrim — `DrawerOverlay` (required with the drawer)
-- U. Drawer panel — `DrawerContent` (required with the drawer)
+- A. Row actions — `DropdownMenu` (required)
+- B. Control labels and metric definitions — `Tooltip` (required)
+- C. Icon-only controls — `IconButton` (required)
+- D. Usage band — `StatTileGroup`, `StatTile` (required)
+- E. Agent onboarding — `Card` (optional)
+- F. Resource rows — `Item` (required)
 
 What each part takes: [blocks/platform/dashboard/home-dashboard.md](blocks/platform/dashboard/home-dashboard.md).
 
@@ -5728,6 +5733,7 @@ What each part takes: [blocks/platform/dashboard/home-dashboard.md](blocks/platf
 - Make every resource row a single link with the actions menu as a separate control.
 - Let the user dismiss the agent card for good.
 - Show the first-access screen, not a grid of empty panels, when the account owns nothing.
+- Open the layout's palette from the first-access prompt with `useConsoleLayout().openSearch()`; never mount a second `Command`.
 
 ## Don't
 
@@ -5746,14 +5752,14 @@ What each part takes: [blocks/platform/dashboard/home-dashboard.md](blocks/platf
 - **Tile tooltips:** one sentence with a period. `Total bytes delivered across all your resources.`
 - **Agent card:** imperative title plus one sentence. `Set up your coding agent` / `Give your editor a prompt that teaches it to build and deploy here.`
 - **Empty panel:** `Nothing here yet.`
-- **Palette placeholder:** `Search resources, pages and commands`.
+- **Prompt label:** `Search resources, pages and commands`.
 
 ## Accessibility
 
-- The header is labelled `Console`, the rail `Main navigation`, the usage band `Usage`, the panels `Resources`, the drawer `Navigation`.
+- The usage band is labelled `Usage` and the panels `Resources`; the layout owns the header, the rail and the one `main`.
 - Every icon-only control has an `aria-label` and a `Tooltip`.
 - Row actions are reachable by keyboard: the menu trigger appears on focus as well as hover.
-- The command palette opens with ⌘K and from the search affordance; the shortcut is shown by `SearchTrigger`.
+- On a new account the prompt opens the layout's command palette, which also opens with ⌘K / Ctrl K.
 - Entrance animations and the card's dismiss transition honour `prefers-reduced-motion`.
 
 ## States
@@ -5794,6 +5800,8 @@ Where one project stands against its plan, one project and sprint at a time. A l
 opens it before a stand-up or a review to see completion, the sprint burndown, the next milestones,
 what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter
 row that picks the project and the sprint; every region reads that pair.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -5897,6 +5905,8 @@ verdict. The reader checks what was submitted, what is still waiting, what was f
 two exceptions: deliveries held until a verdict arrives, and items that were delivered before they
 were flagged. It ends in the submissions table, where the reader finds a specific item.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - Items get a verdict from an asynchronous analysis (Clean, Suspicious, Flagged, Pending).
@@ -5997,6 +6007,8 @@ The page a reader opens to see what their security rules are doing: how many req
 and inspected, how blocking moved over time, which attack categories and countries it came from, which
 source addresses sent the most, and the short list of settings and traffic that need a decision now.
 Needs attention is what makes it more than a report: every entry ends in one action.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -6101,6 +6113,8 @@ requests fail, and which alerts are open right now. One tile per service states 
 its state in words; latency percentiles and error rates sit in two charts with their own window; the
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -7688,7 +7702,7 @@ What each part takes: [blocks/platform/settings/settings-form.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/async-submit")`
-- Components: Accordion, Alert, Avatar, Brand, Breadcrumb, Button, ButtonHighlight, Card, Command, Drawer, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, DropdownMenu, EmptyState, GlobalHeader, IconButton, LogView, `LogViewContent`, Menu, PageHeader, Progress, SearchTrigger, Sidebar, Spinner, StatusIndicator, Tag, ThemeSwitcher, Toast, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Button, Card, EmptyState, LogView, `LogViewContent`, PageHeader, Progress, Spinner, StatusIndicator, Tag, Toast, ToggleGroup
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
@@ -7696,6 +7710,8 @@ What each part takes: [blocks/platform/settings/settings-form.md](blocks/platfor
 async submit; long running action; background job status; deploy in progress; async deploy result; operation status; envio assíncrono; ação demorada; status da operação
 
 The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -7712,30 +7728,12 @@ The async-action pattern, taken from the design sample (`/forms/async-deployment
 
 ## Building blocks
 
-- A. Navigation rail — `Sidebar` (required)
-- B. Product mark — `Brand` (required)
-- C. Search and commands — `Command` (required)
-- D. Module menu — `Menu` (required)
-- E. Account avatar — `Avatar` (required)
-- F. Account menu — `DropdownMenu` (required)
-- G. Hint — `Tooltip` (required)
-- H. Icon action — `IconButton` (required)
-- I. Theme — `ThemeSwitcher` (required)
-- J. Actions — `Button` (required)
-- K. Plan status — `StatusIndicator` (required)
-- L. Top bar — `GlobalHeader` (required)
-- M. Location — `Breadcrumb` (required)
-- N. Search — `SearchTrigger` (required)
-- O. Upgrade — `ButtonHighlight` (required)
-- P. Page heading — `PageHeader` (required)
-- Q. Run status — `Tag` (required)
-- R. Simulated ending — `ToggleGroup` (simulation only)
-- S. Nothing running — `EmptyState` (idle only)
-- T. Mobile navigation — `Drawer` (below `md`)
-- U. Drawer layer — `DrawerPortal` (below `md`)
-- V. Drawer backdrop — `DrawerOverlay` (below `md`)
-- W. Drawer panel — `DrawerContent` (below `md`)
-- X. Run toast — `Toaster` (required)
+- A. Actions — `Button` (required)
+- B. Page heading — `PageHeader` (required)
+- C. Run status — `Tag` (required)
+- D. Simulated ending — `ToggleGroup` (simulation only)
+- E. Nothing running — `EmptyState` (idle only)
+- F. Run toast — `Toaster` (required)
 
 What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/states/async-submit.md).
 
@@ -7793,7 +7791,7 @@ What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/s
 - `platform/create/deployment-flow` — the deployment logs card the Running and Failed states reuse.
 - `platform/detail/deployment-logs` — the full logs of a run, the page Edit or a failure leads into.
 - `platform/create/deploy-success` — the confirmation page after a deploy completes.
-- `shells/console` — the frame the user moves through while the run reports back.
+- `shells/console` — the layout this body renders in, which the user moves through while the run reports back.
 
 ## Variants
 
@@ -7818,6 +7816,8 @@ What each part takes: [blocks/platform/states/async-submit.md](blocks/platform/s
 empty state; empty list; first use; no resources yet; create first resource; product empty state; zero state; estado vazio; lista vazia; primeiro uso
 
 What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -7916,6 +7916,8 @@ What each part takes: [blocks/platform/states/first-use.md](blocks/platform/stat
 form error; server validation; server-side error; rejected save; field scoped error; section error; stale reference; linked resource deleted; api error on save; reload options; erro de formulário; validação no servidor; erro da api; salvamento rejeitado; error de formulario; validación en el servidor
 
 The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.
+
+This block is a focused create page with its own creation header and no rail: render it outside `ConsoleLayout` (`shells/console`).
 
 ## When to use
 
@@ -8032,6 +8034,8 @@ form validation; validation errors; submit states; required fields; server error
 
 Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.
 
+This block is a page body for a create page: render it under the focused creation header (`headers/creation-header`), not in `ConsoleLayout`.
+
 ## When to use
 
 - As the reference for the submit states of any create or edit form: what happens on Create with gaps, while the request is in flight, and on each kind of answer.
@@ -8141,6 +8145,8 @@ What each part takes: [blocks/platform/states/form-validation.md](blocks/platfor
 
 The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - A route that matches nothing: the catch-all route of the app renders the primary.
@@ -8191,7 +8197,7 @@ What each part takes: [blocks/platform/states/not-found.md](blocks/platform/stat
 ## Accessibility
 
 - Each variant has exactly one `h1` (visually hidden) naming the error code, so the page has a heading and the code is announced even though the figure is decorative.
-- The full-page variants are the `main` landmark; ResourceNotFound sits in the shell's content column and renders its own `main` only as a stand-alone page.
+- Every variant is a body inside the layout's `main`, with no `main` of its own.
 - The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
 - Try again shows the `Button` loading state while the page reloads; the button keeps its label.
@@ -8235,6 +8241,8 @@ What each part takes: [blocks/platform/states/not-found.md](blocks/platform/stat
 page skeleton; loading skeleton; skeleton screen; page loading state; wireframe loading; session expired; carregando; esqueleto de carregamento; tela de carregamento
 
 The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home).
+
+Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` (`shells/console`); the Session wires stand in for the whole app, layout included.
 
 ## When to use
 
@@ -8329,6 +8337,8 @@ drop zone; drag and drop upload; upload project; folder upload; initializing pro
 
 The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over.
 
+DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.
+
 ## When to use
 
 - Pages where dropping a project is a shortcut to deploying it: Home, its empty state, a creation hub, and a project detail page.
@@ -8416,6 +8426,8 @@ card view; cards view; card list; cards list; resource cards; grid of cards; car
 
 The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination.
 
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
 ## When to use
 
 - The module the sidebar routes to lists resources people tell apart by a handful of fields or a picture rather than by comparing one column across many rows (applications, sites, templates, images).
@@ -8481,7 +8493,7 @@ What each part takes: [blocks/platform/view/card-view.md](blocks/platform/view/c
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the page's only `h1`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
 - `Cards` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
 - Select all items is a visible, labelled checkbox, not an icon; its state is mixed when part of the page is selected.
 - Field labels and values are a `dl`, so each value is read with its label; status is a `Tag` with text, never color alone.
@@ -8527,6 +8539,8 @@ What each part takes: [blocks/platform/view/card-view.md](blocks/platform/view/c
 file browser; file manager; storage browser; bucket browser; object storage; folders and files; upload files; navegador de arquivos; gerenciador de arquivos; arquivos do bucket; upload progress; move files; move objects; drag and drop upload; enviar arquivos; mover arquivos
 
 The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -8599,7 +8613,7 @@ What each part takes: [blocks/platform/view/file-browser.md](blocks/platform/vie
 
 ## Accessibility
 
-- One `main` landmark holds the card; the storage name is the visible title of the surface.
+- The card sits in the layout's one `main` landmark; the storage name is the visible title of the surface.
 - Every icon-only button has an `aria-label`; file and folder glyphs carry `aria-hidden="true"`, so the name cell reads as the name alone.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
 - Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
@@ -8650,6 +8664,8 @@ What each part takes: [blocks/platform/view/file-browser.md](blocks/platform/vie
 marketplace; integration catalog; integrations marketplace; install an integration; browse integrations; extensions catalog; plugin catalog; app store page; integration detail; installed integrations; configure integration; marketplace de integrações; catálogo de integrações; instalar integração; loja de extensões
 
 The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need ("block bots", "split traffic"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -8720,7 +8736,7 @@ What each part takes: [blocks/platform/view/marketplace.md](blocks/platform/view
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
 - The tabs follow the tablist pattern: arrow keys move between Integrations and Templates, and each panel is labelled by its tab.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
@@ -8761,12 +8777,12 @@ What each part takes: [blocks/platform/view/marketplace.md](blocks/platform/view
 
 # QueryEditor (`platform/view/query-editor`)
 
-> The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane.
+> The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane.
 
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: Alert, Avatar, Brand, Breadcrumb, Button, ButtonHighlight, Card, CodeEditor, Command, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, FileDropzone, FileTokenGroup, GlobalHeader, HelperText, IconButton, Input, Item, Menu, PageHeader, PageTabs, `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, SaveBar, SearchTrigger, Select, SettingRow, SettingsSection, Sidebar, StatusIndicator, Switch, `TableRoot`, Tabs, Tag, ThemeSwitcher, Toast, ToggleGroup, Tooltip
+- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, CodeEditor, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, FileDropzone, FileTokenGroup, GlobalHeader, HelperText, IconButton, Input, Item, PageHeader, PageTabs, `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingRow, SettingsSection, Sidebar, Switch, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -8774,6 +8790,8 @@ What each part takes: [blocks/platform/view/marketplace.md](blocks/platform/view
 query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco; create database; criar banco de dados; table rows; linhas da tabela; import csv; import data; csv import; importar csv; importar dados
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
 
 ## When to use
 
@@ -8791,20 +8809,18 @@ The workspace of one SQL database. The user comes here to see which tables exist
 
 ## Building blocks
 
-- A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-- B. Page tabs — `PageTabs`, `Tabs` (required)
-- C. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
-- D. Empty database — `Card`, `EmptyState`, `Button` (required)
-- E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
-- F. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
-- G. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
-- H. Editor — `Button`, `CodeEditor` (required)
-- I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
-- J. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
-- K. Bulk row delete — `Button` (optional)
-- L. Create database page — `GlobalHeader`, `Breadcrumb`, `Input`, `Button` (optional)
-- M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
-- N. Search palette — `Command` (required)
+- A. Page tabs — `PageTabs`, `Tabs` (required)
+- B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
+- C. Empty database — `Card`, `EmptyState`, `Button` (required)
+- D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
+- E. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
+- F. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
+- G. Editor — `Button`, `CodeEditor` (required)
+- H. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
+- I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
+- J. Bulk row delete — `Button` (optional)
+- K. Create database page — `Input`, `Button` (optional)
+- L. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
 What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/view/query-editor.md).
 
@@ -8839,7 +8855,7 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 
 ## Accessibility
 
-- One `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
+- The layout owns the one `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
 - Each side `Sidebar` is named (Tables, Query history) with its own collapse, expand and resize labels.
 - The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.
@@ -8893,6 +8909,8 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 rules list; rules engine list; reorder rules; rule order; drag and drop reorder; firewall rules; request and response phases; review changes; enable disable rule; lista de regras; ordem das regras; reordenar regras; regras do firewall; fases de requisição e resposta; lista de reglas; reordenar reglas
 
 An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -8985,12 +9003,12 @@ What each part takes: [blocks/platform/view/rules-list.md](blocks/platform/view/
 
 # SplitView (`platform/view/split-view`)
 
-> The events explorer placed in the platform shell, with its navigation entry active: the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer.
+> The events explorer (the app marks its Events navigation entry active): the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer.
 
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: Accordion, Alert, Avatar, Badge, Brand, Button, ButtonHighlight, `CalendarRoot`, Chart, Checkbox, Chip, CodeBlock, Command, CopyButton, DateRangePicker, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, GlobalHeader, IconButton, Input, Menu, `PanelHeader`, Popover, PropertyFilter, SearchTrigger, Sidebar, StatusIndicator, Table, `TableRoot`, Tabs, Tag, ThemeSwitcher, Tooltip, `use-collection`
+- Components: Accordion, Alert, Badge, Button, `CalendarRoot`, Chart, Checkbox, Chip, CodeBlock, CopyButton, DateRangePicker, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, `PanelHeader`, Popover, PropertyFilter, Sidebar, Table, `TableRoot`, Tabs, Tag, Tooltip, `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -8998,6 +9016,8 @@ What each part takes: [blocks/platform/view/rules-list.md](blocks/platform/view/
 real-time events; events visualizer; event explorer; log explorer; logs viewer; request logs; events search; eventos em tempo real; visualizador de eventos; explorador de logs; split view; master detail; list and detail panes; visão dividida; query language; events query; saved searches; saved queries; query history; date range; time range picker; investigation tabs; event document; consulta de eventos; buscas salvas; intervalo de datas
 
 The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -9015,19 +9035,17 @@ The events explorer. The user comes here to answer what happened on their traffi
 
 ## Building blocks
 
-- A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-- B. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
-- C. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
-- D. Applied filters — `Chip` (optional)
-- E. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
-- F. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
-- G. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
-- H. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
-- I. Query bar — `Tooltip`, `IconButton` (optional)
-- J. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
-- K. Investigation tabs — `IconButton`, `DropdownMenu`, `Input`, `Tooltip` (optional)
-- L. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
-- M. Search palette — `Command` (required)
+- A. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
+- B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
+- C. Applied filters — `Chip` (optional)
+- D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+- E. Log — `Chart`, `TableRoot`, `Table`, `Tag`, `EmptyState` (required)
+- F. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+- G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
+- H. Query bar — `Tooltip`, `IconButton` (optional)
+- I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+- J. Investigation tabs — `IconButton`, `Input`, `Tooltip` (optional)
+- K. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
 
 What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/split-view.md).
 
@@ -9069,7 +9087,7 @@ What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/
 
 ## Accessibility
 
-- One `main` landmark holds the explorer; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
+- The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
 - The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
 - Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
@@ -9094,7 +9112,7 @@ What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/
 - `platform/view/table-view` — the same controls row over a resource list.
 - `platform/detail/deployment-logs` — logs of one deployment run.
 - `platform/dashboard/data-dashboard` — the metrics view for the same traffic.
-- `shells/console` — the shell this explorer sits in.
+- `shells/console` — the layout this explorer renders in.
 - `TableRoot` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
 
 ## Variants
@@ -9120,6 +9138,8 @@ What each part takes: [blocks/platform/view/split-view.md](blocks/platform/view/
 list; list page; resource list; module list; index page; resources index; list with filters; workloads list; listagem; lista de recursos; página de listagem; resource table; data table; table; sortable table; paginated table; table with copy id; listing table; tabela de listagem; tabela; tabela de recursos; tabela paginada; list controls; filter bar; search and filter; table toolbar; filter chips; column visibility; filtros; barra de filtros; busca e filtro; users; users management; users list; team members; members list; invite user; invite teammate; manage users; remove user; usuários; gestão de usuários; lista de usuários; convidar usuário; membros; teams and permissions; teams; permissions; roles and permissions; access control; team list; create team; user groups; times e permissões; permissões; controle de acesso; equipes; credentials; api tokens; personal tokens; api keys; access tokens; token list; revoke token; credenciais; tokens de api; chaves de api; environments; environments list; production stage preview; deployment environments; deployment policies; create environment; ambientes; lista de ambientes; ambientes de deploy; activity history; audit log; activity log; audit trail; account activity; event history; user actions log; histórico de atividades; log de auditoria; registro de atividades; table view; index table; visualização em tabela; property filter; filter tokens; collection preferences; table preferences; saved preferences; filters in the url; shareable filters; use collection; filtro por propriedade; preferências da tabela; filtros na url
 
 The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -9188,7 +9208,7 @@ What each part takes: [blocks/platform/view/table-view.md](blocks/platform/view/
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the page's only `h1`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
 - The `PropertyFilter` has an `aria-label` that matches its placeholder; each token's remove button names the token, and the match count is announced after each change.
 - Every icon-only button has an `aria-label`; decorative icons carry `aria-hidden="true"`.
 - Focus order follows reading order: heading actions, filter, Refresh, Download CSV, Preferences, table, pagination.
@@ -9235,6 +9255,8 @@ What each part takes: [blocks/platform/view/table-view.md](blocks/platform/view/
 template browser; template gallery; template catalog; start from a template; browse templates; templates by framework; template preview; template readme; deploy a template; starter templates; galeria de templates; catálogo de templates; navegar templates; começar a partir de um template; pré-visualizar template
 
 The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a "Start from a template" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -9295,7 +9317,7 @@ What each part takes: [blocks/platform/view/template-browser.md](blocks/platform
 
 ## Accessibility
 
-- One `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
+- The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
 - Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
 - The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
@@ -9342,6 +9364,8 @@ What each part takes: [blocks/platform/view/template-browser.md](blocks/platform
 waf tuning; web application firewall; allow rules; false positives; attacks table; matched requests; waf allowed rules; threshold; ajuste do waf; falsos positivos; permitir regras; ajuste de waf; falsos positivos waf
 
 The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 

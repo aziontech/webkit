@@ -1,11 +1,11 @@
 # QueryEditor (`platform/view/query-editor`)
 
-> The query editor page placed in the platform shell: the Databases breadcrumb, then the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`.
+> The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
 
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [ButtonHighlight](../../../components/button-highlight.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Command](../../../components/command.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Menu](../../../components/menu.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [SearchTrigger](../../../components/search-trigger.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ThemeSwitcher](../../../components/theme-switcher.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -13,6 +13,8 @@
 query editor; sql editor; run query; query results; sql query page; query history; sql code editor; código sql; editor de consultas; editor sql; executar consulta; sql database; database tables; database detail; table schema; data grid; sql templates; banco de dados; banco de dados sql; tabelas do banco; create database; criar banco de dados; table rows; linhas da tabela; import csv; import data; csv import; importar csv; importar dados
 
 The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. CreateDatabase is a focused create page with its own header and no rail, rendered outside it.
 
 ## When to use
 
@@ -30,69 +32,61 @@ The workspace of one SQL database. The user comes here to see which tables exist
 
 ## Building blocks
 
-### A. Console shell — `Sidebar`, `Brand`, `Command`, `Menu`, `Avatar`, `DropdownMenu`, `Tooltip`, `IconButton`, `ThemeSwitcher`, `Button`, `StatusIndicator`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `ButtonHighlight`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
-
-The platform shell: the resizable, collapsible `Sidebar` with `Brand`, `Menu` and the account footer; the `GlobalHeader` with the Databases `Breadcrumb`, the `SearchTrigger` (⌘K / Ctrl K) that opens the `Command` palette, Create and the Agent `ButtonHighlight`; on a phone the same navigation in a right `Drawer`.
-
-### B. Page tabs — `PageTabs`, `Tabs` (required)
+### A. Page tabs — `PageTabs`, `Tabs` (required)
 
 `PageTabs` bound with `v-model` holds two `Tabs.Item`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
 
-### C. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
+### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
 A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row opens it in the pane and has a Table actions `DropdownMenu` with Delete table.
 
-### D. Empty database — `Card`, `EmptyState`, `Button` (required)
+### C. Empty database — `Card`, `EmptyState`, `Button` (required)
 
 A database with no tables replaces the pane with a `Card` holding an `EmptyState` (No tables yet) and a secondary Create Table `Button`. The side panel says the same thing in its own words; the tabs stay.
 
-### E. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
+### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
 
 The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with Insert row and Import data from CSV; a filter that matches nothing says so with the filter text.
 
-### F. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
+### E. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
 
 Definition shows a Columns heading with an Add column `Button`, over a flush `Card` holding a `TableRoot` of the column name, its type as a secondary `Tag`, and its constraints.
 
-### G. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
+### F. Query history — `Sidebar`, `Input`, `DropdownMenu` (required)
 
 On Editor the start `Sidebar` is named Query history, with a Search queries `Input` and one row per past query showing the statement on one line. Each row has a Query actions `DropdownMenu` with Run query and Delete query.
 
-### H. Editor — `Button`, `CodeEditor` (required)
+### G. Editor — `Button`, `CodeEditor` (required)
 
 A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a `CodeEditor` (`language="sql"`, `path="query.sql"`, 14rem) named SQL editor. The plain editor ships by default; pass `loader` with `() => import('monaco-editor')` to get Monaco with SQL highlighting, themed from the tokens. While a query runs the editor is read-only and Prettify and Templates are disabled. A statement the database rejects puts an error marker on its line (`markers`) as well as the danger `Alert` in Results.
 
-### I. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
+### H. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
 
-### J. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
+### I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
 
-### K. Bulk row delete — `Button` (optional)
+### J. Bulk row delete — `Button` (optional)
 
 Variant TableData only; it adds the `Toaster` with `toast`.
 
 With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
 
-### L. Create database page — `GlobalHeader`, `Breadcrumb`, `Input`, `Button` (optional)
+### K. Create database page — `Input`, `Button` (optional)
 
-Variant CreateDatabase only; it is its own page and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
+Variant CreateDatabase only; it is its own focused page outside `ConsoleLayout`, with the creation header (`GlobalHeader` with `Breadcrumb`), and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
 
 The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
-### M. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
+### L. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
 Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection`, `PanelFooter` and the `Toaster` with `toast`.
 
 An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `TableRoot` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
 
 Validation runs on Insert, as the form-error rule says: a table column mapped twice, a NOT NULL column with no CSV column, nothing mapped, or every row failing shows a danger `Alert` in the section that has to change, and nothing is inserted. A primary key may stay unmapped (the database assigns it). While inserting, the fieldset is disabled and Insert spins; then the drawer closes, the rows appear in the table and a success toast `4 rows inserted into subscribers.` says how many rows were skipped and offers Undo. Importing rows is not a deploy, so Edit and Redeploy do not apply.
-
-### N. Search palette — `Command` (required)
-
-The ⌘K palette the header search opens: `Command.Input`, one group of pages, and `Command.Empty` for no match. It owns the ⌘K / Ctrl K shortcut while mounted.
 
 ## Do
 
@@ -125,7 +119,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 
 ## Accessibility
 
-- One `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
+- The layout owns the one `main` landmark; the tabs are a real tab list, so arrow keys move between Tables and Editor.
 - Each side `Sidebar` is named (Tables, Query history) with its own collapse, expand and resize labels.
 - The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.
@@ -175,14 +169,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
 ```vue
 <script setup>
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
-  import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import CodeEditor from '@aziontech/webkit/code-editor'
-  import Command from '@aziontech/webkit/command'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -191,322 +180,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Menu from '@aziontech/webkit/menu'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaginationRoot from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onMounted, ref, watch } from 'vue'
-
-  const navGroups = [
-    {
-      items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/home' },
-        { id: 'projects', label: 'Projects', icon: 'pi pi-folder', href: '/projects' },
-        {
-          id: 'deployments',
-          label: 'Deployments',
-          icon: 'pi pi-cloud-upload',
-          href: '/deployments'
-        }
-      ]
-    },
-    {
-      label: 'Build',
-      items: [
-        { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
-        { id: 'services', label: 'Services', icon: 'pi pi-server', href: '/services' },
-        { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h', href: '/variables' },
-        { id: 'integrations', label: 'Integrations', icon: 'pi pi-link', href: '/integrations' },
-        { id: 'templates', label: 'Templates', icon: 'pi pi-clone', href: '/templates' }
-      ]
-    },
-    {
-      label: 'Security',
-      items: [
-        { id: 'domains', label: 'Domains', icon: 'pi pi-globe', href: '/domains' },
-        { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
-        { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list', href: '/rule-sets' },
-        { id: 'keys', label: 'Keys', icon: 'pi pi-key', href: '/keys' }
-      ]
-    },
-    {
-      label: 'Data',
-      items: [
-        {
-          id: 'databases',
-          label: 'Databases',
-          icon: 'pi pi-database',
-          href: '/databases',
-          tagValue: 'Preview'
-        },
-        { id: 'storage', label: 'Storage', icon: 'pi pi-inbox', href: '/storage' }
-      ]
-    },
-    {
-      label: 'Observability',
-      items: [
-        { id: 'logs', label: 'Logs', icon: 'pi pi-file', href: '/logs' },
-        {
-          id: 'metrics-module',
-          label: 'Metrics',
-          icon: 'pi pi-chart-bar',
-          kind: 'drill',
-          href: '/metrics',
-          groups: [
-            {
-              items: [{ id: 'metrics', label: 'Overview', href: '/metrics' }]
-            },
-            {
-              label: 'Build',
-              items: [
-                {
-                  id: 'metrics-resources',
-                  label: 'Resources',
-                  href: '/metrics',
-                  query: { dashboard: 'resources' }
-                },
-                {
-                  id: 'metrics-services',
-                  label: 'Services',
-                  href: '/metrics',
-                  query: { dashboard: 'services' }
-                },
-                {
-                  id: 'metrics-cache',
-                  label: 'Cache',
-                  href: '/metrics',
-                  query: { dashboard: 'cache' }
-                }
-              ]
-            },
-            {
-              label: 'Security',
-              items: [
-                {
-                  id: 'metrics-domains',
-                  label: 'Domains',
-                  href: '/metrics',
-                  query: { dashboard: 'domains' }
-                },
-                {
-                  id: 'metrics-policies',
-                  label: 'Policies',
-                  href: '/metrics',
-                  query: { dashboard: 'policies' }
-                },
-                {
-                  id: 'metrics-rule-sets',
-                  label: 'Rule sets',
-                  href: '/metrics',
-                  query: { dashboard: 'rule-sets' }
-                }
-              ]
-            },
-            {
-              label: 'Data',
-              items: [
-                {
-                  id: 'metrics-databases',
-                  label: 'Databases',
-                  href: '/metrics',
-                  query: { dashboard: 'databases' }
-                },
-                {
-                  id: 'metrics-storage',
-                  label: 'Storage',
-                  href: '/metrics',
-                  query: { dashboard: 'storage' }
-                }
-              ]
-            }
-          ]
-        },
-        { id: 'events', label: 'Events', icon: 'pi pi-bolt', href: '/events' }
-      ]
-    },
-    {
-      label: 'More',
-      items: [
-        { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large', href: '/catalog' },
-        {
-          id: 'settings',
-          label: 'Settings',
-          icon: 'pi pi-cog',
-          kind: 'drill',
-          groups: [
-            {
-              label: 'Settings',
-              items: [
-                { id: 'settings-general', label: 'General', href: '/account' },
-                {
-                  id: 'settings-build-deployment',
-                  label: 'Build and deployment',
-                  href: '/account/build-deployment'
-                },
-                {
-                  id: 'settings-environments',
-                  label: 'Environments',
-                  href: '/account/environments'
-                },
-                { id: 'settings-users', label: 'Users management', href: '/account/users' },
-                { id: 'settings-teams', label: 'Teams and permissions', href: '/account/teams' }
-              ]
-            },
-            {
-              label: 'Access',
-              items: [
-                { id: 'settings-tokens', label: 'Personal tokens', href: '/personal-tokens' },
-                { id: 'settings-credentials', label: 'Credentials', href: '/account/credentials' },
-                { id: 'settings-security-mfa', label: 'Multi-factor auth' },
-                { id: 'settings-security-sessions', label: 'Active sessions' },
-                { id: 'settings-activity', label: 'Activity history', href: '/account/activity' }
-              ]
-            },
-            {
-              label: 'Billing',
-              items: [
-                { id: 'settings-billing', label: 'Billing and plan', href: '/account/billing' },
-                { id: 'settings-invoices', label: 'Invoices' }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const recentRows = [
-    {
-      key: 'resources/1020655',
-      name: 'resource-01',
-      icon: 'pi pi-box',
-      typeLabel: 'Resource',
-      navId: 'resources'
-    },
-    {
-      key: 'domains/domain-1020655',
-      name: 'app.example.com',
-      icon: 'pi pi-globe',
-      typeLabel: 'Domain',
-      navId: 'domains'
-    },
-    {
-      key: 'databases/feature-flags',
-      name: 'feature-flags',
-      icon: 'pi pi-database',
-      typeLabel: 'Database',
-      navId: 'databases'
-    }
-  ]
-
-  const accountCommands = [
-    { id: 'settings', label: 'Account settings', icon: 'pi pi-cog' },
-    { id: 'personal-tokens', label: 'Personal tokens', icon: 'pi pi-key' },
-    { id: 'docs', label: 'Docs', icon: 'pi pi-book' },
-    { id: 'logout', label: 'Log out', icon: 'pi pi-sign-out' }
-  ]
-
-  const breadcrumb = [{ label: 'Databases', href: '/databases' }, { label: 'acme-store' }]
-
-  const activeId = ref('databases')
-  const navOpen = ref(false)
-  const paletteOpen = ref(false)
-  const paletteQuery = ref('')
-  const theme = ref('system')
-  const railWidth = ref(null)
-  const railCollapsed = ref(false)
-
-  watch(paletteOpen, () => {
-    paletteQuery.value = ''
-  })
-
-  const leaves = (items) =>
-    items.flatMap((item) =>
-      item.groups
-        ? leaves(item.groups.flatMap((group) => group.items))
-        : item.children
-          ? leaves(item.children)
-          : [item]
-    )
-
-  const paletteGroups = navGroups.flatMap((group, groupIndex) => {
-    const blocks = []
-    let run = []
-    const flush = () => {
-      if (run.length) {
-        blocks.push({
-          key: `area-${groupIndex}-${blocks.length}`,
-          heading: group.label ?? '',
-          items: leaves(run)
-        })
-      }
-      run = []
-    }
-    for (const item of group.items) {
-      if (item.groups || item.children) {
-        flush()
-        blocks.push({ key: item.id, heading: item.label, items: leaves([item]) })
-      } else run.push(item)
-    }
-    flush()
-    return blocks
-  })
-
-  const resolvedTheme = computed(() =>
-    theme.value === 'system'
-      ? globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme.value
-  )
-
-  const actionCommands = computed(() => [
-    { id: 'create', label: 'Create Resource', icon: 'pi pi-plus-circle' },
-    {
-      id: 'theme',
-      label: resolvedTheme.value === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
-      icon: resolvedTheme.value === 'dark' ? 'pi pi-sun' : 'pi pi-moon'
-    },
-    {
-      id: 'sidebar',
-      label: railCollapsed.value ? 'Expand sidebar' : 'Collapse sidebar',
-      icon: railCollapsed.value ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'
-    }
-  ])
-
-  const onNavigate = (event, node) => {
-    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0
-    if (node.href && !modified) event.preventDefault()
-    activeId.value = node.id
-  }
-
-  const onMobileNavigate = (event, node) => {
-    onNavigate(event, node)
-    navOpen.value = false
-  }
-
-  const onPaletteSelect = (event, value) => {
-    const [scope, id] = String(value).split(':')
-    if (scope === 'nav') activeId.value = id
-    if (scope === 'res') {
-      activeId.value = recentRows.find((row) => row.key === id)?.navId ?? activeId.value
-    }
-    if (id === 'theme') theme.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
-    if (id === 'sidebar') railCollapsed.value = !railCollapsed.value
-  }
 
   const tabs = [
     { value: 'tables', label: 'Tables' },
@@ -932,1300 +618,724 @@ LIMIT 3;`
 </script>
 
 <template>
-  <div class="relative flex h-dvh overflow-hidden bg-(--bg-canvas)">
-    <div class="hidden h-full [--sidebar-width:var(--container-2xs)] md:flex">
-      <Sidebar
-        v-model:width="railWidth"
-        v-model:collapsed="railCollapsed"
-        resizable
-        collapsible
-        aria-label="Main navigation"
-        collapse-aria-label="Collapse sidebar"
-        expand-aria-label="Expand sidebar"
-        resize-aria-label="Resize sidebar"
-      >
-        <template #header>
-          <div class="-m-(--spacing-md) flex flex-col">
-            <div
-              class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-            </div>
+  <div class="flex min-h-0 flex-1 flex-col">
+    <PageTabs v-model="activeTab">
+      <Tabs.Item
+        v-for="tab in tabs"
+        :key="tab.value"
+        :value="tab.value"
+        :label="tab.label"
+      />
+    </PageTabs>
 
-            <Command
-              v-model:open="paletteOpen"
-              @select="onPaletteSelect"
-            >
-              <Command.Input
-                placeholder="Search resources, pages and commands"
-                @update:model-value="(value) => (paletteQuery = String(value ?? ''))"
-              />
-              <Command.List>
-                <Command.Group
-                  v-if="!paletteQuery"
-                  key="recents"
-                  heading="Recents"
-                >
-                  <Command.Item
-                    v-for="row in recentRows"
-                    :key="row.key"
-                    :value="'res:' + row.key"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="row.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ row.name }}
-                    <template #suffix>
-                      <span class="text-label-sm text-(--text-muted)">{{ row.typeLabel }}</span>
-                    </template>
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator
-                  v-if="!paletteQuery"
-                  key="recents-rule"
-                />
-
-                <Command.Group
-                  v-for="group in paletteGroups"
-                  :key="group.key"
-                  :heading="group.heading"
-                >
-                  <Command.Item
-                    v-for="item in group.items"
-                    :key="item.id"
-                    :value="'nav:' + item.id"
-                  >
-                    <template
-                      v-if="item.icon"
-                      #prefix
-                    >
-                      <i
-                        :class="item.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ item.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Separator key="commands-rule" />
-
-                <Command.Group heading="Actions">
-                  <Command.Item
-                    v-for="command in actionCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Group heading="Account">
-                  <Command.Item
-                    v-for="command in accountCommands"
-                    :key="command.id"
-                    :value="'cmd:' + command.id"
-                  >
-                    <template #prefix>
-                      <i
-                        :class="command.icon"
-                        aria-hidden="true"
-                      />
-                    </template>
-                    {{ command.label }}
-                  </Command.Item>
-                </Command.Group>
-
-                <Command.Empty>No resource, page or command matches your search.</Command.Empty>
-              </Command.List>
-            </Command>
-          </div>
-        </template>
-
-        <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-          <Menu
-            :groups="navGroups"
-            :active-id="activeId"
-            role="presentation"
-            @navigate="onNavigate"
-          >
-            <Menu.Back />
-          </Menu>
-        </div>
-
-        <template #footer>
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Avatar
-              label="alex@example.com"
-              size="small"
-              kind="square"
-            />
-            <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)">alex</span>
-            <DropdownMenu placement="top-end">
-              <DropdownMenu.Trigger>
-                <Tooltip text="Account menu">
-                  <IconButton
-                    icon="pi pi-ellipsis-v"
-                    aria-label="Account menu"
-                    kind="outlined"
-                    size="small"
-                  />
-                </Tooltip>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Group>
-                <template #top>
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">alex</span>
-                    <span class="truncate text-body-xs text-(--text-muted)">alex@example.com</span>
-                  </div>
-                </template>
-                <DropdownMenu.Option
-                  value="settings"
-                  label="Account settings"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-cog"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="personal-tokens"
-                  label="Personal tokens"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-key"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div
-                  class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                >
-                  <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                    >Theme</span
-                  >
-                  <ThemeSwitcher
-                    v-model="theme"
-                    aria-label="Theme"
-                  />
-                </div>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="home"
-                  label="Home page"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-home"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="changelog"
-                  label="Changelog"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-pencil"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="feedback"
-                  label="Feedback"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-comment"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
-                  value="docs"
-                  label="Docs"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-book"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <DropdownMenu.Option
-                  value="logout"
-                  label="Log out"
-                >
-                  <template #right>
-                    <i
-                      class="pi pi-sign-out"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </DropdownMenu.Option>
-              </DropdownMenu.Group>
-              <DropdownMenu.Group>
-                <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
-                  <Button
-                    label="Upgrade to Pro"
-                    kind="secondary"
-                    size="medium"
-                    class="w-full"
-                  />
-                  <div class="flex justify-center px-(--spacing-xs)">
-                    <StatusIndicator
-                      severity="success"
-                      label="All systems normal"
-                    />
-                  </div>
-                </div>
-              </DropdownMenu.Group>
-            </DropdownMenu>
-          </div>
-        </template>
-      </Sidebar>
-    </div>
-
-    <div class="flex min-w-0 flex-1 flex-col">
-      <div class="@container">
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left>
-            <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
-              <span class="contents md:hidden">
-                <Tooltip
-                  text="Open navigation"
-                  placement="bottom"
-                >
-                  <IconButton
-                    icon="pi pi-bars"
-                    aria-label="Open navigation"
-                    kind="outlined"
-                    size="medium"
-                    @click="navOpen = true"
-                  />
-                </Tooltip>
-              </span>
-
-              <a
-                href="/home"
-                aria-label="Azion home"
-                class="flex h-6 w-fit shrink-0 items-center rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none md:hidden"
-              >
-                <Brand
-                  kind="default"
-                  size="small"
-                />
-              </a>
-
-              <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
-                <Breadcrumb
-                  :items="breadcrumb"
-                  class="w-full"
-                />
-              </div>
-            </div>
-          </GlobalHeader.Left>
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right>
-            <SearchTrigger
-              collapsible
-              @open="paletteOpen = true"
-            />
-
-            <span class="contents md:hidden">
-              <Tooltip
-                text="Create"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="pi pi-plus-circle"
-                  kind="primary"
-                  size="medium"
-                  aria-label="Create"
-                />
-              </Tooltip>
-              <Tooltip
-                text="Agent"
-                placement="bottom"
-              >
-                <IconButton
-                  icon="ai ai-ask-azion"
-                  kind="outlined"
-                  size="medium"
-                  aria-label="Agent"
-                />
-              </Tooltip>
-            </span>
-            <span class="hidden md:contents">
-              <Button
-                label="Create"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus-circle"
-              />
-              <ButtonHighlight
-                label="Agent"
-                size="medium"
-                icon="ai ai-ask-azion"
-              />
-            </span>
-
-            <button
-              type="button"
-              aria-label="Account settings"
-              class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-            >
-              <Avatar
-                label="alex@example.com"
-                size="medium"
-                kind="square"
-              />
-            </button>
-          </GlobalHeader.Right>
-        </GlobalHeader>
-      </div>
-
-      <div class="min-h-0 flex-1 overflow-auto animate-page-enter motion-reduce:animate-none">
-        <main class="flex h-full min-h-0 flex-col">
-          <PageTabs v-model="activeTab">
-            <Tabs.Item
-              v-for="tab in tabs"
-              :key="tab.value"
-              :value="tab.value"
-              :label="tab.label"
-            />
-          </PageTabs>
-
-          <section
-            v-if="activeTab === 'tables'"
-            class="animate-page-enter motion-reduce:animate-none relative flex min-h-0 flex-1 overflow-hidden"
-          >
-            <div class="contents [--sidebar-width:var(--container-2xs)]">
-              <Sidebar
-                v-model:width="leftWidth"
-                v-model:collapsed="leftCollapsed"
-                resizable
-                collapsible
-                aria-label="Tables"
-                collapse-aria-label="Hide the tables panel"
-                expand-aria-label="Show the tables panel"
-                resize-aria-label="Resize the tables panel"
-              >
-                <template #header>
-                  <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
-                    <div class="flex items-center justify-between gap-(--spacing-xs)">
-                      <span class="text-heading-xxs text-(--text-default)">Tables</span>
-                      <div class="flex items-center gap-(--spacing-xxs)">
-                        <Tooltip text="Refresh tables">
-                          <IconButton
-                            icon="pi pi-refresh"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Refresh tables"
-                          />
-                        </Tooltip>
-                        <Tooltip text="Create Table">
-                          <IconButton
-                            icon="pi pi-plus"
-                            kind="outlined"
-                            size="small"
-                            aria-label="Create Table"
-                          />
-                        </Tooltip>
-                      </div>
-                    </div>
-                    <Input
-                      v-model="tableSearch"
-                      size="medium"
-                      class="w-full"
-                      placeholder="Search tables"
-                      aria-label="Search tables"
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </div>
-                </template>
-                <div>
-                  <p
-                    v-if="!tables.length"
-                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    No tables created yet
-                  </p>
-                  <p
-                    v-else-if="!filteredTables.length"
-                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    No tables match "{{ tableSearch }}".
-                  </p>
-                  <div
-                    v-else
-                    class="flex flex-col gap-(--spacing-xxs)"
-                  >
-                    <div
-                      v-for="table in filteredTables"
-                      :key="table.id"
-                      class="group flex items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        :data-selected="
-                          selectedTable && selectedTable.id === table.id ? true : null
-                        "
-                        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
-                        @click="selectTable(table.id)"
-                      >
-                        <i
-                          class="pi pi-table shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span class="min-w-0 truncate">{{ table.name }}</span>
-                      </button>
-                      <DropdownMenu placement="bottom-end">
-                        <DropdownMenu.Trigger>
-                          <Tooltip text="Table actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="transparent"
-                              size="small"
-                              aria-label="Table actions"
-                            />
-                          </Tooltip>
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="delete"
-                            label="Delete table"
-                          >
-                            <template #left
-                              ><i
-                                class="pi pi-trash"
-                                aria-hidden="true"
-                            /></template>
-                          </DropdownMenu.Option>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </div>
-              </Sidebar>
-            </div>
-
-            <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-              <div
-                v-if="!selectedTable"
-                class="flex flex-1 items-center justify-center p-(--spacing-md)"
-              >
-                <Card class="w-full max-w-(--container-2xl)">
-                  <template #content>
-                    <div
-                      class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
-                    >
-                      <EmptyState
-                        size="medium"
-                        title="No tables yet"
-                        description="Create your first table to store your data."
-                        class="w-full"
-                      >
-                        <template #icon>
-                          <span class="relative flex size-10 items-center justify-center">
-                            <span
-                              aria-hidden="true"
-                              class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-xl) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                            />
-                            <span
-                              aria-hidden="true"
-                              class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                            />
-                            <span
-                              class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                            >
-                              <i
-                                class="pi pi-table text-body-md leading-none text-(--text-default)"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </span>
-                        </template>
-                        <template #actions>
-                          <div class="w-full md:w-fit">
-                            <Button
-                              label="Create Table"
-                              icon="pi pi-plus"
-                              kind="secondary"
-                              size="medium"
-                              class="w-full"
-                            />
-                          </div>
-                        </template>
-                      </EmptyState>
-                    </div>
-                  </template>
-                </Card>
-              </div>
-
-              <div
-                v-else
-                class="flex min-h-0 flex-1 flex-col"
-              >
-                <div
-                  class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
-                >
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <i
-                      class="pi pi-table shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="truncate text-heading-xxs text-(--text-default)">{{
-                      selectedTable.name
-                    }}</span>
-                  </div>
-                  <ToggleGroup
-                    v-model="tableView"
-                    :options="tableViewOptions"
-                    aria-label="Table view"
-                  />
-                </div>
-
-                <div
-                  v-if="tableView === 'data'"
-                  class="flex min-h-0 flex-1 flex-col"
-                >
-                  <div
-                    class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
-                  >
-                    <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
-                      <Input
-                        v-model="rowFilter"
-                        size="medium"
-                        class="w-full"
-                        :placeholder="filterPlaceholder"
-                        aria-label="Filter rows"
-                      >
-                        <template #iconLeft>
-                          <i
-                            class="pi pi-search"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </Input>
-                    </div>
-                    <div class="ms-auto flex items-center gap-(--spacing-xs)">
-                      <Button
-                        label="Sort"
-                        kind="outlined"
-                        size="medium"
-                        icon="pi pi-sort-alt"
-                      />
-                      <Tooltip text="Refresh">
-                        <IconButton
-                          icon="pi pi-refresh"
-                          kind="outlined"
-                          size="medium"
-                          aria-label="Refresh"
-                        />
-                      </Tooltip>
-                      <Button
-                        label="Insert"
-                        kind="primary"
-                        size="medium"
-                        icon="pi pi-plus"
-                      />
-                    </div>
-                  </div>
-
-                  <div class="min-h-0 flex-1 overflow-auto">
-                    <TableRoot
-                      v-model:row-selection="rowSelection"
-                      :data="filteredRows"
-                      :columns="dataColumns"
-                      row-key="__k"
-                      enable-row-selection
-                      enable-sorting
-                      paginated
-                      :page-size="25"
-                      :rows-per-page-options="[25, 50, 100]"
-                      density="compact"
-                      :bordered="false"
-                      :aria-label="`Rows of ${selectedTable.name}`"
-                    >
-                      <template
-                        v-for="column in selectedTable.columns"
-                        :key="column.id"
-                        #[`header-${column.name}`]
-                      >
-                        <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                          <span class="truncate">{{ column.name }}</span>
-                          <span class="shrink-0 text-body-xs text-(--text-muted)">{{
-                            column.type
-                          }}</span>
-                          <i
-                            v-if="column.primaryKey"
-                            class="pi pi-key shrink-0 text-(--primary)"
-                            role="img"
-                            aria-label="Primary key"
-                          />
-                        </span>
-                      </template>
-                      <template
-                        v-for="column in selectedTable.columns"
-                        :key="column.id"
-                        #[`cell-${column.name}`]="{ value }"
-                      >
-                        <span
-                          class="truncate font-code text-label-code-sm"
-                          :class="
-                            isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'
-                          "
-                          >{{ displayCell(value) }}</span
-                        >
-                      </template>
-                      <template #cell-__actions="{ row }">
-                        <Tooltip text="Delete row">
-                          <IconButton
-                            icon="pi pi-trash"
-                            kind="transparent"
-                            size="small"
-                            aria-label="Delete row"
-                            @click="deleteRow(row)"
-                          />
-                        </Tooltip>
-                      </template>
-                      <template #empty>
-                        <div
-                          v-if="!tableRows.length"
-                          class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
-                        >
-                          <p class="text-body-sm text-(--text-default)">This table is empty</p>
-                          <div
-                            class="flex flex-wrap items-center justify-center gap-(--spacing-xs)"
-                          >
-                            <Button
-                              label="Insert row"
-                              kind="secondary"
-                              size="medium"
-                              icon="pi pi-plus"
-                            />
-                            <Button
-                              label="Import data from CSV"
-                              kind="outlined"
-                              size="medium"
-                              icon="pi pi-upload"
-                            />
-                          </div>
-                          <p class="text-body-xs text-(--text-muted)">
-                            or drag and drop a CSV file here
-                          </p>
-                        </div>
-                        <p
-                          v-else
-                          class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
-                        >
-                          No rows match "{{ rowFilter }}".
-                        </p>
-                      </template>
-                    </TableRoot>
-                  </div>
-                </div>
-
-                <div
-                  v-else
-                  class="flex min-h-0 flex-1 flex-col gap-(--layout-group-gap) overflow-auto p-(--spacing-md)"
-                >
-                  <div class="flex items-center justify-between gap-(--spacing-sm)">
-                    <p class="text-heading-xxs text-(--text-default)">Columns</p>
-                    <Button
-                      label="Add column"
-                      kind="outlined"
-                      size="medium"
-                      icon="pi pi-plus"
-                    />
-                  </div>
-                  <Card :padded="false">
-                    <template #content>
-                      <TableRoot
-                        :data="schemaRows"
-                        :columns="schemaColumns"
-                        row-key="id"
-                        :bordered="false"
-                      >
-                        <template #cell-name="{ value }">
-                          <span class="min-w-0 truncate">{{ value }}</span>
-                        </template>
-                        <template #cell-type="{ value }">
-                          <Tag
-                            :label="value"
-                            severity="secondary"
-                            size="medium"
-                          />
-                        </template>
-                        <template #cell-constraints="{ value }">
-                          <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
-                        </template>
-                      </TableRoot>
-                    </template>
-                  </Card>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section
-            v-else
-            class="relative flex min-h-0 flex-1 overflow-hidden"
-          >
-            <div class="contents [--sidebar-width:var(--container-2xs)]">
-              <Sidebar
-                v-model:width="leftWidth"
-                v-model:collapsed="leftCollapsed"
-                resizable
-                collapsible
-                aria-label="Query history"
-                collapse-aria-label="Hide the query history"
-                expand-aria-label="Show the query history"
-                resize-aria-label="Resize the query history panel"
-              >
-                <template #header>
-                  <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
-                    <span class="text-heading-xxs text-(--text-default)">Query history</span>
-                    <Input
-                      v-model="historySearch"
-                      size="medium"
-                      class="w-full"
-                      placeholder="Search queries"
-                      aria-label="Search queries"
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </div>
-                </template>
-                <div>
-                  <p
-                    v-if="!filteredHistory.length"
-                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-                  >
-                    No queries yet
-                  </p>
-                  <div
-                    v-else
-                    class="flex flex-col gap-(--spacing-xxs)"
-                  >
-                    <div
-                      v-for="item in filteredHistory"
-                      :key="item.id"
-                      class="flex items-center gap-(--spacing-xxs)"
-                    >
-                      <button
-                        type="button"
-                        class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                        :title="oneLine(item.sql)"
-                        @click="loadFromHistory(item)"
-                      >
-                        {{ oneLine(item.sql) }}
-                      </button>
-                      <DropdownMenu
-                        placement="bottom-end"
-                        @select="
-                          (event, value) =>
-                            value === 'run'
-                              ? (applyTemplate(item.sql), runQuery())
-                              : deleteHistory(event, item)
-                        "
-                      >
-                        <DropdownMenu.Trigger>
-                          <Tooltip text="Query actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="transparent"
-                              size="small"
-                              aria-label="Query actions"
-                            />
-                          </Tooltip>
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="run"
-                            label="Run query"
-                          >
-                            <template #left
-                              ><i
-                                class="pi pi-play"
-                                aria-hidden="true"
-                            /></template>
-                          </DropdownMenu.Option>
-                          <DropdownMenu.Option
-                            value="delete"
-                            label="Delete query"
-                          >
-                            <template #left
-                              ><i
-                                class="pi pi-trash"
-                                aria-hidden="true"
-                            /></template>
-                          </DropdownMenu.Option>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </div>
-              </Sidebar>
-            </div>
-
-            <div class="flex min-w-0 flex-1 flex-col overflow-auto">
-              <div
-                class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
-              >
-                <Button
-                  label="Run query"
-                  kind="primary"
-                  size="medium"
-                  icon="pi pi-play"
-                  :loading="running"
-                  @click="runQuery"
-                />
-                <div class="ms-auto flex items-center gap-(--spacing-xs)">
-                  <Button
-                    label="Prettify"
-                    kind="outlined"
-                    size="medium"
-                    icon="pi pi-align-left"
-                    :disabled="running"
-                  />
-                  <Button
-                    label="Templates"
-                    kind="outlined"
-                    size="medium"
-                    icon="pi pi-bolt"
-                    :disabled="running"
-                    @click="templatesOpen = true"
-                  />
-                </div>
-              </div>
-
-              <CodeEditor
-                v-model="editorSql"
-                language="sql"
-                path="query.sql"
-                height="14rem"
-                :readonly="running"
-                :markers="editorMarkers"
-                aria-label="SQL editor"
-              />
-
-              <div
-                class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)"
-              >
-                <div
-                  class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
-                >
-                  <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
-                  <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
-                    <Input
-                      v-model="resultSearch"
-                      size="medium"
-                      class="w-full"
-                      placeholder="Search"
-                      aria-label="Search results"
-                      :disabled="!resultRows.length"
-                    >
-                      <template #iconLeft>
-                        <i
-                          class="pi pi-search"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </Input>
-                  </div>
-                  <div class="ms-auto flex items-center gap-(--spacing-xs)">
-                    <ToggleGroup
-                      v-model="resultView"
-                      :options="resultViewOptions"
-                      aria-label="Result view"
-                    />
-                    <Tooltip text="Refresh">
-                      <IconButton
-                        icon="pi pi-refresh"
-                        kind="outlined"
-                        size="medium"
-                        aria-label="Refresh results"
-                        :loading="running"
-                        @click="runQuery"
-                      />
-                    </Tooltip>
-                    <Tooltip text="Download">
-                      <IconButton
-                        icon="pi pi-download"
-                        kind="outlined"
-                        size="medium"
-                        aria-label="Download results"
-                        :disabled="!resultRows.length"
-                      />
-                    </Tooltip>
-                    <Tooltip text="Columns">
-                      <IconButton
-                        icon="pi pi-table"
-                        kind="outlined"
-                        size="medium"
-                        aria-label="Toggle columns"
-                        :disabled="!resultRows.length"
-                      />
-                    </Tooltip>
-                    <Button
-                      label="Insert"
-                      kind="primary"
-                      size="medium"
-                      icon="pi pi-plus"
-                      :disabled="true"
-                    />
-                  </div>
-                </div>
-
-                <div class="min-h-(--container-3xs)">
-                  <TableRoot
-                    v-if="resultRows.length && resultView === 'table'"
-                    :data="filteredResultRows"
-                    :columns="resultColumns"
-                    row-key="__k"
-                    :bordered="false"
-                  />
-                  <pre
-                    v-else-if="resultRows.length && resultView === 'json'"
-                    class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
-                    >{{ resultJson }}</pre>
-                  <div
-                    v-else-if="results && (results.type === 'message' || results.type === 'error')"
-                    class="p-(--spacing-md)"
-                  >
-                    <Alert
-                      :severity="results.type === 'error' ? 'danger' : 'success'"
-                      :label="results.text"
-                    />
-                  </div>
-                  <div
-                    v-else
-                    class="flex min-h-(--container-3xs) items-center justify-center p-(--spacing-lg)"
-                  >
-                    <EmptyState
-                      title="Ready to execute"
-                      description="Execute a query to see the results here."
-                    />
-                  </div>
-                </div>
-
-                <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
-                  <PaginationRoot
-                    :total="filteredResultRows.length"
-                    :page-size="50"
-                    :page-size-options="[10, 25, 50, 100]"
-                    aria-label="Results pagination"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        </main>
-
-        <Drawer
-          v-model:open="templatesOpen"
-          size="large"
-          side="right"
-        >
-          <DrawerPortal>
-            <DrawerOverlay />
-            <DrawerContent>
-              <PanelHeader class="w-full">
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                  <DrawerTitle>SQL quick templates</DrawerTitle>
-                  <p class="text-body-sm text-(--text-muted)">
-                    Pick a snippet to load it into the editor.
-                  </p>
-                </div>
-                <DrawerClose />
-              </PanelHeader>
-
-              <PanelContent>
-                <div class="flex flex-col gap-(--spacing-md)">
-                  <Input
-                    v-model="templateQuery"
-                    size="large"
-                    class="w-full"
-                    placeholder="Search templates"
-                    aria-label="Search templates"
-                  >
-                    <template #iconLeft>
-                      <i
-                        class="pi pi-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-
-                  <div
-                    v-if="filteredTemplates.length"
-                    class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
-                  >
-                    <button
-                      v-for="template in filteredTemplates"
-                      :key="template.id"
-                      type="button"
-                      class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-start transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                      @click="chooseTemplate(template)"
-                    >
-                      <span class="flex items-center gap-(--spacing-xs)">
-                        <i
-                          :class="template.icon"
-                          class="text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span class="text-label-md text-(--text-default)">{{
-                          template.title
-                        }}</span>
-                      </span>
-                      <span class="text-body-xs text-(--text-muted)">{{
-                        template.description
-                      }}</span>
-                    </button>
-                  </div>
-
-                  <p
-                    v-else
-                    class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
-                  >
-                    No templates match "{{ templateQuery }}".
-                  </p>
-                </div>
-              </PanelContent>
-            </DrawerContent>
-          </DrawerPortal>
-        </Drawer>
-      </div>
-    </div>
-
-    <Drawer
-      v-model:open="navOpen"
-      side="right"
-      size="small"
+    <section
+      v-if="activeTab === 'tables'"
+      class="animate-page-enter motion-reduce:animate-none relative flex min-h-0 flex-1 overflow-hidden"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent aria-label="Navigation">
-          <Sidebar aria-label="Main navigation">
-            <template #header>
-              <div class="-m-(--spacing-md) flex flex-col">
-                <div
-                  class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-                >
-                  <a
-                    href="/home"
-                    aria-label="Azion home"
-                    class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                  >
-                    <Brand
-                      kind="default"
+      <div class="contents [--sidebar-width:var(--container-2xs)]">
+        <Sidebar
+          v-model:width="leftWidth"
+          v-model:collapsed="leftCollapsed"
+          resizable
+          collapsible
+          aria-label="Tables"
+          collapse-aria-label="Hide the tables panel"
+          expand-aria-label="Show the tables panel"
+          resize-aria-label="Resize the tables panel"
+        >
+          <template #header>
+            <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
+              <div class="flex items-center justify-between gap-(--spacing-xs)">
+                <span class="text-heading-xxs text-(--text-default)">Tables</span>
+                <div class="flex items-center gap-(--spacing-xxs)">
+                  <Tooltip text="Refresh tables">
+                    <IconButton
+                      icon="pi pi-refresh"
+                      kind="outlined"
                       size="small"
+                      aria-label="Refresh tables"
                     />
-                  </a>
+                  </Tooltip>
+                  <Tooltip text="Create Table">
+                    <IconButton
+                      icon="pi pi-plus"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Create Table"
+                    />
+                  </Tooltip>
                 </div>
               </div>
-            </template>
-
-            <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
-              <Menu
-                :groups="navGroups"
-                :active-id="activeId"
-                role="presentation"
-                @navigate="onMobileNavigate"
+              <Input
+                v-model="tableSearch"
+                size="medium"
+                class="w-full"
+                placeholder="Search tables"
+                aria-label="Search tables"
               >
-                <Menu.Back />
-              </Menu>
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
             </div>
-
-            <template #footer>
-              <div class="flex items-center gap-(--spacing-xs)">
-                <Avatar
-                  label="alex@example.com"
-                  size="small"
-                  kind="square"
-                />
-                <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                  >alex</span
+          </template>
+          <div>
+            <p
+              v-if="!tables.length"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+            >
+              No tables created yet
+            </p>
+            <p
+              v-else-if="!filteredTables.length"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+            >
+              No tables match "{{ tableSearch }}".
+            </p>
+            <div
+              v-else
+              class="flex flex-col gap-(--spacing-xxs)"
+            >
+              <div
+                v-for="table in filteredTables"
+                :key="table.id"
+                class="group flex items-center gap-(--spacing-xxs)"
+              >
+                <button
+                  type="button"
+                  :data-selected="
+                    selectedTable && selectedTable.id === table.id ? true : null
+                  "
+                  class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
+                  @click="selectTable(table.id)"
                 >
-                <DropdownMenu placement="top-end">
+                  <i
+                    class="pi pi-table shrink-0 text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="min-w-0 truncate">{{ table.name }}</span>
+                </button>
+                <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Account menu">
+                    <Tooltip text="Table actions">
                       <IconButton
-                        icon="pi pi-ellipsis-v"
-                        aria-label="Account menu"
-                        kind="outlined"
+                        icon="pi pi-ellipsis-h"
+                        kind="transparent"
                         size="small"
+                        aria-label="Table actions"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <template #top>
-                      <div class="flex min-w-0 flex-col">
-                        <span class="truncate text-label-md text-(--text-default)">alex</span>
-                        <span class="truncate text-body-xs text-(--text-muted)"
-                          >alex@example.com</span
-                        >
-                      </div>
-                    </template>
                     <DropdownMenu.Option
-                      value="settings"
-                      label="Account settings"
+                      value="delete"
+                      label="Delete table"
                     >
-                      <template #right>
-                        <i
-                          class="pi pi-cog"
+                      <template #left
+                        ><i
+                          class="pi pi-trash"
                           aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="personal-tokens"
-                      label="Personal tokens"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-key"
-                          aria-hidden="true"
-                        />
-                      </template>
+                      /></template>
                     </DropdownMenu.Option>
                   </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
-                    >
-                      <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
-                        >Theme</span
-                      >
-                      <ThemeSwitcher
-                        v-model="theme"
-                        aria-label="Theme"
+                </DropdownMenu>
+              </div>
+            </div>
+          </div>
+        </Sidebar>
+      </div>
+
+      <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <div
+          v-if="!selectedTable"
+          class="flex flex-1 items-center justify-center p-(--spacing-md)"
+        >
+          <Card class="w-full max-w-(--container-2xl)">
+            <template #content>
+              <div
+                class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
+              >
+                <EmptyState
+                  size="medium"
+                  title="No tables yet"
+                  description="Create your first table to store your data."
+                  class="w-full"
+                >
+                  <template #icon>
+                    <span class="relative flex size-10 items-center justify-center">
+                      <span
+                        aria-hidden="true"
+                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-xl) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
                       />
-                    </div>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="home"
-                      label="Home page"
-                    >
-                      <template #right>
+                      <span
+                        aria-hidden="true"
+                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+                      />
+                      <span
+                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
+                      >
                         <i
-                          class="pi pi-home"
+                          class="pi pi-table text-body-md leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="changelog"
-                      label="Changelog"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-pencil"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="feedback"
-                      label="Feedback"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-comment"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
-                      value="docs"
-                      label="Docs"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-book"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <DropdownMenu.Option
-                      value="logout"
-                      label="Log out"
-                    >
-                      <template #right>
-                        <i
-                          class="pi pi-sign-out"
-                          aria-hidden="true"
-                        />
-                      </template>
-                    </DropdownMenu.Option>
-                  </DropdownMenu.Group>
-                  <DropdownMenu.Group>
-                    <div
-                      class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)"
-                    >
+                      </span>
+                    </span>
+                  </template>
+                  <template #actions>
+                    <div class="w-full md:w-fit">
                       <Button
-                        label="Upgrade to Pro"
+                        label="Create Table"
+                        icon="pi pi-plus"
                         kind="secondary"
                         size="medium"
                         class="w-full"
                       />
-                      <div class="flex justify-center px-(--spacing-xs)">
-                        <StatusIndicator
-                          severity="success"
-                          label="All systems normal"
-                        />
-                      </div>
                     </div>
+                  </template>
+                </EmptyState>
+              </div>
+            </template>
+          </Card>
+        </div>
+
+        <div
+          v-else
+          class="flex min-h-0 flex-1 flex-col"
+        >
+          <div
+            class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+          >
+            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <i
+                class="pi pi-table shrink-0 text-(--text-muted)"
+                aria-hidden="true"
+              />
+              <span class="truncate text-heading-xxs text-(--text-default)">{{
+                selectedTable.name
+              }}</span>
+            </div>
+            <ToggleGroup
+              v-model="tableView"
+              :options="tableViewOptions"
+              aria-label="Table view"
+            />
+          </div>
+
+          <div
+            v-if="tableView === 'data'"
+            class="flex min-h-0 flex-1 flex-col"
+          >
+            <div
+              class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+            >
+              <div class="flex min-w-0 flex-1 md:max-w-(--container-lg)">
+                <Input
+                  v-model="rowFilter"
+                  size="medium"
+                  class="w-full"
+                  :placeholder="filterPlaceholder"
+                  aria-label="Filter rows"
+                >
+                  <template #iconLeft>
+                    <i
+                      class="pi pi-search"
+                      aria-hidden="true"
+                    />
+                  </template>
+                </Input>
+              </div>
+              <div class="ms-auto flex items-center gap-(--spacing-xs)">
+                <Button
+                  label="Sort"
+                  kind="outlined"
+                  size="medium"
+                  icon="pi pi-sort-alt"
+                />
+                <Tooltip text="Refresh">
+                  <IconButton
+                    icon="pi pi-refresh"
+                    kind="outlined"
+                    size="medium"
+                    aria-label="Refresh"
+                  />
+                </Tooltip>
+                <Button
+                  label="Insert"
+                  kind="primary"
+                  size="medium"
+                  icon="pi pi-plus"
+                />
+              </div>
+            </div>
+
+            <div class="min-h-0 flex-1 overflow-auto">
+              <TableRoot
+                v-model:row-selection="rowSelection"
+                :data="filteredRows"
+                :columns="dataColumns"
+                row-key="__k"
+                enable-row-selection
+                enable-sorting
+                paginated
+                :page-size="25"
+                :rows-per-page-options="[25, 50, 100]"
+                density="compact"
+                :bordered="false"
+                :aria-label="`Rows of ${selectedTable.name}`"
+              >
+                <template
+                  v-for="column in selectedTable.columns"
+                  :key="column.id"
+                  #[`header-${column.name}`]
+                >
+                  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                    <span class="truncate">{{ column.name }}</span>
+                    <span class="shrink-0 text-body-xs text-(--text-muted)">{{
+                      column.type
+                    }}</span>
+                    <i
+                      v-if="column.primaryKey"
+                      class="pi pi-key shrink-0 text-(--primary)"
+                      role="img"
+                      aria-label="Primary key"
+                    />
+                  </span>
+                </template>
+                <template
+                  v-for="column in selectedTable.columns"
+                  :key="column.id"
+                  #[`cell-${column.name}`]="{ value }"
+                >
+                  <span
+                    class="truncate font-code text-label-code-sm"
+                    :class="
+                      isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'
+                    "
+                    >{{ displayCell(value) }}</span
+                  >
+                </template>
+                <template #cell-__actions="{ row }">
+                  <Tooltip text="Delete row">
+                    <IconButton
+                      icon="pi pi-trash"
+                      kind="transparent"
+                      size="small"
+                      aria-label="Delete row"
+                      @click="deleteRow(row)"
+                    />
+                  </Tooltip>
+                </template>
+                <template #empty>
+                  <div
+                    v-if="!tableRows.length"
+                    class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
+                  >
+                    <p class="text-body-sm text-(--text-default)">This table is empty</p>
+                    <div
+                      class="flex flex-wrap items-center justify-center gap-(--spacing-xs)"
+                    >
+                      <Button
+                        label="Insert row"
+                        kind="secondary"
+                        size="medium"
+                        icon="pi pi-plus"
+                      />
+                      <Button
+                        label="Import data from CSV"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-upload"
+                      />
+                    </div>
+                    <p class="text-body-xs text-(--text-muted)">
+                      or drag and drop a CSV file here
+                    </p>
+                  </div>
+                  <p
+                    v-else
+                    class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
+                  >
+                    No rows match "{{ rowFilter }}".
+                  </p>
+                </template>
+              </TableRoot>
+            </div>
+          </div>
+
+          <div
+            v-else
+            class="flex min-h-0 flex-1 flex-col gap-(--layout-group-gap) overflow-auto p-(--spacing-md)"
+          >
+            <div class="flex items-center justify-between gap-(--spacing-sm)">
+              <p class="text-heading-xxs text-(--text-default)">Columns</p>
+              <Button
+                label="Add column"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-plus"
+              />
+            </div>
+            <Card :padded="false">
+              <template #content>
+                <TableRoot
+                  :data="schemaRows"
+                  :columns="schemaColumns"
+                  row-key="id"
+                  :bordered="false"
+                >
+                  <template #cell-name="{ value }">
+                    <span class="min-w-0 truncate">{{ value }}</span>
+                  </template>
+                  <template #cell-type="{ value }">
+                    <Tag
+                      :label="value"
+                      severity="secondary"
+                      size="medium"
+                    />
+                  </template>
+                  <template #cell-constraints="{ value }">
+                    <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
+                  </template>
+                </TableRoot>
+              </template>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      v-else
+      class="relative flex min-h-0 flex-1 overflow-hidden"
+    >
+      <div class="contents [--sidebar-width:var(--container-2xs)]">
+        <Sidebar
+          v-model:width="leftWidth"
+          v-model:collapsed="leftCollapsed"
+          resizable
+          collapsible
+          aria-label="Query history"
+          collapse-aria-label="Hide the query history"
+          expand-aria-label="Show the query history"
+          resize-aria-label="Resize the query history panel"
+        >
+          <template #header>
+            <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
+              <span class="text-heading-xxs text-(--text-default)">Query history</span>
+              <Input
+                v-model="historySearch"
+                size="medium"
+                class="w-full"
+                placeholder="Search queries"
+                aria-label="Search queries"
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+          </template>
+          <div>
+            <p
+              v-if="!filteredHistory.length"
+              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+            >
+              No queries yet
+            </p>
+            <div
+              v-else
+              class="flex flex-col gap-(--spacing-xxs)"
+            >
+              <div
+                v-for="item in filteredHistory"
+                :key="item.id"
+                class="flex items-center gap-(--spacing-xxs)"
+              >
+                <button
+                  type="button"
+                  class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                  :title="oneLine(item.sql)"
+                  @click="loadFromHistory(item)"
+                >
+                  {{ oneLine(item.sql) }}
+                </button>
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="
+                    (event, value) =>
+                      value === 'run'
+                        ? (applyTemplate(item.sql), runQuery())
+                        : deleteHistory(event, item)
+                  "
+                >
+                  <DropdownMenu.Trigger>
+                    <Tooltip text="Query actions">
+                      <IconButton
+                        icon="pi pi-ellipsis-h"
+                        kind="transparent"
+                        size="small"
+                        aria-label="Query actions"
+                      />
+                    </Tooltip>
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
+                      value="run"
+                      label="Run query"
+                    >
+                      <template #left
+                        ><i
+                          class="pi pi-play"
+                          aria-hidden="true"
+                      /></template>
+                    </DropdownMenu.Option>
+                    <DropdownMenu.Option
+                      value="delete"
+                      label="Delete query"
+                    >
+                      <template #left
+                        ><i
+                          class="pi pi-trash"
+                          aria-hidden="true"
+                      /></template>
+                    </DropdownMenu.Option>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </div>
-            </template>
-          </Sidebar>
+            </div>
+          </div>
+        </Sidebar>
+      </div>
+
+      <div class="flex min-w-0 flex-1 flex-col overflow-auto">
+        <div
+          class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+        >
+          <Button
+            label="Run query"
+            kind="primary"
+            size="medium"
+            icon="pi pi-play"
+            :loading="running"
+            @click="runQuery"
+          />
+          <div class="ms-auto flex items-center gap-(--spacing-xs)">
+            <Button
+              label="Prettify"
+              kind="outlined"
+              size="medium"
+              icon="pi pi-align-left"
+              :disabled="running"
+            />
+            <Button
+              label="Templates"
+              kind="outlined"
+              size="medium"
+              icon="pi pi-bolt"
+              :disabled="running"
+              @click="templatesOpen = true"
+            />
+          </div>
+        </div>
+
+        <CodeEditor
+          v-model="editorSql"
+          language="sql"
+          path="query.sql"
+          height="14rem"
+          :readonly="running"
+          :markers="editorMarkers"
+          aria-label="SQL editor"
+        />
+
+        <div
+          class="flex flex-col border-t-(length:--border-width-default) border-(--border-default)"
+        >
+          <div
+            class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+          >
+            <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
+            <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
+              <Input
+                v-model="resultSearch"
+                size="medium"
+                class="w-full"
+                placeholder="Search"
+                aria-label="Search results"
+                :disabled="!resultRows.length"
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+            <div class="ms-auto flex items-center gap-(--spacing-xs)">
+              <ToggleGroup
+                v-model="resultView"
+                :options="resultViewOptions"
+                aria-label="Result view"
+              />
+              <Tooltip text="Refresh">
+                <IconButton
+                  icon="pi pi-refresh"
+                  kind="outlined"
+                  size="medium"
+                  aria-label="Refresh results"
+                  :loading="running"
+                  @click="runQuery"
+                />
+              </Tooltip>
+              <Tooltip text="Download">
+                <IconButton
+                  icon="pi pi-download"
+                  kind="outlined"
+                  size="medium"
+                  aria-label="Download results"
+                  :disabled="!resultRows.length"
+                />
+              </Tooltip>
+              <Tooltip text="Columns">
+                <IconButton
+                  icon="pi pi-table"
+                  kind="outlined"
+                  size="medium"
+                  aria-label="Toggle columns"
+                  :disabled="!resultRows.length"
+                />
+              </Tooltip>
+              <Button
+                label="Insert"
+                kind="primary"
+                size="medium"
+                icon="pi pi-plus"
+                :disabled="true"
+              />
+            </div>
+          </div>
+
+          <div class="min-h-(--container-3xs)">
+            <TableRoot
+              v-if="resultRows.length && resultView === 'table'"
+              :data="filteredResultRows"
+              :columns="resultColumns"
+              row-key="__k"
+              :bordered="false"
+            />
+            <pre
+              v-else-if="resultRows.length && resultView === 'json'"
+              class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
+              >{{ resultJson }}</pre>
+            <div
+              v-else-if="results && (results.type === 'message' || results.type === 'error')"
+              class="p-(--spacing-md)"
+            >
+              <Alert
+                :severity="results.type === 'error' ? 'danger' : 'success'"
+                :label="results.text"
+              />
+            </div>
+            <div
+              v-else
+              class="flex min-h-(--container-3xs) items-center justify-center p-(--spacing-lg)"
+            >
+              <EmptyState
+                title="Ready to execute"
+                description="Execute a query to see the results here."
+              />
+            </div>
+          </div>
+
+          <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
+            <PaginationRoot
+              :total="filteredResultRows.length"
+              :page-size="50"
+              :page-size-options="[10, 25, 50, 100]"
+              aria-label="Results pagination"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Drawer
+      v-model:open="templatesOpen"
+      size="large"
+      side="right"
+    >
+      <DrawerPortal>
+        <DrawerOverlay />
+        <DrawerContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>SQL quick templates</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                Pick a snippet to load it into the editor.
+              </p>
+            </div>
+            <DrawerClose />
+          </PanelHeader>
+
+          <PanelContent>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <Input
+                v-model="templateQuery"
+                size="large"
+                class="w-full"
+                placeholder="Search templates"
+                aria-label="Search templates"
+              >
+                <template #iconLeft>
+                  <i
+                    class="pi pi-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+
+              <div
+                v-if="filteredTemplates.length"
+                class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
+              >
+                <button
+                  v-for="template in filteredTemplates"
+                  :key="template.id"
+                  type="button"
+                  class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-start transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                  @click="chooseTemplate(template)"
+                >
+                  <span class="flex items-center gap-(--spacing-xs)">
+                    <i
+                      :class="template.icon"
+                      class="text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span class="text-label-md text-(--text-default)">{{
+                      template.title
+                    }}</span>
+                  </span>
+                  <span class="text-body-xs text-(--text-muted)">{{
+                    template.description
+                  }}</span>
+                </button>
+              </div>
+
+              <p
+                v-else
+                class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+              >
+                No templates match "{{ templateQuery }}".
+              </p>
+            </div>
+          </PanelContent>
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
