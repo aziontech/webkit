@@ -1,12 +1,12 @@
 <script setup>
-  import CardGrid from '@aziontech/webkit/card-grid'
+  import CardGridRoot from '@aziontech/webkit/card-grid-root'
   import Illustration from '@aziontech/webkit/illustration'
   import MediaTile from '@aziontech/webkit/media-tile'
 </script>
 
 <template>
   <div class="flex flex-col gap-8">
-    <CardGrid
+    <CardGridRoot
       kind="gap"
       :columns="2"
     >
@@ -28,8 +28,8 @@
           <Illustration name="distributed-apis" />
         </template>
       </MediaTile>
-    </CardGrid>
-    <CardGrid
+    </CardGridRoot>
+    <CardGridRoot
       kind="divider"
       :columns="2"
     >
@@ -51,6 +51,6 @@
           <Illustration name="runtime" />
         </template>
       </MediaTile>
-    </CardGrid>
+    </CardGridRoot>
   </div>
 </template>

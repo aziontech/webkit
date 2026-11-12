@@ -1,10 +1,10 @@
 <script setup>
-  import BentoGrid from '@aziontech/webkit/bento-grid'
+  import BentoGridRoot from '@aziontech/webkit/bento-grid-root'
   import BentoGridCell from '@aziontech/webkit/bento-grid-cell'
 </script>
 
 <template>
-  <BentoGrid aria-label="Platform capabilities">
+  <BentoGridRoot aria-label="Platform capabilities">
     <BentoGridCell>
       <h3 class="m-0 text-heading-sm text-(--text-default)">Deploy in seconds</h3>
       <p class="m-0 mt-(--spacing-sm) text-body-sm text-(--text-muted)">
@@ -33,5 +33,5 @@
         running.
       </p>
     </BentoGridCell>
-  </BentoGrid>
+  </BentoGridRoot>
 </template>

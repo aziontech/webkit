@@ -1,17 +1,19 @@
 <script setup>
   import { ref } from 'vue'
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
-  import Select, { SelectTrigger, SelectContent, SelectOption } from '@aziontech/webkit/select'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverDescription from '@aziontech/webkit/popover-description'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverFooter from '@aziontech/webkit/popover-footer'
+  import SelectRoot from '@aziontech/webkit/select-root'
+  import SelectTrigger from '@aziontech/webkit/select-trigger'
+  import SelectContent from '@aziontech/webkit/select-content'
+  import SelectOption from '@aziontech/webkit/select-option'
   import Input from '@aziontech/webkit/input'
-  import Label from '@aziontech/webkit/label'
+  import FieldLegend from '@aziontech/webkit/field-legend'
   import Button from '@aziontech/webkit/button'
 
   const open = ref(false)
@@ -40,7 +42,7 @@
 </script>
 
 <template>
-  <Popover
+  <PopoverRoot
     v-model:open="open"
     :dismissible="false"
     width="large"
@@ -61,16 +63,16 @@
         <PopoverClose />
       </PopoverHeader>
 
-      <div class="flex flex-col gap-(--spacing-xs) p-(--spacing-md)">
-        <Label>New Filter</Label>
+      <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-(--spacing-md)">
+        <FieldLegend kind="label">New Filter</FieldLegend>
         <div class="flex items-start gap-(--spacing-sm)">
           <div class="min-w-0 flex-1">
-            <Select
+            <SelectRoot
               v-model="field"
               size="small"
               placeholder="Field"
             >
-              <SelectTrigger />
+              <SelectTrigger aria-label="Field" />
               <SelectContent>
                 <SelectOption
                   v-for="option in fields"
@@ -79,15 +81,15 @@
                   >{{ option.label }}</SelectOption
                 >
               </SelectContent>
-            </Select>
+            </SelectRoot>
           </div>
           <div class="min-w-0 flex-1">
-            <Select
+            <SelectRoot
               size="small"
               v-model="operator"
               placeholder="Operator"
             >
-              <SelectTrigger />
+              <SelectTrigger aria-label="Operator" />
               <SelectContent>
                 <SelectOption
                   v-for="option in operators"
@@ -96,17 +98,18 @@
                   >{{ option.label }}</SelectOption
                 >
               </SelectContent>
-            </Select>
+            </SelectRoot>
           </div>
           <div class="min-w-0 flex-1">
             <Input
               size="small"
               v-model="value"
               placeholder="Value"
+              aria-label="Value"
             />
           </div>
         </div>
-      </div>
+      </fieldset>
 
       <PopoverFooter>
         <Button
@@ -123,5 +126,5 @@
         />
       </PopoverFooter>
     </PopoverContent>
-  </Popover>
+  </PopoverRoot>
 </template>

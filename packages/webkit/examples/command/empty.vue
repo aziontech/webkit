@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue'
-  import Command from '@aziontech/webkit/command'
+  import CommandRoot from '@aziontech/webkit/command-root'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandList from '@aziontech/webkit/command-list'
   import CommandEmpty from '@aziontech/webkit/command-empty'
@@ -16,7 +16,7 @@
     @click="open = true"
   />
 
-  <Command
+  <CommandRoot
     v-model:open="open"
     shortcut=""
   >
@@ -24,5 +24,5 @@
     <CommandList>
       <CommandEmpty>No commands found.</CommandEmpty>
     </CommandList>
-  </Command>
+  </CommandRoot>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-  import MultiSelect from '@aziontech/webkit/multi-select'
+  import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectOption from '@aziontech/webkit/multi-select-option'
@@ -18,7 +18,7 @@
     class="flex flex-col gap-4"
     style="width: 280px"
   >
-    <MultiSelect
+    <MultiSelectRoot
       :aria-label="`Option, ${s}`"
       v-for="s in sizes"
       :key="s"
@@ -35,6 +35,6 @@
           >{{ o.label }}</MultiSelectOption
         >
       </MultiSelectContent>
-    </MultiSelect>
+    </MultiSelectRoot>
   </div>
 </template>

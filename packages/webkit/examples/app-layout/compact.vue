@@ -4,7 +4,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Menu from '@aziontech/webkit/menu'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -25,7 +25,7 @@
           :resizable="!drawer"
           :collapsible="!drawer"
         >
-          <Menu role="presentation">
+          <MenuRoot role="presentation">
             <MenuGroup>
               <MenuItem
                 label="Home"
@@ -39,22 +39,24 @@
                 href="#"
               />
             </MenuGroup>
-          </Menu>
+          </MenuRoot>
         </Sidebar>
       </template>
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left class="justify-start!">
-              <IconButton
-                v-if="compact"
-                icon="pi pi-bars"
-                aria-label="Open navigation"
-                kind="outlined"
-                size="medium"
-                @click="openNavigation"
-              />
+            <GlobalHeader.Left>
+              <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+                <IconButton
+                  v-if="compact"
+                  icon="pi pi-bars"
+                  aria-label="Open navigation"
+                  kind="outlined"
+                  size="medium"
+                  @click="openNavigation"
+                />
+              </div>
             </GlobalHeader.Left>
             <GlobalHeader.Middle />
             <GlobalHeader.Right>

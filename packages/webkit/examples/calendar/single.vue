@@ -1,13 +1,13 @@
 <script setup>
   import { ref } from 'vue'
 
-  import Calendar from '@aziontech/webkit/calendar'
+  import CalendarRoot from '@aziontech/webkit/calendar-root'
 
   const date = ref(null)
 </script>
 
 <template>
-  <Calendar
+  <CalendarRoot
     v-model="date"
     mode="single"
     placeholder="Select date"

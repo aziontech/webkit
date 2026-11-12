@@ -1,19 +1,18 @@
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverDescription from '@aziontech/webkit/popover-description'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverFooter from '@aziontech/webkit/popover-footer'
   import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
   <div class="flex flex-wrap items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
-    <Popover
+    <PopoverRoot
       placement="bottom-start"
       width="small"
     >
@@ -32,9 +31,9 @@
           Panel width is var(--container-xs) (348px).
         </div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover
+    <PopoverRoot
       placement="bottom-start"
       width="medium"
     >
@@ -53,9 +52,9 @@
           Panel width is var(--container-sm) (408px).
         </div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
 
-    <Popover
+    <PopoverRoot
       placement="bottom-start"
       width="large"
     >
@@ -74,6 +73,6 @@
           Panel width is var(--container-md) (472px).
         </div>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   </div>
 </template>

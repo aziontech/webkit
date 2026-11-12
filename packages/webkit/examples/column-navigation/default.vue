@@ -1,11 +1,11 @@
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
 </script>
 
 <template>
-  <ColumnNavigation
+  <ColumnNavigationRoot
     aria-label="Platform"
     :columns="4"
   >
@@ -89,5 +89,5 @@
         href="/real-time-events"
       />
     </ColumnNavigationColumn>
-  </ColumnNavigation>
+  </ColumnNavigationRoot>
 </template>

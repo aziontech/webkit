@@ -1,5 +1,5 @@
 <script setup>
-  import Menu from '@aziontech/webkit/menu'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
   import MenuSub from '@aziontech/webkit/menu-sub'
@@ -9,7 +9,7 @@
 
 <template>
   <div class="w-[264px] overflow-hidden">
-    <Menu aria-label="Docs">
+    <MenuRoot aria-label="Docs">
       <MenuGroup label="Docs">
         <MenuSub default-open>
           <MenuSubTrigger
@@ -56,6 +56,6 @@
           </MenuSubContent>
         </MenuSub>
       </MenuGroup>
-    </Menu>
+    </MenuRoot>
   </div>
 </template>

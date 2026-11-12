@@ -1,5 +1,5 @@
 <script setup>
-  import Carousel from '@aziontech/webkit/carousel'
+  import CarouselRoot from '@aziontech/webkit/carousel-root'
   import CarouselItem from '@aziontech/webkit/carousel-item'
   import CarouselNext from '@aziontech/webkit/carousel-next'
   import CarouselPrevious from '@aziontech/webkit/carousel-previous'
@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <Carousel aria-label="Customer testimonials">
+  <CarouselRoot aria-label="Customer testimonials">
     <template #controls>
       <CarouselPrevious />
       <CarouselNext />
@@ -47,5 +47,5 @@
         job-title="Head of Information Security, Netshoes"
       />
     </CarouselItem>
-  </Carousel>
+  </CarouselRoot>
 </template>

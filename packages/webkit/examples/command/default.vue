@@ -1,5 +1,5 @@
 <script setup>
-  import Command from '@aziontech/webkit/command'
+  import CommandRoot from '@aziontech/webkit/command-root'
   import CommandGroup from '@aziontech/webkit/command-group'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandItem from '@aziontech/webkit/command-item'
@@ -14,7 +14,7 @@
 <template>
   <SearchTrigger @open="open = true" />
 
-  <Command
+  <CommandRoot
     v-model:open="open"
     shortcut="meta+k"
   >
@@ -44,5 +44,5 @@
         >
       </CommandGroup>
     </CommandList>
-  </Command>
+  </CommandRoot>
 </template>

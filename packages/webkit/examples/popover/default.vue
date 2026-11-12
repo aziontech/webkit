@@ -1,18 +1,17 @@
 <script setup>
-  import Popover, {
-    PopoverTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverTitle,
-    PopoverDescription,
-    PopoverClose,
-    PopoverFooter
-  } from '@aziontech/webkit/popover'
+  import PopoverRoot from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverDescription from '@aziontech/webkit/popover-description'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverFooter from '@aziontech/webkit/popover-footer'
   import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
-  <Popover>
+  <PopoverRoot>
     <PopoverTrigger>
       <Button
         kind="secondary"
@@ -30,5 +29,5 @@
         This content is rendered inside the popover panel.
       </div>
     </PopoverContent>
-  </Popover>
+  </PopoverRoot>
 </template>

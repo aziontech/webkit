@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue'
-  import Command from '@aziontech/webkit/command'
+  import CommandRoot from '@aziontech/webkit/command-root'
   import CommandInput from '@aziontech/webkit/command-input'
   import CommandList from '@aziontech/webkit/command-list'
   import CommandGroup from '@aziontech/webkit/command-group'
@@ -17,7 +17,7 @@
     @click="open = true"
   />
 
-  <Command
+  <CommandRoot
     v-model:open="open"
     shortcut=""
   >
@@ -41,5 +41,5 @@
         >
       </CommandGroup>
     </CommandList>
-  </Command>
+  </CommandRoot>
 </template>

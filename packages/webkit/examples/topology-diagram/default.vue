@@ -168,29 +168,30 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
-    <TopologyDiagram
-      v-model:expanded="expanded"
-      :levels="levels"
-      class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
-      @bind="(key, value) => (event = `Bind ${value} to ${key}.`)"
-      @remove="(key) => (event = `Remove ${key}.`)"
-      @create="(key) => (event = `Create a new ${key}.`)"
-    >
-      <template #actions="{ node }">
-        <Tooltip
-          v-if="node.key === 'domains'"
-          text="Add domain"
-        >
-          <IconButton
-            icon="pi pi-plus"
-            kind="outlined"
-            size="small"
-            aria-label="Add domain"
-            @click="event = 'Add a domain.'"
-          />
-        </Tooltip>
-      </template>
-    </TopologyDiagram>
+    <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
+      <TopologyDiagram
+        v-model:expanded="expanded"
+        :levels="levels"
+        @bind="(key, value) => (event = `Bind ${value} to ${key}.`)"
+        @remove="(key) => (event = `Remove ${key}.`)"
+        @create="(key) => (event = `Create a new ${key}.`)"
+      >
+        <template #actions="{ node }">
+          <Tooltip
+            v-if="node.key === 'domains'"
+            text="Add domain"
+          >
+            <IconButton
+              icon="pi pi-plus"
+              kind="outlined"
+              size="small"
+              aria-label="Add domain"
+              @click="event = 'Add a domain.'"
+            />
+          </Tooltip>
+        </template>
+      </TopologyDiagram>
+    </div>
     <p
       role="status"
       class="text-body-sm text-(--text-muted)"

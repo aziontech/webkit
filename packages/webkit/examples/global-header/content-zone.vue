@@ -7,8 +7,10 @@
 <template>
   <div class="flex w-full flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console header">
-      <GlobalHeader.Left class="justify-start!">
-        <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
+      <GlobalHeader.Left>
+        <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
+          <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
+        </div>
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>

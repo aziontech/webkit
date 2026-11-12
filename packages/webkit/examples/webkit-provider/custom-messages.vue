@@ -1,6 +1,6 @@
 <script setup>
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination'
+  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
 
   const messages = {
@@ -14,6 +14,6 @@
     :catalogs="{ 'pt-BR': ptBR }"
     :messages="messages"
   >
-    <Pagination :total="48" />
+    <PaginationRoot :total="48" />
   </WebkitProvider>
 </template>

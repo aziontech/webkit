@@ -15,7 +15,7 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
+      <Item.Content>
         <Item.Title>shadcn</Item.Title>
         <Item.Description>shadcn@vercel.com</Item.Description>
       </Item.Content>
@@ -37,7 +37,7 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
+      <Item.Content>
         <Item.Title>maxleiter</Item.Title>
         <Item.Description>maxleiter@vercel.com</Item.Description>
       </Item.Content>
@@ -59,7 +59,7 @@
           size="medium"
         />
       </Item.Media>
-      <Item.Content class="gap-(--spacing-1)">
+      <Item.Content>
         <Item.Title>evilrabbit</Item.Title>
         <Item.Description>evilrabbit@vercel.com</Item.Description>
       </Item.Content>

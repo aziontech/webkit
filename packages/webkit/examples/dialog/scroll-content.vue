@@ -110,18 +110,18 @@
             actions stay reachable.
           </p>
         </PanelContent>
-        <PanelFooter class="flex-col md:flex-row md:justify-end">
-          <Button
-            class="w-full md:w-auto"
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            class="w-full md:w-auto"
-            label="Save"
-            kind="primary"
-          />
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
         </PanelFooter>
       </DialogContent>
     </DialogPortal>

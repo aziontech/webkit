@@ -1,16 +1,15 @@
 <script setup>
-  import DropdownMenu, {
-    DropdownMenuGroup,
-    DropdownMenuOption,
-    DropdownMenuTrigger
-  } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
+  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Avatar from '@aziontech/webkit/avatar'
   import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
   <div class="flex flex-wrap gap-(--spacing-lg) items-center">
-    <DropdownMenu>
+    <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <IconButton
           icon="pi pi-ellipsis-h"
@@ -31,15 +30,16 @@
           label="Delete"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
 
-    <DropdownMenu>
+    <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <Avatar
-          label="IB"
-          aria-label="Account menu"
-          class="cursor-pointer"
-        />
+        <span class="cursor-pointer">
+          <Avatar
+            label="IB"
+            aria-label="Account menu"
+          />
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuGroup label="Account">
         <DropdownMenuOption
@@ -55,6 +55,6 @@
           label="Sign out"
         />
       </DropdownMenuGroup>
-    </DropdownMenu>
+    </DropdownMenuRoot>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import { ref } from 'vue'
 
@@ -19,12 +19,12 @@
 
 <template>
   <div class="w-full max-w-(--container-3xl)">
-    <ChatMessage
+    <ChatMessageRoot
       :state="state"
       error-message="The connection was interrupted before the response finished."
       @retry="retry"
     >
       <StreamingResponse :content="content" />
-    </ChatMessage>
+    </ChatMessageRoot>
   </div>
 </template>

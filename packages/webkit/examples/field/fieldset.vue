@@ -47,7 +47,9 @@
             :value="option"
             name="plan"
           />
-          <Field.Label class="capitalize">{{ option }}</Field.Label>
+          <Field.Label>
+            <span class="capitalize">{{ option }}</span>
+          </Field.Label>
         </Field>
       </Field.Set>
     </Field.Group>

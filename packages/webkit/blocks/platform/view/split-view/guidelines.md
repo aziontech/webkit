@@ -34,7 +34,7 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### E. Fields panel — `Sidebar`, `Input`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### E. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
 
 A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 

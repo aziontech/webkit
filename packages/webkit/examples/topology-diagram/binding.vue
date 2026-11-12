@@ -108,14 +108,15 @@
 
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
-    <TopologyDiagram
-      v-model:expanded="expanded"
-      :levels="levels"
-      class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
-      @bind="bind"
-      @remove="remove"
-      @create="create"
-    />
+    <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
+      <TopologyDiagram
+        v-model:expanded="expanded"
+        :levels="levels"
+        @bind="bind"
+        @remove="remove"
+        @create="create"
+      />
+    </div>
     <p
       role="status"
       class="text-body-sm text-(--text-muted)"

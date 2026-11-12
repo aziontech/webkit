@@ -1,12 +1,12 @@
 <script setup>
-  import ColumnNavigation from '@aziontech/webkit/column-navigation'
+  import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'
   import ColumnNavigationColumn from '@aziontech/webkit/column-navigation-column'
   import ColumnNavigationItem from '@aziontech/webkit/column-navigation-item'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, two columns"
       :columns="2"
     >
@@ -38,9 +38,9 @@
           href="/cache"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
 
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, three columns"
       :columns="3"
     >
@@ -68,9 +68,9 @@
           href="/waf"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
 
-    <ColumnNavigation
+    <ColumnNavigationRoot
       aria-label="Platform, four columns"
       :columns="4"
     >
@@ -106,6 +106,6 @@
           href="/real-time-metrics"
         />
       </ColumnNavigationColumn>
-    </ColumnNavigation>
+    </ColumnNavigationRoot>
   </div>
 </template>

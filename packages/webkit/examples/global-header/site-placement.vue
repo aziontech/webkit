@@ -19,12 +19,14 @@
             size="small"
         /></a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle class="justify-start!">
-        <a
-          class="text-label-md text-(--text-default) no-underline"
-          href="/pricing"
-          >Pricing</a
-        >
+      <GlobalHeader.Middle>
+        <div class="flex w-full min-w-0 items-center">
+          <a
+            class="text-label-md text-(--text-default) no-underline"
+            href="/pricing"
+            >Pricing</a
+          >
+        </div>
       </GlobalHeader.Middle>
       <GlobalHeader.Right>
         <Button

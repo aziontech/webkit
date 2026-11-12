@@ -1,5 +1,5 @@
 <script setup>
-  import Menu from '@aziontech/webkit/menu'
+  import MenuRoot from '@aziontech/webkit/menu-root'
   import MenuBack from '@aziontech/webkit/menu-back'
   import MenuGroup from '@aziontech/webkit/menu-group'
   import MenuItem from '@aziontech/webkit/menu-item'
@@ -11,7 +11,7 @@
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-md)">
     <div class="w-[264px] overflow-hidden">
-      <Menu aria-label="Expands in place">
+      <MenuRoot aria-label="Expands in place">
         <MenuGroup label="Expands in place">
           <MenuSub default-open>
             <MenuSubTrigger
@@ -32,10 +32,10 @@
             </MenuSubContent>
           </MenuSub>
         </MenuGroup>
-      </Menu>
+      </MenuRoot>
     </div>
     <div class="w-[264px] overflow-hidden">
-      <Menu aria-label="Replaces the menu">
+      <MenuRoot aria-label="Replaces the menu">
         <MenuBack />
         <MenuGroup label="Replaces the menu">
           <MenuSub>
@@ -58,7 +58,7 @@
             </MenuSubContent>
           </MenuSub>
         </MenuGroup>
-      </Menu>
+      </MenuRoot>
     </div>
   </div>
 </template>

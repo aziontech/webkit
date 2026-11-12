@@ -1,6 +1,6 @@
 <script setup>
   import Input from '@aziontech/webkit/input'
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const all = Array.from({ length: 87 }, (_, i) => ({
@@ -38,6 +38,6 @@
       placeholder="Search domains"
       aria-label="Search domains"
     />
-    <Table v-bind="tableProps" />
+    <TableRoot v-bind="tableProps" />
   </div>
 </template>

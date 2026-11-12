@@ -1,5 +1,5 @@
 <script setup>
-  import Table from '@aziontech/webkit/table'
+  import TableRoot from '@aziontech/webkit/table-root'
 
   const rows = Array.from({ length: 10000 }, (_, i) => ({
     id: String(i + 1),
@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <Table
+  <TableRoot
     :data="rows"
     :columns="columns"
     virtual

@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
-  import Pagination from '@aziontech/webkit/pagination'
+  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
   import { ref } from 'vue'
 
@@ -14,25 +14,26 @@
   <WebkitProvider
     locale="pt-BR"
     :catalogs="{ 'pt-BR': ptBR }"
-    class="flex flex-col gap-(--spacing-md)"
   >
-    <Pagination
-      v-model:page="page"
-      :total="120"
-    />
-    <ConfirmDialog
-      v-model:open="open"
-      title="Remover domínio"
-      description="shop.example.com deixa de responder por este recurso."
-      @confirm="open = false"
-    >
-      <template #trigger>
-        <Button
-          label="Remover domínio"
-          kind="outlined"
-          size="medium"
-        />
-      </template>
-    </ConfirmDialog>
+    <div class="flex flex-col gap-(--spacing-md)">
+      <PaginationRoot
+        v-model:page="page"
+        :total="120"
+      />
+      <ConfirmDialog
+        v-model:open="open"
+        title="Remover domínio"
+        description="shop.example.com deixa de responder por este recurso."
+        @confirm="open = false"
+      >
+        <template #trigger>
+          <Button
+            label="Remover domínio"
+            kind="outlined"
+            size="medium"
+          />
+        </template>
+      </ConfirmDialog>
+    </div>
   </WebkitProvider>
 </template>
