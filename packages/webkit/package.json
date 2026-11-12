@@ -1226,6 +1226,10 @@
       "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
       "default": "./src/components/layout/console-layout/composables/use-console-layout.ts"
     },
+    "./site-layout": {
+      "types": "./types/components/layout/site-layout/site-layout.vue.d.ts",
+      "default": "./src/components/layout/site-layout/site-layout.vue"
+    },
     "./board": {
       "types": "./types/components/layout/board/index.d.ts",
       "default": "./src/components/layout/board/index.ts"
