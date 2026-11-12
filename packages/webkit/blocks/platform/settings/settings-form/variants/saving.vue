@@ -6,7 +6,7 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -21,7 +21,7 @@
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const labelOf = (list: { label: string; value: string }[]) => (value: unknown) =>
+  const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
   const saved = ref({

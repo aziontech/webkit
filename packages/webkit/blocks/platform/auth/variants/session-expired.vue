@@ -48,9 +48,7 @@
   const newPasswordError = (value: string) =>
     !value
       ? 'This field is required.'
-      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
-            typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
-          )
+      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
         ? ''
         : 'Password does not meet requirements.'
 

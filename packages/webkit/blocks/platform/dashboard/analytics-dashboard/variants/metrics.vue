@@ -8,7 +8,7 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import Tabs from '@aziontech/webkit/tabs'
+  import Tabs, { type TabsValue } from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
@@ -587,13 +587,12 @@
     })
   }
 
-  const activeProduct = ref<string | number | null>('applications')
+  const activeProduct = ref<TabsValue | null>('applications')
   const period = ref('24h')
   const activeIndex = ref<number | null>(null)
 
   const periodOptions = periods.map(({ value, label }) => ({ value, label }))
-  const periodLabel = (value: unknown) =>
-    periods.find((entry) => entry.value === value)?.label ?? ''
+  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
 
   const currentPeriod = computed(
     () => periods.find((entry) => entry.value === period.value) ?? periods[1]
@@ -637,7 +636,7 @@
     }))
   )
 
-  const selectProduct = (value: string | number | null) => {
+  const selectProduct = (value: TabsValue | null) => {
     activeProduct.value = value
     activeIndex.value = null
   }

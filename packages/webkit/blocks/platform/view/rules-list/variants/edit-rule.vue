@@ -755,10 +755,9 @@
     "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
-  const operatorLabel = (value: unknown) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator: unknown) =>
-    operator !== 'exists' && operator !== 'does-not-exist'
-  const behaviorLabel = (value: unknown) => byValue[String(value)]?.label ?? ''
+  const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
+  const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
+  const behaviorLabel = (value: string) => byValue[value]?.label ?? ''
   const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
   const textArgument = (value: string) => behaviorArgument(value) as TextArgument
   const selectArgument = (value: string) => behaviorArgument(value) as SelectArgument
@@ -1532,7 +1531,7 @@
                     <template #cell-variable="{ value, update, invalid }">
                       <div class="contents font-code">
                         <Combobox
-                          :model-value="value as string"
+                          :model-value="value"
                           :options="variablesForPhase"
                           size="large"
                           placeholder="${uri}"
@@ -1546,7 +1545,7 @@
                     </template>
                     <template #cell-operator="{ value, update }">
                       <Select
-                        :model-value="value as string"
+                        :model-value="value"
                         size="large"
                         class="w-full"
                         :disabled="submitting"
@@ -1569,7 +1568,7 @@
                       <Input
                         v-if="takesArgument(item.operator)"
                         key="argument"
-                        :model-value="value as string"
+                        :model-value="value"
                         size="large"
                         class="w-full"
                         autocomplete="off"
@@ -1627,7 +1626,7 @@
                                   class="w-full"
                                   :disabled="submitting"
                                   :display-value="behaviorLabel"
-                                  @update:model-value="setBehaviorType(bIdx, $event as string)"
+                                  @update:model-value="setBehaviorType(bIdx, $event)"
                                   @update:open="onBehaviorPanel(behavior.id, $event)"
                                 >
                                   <Select.Trigger aria-label="Behavior" />

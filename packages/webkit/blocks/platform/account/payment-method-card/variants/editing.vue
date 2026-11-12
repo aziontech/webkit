@@ -2,19 +2,13 @@
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Alert from '@aziontech/webkit/alert'
   import { nextTick, reactive, ref } from 'vue'
 
-  interface SelectOption {
-    value: string
-    label: string
-    disabled?: boolean
-  }
-
-  const countryOptions: SelectOption[] = [
+  const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },

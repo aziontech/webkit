@@ -10,7 +10,7 @@
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -325,7 +325,7 @@
     toast.success(`Labels updated on ${plural(ids.size, 'resource', 'resources')}.`)
   }
 
-  const onRowAction = (value: string | number, row: Resource) => {
+  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
     const item = resources.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {

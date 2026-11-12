@@ -9,7 +9,6 @@
   import Input from '@aziontech/webkit/input'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
-  import type { SelectValue } from '@aziontech/webkit/select-root'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -219,10 +218,10 @@
     return environments.filter((entry) => entry.name.toLowerCase().includes(needle))
   })
 
-  const environmentLabel = (value: unknown) => String(value ?? '')
+  const environmentLabel = (value: string) => value
 
-  const pickEnvironment = (value: SelectValue) => {
-    if (typeof value === 'string' && value !== '__create-environment__') environment.value = value
+  const pickEnvironment = (value: string) => {
+    if (value !== '__create-environment__') environment.value = value
   }
 
   const onEnvironmentOpen = (open: boolean) => {

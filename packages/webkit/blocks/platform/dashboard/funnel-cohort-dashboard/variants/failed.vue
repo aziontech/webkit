@@ -5,7 +5,7 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import { computed, ref } from 'vue'
 
@@ -111,7 +111,7 @@
   const period = ref('6w')
   const segment = ref('partners')
 
-  const optionLabel = (options: { value: string; label: string }[]) => (value: unknown) =>
+  const optionLabel = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)

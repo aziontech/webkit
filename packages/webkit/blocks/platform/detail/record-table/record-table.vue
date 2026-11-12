@@ -25,7 +25,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -124,7 +124,7 @@
     { value: 'weighted', label: 'Weighted' }
   ]
 
-  const policyLabel = (value: unknown) =>
+  const policyLabel = (value: string) =>
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   const filterFields: FilterField[] = [
@@ -350,7 +350,7 @@
     columnVisibility.value = {}
   }
 
-  const tableRef = ref<{ exportCsv: (options?: { filename?: string }) => void } | null>(null)
+  const tableRef = ref<TableExposed<DnsRecord> | null>(null)
   const pagination = ref({ pageIndex: 0, pageSize: 8 })
   const visibleRows = computed(() =>
     rows.filter((row) =>

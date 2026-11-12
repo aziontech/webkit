@@ -19,8 +19,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
-  import type { SelectValue } from '@aziontech/webkit/select-root'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -29,7 +28,7 @@
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   type FieldProblem = { kind: HelperTextKind; message: string }
-  type LabeledOption = { value: unknown; label: string }
+  type LabeledOption = SelectOptionItem<string | number>
 
   const port = (value: number, label = String(value)) => ({ value, label })
   const httpPorts = [port(80, '80 (default)'), port(8008), port(8080), port(8880)]
@@ -68,9 +67,9 @@
     { value: 'devices-crl', label: 'devices-crl' }
   ]
 
-  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
-    options.find((option) => option.value === value)?.label ?? String(value ?? '')
-  const caLabel = (value: unknown) => labelOf(trustedCas.value)(value)
+  const labelOf = (options: LabeledOption[]) => (value: string | number) =>
+    options.find((option) => option.value === value)?.label ?? String(value)
+  const caLabel = (value: string) => labelOf(trustedCas.value)(value)
   const portsLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
   const listLabel = (values: unknown[] | undefined) => (values ?? []).join(', ')
 
@@ -116,12 +115,12 @@
       ? trustedCas.value.filter((option) => option.label.includes(needle))
       : trustedCas.value
   })
-  const pickCa = (value: SelectValue) => {
+  const pickCa = (value: string) => {
     if (value === '__upload__') {
       uploadOpen.value = true
       return
     }
-    form.trustedCa = String(value)
+    form.trustedCa = value
     clear('trustedCa')
   }
 

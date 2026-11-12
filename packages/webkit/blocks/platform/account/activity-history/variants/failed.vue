@@ -10,7 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -196,9 +196,7 @@
     }, 700)
   }
 
-  const activityTable = ref<{ exportCsv: (options: { filename: string }) => Promise<void> } | null>(
-    null
-  )
+  const activityTable = ref<TableExposed<ActivityEvent> | null>(null)
   const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const widenRange = () => {

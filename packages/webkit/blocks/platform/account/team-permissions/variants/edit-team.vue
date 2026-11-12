@@ -158,7 +158,7 @@
     permissionsOf(resource).includes(`${resource.key}.${action}`)
 
   const isChecked = (id: string) => selected.value.includes(id)
-  const setChecked = (id: string, checked: unknown) => {
+  const setChecked = (id: string, checked: boolean) => {
     const next = new Set(selected.value)
     if (checked) next.add(id)
     else next.delete(id)
@@ -174,7 +174,7 @@
     const count = ids.filter(isChecked).length
     return { all: count === ids.length, some: count > 0 && count < ids.length }
   }
-  const toggleGroup = (group: PermissionGroup, checked: unknown) => {
+  const toggleGroup = (group: PermissionGroup, checked: boolean) => {
     const ids = new Set(groupIds(group))
     selected.value = checked
       ? allIds.filter((id) => ids.has(id) || isChecked(id))

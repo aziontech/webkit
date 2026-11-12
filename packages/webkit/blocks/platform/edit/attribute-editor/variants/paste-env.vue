@@ -75,10 +75,7 @@
     visible: false
   })
   const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
-  const formatKey = (value: unknown) =>
-    String(value ?? '')
-      .replace(/\s/g, '_')
-      .toUpperCase()
+  const formatKey = (value: string) => value.replace(/\s/g, '_').toUpperCase()
 
   const drawerOpen = ref(false)
   const submitting = ref(false)

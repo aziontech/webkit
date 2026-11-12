@@ -10,7 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
@@ -19,11 +19,6 @@
   import { ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
-
-  interface SelectOption {
-    value: string
-    label: string
-  }
 
   interface Figure {
     id: string
@@ -72,7 +67,7 @@
   const loading = false
   const comparison = 'vs previous sprint'
 
-  const projects: SelectOption[] = [
+  const projects: SelectOptionItem[] = [
     {
       value: 'product-launch',
       label: 'Product launch'
@@ -87,7 +82,7 @@
     }
   ]
 
-  const sprints: SelectOption[] = [
+  const sprints: SelectOptionItem[] = [
     {
       value: 'sprint-6',
       label: 'Sprint 6 · Oct 27 to Nov 7'
@@ -378,8 +373,8 @@
     points: (value: number) => `${value} pts`
   }
 
-  const labelOf = (options: SelectOption[]) => (value: unknown) =>
-    options.find((option) => option.value === value)?.label ?? String(value)
+  const labelOf = (options: SelectOptionItem[]) => (value: string) =>
+    options.find((option) => option.value === value)?.label ?? value
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')

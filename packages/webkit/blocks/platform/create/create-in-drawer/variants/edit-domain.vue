@@ -9,7 +9,9 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
+  import DropdownMenuRoot, {
+    type DropdownMenuOptionValue
+  } from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -19,7 +21,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import Select, { type SelectValue } from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
@@ -31,9 +33,7 @@
 
   type DeploymentPolicy = 'single_version' | 'versioned_urls'
 
-  interface EnvironmentOption {
-    value: string
-    label: string
+  interface EnvironmentOption extends SelectOptionItem {
     deploymentPolicy: DeploymentPolicy
   }
 
@@ -77,9 +77,9 @@
   const form = reactive({ ...editingDomain })
   const errors = reactive({ domain: '', environment: '' })
 
-  const environmentLabel = (value: unknown) =>
+  const environmentLabel = (value: string) =>
     environmentOptions.find((option) => option.value === value)?.label ?? ''
-  const certificateLabel = (value: unknown) =>
+  const certificateLabel = (value: string) =>
     certificateOptions.find((option) => option.value === value)?.label ?? ''
 
   const subjectCovers = (subject: string, host: string) => {
@@ -128,8 +128,7 @@
     { immediate: true }
   )
 
-  const onCertificate = (value: SelectValue) => {
-    if (typeof value !== 'string') return
+  const onCertificate = (value: string) => {
     certificateTouched.value = true
     form.certificate = value
   }
@@ -160,8 +159,7 @@
       : `${chosen.value.label} publishes with the Deployment Settings set to ${policy}.`
   })
 
-  const onEnvironmentModel = (value: SelectValue) => {
-    if (typeof value !== 'string') return
+  const onEnvironmentModel = (value: string) => {
     if (value === CREATE_ENVIRONMENT) {
       environmentSelectOpen.value = false
       return
@@ -186,7 +184,7 @@
     }, 600)
   }
 
-  const onRowAction = (value: string | number) => {
+  const onRowAction = (value: DropdownMenuOptionValue) => {
     if (value === 'edit') open.value = true
   }
 </script>

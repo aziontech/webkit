@@ -248,7 +248,7 @@
                             <template #default="{ item }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
-                                  :src="marbleOf(previewName, (item as Accent).colors)"
+                                  :src="marbleOf(previewName, item.colors)"
                                   :alt="item.label"
                                   size="medium"
                                   kind="square"

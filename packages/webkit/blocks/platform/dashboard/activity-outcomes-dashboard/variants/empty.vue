@@ -8,7 +8,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
@@ -17,12 +17,6 @@
   import { ref } from 'vue'
 
   type Outcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
-
-  interface FilterOption {
-    value: string
-    label: string
-    disabled?: boolean
-  }
 
   interface ActivityRow {
     id: string
@@ -50,7 +44,7 @@
     (_, index) => new Date(Date.UTC(2026, 10, 9, 15 + index))
   )
 
-  const timeRanges: FilterOption[] = [
+  const timeRanges: SelectOptionItem[] = [
     {
       value: 'Last hour',
       label: 'Last hour'
@@ -69,7 +63,7 @@
     }
   ]
 
-  const actorOptions: FilterOption[] = [
+  const actorOptions: SelectOptionItem[] = [
     {
       value: 'Any actor',
       label: 'Any actor'
@@ -104,7 +98,7 @@
     }
   ]
 
-  const outcomeOptions: FilterOption[] = [
+  const outcomeOptions: SelectOptionItem[] = [
     {
       value: 'Any outcome',
       label: 'Any outcome'
@@ -131,7 +125,7 @@
     }
   ]
 
-  const categoryOptions: FilterOption[] = [
+  const categoryOptions: SelectOptionItem[] = [
     {
       value: 'Any category',
       label: 'Any category'

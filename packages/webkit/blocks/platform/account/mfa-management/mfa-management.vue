@@ -4,7 +4,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -133,7 +133,7 @@
 
   const pending = ref<MemberRow | null>(null)
   const resetOpen = ref(false)
-  const onAction = (value: string | number, row: MemberRow) => {
+  const onAction = (value: DropdownMenuOptionValue, row: MemberRow) => {
     if (value === 'reset') {
       pending.value = row
       resetOpen.value = true

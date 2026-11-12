@@ -11,7 +11,7 @@
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -21,13 +21,7 @@
     { label: 'Nuxt E-commerce', current: true }
   ]
 
-  interface ScopeOption {
-    label: string
-    value: string
-    disabled?: boolean
-  }
-
-  const scopes: ScopeOption[] = [
+  const scopes: SelectOptionItem[] = [
     { label: 'gab-lisboa', value: 'gab-lisboa' },
     { label: 'acme', value: 'acme' },
     { label: 'acme-templates', value: 'acme-templates' }

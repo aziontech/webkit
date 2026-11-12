@@ -12,7 +12,11 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import TableRoot, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/table-root'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref, useId } from 'vue'
@@ -137,9 +141,7 @@
     }, 700)
   }
 
-  const resourcesTable = ref<{
-    exportCsv: (options?: { filename?: string }) => Promise<void>
-  } | null>(null)
+  const resourcesTable = ref<TableExposed<Resource> | null>(null)
   const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
 
   const pending = ref<Resource | null>(null)
@@ -150,7 +152,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: string | number, row: Resource) => {
+  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
     if (value !== 'delete') return
     pending.value = row
     confirmation.value = ''

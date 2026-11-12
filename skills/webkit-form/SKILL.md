@@ -69,6 +69,11 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
 - **Loose (the bare control):** only when the label lives elsewhere — a control in an `Item.Actions`
   cell whose `Item.Title` names it, a table cell, a toolbar. Then **you** own the `aria-label` /
   `aria-describedby` per the rules below.
+- **Types come from the binding.** `Select` and `MultiSelect` take their value type from the bound
+  model (a `string` model gives `@update:model-value` and `display-value` a `string`, so handlers are
+  `(value: string)` with no `typeof` guard), and an options list is `SelectOptionItem[]` from
+  `@aziontech/webkit/select`. `Input`, `Textarea` and `PasswordInput` expose `focus()`: type the ref
+  `ref<InstanceType<typeof Input> | null>(null)` and call `field.value?.focus()`, never `$el.querySelector`.
 
 ```vue
 <!-- ✅ Preferred — the Field owns label + description + validation wiring -->

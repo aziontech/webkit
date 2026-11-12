@@ -134,6 +134,9 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
   toolbar's `selectedRows` and the `@row-click` row are `Application` too. A column whose id is not a
   row field (`actions`) gets `value: unknown`. Keep `id` equal to `accessorKey` (or omit it); never
   cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/table-root`.
+- A template ref on the Table is `ref<TableExposed<Application> | null>(null)` (`TableExposed` from
+  `@aziontech/webkit/table-root`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
+  `getState` and `setState`; never declare a local `{ exportCsv(…) }` shape for it.
 - `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
   body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`

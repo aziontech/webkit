@@ -44,7 +44,7 @@
     }, CHECK_MS)
   })
 
-  const onCheckOpen = (value: unknown) => {
+  const onCheckOpen = (value: boolean) => {
     if (!value) check.open = false
   }
 </script>

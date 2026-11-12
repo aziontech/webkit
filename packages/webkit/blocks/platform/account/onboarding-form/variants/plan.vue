@@ -3,7 +3,7 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Avatar from '@aziontech/webkit/avatar'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
@@ -49,12 +49,6 @@
     name: string
     features: { title: string; detail?: string }[]
     charge: Record<BillingPeriod, PlanCharge>
-  }
-
-  interface SelectOption {
-    value: string
-    label: string
-    disabled?: boolean
   }
 
   interface BillingAddress {
@@ -191,20 +185,20 @@
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' }
   ]
-  const countryOptions: SelectOption[] = [
+  const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },
     { value: 'Argentina', label: 'Argentina' },
     { value: 'Mexico', label: 'Mexico' }
   ]
-  const stateOptions: SelectOption[] = [
+  const stateOptions: SelectOptionItem[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
     { value: 'Minas Gerais', label: 'Minas Gerais' },
     { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
   ]
-  const cityOptions: SelectOption[] = [
+  const cityOptions: SelectOptionItem[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Campinas', label: 'Campinas' },
     { value: 'Santos', label: 'Santos' }
@@ -227,8 +221,8 @@
   }
   const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
 
-  const plan = ref<string | number>()
-  const pendingPlanId = ref<string | number>('')
+  const plan = ref<string>()
+  const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const submitted = ref(false)
   const period = ref<BillingPeriod>('yearly')
@@ -244,7 +238,7 @@
     (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress)
   )
 
-  const selectPlan = (value: string | number) => {
+  const selectPlan = (value: string) => {
     submitted.value = false
     if (value === 'free') {
       plan.value = value
@@ -379,13 +373,13 @@
                               </div>
                               <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
                                 <Tag
-                                  :label="(item as PlanItem).name"
-                                  :severity="(item as PlanItem).severity"
+                                  :label="item.name"
+                                  :severity="item.severity"
                                   size="small"
                                   rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
-                                  {{ (item as PlanItem).price }}
+                                  {{ item.price }}
                                 </span>
                               </div>
                             </div>

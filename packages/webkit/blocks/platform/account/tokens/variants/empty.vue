@@ -16,7 +16,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -125,7 +125,7 @@
     { value: '90', label: '90 days' },
     { value: '365', label: '1 year' }
   ]
-  const expiryLabel = (value: unknown) =>
+  const expiryLabel = (value: string) =>
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
@@ -202,7 +202,7 @@
   const deleteOpen = ref(false)
   const working = ref(false)
 
-  const onAction = (value: string | number, row: Token) => {
+  const onAction = (value: DropdownMenuOptionValue, row: Token) => {
     pending.value = row
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true

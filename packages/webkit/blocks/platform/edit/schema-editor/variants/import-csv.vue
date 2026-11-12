@@ -11,7 +11,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
@@ -678,11 +678,11 @@
     }, 700)
   }
 
-  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
     if (value === 'truncate') openTruncate()
     if (value === 'create') createOpen.value = true
   }
-  const onColumnAction = (value: string | number, row: { name: string }) => {
+  const onColumnAction = (value: DropdownMenuOptionValue, row: { name: string }) => {
     if (value === 'alter') openAlter(row.name)
   }
 </script>
