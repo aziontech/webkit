@@ -4,14 +4,7 @@ description: Entry point for building UI on @aziontech/webkit. Use when adding o
 scope: general
 status: active
 last_updated: 2026-11-12
-enforced_by:
-  [
-    webkit-imports,
-    webkit-tokens,
-    webkit-style-override,
-    webkit-prefer-over-custom,
-    webkit-performance
-  ]
+enforced_by: [webkit-imports, webkit-tokens, webkit-style-override, webkit-prefer-over-custom, webkit-performance]
 ---
 
 # Skill: webkit-usage
