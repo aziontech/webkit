@@ -564,7 +564,6 @@
 
   const topValues = 6
 
-
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
   const canFilterField = (field: EventField) => !unfilterableFields.has(field.id)

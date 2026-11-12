@@ -5,7 +5,7 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
@@ -96,7 +96,7 @@
     points: (value: number) => `${value} pts`
   }
 
-  const labelOf = (options: { value: string; label: string }[]) => (value: string) =>
+  const labelOf = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? value
 
   const project = ref('product-launch')

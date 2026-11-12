@@ -402,8 +402,7 @@
   }
 
   const onSelectScope = (value: string) => {
-    if (!value || value === '__add-account__' || value === scope.value)
-      return
+    if (!value || value === '__add-account__' || value === scope.value) return
     scope.value = value
     loadRepos()
   }

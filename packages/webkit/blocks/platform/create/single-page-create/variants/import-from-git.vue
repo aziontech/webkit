@@ -20,8 +20,7 @@
     { label: 'acme', value: 'acme' },
     { label: 'rafael-personal', value: 'rafael-personal' }
   ]
-  const scopeLabel = (value: string) =>
-    scopes.find((option) => option.value === value)?.label ?? ''
+  const scopeLabel = (value: string) => scopes.find((option) => option.value === value)?.label ?? ''
 
   const deploymentTypes = [
     {

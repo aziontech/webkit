@@ -756,8 +756,7 @@
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
   const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator: string) =>
-    operator !== 'exists' && operator !== 'does-not-exist'
+  const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
   const behaviorLabel = (value: string) => byValue[value]?.label ?? ''
   const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
   const textArgument = (value: string) => behaviorArgument(value) as TextArgument

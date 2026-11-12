@@ -85,8 +85,7 @@
   )
   const isWeighted = computed(() => form.policy === 'weighted')
 
-  const typeLabel = (value: string) =>
-    recordTypes.find((type) => type.value === value)?.label ?? ''
+  const typeLabel = (value: string) => recordTypes.find((type) => type.value === value)?.label ?? ''
   const policyLabelOf = (value: string) =>
     policyTypes.find((policy) => policy.value === value)?.label ?? ''
 

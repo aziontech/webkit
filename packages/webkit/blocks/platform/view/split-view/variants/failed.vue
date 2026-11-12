@@ -20,9 +20,9 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import type { TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import type { TableExposed } from '@aziontech/webkit/table-root'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   type EventSource = 'http' | 'security' | 'services' | 'access'
@@ -529,7 +529,6 @@
   )
 
   const topValues = 6
-
 
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 

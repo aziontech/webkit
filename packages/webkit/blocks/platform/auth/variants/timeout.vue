@@ -47,9 +47,7 @@
         : 'Enter a valid email address.'
 
   const passwordMeetsRequirements = (value: string) =>
-    DEFAULT_PASSWORD_REQUIREMENTS.every((rule) =>
-      typeof rule.test === 'function' ? rule.test(value) : rule.test.test(value)
-    )
+    DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
 
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 

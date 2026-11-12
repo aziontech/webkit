@@ -19,14 +19,13 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  type Option = { value: string; label: string }
   type ArgumentInput = { field: string; placeholder: string; label: string }
   type BehaviorArgument =
     | ({ kind: 'text' } & ArgumentInput)
@@ -330,7 +329,7 @@
     { value: '4021887', label: 'ab-test-split', scope: 'request' },
     { value: '4021890', label: 'security-headers', scope: 'any' }
   ]
-  const sources: Record<string, Option[]> = {
+  const sources: Record<string, SelectOptionItem[]> = {
     'cache-settings': [
       { value: 'cs-default', label: 'Default Cache' },
       { value: 'cs-static', label: 'Static Assets' }
@@ -353,8 +352,7 @@
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
   const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator: string) =>
-    operator !== 'exists' && operator !== 'does-not-exist'
+  const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
   const behaviorLabel = (value: string) => byValue[value]?.label ?? ''
   const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
   const behaviorsFor = (phase: string) =>
@@ -363,7 +361,7 @@
     Boolean(byValue[value]?.phases.includes(phase))
   const isTerminalBehavior = (value: string | undefined) =>
     ['deliver', 'deny', 'no-content', 'redirect-301', 'redirect-302'].includes(value ?? '')
-  const behaviorOptions = (source: string, phase: string): Option[] => {
+  const behaviorOptions = (source: string, phase: string): SelectOptionItem[] => {
     if (source === 'policies') {
       return policies
         .filter((policy) => phase !== 'response' || policy.scope === 'any')

@@ -14,14 +14,13 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioCards from '@aziontech/webkit/radio-cards'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import Stepper from '@aziontech/webkit/stepper'
+  import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import type { StepperStepState } from '@aziontech/webkit/stepper-step'
   import { computed, reactive, ref } from 'vue'
 
   interface WizardStep {
@@ -36,11 +35,8 @@
     state: StepperStepState
     disabled: boolean
   }
-  interface Option {
-    value: string
-    label: string
+  interface Option extends SelectOptionItem {
     description?: string
-    disabled?: boolean
   }
   type CachePolicyId = 'images' | 'files-optimization'
   interface CacheField {

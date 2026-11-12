@@ -50,7 +50,7 @@
 
   const focusName = async () => {
     await nextTick()
-    nameInput.value?.$el?.querySelector?.('input')?.focus()
+    nameInput.value?.focus()
   }
 
   const CREATE_TOAST = 'create-database'

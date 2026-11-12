@@ -7,7 +7,7 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { computed, ref } from 'vue'
@@ -15,12 +15,7 @@
   type FigureFormat = 'number' | 'share'
   type WeekKey = 'week1' | 'week2' | 'week3' | 'week4' | 'week5' | 'week6'
 
-  interface FilterOption {
-    value: string
-    label: string
-  }
-
-  interface PeriodOption extends FilterOption {
+  interface PeriodOption extends SelectOptionItem {
     comparison: string
   }
 
@@ -83,7 +78,7 @@
     }
   ]
 
-  const segments: FilterOption[] = [
+  const segments: SelectOptionItem[] = [
     {
       value: 'all',
       label: 'All users'
@@ -431,7 +426,7 @@
   const period = ref('6w')
   const segment = ref('partners')
 
-  const optionLabel = (options: FilterOption[]) => (value: string) =>
+  const optionLabel = (options: SelectOptionItem[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)
