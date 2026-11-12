@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -21,7 +21,13 @@
     { label: 'Nuxt E-commerce', current: true }
   ]
 
-  const scopes = [
+  interface ScopeOption {
+    label: string
+    value: string
+    disabled?: boolean
+  }
+
+  const scopes: ScopeOption[] = [
     { label: 'gab-lisboa', value: 'gab-lisboa' },
     { label: 'acme', value: 'acme' },
     { label: 'acme-templates', value: 'acme-templates' }

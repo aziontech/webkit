@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -29,18 +29,34 @@
   import PasswordInput from '@aziontech/webkit/password-input'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Table from '@aziontech/webkit/table'
+  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
 
+  interface Token {
+    id: string
+    name: string
+    description: string
+    createdAt: Date
+    createdBy: string
+    expiresAt: Date
+    lastUsedAt: Date | null
+    revoked: boolean
+  }
+  interface TokenStatus {
+    label: string
+    severity: TagSeverity
+  }
+
   const DAY = 86_400_000
   const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysFrom = (days) => new Date(referenceTime + days * DAY)
+  const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
 
-  const formatDate = (date) =>
+  const formatDate = (date: Date) =>
     date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -48,9 +64,9 @@
       timeZone: 'UTC'
     })
 
-  const tokens = ref([])
+  const tokens = ref<Token[]>([])
 
-  const statusOf = (token) => {
+  const statusOf = (token: Token): TokenStatus => {
     if (token.revoked) return { label: 'Revoked', severity: 'secondary' }
     const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
@@ -67,7 +83,7 @@
     }))
   )
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'Status', minWidth: 160 },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
@@ -109,7 +125,8 @@
     { value: '90', label: '90 days' },
     { value: '365', label: '1 year' }
   ]
-  const expiryLabel = (value) => expiryOptions.find((option) => option.value === value)?.label ?? ''
+  const expiryLabel = (value: unknown) =>
+    expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)
   const submitting = ref(false)
@@ -126,7 +143,7 @@
     createOpen.value = true
   }
 
-  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const revealOpen = ref(false)
   const revealed = reactive({ name: '', secret: '' })
@@ -180,12 +197,12 @@
     revealed.secret = ''
   }
 
-  const pending = ref(null)
+  const pending = ref<Token | null>(null)
   const revokeOpen = ref(false)
   const deleteOpen = ref(false)
   const working = ref(false)
 
-  const onAction = (value, row) => {
+  const onAction = (value: string | number, row: Token) => {
     pending.value = row
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
@@ -367,7 +384,7 @@
               <template #cell-actions="{ row }">
                 <Table.CellActions
                   :name="row.name"
-                  @select="(event, value) => onAction(value, row)"
+                  @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group
                     key="dropdown-menu.group-1"

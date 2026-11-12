@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -85,8 +85,10 @@
   )
   const isWeighted = computed(() => form.policy === 'weighted')
 
-  const typeLabel = (value) => recordTypes.find((type) => type.value === value)?.label ?? ''
-  const policyLabelOf = (value) => policyTypes.find((policy) => policy.value === value)?.label ?? ''
+  const typeLabel = (value: unknown) =>
+    recordTypes.find((type) => type.value === value)?.label ?? ''
+  const policyLabelOf = (value: unknown) =>
+    policyTypes.find((policy) => policy.value === value)?.label ?? ''
 
   watch(open, (isOpen) => {
     if (!isOpen) return

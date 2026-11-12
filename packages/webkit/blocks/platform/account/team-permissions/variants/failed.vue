@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -10,12 +10,27 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import Table from '@aziontech/webkit/table'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import type { TagSeverity } from '@aziontech/webkit/tag'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
-  const permissionLabels = {
+  type TeamStatus = 'Active' | 'Inactive'
+
+  interface Team {
+    id: string
+    name: string
+    description: string
+    permissions: string[]
+    members: number
+    status: TeamStatus
+  }
+
+  type TeamRow = Team & { permissionNames: string[] }
+
+  const permissionLabels: Record<string, string> = {
     'applications.view': 'View Applications',
     'applications.edit': 'Edit Applications',
     'domains.view': 'View Domains',
@@ -36,7 +51,7 @@
   }
   const allPermissions = Object.keys(permissionLabels)
 
-  const seedTeams = [
+  const seedTeams: Team[] = [
     {
       id: 'team-1',
       name: 'Administrators',
@@ -93,16 +108,16 @@
     }
   ]
 
-  const teams = ref([])
+  const teams = ref<Team[]>([])
 
-  const rows = computed(() =>
+  const rows = computed<TeamRow[]>(() =>
     teams.value.map((team) => ({
       ...team,
       permissionNames: team.permissions.map((id) => permissionLabels[id] ?? id)
     }))
   )
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'permissionNames', header: 'Permissions', grow: 2 },
     { accessorKey: 'members', header: 'Members', enableSorting: true, minWidth: 100 },
@@ -117,7 +132,8 @@
     pagination: { pageSize: 10 }
   })
 
-  const statusSeverity = (value) => (value === 'Active' ? 'success' : 'secondary')
+  const statusSeverity = (value: TeamStatus): TagSeverity =>
+    value === 'Active' ? 'success' : 'secondary'
 
   const loading = ref(false)
   const loadFailed = ref(true)
@@ -139,13 +155,15 @@
     }, 700)
   }
 
-  const pending = ref(null)
+  const pending = ref<TeamRow | null>(null)
   const deleteOpen = ref(false)
 
-  const onAction = (value, row) => {
+  const onAction = (value: string | number, row: TeamRow) => {
     if (value === 'duplicate') {
-      const copy = {
-        ...teams.value.find((team) => team.id === row.id),
+      const source = teams.value.find((team) => team.id === row.id)
+      if (!source) return
+      const copy: Team = {
+        ...source,
         id: `team-${teams.value.length + 1}-copy`,
         name: `${row.name} copy`,
         members: 0
@@ -328,7 +346,7 @@
               <template #cell-actions="{ row }">
                 <Table.CellActions
                   :name="row.name"
-                  @select="(event, value) => onAction(value, row)"
+                  @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group>
                     <DropdownMenu.Option

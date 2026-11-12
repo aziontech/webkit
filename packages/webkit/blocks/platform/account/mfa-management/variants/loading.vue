@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
@@ -10,7 +10,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import Table from '@aziontech/webkit/table'
+  import Table, { type TableColumn } from '@aziontech/webkit/table'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -18,7 +18,18 @@
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
 
-  const seedMembers = [
+  interface Member {
+    id: string
+    name: string
+    email: string
+    method: string
+    enabled: boolean
+    since: Date | null
+  }
+
+  type MemberRow = Member & { status: string }
+
+  const seedMembers: Member[] = [
     {
       id: 'm-1',
       name: 'Avery Stone',
@@ -62,14 +73,14 @@
   ]
 
   const REQUIRED_ON_START = false
-  const members = ref([])
+  const members = ref<Member[]>([])
   const required = ref(REQUIRED_ON_START)
   const loading = ref(true)
   const loadFailed = ref(false)
 
   const withoutMfa = computed(() => members.value.filter((member) => !member.enabled))
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
     { accessorKey: 'method', header: 'Method', minWidth: 160 },
@@ -99,7 +110,7 @@
   }
 
   const requireOpen = ref(false)
-  const onRequire = (value) => {
+  const onRequire = (value: boolean) => {
     if (value) {
       requireOpen.value = true
       return
@@ -120,9 +131,9 @@
     })
   }
 
-  const pending = ref(null)
+  const pending = ref<MemberRow | null>(null)
   const resetOpen = ref(false)
-  const onAction = (value, row) => {
+  const onAction = (value: string | number, row: MemberRow) => {
     if (value === 'reset') {
       pending.value = row
       resetOpen.value = true
@@ -283,7 +294,7 @@
                 <template #cell-actions="{ row }">
                   <Table.CellActions
                     :name="row.name"
-                    @select="(event, value) => onAction(value, row)"
+                    @select="(_event, value) => onAction(value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Option

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -7,6 +7,16 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
+
+  interface NextStep {
+    icon: string
+    title: string
+    description: string
+    href?: string
+    external?: boolean
+    action?: boolean
+    recommended?: boolean
+  }
 
   const resources = [
     {
@@ -19,7 +29,7 @@
     }
   ]
 
-  const nextSteps = [
+  const nextSteps: NextStep[] = [
     {
       icon: 'pi pi-cloud-upload',
       title: 'Deploy this resource',

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
@@ -20,7 +20,8 @@
     { label: 'acme', value: 'acme' },
     { label: 'rafael-personal', value: 'rafael-personal' }
   ]
-  const scopeLabel = (value) => scopes.find((option) => option.value === value)?.label ?? ''
+  const scopeLabel = (value: unknown) =>
+    scopes.find((option) => option.value === value)?.label ?? ''
 
   const deploymentTypes = [
     {
@@ -52,7 +53,7 @@
     { label: 'Europe', value: 'eu-west' },
     { label: 'Asia Pacific', value: 'ap-southeast' }
   ]
-  const regionsLabel = (values) =>
+  const regionsLabel = (values: unknown[]) =>
     (values ?? [])
       .map((value) => regionOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')

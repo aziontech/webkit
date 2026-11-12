@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -8,14 +8,15 @@
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, type Ref, ref } from 'vue'
 
   const languages = [
     { label: 'English', value: 'en' },
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const languageLabel = (value) => languages.find((option) => option.value === value)?.label ?? ''
+  const languageLabel = (value: unknown) =>
+    languages.find((option) => option.value === value)?.label ?? ''
 
   const general = reactive({ fullName: 'Alex Morgan', language: 'en' })
   const savingGeneral = ref(false)
@@ -23,7 +24,7 @@
   const notifications = reactive({ productUpdates: true, securityAlerts: true })
   const savingNotifications = ref(false)
 
-  const saveGroup = (flag) => {
+  const saveGroup = (flag: Ref<boolean>) => {
     if (flag.value) return
     flag.value = true
     setTimeout(() => {

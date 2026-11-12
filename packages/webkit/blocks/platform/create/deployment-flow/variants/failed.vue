@@ -1,13 +1,28 @@
-<script setup>
+<script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Card from '@aziontech/webkit/card'
-  import LogView from '@aziontech/webkit/log-view'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
-  const steps = [
+  type StepStatus = 'done' | 'running' | 'pending' | 'failed' | 'skipped'
+
+  interface DeploymentStep {
+    key: string
+    title: string
+    description: string
+    status: StepStatus
+    duration: string
+    tag?: {
+      label: string
+      severity: TagSeverity
+    }
+    lines: LogViewLine[]
+  }
+
+  const steps: DeploymentStep[] = [
     {
       key: 'token',
       title: 'Access token',

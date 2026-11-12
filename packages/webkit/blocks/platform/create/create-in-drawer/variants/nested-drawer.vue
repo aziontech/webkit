@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Drawer from '@aziontech/webkit/drawer'
@@ -14,7 +14,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectValue } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import { reactive, ref, watch } from 'vue'
 
@@ -25,7 +25,8 @@
     { value: 'origin-api', label: 'api-backend' },
     { value: 'origin-static', label: 'static-assets' }
   ])
-  const originLabel = (value) => origins.value.find((origin) => origin.value === value)?.label ?? ''
+  const originLabel = (value: unknown) =>
+    origins.value.find((origin) => origin.value === value)?.label ?? ''
 
   const rules = ref([{ id: 'rule-1', name: 'route-api', originId: 'origin-api' }])
 
@@ -42,7 +43,8 @@
   const childErrors = reactive({ name: '', address: '' })
   const childSubmitting = ref(false)
 
-  const onOriginModel = (value) => {
+  const onOriginModel = (value: SelectValue) => {
+    if (typeof value !== 'string') return
     if (value === CREATE_ORIGIN) {
       originSelectOpen.value = false
       childOpen.value = true

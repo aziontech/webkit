@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
@@ -8,14 +8,20 @@
   import Alert from '@aziontech/webkit/alert'
   import { nextTick, reactive, ref } from 'vue'
 
-  const countryOptions = [
+  interface SelectOption {
+    value: string
+    label: string
+    disabled?: boolean
+  }
+
+  const countryOptions: SelectOption[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },
     { value: 'Argentina', label: 'Argentina' },
     { value: 'Mexico', label: 'Mexico' }
   ]
-  const cardFieldIds = {
+  const cardFieldIds: Record<string, string> = {
     holder: 'card-holder',
     number: 'card-number',
     expiry: 'card-expiry',
@@ -25,10 +31,15 @@
   const cardLast4 = ref('8888')
   const blankCard = () => ({ holder: '', country: 'Brazil', number: '', expiry: '', code: '' })
   const cardForm = reactive(blankCard())
-  const cardErrors = reactive({ holder: '', number: '', expiry: '', code: '' })
+  const cardErrors = reactive<Record<string, string>>({
+    holder: '',
+    number: '',
+    expiry: '',
+    code: ''
+  })
   const cardDeclined = ref(false)
 
-  const focusById = (id) => nextTick(() => document.getElementById(id)?.focus())
+  const focusById = (id: string) => nextTick(() => document.getElementById(id)?.focus())
 
   const clearCardErrors = () => {
     Object.assign(cardErrors, { holder: '', number: '', expiry: '', code: '' })
@@ -87,7 +98,7 @@
     focusById('card-change')
   }
 
-  const fieldState = (field) => ({
+  const fieldState = (field: 'holder' | 'number' | 'expiry' | 'code') => ({
     required: !!cardErrors[field] && !String(cardForm[field]).trim(),
     invalid: !!cardErrors[field] && !!String(cardForm[field]).trim()
   })

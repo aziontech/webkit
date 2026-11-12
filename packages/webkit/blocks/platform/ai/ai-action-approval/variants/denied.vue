@@ -1,19 +1,21 @@
-<script setup>
-  import ActionConfirmation from '@aziontech/webkit/action-confirmation'
+<script setup lang="ts">
+  import ActionConfirmation, {
+    type ActionConfirmationState
+  } from '@aziontech/webkit/action-confirmation'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolCall from '@aziontech/webkit/tool-call'
+  import ToolCall, { type ToolCallState } from '@aziontech/webkit/tool-call'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
-  const decision = ref('denied')
-  const run = ref('denied')
+  const decision = ref<ActionConfirmationState>('denied')
+  const run = ref<ToolCallState | ''>('denied')
   const prompt = ref('')
-  let timer
+  let timer: ReturnType<typeof setTimeout> | undefined
 
   const followUp = computed(() => {
     if (decision.value === 'denied')

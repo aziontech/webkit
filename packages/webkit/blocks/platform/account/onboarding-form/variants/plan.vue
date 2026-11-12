@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
@@ -25,10 +25,48 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Progress from '@aziontech/webkit/progress'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { computed, reactive, ref, watch } from 'vue'
 
-  const plans = [
+  type BillingPeriod = 'monthly' | 'yearly'
+
+  interface PlanItem {
+    value: string
+    label: string
+    description: string
+    ariaLabel: string
+    name: string
+    severity: TagSeverity
+    price: string
+  }
+
+  interface PlanCharge {
+    rows: { label: string; value: string; suffix?: string }[]
+    total: { value: string; suffix: string }
+  }
+
+  interface PlanUpgrade {
+    name: string
+    features: { title: string; detail?: string }[]
+    charge: Record<BillingPeriod, PlanCharge>
+  }
+
+  interface SelectOption {
+    value: string
+    label: string
+    disabled?: boolean
+  }
+
+  interface BillingAddress {
+    country: string | undefined
+    postalCode: string
+    state: string | undefined
+    city: string | undefined
+    line1: string
+    line2: string
+  }
+
+  const plans: PlanItem[] = [
     {
       value: 'free',
       label: "I'm working on personal projects",
@@ -57,7 +95,7 @@
       price: 'From $2.000/mo'
     }
   ]
-  const upgrades = {
+  const upgrades: Partial<Record<string, PlanUpgrade>> = {
     pro: {
       name: 'Pro',
       features: [
@@ -149,29 +187,29 @@
       href: 'https://example.com/pricing#comparison'
     }
   ]
-  const periods = [
+  const periods: { value: BillingPeriod; label: string }[] = [
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' }
   ]
-  const countryOptions = [
+  const countryOptions: SelectOption[] = [
     { value: 'Brazil', label: 'Brazil' },
     { value: 'United States', label: 'United States' },
     { value: 'Portugal', label: 'Portugal' },
     { value: 'Argentina', label: 'Argentina' },
     { value: 'Mexico', label: 'Mexico' }
   ]
-  const stateOptions = [
+  const stateOptions: SelectOption[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
     { value: 'Minas Gerais', label: 'Minas Gerais' },
     { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
   ]
-  const cityOptions = [
+  const cityOptions: SelectOption[] = [
     { value: 'São Paulo', label: 'São Paulo' },
     { value: 'Campinas', label: 'Campinas' },
     { value: 'Santos', label: 'Santos' }
   ]
-  const accountAddress = {
+  const accountAddress: BillingAddress = {
     country: 'Brazil',
     postalCode: '01310-100',
     state: 'São Paulo',
@@ -179,7 +217,7 @@
     line1: 'Avenida Paulista, 1000',
     line2: ''
   }
-  const blankAddress = {
+  const blankAddress: BillingAddress = {
     country: undefined,
     postalCode: '',
     state: undefined,
@@ -189,11 +227,11 @@
   }
   const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
 
-  const plan = ref()
-  const pendingPlanId = ref('')
+  const plan = ref<string | number>()
+  const pendingPlanId = ref<string | number>('')
   const upgradeOpen = ref(false)
   const submitted = ref(false)
-  const period = ref('yearly')
+  const period = ref<BillingPeriod>('yearly')
   const editing = ref(false)
   const card = reactive({ last4: '8888', ...blankCard })
   const address = reactive({ useAccountInformation: true, ...accountAddress })
@@ -206,7 +244,7 @@
     (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress)
   )
 
-  const selectPlan = (value) => {
+  const selectPlan = (value: string | number) => {
     submitted.value = false
     if (value === 'free') {
       plan.value = value
@@ -219,7 +257,7 @@
     upgradeOpen.value = true
   }
 
-  const onOpenChange = (isOpen) => {
+  const onOpenChange = (isOpen: boolean) => {
     upgradeOpen.value = isOpen
     if (!isOpen) pendingPlanId.value = ''
   }
@@ -341,13 +379,13 @@
                               </div>
                               <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
                                 <Tag
-                                  :label="item.name"
-                                  :severity="item.severity"
+                                  :label="(item as PlanItem).name"
+                                  :severity="(item as PlanItem).severity"
                                   size="small"
                                   rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
-                                  {{ item.price }}
+                                  {{ (item as PlanItem).price }}
                                 </span>
                               </div>
                             </div>
@@ -364,7 +402,7 @@
                           :open="upgradeOpen"
                           size="large"
                           side="right"
-                          @update:open="onOpenChange"
+                          @update:open="onOpenChange($event as boolean)"
                         >
                           <DrawerPortal>
                             <DrawerOverlay />

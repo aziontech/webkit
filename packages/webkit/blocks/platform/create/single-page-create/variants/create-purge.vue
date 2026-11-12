@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -7,7 +7,7 @@
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -17,6 +17,11 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, watch } from 'vue'
+
+  interface PurgeError {
+    kind: HelperTextKind
+    message: string
+  }
 
   const breadcrumb = [{ label: 'Cache', href: '/cache' }, { label: 'Create Purge' }]
   const layers = [
@@ -61,10 +66,10 @@
   const TIERED_CACHE_TYPES = ['cachekey']
 
   const form = reactive({ layer: 'cache', type: 'url', arguments: '' })
-  const error = reactive({ kind: 'required', message: '' })
+  const error = reactive<PurgeError>({ kind: 'required', message: '' })
 
   const tiered = computed(() => form.layer === 'tiered_cache')
-  const typeAllowed = (value) => !tiered.value || TIERED_CACHE_TYPES.includes(value)
+  const typeAllowed = (value: string) => !tiered.value || TIERED_CACHE_TYPES.includes(value)
 
   watch(tiered, () => {
     if (!typeAllowed(form.type)) form.type = TIERED_CACHE_TYPES[0]
@@ -87,7 +92,7 @@
 
   const guidance = computed(() => error.message || selectedType.value.helper)
 
-  const lineIssue = (line, index) => {
+  const lineIssue = (line: string, index: number) => {
     const at = entries.value.length > 1 ? 'Line ' + (index + 1) : 'The argument'
     if (/^https?:\/\//i.test(line)) return at + ' starts with a protocol. Remove it.'
     if (form.type === 'wildcard' && !line.includes('*'))

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
@@ -17,6 +17,11 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
   import { computed, reactive, ref } from 'vue'
+
+  interface PortOption {
+    label: string
+    value: string
+  }
 
   const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'In-page create' }]
 
@@ -72,7 +77,7 @@
     }
   ]
 
-  const portsLabel = (list) => (values) =>
+  const portsLabel = (list: PortOption[]) => (values: unknown[]) =>
     (values ?? [])
       .map((value) => list.find((option) => option.value === value)?.label ?? value)
       .join(', ')

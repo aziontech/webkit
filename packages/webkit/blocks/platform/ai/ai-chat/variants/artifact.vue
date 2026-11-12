@@ -1,8 +1,11 @@
-<script setup>
+<script setup lang="ts">
   import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
   import ArtifactPreview from '@aziontech/webkit/artifact-preview'
   import Button from '@aziontech/webkit/button'
-  import ChatMessage from '@aziontech/webkit/chat-message'
+  import ChatMessage, {
+    type ChatMessageFeedbackValue,
+    type ChatMessageState
+  } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -11,15 +14,41 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PromptInput from '@aziontech/webkit/prompt-input'
+  import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
+  interface Draft {
+    ask?: string
+    reply: string
+    sql: string
+  }
+
+  interface UserTurn {
+    id: number
+    from: 'user'
+    text: string
+    time: string
+  }
+
+  interface AssistantTurn {
+    id: number
+    from: 'assistant'
+    state: ChatMessageState
+    content: string
+    version: number
+    feedback: ChatMessageFeedbackValue | null
+    time: string
+    stopped?: boolean
+  }
+
+  type Turn = UserTurn | AssistantTurn
+
   const ARTIFACT = 'top-orders.sql'
-  const drafts = [
+  const drafts: Draft[] = [
     {
       ask: 'Write a query for the ten biggest orders',
       reply: 'Here is a query for the ten biggest orders, newest total first.',
@@ -46,16 +75,16 @@
   const canvasOpen = ref(true)
   const drawerOpen = ref(false)
   const width = ref(440)
-  const paneCanvas = ref(null)
-  const drawerCanvas = ref(null)
+  const paneCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
+  const drawerCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
-  const state = ref('ready')
-  const composer = ref(null)
+  const state = ref<PromptInputState>('ready')
+  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
 
-  const turns = ref(
-    drafts.slice(0, 2).flatMap((draft, index) => [
-      { id: index * 2 + 1, from: 'user', text: draft.ask, time: `10:0${index * 2}` },
-      reactive({
+  const turns = ref<Turn[]>(
+    drafts.slice(0, 2).flatMap((draft, index): Turn[] => [
+      { id: index * 2 + 1, from: 'user', text: draft.ask ?? '', time: `10:0${index * 2}` },
+      reactive<AssistantTurn>({
         id: index * 2 + 2,
         from: 'assistant',
         state: 'complete',
@@ -66,7 +95,7 @@
       })
     ])
   )
-  const followUps = computed(() =>
+  const followUps = computed<SuggestionItem[]>(() =>
     versions.value.length < drafts.length && state.value === 'ready'
       ? [
           { id: 'email', label: 'Show the customer email too' },
@@ -77,7 +106,7 @@
   const lines = computed(() => versions.value[version.value].split('\n').length)
 
   const narrow = ref(false)
-  let narrowQuery = null
+  let narrowQuery: MediaQueryList | null = null
   const onNarrowChange = () => {
     narrow.value = !!narrowQuery?.matches
     if (!narrow.value) drawerOpen.value = false
@@ -89,9 +118,11 @@
   })
   onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
 
-  let lastOpener = null
-  const openCanvas = async (event) => {
-    lastOpener = event?.currentTarget ?? globalThis.document?.activeElement ?? null
+  let lastOpener: HTMLElement | null = null
+  const openCanvas = async (event?: Event) => {
+    lastOpener = (event?.currentTarget ??
+      globalThis.document?.activeElement ??
+      null) as HTMLElement | null
     if (narrow.value) {
       drawerOpen.value = true
       await nextTick()
@@ -109,23 +140,23 @@
     const opener =
       lastOpener?.isConnected && lastOpener.tagName === 'BUTTON'
         ? lastOpener
-        : globalThis.document?.querySelector('[data-artifact-open] button')
+        : globalThis.document?.querySelector<HTMLElement>('[data-artifact-open] button')
     opener?.focus()
   }
 
   let nextId = turns.value.length + 1
-  let timer = 0
+  let timer: ReturnType<typeof setTimeout> | undefined
   const stopTimers = () => {
     clearTimeout(timer)
     clearInterval(timer)
   }
 
-  function send(text) {
+  function send(text: string) {
     if (!text.trim() || state.value !== 'ready' || versions.value.length >= drafts.length) return
     prompt.value = ''
     const draft = drafts[versions.value.length]
     turns.value.push({ id: nextId++, from: 'user', text, time: '10:12' })
-    const turn = reactive({
+    const turn = reactive<AssistantTurn>({
       id: nextId++,
       from: 'assistant',
       state: 'pending',

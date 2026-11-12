@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
@@ -30,8 +30,8 @@
     { value: 'other', label: 'Other' }
   ]
 
-  const usage = ref()
-  const role = ref()
+  const usage = ref<string | number>()
+  const role = ref<string | number>()
   const session = ref(false)
   const submitted = ref(false)
   const creating = ref(false)
