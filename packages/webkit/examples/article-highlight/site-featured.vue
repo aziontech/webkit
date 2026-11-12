@@ -2,13 +2,14 @@
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import ArticleHighlight from '@aziontech/webkit/article-highlight'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 
   const items = [
     {
       key: 'ship-portfolio-two-commands-azion-cli',
       href: '/blog/ship-portfolio-two-commands-azion-cli',
-      image: '/media/blog/ship-portfolio-two-commands.png',
-      highlightImage: '/media/blog/ship-portfolio-two-commands-highlight.png',
+      image: placeholderImage,
+      highlightImage: placeholderImage,
       meta: 'Developers • SEP 25, 2026',
       title: 'How I Shipped My Portfolio in Just Two Commands',
       description:
@@ -18,8 +19,8 @@
     {
       key: 'how-to-reduce-ai-agent-latency',
       href: '/blog/how-to-reduce-ai-agent-latency',
-      image: '/media/blog/reduce-ai-agent-latency.png',
-      highlightImage: '/media/blog/reduce-ai-agent-latency-highlight.png',
+      image: placeholderImage,
+      highlightImage: placeholderImage,
       meta: 'Serverless • SEP 23, 2026',
       title: 'How Do You Reduce AI Agent Latency?',
       description:
@@ -29,8 +30,8 @@
     {
       key: 'cloudflare-alternatives-and-competitors',
       href: '/blog/cloudflare-alternatives-and-competitors',
-      image: '/media/blog/best-cloudflare-alternatives.png',
-      highlightImage: '/media/blog/best-cloudflare-alternatives-highlight.png',
+      image: placeholderImage,
+      highlightImage: placeholderImage,
       meta: 'Security • SEP 22, 2026',
       title: 'Best Cloudflare Alternatives and Competitors',
       description:
@@ -40,8 +41,8 @@
     {
       key: 'which-azion-plan-is-right-for-your-project',
       href: '/blog/which-azion-plan-is-right-for-your-project',
-      image: '/media/blog/which-azion-plan.png',
-      highlightImage: '/media/blog/which-azion-plan-highlight.png',
+      image: placeholderImage,
+      highlightImage: placeholderImage,
       meta: 'Company news • SEP 22, 2026',
       title: 'Which Azion Plan Is Right for Your Project?',
       description:

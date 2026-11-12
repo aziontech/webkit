@@ -42,11 +42,8 @@ The data side is a Vite plugin, `plugins/docs-plugin.ts`:
 A router guard (`src/lib/data.ts`, `preloadRoute`) loads the chunks a route needs before it
 renders, so server rendering and hydration see the same data.
 
-Images and media that examples reference by absolute path (`/media/…`, `/logos/…`, `/docs/…`) are
-Vite's public folder, `apps/docs/public`, served in dev and copied into `dist/` at build (the demos
-app serves the same folder). The site URLs that marketing examples use (`/marketing-components/…`)
-are mapped to `@aziontech/webkit/assets/*` through the table in
-`packages/webkit/src/assets/site-assets.json` (`siteAssets()` in `plugins/paths.ts`). `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
+Examples and blocks import every image they show from `@aziontech/webkit/assets/<file>`, so the docs
+site serves no media of its own and has no public folder. `packages/webkit/llms/` is served at `/llms/` and its `llms.txt` at
 `/llms.txt`; component, block and foundation pages link their `.md` as "View as Markdown".
 
 ## Build and deploy

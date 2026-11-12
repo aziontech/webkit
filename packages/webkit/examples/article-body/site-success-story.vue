@@ -1,5 +1,6 @@
 <script setup>
   import ArticleBody from '@aziontech/webkit/article-body'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 
   const article = {
     title: 'Magalu Ensures High Availability at Scale with Azion',
@@ -104,7 +105,7 @@
     :article="article"
     :trail="trail"
     :body="body"
-    banner="/media/blog/banner.svg"
+    :banner="placeholderImage"
     :share="share"
     :community="community"
     :copy-page="copyPage"

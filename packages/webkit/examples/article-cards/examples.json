@@ -4,19 +4,19 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The blog post closing band: the `left` heading over three related posts, each with its cover. Edit the props in the Controls panel — a band with no items renders nothing, and one with no title drops its header.",
+      "summary": "The blog post closing band: the `left` heading over three related posts, each with its cover. Edit the props in the Controls panel — a band with no items renders nothing, and one with no title drops its header. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "default.vue"
     },
     {
       "name": "Types",
-      "summary": "Both placements stacked: the `left` heading over three covers, then the `centered` heading under an overline over three cards that draw their client marks.",
+      "summary": "Both placements stacked: the `left` heading over three covers, then the `centered` heading under an overline over three cards that draw their client marks. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "types.vue"
     }
   ],
   "site": [
     {
       "name": "RelatedArticles",
-      "summary": "The blog post's closing band: three related posts, each with its cover image.",
+      "summary": "The blog post's closing band: three related posts, each with its cover image. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "site-related-articles.vue",
       "json": "site-related-articles.json"
     },

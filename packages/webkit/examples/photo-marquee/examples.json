@@ -4,14 +4,14 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. Edit the props in the Controls panel — a band with no photos renders nothing at all.",
+      "summary": "The band as the careers page places it: the headline and wide description over a strip of six office photographs that scrolls continuously and pauses on hover or focus. Edit the props in the Controls panel — a band with no photos renders nothing at all. WebKit ships no editorial media, so the photos here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "default.vue"
     }
   ],
   "site": [
     {
       "name": "Default",
-      "summary": "The six office photos Careers runs, at ten seconds per photo.",
+      "summary": "The six office photos Careers runs, at ten seconds per photo. WebKit ships no editorial media, so the photos here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
       "file": "site-default.vue",
       "json": "site-default.json"
     }
