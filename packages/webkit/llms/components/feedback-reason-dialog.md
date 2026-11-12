@@ -35,6 +35,7 @@
 | `reasons` | `{ value: string; label: string }[]` | `[]` | false | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

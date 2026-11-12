@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it. */
-  export type SaveBarKind = 'floating' | 'docked' | 'plain' | 'fade'
+  /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it, `centered` floats the actions as a raised card centred over the bottom of a create page. */
+  export type SaveBarKind = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
 
   defineOptions({
     name: 'SaveBar',
@@ -37,7 +37,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas)"
+    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas) data-[kind=centered]:pointer-events-none"
   >
     <div
       class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
@@ -66,6 +66,29 @@
           class="flex items-center gap-(--spacing-sm) @max-md/save-bar:flex-col-reverse @max-md/save-bar:items-stretch @max-md/save-bar:gap-(--spacing-xs)"
         >
           <slot name="actions" />
+        </div>
+      </div>
+      <div
+        v-else-if="kind === 'centered'"
+        class="flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-[max(var(--spacing-lg),env(safe-area-inset-bottom))]"
+      >
+        <div
+          :data-testid="`${testId}__card`"
+          class="pointer-events-auto flex max-w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xs) shadow-(--shadow-lg)"
+        >
+          <div
+            v-if="$slots['leading'] || $slots['default']"
+            :data-testid="`${testId}__message`"
+            class="flex min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-xs) text-body-sm text-(--text-default)"
+          >
+            <slot name="leading"><slot /></slot>
+          </div>
+          <div
+            :data-testid="`${testId}__actions`"
+            class="flex shrink-0 items-center gap-(--spacing-sm)"
+          >
+            <slot name="actions" />
+          </div>
         </div>
       </div>
       <div

@@ -46,6 +46,8 @@
 | `collapseAriaLabel` | `string` | `''` | false | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`). |
 | `expandAriaLabel` | `string` | `''` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
 | `resizeAriaLabel` | `string` | `''` | false | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`). |
+| `collapsed` | `boolean` | `false` | false | Two-way value (`v-model:collapsed`). |
+| `width` | `number \| null` | `null` | false | Two-way value (`v-model:width`). |
 
 ## Events
 

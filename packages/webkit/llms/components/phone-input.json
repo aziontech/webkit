@@ -100,6 +100,20 @@
    "default": "''",
    "required": "false",
    "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`)."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "country",
+   "type": "string",
+   "default": "'BR'",
+   "required": "false",
+   "doc": "Two-way value (`v-model:country`)."
   }
  ],
  "events": [

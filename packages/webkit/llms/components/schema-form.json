@@ -78,6 +78,13 @@
    "default": "false",
    "required": "false",
    "doc": "Shows every value without letting it change."
+  },
+  {
+   "name": "modelValue",
+   "type": "SchemaFormValue",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

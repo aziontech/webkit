@@ -45,6 +45,8 @@
 | `name` | `string` | `''` | false | HTML name for the internal input (form + vee-validate integration). |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+| `country` | `string` | `'BR'` | false | Two-way value (`v-model:country`). |
 
 ## Events
 

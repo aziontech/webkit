@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Composition from '../../../../examples/table/composition.vue'
 import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
+import StackedRows from '../../../../examples/table/stacked-rows.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -703,8 +704,16 @@ describe('Table (composition + data-driven)', () => {
       return render(Table, { props: { columns, data: rows, ...props }, container: host })
     }
 
-    it('renders each row as label and value pairs below --container-lg', async () => {
+    it('keeps the scrolling grid on a phone by default, as the console does', async () => {
       const view = mountIn(320)
+      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
+    })
+
+    it('renders each row as label and value pairs below --container-lg when stackable', async () => {
+      const view = mountIn(320, { stackable: true })
       const root = view.getByTestId('data-table')
 
       await waitFor(() => expect(root.hasAttribute('data-stacked')).toBe(true))
@@ -718,20 +727,23 @@ describe('Table (composition + data-driven)', () => {
       ])
     })
 
-    it('keeps the scrolling grid in a wide box', async () => {
-      const view = mountIn(1024)
+    it('keeps the scrolling grid in a wide box when stackable', async () => {
+      const view = mountIn(1024, { stackable: true })
       await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
 
       expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
       expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
     })
 
-    it('keeps the scrolling grid at every width when stackable is false', async () => {
-      const view = mountIn(320, { stackable: false })
-      await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
+    it('renders the StackedRows example as cards', async () => {
+      const host = document.createElement('div')
+      host.style.width = '360px'
+      document.body.appendChild(host)
+      const view = render(StackedRows, { container: host })
 
-      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
-      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
+      await waitFor(() =>
+        expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(true)
+      )
     })
 
     it('never stacks a hand-composed table', () => {
@@ -746,7 +758,7 @@ describe('Table (composition + data-driven)', () => {
       host.style.width = '320px'
       document.body.appendChild(host)
       const view = render(Table, {
-        props: { columns, data: rows, enableRowSelection: true },
+        props: { columns, data: rows, enableRowSelection: true, stackable: true },
         container: host
       })
       const bar = await waitFor(() => view.getByTestId('data-table__stacked-select-all'))

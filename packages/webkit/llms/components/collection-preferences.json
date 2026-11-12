@@ -78,6 +78,13 @@
    "default": "false",
    "required": "false",
    "doc": "Disables the trigger."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [

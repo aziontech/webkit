@@ -7,8 +7,8 @@
   },
   {
    "name": "Types",
-   "summary": "All severity variants side by side.",
-   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n  </div>\n</template>"
+   "summary": "All severity variants side by side; `highlight` is the brand orange as a tint, for the one value a list singles out (the Owner role).",
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"highlight\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

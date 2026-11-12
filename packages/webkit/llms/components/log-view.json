@@ -85,6 +85,20 @@
    "default": "''",
    "required": "false",
    "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`)."
+  },
+  {
+   "name": "search",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:search`)."
+  },
+  {
+   "name": "warningsOnly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:warningsOnly`)."
   }
  ],
  "events": [

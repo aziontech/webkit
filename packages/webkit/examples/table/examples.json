@@ -69,7 +69,7 @@
     },
     {
       "name": "CellPresets",
-      "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
+      "summary": "The cell presets every list shares: `Table.CellLink` for a name that opens another screen (tooltip names the destination), for a repository with its provider glyph before the name (`icon=\"ai ai-github\"`, muted and outside the link) and for a domain with its `+N` overflow and a copy button pinned to the end edge, `Table.CellId` with a copy button, `Table.CellStatus` (one semantic chip per row), `Table.CellTags` showing as many tags as fit, `Table.CellTime` (avatar plus relative time, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row).",
       "file": "cell-presets.vue"
     },
     {
@@ -91,6 +91,11 @@
       "name": "TreeRows",
       "summary": "Hierarchical rows: `get-sub-rows` returns each row's children, which open under a chevron in the principal column, indented one step per level. The grid becomes a `treegrid` (`aria-level`, `aria-expanded`, `aria-setsize`, `aria-posinset`) with one row in the tab order: Arrow Up and Arrow Down move between rows, Arrow Right opens a row or enters it, Arrow Left closes it or goes to the parent, Enter toggles it and Space selects it. `v-model:expanded` holds the open rows; selection stays per row.",
       "file": "tree-rows.vue"
+    },
+    {
+      "name": "StackedRows",
+      "summary": "A short release list in a side-panel-width box with `stackable`: each row becomes a card with the release name as its title and Area and Released as label and value lines. Opt-in; a console list keeps its scrolling grid on a phone.",
+      "file": "stacked-rows.vue"
     }
   ]
 }

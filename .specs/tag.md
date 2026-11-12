@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 764558c5a07a5346565592bbeba77c3a6142813525fe7e93e62af66d57f021d3
+checksum: 364699d1fc59b0d8e9c142d6d0d9411cb9854901498e2b0727f933bc9f77f988
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Tag — Component Spec
@@ -21,7 +21,8 @@ Compact status or category label with severity-based color coding. Supports opti
 ## When to use
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status/category with severity color via `kind`.
+- Show a status/category with severity color via `severity`.
+- Mark the one value a list highlights (the Owner role in a users table) with `severity="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
 
 ## When NOT to use
 
@@ -35,7 +36,9 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ## Best practices
 
-- Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.
+- Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `secondary` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
 ## Usage
@@ -59,7 +62,7 @@ Compact status or category label with severity-based color coding. Supports opti
 | Prop       | Type                                                                                                 | Default     | Required | JSDoc                                                                                                     |
 | ---------- | ---------------------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------- |
 | `label`    | `string`                                                                                             | `''`        | false    | Fallback text when the default slot is empty.                                                             |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false    | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false    | Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size`     | `'small' \| 'medium'`                                                                                | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                       |
 | `rounded`  | `boolean`                                                                                            | `false`     | false    | Pill shape when true.                                                                                     |
 | `icon`     | `string`                                                                                             | `undefined` | false    | PrimeIcons class for the leading icon.                                                                    |
@@ -93,6 +96,7 @@ _none_
 | shape (all severities) | `var(--shape-elements)`                                              |
 | surface (primary)      | `var(--primary)` / `var(--primary-contrast)`, WCAG AA in both themes |
 | surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                        |
+| surface (highlight)    | `var(--primary-mask)` / `color-mix(in srgb, var(--text-primary) 80%, var(--text-default))`, WCAG AA (5.1:1 or more) on every surface and canvas in both themes |
 | shape (pill)           | `rounded-full`                                                       |
 | ring                   | `var(--ring-color)`                                                  |
 
@@ -119,7 +123,7 @@ _none_
 ## Examples
 
 - Default
-- Types
+- Types — every severity, `highlight` included.
 - Sizes
 - WithIcon
 

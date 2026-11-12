@@ -89,6 +89,20 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the card when it has no title."
+  },
+  {
+   "name": "span",
+   "type": "number",
+   "default": "6",
+   "required": "false",
+   "doc": "Two-way value (`v-model:span`)."
+  },
+  {
+   "name": "height",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:height`)."
   }
  ],
  "events": [

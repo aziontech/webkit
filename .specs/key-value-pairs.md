@@ -3,10 +3,10 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 7e5b750bb0880657b997c075aa9a2c811290c56097a50256299aa3c4b0d530b4
+checksum: 52df63bb57644c5729588f520c936351be0eea0f38ba7f37a23cc4d60221a2de
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # KeyValuePairs — Component Spec
@@ -21,6 +21,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 - A read-only summary of settings before a confirm step (review step, deploy summary).
 - Any set of named attributes of a single subject where the reader scans keys to find a value.
 - Facts that fall into named clusters (General, Networking, Source) shown side by side as titled columns.
+- The rows of a summary card, label on the left and value on the right (a subscription plan: Plan Price, Billing Period, Next Invoice): `kind="split"`.
 
 ## When NOT to use
 
@@ -43,6 +44,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 
 - Keep keys short nouns in sentence case ("Created", "Region"), never sentences or trailing colons.
 - Order pairs by what the reader looks for first: identity, status, then the rest.
+- Pick `kind` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
 - Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.
 - Do not mix bare Items and Groups at the same level; pick one shape per instance.
 - Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible "Not set". Do not type your own "-", "N/A" or "None".
@@ -150,6 +152,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop        | Type               | Default | Required | JSDoc                                                                                       |
 | ----------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------- |
+| `kind`      | `'stacked' \| 'split'` | `'stacked'` | false | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
 | `columns`   | `1 \| 2 \| 3 \| 4` | `1`     | false    | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`. |
 | `loading`   | `boolean`          | `false` | false    | Replaces every value with a skeleton while the data loads; labels stay visible.             |
 | `ariaLabel` | `string`           | `''`    | false    | Accessible name of the list when no visible heading names it.                               |
@@ -169,6 +172,7 @@ Read-only display; interactive values (links, copy buttons) emit their own event
 ## States
 
 - Visual states: `default`, `loading`, empty value (per Item)
+- `data-kind` on the root and on each Item mirrors `kind`; `split` turns each Item into one row (label start, value end, wrapping under the label only when the value does not fit)
 - `data-columns` on the root mirrors `columns` and drives the grid template through `data-[columns=n]:` variants
 - `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading
 - Empty value: the Item's `<dd>` shows `—` (`aria-hidden`) plus a visually hidden "Not set"
@@ -195,6 +199,7 @@ The loading shimmer belongs to the composed `Skeleton`, which already suppresses
 | inline value components gap                   | `var(--spacing-xs)`                        |
 | group title → items gap; items inside a group | `var(--spacing-sm)`                        |
 | info slot gap after label                     | `var(--spacing-xxs)`                       |
+| `split`: label → value gap; row gap           | `var(--spacing-md)`; `var(--spacing-sm)`   |
 
 Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `break-words`, so composed values line up on one row and long unbroken IDs or URLs wrap instead of overflowing the cell. No surface, border or shape tokens — the container (`card`, a page band) supplies them.
 
@@ -222,8 +227,9 @@ Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `br
 - Columns — composite: the same facts at `columns` 2, 3 and 4 stacked in one frame (the `Types` equivalent for the `columns` axis).
 - Groups — two to three `KeyValuePairs.Group` columns (General, Networking, Source) with an `info` `Hint` on one key and one empty value.
 - Loading — `loading: true` on the Default facts.
+- Split — a subscription plan card with `kind="split"` (Plan Price, Billing Period, Next Invoice, Payment Method); justified because `kind` changes the layout of every pair.
 
-Justification: KeyValuePairs has no `kind` / `size` axis; its axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
+Justification: KeyValuePairs has a two-value `kind` axis (`Split` shows the non-default one) and no `size` axis; its other axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
 
 ## Decisions and open questions
 

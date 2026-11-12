@@ -21,6 +21,7 @@
 - dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
+- Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Don’t
 
@@ -50,7 +51,7 @@
 ## Sub-components
 
 - `tab-view-item.vue` — Public sub-component `tabs-item`. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
-- `tab-view-list.vue` — Public sub-component `tabs-list`.
+- `tab-view-list.vue` — Public sub-component `tabs-list`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
 - `tab-view-panel.vue` — Public sub-component `tabs-panel`.
 
 ## v-model
@@ -139,6 +140,47 @@
 </template>
 ```
 
+### Centered
+
+```vue
+<script setup>
+  import Tabs from '@aziontech/webkit/tabs'
+  import { ref } from 'vue'
+
+  const active = ref('templates')
+</script>
+
+<template>
+  <Tabs.Root
+    v-model="active"
+    class="w-full max-w-[40rem]"
+  >
+    <Tabs.List align="center">
+      <Tabs.Item
+        value="templates"
+        label="Templates"
+      />
+      <Tabs.Item
+        value="integrations"
+        label="Integrations"
+      />
+    </Tabs.List>
+    <Tabs.Content class="mt-(--spacing-lg)">
+      <Tabs.Panel value="templates">
+        <p class="text-center text-body-sm text-(--text-muted)">
+          Start a project from a template built for the edge.
+        </p>
+      </Tabs.Panel>
+      <Tabs.Panel value="integrations">
+        <p class="text-center text-body-sm text-(--text-muted)">
+          Connect the services your applications already use.
+        </p>
+      </Tabs.Panel>
+    </Tabs.Content>
+  </Tabs.Root>
+</template>
+```
+
 ### Standalone
 
 ```vue
@@ -158,76 +200,5 @@
       disabled
     />
   </div>
-</template>
-```
-
-### Scrollable
-
-```vue
-<script setup>
-  import Tabs from '@aziontech/webkit/tabs'
-  import { ref } from 'vue'
-
-  const tabs = [
-    {
-      value: 'tab-1',
-      label: 'Overview'
-    },
-    {
-      value: 'tab-2',
-      label: 'Metrics'
-    },
-    {
-      value: 'tab-3',
-      label: 'Logs'
-    },
-    {
-      value: 'tab-4',
-      label: 'Settings'
-    },
-    {
-      value: 'tab-5',
-      label: 'Security'
-    },
-    {
-      value: 'tab-6',
-      label: 'Integrations'
-    },
-    {
-      value: 'tab-7',
-      label: 'Billing'
-    },
-    {
-      value: 'tab-8',
-      label: 'Advanced'
-    }
-  ]
-  const active = ref('tab-1')
-</script>
-
-<template>
-  <Tabs.Root
-    v-model="active"
-    class="w-full max-w-[20rem]"
-  >
-    <Tabs.List>
-      <Tabs.Item
-        v-for="tab in tabs"
-        :key="tab.value"
-        :value="tab.value"
-        :label="tab.label"
-      />
-    </Tabs.List>
-    <Tabs.Content class="mt-(--spacing-4)">
-      <Tabs.Panel
-        v-for="tab in tabs"
-        :key="tab.value"
-        :value="tab.value"
-        class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)"
-      >
-        <p class="text-body-sm text-(--text-default)">Content for {{ tab.label }}</p>
-      </Tabs.Panel>
-    </Tabs.Content>
-  </Tabs.Root>
 </template>
 ```

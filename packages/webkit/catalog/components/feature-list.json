@@ -1,0 +1,26 @@
+{
+ "purpose": "The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the \"what you get\" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says \"included\", never \"done\". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.",
+ "useWhen": [
+  "The perks of an upgrade card (Upgrade to Pro: Unlimited Applications, Unlimited Workloads, Custom Domains).",
+  "The features a plan includes in a change-plan or upgrade drawer, each with a short description.",
+  "Any short list of included capabilities where the check is the only marker."
+ ],
+ "avoidWhen": [
+  "Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-mark` per row, or the `stepper`.",
+  "A comparison of features across plans → use `compare-plans` or `table`.",
+  "Label and value facts → use `key-value-pairs`.",
+  "Rows that navigate or carry actions → use `item`.",
+  "Marketing pricing cards on the site → use `card-pricing` / `pricing-plans`, which carry their own feature lists."
+ ],
+ "related": [
+  "key-value-pairs` — the plan facts that sit next to the feature list in a billing card.",
+  "card` — the surface the list sits in; FeatureList brings no surface of its own.",
+  "outcome-mark` — the mark for a step that finished, which this check is not."
+ ],
+ "bestPractices": [
+  "Keep each label to a few words in title case or sentence case, one capability per row; put the detail in `description`, not in the label.",
+  "Use `columns: 2` for six or more short labels in a wide card; it falls back to one column in a narrow box on its own.",
+  "Name the list with `ariaLabel` (for example \"Pro plan features\") when no visible heading right above it says what the features belong to.",
+  "Do not hand-write the list with your own check icons: the check colour and spacing are part of the component."
+ ]
+}

@@ -2395,6 +2395,10 @@
     "./schema-form": {
       "types": "./types/components/inputs/schema-form/schema-form.vue.d.ts",
       "default": "./src/components/inputs/schema-form/schema-form.vue"
+    },
+    "./feature-list": {
+      "types": "./types/components/content/feature-list/feature-list.vue.d.ts",
+      "default": "./src/components/content/feature-list/feature-list.vue"
     }
   }
 }

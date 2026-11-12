@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 6265ff7a9369176209b42d553cd86c5df477797e4d7227c873e865b6adeec5e0
+checksum: 67abdfa610263eff6d7e62a1a41e59a18c5d9c2b35a3c8f683b1e07b192f30f3
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Tab View — Component Spec
@@ -45,6 +45,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
+- Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Usage
 
@@ -85,7 +86,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 ## Sub-components
 
 - `tab-view-item.vue` — Public sub-component `tabs-item`. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
-- `tab-view-list.vue` — Public sub-component `tabs-list`.
+- `tab-view-list.vue` — Public sub-component `tabs-list`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
 - `tab-view-panel.vue` — Public sub-component `tabs-panel`.
 
 ## Props
@@ -165,6 +166,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 
 - Default
 - Scrollable — many tabs in a width-constrained container; justified because the horizontal-scroll (mobile) behavior of `Tabs.List` is a distinct rendered state that the Default story (few tabs, no overflow) does not exercise.
+- Centered — `Tabs.List align="center"` over a centred catalog; justified because `align` is a distinct rendered state of the list.
 - Standalone — a `Tabs.Item` outside a `Tabs.Root`, selected / idle / disabled; justified because a context-free item reads its own `selected` prop and paints the pill itself (mask + hairline + `--shadow-xs`) rather than sitting on the List's sliding indicator, which no composed story renders.
 
 ## Constraints — DO NOT

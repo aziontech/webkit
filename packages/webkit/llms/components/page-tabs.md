@@ -30,6 +30,12 @@
 - [page-header](page-header.md) — the page heading under the strip.
 - [tag](tag.md) and `button` — the usual content of the `actions` slot.
 
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
+
 ## Slots
 
 | Slot | Scope | Notes |

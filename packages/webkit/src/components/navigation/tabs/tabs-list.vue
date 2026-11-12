@@ -10,6 +10,18 @@
     inheritAttrs: false
   })
 
+  /** Where the tabs sit in the row. */
+  export type TabsListAlign = 'start' | 'center'
+
+  interface Props {
+    /** Where the tabs sit in the row: `center` for a page whose content below is centred. */
+    align?: TabsListAlign
+  }
+
+  withDefaults(defineProps<Props>(), {
+    align: 'start'
+  })
+
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
@@ -53,7 +65,7 @@
 
   const listClasses = computed(() =>
     cn(
-      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[align=center]:justify-center-safe',
       attrs.class as string | undefined
     )
   )
@@ -131,6 +143,7 @@
       ref="listRef"
       role="tablist"
       :class="listClasses"
+      :data-align="align"
       :data-testid="testId"
       :data-fade-start="canScrollStart || null"
       :data-fade-end="canScrollEnd || null"

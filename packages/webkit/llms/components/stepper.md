@@ -41,6 +41,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the step rail. Empty uses the locale catalog (`Steps`). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Slots
 

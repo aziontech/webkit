@@ -63,6 +63,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+  },
+  {
+   "name": "activeStep",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model:activeStep`)."
   }
  ],
  "events": [

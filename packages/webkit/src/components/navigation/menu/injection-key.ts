@@ -14,7 +14,7 @@ export type MenuNode = {
   label: string
   /** Leading glyph class. */
   icon?: string
-  /** Destination URL; renders the row as an anchor when set. */
+  /** The row's destination, and the only field Menu reads for one; renders the row as an anchor. With Vue Router put the route path here and call router.push in the navigate handler. */
   href?: string
   /** Link target when `href` is set. */
   target?: '_self' | '_blank'

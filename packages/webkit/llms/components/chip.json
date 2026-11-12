@@ -79,6 +79,13 @@
    "default": "false",
    "required": "false",
    "doc": "Suppresses activation, toggling and removal."
+  },
+  {
+   "name": "selected",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selected`)."
   }
  ],
  "events": [

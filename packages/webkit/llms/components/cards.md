@@ -40,6 +40,7 @@
 | `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards and sets aria-busy while true. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog. |
+| `selectedKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:selectedKeys`). |
 
 ## Slots
 

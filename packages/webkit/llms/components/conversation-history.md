@@ -38,6 +38,7 @@
 | `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
 | `label` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+| `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Events
 

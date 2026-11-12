@@ -1027,10 +1027,10 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 </template>
 ```
 
-The components that live in panels already do this, so a page gets it for free: `Table` (rows
-stack into label/value cards below `--container-lg`; `:stackable="false"` keeps the scrolling grid),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (the
-control moves under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
+The components that live in panels already do this, so a page gets it for free: `Table` (the grid
+scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (keeps its
+two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (only previous / current / next in a narrow box), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
@@ -1501,13 +1501,13 @@ Descriptions: [foundations/brand-marks.md](brand-marks.md).
 
 A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-492 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+493 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [ButtonHighlight](../components/button-highlight.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FileDropzone](../components/file-dropzone.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [MiniButton](../components/mini-button.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md), [Topic](../components/topic.md).
 
 ## Names
 
-`ai ai-abuse-prevention` · `ai ai-adaptive-security` · `ai ai-ai-gateway` · `ai ai-ai-pillar` · `ai ai-angular` · `ai ai-app-accelerator` · `ai ai-ask-azion` · `ai ai-astro` · `ai ai-attack` · `ai ai-azion-api` · `ai ai-azion-cli` · `ai ai-azion` · `ai ai-bot-manager` · `ai ai-branch` · `ai ai-build-pillar` · `ai ai-business-support` · `ai ai-certificate-manager` · `ai ai-circle-half` · `ai ai-circle-minus` · `ai ai-claude` · `ai ai-column` · `ai ai-configuration-service` · `ai ai-content-delivery` · `ai ai-cursor` · `ai ai-custom-pages` · `ai ai-data-stream` · `ai ai-database` · `ai ai-datasheet` · `ai ai-deepseek` · `ai ai-deploy-pillar` · `ai ai-digital-certificates` · `ai ai-disabled` · `ai ai-discord` · `ai ai-docusaurus` · `ai ai-domains` · `ai ai-durable-objects` · `ai ai-edge-ai` · `ai ai-edge-application` · `ai ai-edge-connectors` · `ai ai-edge-dns` · `ai ai-edge-firewall` · `ai ai-edge-functions` · `ai ai-edge-kv` · `ai ai-edge-libraries` · `ai ai-edge-nodes` · `ai ai-edge-orchestrator` · `ai ai-edge-pulse` · `ai ai-edge-services` · `ai ai-edge-sql` · `ai ai-edge-storage` · `ai ai-eleventy` · `ai ai-enabled` · `ai ai-filter-alt` · `ai ai-gateway` · `ai ai-gatsby` · `ai ai-gemini` · `ai ai-git-branch-delete` · `ai ai-git-branch-plus` · `ai ai-git-branch` · `ai ai-git-cherry-pick` · `ai ai-git-commit` · `ai ai-git-compare` · `ai ai-git-diff` · `ai ai-git-fork` · `ai ai-git-graph` · `ai ai-git-merge-conflict` · `ai ai-git-merge` · `ai ai-git-pull-request-closed` · `ai ai-git-pull-request-draft` · `ai ai-git-pull-request` · `ai ai-git-repository` · `ai ai-github` · `ai ai-graphql` · `ai ai-grok` · `ai ai-hexo` · `ai ai-home` · `ai ai-hono` · `ai ai-html` · `ai ai-hugo` · `ai ai-image-processor` · `ai ai-instructor` · `ai ai-integration-services` · `ai ai-jekyll` · `ai ai-json-text` · `ai ai-json` · `ai ai-layers` · `ai ai-live-ingest` · `ai ai-load-balancer` · `ai ai-lora` · `ai ai-marketplace` · `ai ai-mcp-logo` · `ai ai-medium` · `ai ai-meta` · `ai ai-microsoft-copilot` · `ai ai-mistral` · `ai ai-network-lists` · `ai ai-next` · `ai ai-nuxt` · `ai ai-observe-pillar` · `ai ai-open` · `ai ai-origin-accelerator` · `ai ai-origin-shield` · `ai ai-perplexity` · `ai ai-pratices-review` · `ai ai-preact` · `ai ai-professional-services` · `ai ai-qwen` · `ai ai-qwik` · `ai ai-react` · `ai ai-real-time-events` · `ai ai-real-time-metrics` · `ai ai-real-time-purge` · `ai ai-redis` · `ai ai-remix` · `ai ai-rss` · `ai ai-rules-engine` · `ai ai-sase` · `ai ai-scizors` · `ai ai-secure-pillar` · `ai ai-security-team` · `ai ai-sparkles` · `ai ai-sql` · `ai ai-store` · `ai ai-technical-account` · `ai ai-technical-support` · `ai ai-terraform` · `ai ai-tiered-cache` · `ai ai-turso` · `ai ai-twitch` · `ai ai-variables` · `ai ai-vite` · `ai ai-vitepress` · `ai ai-vue` · `ai ai-vuepress` · `ai ai-waf-rules` · `ai ai-webhook` · `ai ai-windsurf` · `ai ai-workloads` · `ai ai-x` · `ai ai-youtube` · `ai ai-sparkles` · `pi pi-address-book` · `pi pi-align-center` · `pi pi-align-justify` · `pi pi-align-left` · `pi pi-align-right` · `pi pi-amazon` · `pi pi-android` · `pi pi-angle-double-down` · `pi pi-angle-double-left` · `pi pi-angle-double-right` · `pi pi-angle-double-up` · `pi pi-angle-down` · `pi pi-angle-left` · `pi pi-angle-right` · `pi pi-angle-up` · `pi pi-apple` · `pi pi-arrow-circle-down` · `pi pi-arrow-circle-left` · `pi pi-arrow-circle-right` · `pi pi-arrow-circle-up` · `pi pi-arrow-down-left-and-arrow-up-right-to-center` · `pi pi-arrow-down-left` · `pi pi-arrow-down-right` · `pi pi-arrow-down` · `pi pi-arrow-left` · `pi pi-arrow-right-arrow-left` · `pi pi-arrow-right` · `pi pi-arrow-up-left` · `pi pi-arrow-up-right-and-arrow-down-left-from-center` · `pi pi-arrow-up-right` · `pi pi-arrow-up` · `pi pi-arrows-alt` · `pi pi-arrows-h` · `pi pi-arrows-v` · `pi pi-asterisk` · `pi pi-at` · `pi pi-backward` · `pi pi-ban` · `pi pi-barcode` · `pi pi-bars` · `pi pi-bell-slash` · `pi pi-bell` · `pi pi-bitcoin` · `pi pi-bolt` · `pi pi-book` · `pi pi-bookmark-fill` · `pi pi-bookmark` · `pi pi-box` · `pi pi-briefcase` · `pi pi-building-columns` · `pi pi-building` · `pi pi-bullseye` · `pi pi-calculator` · `pi pi-calendar-clock` · `pi pi-calendar-minus` · `pi pi-calendar-plus` · `pi pi-calendar-times` · `pi pi-calendar` · `pi pi-camera` · `pi pi-car` · `pi pi-caret-down` · `pi pi-caret-left` · `pi pi-caret-right` · `pi pi-caret-up` · `pi pi-cart-arrow-down` · `pi pi-cart-minus` · `pi pi-cart-plus` · `pi pi-chart-bar` · `pi pi-chart-line` · `pi pi-chart-pie` · `pi pi-chart-scatter` · `pi pi-check-circle` · `pi pi-check-square` · `pi pi-check` · `pi pi-chevron-circle-down` · `pi pi-chevron-circle-left` · `pi pi-chevron-circle-right` · `pi pi-chevron-circle-up` · `pi pi-chevron-down` · `pi pi-chevron-left` · `pi pi-chevron-right` · `pi pi-chevron-up` · `pi pi-circle-fill` · `pi pi-circle-off` · `pi pi-circle-on` · `pi pi-circle` · `pi pi-claude` · `pi pi-clipboard` · `pi pi-clock` · `pi pi-clone` · `pi pi-cloud-download` · `pi pi-cloud-upload` · `pi pi-cloud` · `pi pi-code` · `pi pi-cog` · `pi pi-comment` · `pi pi-comments` · `pi pi-compass` · `pi pi-copy` · `pi pi-credit-card` · `pi pi-crown` · `pi pi-database` · `pi pi-delete-left` · `pi pi-desktop` · `pi pi-directions-alt` · `pi pi-directions` · `pi pi-discord` · `pi pi-dollar` · `pi pi-download` · `pi pi-eject` · `pi pi-ellipsis-h` · `pi pi-ellipsis-v` · `pi pi-envelope` · `pi pi-equals` · `pi pi-eraser` · `pi pi-ethereum` · `pi pi-euro` · `pi pi-exclamation-circle` · `pi pi-exclamation-triangle` · `pi pi-expand` · `pi pi-external-link` · `pi pi-eye-slash` · `pi pi-eye` · `pi pi-face-smile` · `pi pi-facebook` · `pi pi-fast-backward` · `pi pi-fast-forward` · `pi pi-file-arrow-up` · `pi pi-file-check` · `pi pi-file-edit` · `pi pi-file-excel` · `pi pi-file-export` · `pi pi-file-import` · `pi pi-file-o` · `pi pi-file-pdf` · `pi pi-file-plus` · `pi pi-file-word` · `pi pi-file` · `pi pi-filter-fill` · `pi pi-filter-slash` · `pi pi-filter` · `pi pi-flag-fill` · `pi pi-flag` · `pi pi-folder-open` · `pi pi-folder-plus` · `pi pi-folder` · `pi pi-forward` · `pi pi-gauge` · `pi pi-gemini` · `pi pi-gift` · `pi pi-github` · `pi pi-globe` · `pi pi-google` · `pi pi-graduation-cap` · `pi pi-hammer` · `pi pi-hashtag` · `pi pi-headphones` · `pi pi-heart-fill` · `pi pi-heart` · `pi pi-history` · `pi pi-home` · `pi pi-hourglass` · `pi pi-id-card` · `pi pi-image` · `pi pi-images` · `pi pi-inbox` · `pi pi-indian-rupee` · `pi pi-info-circle` · `pi pi-info` · `pi pi-instagram` · `pi pi-key` · `pi pi-language` · `pi pi-lightbulb` · `pi pi-link` · `pi pi-linkedin` · `pi pi-list-check` · `pi pi-list` · `pi pi-lock-open` · `pi pi-lock` · `pi pi-map-marker` · `pi pi-map` · `pi pi-mars` · `pi pi-megaphone` · `pi pi-microchip-ai` · `pi pi-microchip` · `pi pi-microphone` · `pi pi-microsoft` · `pi pi-minus-circle` · `pi pi-minus` · `pi pi-mobile` · `pi pi-money-bill` · `pi pi-moon` · `pi pi-objects-column` · `pi pi-palette` · `pi pi-paperclip` · `pi pi-pause-circle` · `pi pi-pause` · `pi pi-paypal` · `pi pi-pen-to-square` · `pi pi-pencil` · `pi pi-percentage` · `pi pi-phone` · `pi pi-pinterest` · `pi pi-play-circle` · `pi pi-play` · `pi pi-plus-circle` · `pi pi-plus` · `pi pi-pound` · `pi pi-power-off` · `pi pi-prime` · `pi pi-print` · `pi pi-qrcode` · `pi pi-question-circle` · `pi pi-question` · `pi pi-receipt` · `pi pi-reddit` · `pi pi-refresh` · `pi pi-replay` · `pi pi-reply` · `pi pi-save` · `pi pi-search-minus` · `pi pi-search-plus` · `pi pi-search` · `pi pi-send` · `pi pi-server` · `pi pi-share-alt` · `pi pi-shield` · `pi pi-shop` · `pi pi-shopping-bag` · `pi pi-shopping-cart` · `pi pi-sign-in` · `pi pi-sign-out` · `pi pi-sitemap` · `pi pi-slack` · `pi pi-sliders-h` · `pi pi-sliders-v` · `pi pi-sort-alpha-down-alt` · `pi pi-sort-alpha-down` · `pi pi-sort-alpha-up-alt` · `pi pi-sort-alpha-up` · `pi pi-sort-alt-slash` · `pi pi-sort-alt` · `pi pi-sort-amount-down-alt` · `pi pi-sort-amount-down` · `pi pi-sort-amount-up-alt` · `pi pi-sort-amount-up` · `pi pi-sort-down-fill` · `pi pi-sort-down` · `pi pi-sort-numeric-down-alt` · `pi pi-sort-numeric-down` · `pi pi-sort-numeric-up-alt` · `pi pi-sort-numeric-up` · `pi pi-sort-up-fill` · `pi pi-sort-up` · `pi pi-sort` · `pi pi-sparkles` · `pi pi-spinner-dotted` · `pi pi-spinner` · `pi pi-star-fill` · `pi pi-star-half-fill` · `pi pi-star-half` · `pi pi-star` · `pi pi-step-backward-alt` · `pi pi-step-backward` · `pi pi-step-forward-alt` · `pi pi-step-forward` · `pi pi-stop-circle` · `pi pi-stop` · `pi pi-stopwatch` · `pi pi-sun` · `pi pi-sync` · `pi pi-table` · `pi pi-tablet` · `pi pi-tag` · `pi pi-tags` · `pi pi-telegram` · `pi pi-th-large` · `pi pi-thumbs-down-fill` · `pi pi-thumbs-down` · `pi pi-thumbs-up-fill` · `pi pi-thumbs-up` · `pi pi-thumbtack` · `pi pi-ticket` · `pi pi-tiktok` · `pi pi-times-circle` · `pi pi-times` · `pi pi-trash` · `pi pi-trophy` · `pi pi-truck` · `pi pi-turkish-lira` · `pi pi-twitch` · `pi pi-twitter` · `pi pi-undo` · `pi pi-unlock` · `pi pi-upload` · `pi pi-user-edit` · `pi pi-user-minus` · `pi pi-user-plus` · `pi pi-user` · `pi pi-users` · `pi pi-venus` · `pi pi-verified` · `pi pi-video` · `pi pi-vimeo` · `pi pi-volume-down` · `pi pi-volume-off` · `pi pi-volume-up` · `pi pi-wallet` · `pi pi-warehouse` · `pi pi-wave-pulse` · `pi pi-whatsapp` · `pi pi-wifi` · `pi pi-window-maximize` · `pi pi-window-minimize` · `pi pi-wrench` · `pi pi-youtube` · `ai-cor ai-angular` · `ai-cor ai-astro` · `ai-cor ai-azuredevops` · `ai-cor ai-bitbucket` · `ai-cor ai-claude` · `ai-cor ai-cursor` · `ai-cor ai-deepseek` · `ai-cor ai-discord` · `ai-cor ai-flutter` · `ai-cor ai-gemini` · `ai-cor ai-gitlab` · `ai-cor ai-google` · `ai-cor ai-graphql` · `ai-cor ai-grok` · `ai-cor ai-html` · `ai-cor ai-js` · `ai-cor ai-kotlin` · `ai-cor ai-meta` · `ai-cor ai-microsoft-copilot` · `ai-cor ai-mistral` · `ai-cor ai-next` · `ai-cor ai-nuxt` · `ai-cor ai-open` · `ai-cor ai-perplexity` · `ai-cor ai-qwen` · `ai-cor ai-react` · `ai-cor ai-redwood` · `ai-cor ai-solidjs` · `ai-cor ai-svelte` · `ai-cor ai-terraform` · `ai-cor ai-ts` · `ai-cor ai-vue` · `ai-cor ai-windsurf` · `ai-cor ai-x` · `ai-cor ai-youtube`
+`ai ai-abuse-prevention` · `ai ai-adaptive-security` · `ai ai-ai-gateway` · `ai ai-ai-pillar` · `ai ai-angular` · `ai ai-app-accelerator` · `ai ai-ask-azion` · `ai ai-astro` · `ai ai-attack` · `ai ai-azion-api` · `ai ai-azion-cli` · `ai ai-azion` · `ai ai-bot-manager` · `ai ai-branch` · `ai ai-build-pillar` · `ai ai-business-support` · `ai ai-certificate-manager` · `ai ai-circle-half` · `ai ai-circle-minus` · `ai ai-claude` · `ai ai-column` · `ai ai-configuration-service` · `ai ai-content-delivery` · `ai ai-cursor` · `ai ai-custom-pages` · `ai ai-data-stream` · `ai ai-database` · `ai ai-datasheet` · `ai ai-deepseek` · `ai ai-deploy-pillar` · `ai ai-digital-certificates` · `ai ai-disabled` · `ai ai-discord` · `ai ai-docusaurus` · `ai ai-domains` · `ai ai-durable-objects` · `ai ai-edge-ai` · `ai ai-edge-application` · `ai ai-edge-connectors` · `ai ai-edge-dns` · `ai ai-edge-firewall` · `ai ai-edge-functions` · `ai ai-edge-kv` · `ai ai-edge-libraries` · `ai ai-edge-nodes` · `ai ai-edge-orchestrator` · `ai ai-edge-pulse` · `ai ai-edge-services` · `ai ai-edge-sql` · `ai ai-edge-storage` · `ai ai-eleventy` · `ai ai-enabled` · `ai ai-filter-alt` · `ai ai-gateway` · `ai ai-gatsby` · `ai ai-gemini` · `ai ai-git-branch-delete` · `ai ai-git-branch-plus` · `ai ai-git-branch` · `ai ai-git-cherry-pick` · `ai ai-git-commit` · `ai ai-git-compare` · `ai ai-git-diff` · `ai ai-git-fork` · `ai ai-git-graph` · `ai ai-git-merge-conflict` · `ai ai-git-merge` · `ai ai-git-pull-request-closed` · `ai ai-git-pull-request-draft` · `ai ai-git-pull-request` · `ai ai-git-repository` · `ai ai-github` · `ai ai-graphql` · `ai ai-grok` · `ai ai-hexo` · `ai ai-home` · `ai ai-hono` · `ai ai-html` · `ai ai-hugo` · `ai ai-image-processor` · `ai ai-instructor` · `ai ai-integration-services` · `ai ai-jekyll` · `ai ai-json-text` · `ai ai-json` · `ai ai-layers` · `ai ai-live-ingest` · `ai ai-load-balancer` · `ai ai-lora` · `ai ai-marketplace` · `ai ai-mcp-logo` · `ai ai-medium` · `ai ai-meta` · `ai ai-microsoft-copilot` · `ai ai-mistral` · `ai ai-network-lists` · `ai ai-next` · `ai ai-nuxt` · `ai ai-observe-pillar` · `ai ai-open` · `ai ai-origin-accelerator` · `ai ai-origin-shield` · `ai ai-perplexity` · `ai ai-pratices-review` · `ai ai-preact` · `ai ai-professional-services` · `ai ai-qwen` · `ai ai-qwik` · `ai ai-react` · `ai ai-real-time-events` · `ai ai-real-time-metrics` · `ai ai-real-time-purge` · `ai ai-redis` · `ai ai-remix` · `ai ai-rss` · `ai ai-rules-engine` · `ai ai-sase` · `ai ai-scizors` · `ai ai-secure-pillar` · `ai ai-security-team` · `ai ai-sparkles` · `ai ai-sql` · `ai ai-store` · `ai ai-svelte` · `ai ai-technical-account` · `ai ai-technical-support` · `ai ai-terraform` · `ai ai-tiered-cache` · `ai ai-turso` · `ai ai-twitch` · `ai ai-variables` · `ai ai-vite` · `ai ai-vitepress` · `ai ai-vue` · `ai ai-vuepress` · `ai ai-waf-rules` · `ai ai-webhook` · `ai ai-windsurf` · `ai ai-workloads` · `ai ai-x` · `ai ai-youtube` · `ai ai-sparkles` · `pi pi-address-book` · `pi pi-align-center` · `pi pi-align-justify` · `pi pi-align-left` · `pi pi-align-right` · `pi pi-amazon` · `pi pi-android` · `pi pi-angle-double-down` · `pi pi-angle-double-left` · `pi pi-angle-double-right` · `pi pi-angle-double-up` · `pi pi-angle-down` · `pi pi-angle-left` · `pi pi-angle-right` · `pi pi-angle-up` · `pi pi-apple` · `pi pi-arrow-circle-down` · `pi pi-arrow-circle-left` · `pi pi-arrow-circle-right` · `pi pi-arrow-circle-up` · `pi pi-arrow-down-left-and-arrow-up-right-to-center` · `pi pi-arrow-down-left` · `pi pi-arrow-down-right` · `pi pi-arrow-down` · `pi pi-arrow-left` · `pi pi-arrow-right-arrow-left` · `pi pi-arrow-right` · `pi pi-arrow-up-left` · `pi pi-arrow-up-right-and-arrow-down-left-from-center` · `pi pi-arrow-up-right` · `pi pi-arrow-up` · `pi pi-arrows-alt` · `pi pi-arrows-h` · `pi pi-arrows-v` · `pi pi-asterisk` · `pi pi-at` · `pi pi-backward` · `pi pi-ban` · `pi pi-barcode` · `pi pi-bars` · `pi pi-bell-slash` · `pi pi-bell` · `pi pi-bitcoin` · `pi pi-bolt` · `pi pi-book` · `pi pi-bookmark-fill` · `pi pi-bookmark` · `pi pi-box` · `pi pi-briefcase` · `pi pi-building-columns` · `pi pi-building` · `pi pi-bullseye` · `pi pi-calculator` · `pi pi-calendar-clock` · `pi pi-calendar-minus` · `pi pi-calendar-plus` · `pi pi-calendar-times` · `pi pi-calendar` · `pi pi-camera` · `pi pi-car` · `pi pi-caret-down` · `pi pi-caret-left` · `pi pi-caret-right` · `pi pi-caret-up` · `pi pi-cart-arrow-down` · `pi pi-cart-minus` · `pi pi-cart-plus` · `pi pi-chart-bar` · `pi pi-chart-line` · `pi pi-chart-pie` · `pi pi-chart-scatter` · `pi pi-check-circle` · `pi pi-check-square` · `pi pi-check` · `pi pi-chevron-circle-down` · `pi pi-chevron-circle-left` · `pi pi-chevron-circle-right` · `pi pi-chevron-circle-up` · `pi pi-chevron-down` · `pi pi-chevron-left` · `pi pi-chevron-right` · `pi pi-chevron-up` · `pi pi-circle-fill` · `pi pi-circle-off` · `pi pi-circle-on` · `pi pi-circle` · `pi pi-claude` · `pi pi-clipboard` · `pi pi-clock` · `pi pi-clone` · `pi pi-cloud-download` · `pi pi-cloud-upload` · `pi pi-cloud` · `pi pi-code` · `pi pi-cog` · `pi pi-comment` · `pi pi-comments` · `pi pi-compass` · `pi pi-copy` · `pi pi-credit-card` · `pi pi-crown` · `pi pi-database` · `pi pi-delete-left` · `pi pi-desktop` · `pi pi-directions-alt` · `pi pi-directions` · `pi pi-discord` · `pi pi-dollar` · `pi pi-download` · `pi pi-eject` · `pi pi-ellipsis-h` · `pi pi-ellipsis-v` · `pi pi-envelope` · `pi pi-equals` · `pi pi-eraser` · `pi pi-ethereum` · `pi pi-euro` · `pi pi-exclamation-circle` · `pi pi-exclamation-triangle` · `pi pi-expand` · `pi pi-external-link` · `pi pi-eye-slash` · `pi pi-eye` · `pi pi-face-smile` · `pi pi-facebook` · `pi pi-fast-backward` · `pi pi-fast-forward` · `pi pi-file-arrow-up` · `pi pi-file-check` · `pi pi-file-edit` · `pi pi-file-excel` · `pi pi-file-export` · `pi pi-file-import` · `pi pi-file-o` · `pi pi-file-pdf` · `pi pi-file-plus` · `pi pi-file-word` · `pi pi-file` · `pi pi-filter-fill` · `pi pi-filter-slash` · `pi pi-filter` · `pi pi-flag-fill` · `pi pi-flag` · `pi pi-folder-open` · `pi pi-folder-plus` · `pi pi-folder` · `pi pi-forward` · `pi pi-gauge` · `pi pi-gemini` · `pi pi-gift` · `pi pi-github` · `pi pi-globe` · `pi pi-google` · `pi pi-graduation-cap` · `pi pi-hammer` · `pi pi-hashtag` · `pi pi-headphones` · `pi pi-heart-fill` · `pi pi-heart` · `pi pi-history` · `pi pi-home` · `pi pi-hourglass` · `pi pi-id-card` · `pi pi-image` · `pi pi-images` · `pi pi-inbox` · `pi pi-indian-rupee` · `pi pi-info-circle` · `pi pi-info` · `pi pi-instagram` · `pi pi-key` · `pi pi-language` · `pi pi-lightbulb` · `pi pi-link` · `pi pi-linkedin` · `pi pi-list-check` · `pi pi-list` · `pi pi-lock-open` · `pi pi-lock` · `pi pi-map-marker` · `pi pi-map` · `pi pi-mars` · `pi pi-megaphone` · `pi pi-microchip-ai` · `pi pi-microchip` · `pi pi-microphone` · `pi pi-microsoft` · `pi pi-minus-circle` · `pi pi-minus` · `pi pi-mobile` · `pi pi-money-bill` · `pi pi-moon` · `pi pi-objects-column` · `pi pi-palette` · `pi pi-paperclip` · `pi pi-pause-circle` · `pi pi-pause` · `pi pi-paypal` · `pi pi-pen-to-square` · `pi pi-pencil` · `pi pi-percentage` · `pi pi-phone` · `pi pi-pinterest` · `pi pi-play-circle` · `pi pi-play` · `pi pi-plus-circle` · `pi pi-plus` · `pi pi-pound` · `pi pi-power-off` · `pi pi-prime` · `pi pi-print` · `pi pi-qrcode` · `pi pi-question-circle` · `pi pi-question` · `pi pi-receipt` · `pi pi-reddit` · `pi pi-refresh` · `pi pi-replay` · `pi pi-reply` · `pi pi-save` · `pi pi-search-minus` · `pi pi-search-plus` · `pi pi-search` · `pi pi-send` · `pi pi-server` · `pi pi-share-alt` · `pi pi-shield` · `pi pi-shop` · `pi pi-shopping-bag` · `pi pi-shopping-cart` · `pi pi-sign-in` · `pi pi-sign-out` · `pi pi-sitemap` · `pi pi-slack` · `pi pi-sliders-h` · `pi pi-sliders-v` · `pi pi-sort-alpha-down-alt` · `pi pi-sort-alpha-down` · `pi pi-sort-alpha-up-alt` · `pi pi-sort-alpha-up` · `pi pi-sort-alt-slash` · `pi pi-sort-alt` · `pi pi-sort-amount-down-alt` · `pi pi-sort-amount-down` · `pi pi-sort-amount-up-alt` · `pi pi-sort-amount-up` · `pi pi-sort-down-fill` · `pi pi-sort-down` · `pi pi-sort-numeric-down-alt` · `pi pi-sort-numeric-down` · `pi pi-sort-numeric-up-alt` · `pi pi-sort-numeric-up` · `pi pi-sort-up-fill` · `pi pi-sort-up` · `pi pi-sort` · `pi pi-sparkles` · `pi pi-spinner-dotted` · `pi pi-spinner` · `pi pi-star-fill` · `pi pi-star-half-fill` · `pi pi-star-half` · `pi pi-star` · `pi pi-step-backward-alt` · `pi pi-step-backward` · `pi pi-step-forward-alt` · `pi pi-step-forward` · `pi pi-stop-circle` · `pi pi-stop` · `pi pi-stopwatch` · `pi pi-sun` · `pi pi-sync` · `pi pi-table` · `pi pi-tablet` · `pi pi-tag` · `pi pi-tags` · `pi pi-telegram` · `pi pi-th-large` · `pi pi-thumbs-down-fill` · `pi pi-thumbs-down` · `pi pi-thumbs-up-fill` · `pi pi-thumbs-up` · `pi pi-thumbtack` · `pi pi-ticket` · `pi pi-tiktok` · `pi pi-times-circle` · `pi pi-times` · `pi pi-trash` · `pi pi-trophy` · `pi pi-truck` · `pi pi-turkish-lira` · `pi pi-twitch` · `pi pi-twitter` · `pi pi-undo` · `pi pi-unlock` · `pi pi-upload` · `pi pi-user-edit` · `pi pi-user-minus` · `pi pi-user-plus` · `pi pi-user` · `pi pi-users` · `pi pi-venus` · `pi pi-verified` · `pi pi-video` · `pi pi-vimeo` · `pi pi-volume-down` · `pi pi-volume-off` · `pi pi-volume-up` · `pi pi-wallet` · `pi pi-warehouse` · `pi pi-wave-pulse` · `pi pi-whatsapp` · `pi pi-wifi` · `pi pi-window-maximize` · `pi pi-window-minimize` · `pi pi-wrench` · `pi pi-youtube` · `ai-cor ai-angular` · `ai-cor ai-astro` · `ai-cor ai-azuredevops` · `ai-cor ai-bitbucket` · `ai-cor ai-claude` · `ai-cor ai-cursor` · `ai-cor ai-deepseek` · `ai-cor ai-discord` · `ai-cor ai-flutter` · `ai-cor ai-gemini` · `ai-cor ai-gitlab` · `ai-cor ai-google` · `ai-cor ai-graphql` · `ai-cor ai-grok` · `ai-cor ai-html` · `ai-cor ai-js` · `ai-cor ai-kotlin` · `ai-cor ai-meta` · `ai-cor ai-microsoft-copilot` · `ai-cor ai-mistral` · `ai-cor ai-next` · `ai-cor ai-nuxt` · `ai-cor ai-open` · `ai-cor ai-perplexity` · `ai-cor ai-qwen` · `ai-cor ai-react` · `ai-cor ai-redwood` · `ai-cor ai-solidjs` · `ai-cor ai-svelte` · `ai-cor ai-terraform` · `ai-cor ai-ts` · `ai-cor ai-vue` · `ai-cor ai-windsurf` · `ai-cor ai-x` · `ai-cor ai-youtube`
 
 Descriptions and keywords: [foundations/icons.md](icons.md).
 
@@ -12549,10 +12549,12 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 - Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
 - A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
+- An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `kind="link"`. It is still a `<button>`, so keyboard and screen readers get an action.
 
 ## Do
 
 - Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
+- kind="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
@@ -12563,6 +12565,8 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 - The control is icon-only → use `icon-button`.
 - One default action with related alternatives in an attached menu → use `split-button`.
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
+- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `kind="link"` Button is for an action with no destination.
+- A hand-written `<button class="text-(--text-link) …">` → use `kind="link"`.
 - The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -12579,7 +12583,7 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `—` | true | Visible label text. Use `IconButton` for icon-only controls. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false | Visual variant. `link` draws an inline text action in the link colour, with no box. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
@@ -12610,6 +12614,7 @@ The code of every state is in [blocks/shells/website.md](blocks/shells/website.m
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- `data-kind` mirrors `kind`; with `kind="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -13635,6 +13640,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
+| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 
@@ -14004,6 +14010,7 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 | `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy. |
 | `downloadHref` | `string` | `''` | false | URL of the version shown, for Download (`download` takes the title). Empty hides Download. |
 | `streaming` | `boolean` | `false` | false | A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so. |
+| `version` | `number` | `0` | false | Two-way value (`v-model:version`). |
 
 ## Events
 
@@ -14820,6 +14827,7 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
 | `label` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+| `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -14963,6 +14971,7 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `reasons` | `{ value: string; label: string }[]` | `[]` | false | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -15122,6 +15131,8 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
 | `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+| `references` | `PromptInputReference[]` | `() => []` | false | Two-way value (`v-model:references`). |
 
 ## Events
 
@@ -15402,6 +15413,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 | `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
 | `label` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
 | `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -16185,6 +16197,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
+- Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Don’t
 
@@ -16226,6 +16239,9 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the marks. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the chart when it is not inside a ChartCard with a title. |
+| `activeIndex` | `number \| null` | `null` | false | Two-way value (`v-model:activeIndex`). |
+| `hiddenSeries` | `string[]` | `() => []` | false | Two-way value (`v-model:hiddenSeries`). |
+| `range` | `ChartRange \| null` | `null` | false | Two-way value (`v-model:range`). |
 
 ## Events
 
@@ -16277,8 +16293,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'linear'`).
   - Events: _none_.
   - Slots: _none_.
-- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars).
+- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `kind="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
   - Events: _none_.
   - Slots: _none_.
 - `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.
@@ -16480,6 +16496,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `minHeight` | `number` | `240` | false | Smallest height in pixels the resize handle allows. |
 | `maxHeight` | `number` | `960` | false | Largest height in pixels the resize handle allows. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the card when it has no title. |
+| `span` | `number` | `6` | false | Two-way value (`v-model:span`). |
+| `height` | `number \| undefined` | `undefined` | false | Two-way value (`v-model:height`). |
 
 ## Events
 
@@ -16707,6 +16725,8 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the ring. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the chart. |
+| `activeIndex` | `number \| null` | `null` | false | Two-way value (`v-model:activeIndex`). |
+| `hiddenSeries` | `string[]` | `() => []` | false | Two-way value (`v-model:hiddenSeries`). |
 
 ## Events
 
@@ -16991,6 +17011,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the map. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the map when it is not inside a ChartCard with a title. |
+| `activeId` | `string \| null` | `null` | false | Two-way value (`v-model:activeId`). |
 
 ## Events
 
@@ -17442,6 +17463,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 | `title` | `string` | `''` | false | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. |
 | `animateLines` | `boolean` | `false` | false | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart. |
 | `bordered` | `boolean` | `true` | false | Draw the outer card border around the block. On by default; set `:bordered="false"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected. |
+| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -17606,6 +17628,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 | `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
 | `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -17767,6 +17790,8 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 | `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewHeader. |
 | `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
 | `loadingLabel` | `string` | `''` | false | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). |
+| `search` | `string` | `''` | false | Two-way value (`v-model:search`). |
+| `warningsOnly` | `boolean` | `false` | false | Two-way value (`v-model:warningsOnly`). |
 
 ## Events
 
@@ -18113,6 +18138,7 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | `collapsible` | `boolean` | `true` | false | In single mode, lets the open item collapse so that no item is open. |
 | `size` | `'medium' \| 'large'` | `'medium'` | false | Size token; affects header height, padding, and typography. Provided to every item via context. |
 | `arrowPosition` | `'left' \| 'right'` | `'right'` | false | Side of the header the chevron sits on. Provided to every item via context. |
+| `modelValue` | `AccordionValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -18526,6 +18552,8 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`). |
 | `widthHandleAriaLabel` | `string` | `''` | false | Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`). |
 | `heightHandleAriaLabel` | `string` | `''` | false | Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`). |
+| `width` | `number \| undefined` | `undefined` | false | Two-way value (`v-model:width`). |
+| `height` | `number` | `800` | false | Two-way value (`v-model:height`). |
 
 ## Slots
 
@@ -19042,6 +19070,116 @@ The frame is static apart from its resize handles.
 
 ---
 
+<!-- components/feature-list.md -->
+
+# Feature List
+
+> The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+
+- Import: `import FeatureList from '@aziontech/webkit/feature-list'`
+- Category: content · Surface: product · Structure: monolithic
+- API as JSON: [feature-list.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-list.json)
+
+## When to use
+
+- The perks of an upgrade card (Upgrade to Pro: Unlimited Applications, Unlimited Workloads, Custom Domains).
+- The features a plan includes in a change-plan or upgrade drawer, each with a short description.
+- Any short list of included capabilities where the check is the only marker.
+
+## Do
+
+- Keep each label to a few words in title case or sentence case, one capability per row; put the detail in `description`, not in the label.
+- Use `columns: 2` for six or more short labels in a wide card; it falls back to one column in a narrow box on its own.
+- Name the list with `ariaLabel` (for example "Pro plan features") when no visible heading right above it says what the features belong to.
+- Do not hand-write the list with your own check icons: the check colour and spacing are part of the component.
+
+## Don’t
+
+- Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-mark` per row, or the `stepper`.
+- A comparison of features across plans → use `compare-plans` or `table`.
+- Label and value facts → use `key-value-pairs`.
+- Rows that navigate or carry actions → use `item`.
+- Marketing pricing cards on the site → use `card-pricing` / `pricing-plans`, which carry their own feature lists.
+- Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
+
+## Related
+
+- [key-value-pairs](key-value-pairs.md) — the plan facts that sit next to the feature list in a billing card.
+- [card](card.md) — the surface the list sits in; FeatureList brings no surface of its own.
+- [outcome-mark](outcome-mark.md) — the mark for a step that finished, which this check is not.
+
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `items` | `FeatureListItem[]` | `[]` | false | The features, in order; each item is `{ label: string; description?: string }`. |
+| `columns` | `1 \| 2` | `1` | false | Columns when the list's own box is at least the md container; a narrower box always shows one column. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list when no visible heading names it. |
+
+## States
+
+- Visual states: `default`
+- `data-columns` on the list mirrors `columns`
+- Empty: with no `items` the component renders nothing (no empty list, no placeholder); the card around it decides what to say
+- No `loading`, `disabled`, `invalid`, `readonly`, `error` or `open` states: the list is static, read-only text
+
+## Accessibility
+
+- Visible focus: none; the list has no interactive part.
+- Keyboard map: no tab stop.
+- ARIA: a native `ul` with `role="list"` (so the list semantics survive `list-style: none` in Safari); each feature is an `li`; the check glyph is `aria-hidden="true"`; `ariaLabel` is set as `aria-label` on the `ul` only when non-empty.
+- Contrast ≥4.5:1 for the label and the muted description, ≥3:1 for the check glyph, on `var(--bg-surface)` in both themes.
+- No motion.
+- No touch target: nothing is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only; the check sits at the inline start and the text after it, so the row mirrors under `dir="rtl"`.
+- Icons: the check does not mirror.
+- Keyboard: no arrow-key logic.
+- User data: each label and description renders `dir="auto"`, so a product name in another script keeps its own direction.
+
+## Internationalization
+
+No built-in strings: every visible text comes from `items`, and the accessible name from `ariaLabel`.
+
+- Formatting: none
+
+## Responsive
+
+- Container queries: the root is `@container/feature-list`; `columns: 2` applies from `@md` of that box (448 px) and the list shows one column below it, so a card in a split view or on a phone stacks the features by itself.
+- Narrow (≤ 640 px or a narrow container): one column; labels and descriptions wrap, never truncate.
+- Touch: nothing is interactive.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; long unbroken words break.
+
+## Examples
+
+### Default
+
+```vue
+<script setup>
+  import FeatureList from '@aziontech/webkit/feature-list'
+
+  const features = [
+    { label: 'Unlimited Applications' },
+    { label: 'Unlimited Workloads' },
+    { label: 'Custom Domains' },
+    { label: 'Priority Support' }
+  ]
+</script>
+
+<template>
+  <FeatureList
+    :items="features"
+    aria-label="Pro plan features"
+  />
+</template>
+```
+
+2 more example(s) in [components/feature-list.md](https://github.com/aziontech/webkit/blob/main/.specs/components/feature-list.md).
+
+---
+
 <!-- components/help-panel.md -->
 
 # Help Panel
@@ -19522,6 +19660,7 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 - A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.
 - A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.
 - A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child.
+- A compact option in a chooser list (a workload, a host, an application picked under a search field): `kind="option"` with `as-child` on a `button`. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the button is `aria-pressed="true"` or `aria-selected="true"`.
 
 ## Do
 
@@ -19530,6 +19669,7 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 - With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.
 - Set `Item.Media` `kind="icon"` for a glyph and `kind="image"` for a picture; the frame sizes and clips the content.
 - Use `size="small"` for dense lists; `medium` is the default.
+- For the rows of a picker under a search field use `kind="option"` (not `size="small"` plus your own padding): it sets its own density and the selected fill from `aria-pressed` / `aria-selected`, so `size` does not change it. Keep option rows in a plain column, not in `Item.List` or `Item.Group`, which force their own kind.
 
 ## Don’t
 
@@ -19550,7 +19690,7 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'default' \| 'outlined' \| 'muted' \| 'inline'` | `'default'` | false | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
+| `kind` | `'default' \| 'outlined' \| 'muted' \| 'inline' \| 'option'` | `'default'` | false | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Item root density (padding and gap). |
 | `asChild` | `boolean` | `false` | false | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor). |
 
@@ -19591,7 +19731,8 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 - Visual states on Item shell: `default` only, **except with `asChild`**, where the merged child (the whole-row link/button) gains row-level `hover`, `active`, and `focus-visible`
 - Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
-- `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
+- `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
+- `kind="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
 - `data-size` on Item root: `small` | `medium`
 - `data-kind` on ItemMedia: `default` | `icon` | `image`
 
@@ -19742,11 +19883,13 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 - A read-only summary of settings before a confirm step (review step, deploy summary).
 - Any set of named attributes of a single subject where the reader scans keys to find a value.
 - Facts that fall into named clusters (General, Networking, Source) shown side by side as titled columns.
+- The rows of a summary card, label on the left and value on the right (a subscription plan: Plan Price, Billing Period, Next Invoice): `kind="split"`.
 
 ## Do
 
 - Keep keys short nouns in sentence case ("Created", "Region"), never sentences or trailing colons.
 - Order pairs by what the reader looks for first: identity, status, then the rest.
+- Pick `kind` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
 - Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.
 - Do not mix bare Items and Groups at the same level; pick one shape per instance.
 - Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible "Not set". Do not type your own "-", "N/A" or "None".
@@ -19776,6 +19919,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `kind` | `'stacked' \| 'split'` | `'stacked'` | false | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
 | `columns` | `1 \| 2 \| 3 \| 4` | `1` | false | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`. |
 | `loading` | `boolean` | `false` | false | Replaces every value with a skeleton while the data loads; labels stay visible. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list when no visible heading names it. |
@@ -19814,6 +19958,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## States
 
 - Visual states: `default`, `loading`, empty value (per Item)
+- `data-kind` on the root and on each Item mirrors `kind`; `split` turns each Item into one row (label start, value end, wrapping under the label only when the value does not fit)
 - `data-columns` on the root mirrors `columns` and drives the grid template through `data-[columns=n]:` variants
 - `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading
 - Empty value: the Item's `<dd>` shows `—` (`aria-hidden`) plus a visually hidden "Not set"
@@ -20925,11 +21070,14 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 ## When to use
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status/category with severity color via `kind`.
+- Show a status/category with severity color via `severity`.
+- Mark the one value a list highlights (the Owner role in a users table) with `severity="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
 
 ## Do
 
-- Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.
+- Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `secondary` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
 ## Don’t
@@ -20948,7 +21096,7 @@ Exports: `./shell-mockup` → `index.ts`, `./shell-mockup-root` → `shell-mocku
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast'` | `'primary'` | false | Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
 | `icon` | `string` | `undefined` | false | PrimeIcons class for the leading icon. |
@@ -21346,6 +21494,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards and sets aria-busy while true. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog. |
+| `selectedKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:selectedKeys`). |
 
 ## Slots
 
@@ -21501,6 +21650,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `container` | `'dialog' \| 'drawer'` | `'dialog'` | false | Opens in a centered dialog or a side drawer. |
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -22285,7 +22435,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 # Table
 
-> Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** Six presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
+> Composition primitives for building accessible, pixel-perfect data tables, in two modes. **Composition mode** (default): compose the anatomy by hand (header / body / rows / cells) — the component owns markup, tokens, a11y, configurable column sizing (an emphasized first column), sortable headers, selectable rows, and a **freeze system** for sticky columns (e.g. an actions column) and a sticky header. **Data-driven mode**: pass `data` + `columns` and the table renders itself via the headless **`@tanstack/vue-table`** engine, still rendering through the same primitives (our markup/tokens/a11y, pixel-perfect to Figma). Pairs with the [`Pagination`](pagination.md) component (rendered automatically in the footer when `paginated`). A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport in both modes for a title, search / filter / export / column-selector actions, and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance (in data-driven mode) so the consumer can drive filtering, global search, and column visibility through the table's own methods. **Engine.** Data-driven mode is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to this single component per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (a structured field/operator/value builder that commits removable/editable filter chips, with an escape slot to plug a custom builder such as the console's AQL), `Table.AppliedFilters` (the chips), `Table.ColumnSelector` (a column-visibility picker over the existing `columnVisibility` state), `Table.Export` (CSV download), and `Table.RefreshButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives the data-driven mode in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `rowsPerPageOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** Six presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
 
 - Import: `import TableRoot from '@aziontech/webkit/table-root'`
 - Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
@@ -22304,6 +22454,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - Give rows a stable id under `row-key` (default `'id'`); selection and `v-model:row-selection` are keyed by it.
 - Mark the row-actions column `kind: 'action'` so it pins to the trailing edge; give chip or short-token columns a `minWidth` rather than a fixed `width`.
 - Drive loading through the `loading` prop (skeleton rows, `aria-busy`) and keep the `empty` slot for no-data copy — do not swap the table for a spinner.
+- On a phone a console list keeps its grid and scrolls sideways (the default). Set `stackable` only for a short list read one record at a time on a narrow, phone-first surface (a marketing listing, a summary in a side panel), where a card per row reads better than a scroll; never on a resource index, a log or a list compared across columns.
 - Place `Table.Search`, `Table.Filter`, `Table.ColumnSelector`, `Table.Export` and `Table.RefreshButton` in the `toolbar` slot with no `v-model` wiring — they read the table from context. `Table.Search` and `Table.ColumnSelector` act on the TanStack instance, so they need data-driven mode.
 
 ## Don’t
@@ -22354,7 +22505,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `initialState` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
 | `exportRows` | `(scope: 'filtered' \| 'all') => Record<string, unknown>[] \| Promise<Record<string, unknown>[]>` | `undefined` | false | Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download. |
 | `exportFilename` | `string` | `'export.csv'` | false | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
-| `stackable` | `boolean` | `true` | false | Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width. |
+| `stackable` | `boolean` | `false` | false | Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. |
 | `wrapLines` | `boolean` | `false` | false | Data-driven mode: cell text wraps onto several lines instead of truncating. |
 | `striped` | `boolean` | `false` | false | Data-driven mode: every other body row takes the raised surface. |
 | `density` | `'comfortable' \| 'compact'` | `'comfortable'` | false | Row density: `compact` shrinks body rows and cell padding. |
@@ -22438,7 +22589,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `table-column-selector/table-column-selector.vue` — context-aware column-visibility picker (the UI over the already-wired `columnVisibility`). An `IconButton` trigger opens an anchored **popover** (the same `use-placement` pattern as `Table.Filter`) listing each hideable leaf column with a `Checkbox`, toggling visibility through the injected `table`. Respects `column.getCanHide()` / the column's `hideable`. Prop `title?: string` (default `''`; empty uses the locale catalog, `Columns` in English). Slot `trigger` (scope `{ open }`). Motion: `animate-popup-scale-in` / `animate-popup-scale-out` paired with `motion-reduce:animate-none`.
 - `table-export/table-export.vue` — context-aware export control (an `IconButton`, download glyph, its name repeated on a `Tooltip`). Calls the injected `exportCsv(options?)`; the root emits `export` with the resolved rows (a consumer may intercept for server-side export, otherwise the built-in CSV util downloads the visible, ordered columns and filtered rows). Props `filename?: string` (default `''` → falls back to the root `exportFilename`), `scope?: 'page' | 'filtered' | 'all'` (default `'filtered'`). Slot `trigger` (scope `{ export }`).
 - `table-refresh-button/table-refresh-button.vue` — context-aware refresh control (an `IconButton`, refresh glyph). Calls the injected `reload()`; the root emits `refresh`. Binds `:disabled` to `disabled || loading` (the injected loading flag), so it can't fire mid-fetch. Props `disabled?: boolean` (default `false`) and `loading?: boolean` (default `false`: spins the glyph and blocks a second press while a refresh runs and the current rows stay on screen — the refresh pattern; the table's own `loading` is for a first load with nothing to show). A `Tooltip` repeats its name for pointer users.
-- `table-cell-link/table-cell-link.vue` — cross-resource link preset. Props `label?: string`, `href?: string` (outside the app; new tab with a visually hidden `(opens in a new tab)`), `to?: string | Record<string, unknown>` (in-app; the app's registered `RouterLink`, else a plain `href`), `destination?: string` (tooltip `Open <label> in <destination>`), `copyable?: boolean`, `copyValue?: string`, `more?: OverflowCountItem[]`, `moreNoun?: OverflowCountNoun`. Clicks stop at the link so a row click does not also fire. No `href`/`to` renders plain truncating text with no mark and no tooltip.
+- `table-cell-link/table-cell-link.vue` — cross-resource link preset. Props `label?: string`, `href?: string` (outside the app; new tab with a visually hidden `(opens in a new tab)`), `to?: string | Record<string, unknown>` (in-app; the app's registered `RouterLink`, else a plain `href`), `destination?: string` (tooltip `Open <label> in <destination>`), `icon?: string` (default `''`; a glyph class drawn before the name in `var(--text-muted)`, outside the link and `aria-hidden`, naming the provider or the resource type: `ai ai-github` for a repository, `ai ai-workloads` for a workload), `copyable?: boolean`, `copyValue?: string`, `more?: OverflowCountItem[]`, `moreNoun?: OverflowCountNoun`. Clicks stop at the link so a row click does not also fire. No `href`/`to` renders plain truncating text with no mark and no tooltip.
 - `table-cell-id/table-cell-id.vue` — identifier preset: the value (`dir="ltr"`, tabular numbers, truncating) and a `CopyButton` pinned to the end edge named `Copy <resource> ID`. Props `value?: string | number`, `resource?: string`.
 - `table-cell-status/table-cell-status.vue` — status preset: one `Tag` (`size="medium"`, truncating). Props `label?: string` (empty renders a muted dash), `severity?: TagSeverity` (default `secondary`), `icon?: string`.
 - `table-cell-tags/table-cell-tags.vue` — tag list preset: rounded secondary tags, as many as fit the cell (measured with a `ResizeObserver` against a hidden ruler), the rest behind an `OverflowCount`. Props `items?: string[]` (empty renders a muted dash), `icon?: string`, `noun?: OverflowCountNoun` (default `tag` / `tags` from the catalog).
@@ -22457,7 +22608,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 - `data-sortable` and `data-sort` (`none` | `ascending` | `descending`) on TableHeadCell; `aria-sort` mirrors `data-sort`.
 - `data-direction` (`none` | `ascending` | `descending`) and `data-visible` on TableSortButton.
 - `data-clickable` on TableCell mirrors the `clickable` prop.
-- Stacked rows (data-driven, `stackable`): the table measures its own box; below `--container-lg` (552 px) it sets `data-stacked` and each body row becomes a bordered card. The checkbox, the principal column and the action column share the first line; every other column takes its own line as a label (the column `label` or `header`, `aria-hidden`) and its value. The header row stays in the DOM visually hidden, so screen readers keep the column headers; frozen offsets and fades are dropped. `stackable: false` keeps the scrolling grid. A hand-composed table never stacks.
+- Stacked rows (data-driven, opt-in `stackable`): by default the grid scrolls sideways at every width, as the console does on a phone. With `stackable`, the table measures its own box; below `--container-lg` (552 px) it sets `data-stacked` and each body row becomes a bordered card. The checkbox, the principal column and the action column share the first line; every other column takes its own line as a label (the column `label` or `header`, `aria-hidden`) and its value. The header row stays in the DOM visually hidden, so screen readers keep the column headers; frozen offsets and fades are dropped. A hand-composed table never stacks.
 - Stacked select-all (data-driven, `enableRowSelection`): in the stacked layout the header checkbox is not rendered; a visible, labelled **Select all rows** checkbox sits above the stacked rows (`__stacked-select-all`) and toggles the page, with the same indeterminate state.
 - Per-row selectability (data-driven, `rowSelectable`): a row the function rejects renders an empty selection cell, ignores `selectOnRowClick` and is skipped by Select all; the header checkbox reads `all` when every selectable row is selected.
 - Density and wrapping: `data-density="compact"` on the root shrinks body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
@@ -22665,6 +22816,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `levels` | `TopologyLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
 
 ## Events
 
@@ -22990,6 +23142,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | `emptyTitle` | `string` | `''` | false | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`). |
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the tree. |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
+| `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
 
 ## Events
 
@@ -26094,7 +26248,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 
 - Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
 - Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
-- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.
+- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `"Building..."`) is trimmed first, so it renders `Building…`, never `Building......`.
 - It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
 
 ## Don’t
@@ -26117,7 +26271,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `loading` | `boolean` | `false` | false | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
 | `label` | `string` | `''` | false | Visible label text. Empty uses the locale catalog (`Status`). |
 
 ## States
@@ -26327,6 +26481,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
+| `collapsed` | `boolean` | `false` | false | Two-way value (`v-model:collapsed`). |
 
 ## Events
 
@@ -26967,6 +27122,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `clickable` | `boolean` | `false` | false | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 | `selectable` | `boolean` | `false` | false | When true, the chip becomes a toggle: activating it flips the `selected` model and emits `click`. |
 | `disabled` | `boolean` | `false` | false | Suppresses activation, toggling and removal. |
+| `selected` | `boolean` | `false` | false | Two-way value (`v-model:selected`). |
 
 ## Events
 
@@ -27095,6 +27251,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `readonly` | `boolean` | `false` | false | Shows the value without the list or editing. |
 | `required` | `boolean` | `false` | false | Marks the field required (`aria-required`). |
 | `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -27257,6 +27414,8 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | `ariaLabel` | `string` | `''` | false | Accessible name of the trigger. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and the step buttons. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
+| `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
+| `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 
 ## v-model
 
@@ -28593,6 +28752,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `invalid` | `boolean` | `false` | false | Danger borders on every box and `aria-invalid`; set after a rejected code. |
 | `required` | `boolean` | `false` | false | Native `required` and `aria-required`. |
 | `autofocus` | `boolean` | `false` | false | Focus the field on mount, for a screen whose only task is the code. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -28931,6 +29091,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `name` | `string` | `''` | false | HTML name for the internal input (form + vee-validate integration). |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+| `country` | `string` | `'BR'` | false | Two-way value (`v-model:country`). |
 
 ## Events
 
@@ -29269,6 +29431,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `validateOn` | `'blur' \| 'submit'` | `'blur'` | false | When fields first show their validation message: on leaving the field, or only after `validate()`. |
 | `disabled` | `boolean` | `false` | false | Disables every field. |
 | `readonly` | `boolean` | `false` | false | Shows every value without letting it change. |
+| `modelValue` | `SchemaFormValue` | `—` | false | Two-way value (`v-model`). |
 
 ## v-model
 
@@ -29605,6 +29768,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `ticks` | `boolean` | `false` | false | Shows a tick mark at every step when the range has at most 21 positions. |
 | `referenceValues` | `number[]` | `[]` | false | Values marked and labelled under the track; entries outside min and max are ignored. |
 | `unit` | `string` | `''` | false | Text appended verbatim to the reference labels and to the announced value. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -30051,6 +30215,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | false | Disables the whole control and applies disabled tokens. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). |
+| `modelValue` | `ThemeSwitcherValue` | `'system'` | false | Two-way value (`v-model`). |
 
 ## v-model
 
@@ -30470,6 +30635,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `maxHeight` | `number` | `960` | false | Largest height in pixels a resize allows. |
 | `editing` | `boolean` | `false` | false | Shows the drag and resize handles of every card and lets the reader rearrange the board. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`). |
+| `layout` | `BoardLayoutItem[]` | `() => []` | false | Two-way value (`v-model:layout`). |
 
 ## Events
 
@@ -31345,7 +31511,7 @@ context, so a consumer never wires one part to the other.
 
 # Save Bar
 
-> The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next.
+> The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next; `centered` floats the actions as a raised card centred over the bottom of a create page, always shown.
 
 - Import: `import SaveBar from '@aziontech/webkit/save-bar'`
 - Category: layout · Surface: product · Structure: monolithic
@@ -31356,12 +31522,15 @@ context, so a consumer never wires one part to the other.
 - A settings page whose changes are staged and saved together: show the floating bar while the form is dirty or saving.
 - A create page or account form with one Save for the whole page (`plain`).
 - A full-page wizard step: Back in `leading`, the step's primary action in `actions` (`fade`).
+- A create page (Create Team, Create Zone, Create Function): Cancel and Create in a raised card centred at the bottom of the form, over the content, at every width (`centered`). This is the design sample's create-page footer; use it instead of a full-width `floating` bar there.
 
 ## Do
 
 - Render the floating bar with `v-if="dirty || saving"` inside a `Transition`, so it slides in when the first change is made.
 - Say what changed and when it takes effect in the status sentence; keep it to one line.
 - Disable Discard and set `loading` on Save while saving.
+- Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `kind="centered"`.
+- floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
 
 ## Don’t
 
@@ -31380,7 +31549,7 @@ context, so a consumer never wires one part to the other.
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. |
+| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. |
 
 ## Slots
 
@@ -31394,7 +31563,7 @@ context, so a consumer never wires one part to the other.
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the root
-- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
+- Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
 
@@ -31723,7 +31892,7 @@ context, so a consumer never wires one part to the other.
 
 # Setting Row
 
-> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`).
+> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.
 
 - Import: `import SettingRow from '@aziontech/webkit/setting-row'`
 - Category: layout · Surface: product · Structure: monolithic
@@ -31740,6 +31909,11 @@ context, so a consumer never wires one part to the other.
 - Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
 - Show a validation message only after Save was pressed.
 - Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
+- Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.
+- Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.
+- Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
+- Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
+- Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
 
 ## Don’t
 
@@ -31762,6 +31936,7 @@ context, so a consumer never wires one part to the other.
 | `description` | `string` | `''` | false | One sentence under the title that says what the setting does. |
 | `kind` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `level` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
+| `stackable` | `boolean` | `false` | false | Below the md container of the row, move a field control under the copy at full width. |
 
 ## Slots
 
@@ -31774,8 +31949,9 @@ context, so a consumer never wires one part to the other.
 ## States
 
 - Visual states: `default`
-- `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root
-- Responsive: the row is the `@container/setting-row`. Below `@md` of the row (a narrow drawer, a phone) a `field` control moves under the copy at full width; from `@md` it sits on the end side, capped at `--layout-measure-control`.
+- `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root; `data-stackable` is set when `stackable` is on
+- Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
+- Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
 
 ## Accessibility
 
@@ -31895,6 +32071,7 @@ context, so a consumer never wires one part to the other.
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false | Turns the title into a disclosure that folds the band body. |
 | `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -32080,6 +32257,8 @@ context, so a consumer never wires one part to the other.
 | `collapseAriaLabel` | `string` | `''` | false | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`). |
 | `expandAriaLabel` | `string` | `''` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
 | `resizeAriaLabel` | `string` | `''` | false | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`). |
+| `collapsed` | `boolean` | `false` | false | Two-way value (`v-model:collapsed`). |
+| `width` | `number \| null` | `null` | false | Two-way value (`v-model:width`). |
 
 ## Events
 
@@ -34930,6 +35109,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | `autoplay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -35930,6 +36110,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Prefer `items`; only `items` mode collapses the middle segments into an overflow menu below `md`. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
 - Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
+- **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
 - In slot mode, wrap each `Breadcrumb.Item` in an `li`: `Breadcrumb.List` is an `ol` and the item renders an `a` / `span`, while `Breadcrumb.Separator` is already an `li`.
 
 ## Don’t
@@ -36425,6 +36606,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
+- **A row's destination is `href`, and only `href`.** A `MenuNode` (and `Menu.Item` / `Menu.SubTrigger`) renders as an anchor when it has an `href`; any other key (`path`, `to`, `url`, `route`) is not read, and the row renders as a button with no destination. `path` on the root is a different thing: `v-model:path`, the drill stack.
+- **Vue Router:** put the route's path in `href` (for a named route, `router.resolve(to).href`), then take over the click in `@navigate`: `(event, node) => { event.preventDefault(); router.push(node.href) }`, and derive `active-id` from the current route. The row stays a real link (open in a new tab, copy link address) while the router does the navigation. A modified click (Ctrl, ⌘, Shift, middle button) should be left to the browser: skip `preventDefault` when `event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0`.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.
 - Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.
 - Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.
@@ -36457,6 +36640,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 | `activeId` | `string` | `''` | false | Id of the node rendered as selected in data-driven mode. |
 | `enterOnMount` | `boolean` | `false` | false | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the navigation region. Empty uses the locale catalog (`Menu`). |
+| `path` | `string[]` | `() => []` | false | Two-way value (`v-model:path`). |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
 
 ## Events
 
@@ -37017,6 +37202,12 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 - [page-header](page-header.md) — the page heading under the strip.
 - [tag](tag.md) and `button` — the usual content of the `actions` slot.
 
+## Props
+
+| Prop | Type | Default | Required | Description |
+| --- | --- | --- | --- | --- |
+| `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
+
 ## Slots
 
 | Slot | Scope | Notes |
@@ -37123,6 +37314,7 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the step rail. Empty uses the locale catalog (`Steps`). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -37268,6 +37460,7 @@ even when the row carries nothing but its title.
 - dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
 - Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.
 - Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.
+- Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Don’t
 
@@ -37297,7 +37490,7 @@ even when the row carries nothing but its title.
 ## Sub-components
 
 - `tab-view-item.vue` — Public sub-component `tabs-item`. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
-- `tab-view-list.vue` — Public sub-component `tabs-list`.
+- `tab-view-list.vue` — Public sub-component `tabs-list`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
 - `tab-view-panel.vue` — Public sub-component `tabs-panel`.
 
 ## v-model
@@ -37443,6 +37636,7 @@ even when the row carries nothing but its title.
 | `submitLabel` | `string` | `''` | false | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
 | `loading` | `boolean` | `false` | false | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create edge application. |
+| `activeStep` | `number` | `0` | false | Two-way value (`v-model:activeStep`). |
 
 ## Events
 
@@ -38016,6 +38210,7 @@ packages/webkit/src/components/overlay/command/
 | `size` | `'small' \| 'medium'` | `'small'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, the close button, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -44,6 +44,8 @@
 | `minHeight` | `number` | `240` | false | Smallest height in pixels the resize handle allows. |
 | `maxHeight` | `number` | `960` | false | Largest height in pixels the resize handle allows. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the card when it has no title. |
+| `span` | `number` | `6` | false | Two-way value (`v-model:span`). |
+| `height` | `number \| undefined` | `undefined` | false | Two-way value (`v-model:height`). |
 
 ## Events
 

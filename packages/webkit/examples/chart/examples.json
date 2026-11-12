@@ -39,7 +39,7 @@
     },
     {
       "name": "Brush",
-      "summary": "Drag across the plot, or hold Shift with the arrow keys and press Enter, to select a span. The chart reports it through v-model:range; the page filters to it. Escape clears it.",
+      "summary": "An event-volume histogram: `Chart.Bar kind=\"histogram\" stacked` draws solid columns that touch, with no gap between levels and the busiest bucket at the top. Drag across the plot, or hold Shift with the arrow keys and press Enter, to select a span. The chart reports it through v-model:range; the page filters to it. Escape clears it.",
       "file": "brush.vue"
     },
     {

@@ -1,0 +1,78 @@
+{
+ "name": "feature-list",
+ "binding": "FeatureList",
+ "import": "@aziontech/webkit/feature-list",
+ "treeShakeableImport": "@aziontech/webkit/feature-list",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the \"what you get\" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says \"included\", never \"done\". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.",
+ "setup": null,
+ "useWhen": [
+  "The perks of an upgrade card (Upgrade to Pro: Unlimited Applications, Unlimited Workloads, Custom Domains).",
+  "The features a plan includes in a change-plan or upgrade drawer, each with a short description.",
+  "Any short list of included capabilities where the check is the only marker."
+ ],
+ "avoidWhen": [
+  "Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-mark` per row, or the `stepper`.",
+  "A comparison of features across plans → use `compare-plans` or `table`.",
+  "Label and value facts → use `key-value-pairs`.",
+  "Rows that navigate or carry actions → use `item`.",
+  "Marketing pricing cards on the site → use `card-pricing` / `pricing-plans`, which carry their own feature lists."
+ ],
+ "related": [
+  "key-value-pairs` — the plan facts that sit next to the feature list in a billing card.",
+  "card` — the surface the list sits in; FeatureList brings no surface of its own.",
+  "outcome-mark` — the mark for a step that finished, which this check is not."
+ ],
+ "bestPractices": [
+  "Keep each label to a few words in title case or sentence case, one capability per row; put the detail in `description`, not in the label.",
+  "Use `columns: 2` for six or more short labels in a wide card; it falls back to one column in a narrow box on its own.",
+  "Name the list with `ariaLabel` (for example \"Pro plan features\") when no visible heading right above it says what the features belong to.",
+  "Do not hand-write the list with your own check icons: the check colour and spacing are part of the component."
+ ],
+ "props": [
+  {
+   "name": "items",
+   "type": "FeatureListItem[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The features, in order; each item is `{ label: string; description?: string }`."
+  },
+  {
+   "name": "columns",
+   "type": "1 | 2",
+   "default": "1",
+   "required": "false",
+   "doc": "Columns when the list's own box is at least the md container; a narrower box always shows one column."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the list when no visible heading names it."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  },
+  {
+   "name": "Columns",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' },\n    { label: 'Real-Time Metrics' },\n    { label: 'Data Stream' },\n    { label: 'Web Application Firewall' },\n    { label: 'Team Permissions' }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    :columns=\"2\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  },
+  {
+   "name": "WithDescriptions",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    {\n      label: 'Unlimited Applications',\n      description: 'Deploy as many applications as your projects need.'\n    },\n    {\n      label: 'Custom Domains',\n      description: 'Serve every application from your own domain, with managed certificates.'\n    },\n    {\n      label: 'Priority Support',\n      description: 'Reach the support team by chat and get an answer within one business day.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/feature-list.md"
+}

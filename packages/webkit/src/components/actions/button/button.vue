@@ -4,7 +4,7 @@
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
+  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger' | 'link'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
@@ -18,7 +18,7 @@
   interface Props {
     /** Visible label text. Use IconButton for icon-only controls. */
     label: string
-    /** Visual variant. */
+    /** Visual variant. `link` draws an inline text action in the link colour, with no box; `size` does not apply to it. */
     kind?: ButtonKind
     /** Size token; affects height, padding, and typography. */
     size?: ButtonSize
@@ -107,7 +107,8 @@
     transparent:
       'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
     danger:
-      'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
+      'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
+    link: 'bg-transparent text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline motion-reduce:transition-none before:hidden after:hidden forced-colors:border-0 forced-colors:text-[LinkText]'
   }
 
   const disabledClasses =
@@ -128,7 +129,19 @@
     small: 'size-3'
   }
 
+  const linkInactiveClasses =
+    'border-transparent text-(--text-disabled) before:hidden after:hidden forced-colors:border-0'
+
   const rootClasses = computed(() => {
+    if (props.kind === 'link') {
+      const linkState = props.disabled
+        ? `cursor-not-allowed ${linkInactiveClasses}`
+        : props.loading
+          ? `cursor-wait ${linkInactiveClasses}`
+          : kindClasses.link
+      return [sharedClasses, linkState, 'text-body-sm', attrs['class']]
+    }
+
     const stateClasses = props.disabled
       ? disabledClasses
       : props.loading
@@ -162,6 +175,7 @@
     :aria-busy="loading || undefined"
     :tabindex="isInactive ? -1 : undefined"
     :data-disabled="disabled ? '' : undefined"
+    :data-kind="kind"
     :data-icon-position="icon ? iconPosition : undefined"
     :data-testid="testId"
     @click="handleClick"
@@ -199,6 +213,7 @@
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :data-disabled="disabled ? '' : undefined"
+    :data-kind="kind"
     :data-icon-position="icon ? iconPosition : undefined"
     :class="rootClasses"
     :data-testid="testId"

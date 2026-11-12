@@ -84,6 +84,13 @@
    "default": "false",
    "required": "false",
    "doc": "A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so."
+  },
+  {
+   "name": "version",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model:version`)."
   }
  ],
  "events": [

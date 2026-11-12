@@ -44,6 +44,7 @@
 | `size` | `'small' \| 'medium'` | `'small'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, the close button, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -1,6 +1,7 @@
 import authoringStandards from './rules/authoring-standards.js'
 import containerNeedsWidth from './rules/container-needs-width.js'
 import headerSearchTrigger from './rules/header-search-trigger.js'
+import menuNodeHref from './rules/menu-node-href.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -35,7 +36,8 @@ const rules = {
   'header-search-trigger': headerSearchTrigger,
   'no-wrapped-page-chrome': noWrappedPageChrome,
   'no-output-in-command': noOutputInCommand,
-  'no-root-relative-asset': noRootRelativeAsset
+  'no-root-relative-asset': noRootRelativeAsset,
+  'menu-node-href': menuNodeHref
 }
 
 const FILES = [
@@ -85,10 +87,15 @@ const RECOMMENDED = {
   'header-search-trigger': 'error',
   'no-wrapped-page-chrome': 'error',
   'no-output-in-command': 'warn',
-  'no-root-relative-asset': 'error'
+  'no-root-relative-asset': 'error',
+  'menu-node-href': 'warn'
 }
 
-export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
+export const HEURISTIC_RULES = Object.freeze([
+  'container-needs-width',
+  'no-output-in-command',
+  'menu-node-href'
+])
 
 const STRICT = Object.fromEntries(
   Object.keys(rules).map((r) => [r, HEURISTIC_RULES.includes(r) ? 'warn' : 'error'])

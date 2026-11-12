@@ -2,7 +2,7 @@
 name: webkit-data-viz
 description: The token adapter that maps charts onto @aziontech/theme — every series color derived from the --color-* families (never hex), computed tokens re-read on a data-theme change so a canvas re-themes (SVG re-themes for free), and the chart's loading/empty/error surface rendered with webkit components. For chart-form and palette theory, use the generic dataviz skill; this skill covers only mapping that onto theme tokens. Use when building or reviewing a chart, dashboard, or KPI tile in a webkit app.
 status: active
-last_updated: 2026-10-20
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-tokens, webkit-component-states, ui-verify]
 ---
@@ -40,6 +40,9 @@ Never guess an import path or a hex value. Resolve both from the contract:
   `Chart.Tooltip`, `Chart.Legend`), `@aziontech/webkit/donut-chart`, `@aziontech/webkit/stat-tile`
   and `@aziontech/webkit/chart-card` already carry the palette, the tooltip, the legend, the keyboard
   model, the table twin and the state surface. Use them before adding a charting library.
+  Event volume over time buckets (a log histogram) is `Chart.Bar kind="histogram"` (add `stacked`
+  for one segment per level): solid columns that touch and end at the busiest bucket. The default
+  `Chart.Bar` keeps rounded, gapped bars for separate categories compared one against another.
 - **Other components** (`Skeleton`, `EmptyState`, `Alert`, `Card`, `StatusIndicator`): ask the
   **webkit MCP** — `suggest_component` in plain words ("empty state", "stat card") — or read the
   `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**. A subpath that is not a key

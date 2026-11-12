@@ -41,6 +41,7 @@
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false | Turns the title into a disclosure that folds the band body. |
 | `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 

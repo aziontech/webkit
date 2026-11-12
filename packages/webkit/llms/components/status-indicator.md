@@ -15,7 +15,7 @@
 
 - Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
 - Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
-- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.
+- With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `"Building..."`) is trimmed first, so it renders `Building…`, never `Building......`.
 - It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
 
 ## Don’t
@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
-| `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
+| `loading` | `boolean` | `false` | false | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
 | `label` | `string` | `''` | false | Visible label text. Empty uses the locale catalog (`Status`). |
 
 ## States

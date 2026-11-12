@@ -53,6 +53,23 @@ describe('StatusIndicator', () => {
     expect(getByTestId('feedback-status-indicator').getAttribute('data-severity')).toBe('success')
   })
 
+  it.each([
+    ['Deploying', 'Deploying…'],
+    ['Building...', 'Building…'],
+    ['Building…', 'Building…'],
+    ['Propagating ...', 'Propagating…']
+  ])('appends one ellipsis to %s while loading', (label, shown) => {
+    const { getByTestId } = render(StatusIndicator, { props: { label, loading: true } })
+
+    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe(shown)
+  })
+
+  it('leaves a trailing ellipsis alone when not loading', () => {
+    const { getByTestId } = render(StatusIndicator, { props: { label: 'Queued...' } })
+
+    expect(getByTestId('feedback-status-indicator__label').textContent?.trim()).toBe('Queued...')
+  })
+
   it('renders the label prop inside the label span', () => {
     const { getByTestId } = render(StatusIndicator, { props: { label: 'Online' } })
 

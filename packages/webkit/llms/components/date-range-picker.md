@@ -49,6 +49,8 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the trigger. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger and the step buttons. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger and the panel controls. |
+| `modelValue` | `DateRangeValue \| null` | `null` | false | Two-way value (`v-model`). |
+| `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
 
 ## v-model
 

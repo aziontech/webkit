@@ -65,6 +65,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the list. Empty uses the locale catalog."
+  },
+  {
+   "name": "selectedKeys",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selectedKeys`)."
   }
  ],
  "events": [],

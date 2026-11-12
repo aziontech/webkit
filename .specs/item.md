@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 2
 created: 2026-05-24
-last_updated: 2026-11-11
-checksum: af43c45db26dcdbc0a232068c0623b654b2e6fb0594f85b6cbc28e03468df4e9
+last_updated: 2026-11-12
+checksum: b6991f3fe5e0f36f18f102d0b303c6d331afffb2270210525ac6f9aa5817a7f7
 ---
 
 # Item — Component Spec
@@ -20,6 +20,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.
 - A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.
 - A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child.
+- A compact option in a chooser list (a workload, a host, an application picked under a search field): `kind="option"` with `as-child` on a `button`. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the button is `aria-pressed="true"` or `aria-selected="true"`.
 
 ## When NOT to use
 
@@ -42,6 +43,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.
 - Set `Item.Media` `kind="icon"` for a glyph and `kind="image"` for a picture; the frame sizes and clips the content.
 - Use `size="small"` for dense lists; `medium` is the default.
+- For the rows of a picker under a search field use `kind="option"` (not `size="small"` plus your own padding): it sets its own density and the selected fill from `aria-pressed` / `aria-selected`, so `size` does not change it. Keep option rows in a plain column, not in `Item.List` or `Item.Group`, which force their own kind.
 
 ## Usage
 
@@ -117,7 +119,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 | Prop      | Type                                             | Default     | Required | JSDoc                                                                                                                                     |
 | --------- | ------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`    | `'default' \| 'outlined' \| 'muted' \| 'inline'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. |
+| `kind`    | `'default' \| 'outlined' \| 'muted' \| 'inline' \| 'option'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected. |
 | `size`    | `'small' \| 'medium'`                            | `'medium'`  | false    | Item root density (padding and gap).                                                                                                      |
 | `asChild` | `boolean`                                        | `false`     | false    | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor).                                          |
 
@@ -137,7 +139,8 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - Visual states on Item shell: `default` only, **except with `asChild`**, where the merged child (the whole-row link/button) gains row-level `hover`, `active`, and `focus-visible`
 - Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
-- `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
+- `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
+- `kind="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
 - `data-size` on Item root: `small` | `medium`
 - `data-kind` on ItemMedia: `default` | `icon` | `image`
 
@@ -151,6 +154,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 | Region                 | Token (DESIGN.md)       |
 | ---------------------- | ----------------------- |
 | title typography       | `.text-body-sm`         |
+| title (option kind)    | `.text-body-md`         |
+| option padding         | `var(--spacing-xs)` block, `var(--spacing-sm)` inline |
+| option selected        | `var(--bg-selected)`    |
 | description typography | `.text-body-sm`         |
 | surface (default)      | `var(--bg-surface)`     |
 | surface (muted kind)   | `var(--bg-mask)`        |
@@ -195,6 +201,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - WithListAsChild — `ItemList` of `asChild` anchor rows inside a `Card`; whole-row links with dividers, row-level hover, and focus-visible ring.
 - Inline — `kind="inline"` items in an `ItemGroup`, placed directly on the page (no card, no outer padding).
 - WithAsChild — `asChild` on `Item` wrapping an anchor; row layout merges onto the link; focus stays on the anchor.
+- Option — `kind="option"` rows under a search field, one pressed; justified because `option` is a `kind` value.
 
 ## Constraints — DO NOT
 

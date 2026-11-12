@@ -50,6 +50,7 @@ const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output
 const noRootRelativeAsset = (
   await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
 ).default
+const menuNodeHref = (await import('../../src/eslint-plugin/rules/menu-node-href.js')).default
 
 const js = new RuleTester({ languageOptions: { ecmaVersion: 2022, sourceType: 'module' } })
 const vue = new RuleTester({
@@ -1060,6 +1061,48 @@ test('no-root-relative-asset', () => {
 <template><PhotoMarquee :photos="photos" /></template>`,
         filename: 'd.vue',
         errors: [{ messageId: 'unknown' }]
+      }
+    ]
+  })
+})
+
+test('menu-node-href', () => {
+  js.run('menu-node-href', menuNodeHref, {
+    valid: [
+      "const nav = [{ id: 'home', label: 'Home', href: '/home' }]",
+      "const nav = [{ id: 'home', label: 'Home', href: '/home', path: '/home' }]",
+      "const routes = [{ path: '/home', name: 'home', component: Home }]",
+      "const crumbs = [{ label: 'Home', path: '/home' }]",
+      "const node = { id: 'docs', label: 'Docs', path: 'relative' }",
+      "const node = { id: 'docs', label: 'Docs', to: someRoute }"
+    ],
+    invalid: [
+      {
+        code: "const nav = [{ id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' }]",
+        errors: [{ messageId: 'alias', data: { key: 'path' } }]
+      },
+      {
+        code: "const node = { id: 'users', label: 'Users', to: { name: 'users' } }",
+        errors: [{ messageId: 'alias', data: { key: 'to' } }]
+      },
+      {
+        code: 'const node = { id: `x`, label: `X`, url: `/x/${id}` }',
+        errors: [{ messageId: 'alias', data: { key: 'url' } }]
+      }
+    ]
+  })
+  vue.run('menu-node-href', menuNodeHref, {
+    valid: [
+      {
+        code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', href: '/a' }] }]" /></template>`,
+        filename: 'a.vue'
+      }
+    ],
+    invalid: [
+      {
+        code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', path: '/a' }] }]" /></template>`,
+        filename: 'b.vue',
+        errors: [{ messageId: 'alias' }]
       }
     ]
   })

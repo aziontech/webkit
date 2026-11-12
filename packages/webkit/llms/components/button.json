@@ -14,12 +14,15 @@
   "Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.",
   "Mark the main action of a view with `kind=\"primary\"` and the lesser ones with `secondary`, `outlined` or `transparent`.",
   "Submit or reset a form with `type=\"submit\"` / `type=\"reset\"`.",
-  "A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look."
+  "A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.",
+  "An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `kind=\"link\"`. It is still a `<button>`, so keyboard and screen readers get an action."
  ],
  "avoidWhen": [
   "The control is icon-only → use `icon-button`.",
   "One default action with related alternatives in an attached menu → use `split-button`.",
   "A standalone navigation link with a trailing icon and a ghost hover → use `link`.",
+  "Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `kind=\"link\"` Button is for an action with no destination.",
+  "A hand-written `<button class=\"text-(--text-link) …\">` → use `kind=\"link\"`.",
   "The single AI or highlight entry point that must stand out from every other action → use `button-highlight`."
  ],
  "related": [
@@ -31,6 +34,7 @@
  ],
  "bestPractices": [
   "Keep one `kind=\"primary\"` per view or region; use `danger` only for destructive actions.",
+  "kind=\"link\"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).",
   "Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.",
   "Use `iconPosition=\"leading\"` for a glyph that names the action and `\"trailing\"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.",
   "Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.",
@@ -46,10 +50,10 @@
   },
   {
    "name": "kind",
-   "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+   "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger' | 'link'",
    "default": "'primary'",
    "required": "false",
-   "doc": "Visual variant."
+   "doc": "Visual variant. `link` draws an inline text action in the link colour, with no box."
   },
   {
    "name": "size",
@@ -143,7 +147,7 @@
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      kind=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"outlined\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"transparent\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"danger\"\n      label=\"Button\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      kind=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"outlined\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"transparent\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"danger\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"link\"\n      label=\"Link button\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

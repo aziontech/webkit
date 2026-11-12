@@ -32,6 +32,7 @@
   "Keep filters and the time range in one row above the dashboard, never inside a chart.",
   "While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).",
   "Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.",
-  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced."
+  "Use `labelScale=\"linear\"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.",
+  "Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind=\"histogram\"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another."
  ]
 }

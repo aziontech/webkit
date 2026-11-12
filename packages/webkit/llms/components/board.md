@@ -46,6 +46,7 @@
 | `maxHeight` | `number` | `960` | false | Largest height in pixels a resize allows. |
 | `editing` | `boolean` | `false` | false | Shows the drag and resize handles of every card and lets the reader rearrange the board. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`). |
+| `layout` | `BoardLayoutItem[]` | `() => []` | false | Two-way value (`v-model:layout`). |
 
 ## Events
 

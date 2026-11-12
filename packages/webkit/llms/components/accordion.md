@@ -43,6 +43,7 @@
 | `collapsible` | `boolean` | `true` | false | In single mode, lets the open item collapse so that no item is open. |
 | `size` | `'medium' \| 'large'` | `'medium'` | false | Size token; affects header height, padding, and typography. Provided to every item via context. |
 | `arrowPosition` | `'left' \| 'right'` | `'right'` | false | Side of the header the chevron sits on. Provided to every item via context. |
+| `modelValue` | `AccordionValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
 

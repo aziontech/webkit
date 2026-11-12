@@ -26,7 +26,8 @@ export const RULE_PURPOSE = {
   'container-needs-width': 'Card, StatTile or ChartCard as a flex item with no width',
   'header-search-trigger': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
   'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper',
-  'no-output-in-command': 'shell code sample that mixes the command with what it prints'
+  'no-output-in-command': 'shell code sample that mixes the command with what it prints',
+  'menu-node-href': 'navigation node naming its destination path/to/url instead of href'
 }
 
 const TEMPLATE_ONLY_RULES = [

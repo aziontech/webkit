@@ -39,6 +39,7 @@
 | `levels` | `TopologyLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
 
 ## Events
 

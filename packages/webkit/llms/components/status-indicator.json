@@ -29,7 +29,7 @@
  "bestPractices": [
   "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
   "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.",
-  "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner.",
+  "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `\"Building...\"`) is trimmed first, so it renders `Building…`, never `Building......`.",
   "It is a non-interactive `role=\"status\"` element with no click or keyboard behavior. Don't attach handlers to it."
  ],
  "props": [
@@ -45,7 +45,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Shows loading state and disables activation."
+   "doc": "Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled."
   },
   {
    "name": "label",

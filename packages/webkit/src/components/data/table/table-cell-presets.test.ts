@@ -49,6 +49,24 @@ describe('Table cell presets', () => {
     expect(view.getByRole('button', { name: 'Copy shop.example.com' })).toBeTruthy()
   })
 
+  it('CellLink: a leading icon sits before the name, outside the link and hidden from assistive tech', () => {
+    const view = render(TableCellLink, {
+      props: {
+        label: 'example/storefront',
+        href: 'https://github.com/example/storefront',
+        icon: 'ai ai-github'
+      }
+    })
+    const icon = view.getByTestId('data-table__cell-link__icon')
+    expect(icon.getAttribute('aria-hidden')).toBe('true')
+    expect(icon.classList.contains('ai-github')).toBe(true)
+    expect(view.getByRole('link').contains(icon)).toBe(false)
+    expect(view.getByRole('link').textContent).toContain('example/storefront')
+
+    const bare = render(TableCellLink, { props: { label: 'draft' } })
+    expect(bare.container.querySelector('[data-testid="data-table__cell-link__icon"]')).toBeNull()
+  })
+
   it('CellLink: no destination renders plain text with no mark', () => {
     const view = render(TableCellLink, { props: { label: 'draft' } })
     expect(view.queryByRole('link')).toBeNull()

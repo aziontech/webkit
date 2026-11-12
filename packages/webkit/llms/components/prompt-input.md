@@ -45,6 +45,8 @@
 | `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
 | `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
+| `references` | `PromptInputReference[]` | `() => []` | false | Two-way value (`v-model:references`). |
 
 ## Events
 

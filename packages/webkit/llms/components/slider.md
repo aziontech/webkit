@@ -53,6 +53,7 @@
 | `ticks` | `boolean` | `false` | false | Shows a tick mark at every step when the range has at most 21 positions. |
 | `referenceValues` | `number[]` | `[]` | false | Values marked and labelled under the track; entries outside min and max are ignored. |
 | `unit` | `string` | `''` | false | Text appended verbatim to the reference labels and to the announced value. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Events
 

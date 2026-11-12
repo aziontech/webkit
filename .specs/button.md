@@ -4,9 +4,9 @@ category: actions
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 0eb451f0acc8d40346f83e2be1e7f7cbb51cfb5f07eb40b05a68258c0b503370
+checksum: 25803f26ef121e0a63a7e5243d32581a54aaa54095f545bc54956a00ceff03b3
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Button — Component Spec
@@ -21,12 +21,15 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
 - A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
+- An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `kind="link"`. It is still a `<button>`, so keyboard and screen readers get an action.
 
 ## When NOT to use
 
 - The control is icon-only → use `icon-button`.
 - One default action with related alternatives in an attached menu → use `split-button`.
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
+- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `kind="link"` Button is for an action with no destination.
+- A hand-written `<button class="text-(--text-link) …">` → use `kind="link"`.
 - The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
 
 ## Related
@@ -40,6 +43,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 ## Best practices
 
 - Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
+- `kind="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
@@ -75,7 +79,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 | Prop           | Type                                                                  | Default     | Required | JSDoc                                                                                                                                     |
 | -------------- | --------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`        | `string`                                                              | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
-| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                           |
+| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false    | Visual variant. `link` draws an inline text action in the link colour, with no box. |
 | `size`         | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
 | `disabled`     | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
 | `loading`      | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                              |
@@ -102,6 +106,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- `data-kind` mirrors `kind`; with `kind="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -111,12 +116,14 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
 | hover / active (state layer fade)                  | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                              | `@aziontech/theme` semantic duration + curve           | `motion-reduce:before:transition-none` |
 | hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none`        |
+| hover, `kind="link"` (colour change) | `transition-colors duration-fast-02 ease-productive-entrance` | `--duration-fast-02`, `--ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
 | Region     | Token (DESIGN.md)       |
 | ---------- | ----------------------- |
 | typography | .text-button-lg         |
+| link kind  | `.text-body-sm`, `var(--text-link)`, `var(--text-link-hover)` |
 | surface    | `var(--bg-surface)`     |
 | text       | `var(--text-default)`   |
 | spacing    | `var(--spacing-3)`      |
@@ -153,8 +160,9 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Primary (kind)
 - Secondary (kind)
 - Outlined (kind)
-- Text (kind)
+- Transparent (kind)
 - Danger (kind)
+- Link (kind) — shown in the Types example beside the others.
 - Small (size)
 - Medium (size)
 - Large (size)

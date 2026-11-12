@@ -22,6 +22,7 @@
   "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
   "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
   "Use the item's `selected` prop only for a standalone `Tabs.Item` outside a root; inside a root the selection comes from the root's value.",
-  "Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel."
+  "Put spacing between the list and the panels on `Tabs.Content` (e.g. a top margin), not inside each panel.",
+  "Centre the tab row with `<Tabs.List align=\"center\">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form."
  ]
 }

@@ -29,7 +29,15 @@
   "Keep the labels to one word where possible.",
   "Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`."
  ],
- "props": [],
+ "props": [
+  {
+   "name": "modelValue",
+   "type": "TabsValue | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
  "events": [],
  "slots": [
   {

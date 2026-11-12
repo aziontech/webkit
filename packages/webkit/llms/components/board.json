@@ -84,6 +84,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+  },
+  {
+   "name": "layout",
+   "type": "BoardLayoutItem[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:layout`)."
   }
  ],
  "events": [

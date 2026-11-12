@@ -41,6 +41,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`)."
+  },
+  {
+   "name": "modelValue",
+   "type": "ThemeSwitcherValue",
+   "default": "'system'",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

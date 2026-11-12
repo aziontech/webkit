@@ -88,6 +88,20 @@
    "default": "[]",
    "required": "false",
    "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "references",
+   "type": "PromptInputReference[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:references`)."
   }
  ],
  "events": [

@@ -2346,6 +2346,13 @@
      "default": "false",
      "required": "false",
      "doc": "A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so."
+    },
+    {
+     "name": "version",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:version`)."
     }
    ],
    "events": [
@@ -2717,6 +2724,13 @@
      "default": "''",
      "required": "false",
      "doc": "Dialog title. Empty uses the locale catalog (`What went wrong?`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
@@ -2806,6 +2820,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -2882,6 +2903,20 @@
      "default": "[]",
      "required": "false",
      "doc": "Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "references",
+     "type": "PromptInputReference[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:references`)."
     }
    ],
    "events": [
@@ -3012,6 +3047,13 @@
      "default": "false",
      "required": "false",
      "doc": "Locks the pager, for example while a new version streams."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -3253,10 +3295,10 @@
     },
     {
      "name": "kind",
-     "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+     "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger' | 'link'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Visual variant."
+     "doc": "Visual variant. `link` draws an inline text action in the link colour, with no box."
     },
     {
      "name": "size",
@@ -3685,6 +3727,13 @@
      "default": "false",
      "required": "false",
      "doc": "Stretches the group to its container and lets the options share that width."
+    },
+    {
+     "name": "modelValue",
+     "type": "string | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -4015,6 +4064,27 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+    },
+    {
+     "name": "activeIndex",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeIndex`)."
+    },
+    {
+     "name": "hiddenSeries",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:hiddenSeries`)."
+    },
+    {
+     "name": "range",
+     "type": "ChartRange | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:range`)."
     }
    ],
    "events": [
@@ -4196,6 +4266,27 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the chart when it is not inside a ChartCard with a title."
+    },
+    {
+     "name": "activeIndex",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeIndex`)."
+    },
+    {
+     "name": "hiddenSeries",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:hiddenSeries`)."
+    },
+    {
+     "name": "range",
+     "type": "ChartRange | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:range`)."
     }
    ],
    "events": [
@@ -4382,6 +4473,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the card when it has no title."
+    },
+    {
+     "name": "span",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "Two-way value (`v-model:span`)."
+    },
+    {
+     "name": "height",
+     "type": "number | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:height`)."
     }
    ],
    "events": [
@@ -4479,6 +4584,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the card when it has no title."
+    },
+    {
+     "name": "span",
+     "type": "number",
+     "default": "6",
+     "required": "false",
+     "doc": "Two-way value (`v-model:span`)."
+    },
+    {
+     "name": "height",
+     "type": "number | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:height`)."
     }
    ],
    "events": [
@@ -4687,6 +4806,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the chart."
+    },
+    {
+     "name": "activeIndex",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeIndex`)."
+    },
+    {
+     "name": "hiddenSeries",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:hiddenSeries`)."
     }
    ],
    "events": [
@@ -4937,6 +5070,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the map when it is not inside a ChartCard with a title."
+    },
+    {
+     "name": "activeId",
+     "type": "string | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeId`)."
     }
    ],
    "events": [
@@ -5242,10 +5382,10 @@
     },
     {
      "name": "severity",
-     "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'",
+     "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast' | 'highlight'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
+     "doc": "Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
     },
     {
      "name": "size",
@@ -5514,6 +5654,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`)."
+    },
+    {
+     "name": "width",
+     "type": "number | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:width`)."
+    },
+    {
+     "name": "height",
+     "type": "number",
+     "default": "800",
+     "required": "false",
+     "doc": "Two-way value (`v-model:height`)."
     }
    ],
    "slots": [
@@ -5575,6 +5729,13 @@
      "default": "'right'",
      "required": "false",
      "doc": "Side of the header the chevron sits on. Provided to every item via context."
+    },
+    {
+     "name": "modelValue",
+     "type": "AccordionValue | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -5631,6 +5792,13 @@
      "default": "'right'",
      "required": "false",
      "doc": "Side of the header the chevron sits on. Provided to every item via context."
+    },
+    {
+     "name": "modelValue",
+     "type": "AccordionValue | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -6276,10 +6444,10 @@
    "props": [
     {
      "name": "kind",
-     "type": "'default' | 'outlined' | 'muted' | 'inline'",
+     "type": "'default' | 'outlined' | 'muted' | 'inline' | 'option'",
      "default": "'default'",
      "required": "false",
-     "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists."
+     "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected."
     },
     {
      "name": "size",
@@ -6318,10 +6486,10 @@
    "props": [
     {
      "name": "kind",
-     "type": "'default' | 'outlined' | 'muted' | 'inline'",
+     "type": "'default' | 'outlined' | 'muted' | 'inline' | 'option'",
      "default": "'default'",
      "required": "false",
-     "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists."
+     "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected."
     },
     {
      "name": "size",
@@ -6975,6 +7143,13 @@
    "structure": "composition",
    "props": [
     {
+     "name": "kind",
+     "type": "'stacked' | 'split'",
+     "default": "'stacked'",
+     "required": "false",
+     "doc": "How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row."
+    },
+    {
      "name": "columns",
      "type": "1 | 2 | 3 | 4",
      "default": "1",
@@ -7132,6 +7307,13 @@
    "category": "content",
    "structure": "composition",
    "props": [
+    {
+     "name": "kind",
+     "type": "'stacked' | 'split'",
+     "default": "'stacked'",
+     "required": "false",
+     "doc": "How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row."
+    },
     {
      "name": "columns",
      "type": "1 | 2 | 3 | 4",
@@ -7366,6 +7548,20 @@
      "default": "''",
      "required": "false",
      "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`)."
+    },
+    {
+     "name": "search",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:search`)."
+    },
+    {
+     "name": "warningsOnly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:warningsOnly`)."
     }
    ],
    "events": [
@@ -7487,6 +7683,13 @@
      "default": "true",
      "required": "false",
      "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
+    },
+    {
+     "name": "modelValue",
+     "type": "string | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -7745,9 +7948,9 @@
     {
      "name": "stackable",
      "type": "boolean",
-     "default": "true",
+     "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width."
+     "doc": "Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
     },
     {
      "name": "wrapLines",
@@ -8146,9 +8349,9 @@
     {
      "name": "stackable",
      "type": "boolean",
-     "default": "true",
+     "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width."
+     "doc": "Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
     },
     {
      "name": "wrapLines",
@@ -8662,6 +8865,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the trigger."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
@@ -8734,6 +8944,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the list. Empty uses the locale catalog."
+    },
+    {
+     "name": "selectedKeys",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:selectedKeys`)."
     }
    ],
    "slots": [
@@ -9056,6 +9273,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
+    },
+    {
+     "name": "expanded",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:expanded`)."
     }
    ],
    "events": [
@@ -9351,6 +9575,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the tree."
+    },
+    {
+     "name": "expanded",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:expanded`)."
+    },
+    {
+     "name": "selected",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:selected`)."
     }
    ],
    "events": [
@@ -10668,7 +10906,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows loading state and disables activation."
+     "doc": "Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled."
     },
     {
      "name": "label",
@@ -10966,6 +11204,13 @@
      "default": "true",
      "required": "false",
      "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
+    },
+    {
+     "name": "collapsed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:collapsed`)."
     }
    ],
    "events": [
@@ -11135,6 +11380,20 @@
      "default": "'medium'",
      "required": "false",
      "doc": "Size token of the trigger and the panel controls."
+    },
+    {
+     "name": "modelValue",
+     "type": "DateRangeValue | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "timeZone",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:timeZone`)."
     }
    ],
    "surface": "product",
@@ -12139,6 +12398,20 @@
      "default": "''",
      "required": "false",
      "doc": "Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "country",
+     "type": "string",
+     "default": "'BR'",
+     "required": "false",
+     "doc": "Two-way value (`v-model:country`)."
     }
    ],
    "events": [
@@ -12310,6 +12583,13 @@
      "default": "false",
      "required": "false",
      "doc": "Focus the field on mount, for a screen whose only task is the code."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -12728,6 +13008,13 @@
      "default": "false",
      "required": "false",
      "doc": "Suppresses activation, toggling and removal."
+    },
+    {
+     "name": "selected",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:selected`)."
     }
    ],
    "events": [
@@ -13016,6 +13303,13 @@
      "default": "''",
      "required": "false",
      "doc": "Text appended verbatim to the reference labels and to the announced value."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -13050,6 +13344,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "ThemeSwitcherValue",
+     "default": "'system'",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -14292,6 +14593,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    },
+    {
+     "name": "layout",
+     "type": "BoardLayoutItem[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:layout`)."
     }
    ],
    "events": [
@@ -14374,6 +14682,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the list of items. Empty uses the locale catalog (`Dashboard`)."
+    },
+    {
+     "name": "layout",
+     "type": "BoardLayoutItem[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:layout`)."
     }
    ],
    "events": [
@@ -14684,6 +14999,13 @@
      "default": "''",
      "required": "false",
      "doc": "Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -14737,6 +15059,13 @@
      "default": "0",
      "required": "false",
      "doc": "Indent depth under a rule, for a setting that only applies when its parent is on."
+    },
+    {
+     "name": "stackable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Below the md container of the row, move a field control under the copy at full width."
     }
    ],
    "slots": [
@@ -14770,7 +15099,7 @@
    "props": [
     {
      "name": "kind",
-     "type": "'floating' | 'docked' | 'plain' | 'fade'",
+     "type": "'floating' | 'docked' | 'plain' | 'fade' | 'centered'",
      "default": "'floating'",
      "required": "false",
      "doc": "How the bar sits at the bottom of its scroll region."
@@ -14913,6 +15242,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`)."
+    },
+    {
+     "name": "collapsed",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:collapsed`)."
+    },
+    {
+     "name": "width",
+     "type": "number | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:width`)."
     }
    ],
    "events": [
@@ -16752,6 +17095,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
+    },
+    {
+     "name": "path",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:path`)."
+    },
+    {
+     "name": "expanded",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:expanded`)."
     }
    ],
    "events": [
@@ -16818,6 +17175,20 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
+    },
+    {
+     "name": "path",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:path`)."
+    },
+    {
+     "name": "expanded",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:expanded`)."
     }
    ],
    "events": [
@@ -16932,6 +17303,15 @@
    "treeShakeableImport": "@aziontech/webkit/page-tabs",
    "category": "navigation",
    "structure": "monolithic",
+   "props": [
+    {
+     "name": "modelValue",
+     "type": "TabsValue | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
    "slots": [
     {
      "name": "default",
@@ -16966,6 +17346,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the step rail. Empty uses the locale catalog (`Steps`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -16993,6 +17380,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the step rail. Empty uses the locale catalog (`Steps`)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -17045,6 +17439,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+    },
+    {
+     "name": "activeStep",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeStep`)."
     }
    ],
    "events": [
@@ -17104,6 +17505,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the wizard region. Name the task, for example Create edge application."
+    },
+    {
+     "name": "activeStep",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model:activeStep`)."
     }
    ],
    "events": [
@@ -17653,6 +18061,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the confirm button, for a confirmation that needs input first."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
@@ -24553,6 +24968,13 @@
      "default": "true",
      "required": "false",
      "doc": "Advances a hairline along the quotation panel's bottom edge while the timer runs."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -24923,6 +25345,13 @@
      "default": "false",
      "required": "false",
      "doc": "Marks the field invalid (`aria-invalid`, danger border)."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -25046,6 +25475,13 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name when no `Field` label names it. Empty uses the locale catalog."
+    },
+    {
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -25210,11 +25646,52 @@
      "default": "false",
      "required": "false",
      "doc": "Shows every value without letting it change."
+    },
+    {
+     "name": "modelValue",
+     "type": "SchemaFormValue",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
    "examplesFile": "catalog/examples/schema-form.json",
    "docsFile": "catalog/components/schema-form.json"
+  },
+  "feature-list": {
+   "import": "@aziontech/webkit/feature-list",
+   "target": "./src/components/content/feature-list/feature-list.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/feature-list",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "items",
+     "type": "FeatureListItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The features, in order; each item is `{ label: string; description?: string }`."
+    },
+    {
+     "name": "columns",
+     "type": "1 | 2",
+     "default": "1",
+     "required": "false",
+     "doc": "Columns when the list's own box is at least the md container; a narrower box always shows one column."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the list when no visible heading names it."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/feature-list.json",
+   "docsFile": "catalog/components/feature-list.json"
   }
  },
  "assets": {
@@ -25302,7 +25779,7 @@
     "tag",
     "topic"
    ],
-   "count": 492,
+   "count": 493,
    "file": "catalog/assets/icons.json"
   }
  },

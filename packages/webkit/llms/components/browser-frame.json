@@ -99,6 +99,20 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`)."
+  },
+  {
+   "name": "width",
+   "type": "number | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:width`)."
+  },
+  {
+   "name": "height",
+   "type": "number",
+   "default": "800",
+   "required": "false",
+   "doc": "Two-way value (`v-model:height`)."
   }
  ],
  "events": [],

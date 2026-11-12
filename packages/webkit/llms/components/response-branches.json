@@ -49,6 +49,13 @@
    "default": "false",
    "required": "false",
    "doc": "Locks the pager, for example while a new version streams."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

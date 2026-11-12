@@ -42,6 +42,7 @@
 | `clickable` | `boolean` | `false` | false | When true, the chip body becomes interactive (`role="button"`, focusable) and emits `click` on activation (click / Enter / Space). |
 | `selectable` | `boolean` | `false` | false | When true, the chip becomes a toggle: activating it flips the `selected` model and emits `click`. |
 | `disabled` | `boolean` | `false` | false | Suppresses activation, toggling and removal. |
+| `selected` | `boolean` | `false` | false | Two-way value (`v-model:selected`). |
 
 ## Events
 

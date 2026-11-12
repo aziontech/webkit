@@ -48,6 +48,13 @@
    "default": "''",
    "required": "false",
    "doc": "Dialog title. Empty uses the locale catalog (`What went wrong?`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [

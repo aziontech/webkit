@@ -12,7 +12,8 @@
  "setup": null,
  "useWhen": [
   "Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.",
-  "Show a status/category with severity color via `kind`."
+  "Show a status/category with severity color via `severity`.",
+  "Mark the one value a list highlights (the Owner role in a users table) with `severity=\"highlight\"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints."
  ],
  "avoidWhen": [
   "It is purely a count or one-glance status label → use `badge`.",
@@ -23,7 +24,9 @@
   "chip` — interactive/removable token."
  ],
  "bestPractices": [
-  "Severity comes from `kind`; the optional icon is decorative — keep it `aria-hidden`.",
+  "Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.",
+  "Pick the severity by meaning: `success` Active, `warning` Pending, `secondary` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.",
+  "Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.",
   "Use `rounded` for the pill shape rather than a custom radius."
  ],
  "props": [
@@ -36,10 +39,10 @@
   },
   {
    "name": "severity",
-   "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast'",
+   "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast' | 'highlight'",
    "default": "'primary'",
    "required": "false",
-   "doc": "Color style for the tag surface and label; `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
+   "doc": "Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
   },
   {
    "name": "size",
@@ -85,7 +88,7 @@
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"secondary\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"contrast\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"highlight\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

@@ -116,6 +116,20 @@
    "default": "'medium'",
    "required": "false",
    "doc": "Size token of the trigger and the panel controls."
+  },
+  {
+   "name": "modelValue",
+   "type": "DateRangeValue | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:timeZone`)."
   }
  ],
  "events": [],

@@ -26,8 +26,8 @@ Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes")
   `--container-*` scale) are for everything that can live in a panel: a band inside a drawer, a
   split view or a card lays out for its box, not the window.
 
-These components are box-aware and need nothing from the page: `Table` (stacked rows below
-`--container-lg`, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
+These components are box-aware and need nothing from the page: `Table` (scrolls sideways
+inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
 `SaveBar`, `Card` (its content is `@container/card`), `Alert`, `EmptyState`, `Pagination`,
 `Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelContent`,
 `@container/panel`). `KeyValuePairs` and `Item` reflow by themselves; `Field orientation="responsive"`

@@ -66,6 +66,13 @@
    "default": "''",
    "required": "false",
    "doc": "Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [],

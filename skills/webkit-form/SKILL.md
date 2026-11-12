@@ -175,6 +175,11 @@ contexts** in Azion products:
   Invoices; each card titled by a `SettingsSection`, see Approach A § _Section title_) **or as a
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
+  The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
+  facts (Plan Price, Billing Period, Next Invoice) are `KeyValuePairs kind="split"`
+  (`@aziontech/webkit/key-value-pairs`, label at the start, value at the end of each row), and
+  the perks of an upgrade card are `FeatureList` (`@aziontech/webkit/feature-list`, a check per
+  included feature, `:columns="2"` in a wide card).
 
 - **Card with independent saves.** Long configuration pages split into multiple `Card` sections
   where **each card owns its own save**, so the user commits changes in parts instead of one giant
@@ -585,6 +590,12 @@ cell capped at `--container-3xs`, so every field on the card ends at the same ed
 editor, under the copy at the full measure. A setting that only applies while the row above it is on
 renders with `v-if` on that state and `:level="1"` (or `2`), indented under a rule.
 
+**The row keeps two columns on a phone and aligns to the top.** The copy and the control align to the
+top of the row (a title stays level with the first of three stacked inputs), and the row does not stack
+in a narrow box: the description clamps to two lines and the `field` control keeps its end cell. Set
+`stackable` on one row only when its field needs the full measure in a narrow box (a long URL in a side
+drawer); never wrap a row in your own flex box to restack or re-centre it.
+
 Canonical pattern:
 
 ```vue
@@ -936,8 +947,10 @@ The primary action drives the native submit so **Enter submits**. While the requ
 locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skill **references it, does not
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
-(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page or a form saved
-as one unit uses `kind="plain"` (always shown, on the form column); a full-page wizard step uses
+(`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page uses
+`kind="centered"` (Cancel and Create in a raised card centred at the bottom of the form, always
+shown, at every width — never a hand-built sticky pill); an in-page form saved as one unit uses
+`kind="plain"` (always shown, on the form column); a full-page wizard step uses
 `kind="fade"` (no border, Back in `#leading`, the step's submit in `#actions`); a settings page
 mounts the default `floating` bar only while the form is dirty or saving, with the status sentence
 in its default slot.

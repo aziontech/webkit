@@ -108,6 +108,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the map when it is not inside a ChartCard with a title."
+  },
+  {
+   "name": "activeId",
+   "type": "string | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model:activeId`)."
   }
  ],
  "events": [

@@ -26,12 +26,15 @@
     kind?: SettingRowKind
     /** Indent depth under a rule, for a setting that only applies when its parent is on. */
     level?: SettingRowLevel
+    /** Below the md container of the row, move a field control under the copy at full width. */
+    stackable?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
     description: '',
     kind: 'field',
-    level: 0
+    level: 0,
+    stackable: false
   })
 
   defineSlots<{
@@ -56,9 +59,10 @@
     :data-testid="testId"
     :data-row-kind="kind"
     :data-level="level"
+    :data-stackable="stackable || null"
     role="listitem"
     size="small"
-    class="@container/setting-row"
+    class="@container/setting-row items-start"
   >
     <div
       :data-kind="kind"
@@ -82,7 +86,8 @@
       </ItemContent>
       <div
         :data-kind="kind"
-        class="contents data-[kind=field]:flex data-[kind=field]:max-w-(--container-3xs) data-[kind=field]:flex-1 data-[kind=field]:justify-end @max-md/setting-row:data-[kind=field]:max-w-none @max-md/setting-row:data-[kind=field]:basis-full @max-md/setting-row:data-[kind=field]:justify-start"
+        :data-stackable="stackable || null"
+        class="contents data-[kind=field]:flex data-[kind=field]:min-w-0 data-[kind=field]:max-w-(--container-3xs) data-[kind=field]:flex-1 data-[kind=field]:justify-end @max-md/setting-row:data-[kind=field]:data-[stackable]:max-w-none @max-md/setting-row:data-[kind=field]:data-[stackable]:basis-full @max-md/setting-row:data-[kind=field]:data-[stackable]:justify-start"
       >
         <ItemActions
           :data-testid="`${testId}__control`"

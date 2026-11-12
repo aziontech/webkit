@@ -107,6 +107,13 @@
    "default": "true",
    "required": "false",
    "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
+  },
+  {
+   "name": "modelValue",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [

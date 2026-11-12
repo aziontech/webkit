@@ -55,7 +55,10 @@
     >
       <Chart.Axis kind="x" />
       <Chart.Brush />
-      <Chart.Bar stacked />
+      <Chart.Bar
+        kind="histogram"
+        stacked
+      />
       <Chart.Tooltip />
     </Chart>
     <p class="text-body-sm text-(--text-muted)">{{ selected }}</p>

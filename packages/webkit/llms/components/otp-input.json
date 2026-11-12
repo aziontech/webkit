@@ -80,6 +80,13 @@
    "default": "false",
    "required": "false",
    "doc": "Focus the field on mount, for a screen whose only task is the code."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [

@@ -36,6 +36,7 @@
 | `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
 | `label` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
 | `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Slots
 

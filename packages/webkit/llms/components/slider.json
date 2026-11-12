@@ -108,6 +108,13 @@
    "default": "''",
    "required": "false",
    "doc": "Text appended verbatim to the reference labels and to the announced value."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [

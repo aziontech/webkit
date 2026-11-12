@@ -13,11 +13,13 @@
 - A read-only summary of settings before a confirm step (review step, deploy summary).
 - Any set of named attributes of a single subject where the reader scans keys to find a value.
 - Facts that fall into named clusters (General, Networking, Source) shown side by side as titled columns.
+- The rows of a summary card, label on the left and value on the right (a subscription plan: Plan Price, Billing Period, Next Invoice): `kind="split"`.
 
 ## Do
 
 - Keep keys short nouns in sentence case ("Created", "Region"), never sentences or trailing colons.
 - Order pairs by what the reader looks for first: identity, status, then the rest.
+- Pick `kind` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
 - Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.
 - Do not mix bare Items and Groups at the same level; pick one shape per instance.
 - Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible "Not set". Do not type your own "-", "N/A" or "None".
@@ -47,6 +49,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `kind` | `'stacked' \| 'split'` | `'stacked'` | false | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
 | `columns` | `1 \| 2 \| 3 \| 4` | `1` | false | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`. |
 | `loading` | `boolean` | `false` | false | Replaces every value with a skeleton while the data loads; labels stay visible. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list when no visible heading names it. |
@@ -85,6 +88,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## States
 
 - Visual states: `default`, `loading`, empty value (per Item)
+- `data-kind` on the root and on each Item mirrors `kind`; `split` turns each Item into one row (label start, value end, wrapping under the label only when the value does not fit)
 - `data-columns` on the root mirrors `columns` and drives the grid template through `data-[columns=n]:` variants
 - `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading
 - Empty value: the Item's `<dd>` shows `—` (`aria-hidden`) plus a visually hidden "Not set"

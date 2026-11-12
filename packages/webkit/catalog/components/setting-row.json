@@ -1,5 +1,5 @@
 {
- "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`).",
+ "purpose": "One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.",
  "useWhen": [
   "Every row of a settings card: account settings, build settings, create pages, resource settings.",
   "A field with a validation message under it (put the `HelperText` in the default slot after the control)."
@@ -18,6 +18,11 @@
   "The title is the label: give the control the same text as `aria-label`.",
   "Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.",
   "Show a validation message only after Save was pressed.",
-  "Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state."
+  "Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.",
+  "Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.",
+  "Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.",
+  "Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.",
+  "Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.",
+  "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side."
  ]
 }

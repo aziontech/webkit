@@ -43,6 +43,7 @@
 | `invalid` | `boolean` | `false` | false | Danger borders on every box and `aria-invalid`; set after a rejected code. |
 | `required` | `boolean` | `false` | false | Native `required` and `aria-required`. |
 | `autofocus` | `boolean` | `false` | false | Focus the field on mount, for a screen whose only task is the code. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 

@@ -47,6 +47,7 @@
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the map. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the map when it is not inside a ChartCard with a title. |
+| `activeId` | `string \| null` | `null` | false | Two-way value (`v-model:activeId`). |
 
 ## Events
 

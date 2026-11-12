@@ -7,8 +7,8 @@
   },
   {
    "name": "Types",
-   "summary": "All kind variants side by side.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      kind=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"outlined\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"transparent\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"danger\"\n      label=\"Button\"\n    />\n  </div>\n</template>"
+   "summary": "All kind variants side by side. `link` is an inline text action with no box, for a cell or a summary line that opens a drawer or a flow; `size` does not apply to it.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Button\n      kind=\"primary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"secondary\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"outlined\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"transparent\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"danger\"\n      label=\"Button\"\n    />\n    <Button\n      kind=\"link\"\n      label=\"Link button\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

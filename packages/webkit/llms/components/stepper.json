@@ -43,6 +43,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name for the step rail. Empty uses the locale catalog (`Steps`)."
+  },
+  {
+   "name": "modelValue",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

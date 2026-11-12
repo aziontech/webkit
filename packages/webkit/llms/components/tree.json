@@ -77,6 +77,20 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the tree."
+  },
+  {
+   "name": "expanded",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:expanded`)."
+  },
+  {
+   "name": "selected",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selected`)."
   }
  ],
  "events": [

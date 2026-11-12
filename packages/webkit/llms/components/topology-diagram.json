@@ -52,6 +52,13 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
+  },
+  {
+   "name": "expanded",
+   "type": "string[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:expanded`)."
   }
  ],
  "events": [

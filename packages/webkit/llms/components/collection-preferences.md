@@ -41,6 +41,7 @@
 | `container` | `'dialog' \| 'drawer'` | `'dialog'` | false | Opens in a centered dialog or a side drawer. |
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Events
 

@@ -46,6 +46,7 @@
 | `autoplay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Slots
 

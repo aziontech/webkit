@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The perks of an upgrade card: four included features, each behind a check mark, in one column.",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  },
+  {
+   "name": "Columns",
+   "summary": "Eight perks at `columns: 2`: two columns when the list's own box is at least the md container, one column below it.",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    { label: 'Unlimited Applications' },\n    { label: 'Unlimited Workloads' },\n    { label: 'Custom Domains' },\n    { label: 'Priority Support' },\n    { label: 'Real-Time Metrics' },\n    { label: 'Data Stream' },\n    { label: 'Web Application Firewall' },\n    { label: 'Team Permissions' }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    :columns=\"2\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  },
+  {
+   "name": "WithDescriptions",
+   "summary": "The features of a change-plan drawer, each with a one-line description under its label.",
+   "sfc": "<script setup>\n  import FeatureList from '@aziontech/webkit/feature-list'\n\n  const features = [\n    {\n      label: 'Unlimited Applications',\n      description: 'Deploy as many applications as your projects need.'\n    },\n    {\n      label: 'Custom Domains',\n      description: 'Serve every application from your own domain, with managed certificates.'\n    },\n    {\n      label: 'Priority Support',\n      description: 'Reach the support team by chat and get an answer within one business day.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureList\n    :items=\"features\"\n    aria-label=\"Pro plan features\"\n  />\n</template>"
+  }
+ ]
+}

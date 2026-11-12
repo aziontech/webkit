@@ -28,6 +28,7 @@
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
+- Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Don’t
 
@@ -69,6 +70,9 @@
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the range is empty, or what to do next. |
 | `tableView` | `boolean` | `false` | false | Shows the data table in place of the marks. The table is always present for assistive tech. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the chart when it is not inside a ChartCard with a title. |
+| `activeIndex` | `number \| null` | `null` | false | Two-way value (`v-model:activeIndex`). |
+| `hiddenSeries` | `string[]` | `() => []` | false | Two-way value (`v-model:hiddenSeries`). |
+| `range` | `ChartRange \| null` | `null` | false | Two-way value (`v-model:range`). |
 
 ## Events
 
@@ -120,8 +124,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'linear'`).
   - Events: _none_.
   - Slots: _none_.
-- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars).
+- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `kind="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
   - Events: _none_.
   - Slots: _none_.
 - `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.

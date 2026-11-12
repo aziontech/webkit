@@ -71,6 +71,13 @@
    "default": "'right'",
    "required": "false",
    "doc": "Side of the header the chevron sits on. Provided to every item via context."
+  },
+  {
+   "name": "modelValue",
+   "type": "AccordionValue | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

@@ -1,6 +1,6 @@
 # Setting Row
 
-> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`).
+> One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.
 
 - Import: `import SettingRow from '@aziontech/webkit/setting-row'`
 - Category: layout · Surface: product · Structure: monolithic
@@ -17,6 +17,11 @@
 - Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
 - Show a validation message only after Save was pressed.
 - Use `level` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
+- Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.
+- Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.
+- Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
+- Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
+- Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
 
 ## Don’t
 
@@ -39,6 +44,7 @@
 | `description` | `string` | `''` | false | One sentence under the title that says what the setting does. |
 | `kind` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `level` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
+| `stackable` | `boolean` | `false` | false | Below the md container of the row, move a field control under the copy at full width. |
 
 ## Slots
 
@@ -51,8 +57,9 @@
 ## States
 
 - Visual states: `default`
-- `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root
-- Responsive: the row is the `@container/setting-row`. Below `@md` of the row (a narrow drawer, a phone) a `field` control moves under the copy at full width; from `@md` it sits on the end side, capped at `--layout-measure-control`.
+- `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root; `data-stackable` is set when `stackable` is on
+- Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
+- Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
 
 ## Accessibility
 

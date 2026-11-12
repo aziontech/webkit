@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 
-export type ItemKind = 'default' | 'outlined' | 'muted' | 'inline'
+export type ItemKind = 'default' | 'outlined' | 'muted' | 'inline' | 'option'
 export type ItemSize = 'small' | 'medium'
 
 export interface ItemContext {

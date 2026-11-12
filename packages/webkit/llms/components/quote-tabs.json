@@ -71,6 +71,13 @@
    "default": "true",
    "required": "false",
    "doc": "Advances a hairline along the quotation panel's bottom edge while the timer runs."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

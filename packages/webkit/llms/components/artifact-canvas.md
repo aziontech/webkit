@@ -47,6 +47,7 @@
 | `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy. |
 | `downloadHref` | `string` | `''` | false | URL of the version shown, for Download (`download` takes the title). Empty hides Download. |
 | `streaming` | `boolean` | `false` | false | A new version is being generated: the pager locks, the body is `aria-busy` and a polite status says so. |
+| `version` | `number` | `0` | false | Two-way value (`v-model:version`). |
 
 ## Events
 

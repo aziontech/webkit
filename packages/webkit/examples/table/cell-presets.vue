@@ -13,6 +13,7 @@
     {
       id: '1726504',
       name: 'storefront',
+      repository: 'example/storefront',
       status: 'Active',
       domains: ['shop.example.com', 'www.shop.example.com', 'm.shop.example.com'],
       tags: ['production', 'checkout', 'payments', 'europe'],
@@ -22,6 +23,7 @@
     {
       id: '1726511',
       name: 'image-optimizer',
+      repository: 'example/image-optimizer',
       status: 'Pending',
       domains: ['img.example.com'],
       tags: ['media'],
@@ -31,6 +33,7 @@
     {
       id: '1726530',
       name: 'docs-portal',
+      repository: '',
       status: 'Failed',
       domains: ['docs.example.com', 'help.example.com'],
       tags: [],
@@ -42,6 +45,7 @@
   const columns = [
     { accessorKey: 'name', header: 'Name', principal: true },
     { accessorKey: 'id', header: 'ID', minWidth: 140 },
+    { accessorKey: 'repository', header: 'Repository', grow: 2 },
     { accessorKey: 'status', header: 'Status', minWidth: 96 },
     { accessorKey: 'domains', header: 'Domain', grow: 2 },
     { accessorKey: 'tags', header: 'Tags', grow: 2 },
@@ -49,7 +53,7 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const onAction = (event, value, row) => {}
+  const onAction = (_event, _value, _row) => {}
 </script>
 
 <template>
@@ -71,6 +75,19 @@
         :value="value"
         resource="workload"
       />
+    </template>
+    <template #cell-repository="{ value }">
+      <Table.CellLink
+        v-if="value"
+        icon="ai ai-github"
+        :label="value"
+        :href="`https://github.com/${value}`"
+      />
+      <span
+        v-else
+        class="text-body-sm text-(--text-muted)"
+        >—</span
+      >
     </template>
     <template #cell-status="{ value }">
       <Table.CellStatus

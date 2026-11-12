@@ -44,6 +44,8 @@
 | `disabled` | `boolean` | `false` | false | Disables toolbar controls in LogViewHeader. |
 | `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
 | `loadingLabel` | `string` | `''` | false | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). |
+| `search` | `string` | `''` | false | Two-way value (`v-model:search`). |
+| `warningsOnly` | `boolean` | `false` | false | Two-way value (`v-model:warningsOnly`). |
 
 ## Events
 

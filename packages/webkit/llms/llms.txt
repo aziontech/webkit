@@ -173,6 +173,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Card](components/card.md): Displays content or metadata in the UI.
 - [CardPricing](components/card-pricing.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
 - [Currency](components/currency.md): Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string ea…
+- [FeatureList](components/feature-list.md): The features a plan, product or upgrade includes, each behind a check mark, in one or two columns.
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation — or, in tutorial mode, an ordered list of tasks with the reader's prog…
 - [Hotspot](components/hotspot.md): Marks a real control as a step of a tutorial.
 - [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.

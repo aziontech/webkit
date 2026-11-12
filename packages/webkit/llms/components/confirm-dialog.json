@@ -87,6 +87,13 @@
    "default": "false",
    "required": "false",
    "doc": "Disables the confirm button, for a confirmation that needs input first."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [

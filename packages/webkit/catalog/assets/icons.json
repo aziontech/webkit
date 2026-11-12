@@ -1350,6 +1350,15 @@
    ]
   },
   {
+   "name": "ai-svelte",
+   "class": "ai ai-svelte",
+   "set": "azionicons",
+   "keywords": [
+    "brand",
+    "logo"
+   ]
+  },
+  {
    "name": "ai-technical-account",
    "class": "ai ai-technical-account",
    "set": "azionicons",

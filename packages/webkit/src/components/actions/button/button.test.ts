@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import Default from '../../../../examples/button/default.vue'
 import Disabled from '../../../../examples/button/disabled.vue'
 import Loading from '../../../../examples/button/loading.vue'
+import Types from '../../../../examples/button/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Button from './button.vue'
 
@@ -38,6 +39,33 @@ describe('Button', () => {
     it('renders kind="transparent" with no surface fill', () => {
       const { getByRole } = render(Button, { props: { label: 'Skip', kind: 'transparent' } })
       expect(getByRole('button', { name: 'Skip' }).className).toContain('bg-transparent')
+    })
+  })
+
+  describe('kind="link"', () => {
+    it('stays a native button that emits click, marked with data-kind', async () => {
+      const view = render(Button, { props: { label: 'Connect Git Repository', kind: 'link' } })
+      const node = view.getByRole('button', { name: 'Connect Git Repository' })
+      expect(node.tagName).toBe('BUTTON')
+      expect(node.getAttribute('type')).toBe('button')
+      expect(node.getAttribute('data-kind')).toBe('link')
+      await fireEvent.click(node)
+      expect(view.emitted('click')).toHaveLength(1)
+    })
+
+    it('suppresses click while disabled or loading', async () => {
+      for (const state of [{ disabled: true }, { loading: true }]) {
+        const view = render(Button, { props: { label: 'Show rules', kind: 'link', ...state } })
+        await fireEvent.click(view.getByRole('button', { name: 'Show rules' }))
+        expect(view.emitted('click')).toBeUndefined()
+        view.unmount()
+      }
+    })
+
+    it('has no axe violations beside the other kinds', async () => {
+      const { container, getByRole } = render(Types)
+      expect(getByRole('button', { name: 'Link button' }).getAttribute('data-kind')).toBe('link')
+      await expectNoA11yViolations(container)
     })
   })
 

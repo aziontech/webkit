@@ -70,6 +70,13 @@
    "default": "false",
    "required": "false",
    "doc": "Stretches the group to its container and lets the options share that width."
+  },
+  {
+   "name": "modelValue",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

@@ -45,6 +45,7 @@
 | `defaultValue` | `string` | `undefined` | false | Initial selection when `v-model` is not set. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token, on the same 28 / 32 / 40 rhythm every other control uses. |
 | `fluid` | `boolean` | `false` | false | Stretches the group to its container and lets the options share that width. |
+| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
 

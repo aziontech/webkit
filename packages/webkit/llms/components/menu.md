@@ -29,6 +29,8 @@
 - Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
+- **A row's destination is `href`, and only `href`.** A `MenuNode` (and `Menu.Item` / `Menu.SubTrigger`) renders as an anchor when it has an `href`; any other key (`path`, `to`, `url`, `route`) is not read, and the row renders as a button with no destination. `path` on the root is a different thing: `v-model:path`, the drill stack.
+- **Vue Router:** put the route's path in `href` (for a named route, `router.resolve(to).href`), then take over the click in `@navigate`: `(event, node) => { event.preventDefault(); router.push(node.href) }`, and derive `active-id` from the current route. The row stays a real link (open in a new tab, copy link address) while the router does the navigation. A modified click (Ctrl, ⌘, Shift, middle button) should be left to the browser: skip `preventDefault` when `event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0`.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.
 - Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.
 - Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.
@@ -61,6 +63,8 @@
 | `activeId` | `string` | `''` | false | Id of the node rendered as selected in data-driven mode. |
 | `enterOnMount` | `boolean` | `false` | false | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the navigation region. Empty uses the locale catalog (`Menu`). |
+| `path` | `string[]` | `() => []` | false | Two-way value (`v-model:path`). |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
 
 ## Events
 

@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeader (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
 status: active
-last_updated: 2026-08-13
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -475,6 +475,10 @@ row above the table to put it on except the controls row, which is where narrowi
   — so the drawer, the form, and the pending flag never leave the file that renders them. A tab with
   nothing to create simply declares no action.
 - **The active tab lives in the URL (`?tab=`)**, so it survives reload and is linkable.
+- **A centred catalog centres its tabs with the prop, not a class.** A page whose content below is
+  centred (the Marketplace: Templates / Integrations over a card grid) uses
+  `<Tabs.List align="center">`; a `justify-center` class or a centring wrapper is a style override.
+  Resource pages and settings keep the default `start` (and `PageTabs`).
 - **Inside a tab, a list keeps its controls row for narrowing but takes no actions** — its create
   button was hoisted to the tab row. Two create buttons on one page is the failure this rule prevents.
 
@@ -527,6 +531,55 @@ Four rules hold across every row:
 4. **A tab is never a crumb.** Switching tabs does not change the breadcrumb — the tab is second-level
    _navigation within one page_, and it already has its own visible bar. It travels in `?tab=`, not in
    the trail.
+
+## Wiring Vue Router — `href` plus `@navigate`
+
+`Menu` (and its `MenuNode` data), `Breadcrumb` items and `Menu.Item` take their destination in
+**`href`**, and only there. There is no `to`, and a `path`, `to`, `url` or `route` key on a nav node
+is not read: the row renders as a button with nowhere to go (lint `webkit/menu-node-href`). Do not
+confuse it with `v-model:path` on `Menu`, which is the drill stack (ancestor node ids), not a URL.
+
+With Vue Router, keep the rows real links and let the router do the navigation:
+
+```vue
+<script setup lang="ts">
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Menu, { type MenuNode } from '@aziontech/webkit/menu'
+  import { computed } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+
+  const router = useRouter()
+  const route = useRoute()
+
+  const groups = [
+    {
+      label: 'Build',
+      items: [
+        { id: 'applications', label: 'Applications', href: '/applications' },
+        { id: 'functions', label: 'Functions', href: router.resolve({ name: 'functions' }).href }
+      ]
+    }
+  ]
+  const activeId = computed(
+    () => groups.flatMap((group) => group.items).find((node) => route.path.startsWith(node.href))?.id ?? ''
+  )
+
+  const follow = (event: MouseEvent, href: string) => {
+    if (!href || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+    event.preventDefault()
+    router.push(href)
+  }
+</script>
+
+<template>
+  <Menu :groups="groups" :active-id="activeId" @navigate="(event: MouseEvent, node: MenuNode) => follow(event, node.href ?? '')" />
+  <Breadcrumb :items="[{ label: 'Applications', href: '/applications' }, { label: 'edge-app' }]" @navigate="follow" />
+</template>
+```
+
+- A named route becomes `href` through `router.resolve(to).href`; never put the route object on the node.
+- `active-id` follows the route, not the click, so Back / Forward and deep links select the right row.
+- A modified click (Ctrl, ⌘, Shift, middle button) is left to the browser, so open-in-new-tab works.
 
 ## Hard rules
 

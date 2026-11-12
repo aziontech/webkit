@@ -22,7 +22,8 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'ci', by: 'check-authoring' }
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'menu-node-href' }
     ]
   },
   {

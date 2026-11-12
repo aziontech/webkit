@@ -56,6 +56,7 @@
 | `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
 | `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 

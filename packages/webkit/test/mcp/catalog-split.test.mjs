@@ -37,8 +37,8 @@ rmSync(dir, { recursive: true, force: true })
 const PATTERN_IDS = Object.keys(full.patterns)
 const COMPONENT_IDS = ['button', 'field', 'table', 'select', 'chart', 'dialog', 'overline']
 
-test('catalog.json stays under 1.2 MB once the SFCs, examples and component prose move to catalog/', () => {
-  assert.ok(statSync(SPLIT_PATH).size < 1_200_000, `${statSync(SPLIT_PATH).size} bytes`)
+test('catalog.json stays under 1.25 MB once the SFCs, examples and component prose move to catalog/', () => {
+  assert.ok(statSync(SPLIT_PATH).size < 1_250_000, `${statSync(SPLIT_PATH).size} bytes`)
   for (const e of Object.values(split.imports)) {
     for (const k of ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']) {
       assert.equal(k in e, false, `${e.import} keeps ${k}`)

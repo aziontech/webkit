@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: c3f18660f6c439255e11ae8304ea93f76739aa7f7c15678877d334152d3a626b
+checksum: 6a02171bffba234cfbab63de1eb8d957ca6fefd9ad610e91876aa93670ee2fe7
 created: 2026-08-03
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 ---
 
 # Menu — Component Spec
@@ -71,6 +71,8 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
 - **The menu is typed in the `label` family, not `body`.** A menu row is compact UI text, which is what `.text-label-*` is for. Rows — `Menu.Item` and `Menu.SubTrigger` — are `.text-label-md` (14 px) in `var(--text-default)`, and `Menu.Back` keeps that same class even though it is a button rather than a row, so it reads at the rows' size instead of shrinking into chrome. **Only the first-level group title is smaller and muted:** `.text-label-sm` (12 px) in `var(--text-muted)`, which replaced the overline and is the one place the menu changes register. Hierarchy below that is carried by the indent and the rail, not by shrinking each level — and a component with two render branches must give both the same label class, or the same menu renders two sizes.
+- **A row's destination is `href`, and only `href`.** A `MenuNode` (and `Menu.Item` / `Menu.SubTrigger`) renders as an anchor when it has an `href`; any other key (`path`, `to`, `url`, `route`) is not read, and the row renders as a button with no destination. `path` on the root is a different thing: `v-model:path`, the drill stack.
+- **Vue Router:** put the route's path in `href` (for a named route, `router.resolve(to).href`), then take over the click in `@navigate`: `(event, node) => { event.preventDefault(); router.push(node.href) }`, and derive `active-id` from the current route. The row stays a real link (open in a new tab, copy link address) while the router does the navigation. A modified click (Ctrl, ⌘, Shift, middle button) should be left to the browser: skip `preventDefault` when `event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0`.
 - Prefer `groups` when the tree is data. Hand-composing a recursive tree with `v-for` means re-implementing recursion in the consuming app; the data path renders through the same sub-components.
 - Draw the elbow with borders, not a glyph: `w-(--spacing-sm) h-4 -left-(--spacing-sm) border-l border-b border-(--border-default) rounded-bl-(--shape-elements)` on the row's `::before`, and the continuation on its `::after`, hidden on `:last-child`. All tokens, no SVG, and it scales with the row.
 - Do not nest more than three levels. Past that the indent eats the rail's readable width; restructure with a drill row instead.
@@ -528,6 +530,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elem
 - Condensed — **justified addition.** A three-level recursive tree with the nested indent rail. `Default` renders flat groups and cannot show the rail's nesting, which is the primary reason this component exists over `sidebar-group`.
 - Drill — **justified addition.** The view stack is stateful: pushing a level, the `Back` row, and focus restoration on pop cannot be shown by any static args delta.
 - Disabled — a disabled `Menu.Item` and a disabled `SubTrigger`, demonstrating that activation is suppressed.
+- ClientRouting — **justified addition.** A data-driven tree whose rows carry `href` and whose `@navigate` hands the path to a client-side router (a stand-in for `router.push`) and moves `active-id`; the one documented way to wire Vue Router, which no args delta can show.
 
 `Sizes` is omitted: the component declares no `size` prop — row height is fixed at the Figma
 frame's 32 px.

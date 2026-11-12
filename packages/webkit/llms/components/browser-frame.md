@@ -50,6 +50,8 @@
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the address bar's copy button. Empty uses the locale catalog (`Copy address`). |
 | `widthHandleAriaLabel` | `string` | `''` | false | Accessible name of the right-edge width handle. Empty uses the locale catalog (`Resize preview width`). |
 | `heightHandleAriaLabel` | `string` | `''` | false | Accessible name of the bottom-edge height handle. Empty uses the locale catalog (`Resize preview height`). |
+| `width` | `number \| undefined` | `undefined` | false | Two-way value (`v-model:width`). |
+| `height` | `number` | `800` | false | Two-way value (`v-model:height`). |
 
 ## Slots
 

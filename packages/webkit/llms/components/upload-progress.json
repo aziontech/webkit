@@ -66,6 +66,13 @@
    "default": "true",
    "required": "false",
    "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
+  },
+  {
+   "name": "collapsed",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:collapsed`)."
   }
  ],
  "events": [

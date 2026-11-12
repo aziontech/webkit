@@ -231,7 +231,11 @@
   })
 
   const ticks = computed(() => niceTicks(props.min, props.max ?? dataMax.value, 4))
-  const domainMax = computed(() => props.max ?? ticks.value.max)
+  const fitted = computed(() => markList.value.some((mark) => mark.fit))
+  const domainMax = computed(() => {
+    if (props.max !== undefined) return props.max
+    return fitted.value && dataMax.value > props.min ? dataMax.value : ticks.value.max
+  })
   const valueTicks = computed(() =>
     ticks.value.ticks.filter((tick) => tick >= props.min && tick <= domainMax.value)
   )

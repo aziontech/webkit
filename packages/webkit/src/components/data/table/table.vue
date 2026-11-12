@@ -165,7 +165,7 @@
       exportFilename?: string
       /** Rows Table.Export and exportCsv() write for the `filtered` and `all` scopes in place of the rows the table holds; useCollection binds every match, not only the page. */
       exportRows?: (scope: 'filtered' | 'all') => RowRecord[] | Promise<RowRecord[]>
-      /** Data-driven mode: when the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of a horizontally scrolling grid. Set false to keep the grid at every width. */
+      /** Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone. */
       stackable?: boolean
       /** Data-driven mode: cell text wraps onto several lines instead of truncating. */
       wrapLines?: boolean
@@ -216,7 +216,7 @@
       initialState: undefined,
       exportFilename: 'export.csv',
       exportRows: undefined,
-      stackable: true,
+      stackable: false,
       wrapLines: false,
       striped: false,
       density: 'comfortable',

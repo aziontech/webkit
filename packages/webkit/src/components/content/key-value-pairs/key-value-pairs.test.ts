@@ -4,6 +4,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
+import Split from '../../../../examples/key-value-pairs/split.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useKeyValuePairsContext } from './composables/use-key-value-pairs-context'
 import KeyValuePairs, { KeyValuePairsGroup, KeyValuePairsItem } from './index'
@@ -225,6 +226,41 @@ describe('KeyValuePairs', () => {
 
     it('has no axe violations while loading', async () => {
       const view = render(Facts, { props: { loading: true } })
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('defaults to the stacked kind on the root and on every Item', () => {
+      const view = render(Facts)
+      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-kind')).toBe('stacked')
+      for (const item of itemsOf(view)) expect(item.getAttribute('data-kind')).toBe('stacked')
+    })
+
+    it('passes kind split to every Item, inside Groups too', () => {
+      const view = render({
+        components: { KeyValuePairs, KeyValuePairsGroup, KeyValuePairsItem },
+        template: `
+          <KeyValuePairs kind="split" aria-label="Plan">
+            <KeyValuePairsGroup title="Plan">
+              <KeyValuePairsItem label="Plan Price">$0.00 / month</KeyValuePairsItem>
+            </KeyValuePairsGroup>
+          </KeyValuePairs>
+        `
+      })
+      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-kind')).toBe('split')
+      expect(itemsOf(view)[0]?.getAttribute('data-kind')).toBe('split')
+    })
+
+    it('keeps the term and description pairs and the empty marker in the Split example', async () => {
+      const view = render(Split)
+      const items = itemsOf(view)
+      expect(items.map((item) => item.querySelector('dt')?.textContent?.trim())).toEqual([
+        'Plan Price',
+        'Billing Period',
+        'Next Invoice',
+        'Payment Method'
+      ])
+      expect(items[0]?.querySelector('dd')?.textContent?.trim()).toBe('$0.00 / month')
+      expect(items[3]?.querySelector('dd')?.textContent).toContain('Not set')
       await expectNoA11yViolations(view.container)
     })
   })

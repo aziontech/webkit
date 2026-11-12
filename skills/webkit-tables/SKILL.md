@@ -2,7 +2,7 @@
 name: webkit-tables
 description: Data tables on @aziontech/webkit — one data-driven <Table> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · ColumnSelector) + AppliedFilters and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-tokens, ui-verify]
 ---
@@ -50,7 +50,7 @@ file that only renders `:data` + `:columns` imports it to stay small; `TableRoot
 data-driven `Table`, not a hand-composed one. The parts (`Table.Header`, `Table.Row`, `Table.Cell`, or
 `table-row` / `table-cell` imports) are for a component author building a new table primitive. A screen
 or block never composes rows from them, even a short static list: a hand-composed table loses the
-stacked layout, the column model and the cell slots.
+column model, the cell slots and the opt-in stacked layout.
 
 ### Bind it to `useCollection` — the default for any list
 
@@ -228,26 +228,29 @@ chain, not a fixed pixel height:
 `min-h-0` on the flex parent (so it can shrink), `h-full` down the chain (`Card` → `Table`), and
 `max-height="100%"` on the `Table` — the body scrolls inside, the toolbar and column headers don't move.
 
-### Narrow boxes — stacked rows, not a sideways scroll
+### Narrow boxes — the grid scrolls sideways; stacked rows are opt-in
 
-A data-driven `Table` measures its own box. Below `--container-lg` (552 px: a phone, a drawer, one
-pane of a split view) it sets `data-stacked` and renders each row as a card: the checkbox, the
-principal column and the actions share the first line, and every other column becomes a line of
-**label · value** (the label is the column `label` or `header`). The column headers stay in the DOM,
-visually hidden, so screen readers keep them. Nothing to configure:
+On a phone, in a drawer or in one pane of a split view, a console table keeps its grid and scrolls
+sideways inside its own viewport (the page never scrolls sideways). This is the default and what the
+Azion console does on an iPhone: the reader keeps the column headers and compares rows across them.
 
 ```vue
 <Table :data="rows" :columns="columns" row-key="id" />
 ```
 
-- Keep `principal: true` on the column that names the row: it is the card title.
-- Give a column `label` when its `header` is a slot, so the stacked line has a label.
-- `:stackable="false"` keeps the horizontally scrolling grid at every width. Use it only where
-  rows are compared across columns (a pricing grid, a diff), never just to avoid the cards.
+`stackable` opts a data-driven table into **stacked rows**: below `--container-lg` (552 px) of its own
+box it sets `data-stacked` and renders each row as a card. The checkbox, the principal column and the
+actions share the first line, and every other column becomes a line of **label · value** (the column
+`label` or `header`). The column headers stay in the DOM, visually hidden, for screen readers.
+
+- Set `stackable` only for a short list read one record at a time on a narrow, phone-first surface (a
+  marketing listing, a summary list in a side panel). Never on a resource index, a deployments list, a
+  log or anything compared across columns.
+- With `stackable`, keep `principal: true` on the column that names the row (it is the card title) and
+  give a column `label` when its `header` is a slot, so the stacked line has a label.
 - The toolbar is a container too (`@container/table`): below `@md` of the table the toolbar slot
   drops under the title and wraps. Keep `Table.Search` `flex-1` so it takes the free line.
-- A hand-composed table (`Table.Header` / `Table.Row` without `columns`) never stacks; prefer the
-  data-driven API in anything that can be narrow.
+- A hand-composed table (`Table.Header` / `Table.Row` without `columns`) never stacks.
 
 ### Thousands of rows — `virtual`
 
@@ -269,8 +272,8 @@ not the page's: let `CollectionPreferences` set them through `useCollection` ins
 
 ### Selection in a narrow box
 
-In the stacked layout the column headers are hidden, so the table renders a visible, labelled **Select
-all rows** checkbox above the stacked rows. Nothing to configure; do not add your own.
+In the stacked layout (`stackable`) the column headers are hidden, so the table renders a visible,
+labelled **Select all rows** checkbox above the stacked rows. Nothing to configure; do not add your own.
 
 ### Order that matters — `reorderable`
 
@@ -341,10 +344,16 @@ only.
 
 Use `Tag` for a chip; for status, map the value to a semantic `severity` — **never a raw color**.
 
-**One chip per row.** A row where three columns are chips has no emphasis left to spend on the one
-fact a reader scans the list for. Chip the thing that is genuinely a _status_ — what happened, what
-is live — and render every other enumerable value as a glyph plus plain text. If two chips both
-survive that test, check whether they are restating one fact.
+**One status chip per row.** A row where three columns are chips has no emphasis left to spend on
+the one fact a reader scans the list for. Chip the thing that is genuinely a _status_ — what
+happened, what is live — and render every other enumerable value as a glyph plus plain text, with
+two exceptions the console uses: one **category** chip (the environment, below) and one **marker**
+tag on the version that is live (`Current`). If two chips both survive that test, check whether they
+are restating one fact.
+
+The one highlighted value of a set (the `Owner` role among Admin / Member) is
+`severity="highlight"`, the orange tint; an `Inactive` state is `secondary`, never `danger` — nothing
+failed.
 
 **A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it
 is going_ — an environment, a type, a tier. Branching its colour (`Production` blue, everything else
@@ -396,6 +405,11 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
 
 - `to` renders the app's registered `RouterLink`; with no router it falls back to a plain `href`.
 - It underlines on hover, not at rest, and stops the click so the row's `@row-click` does not fire.
+- A provider or resource-type glyph before the name (the GitHub mark of a repository, the workload
+  glyph of a workload) is `icon="ai ai-github"` / `icon="ai ai-workloads"`: muted, outside the
+  link, hidden from screen readers. Never a hand-written `<i>` beside the preset.
+- An action that only looks like a link (`Connect Git Repository` in an empty repository cell) is
+  `Button kind="link"`, not a `CellLink` with no destination.
 - Do not re-type its markup per call site. The hand-made copies drift on every axis at once (glyph,
   icon size, underline at rest, tooltip or none), and a `Tooltip` trigger in a flex cell needs
   `shrink!` to let the name truncate, which the preset already sets.
@@ -471,11 +485,18 @@ the end edge, named after what it copies (`resource="workload"` → `Copy worklo
 `statusSeverity` is one shared helper per status set (see the chip rules above). An empty value
 renders a muted dash.
 
-### Last modified — `Table.CellTime` (one column, not two)
+### Last modified — `Table.CellTime`
 
-A "Last modified" / "Updated" / "Deployed" column shows **the author's avatar and a relative time**
-("2 hours ago"), never a raw absolute date and never a separate "Author" column. The name is on the
-avatar's tooltip (an email reads as a name: `maria.silva@example.com` → `Maria Silva`); the absolute
+A "Last modified" / "Updated" / "Deployed" column shows **a relative time** ("2 hours ago"), never a
+raw absolute date. Two shapes, both from the console:
+
+- **Who and when are separate facts** (a deployments list, a resource index whose reference shows a
+  `Last Editor` column): a `Last Editor` column with an `Avatar` and the person's name in its cell slot,
+  then the time column with `Table.CellTime` and no `author`.
+- **One column** where the screen has room for only one: `Table.CellTime` with `author`, which puts the
+  author's avatar before the time.
+
+With `author`, the name is on the avatar's tooltip (an email reads as a name: `maria.silva@example.com` → `Maria Silva`); the absolute
 time is on the time's tooltip and in visually hidden text, so a screen reader hears both. Every
 mounted cell shares one minute clock, so "just now" turns into "1 minute ago" without a reload.
 
@@ -527,12 +548,12 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen is `Table.CellLink` (12px `pi-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
-- [ ] Only **one** chip per row, and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
+- [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
 - [ ] Domain cell = `Table.CellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
-- [ ] In a 320 px box the rows stack into label/value cards (no `:stackable="false"` without a reason) and the toolbar wraps.
+- [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.
 - [ ] Measured at a narrow viewport: **zero** cells where `scrollWidth > clientWidth` (catches a link wrapper that cannot shrink, which looks fine when wide).
 - [ ] Every copyable ID or token is `Table.CellId`: text then a copy button pinned to the end, named after what it copies.
-- [ ] "Last modified" cell = `Table.CellTime` (avatar + relative time in one column); no raw absolute date and no separate "Author" column beside it.
+- [ ] "Last modified" / "Deployed" cell = `Table.CellTime` (relative time, `author` only when there is no `Last Editor` column); no raw absolute date.
 - [ ] Overflow is an `OverflowCount` (`+N` with summary, search past 7, Load more), or `Table.CellTags` for tags; never a wrapped inline list.
 - [ ] Status via `Table.CellStatus :severity` from one shared helper, never a raw color; long text `truncate`s inside `min-w-0`.
 - [ ] Row actions are `Table.CellActions :name` (trigger named after the row), destructive options in their own last group.

@@ -2,6 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/tag/default.vue'
+import Types from '../../../../examples/tag/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
@@ -13,7 +14,8 @@ const SEVERITIES = [
   'warning',
   'danger',
   'accent',
-  'contrast'
+  'contrast',
+  'highlight'
 ] as const
 
 const SIZES = ['small', 'medium'] as const
@@ -138,6 +140,22 @@ describe('Tag', () => {
     })
 
     await expectNoA11yViolations(container)
+  })
+
+  it('falls back to primary for a severity outside the union', () => {
+    const { getByTestId } = render(Tag, {
+      props: { label: 'Inactive', severity: 'neutral' as never }
+    })
+
+    expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
+  })
+
+  it('renders every severity in the Types example, highlight included', () => {
+    const { getAllByTestId } = render(Types)
+
+    const severities = getAllByTestId('content-tag').map((tag) => tag.getAttribute('data-severity'))
+
+    expect([...severities].sort()).toEqual([...SEVERITIES].sort())
   })
 
   it('renders the Default story fixture cleanly', async () => {

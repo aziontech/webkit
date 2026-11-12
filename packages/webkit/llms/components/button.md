@@ -12,10 +12,12 @@
 - Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
 - A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
+- An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `kind="link"`. It is still a `<button>`, so keyboard and screen readers get an action.
 
 ## Do
 
 - Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
+- kind="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
@@ -26,6 +28,8 @@
 - The control is icon-only → use `icon-button`.
 - One default action with related alternatives in an attached menu → use `split-button`.
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
+- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `kind="link"` Button is for an action with no destination.
+- A hand-written `<button class="text-(--text-link) …">` → use `kind="link"`.
 - The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -42,7 +46,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `—` | true | Visible label text. Use `IconButton` for icon-only controls. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
+| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false | Visual variant. `link` draws an inline text action in the link colour, with no box. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
@@ -73,6 +77,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- `data-kind` mirrors `kind`; with `kind="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -140,6 +145,10 @@
     <Button
       kind="danger"
       label="Button"
+    />
+    <Button
+      kind="link"
+      label="Link button"
     />
   </div>
 </template>

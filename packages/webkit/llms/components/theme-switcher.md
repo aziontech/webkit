@@ -34,6 +34,7 @@
 | --- | --- | --- | --- | --- |
 | `disabled` | `boolean` | `false` | false | Disables the whole control and applies disabled tokens. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). |
+| `modelValue` | `ThemeSwitcherValue` | `'system'` | false | Two-way value (`v-model`). |
 
 ## v-model
 

@@ -246,8 +246,9 @@ split view or a card these change:
 - **Container-aware components.** `PageHeader` and `SectionHeader` drop their actions under the
   title below `@md` of the header (was: below the `md` viewport). `SaveBar` puts message and actions
   on one row from `@xl` of the bar (was: the `lg` viewport); `plain` stacks its actions below `@md`.
-  `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingRow` moves a
-  `field` control under its copy below `@md` of the row. `Alert` moves its action to its own line,
+  `Wizard` hides its rail below `@2xl` of the wizard (was: the `md` viewport). `SettingRow` keeps its two
+  columns at every width and top-aligns the copy with the control (was: centred); set `stackable`
+  to move a `field` control under its copy below `@md` of the row. `Alert` moves its action to its own line,
   `EmptyState` stretches its actions and `Pagination` keeps only previous / current / next in a
   narrow box. `KeyValuePairs` picks its column count from its own width (a cell never gets narrower
   than `--container-3xs`) instead of the `md`/`lg` viewport. `Field orientation="responsive"`
@@ -258,10 +259,10 @@ split view or a card these change:
   `StatTile` and `Table` (`@container/table`) are containers: `@md:` utilities in your own markup
   inside them follow that box. A `Card` used as a shrink-to-fit flex item now needs a width
   (`flex-1`, `w-full` or a grid track).
-- **Stacked table.** A data-driven `Table` narrower than `--container-lg` (552 px) renders each row
-  as a card of label / value lines instead of scrolling sideways. The column headers stay for
-  screen readers. Set `:stackable="false"` to keep the old grid; give a column `label` when its
-  header is a slot.
+- **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
+  every width, as before. Set `stackable` to render each row as a card of label / value lines
+  when the table is narrower than `--container-lg` (552 px); the column headers stay for screen
+  readers. Give a column `label` when its header is a slot.
 - **Sheets.** Below `sm` a `Dialog` or `Drawer` is a full-height, full-width sheet (it was an
   80 dvh bottom sheet, which it still is between `sm` and `md`). `PanelFooter` stretches its direct
   children to equal widths and keeps the safe-area inset clear on phones.

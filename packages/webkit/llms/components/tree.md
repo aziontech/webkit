@@ -46,6 +46,8 @@
 | `emptyTitle` | `string` | `''` | false | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`). |
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the tree. |
+| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
+| `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
 
 ## Events
 

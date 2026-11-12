@@ -56,6 +56,7 @@
 | `readonly` | `boolean` | `false` | false | Shows the value without the list or editing. |
 | `required` | `boolean` | `false` | false | Marks the field required (`aria-required`). |
 | `invalid` | `boolean` | `false` | false | Marks the field invalid (`aria-invalid`, danger border). |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Events
 

@@ -16,7 +16,7 @@
   interface Props {
     /** severity. */
     severity?: StatusIndicatorSeverity
-    /** Shows loading state and disables activation. */
+    /** Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis, so pass the bare verb (Deploying); a trailing ellipsis or three periods already in the label are not doubled. */
     loading?: boolean
     /** Visible label text. Empty uses the locale catalog (`Status`). */
     label?: string
@@ -31,6 +31,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ statusIndicator: en.statusIndicator })
   const text = computed(() => props.label || t('statusIndicator.label'))
+  const loadingText = computed(() => `${text.value.replace(/\s*(?:…|\.{3})\s*$/, '')}…`)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-status-indicator'
@@ -63,7 +64,7 @@
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
-      {{ loading ? `${text}…` : text }}
+      {{ loading ? loadingText : text }}
     </span>
   </div>
 </template>

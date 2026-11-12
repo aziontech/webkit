@@ -26,6 +26,7 @@ export interface ChartMarkRegistration {
   stacked: boolean
   labeled: boolean
   ids: readonly string[]
+  fit?: boolean
 }
 
 export interface ChartContext {

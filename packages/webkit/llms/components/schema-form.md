@@ -47,6 +47,7 @@
 | `validateOn` | `'blur' \| 'submit'` | `'blur'` | false | When fields first show their validation message: on leaving the field, or only after `validate()`. |
 | `disabled` | `boolean` | `false` | false | Disables every field. |
 | `readonly` | `boolean` | `false` | false | Shows every value without letting it change. |
+| `modelValue` | `SchemaFormValue` | `—` | false | Two-way value (`v-model`). |
 
 ## v-model
 

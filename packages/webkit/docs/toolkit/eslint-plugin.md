@@ -28,7 +28,7 @@ export default [
 
 ## Presets
 
-Nothing out of standard is ever a warning — **every rule in every preset is `error`**, except the heuristics (`HEURISTIC_RULES`: `container-needs-width`, which reads only the template and cannot see the rendered layout, and `no-output-in-command`, which reads intent from comments), so they `warn` in every preset.
+Nothing out of standard is ever a warning — **every rule in every preset is `error`**, except the heuristics (`HEURISTIC_RULES`: `container-needs-width`, which reads only the template and cannot see the rendered layout, `no-output-in-command`, which reads intent from comments, and `menu-node-href`, which recognises a navigation node by its shape), so they `warn` in every preset.
 
 | Preset        | Rule set                                                                                               |
 | ------------- | ------------------------------------------------------------------------------------------------------ |
@@ -74,6 +74,7 @@ previously unmeasured by these presets — that's the fix working, not a regress
 
 | `no-output-in-command` | (warn) A shell code sample — an object with `language`/`lang` `bash`, `sh`, `shell`, `zsh` or `console` and a static `code` string, such as a `DocCodeGroup` sample or a `CodeBlock` tab, in a script or a template — that mixes the command with what it prints: a `#` comment after the command that reads as output (`# HTTP/2 200`, `# => …`, `# 4.23.0`, `# returns …`) or a trailing run of `#` lines, or, in a `$`-prompted transcript, a line without the prompt. A command block holds only what the reader runs, so its copy control copies exactly that. Fix with the sample's `output` field (`DocCodeGroup` draws it as a muted "Output" block), a `<CodeBlock kind="output">`, or prose. |
 | `no-root-relative-asset` | A string, template literal, static attribute or CSS `url()` that starts with `/marketing-components/` or `/media/`: media that only azion.com and the WebKit docs site serve, so a copied example renders a broken image. Import the file from `@aziontech/webkit/assets/<file>` (the message names the import when `src/assets/site-assets.json` knows the URL), or pass an image the app serves; `placeholder-image.svg` and `placeholder-clip.webm` stand in for photos, covers and clips. An app that serves its own `/media/` folder narrows the check with `{ prefixes: ['/marketing-components/'] }`. |
+| `menu-node-href` | (warn) A navigation node — an object with `id` and `label`, as a `Menu` `groups` tree holds — that names its destination `path`, `to`, `url` or `route` (a `/`-path string or a route object) and has no `href`. `Menu` reads only `href`, so the row renders as a button with nowhere to go. Rename the key to `href`; with Vue Router, call `router.push(node.href)` in `@navigate`. |
 
 Deterministic import rules (`valid-import-path`, `no-deep-internal-import`, `no-barrel-import`, `no-whole-icon-set-import`, `prefer-tree-shakeable-root`) and `no-physical-direction` are **autofixable**.
 

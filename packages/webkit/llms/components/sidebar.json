@@ -93,6 +93,20 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`)."
+  },
+  {
+   "name": "collapsed",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:collapsed`)."
+  },
+  {
+   "name": "width",
+   "type": "number | null",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model:width`)."
   }
  ],
  "events": [

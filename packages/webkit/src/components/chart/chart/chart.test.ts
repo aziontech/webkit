@@ -396,6 +396,51 @@ describe('Chart', () => {
     expect(bar.querySelectorAll('text')).toHaveLength(4)
   })
 
+  it('draws a histogram as solid touching columns that end at the tallest bucket', async () => {
+    const volume: ChartSeries[] = [
+      { id: 'error', name: 'Error', values: [3, 5] },
+      { id: 'info', name: 'Info', values: [2, 2] }
+    ]
+    const at = (kind: 'default' | 'histogram') =>
+      render({
+        render: () =>
+          h('div', { style: 'width: 640px' }, [
+            h(
+              Chart,
+              { series: volume, labels: ['08:00', '08:05'], ariaLabel: 'Event volume' },
+              {
+                default: () => [h(ChartAxis, { kind: 'y' }), h(ChartBar, { kind, stacked: true })]
+              }
+            )
+          ])
+      })
+    const segments = async (view: ReturnType<typeof render>) => {
+      await measured(view)
+      const bar = view.getByTestId('chart-chart__bar')
+      const paths = [...bar.querySelectorAll('path')] as globalThis.SVGPathElement[]
+      expect(paths).toHaveLength(4)
+      return { bar, boxes: paths.map((path) => path.getBBox()) }
+    }
+    const ticks = (view: ReturnType<typeof render>) =>
+      [...view.getByTestId('chart-chart__axis-y').querySelectorAll('text')].map((text) =>
+        text.textContent?.trim()
+      )
+
+    const solid = at('histogram')
+    const histogram = await segments(solid)
+    expect(histogram.bar.getAttribute('data-kind')).toBe('histogram')
+    const [lowerFirst, upperFirst] = [histogram.boxes[0], histogram.boxes[1]]
+    expect(Math.abs(lowerFirst!.y - (upperFirst!.y + upperFirst!.height))).toBeLessThan(0.5)
+    expect(ticks(solid)).not.toContain('8')
+    solid.unmount()
+
+    const gapped = at('default')
+    const bars = await segments(gapped)
+    const [lower, upper] = [bars.boxes[0], bars.boxes[1]]
+    expect(lower!.y - (upper!.y + upper!.height)).toBeGreaterThan(1)
+    expect(ticks(gapped)).toContain('8')
+  })
+
   it('throws when a part renders outside a chart', () => {
     expect(() => render(ChartLine)).toThrow('Chart.* sub-components must be used inside <Chart>.')
   })
