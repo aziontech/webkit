@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtempSync, rmSync, writeFileSync, mkdirSync } from 'node:fs'
+import { existsSync, mkdtempSync, rmSync, writeFileSync, mkdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -15,6 +15,7 @@ function makeProject(pkg = { name: 'demo', version: '1.0.0' }) {
 }
 
 const statusOf = (report, check) => report.find((c) => c.check === check)?.status
+const detailOf = (report, check) => report.find((c) => c.check === check)
 
 test('doctor on a bare project fails the required checks', () => {
   const dir = makeProject()
@@ -38,12 +39,75 @@ test('doctor after init passes the config/mcp/husky/style checks', () => {
     assert.equal(statusOf(report, 'eslint config'), 'ok')
     assert.equal(statusOf(report, 'stylelint config'), 'ok')
     assert.equal(statusOf(report, 'webkit.css @source'), 'ok')
-    assert.equal(statusOf(report, 'postcss config'), 'ok')
+    assert.equal(statusOf(report, 'tailwind build'), 'ok')
     assert.equal(statusOf(report, 'mcp server'), 'ok')
     assert.equal(statusOf(report, 'husky prepare script'), 'ok')
     assert.equal(statusOf(report, 'pre-commit hook'), 'ok')
     // webkit is not actually installed in the scratch project → catalog still fails.
     assert.equal(statusOf(report, 'webkit catalog'), 'fail')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor accepts Tailwind through @tailwindcss/vite with no PostCSS config, as init plans it', () => {
+  const dir = makeProject({
+    name: 'demo',
+    version: '1.0.0',
+    devDependencies: { '@tailwindcss/vite': '^4.0.0', vite: '^7.0.0' }
+  })
+  try {
+    applyPlan(dir, planInit(dir, {}))
+    assert.equal(existsSync(join(dir, 'postcss.config.mjs')), false)
+    const check = detailOf(planDoctor(dir), 'tailwind build')
+    assert.equal(check.status, 'ok')
+    assert.match(check.detail, /@tailwindcss\/vite/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor finds @tailwindcss/vite in vite.config when package.json does not list it', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, 'vite.config.ts'),
+      "import tailwindcss from '@tailwindcss/vite'\nexport default { plugins: [tailwindcss()] }\n"
+    )
+    assert.equal(statusOf(planDoctor(dir), 'tailwind build'), 'ok')
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor warns when Tailwind runs through both @tailwindcss/vite and PostCSS', () => {
+  const dir = makeProject({
+    name: 'demo',
+    version: '1.0.0',
+    devDependencies: { '@tailwindcss/vite': '^4.0.0' }
+  })
+  try {
+    writeFileSync(
+      join(dir, 'postcss.config.mjs'),
+      "export default { plugins: { '@tailwindcss/postcss': {} } }\n"
+    )
+    const check = detailOf(planDoctor(dir), 'tailwind build')
+    assert.equal(check.status, 'warn')
+    assert.match(check.detail, /processed twice/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('doctor warns when neither @tailwindcss/vite nor a Tailwind PostCSS config is present', () => {
+  const dir = makeProject()
+  try {
+    assert.equal(statusOf(planDoctor(dir), 'tailwind build'), 'warn')
+    writeFileSync(join(dir, 'postcss.config.mjs'), 'export default { plugins: {} }\n')
+    assert.match(
+      detailOf(planDoctor(dir), 'tailwind build').detail,
+      /does not load @tailwindcss\/postcss/
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -167,21 +231,41 @@ test('doctor reports a malformed .mcp.json as a failure, not a crash', () => {
 })
 
 test('doctor fails when a second theme copy is nested under webkit or the theme misses the peer range', () => {
-  const dir = makeProject({ name: 'demo', version: '1.0.0', dependencies: { '@aziontech/webkit': '^6.0.0', '@aziontech/theme': '^5.2.2' } })
+  const dir = makeProject({
+    name: 'demo',
+    version: '1.0.0',
+    dependencies: { '@aziontech/webkit': '^6.0.0', '@aziontech/theme': '^5.2.2' }
+  })
   try {
     const nm = join(dir, 'node_modules', '@aziontech')
     mkdirSync(join(nm, 'webkit', 'node_modules', '@aziontech', 'theme'), { recursive: true })
     mkdirSync(join(nm, 'theme'), { recursive: true })
-    writeFileSync(join(nm, 'webkit', 'package.json'), JSON.stringify({ name: '@aziontech/webkit', version: '6.0.0', peerDependencies: { '@aziontech/theme': '^5.2.2' } }))
-    writeFileSync(join(nm, 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '5.2.2' }))
-    writeFileSync(join(nm, 'webkit', 'node_modules', '@aziontech', 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' }))
+    writeFileSync(
+      join(nm, 'webkit', 'package.json'),
+      JSON.stringify({
+        name: '@aziontech/webkit',
+        version: '6.0.0',
+        peerDependencies: { '@aziontech/theme': '^5.2.2' }
+      })
+    )
+    writeFileSync(
+      join(nm, 'theme', 'package.json'),
+      JSON.stringify({ name: '@aziontech/theme', version: '5.2.2' })
+    )
+    writeFileSync(
+      join(nm, 'webkit', 'node_modules', '@aziontech', 'theme', 'package.json'),
+      JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' })
+    )
     let c = planDoctor(dir).find((x) => x.check === 'theme version')
     assert.equal(c.status, 'fail')
     assert.match(c.detail, /second copy/)
     rmSync(join(nm, 'webkit', 'node_modules'), { recursive: true, force: true })
     c = planDoctor(dir).find((x) => x.check === 'theme version')
     assert.equal(c.status, 'ok')
-    writeFileSync(join(nm, 'theme', 'package.json'), JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' }))
+    writeFileSync(
+      join(nm, 'theme', 'package.json'),
+      JSON.stringify({ name: '@aziontech/theme', version: '4.3.1' })
+    )
     c = planDoctor(dir).find((x) => x.check === 'theme version')
     assert.equal(c.status, 'fail')
     assert.match(c.detail, /does not satisfy/)

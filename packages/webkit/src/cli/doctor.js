@@ -14,7 +14,8 @@ import {
   POSTCSS_CONFIG_CANDIDATES,
   rawColourStylesheets,
   read,
-  STYLELINT_CONFIG_CANDIDATES
+  STYLELINT_CONFIG_CANDIDATES,
+  usesTailwindVitePlugin
 } from './plan.js'
 import { planSync } from './sync.js'
 import { brokenVueTscIn, VUE_TSC_BROKEN, VUE_TSC_KNOWN_GOOD, vueTscState } from './toolchain.js'
@@ -129,12 +130,28 @@ export function planDoctor(projectDir) {
   )
 
   const postcssCfg = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
-  add(
-    'postcss config',
-    postcssCfg ? 'ok' : 'warn',
-    postcssCfg ||
-      'no postcss config — Tailwind v4 may not run in the build. Run `npx @aziontech/webkit init`.'
+  const postcssRunsTailwind = Boolean(
+    postcssCfg && read(join(projectDir, postcssCfg))?.includes('@tailwindcss/postcss')
   )
+  if (usesTailwindVitePlugin(projectDir)) {
+    add(
+      'tailwind build',
+      postcssRunsTailwind ? 'warn' : 'ok',
+      postcssRunsTailwind
+        ? `Tailwind runs through @tailwindcss/vite and ${postcssCfg} adds @tailwindcss/postcss too — Tailwind is processed twice. Remove @tailwindcss/postcss from ${postcssCfg}.`
+        : 'Tailwind runs through @tailwindcss/vite (no PostCSS config needed)'
+    )
+  } else {
+    add(
+      'tailwind build',
+      postcssRunsTailwind ? 'ok' : 'warn',
+      postcssRunsTailwind
+        ? `Tailwind runs through PostCSS (${postcssCfg})`
+        : postcssCfg
+          ? `${postcssCfg} does not load @tailwindcss/postcss and @tailwindcss/vite is not installed — Tailwind v4 may not run in the build. Add the plugin (see \`npx @aziontech/webkit init --dry-run\`).`
+          : 'neither @tailwindcss/vite nor a PostCSS config — Tailwind v4 may not run in the build. Run `npx @aziontech/webkit init`.'
+    )
+  }
 
   const mcpPath = join(projectDir, '.mcp.json')
   if (!existsSync(mcpPath)) {
