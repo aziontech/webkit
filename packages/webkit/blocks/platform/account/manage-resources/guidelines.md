@@ -16,13 +16,13 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Tooltip`, `IconButton`, `Button` (required)
+### A. Page heading — `PageHeader` (required)
 
-Title `Manage resources` and one sentence on what the hierarchy decides. Actions: Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`).
+Title `Manage resources` and one sentence on what the hierarchy decides. No heading actions: `PageHeader` stretches its actions to full width on phones, so Refresh and the details toggle live at the end of the toolbar instead (the design sample put them in the heading).
 
-### B. Toolbar — `Button` (required)
+### B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
 
-A `role="toolbar"` row: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth.
+A `role="group"` row named `Resource actions`: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth. At the end, Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`). The row wraps on narrow screens.
 
 ### C. Resource tree — `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
@@ -32,7 +32,7 @@ The data stays flat (`parentId`) and the page builds the tree for the table, so 
 
 ### D. Details panel — `Card`, `Tabs`, `Alert`, `Tag` (required)
 
-An `aside` beside the table on wide screens and under it on narrow ones. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
+An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
 
 ### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
 
@@ -83,7 +83,7 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 - The table is a `treegrid` labelled by the Resources heading. Rows carry `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` when they have children, and `aria-selected` when selected.
 - One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it and Space selects it. Tab reaches the checkbox, ID copy and row menu of the focused row.
 - The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state.
-- The toolbar is a `role="toolbar"` named `Resource actions`; disabled bulk buttons stay visible so the actions are discoverable.
+- The action row is a `role="group"` named `Resource actions` (plain Tab order, no arrow-key toolbar); disabled bulk buttons stay visible so the actions are discoverable.
 - The details heading is a polite live region, so a change of selection is announced.
 - Dialogs trap focus and return it to the button that opened them.
 

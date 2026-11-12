@@ -317,32 +317,10 @@
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
-      >
-        <template #actions>
-          <Tooltip text="Refresh">
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="large"
-              :loading="refreshing"
-              aria-label="Refresh resources"
-              @click="refresh"
-            />
-          </Tooltip>
-          <Button
-            :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
-            kind="transparent"
-            size="large"
-            :aria-expanded="detailsOpen"
-            :aria-controls="`${uid}-details`"
-            @click="detailsOpen = !detailsOpen"
-          />
-        </template>
-      </PageHeader>
+      />
 
       <div
-        role="toolbar"
+        role="group"
         aria-label="Resource actions"
         class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
       >
@@ -388,9 +366,30 @@
           :disabled="!selectedCount"
           @click="openDelete(selected)"
         />
+        <div class="ms-auto flex items-center gap-(--spacing-xs)">
+          <Tooltip text="Refresh">
+            <IconButton
+              icon="pi pi-refresh"
+              kind="outlined"
+              size="medium"
+              :loading="refreshing"
+              aria-label="Refresh resources"
+              @click="refresh"
+            />
+          </Tooltip>
+          <Button
+            :label="detailsOpen ? 'Hide details' : 'Show details'"
+            :icon="detailsOpen ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            kind="transparent"
+            size="medium"
+            :aria-expanded="detailsOpen"
+            :aria-controls="`${uid}-details`"
+            @click="detailsOpen = !detailsOpen"
+          />
+        </div>
       </div>
 
-      <div class="layout-group-start flex min-w-0 flex-col gap-(--spacing-lg) lg:flex-row">
+      <div class="layout-group-start flex min-w-0 flex-col gap-(--spacing-lg) 2xl:flex-row">
         <section
           :aria-labelledby="`${uid}-resources`"
           class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)"
@@ -596,7 +595,7 @@
           v-show="detailsOpen"
           :id="`${uid}-details`"
           :aria-labelledby="`${uid}-details-heading`"
-          class="w-full shrink-0 lg:w-(--container-xs)"
+          class="w-full shrink-0 2xl:w-(--container-xs)"
         >
           <Card>
             <template #content>

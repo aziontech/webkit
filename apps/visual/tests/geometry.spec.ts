@@ -60,6 +60,32 @@ for (const theme of THEMES) {
     )
   })
 
+  for (const dir of ['ltr', 'rtl'] as const) {
+    const mode: Mode = { theme, width: 1280, dir }
+    test(`geometry table tree rows ${label(mode)}`, async ({ page }) => {
+      await prepare(page, mode)
+      const preview = await openExample(page, 'table/tree-rows', mode)
+      await preview.locator('[data-tree-row="ws-1"] [data-testid$="__expand-toggle"]').click()
+      await expect(preview.locator('[data-tree-row="cl-1"]')).toBeVisible()
+      await settle(page)
+      const start = async (id: string) => {
+        const box = await preview
+          .locator(`[data-tree-row="${id}"] [data-tree-gutter] + span`)
+          .boundingBox()
+        if (!box) throw new Error(`no name for ${id}`)
+        return dir === 'rtl' ? -(box.x + box.width) : box.x
+      }
+      const [org1, org2, ws1, ws2, cl1] = await Promise.all(
+        ['org-1', 'org-2', 'ws-1', 'ws-2', 'cl-1'].map(start)
+      )
+      expect(org2).toBeCloseTo(org1, 1)
+      expect(ws2).toBeCloseTo(ws1, 1)
+      expect(ws1 - org1).toBeCloseTo(16, 1)
+      expect(cl1 - ws1).toBeCloseTo(16, 1)
+      await expect(preview).toHaveScreenshot(shot(`geometry/table-tree-rows--${label(mode)}.png`))
+    })
+  }
+
   test(`geometry overflow count open ${theme}`, async ({ page }) => {
     const mode: Mode = { theme, width: 1280 }
     await prepare(page, mode)

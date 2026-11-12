@@ -79,6 +79,7 @@
       />
       <span
         aria-live="polite"
+        dir="auto"
         :data-testid="`${testId}__position`"
         class="min-w-10 text-center text-label-sm text-(--text-muted) tabular-nums group-data-[disabled]:text-(--text-disabled)"
         >{{ t('responseBranches.position', { current: index + 1, total: count }) }}</span

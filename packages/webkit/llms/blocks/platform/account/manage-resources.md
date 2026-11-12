@@ -1,6 +1,6 @@
 # ManageResources (`platform/account/manage-resources`)
 
-> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Refresh and Hide details, a toolbar with Create workspace, Create group and the bulk Move, Labels and Delete that act on the selection, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.
+> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.
 
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
@@ -28,13 +28,13 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 ## Building blocks
 
-### A. Page heading — `PageHeader`, `Tooltip`, `IconButton`, `Button` (required)
+### A. Page heading — `PageHeader` (required)
 
-Title `Manage resources` and one sentence on what the hierarchy decides. Actions: Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`).
+Title `Manage resources` and one sentence on what the hierarchy decides. No heading actions: `PageHeader` stretches its actions to full width on phones, so Refresh and the details toggle live at the end of the toolbar instead (the design sample put them in the heading).
 
-### B. Toolbar — `Button` (required)
+### B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
 
-A `role="toolbar"` row: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth.
+A `role="group"` row named `Resource actions`: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth. At the end, Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`). The row wraps on narrow screens.
 
 ### C. Resource tree — `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
@@ -44,7 +44,7 @@ The data stays flat (`parentId`) and the page builds the tree for the table, so 
 
 ### D. Details panel — `Card`, `Tabs`, `Alert`, `Tag` (required)
 
-An `aside` beside the table on wide screens and under it on narrow ones. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
+An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
 
 ### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
 
@@ -95,7 +95,7 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 - The table is a `treegrid` labelled by the Resources heading. Rows carry `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` when they have children, and `aria-selected` when selected.
 - One row is in the tab order. Arrow Up and Arrow Down move between rows, Home and End go to the first and last, Arrow Right opens a row or moves into it, Arrow Left closes it or goes to its parent (mirrored right to left), Enter toggles it and Space selects it. Tab reaches the checkbox, ID copy and row menu of the focused row.
 - The chevron is pointer-only and hidden from assistive technology; the row's `aria-expanded` is the state.
-- The toolbar is a `role="toolbar"` named `Resource actions`; disabled bulk buttons stay visible so the actions are discoverable.
+- The action row is a `role="group"` named `Resource actions` (plain Tab order, no arrow-key toolbar); disabled bulk buttons stay visible so the actions are discoverable.
 - The details heading is a polite live region, so a change of selection is announced.
 - Dialogs trap focus and return it to the button that opened them.
 
@@ -446,32 +446,10 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
-      >
-        <template #actions>
-          <Tooltip text="Refresh">
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="large"
-              :loading="refreshing"
-              aria-label="Refresh resources"
-              @click="refresh"
-            />
-          </Tooltip>
-          <Button
-            :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
-            kind="transparent"
-            size="large"
-            :aria-expanded="detailsOpen"
-            :aria-controls="`${uid}-details`"
-            @click="detailsOpen = !detailsOpen"
-          />
-        </template>
-      </PageHeader>
+      />
 
       <div
-        role="toolbar"
+        role="group"
         aria-label="Resource actions"
         class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
       >
@@ -517,9 +495,30 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           :disabled="!selectedCount"
           @click="openDelete(selected)"
         />
+        <div class="ms-auto flex items-center gap-(--spacing-xs)">
+          <Tooltip text="Refresh">
+            <IconButton
+              icon="pi pi-refresh"
+              kind="outlined"
+              size="medium"
+              :loading="refreshing"
+              aria-label="Refresh resources"
+              @click="refresh"
+            />
+          </Tooltip>
+          <Button
+            :label="detailsOpen ? 'Hide details' : 'Show details'"
+            :icon="detailsOpen ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            kind="transparent"
+            size="medium"
+            :aria-expanded="detailsOpen"
+            :aria-controls="`${uid}-details`"
+            @click="detailsOpen = !detailsOpen"
+          />
+        </div>
       </div>
 
-      <div class="layout-group-start flex min-w-0 flex-col gap-(--spacing-lg) lg:flex-row">
+      <div class="layout-group-start flex min-w-0 flex-col gap-(--spacing-lg) 2xl:flex-row">
         <section
           :aria-labelledby="`${uid}-resources`"
           class="flex min-w-0 flex-1 flex-col gap-(--spacing-sm)"
@@ -725,7 +724,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           v-show="detailsOpen"
           :id="`${uid}-details`"
           :aria-labelledby="`${uid}-details-heading`"
-          class="w-full shrink-0 lg:w-(--container-xs)"
+          class="w-full shrink-0 2xl:w-(--container-xs)"
         >
           <Card>
             <template #content>

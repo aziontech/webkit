@@ -25238,7 +25238,7 @@
    "title": "Templates/Platform/Account/ManageResources",
    "source": "blocks/platform/account/manage-resources/manage-resources.vue",
    "surface": "product",
-   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Refresh and Hide details, a toolbar with Create workspace, Create group and the bulk Move, Labels and Delete that act on the selection, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.",
+   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo.",
    "intents": [
     "manage resources",
     "resource hierarchy",

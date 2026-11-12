@@ -22,6 +22,7 @@ const subscribers = new Set<() => void>()
 let observer: MutationObserver | null = null
 
 function subscribe(listener: () => void): () => void {
+  if (typeof document === 'undefined') return () => {}
   subscribers.add(listener)
   if (!observer && typeof MutationObserver !== 'undefined' && typeof document !== 'undefined') {
     observer = new MutationObserver(() => {

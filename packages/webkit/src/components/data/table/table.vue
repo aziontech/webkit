@@ -34,7 +34,7 @@
     watch
   } from 'vue'
 
-  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -1432,7 +1432,6 @@
     doc.addEventListener('touchend', onEnd)
     event.preventDefault()
   }
-  const treeDir = useDirection(rootEl)
   const treeFocusId = ref<string | null>(null)
   const treeTabStop = computed<string | undefined>(() =>
     treeActive.value
@@ -1497,7 +1496,7 @@
       event.preventDefault()
       if (target) void focusTreeRow(target.id)
     }
-    switch (logicalArrowKey(event.key, treeDir.value)) {
+    switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowDown':
         return go(list[index + 1])
       case 'ArrowUp':
