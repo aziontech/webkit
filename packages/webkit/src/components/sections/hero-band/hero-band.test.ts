@@ -6,6 +6,7 @@ import HeroBand from './hero-band.vue'
 
 const TESTID = 'sections-hero-band'
 const HERO_TESTID = 'marketing-hero'
+const HERO_TITLE_TESTID = 'marketing-hero-title'
 const TITLE = 'Deliver content fast, worldwide'
 const HIGHLIGHT = 'Build and run applications'
 const EYEBROW = 'Cache'
@@ -66,6 +67,24 @@ describe('HeroBand', () => {
     const { getByTestId } = band({ size: 'large' })
 
     expect(getByTestId(HERO_TESTID).getAttribute('data-size')).toBe('large')
+  })
+
+  it('sets the title-band headline in the wide column by default', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('4xl')
+  })
+
+  it('narrows the title-band headline column with titleLength=short', () => {
+    const { getByTestId } = band({ titleLength: 'short' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
+  })
+
+  it('ignores titleLength outside the title-band layout', () => {
+    const { getByTestId } = band({ kind: 'pixel-floor', titleLength: 'short' })
+
+    expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('4xl')
   })
 
   it.each(['centered', 'pixel-floor', 'copy-beside-art'] as const)(

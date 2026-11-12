@@ -49,6 +49,17 @@ const meta = {
         defaultValue: { summary: "'medium'" }
       }
     },
+    titleLength: {
+      control: 'inline-radio',
+      options: ['short', 'long'],
+      description:
+        'Length of the headline in the `title-band` layout; `short` narrows its column so a brief headline and sentence stay compact, `long` widens it so a longer headline breaks into two lines instead of three.',
+      table: {
+        category: 'props',
+        type: { summary: "'short' | 'long'" },
+        defaultValue: { summary: "'long'" }
+      }
+    },
     eyebrow: {
       control: 'text',
       description: 'Short overline above the headline.',
