@@ -7,7 +7,7 @@
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 
   type FieldName = 'key' | 'value' | 'environment' | 'description'
@@ -264,6 +264,5 @@
         </div>
       </div>
     </form>
-    <Toaster position="bottom-right" />
   </div>
 </template>

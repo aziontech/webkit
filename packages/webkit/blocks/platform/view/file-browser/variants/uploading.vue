@@ -29,7 +29,7 @@
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
@@ -391,6 +391,7 @@
     if (failed) {
       toast.error(`${failed} of ${done + failed} files weren't uploaded.`, {
         id: 'file-browser-upload',
+        position: 'top-right',
         description: `The other ${done} are in ${folder}. Retry sends only the failed ones.`,
         actions: [{ label: 'Retry failed', onClick: () => retry() }]
       })
@@ -398,6 +399,7 @@
     }
     toast.success(`${done} ${done === 1 ? 'file' : 'files'} uploaded to ${folder}.`, {
       id: 'file-browser-upload',
+      position: 'top-right',
       actions: [{ label: 'Open folder', onClick: () => openFolder(where) }]
     })
   }
@@ -451,7 +453,8 @@
     const refused = files.filter((file) => file.size > LIMIT)
     if (refused.length) {
       toast.error(`${refused[0].name} is larger than 300 MB.`, {
-        description: 'Files over the limit per file were left out of the upload.'
+        description: 'Files over the limit per file were left out of the upload.',
+        position: 'top-right'
       })
     }
   }
@@ -929,6 +932,5 @@
         />
       </template>
     </UploadProgress>
-    <Toaster position="top-right" />
   </div>
 </template>

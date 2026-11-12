@@ -18,7 +18,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
@@ -948,7 +948,5 @@
         </Resizable.Pane>
       </Resizable>
     </div>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

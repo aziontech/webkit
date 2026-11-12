@@ -12,7 +12,7 @@
   import Table from '@aziontech/webkit/table'
   import type { TableColumn } from '@aziontech/webkit/table-root'
   import type { TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -399,7 +399,5 @@
       confirm-label="Delete team"
       @confirm="remove"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

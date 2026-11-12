@@ -14,7 +14,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   type PermissionAction = 'view' | 'edit'
@@ -615,7 +615,5 @@
       :loading="deleting"
       @confirm="deleteTeam"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

@@ -67,21 +67,21 @@ An "Overview" `h3` over the publisher's text in `DocProse`, ending on what insta
 
 An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
 
-### M. Install toast — `Toaster` (required)
-
-One `Toaster` at `bottom-right`, raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it.
-
-### N. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+### M. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
 
 The drawer's content as a page, for the integration's own URL (the variant adds `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
-### O. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+### N. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
 The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `platform/states/form-error`: nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
-### P. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
+### O. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
 
 A template as a page, for the template's own URL (the variant adds `SettingsSection`, `Input` and `Link`): the description, a deploy form (application name, repository) beside the facts. Deploy is a build and deploy, so it follows `platform/states/async-submit`: loading on the button, a progress toast, and a success toast with Edit and Redeploy.
+
+### Install toast — through `toast`
+
+Raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

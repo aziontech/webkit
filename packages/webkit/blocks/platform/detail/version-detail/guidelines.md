@@ -57,6 +57,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
 - Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
@@ -89,7 +90,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - The version `Select` trigger is named "Switch version"; its search input is named "Search versions".
 - Every `Switch` and `Input` in a setting row has an `aria-label` that matches the row title.
 - A disabled control with a reason gets a `Tooltip` that the keyboard can reach.
-- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the `Toaster` region, and the bar's status line announces "Reverting to <id>…".
+- The revert dialog traps focus, is named by its title and returns focus to Revert on close. Each changed setting carries a visually hidden sentence ("changes from On to Off"); the struck-through values and the arrow are `aria-hidden`. The toasts live in the app's one `Toaster` region (the app mounts it; the page body only calls `toast`), and the bar's status line announces "Reverting to <id>…".
 - Icon-only buttons (Version actions, Close version history, Edit version info) have an `aria-label`; decorative icons are `aria-hidden`.
 
 ## States

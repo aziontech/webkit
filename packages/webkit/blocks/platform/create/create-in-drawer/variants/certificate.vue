@@ -16,7 +16,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -453,5 +453,4 @@ mr+L2DBwFXtW2qJfNedf/9rU
       </DrawerContent>
     </DrawerPortal>
   </Drawer>
-  <Toaster position="bottom-right" />
 </template>

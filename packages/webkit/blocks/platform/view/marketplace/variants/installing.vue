@@ -19,7 +19,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import Tabs from '@aziontech/webkit/tabs'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
@@ -684,7 +684,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

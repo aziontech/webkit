@@ -11,7 +11,7 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
   import Table, { type TableColumn } from '@aziontech/webkit/table'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
@@ -354,7 +354,5 @@
       confirm-label="Reset MFA"
       @confirm="reset"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

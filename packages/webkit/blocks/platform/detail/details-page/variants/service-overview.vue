@@ -27,7 +27,7 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram, {
     type TopologyBindOption,
@@ -1172,7 +1172,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

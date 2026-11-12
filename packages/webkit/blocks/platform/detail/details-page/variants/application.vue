@@ -21,7 +21,7 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram, {
     type TopologyBindOption,
@@ -651,7 +651,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

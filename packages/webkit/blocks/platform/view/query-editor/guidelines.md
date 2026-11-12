@@ -58,19 +58,19 @@ Templates opens a large right `Drawer` titled SQL quick templates with a one-lin
 
 ### J. Bulk row delete — `Button` (optional)
 
-Variant TableData only; it adds the `Toaster` with `toast`.
+Variant TableData only; it raises its toast with `toast`.
 
 With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:loading` while it runs). Deleting rows is not a deploy: the outcome is a success toast `2 rows deleted from events.` whose action fits the rows, Undo, which puts them back. Never View deployments, Edit or Redeploy.
 
 ### K. Create database page — `Input`, `Button` (optional)
 
-Variant CreateDatabase only; it is its own focused page outside `ConsoleLayout`, with the creation header (`GlobalHeader` with `Breadcrumb`), and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch`, `SaveBar` and the `Toaster` with `toast`.
+Variant CreateDatabase only; it is its own focused page outside `ConsoleLayout`, with the creation header (`GlobalHeader` with `Breadcrumb`), and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch` and `SaveBar`, and raises its toasts with `toast`. Being outside `ConsoleLayout` does not make it an app root: it is still a route of the same app, so its toasts ride the app's one region like every other page's.
 
 The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-error rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
 ### L. Import data from CSV — `Drawer`, `Alert`, `TableRoot`, `Button` (optional)
 
-Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection`, `PanelFooter` and the `Toaster` with `toast`.
+Variant ImportCsv only; it adds `FileDropzone`, `FileTokenGroup`, `Select`, `SettingsSection` and `PanelFooter`, and raises its toasts with `toast`.
 
 An empty table's Data view offers Insert row and Import data from CSV, and accepts a CSV dropped on the empty state; both open a large drawer `Import data into <table>` in three sections. **File**: a `FileDropzone` with Browse files, then the file as a `FileTokenGroup` token (dismiss to pick another); a header with a blank name, a header with no rows or a file that is not `.csv` is an error on the token. **Map columns**: one row per CSV column with its first value as an example, an arrow, and a `Select` of the table's columns (name, type, `required` for NOT NULL ones) plus Skip; columns are matched by name, ignoring case, when the file is read, and everything else starts on Skip. **Check rows**: a polite sentence `4 of 7 rows are ready to insert. 3 rows have errors and will be skipped.`, the errors per line (`Line 4: active “maybe” is not true or false (bool).`; at most 10, then `And N more.`) and the first five valid rows as a `TableRoot` named `Import preview` under the table's column names. The footer holds Cancel and the primary `Insert 4 rows`.
 
@@ -85,6 +85,7 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - Offer JSON beside Table for results, so the raw shape is one click away.
 - Confirm Delete table with `platform/delete/delete-with-confirmation`.
 - Mark the page root with `data-layout-fill` (every variant but CreateDatabase), so the panes scroll on their own instead of the page.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

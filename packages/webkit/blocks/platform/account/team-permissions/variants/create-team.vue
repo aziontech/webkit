@@ -10,7 +10,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   type PermissionAction = 'view' | 'edit'
@@ -391,7 +391,5 @@
         </div>
       </form>
     </div>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

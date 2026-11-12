@@ -32,7 +32,7 @@
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -632,7 +632,5 @@
       confirm-label="Delete token"
       @confirm="remove"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

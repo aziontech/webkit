@@ -28,7 +28,7 @@
   import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
@@ -1591,7 +1591,5 @@
         />
       </template>
     </ConfirmDialog>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

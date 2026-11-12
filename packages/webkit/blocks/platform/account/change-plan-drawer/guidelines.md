@@ -98,17 +98,17 @@ Country and state.
 
 Cancel and Upgrade, side by side from `md`, full width below.
 
-### V. Toasts — `Toaster` (required)
-
-Mounted once with the drawers. A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.`
-
-### W. Card brand — `PaymentBrand` (required)
+### V. Card brand — `PaymentBrand` (required)
 
 The plate before the card on file in the Payment method section, named after the brand.
 
-### X. Included features — `FeatureList` (required)
+### W. Included features — `FeatureList` (required)
 
 What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
+
+### Toasts — through `toast`
+
+A failure no section owns (the payment service did not answer) is `toast.error` with Retry, and the drawer stays open with the entries kept; a successful upgrade closes both drawers and toasts `The account was upgraded to Pro.` This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

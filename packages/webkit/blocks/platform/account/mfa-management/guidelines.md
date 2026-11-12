@@ -35,9 +35,9 @@ A search `Input` with `v-bind="filterProps"`, then a `Table` with `v-bind="table
 
 `Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
 
-### F. Load failure and outcomes — `Alert`, `Toaster` (required)
+### F. Load failure and outcomes — `Alert` (required)
 
-When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy.
+When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

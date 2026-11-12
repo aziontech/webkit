@@ -24,7 +24,7 @@
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
 
@@ -921,7 +921,5 @@
       confirm-label="Delete"
       @confirm="confirmDelete"
     />
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

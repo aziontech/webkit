@@ -44,9 +44,9 @@ A medium right `Drawer` around a `form`: a description of what the invitation do
 
 With only the owner, a small `EmptyState` under the table invites the first teammate. `No matching users` with Clear search sits in the table's `#empty` slot. When the list fails to load, a danger `Alert` with Retry takes the table's place.
 
-### H. Outcomes — `Toaster` (required)
+### Outcomes — through `toast`
 
-Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy.
+Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

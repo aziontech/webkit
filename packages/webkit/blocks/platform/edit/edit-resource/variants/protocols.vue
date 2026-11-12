@@ -25,7 +25,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   type FieldProblem = { kind: HelperTextKind; message: string }
@@ -769,7 +769,5 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

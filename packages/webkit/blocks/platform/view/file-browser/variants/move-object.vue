@@ -28,7 +28,7 @@
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
   import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
@@ -399,6 +399,7 @@
           `${items.length} ${items.length === 1 ? 'file' : 'files'} moved to ${where}.`,
           {
             id: 'file-browser-move',
+            position: 'top-right',
             actions: [{ label: 'Open folder', onClick: () => openFolder(target) }]
           }
         )
@@ -871,6 +872,5 @@
       :cancelable="false"
       @close="closeTransfer"
     />
-    <Toaster position="top-right" />
   </div>
 </template>

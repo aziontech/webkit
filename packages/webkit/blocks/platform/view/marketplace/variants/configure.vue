@@ -11,7 +11,7 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   interface FormErrors {
@@ -203,7 +203,5 @@
         </template>
       </SaveBar>
     </div>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>

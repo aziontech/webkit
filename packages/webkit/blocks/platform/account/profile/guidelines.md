@@ -67,9 +67,9 @@ Rises with a motion-reduced transition once the form differs from the saved copy
 
 Under Account name and Billing emails after Save: `required` when empty, `invalid` when an address is malformed, linked with `aria-describedby`. Save stops and focus moves to the first field in error.
 
-### N. Toasts — `Toaster` (required)
+### Toasts — through `toast`
 
-Mounted once with the page. A save no field owns that fails is `toast.error` with Retry and keeps the changes; a successful save toasts `Profile saved.`
+A save no field owns that fails is `toast.error` with Retry and keeps the changes; a successful save toasts `Profile saved.` This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 

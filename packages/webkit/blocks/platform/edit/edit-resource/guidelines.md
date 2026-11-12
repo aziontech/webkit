@@ -77,6 +77,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - Say when the record changed elsewhere as soon as it is known, and ask before Save overwrites it.
 - Keep the edits on screen after a reload with an Undo, so a stale form never loses work silently.
 - Ask for the resource name before a delete, with a copy button beside the name.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

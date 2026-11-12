@@ -71,6 +71,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
 - Close the drawer on success and show the new item in the list behind it, with a toast that names it.
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
+- Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 

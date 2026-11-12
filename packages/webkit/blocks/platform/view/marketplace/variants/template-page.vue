@@ -8,7 +8,7 @@
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface FormErrors {
@@ -191,7 +191,5 @@
         </aside>
       </div>
     </div>
-
-    <Toaster position="bottom-right" />
   </div>
 </template>
