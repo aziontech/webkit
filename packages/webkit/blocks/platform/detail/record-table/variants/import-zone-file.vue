@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
+  import type { CalendarRange, CalendarValue } from '@aziontech/webkit/calendar'
   import CalendarRoot from '@aziontech/webkit/calendar-root'
   import Card from '@aziontech/webkit/card'
   import Chip from '@aziontech/webkit/chip'
@@ -36,13 +37,46 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
+  import type { TableColumn } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, reactive, ref, useId, watch } from 'vue'
+
+  type DnsRecord = {
+    id: string
+    name: string
+    type: string
+    value: string
+    ttl: number
+    policy: string
+    weight: number | null
+    description: string
+  }
+  type ZoneLineBase = {
+    line: number
+    name?: string
+    type?: string
+    ttl?: number
+    value?: string
+    reason: string
+  }
+  type ZoneLine =
+    | (ZoneLineBase & { status: 'skipped' | 'error' })
+    | (ZoneLineBase & { status: 'ready'; name: string; type: string; ttl: number; value: string })
+  type FilterOption = { value: string; label: string; custom?: boolean; avatar?: string }
+  type FilterValue = string | CalendarRange
+  type FilterField = {
+    id: string
+    label: string
+    kind: 'options' | 'range'
+    options: FilterOption[]
+    match: (record: DnsRecord, values: FilterValue[]) => boolean
+    formatValue?: (value: FilterValue) => string
+  }
 
   const activeTab = ref('records')
 
@@ -115,26 +149,27 @@
     { value: 'weighted', label: 'Weighted' }
   ]
 
-  const policyLabel = (value) => POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
+  const policyLabel = (value: unknown) =>
+    POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
-  const filterFields = [
+  const filterFields: FilterField[] = [
     {
       id: 'type',
       label: 'Type',
       kind: 'options',
       options: ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS'].map((value) => ({ value, label: value })),
-      match: (record, values) => values.includes(record.type)
+      match: (record: DnsRecord, values: FilterValue[]) => values.includes(record.type)
     },
     {
       id: 'policy',
       label: 'Policy',
       kind: 'options',
       options: POLICY_TYPES,
-      match: (record, values) => values.includes(record.policy)
+      match: (record: DnsRecord, values: FilterValue[]) => values.includes(record.policy)
     }
   ]
 
-  const columns = [
+  const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: 80 },
     { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: 104 },
@@ -146,7 +181,7 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const rows = ref([
+  const rows = ref<DnsRecord[]>([
     {
       id: '423916',
       name: 'www',
@@ -161,32 +196,35 @@
 
   const search = ref('')
 
-  const filters = ref({})
+  const filters = ref<Record<string, FilterValue[]>>({})
   const filterOpen = ref(false)
-  const activeId = ref(null)
-  const customId = ref(null)
+  const activeId = ref<string | null>(null)
+  const customId = ref<string | null>(null)
   const calendarOpen = ref(false)
-  const customRange = ref(null)
+  const customRange = ref<CalendarValue>(null)
   const query = ref('')
   const direction = ref('forward')
-  const filterPanel = ref(null)
-  let requestedId = null
+  const filterPanel = ref<HTMLElement | null>(null)
+  let requestedId: string | null = null
 
-  const isApplied = (field) => Boolean(filters.value[field.id]?.length)
+  const isApplied = (field: FilterField) => Boolean(filters.value[field.id]?.length)
   const appliedFilters = computed(() => filterFields.filter(isApplied))
   const appliedCount = computed(() => appliedFilters.value.length)
-  const summarize = (field) => {
+  const summarize = (field: FilterField) => {
     const values = filters.value[field.id] ?? []
     if (!values.length) return null
     const first = field.options.find((option) => option.value === values[0])
-    return { label: first ? first.label : field.formatValue(values[0]), extra: values.length - 1 }
+    return {
+      label: first ? first.label : (field.formatValue?.(values[0]) ?? ''),
+      extra: values.length - 1
+    }
   }
-  const summarizeText = (field) => {
+  const summarizeText = (field: FilterField) => {
     const parts = summarize(field)
     if (!parts) return ''
     return parts.extra ? `${parts.label} +${parts.extra}` : parts.label
   }
-  const avatarsOf = (field) =>
+  const avatarsOf = (field: FilterField) =>
     field.options
       .filter(
         (option) => 'avatar' in option && (filters.value[field.id] ?? []).includes(option.value)
@@ -201,12 +239,14 @@
     if (customId.value) return `custom:${customId.value}`
     return activeId.value ? `values:${activeId.value}` : 'fields'
   })
-  const filterRows = computed(() => {
+  const matchesQuery = <T extends { label: string }>(source: T[]) => {
     const term = query.value.trim().toLowerCase()
-    const source = activeField.value ? activeField.value.options : filterFields
     return term ? source.filter((row) => row.label.toLowerCase().includes(term)) : source
-  })
-  const isPicked = (value) => (filters.value[activeId.value] ?? []).includes(value)
+  }
+  const fieldRows = computed(() => matchesQuery(filterFields))
+  const optionRows = computed(() => matchesQuery(activeField.value?.options ?? []))
+  const filterRows = computed(() => (activeField.value ? optionRows.value : fieldRows.value))
+  const isPicked = (value: string) => (filters.value[activeId.value ?? ''] ?? []).includes(value)
 
   watch(filterOpen, (open) => {
     if (!open) return
@@ -219,11 +259,11 @@
     direction.value = 'forward'
   })
 
-  const toLevel = (dir, mutate) => {
+  const toLevel = (dir: string, mutate: () => void) => {
     direction.value = dir
     mutate()
   }
-  const enter = (fieldId) => {
+  const enter = (fieldId: string) => {
     if (!filterOpen.value) {
       requestedId = fieldId
       filterOpen.value = true
@@ -239,7 +279,7 @@
       activeId.value = null
       query.value = ''
     })
-  const pick = (field, option) => {
+  const pick = (field: FilterField, option: FilterOption) => {
     if (option.custom) {
       toLevel('forward', () => {
         customId.value = field.id
@@ -248,7 +288,7 @@
       return
     }
     const current = filters.value[field.id] ?? []
-    const next =
+    const next: FilterValue[] =
       field.kind === 'range'
         ? current[0] === option.value
           ? []
@@ -266,31 +306,32 @@
       customId.value = null
     })
   }
-  const commitCustom = (range) => {
+  const commitCustom = (range: CalendarValue) => {
     const field = customField.value
     if (!field) return
     const next = { ...filters.value }
-    if (range?.start || range?.end) next[field.id] = [range]
+    if (range && !(range instanceof Date) && (range.start || range.end)) next[field.id] = [range]
     else delete next[field.id]
     filters.value = next
     leaveCustom()
     back()
     filterOpen.value = false
   }
-  const clearFilter = (field) => {
+  const clearFilter = (field: FilterField) => {
     const next = { ...filters.value }
     delete next[field.id]
     filters.value = next
   }
   const levelRows = () => [
-    ...(filterPanel.value?.querySelectorAll(`[data-level="${levelKey.value}"] [data-filter-row]`) ??
-      [])
+    ...(filterPanel.value?.querySelectorAll<HTMLElement>(
+      `[data-level="${levelKey.value}"] [data-filter-row]`
+    ) ?? [])
   ]
-  const move = (event, step) => {
+  const move = (event: KeyboardEvent, step: number) => {
     const items = levelRows()
     if (!items.length) return
     event.preventDefault()
-    const index = items.indexOf(event.target)
+    const index = items.indexOf(event.target as HTMLElement)
     items[(index + step + items.length) % items.length]?.focus()
   }
   watch(levelKey, async () => {
@@ -299,7 +340,7 @@
   })
 
   const loading = ref(false)
-  let refreshTimer
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
     if (loading.value) return
     loading.value = true
@@ -312,7 +353,7 @@
   const listedColumns = columns
     .filter((column) => column.kind !== 'action')
     .map((column) => ({
-      id: column.id ?? column.accessorKey,
+      id: column.id ?? column.accessorKey ?? '',
       label: column.label ?? column.header,
       locked: column.hideable === false
     }))
@@ -321,9 +362,9 @@
   watch(columnsOpen, (open) => {
     if (open) columnsTipOpen.value = false
   })
-  const columnVisibility = ref({ id: false })
-  const isVisible = (id) => columnVisibility.value[id] !== false
-  const setVisible = (id, visible) => {
+  const columnVisibility = ref<Record<string, boolean>>({ id: false })
+  const isVisible = (id: string) => columnVisibility.value[id] !== false
+  const setVisible = (id: string, visible: boolean) => {
     const next = { ...columnVisibility.value }
     if (visible) delete next[id]
     else next[id] = false
@@ -334,7 +375,7 @@
     columnVisibility.value = {}
   }
 
-  const tableRef = ref(null)
+  const tableRef = ref<{ exportCsv: (options?: { filename?: string }) => void } | null>(null)
   const pagination = ref({ pageIndex: 0, pageSize: 8 })
   const visibleRows = computed(() =>
     rows.value.filter((row) =>
@@ -350,7 +391,7 @@
 
   const SUPPORTED = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'CAA', 'SRV', 'NS', 'PTR']
 
-  const stripComment = (line) => {
+  const stripComment = (line: string) => {
     let quoted = false
     for (let index = 0; index < line.length; index += 1) {
       const char = line[index]
@@ -359,15 +400,17 @@
     }
     return line
   }
-  const unroot = (name) => (name.length > 1 && name.endsWith('.') ? name.slice(0, -1) : name)
-  const readTtl = (token) => {
+  const unroot = (name: string) =>
+    name.length > 1 && name.endsWith('.') ? name.slice(0, -1) : name
+  const readTtl = (token: string) => {
     if (/^\d+$/.test(token)) return Number(token)
     const match = /^(\d+)([smhdw])$/i.exec(token)
     if (!match) return null
-    return Number(match[1]) * { s: 1, m: 60, h: 3600, d: 86400, w: 604800 }[match[2].toLowerCase()]
+    const units: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86400, w: 604800 }
+    return Number(match[1]) * units[match[2].toLowerCase()]
   }
   const IPV4 = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/
-  const checkValue = (type, value) => {
+  const checkValue = (type: string, value: string) => {
     if (!value) return 'The record has no value.'
     if (type === 'A' && !IPV4.test(value)) return `${value} is not an IPv4 address.`
     if (type === 'AAAA' && !value.includes(':')) return `${value} is not an IPv6 address.`
@@ -375,8 +418,8 @@
     return ''
   }
 
-  const parseZoneFile = (text) => {
-    const lines = []
+  const parseZoneFile = (text: string) => {
+    const lines: ZoneLine[] = []
     let origin = ''
     let defaultTtl = 3600
     let lastName = '@'
@@ -498,7 +541,7 @@ legacy  IN HINFO "PC" "Linux"`
   const importOpen = ref(true)
   const zoneText = ref(SAMPLE_ZONE)
   const zoneSource = ref('the pasted zone file')
-  const fileInput = ref(null)
+  const fileInput = ref<HTMLInputElement | null>(null)
   const dropError = ref('')
   const parsed = computed(() => parseZoneFile(zoneText.value))
   const readyLines = computed(() => parsed.value.lines.filter((entry) => entry.status === 'ready'))
@@ -506,20 +549,20 @@ legacy  IN HINFO "PC" "Linux"`
   const skippedLines = computed(() =>
     parsed.value.lines.filter((entry) => entry.status === 'skipped')
   )
-  const previewColumns = [
+  const previewColumns: TableColumn[] = [
     { accessorKey: 'line', header: 'Line', minWidth: 64 },
     { accessorKey: 'name', header: 'Name', principal: true },
     { accessorKey: 'type', header: 'Type', minWidth: 80 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'status', header: 'Status', minWidth: 104 }
   ]
-  const statusTag = {
+  const statusTag: Record<ZoneLine['status'], { label: string; severity: TagSeverity }> = {
     ready: { label: 'Ready', severity: 'success' },
     skipped: { label: 'Skipped', severity: 'secondary' },
     error: { label: 'Error', severity: 'danger' }
   }
 
-  const readFile = async (file) => {
+  const readFile = async (file: File | undefined) => {
     if (!file) return
     dropError.value = ''
     const text = await file.text()
@@ -530,20 +573,21 @@ legacy  IN HINFO "PC" "Linux"`
     zoneText.value = text
     zoneSource.value = file.name
   }
-  const onDrop = (event, files) => readFile(files[0])
+  const onDrop = (_event: DragEvent, files: File[]) => readFile(files[0])
   const onReject = () => {
     dropError.value = 'Drop one text file, such as example.com.zone or zone.txt.'
   }
-  const onPicked = (event) => {
-    readFile(event.target.files?.[0])
-    event.target.value = ''
+  const onPicked = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    readFile(input.files?.[0])
+    input.value = ''
   }
   const onPaste = () => {
     zoneSource.value = 'the pasted zone file'
   }
 
   const importing = ref(false)
-  let importTimer
+  let importTimer: ReturnType<typeof setTimeout> | undefined
   const runImport = () => {
     if (!readyLines.value.length) return
     importing.value = true
@@ -990,7 +1034,7 @@ legacy  IN HINFO "PC" "Linux"`
                                 >
                                   <template v-if="!activeField">
                                     <button
-                                      v-for="field in filterRows"
+                                      v-for="field in fieldRows"
                                       :key="field.id"
                                       type="button"
                                       data-filter-row
@@ -1013,7 +1057,7 @@ legacy  IN HINFO "PC" "Linux"`
 
                                   <template v-else>
                                     <button
-                                      v-for="option in filterRows"
+                                      v-for="option in optionRows"
                                       :key="String(option.value)"
                                       type="button"
                                       data-filter-row
@@ -1251,7 +1295,7 @@ legacy  IN HINFO "PC" "Linux"`
                       <span
                         v-if="summarize(field)?.extra"
                         class="shrink-0 text-(--text-muted)"
-                        >+{{ summarize(field).extra }}</span
+                        >+{{ summarize(field)?.extra }}</span
                       >
                     </span>
                   </Chip>
