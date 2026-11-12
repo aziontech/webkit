@@ -9,8 +9,7 @@ const SLOT_PRESENCE = /\b\$?slots(?:\.[\w$]+(?![\w$])|\[[^\]]+\])(?!\s*(?:\?\.)?
 function computedBodies(text) {
   const bodies = []
   const re = /\bcomputed\s*\(/g
-  let m
-  while ((m = re.exec(text))) {
+  while (re.exec(text)) {
     let depth = 1
     let i = re.lastIndex
     while (i < text.length && depth > 0) {

@@ -383,3 +383,12 @@ New entry `artifact-canvas`: 6.32 KB initial chunk (`entryOnly`; `CopyButton`'s 
 | table-root      | 52.35         | 53.61        | 53.8       | Raised: tree rows.                   |
 | listing-browser | 67.5          | 68.68        | 68.9       | Raised: carries `Table` (tree rows). |
 | listing-table   | 58.6          | 59.75        | 59.95      | Raised: carries `Table` (tree rows). |
+
+### M2.7 owner feedback — CardGrid balances its rows
+
+`CardGrid` counts its rendered cells and resolves the balanced row width per breakpoint (`layout: 'balanced'`, the new default), so every entry that carries it grows by the count and the wrapping-row utilities. Two sections cross their budgets.
+
+| Entry             | Budget before | Measured now | New budget | Note                                   |
+| ----------------- | ------------- | ------------ | ---------- | -------------------------------------- |
+| quote-tabs        | 20.6          | 20.89        | 21.1       | Raised: carries `CardGrid` (balanced). |
+| article-highlight | 7.2           | 7.41         | 7.6        | Raised: carries `CardGrid` (balanced). |
