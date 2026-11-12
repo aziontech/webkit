@@ -838,6 +838,7 @@ export const es: Messages = {
   },
   tableFilter: {
     title: 'Filtros',
+    triggerCount: { one: '{title}, {count} aplicado', other: '{title}, {count} aplicados' },
     field: 'Campo',
     operator: 'Operador',
     value: 'Valor',

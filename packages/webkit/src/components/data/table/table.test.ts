@@ -2,17 +2,21 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import AdvancedFilter from '../../../../examples/table/advanced-filter.vue'
 import Composition from '../../../../examples/table/composition.vue'
 import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
 import StackedRows from '../../../../examples/table/stacked-rows.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
+import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import Table from './index'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
 import TableCell from './table-cell/table-cell.vue'
+import TableFilter from './table-filter/table-filter.vue'
 import TableFooter from './table-footer/table-footer.vue'
 import TableHeadCell from './table-head-cell/table-head-cell.vue'
 import TableHeader from './table-header/table-header.vue'
@@ -1190,5 +1194,61 @@ describe('Table slot presence', () => {
     expect(queryByTestId('data-table__caption')).toBeNull()
     expect(queryByTestId('probe')).toBeNull()
     expect(table.hasAttribute('aria-labelledby')).toBe(false)
+  })
+})
+
+describe('Table.Filter trigger count', () => {
+  it('counts the applied filters of the table and names the trigger with it', async () => {
+    const { getByTestId, getByRole, queryByTestId } = render(AdvancedFilter)
+    const trigger = getByTestId('data-table__filter')
+    expect(trigger).toHaveAccessibleName('Filters, 1 applied')
+    expect(getByTestId('data-table__filter__count')).toHaveTextContent('1')
+    expect(getByTestId('data-table__filter__count').closest('[aria-hidden="true"]')).toBeTruthy()
+    await fireEvent.click(getByRole('button', { name: /^Remove/ }))
+    await waitFor(() => expect(trigger).toHaveAccessibleName('Filters'))
+    expect(queryByTestId('data-table__filter__count')).toBeNull()
+  })
+
+  it('shows the count prop when the filters live outside the table', async () => {
+    const { getByTestId, queryByTestId, rerender } = render(TableFilter, { props: { count: 3 } })
+    expect(getByTestId('data-table__filter')).toHaveAccessibleName('Filters, 3 applied')
+    expect(getByTestId('data-table__filter__count')).toHaveTextContent('3')
+    await rerender({ count: 0 })
+    expect(getByTestId('data-table__filter')).toHaveAccessibleName('Filters')
+    expect(queryByTestId('data-table__filter__count')).toBeNull()
+  })
+
+  it('passes the shown count to a custom trigger', () => {
+    const { getByTestId, queryByTestId } = render(TableFilter, {
+      props: { count: 2 },
+      slots: {
+        trigger: ({ count }: { count: number }) => h('span', { 'data-testid': 'probe' }, count)
+      }
+    })
+    expect(getByTestId('probe')).toHaveTextContent('2')
+    expect(queryByTestId('data-table__filter__count')).toBeNull()
+  })
+
+  it('pluralizes the trigger name in pt-BR and uses the custom title', () => {
+    const Host = defineComponent({
+      setup() {
+        provideLocale({ locale: 'pt-BR', catalogs: { en, ...LOCALES } })
+        return () =>
+          h('div', [
+            h(TableFilter, { count: 1, 'data-testid': 'one' }),
+            h(TableFilter, { count: 4, 'data-testid': 'four' }),
+            h(TableFilter, { count: 2, title: 'Origens', 'data-testid': 'titled' })
+          ])
+      }
+    })
+    const { getByTestId } = render(Host)
+    expect(getByTestId('one')).toHaveAccessibleName('Filtros, 1 aplicado')
+    expect(getByTestId('four')).toHaveAccessibleName('Filtros, 4 aplicados')
+    expect(getByTestId('titled')).toHaveAccessibleName('Origens, 2 aplicados')
+  })
+
+  it('has no axe violations with the count shown', async () => {
+    const { container } = render(AdvancedFilter)
+    await expectNoA11yViolations(container)
   })
 })

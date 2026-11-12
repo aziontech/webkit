@@ -813,6 +813,10 @@ export const tableExport = {
 
 export const tableFilter = {
   title: 'Filters',
+  triggerCount: {
+    one: '{title}, {count} applied',
+    other: '{title}, {count} applied'
+  },
   field: 'Field',
   operator: 'Operator',
   value: 'Value',

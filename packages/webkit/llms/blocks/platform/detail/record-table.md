@@ -55,7 +55,7 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 ### G. Filter popover — `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Button`, `Badge`, `IconButton`, `CalendarRoot`, `Input`, `Avatar` (optional)
 
-The outlined Filter `Button` opens one popover with the Type and Policy fields; a `Badge` on the trigger counts applied fields. Filters narrow `:data` and rewind pagination to the first page. It is the same recipe as `platform/view/table-view`.
+The outlined Filter `Button` opens one popover with the Type and Policy fields; a `Badge` on the trigger counts applied fields (the drill-down popover keeps its composed count; a filter in a table toolbar uses `Table.Filter`, whose trigger carries the count). Filters narrow `:data` and rewind pagination to the first page. It is the same recipe as `platform/view/table-view`.
 
 ### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
 

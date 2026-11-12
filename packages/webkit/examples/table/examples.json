@@ -96,6 +96,11 @@
       "name": "StackedRows",
       "summary": "A short release list in a side-panel-width box with `stackable`: each row becomes a card with the release name as its title and Area and Released as label and value lines. Opt-in; a console list keeps its scrolling grid on a phone.",
       "file": "stacked-rows.vue"
+    },
+    {
+      "name": "AdvancedFilter",
+      "summary": "`Table.Filter` builds field, operator and value conditions and `Table.AppliedFilters` shows each one as a chip you can edit or remove. With one filter applied, the funnel trigger carries its count and is named `Filters, 1 applied`; at zero the count goes away. Pass `count` only when the filters live outside the table, such as a custom builder in the `default` slot.",
+      "file": "advanced-filter.vue"
     }
   ]
 }
