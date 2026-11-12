@@ -93,7 +93,8 @@ Run, from the repository root, and keep the output for the PR:
 ```bash
 pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing, patterns, cited names,
                                                     # spec status, spec template, authoring, doc standards,
-                                                    # test gate, hook tests, toolkit tests → table
+                                                    # test gate, bundle budget, hook tests,
+                                                    # toolkit tests → table
 pnpm --filter @aziontech/webkit lint
 pnpm --filter @aziontech/webkit lint:style
 pnpm --filter @aziontech/webkit type-check
