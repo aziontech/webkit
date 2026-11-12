@@ -35,6 +35,8 @@ export interface MultiSelectContext {
   filled: ComputedRef<boolean>
   /** Records the visible label of an option so the trigger can show labels, not values. */
   registerLabel: (value: unknown, label: string) => void
+  /** Whether a selected value still has no recorded label, so the closed list renders its options once to read them. */
+  labelsPending: ComputedRef<boolean>
 }
 
 export const multiSelectContextKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelectContext')

@@ -359,6 +359,13 @@ describe('MultiSelect (composition / overlay)', () => {
     expect(listbox()).toBeNull()
   })
 
+  it('renders no hidden options while closed with nothing selected', async () => {
+    const { getByTestId } = render(Harness, { props: { initial: [], open: false } })
+    expect(document.querySelector('[data-testid="multi-select-content__labels"]')).toBeNull()
+    expect(document.querySelectorAll('[role="option"]').length).toBe(0)
+    expect(getByTestId('multi-select-trigger__value').textContent?.trim()).toBe('Pick options')
+  })
+
   it('closes the panel on Escape fired inside the listbox', async () => {
     render(Harness, { props: { open: true } })
     const panel = listbox()!

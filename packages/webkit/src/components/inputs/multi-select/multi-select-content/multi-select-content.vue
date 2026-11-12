@@ -121,12 +121,7 @@
     }
   )
 
-  const labelsCollected = ref(false)
-
   onMounted(() => {
-    void nextTick(() => {
-      labelsCollected.value = true
-    })
     if (ctx.open.value) {
       document.addEventListener('pointerdown', onDocumentPointerDown, true)
     }
@@ -190,7 +185,7 @@
     </Transition>
   </Teleport>
   <div
-    v-if="!ctx.open.value && !labelsCollected"
+    v-if="!ctx.open.value && ctx.labelsPending.value"
     hidden
     :data-testid="`${testId}__labels`"
   >

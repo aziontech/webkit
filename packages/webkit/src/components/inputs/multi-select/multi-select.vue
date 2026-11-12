@@ -111,6 +111,8 @@
     if (label && labels.get(value) !== label) labels.set(value, label)
   }
 
+  const labelsPending = computed(() => currentArray().some((value) => !labels.has(value)))
+
   const displayValueComputed = computed((): string => {
     const current = currentArray()
     if (props.displayValue) return props.displayValue(current)
@@ -138,7 +140,8 @@
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
     filled,
-    registerLabel
+    registerLabel,
+    labelsPending
   })
 </script>
 

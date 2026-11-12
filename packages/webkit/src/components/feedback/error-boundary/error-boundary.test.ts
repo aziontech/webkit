@@ -6,6 +6,7 @@ import { defineComponent, h, nextTick, onErrorCaptured, ref } from 'vue'
 import CustomFallback from '../../../../examples/error-boundary/custom-fallback.vue'
 import Default from '../../../../examples/error-boundary/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import ErrorBoundary from './error-boundary.vue'
 
@@ -169,7 +170,7 @@ describe('ErrorBoundary', () => {
           setup: () => () =>
             h(
               WebkitProvider,
-              { locale: 'pt-BR' },
+              { locale: 'pt-BR', catalogs: LOCALES },
               { default: () => h(ErrorBoundary, null, { default: () => h(Region) }) }
             )
         })
