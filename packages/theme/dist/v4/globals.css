@@ -904,6 +904,7 @@
   --text-link-line-height: inherit;
   --text-link-color: var(--text-link);
   --text-link-text-decoration-line: underline;
+  --text-link-text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
   --text-link-text-underline-offset: 0.15em;
   --text-link-border-radius: var(--shape-elements);
   --text-link-transition: all 110ms cubic-bezier(0.39, 0.57, 0.56, 1);
@@ -1605,10 +1606,11 @@
   line-height: var(--text-link-line-height);
   color: var(--text-link-color);
   text-decoration-line: var(--text-link-text-decoration-line);
+  text-decoration-color: var(--text-link-text-decoration-color);
   text-underline-offset: var(--text-link-text-underline-offset);
   border-radius: var(--text-link-border-radius);
   transition: var(--text-link-transition);
-  &:hover { color: var(--text-link-hover); text-decoration-thickness: 2px; }
+  &:hover { color: var(--text-link-hover); text-decoration-color: currentColor; text-decoration-thickness: 2px; }
   &:focus-visible { outline: 2px solid var(--ring-color); outline-offset: 2px; }
 }
 
