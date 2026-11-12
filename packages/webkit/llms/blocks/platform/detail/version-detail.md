@@ -1,18 +1,18 @@
 # VersionDetail (`platform/detail/version-detail`)
 
-> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the app composes it in the layout's breadcrumbs slot; below md the body's own row carries it with a Back button). In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
+> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.
 
 - Surface: product
 - Source: `blocks/platform/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/version-detail")`
-- Components: [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [ConsoleLayout](../../../components/console-layout.md), [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Resizable](../../../components/resizable.md), [ScrollArea](../../../components/scroll-area.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [SplitButton](../../../components/split-button.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
 version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión; environment switcher; environment crumb; switch environment; seletor de ambiente
 
-One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`) and its panes scroll on their own.
+One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.
 
 ## When to use
 
@@ -29,9 +29,9 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ## Building blocks
 
-### A. Version switcher — `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
+### A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 
-The trail is the layout's, and its last crumb is the version, a control: the app composes it in the layout's `breadcrumbs` slot (module, resource, then a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`; `shells/console` DetailPage shows the slot). The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
+The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
 The layout hides its breadcrumbs while compact, so the body opens on a row (`md:hidden`, its own `nav` named Breadcrumb) that carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
 
@@ -64,6 +64,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Keep one primary action on the page, in the version bar; the tabs share it.
 - Lock the settings fieldset, not each control one by one, when the version is built.
 - Let the user switch versions from the breadcrumb without going back to the list.
+- Set the trail from the page with `ConsoleLayout.Breadcrumbs`, and mark the root with `data-layout-fill`.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
@@ -72,6 +73,7 @@ An earlier version opened from Version history keeps the page read-only and says
 ## Don't
 
 - Don't let a built version look editable; disable the fieldset and say Read-only.
+- Don't size the body with `calc(100dvh - …)`.
 - Don't put Save or Deploy in the tab row or the page header.
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
@@ -108,7 +110,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The breadcrumb ends on two crumbs, environment then version, each a small `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 
 ## Related
 
@@ -124,7 +126,7 @@ An earlier version opened from Version history keeps the page read-only and says
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
 - `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
-- `EnvironmentCrumb` — The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the layout's breadcrumbs slot from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
+- `EnvironmentCrumb` — The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumbs` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/version-detail", { variant })`, or the file under `blocks/platform/detail/version-detail/variants/`.
 
@@ -135,6 +137,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -368,7 +371,87 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 </script>
 
 <template>
-  <div class="flex h-[calc(100dvh-var(--layout-header-height))] min-h-0 flex-col">
+  <div
+    data-layout-fill
+    class="flex h-dvh min-h-0 flex-col"
+  >
+    <ConsoleLayout.Breadcrumbs
+      :items="[
+        { label: 'Resources', href: '/resources' },
+        { label: 'web-app', href: '/resources/1784552864' }
+      ]"
+    >
+      <Select
+        kind="transparent"
+        size="small"
+        :model-value="versionId"
+        :display-value="
+          (id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')
+        "
+        @update:open="
+          (open) => {
+            if (!open) query = ''
+          }
+        "
+      >
+        <Select.Trigger aria-label="Switch version" />
+        <Select.Content>
+          <template #search>
+            <Input
+              v-model="query"
+              size="small"
+              placeholder="Search versions"
+              aria-label="Search versions"
+              @keydown.stop
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+          </template>
+          <Select.Group label="Versions">
+            <Select.Option
+              v-for="entry in matches"
+              :key="entry.id"
+              :value="entry.id"
+            >
+              {{ entry.name }}
+              <template #tag>
+                <Tag
+                  :label="entry.tag.label"
+                  :severity="entry.tag.severity"
+                  :icon="entry.tag.icon"
+                  size="small"
+                />
+              </template>
+            </Select.Option>
+            <p
+              v-if="!matches.length"
+              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+            >
+              No versions match"{{ query }}".
+            </p>
+          </Select.Group>
+          <template #footer>
+            <Select.Option
+              value="__create-version__"
+              class="w-full"
+            >
+              <span class="flex items-center gap-(--spacing-xs)">
+                <i
+                  class="pi pi-plus-circle"
+                  aria-hidden="true"
+                />
+                Add Version
+              </span>
+            </Select.Option>
+          </template>
+        </Select.Content>
+      </Select>
+    </ConsoleLayout.Breadcrumbs>
     <nav
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"

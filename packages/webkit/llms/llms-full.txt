@@ -1210,7 +1210,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 ```vue
 <script setup>
-  import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import ConsoleLayout from '@aziontech/webkit/console-layout-root'
   import { navigation } from './navigation'
 </script>
 
@@ -1230,7 +1230,9 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
   (`@aziontech/webkit/use-console-layout`). Bind `v-model:navigation-expanded` to persist the rail or
-  to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`).
+  to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
+  trail, control crumb included, with `ConsoleLayout.Breadcrumbs`, and a full-height workspace puts
+  `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
   `v-model:language`; switch the locale from that value.
@@ -6489,7 +6491,7 @@ What each part takes: [blocks/platform/detail/deployment-logs.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, LogView, `LogViewContent`, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, LogView, `LogViewContent`, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -6524,8 +6526,8 @@ What each part takes: [blocks/platform/detail/details-page.md](blocks/platform/d
 
 ## Breadcrumb and environment
 
-- The trail is the layout's: the app passes `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app). A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
-- A service ends the trail on its environment. That crumb is a control, so the app composes it in the layout's `breadcrumbs` slot: `Breadcrumb.List` with the module and the service, then a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. `shells/console` (DetailPage) shows the slot.
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumbs`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shells/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 
 ## Topology tab
@@ -6581,7 +6583,7 @@ What each part takes: [blocks/platform/detail/details-page.md](blocks/platform/d
 - Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
-- ServiceOverview: a service (its environment crumb is the layout's `breadcrumbs` slot), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 - Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
@@ -6904,14 +6906,14 @@ What each part takes: [blocks/platform/detail/record-table.md](blocks/platform/d
 - Surface: product
 - Source: `blocks/platform/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/version-detail")`
-- Components: Avatar, Button, Card, ConfirmDialog, DropdownMenu, Field, IconButton, Input, Item, PageHeader, PageTabs, Resizable, ScrollArea, Select, SettingRow, SettingsSection, SplitButton, Switch, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Button, Card, ConfirmDialog, ConsoleLayout, DropdownMenu, Field, IconButton, Input, Item, PageHeader, PageTabs, Resizable, ScrollArea, Select, SettingRow, SettingsSection, SplitButton, Switch, Tabs, Tag, Textarea, Toast, Tooltip
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
 version detail; resource version; draft version; version history; version switcher; versioned settings; detalhe da versão; histórico de versões; versão rascunho; revert version; rollback version; reverter versão; revertir versión; environment switcher; environment crumb; switch environment; seletor de ambiente
 
-One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`) and its panes scroll on their own.
+One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.
 
 ## When to use
 
@@ -6928,7 +6930,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ## Building blocks
 
-- A. Version switcher — `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
+- A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 - B. Workspace — `Resizable` (required)
 - C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton` (required)
 - D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
@@ -6943,6 +6945,7 @@ What each part takes: [blocks/platform/detail/version-detail.md](blocks/platform
 - Keep one primary action on the page, in the version bar; the tabs share it.
 - Lock the settings fieldset, not each control one by one, when the version is built.
 - Let the user switch versions from the breadcrumb without going back to the list.
+- Set the trail from the page with `ConsoleLayout.Breadcrumbs`, and mark the root with `data-layout-fill`.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
@@ -6951,6 +6954,7 @@ What each part takes: [blocks/platform/detail/version-detail.md](blocks/platform
 ## Don't
 
 - Don't let a built version look editable; disable the fieldset and say Read-only.
+- Don't size the body with `calc(100dvh - …)`.
 - Don't put Save or Deploy in the tab row or the page header.
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
@@ -6987,7 +6991,7 @@ What each part takes: [blocks/platform/detail/version-detail.md](blocks/platform
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The breadcrumb ends on two crumbs, environment then version, each a small `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 
 ## Related
 
@@ -7138,7 +7142,7 @@ What each part takes: [blocks/platform/edit/attribute-editor.md](blocks/platform
 
 code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução
 
-The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`).
+The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
@@ -7172,6 +7176,7 @@ What each part takes: [blocks/platform/edit/code-editor.md](blocks/platform/edit
 ## Do
 
 - Let the editor fill the pane; the page scrolls inside the editor, not around it.
+- Mark the page root with `data-layout-fill`.
 - Show the schema JSON and the fields form side by side, so the user can check one against the other.
 - Keep collapsed fields as one-line summaries with their tags, and open settings only for the field being edited.
 - Lock fields that cannot change after creation, with a lock glyph and a description that says so.
@@ -7183,6 +7188,7 @@ What each part takes: [blocks/platform/edit/code-editor.md](blocks/platform/edit
 
 - Don't put the code editor inside a card, a drawer or a modal.
 - Don't add a page heading above the tabs; the layout's breadcrumb names the service.
+- Don't size the page with `calc(100dvh - …)`; it overflows under a notification.
 - Don't save from inside the Arguments pane or a field; Save lives in the bar.
 - Don't flag a new field's name before the user has touched it.
 - Don't let the schema pane squeeze the fields pane below a usable width; collapse it instead.
@@ -7245,7 +7251,7 @@ What each part takes: [blocks/platform/edit/code-editor.md](blocks/platform/edit
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -7368,7 +7374,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shells/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is its `breadcrumbs` slot, a `Select` with `kind="transparent"` and `size="small"`.
+- `shells/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
 - `platform/create/single-page-create` — the create page that shares this field list.
 - `platform/detail/attached-resources` — the Domains section body in DeployableSettings.
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
@@ -9452,7 +9458,7 @@ What each part takes: [blocks/platform/view/waf-tuning.md](blocks/platform/view/
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: Alert, Avatar, Badge, Breadcrumb, Button, ButtonHighlight, Card, Command, ConsoleLayout, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, IconButton, Input, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, `type`, StatusIndicator, Table, `type`, Tabs, Tag, ThemeSwitcher, Toast, Tooltip
+- Components: Alert, Avatar, Badge, Button, ButtonHighlight, Card, Command, ConsoleLayout, ConsoleLayout, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, IconButton, Input, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, `type`, StatusIndicator, Table, `type`, Tabs, Tag, ThemeSwitcher, Toast, Tooltip
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -9493,12 +9499,14 @@ What each part takes: [blocks/shells/console.md](blocks/shells/console.md).
 
 - Compose `ConsoleLayout` once in `App.vue` and render every browse page through its default slot; replace this block's stand-in body with `<RouterView />`.
 - Keep the navigation in one data file shared by the app; the rail and the palette both read it.
-- Give every row an `href` (never `to` or `path`); derive `breadcrumbs` from the route.
+- Give every row an `href` (never `to` or `path`); derive a static `breadcrumbs` trail from the route.
+- Let a detail page set its own trail, control crumb included, with `ConsoleLayout.Breadcrumbs`.
 - Frame a list or form body with `layout-boundary` + `layout-column`; open a detail body flush on `PageTabs`.
 
 ## Don't
 
 - Don't render `AppLayout`, `Sidebar`, `GlobalHeader`, `SearchTrigger`, a `Command` palette or a `<main>` in a page; the layout owns them.
+- Don't put a page's control crumb in `App.vue`, or size a body with `calc(100dvh - …)`.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's header, controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
@@ -9523,7 +9531,7 @@ What each part takes: [blocks/shells/console.md](blocks/shells/console.md).
 ## States
 
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) and its controls row (Filter, search, Refresh, Download CSV, Columns) over the table.
-- DetailPage: a resource detail page rendered through `ConsoleLayout`. The `breadcrumbs` slot composes the trail (a crumb that is a control, so the data prop does not fit): `Breadcrumb.List` with Applications, the application, then the environment as a small `Select` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
+- DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as `items`, then the environment in its slot, a `Select` with `kind="transparent"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list: unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
 - AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `header-start` slot, before the breadcrumbs (square `Avatar` with its initials, the name, a chevron), `Switch account (Ctrl+O)` on its tooltip and `aria-keyshortcuts`; while the slot's `compact` is true it shows the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
 
@@ -28186,10 +28194,11 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 # Console Layout
 
-> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
+> The console chrome, composed once in the app: `AppLayout` with the navigation rail (`Sidebar` + `Menu`, the brand on top and the account at the foot), the global header (breadcrumbs, `SearchTrigger`, the app's own actions and the account avatar) and the `Command` search palette wired to the trigger and to ⌘K / Ctrl K. The navigation is data (`navigation`, each row with an `href` that is followed with the app's router when it is an in-app path), the active row follows the current route, and the page body is the default slot inside the layout's `<main>`. A page opens the palette with `useConsoleLayout().openSearch()`, sets its own trail with `ConsoleLayout.Breadcrumbs`, and fills a fixed-height main with `data-layout-fill` on its root. Platform blocks are only page bodies rendered through this slot; they never carry the chrome themselves.
 
-- Import: `import ConsoleLayout from '@aziontech/webkit/console-layout'`
-- Category: layout · Surface: product · Structure: monolithic
+- Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
+- Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
+- Category: layout · Surface: product · Structure: composition
 
 ## When to use
 
@@ -28200,11 +28209,13 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
 - Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
-- Pass the page's trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
-- Use the `breadcrumbs` slot only when a crumb is a control (an environment `Select`); otherwise pass the data prop.
+- A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
+- A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))`.
 - Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
@@ -28250,14 +28261,37 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The page body, rendered inside the layout's `<main>`. |
+| `default` | — | The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main. |
 | `actions` | { compact: boolean, toggleTools: () => void } | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
 | `header-start` | { compact: boolean } | Content at the start of the header, before the breadcrumbs (an account or organization switcher). |
-| `breadcrumbs` | — | A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact. |
+| `breadcrumbs` | — | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact. |
 | `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
 | `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
 | `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
 | `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar. |
+
+## Sub-component imports
+
+- `@aziontech/webkit/console-layout-breadcrumbs`
+
+## Sub-components
+
+The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `ConsoleLayoutCrumb`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
+
+```
+packages/webkit/src/components/layout/console-layout/
+├── console-layout.vue          (root — the chrome, provides the context)
+├── index.ts                    (compound Object.assign)
+├── injection-key.ts            (the page context and the trail registry)
+├── composables/use-console-layout.ts
+├── console-layout.test.ts
+└── console-layout-breadcrumbs/console-layout-breadcrumbs.vue
+```
+
+- `console-layout-breadcrumbs/console-layout-breadcrumbs.vue` — a page's own trail.
+  - Props: `items: ConsoleLayoutCrumb[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
+  - Events: _none_ (crumb clicks are followed by the layout).
+  - Slots: `default` — one or more controls that end the trail (a `Select` with `kind="transparent"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
 
 ## v-model
 
@@ -28271,6 +28305,8 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 - Visual states: `default`, `compact` (from `AppLayout`: the rail becomes a drawer opened from the header, the breadcrumbs give way to the brand), the palette `open` / `closed`.
 - `data-compact` and `data-navigation` come from `AppLayout` on the inner frame.
+- Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
+- Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
@@ -28281,6 +28317,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the account trigger (`Account menu`) come from the locale catalog; the avatar carries the account name.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
+- A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
 
 ## Right-to-left
 
@@ -28319,7 +28356,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'

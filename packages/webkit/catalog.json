@@ -14735,11 +14735,15 @@
   },
   "console-layout": {
    "import": "@aziontech/webkit/console-layout",
-   "target": "./src/components/layout/console-layout/console-layout.vue",
+   "target": "./src/components/layout/console-layout/index.ts",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/console-layout",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/console-layout-root",
+   "subcomponents": [
+    "@aziontech/webkit/console-layout-breadcrumbs"
+   ],
    "category": "layout",
-   "structure": "monolithic",
+   "structure": "composition",
    "props": [
     {
      "name": "navigation",
@@ -14835,7 +14839,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The page body, rendered inside the layout's `<main>`."
+     "notes": "The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main."
     },
     {
      "name": "actions",
@@ -14850,7 +14854,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "A composed trail that replaces the one built from `breadcrumbs` (a last crumb that is an environment `Select`); hidden while compact."
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact."
     },
     {
      "name": "notifications",
@@ -14876,6 +14880,158 @@
    "surface": "product",
    "examplesFile": "catalog/examples/console-layout.json",
    "docsFile": "catalog/components/console-layout.json"
+  },
+  "console-layout-root": {
+   "import": "@aziontech/webkit/console-layout-root",
+   "target": "./src/components/layout/console-layout/console-layout.vue",
+   "kind": "root",
+   "rootOf": "console-layout",
+   "treeShakeableImport": "@aziontech/webkit/console-layout-root",
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "navigation",
+     "type": "ConsoleLayoutNavGroup[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router."
+    },
+    {
+     "name": "activeId",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Id of the current row. Empty matches the current route against each row's `href`."
+    },
+    {
+     "name": "breadcrumbs",
+     "type": "ConsoleLayoutCrumb[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page."
+    },
+    {
+     "name": "home",
+     "type": "string",
+     "default": "'/'",
+     "required": "false",
+     "doc": "Where the brand mark links."
+    },
+    {
+     "name": "account",
+     "type": "ConsoleLayoutAccount",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`)."
+    },
+    {
+     "name": "searchPlaceholder",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Placeholder of the palette's input. Empty uses the locale catalog (`Search pages and commands`)."
+    },
+    {
+     "name": "toolsLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`)."
+    },
+    {
+     "name": "searchOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:searchOpen`)."
+    },
+    {
+     "name": "toolsOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:toolsOpen`)."
+    },
+    {
+     "name": "navigationExpanded",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Two-way value (`v-model:navigationExpanded`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "navigate",
+     "payload": "(event: MouseEvent | KeyboardEvent, item: ConsoleLayoutNavItem)",
+     "notes": "Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first."
+    },
+    {
+     "name": "search-select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+     "notes": "Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main."
+    },
+    {
+     "name": "actions",
+     "scope": "{ compact: boolean, toggleTools: () => void }",
+     "notes": "The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell)."
+    },
+    {
+     "name": "header-start",
+     "scope": "{ compact: boolean }",
+     "notes": "Content at the start of the header, before the breadcrumbs (an account or organization switcher)."
+    },
+    {
+     "name": "breadcrumbs",
+     "scope": "—",
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact."
+    },
+    {
+     "name": "notifications",
+     "scope": "—",
+     "notes": "Flash messages (`Alert`) above the page, kept in view while the page scrolls."
+    },
+    {
+     "name": "tools",
+     "scope": "—",
+     "notes": "The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`."
+    },
+    {
+     "name": "search",
+     "scope": "{ query: string }",
+     "notes": "Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette."
+    },
+    {
+     "name": "account-menu",
+     "scope": "—",
+     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/console-layout-root.json"
+  },
+  "console-layout-breadcrumbs": {
+   "import": "@aziontech/webkit/console-layout-breadcrumbs",
+   "target": "./src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue",
+   "kind": "subcomponent",
+   "parent": "console-layout",
+   "treeShakeableImport": "@aziontech/webkit/console-layout-breadcrumbs",
+   "surface": "product"
   },
   "use-console-layout": {
    "import": "@aziontech/webkit/use-console-layout",
@@ -30443,6 +30599,7 @@
     "Button",
     "Card",
     "CodeBlock",
+    "ConsoleLayout",
     "CopyButton",
     "Drawer",
     "DrawerClose",
@@ -30468,6 +30625,7 @@
     "Popover",
     "SaveBar",
     "SectionHeader",
+    "Select",
     "SettingRow",
     "SettingsSection",
     "StatusIndicator",
@@ -30486,6 +30644,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
+    "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
@@ -30511,6 +30670,7 @@
     "@aziontech/webkit/popover",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/section-header",
+    "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/status-indicator",
@@ -30547,7 +30707,7 @@
     },
     {
      "name": "ServiceOverview",
-     "summary": "A service (its environment crumb is the layout's `breadcrumbs` slot, a transparent small select): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy."
+     "summary": "A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumbs`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy."
     },
     {
      "name": "DeploymentDetail",
@@ -30811,7 +30971,7 @@
    "title": "Templates/Platform/Detail/VersionDetail",
    "source": "blocks/platform/detail/version-detail/version-detail.vue",
    "surface": "product",
-   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the app composes it in the layout's breadcrumbs slot; below md the body's own row carries it with a Back button). In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
+   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Variables, Cache Settings, Custom Code and Rules carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The stories open on the Settings tab; the Rules tab is the Edit/RuleBuilder template, and the Source, Variables, Cache Settings and Custom Code panels are not plotted here. Built from `ConfirmDialog`, `Toaster`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field` and `Textarea`.",
    "intents": [
     "version detail",
     "resource version",
@@ -30841,6 +31001,7 @@
     "Button",
     "Card",
     "ConfirmDialog",
+    "ConsoleLayout",
     "DropdownMenu",
     "Field",
     "IconButton",
@@ -30866,6 +31027,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/console-layout",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
@@ -30887,7 +31049,7 @@
     "@aziontech/webkit/tooltip"
    ],
    "primary": "Draft",
-   "guidelinesSummary": "One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`) and its panes scroll on their own.",
+   "guidelinesSummary": "One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.",
    "variants": [
     {
      "name": "Deployed",
@@ -30903,7 +31065,7 @@
     },
     {
      "name": "EnvironmentCrumb",
-     "summary": "The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the layout's breadcrumbs slot from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`."
+     "summary": "The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumbs` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`."
     }
    ],
    "file": "catalog/patterns/platform/detail/version-detail.json"
@@ -31159,7 +31321,7 @@
     "@aziontech/webkit/trace"
    ],
    "primary": "Code",
-   "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so the body takes the screen under the header (`h-[calc(100dvh-var(--layout-header-height))]`).",
+   "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).",
    "variants": [
     {
      "name": "Arguments",
@@ -31255,6 +31417,7 @@
     "CodeBlock",
     "CodeEditor",
     "ConfirmDialog",
+    "ConsoleLayout",
     "CopyButton",
     "Drawer",
     "DrawerClose",
@@ -31298,6 +31461,7 @@
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer",
     "@aziontech/webkit/drawer-close",
@@ -31339,7 +31503,7 @@
    "variants": [
     {
      "name": "DeployableSettings",
-     "summary": "A deployable resource’s Settings tab, under the environment switcher the layout's breadcrumbs slot carries and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region."
+     "summary": "A deployable resource’s Settings tab, under the environment switcher the page sets as its control crumb with `ConsoleLayout.Breadcrumbs` and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region."
     },
     {
      "name": "PolicySettings",
@@ -33321,11 +33485,11 @@
     "Alert",
     "Avatar",
     "Badge",
-    "Breadcrumb",
     "Button",
     "ButtonHighlight",
     "Card",
     "Command",
+    "ConsoleLayout",
     "ConsoleLayout",
     "Dialog",
     "DialogClose",
@@ -33358,12 +33522,12 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/badge",
-    "@aziontech/webkit/breadcrumb",
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/card",
     "@aziontech/webkit/command",
     "@aziontech/webkit/console-layout",
+    "@aziontech/webkit/console-layout-root",
     "@aziontech/webkit/dialog",
     "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
@@ -33396,7 +33560,7 @@
    "variants": [
     {
      "name": "DetailPage",
-     "summary": "A resource detail page rendered through `ConsoleLayout`: its `breadcrumbs` slot composes a `Breadcrumb` that reads Applications, the application, then its environment as a `Select` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it."
+     "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumbs` (Applications, the application) ending on its environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it."
     },
     {
      "name": "Notifications",
