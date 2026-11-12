@@ -4,6 +4,13 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.12.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.0...@aziontech/webkit@5.12.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **webkit:** use the canonical token shorthand in the readme ([#1176](https://github.com/aziontech/webkit/issues/1176)) ([eac370c](https://github.com/aziontech/webkit/commit/eac370c43c5134aa03a72d2fb2e0073aa2dec321))
+
 ## [5.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.11.1...@aziontech/webkit@5.12.0) (2026-11-11)
 
 
