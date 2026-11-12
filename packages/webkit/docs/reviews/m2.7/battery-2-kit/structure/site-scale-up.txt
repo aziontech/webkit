@@ -1,0 +1,54 @@
+[block-hero-form]
+  [marketing-hero kind=screen size=medium align=center width=5xl aria-label='Azion Scale Up Credit Program']
+    [marketing-hero-title width=lg]
+      h1 "Azion Scale Up Credit Program"
+      p "Up to $120,000 in service credits for your companyAzion platform is the easiest way to build, secure, deliver and observe modern applications anywhere: on the edge, multi-cloud, on-premise or mobile devices.That's why we created Azion Scale Up: a free credits program that will unlock the full potential of your company. Unlock the infinite potential of the edge!With 100+ edge locations around the w…"
+    text "Azion Scale Up Credit Program"
+    [input-label]
+    label "First name (Required)"
+    [input-field-text size=large]
+      input[text] name=firstName placeholder="None"
+    [input-label]
+    label "Last name"
+    [input-field-text size=large]
+      input[text] name=lastName placeholder="None"
+    [input-label]
+    label "Work email (Required)"
+    [input-field-text size=large]
+      input[text] name=email placeholder="name@company.com"
+    [input-label]
+    label "Company (Required)"
+    [input-field-text size=large]
+      input[text] name=company placeholder="None"
+    [input-label]
+    [input-field-phone-number size=large]
+      [select-trigger size=large filled=true aria-label='Country dial code']
+      button "+1"
+      input[tel] name=phone placeholder="(999) 999-9999"
+    button "Request immediate contact"
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating aria-label="Why scale up your company with Azion's credits"]
+    [marketing-section-title kind=centered size=large]
+      h2 "Why scale up your company with Azion's credits"
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center divided=true fill=canvas aria-label='Proximity and Coverage']
+          h2 "Proximity and Coverage"
+          p "Leverage an enterprise-grade, open, extensible and developer-friendly global edge computing platform that is close to your users."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center divided=true fill=canvas aria-label='Security at the Edge']
+          h2 "Security at the Edge"
+          p "Build a security perimeter around your content, web applications and the origin infrastructure."
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center divided=true fill=canvas aria-label='Infrastructure Cost Savings']
+          h2 "Infrastructure Cost Savings"
+          p "Our support team is always available to guide, monitor, and adjust defense strategies as needed, keeping you a step ahead of attackers."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center divided=true fill=canvas aria-label='Scalable and Secure']
+          h2 "Scalable and Secure"
+          p "Build even more powerful web applications that are capable of handling large access peaks with high performance and security for your users."
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='What analysts say about Azion']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "What analysts say about Azion"
+      list (4): Azion is a Leader in CDN & High Performer in 6 security categories in the G2 Winter 2026 Reports. · Azion was named a Leader and identified as the only purpose-built edge platform whose capabilities meet all of the key criteria outlined in the report. · Gartner clients note that Azion excels at providing a consultative approach to orchestration and serverless edge application environments. · Frost & Sullivan pointed that Azion's serverless edge platform increases business agility by empowering developers to build and scale their applications.
+  [marketing-section-gap-end]

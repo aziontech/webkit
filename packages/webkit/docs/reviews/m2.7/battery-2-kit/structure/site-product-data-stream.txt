@@ -1,0 +1,184 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='React faster to security and performance issues']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Data Stream
+      h1 "React faster to security and performance issues"
+      p "Send request logs, security events, and metrics to SIEM, data lake, and analytics tools in near real time."
+      button "Start free" → https://console.azion.com/signup/
+      button "DOCS" → https://www.azion.com/en/documentation/products/observe/data-stream/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Detect threats in seconds"
+          p "Feed your SIEM with near real-time data. Accelerate investigation and response."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Pass compliance audits"
+          p "Retain logs for audits and investigations with secure, continuous backups that meet regulatory requirements."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Pay only for what you use"
+          p "Consumption-based pricing with no hidden costs, no infrastructure to manage, and no vendor lock-in."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Integrate your existing stack"
+          p "Stream to AWS Kinesis, Splunk, S3, Elasticsearch, Datadog, and more. No workflow changes."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Reduce SIEM costs"
+          p "Filter and sample events before delivery to reduce data volume and lower your SIEM ingestion costs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Scale without reconfiguration"
+          p "Handle traffic spikes on a globally distributed platform with no manual intervention required."
+  · section-gap (hatched spacer band)
+  text: // ⏎ Complete, not complex
+  h2 "Security visibility without integration complexity"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Unified data collection']
+          h2 "Unified data collection"
+          p "Collect event data from Applications, Functions, WAF Events, and Activity History from one configuration. Use templates or custom mappings to send only the fields needed for security, compliance, and performance analysis."
+          img "Data collection from multiple sources with variable selection interface"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Stream, filter, and route event data']
+          h2 "Stream, filter, and route event data"
+          p "Run continuous streaming with full capture or optional sampling. Filter and transform events before routing them to SIEM, analytics, and BI platforms."
+          img "Secure pipeline architecture with stream processing capabilities"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Integrate with your existing tools']
+          h2 "Integrate with your existing tools"
+          p "Stream structured event data to SIEM, analytics, storage, and HTTP endpoints, including Splunk, Datadog, BigQuery, S3, and Azure Monitor. Customize payload format, batching, and delivery intervals to match your existing workflows."
+          img "SIEM and analytics platform integration with real-time delivery"
+  · section-gap (hatched spacer band)
+  img "Datadog"
+  img "Azure"
+  img "Elastic"
+  img "Grafana"
+  img "GraphQL"
+  img "Kafka"
+  img "Google BigQuery"
+  img "AWS"
+  img "AWS S3"
+  img "Splunk"
+  img "Kinesis Firehose"
+  img "Datadog"
+  img "Azure"
+  img "Elastic"
+  img "Grafana"
+  img "GraphQL"
+  img "Kafka"
+  img "Google BigQuery"
+  img "AWS"
+  img "AWS S3"
+  img "Splunk"
+  img "Kinesis Firehose"
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Power critical use cases with real-time data']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Power critical use cases with real-time data"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Automate threat response Correlate events across applications to update protection rules automatically. Reduce security team workload." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/block-attackers-automatically-from-siem-detections/
+        [marketing-topic icon=true described=true linked=true]
+        link "Ensure regulatory compliance Maintain audit trails with real-time monitoring. Meet PCI-DSS, HIPAA, and SOC 2 requirements." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/prepare-regulated-web-applications-for-security-audits/
+        [marketing-topic icon=true described=true linked=true]
+        link "Protect from OWASP attacks Block OWASP Top 10 and zero-day attacks with WAAP. Simplify security without performance trade-offs." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-web-applications-from-owasp-top-10-and-zero-day-attacks/
+        [marketing-topic icon=true described=true linked=true]
+        link "Accelerate applications globally Improve performance up to 10x with protocol optimizations. Handle traffic spikes without degradation." → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+        [marketing-topic icon=true described=true linked=true]
+        link "Cut SIEM costs at the source Filter and route only the events you need before they reach your SIEM or storage." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Feed analytics and business intelligence Stream request data to your analytics tools to track traffic, usage, and performance trends." → https://www.azion.com/en/solutions/web-apps/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "How is Data Stream different from native cloud logging services?"
+          [content-accordion-item]
+            h3 "How fast is data delivery?"
+          [content-accordion-item]
+            h3 "Which connectors and endpoints are supported?"
+          [content-accordion-item]
+            h3 "Can I filter and customize the data before streaming?"
+          [content-accordion-item]
+            h3 "How does Data Stream handle high traffic volumes?"
+          [content-accordion-item]
+            h3 "Is Data Stream suitable for compliance and audit requirements?"
+          [content-accordion-item]
+            h3 "How do I integrate Data Stream with my SIEM?"
+          [content-accordion-item]
+            h3 "What is the pricing model for Data Stream?"
+          [content-accordion-item]
+            h3 "What data types can be exported for compliance and auditing?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='See everything.']
+        text: // ⏎ Observe
+        h2 "See everything. Act faster."
+        button "Start free" → https://console.azion.com/signup?tck=observe_cta
+        p "Get clearer visibility, faster response, and fewer blind spots across your stack."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

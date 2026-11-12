@@ -1,0 +1,116 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Catch issues early, protect every conversion']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Edge Pulse
+      h1 "Catch issues early, protect every conversion"
+      p "Identify performance bottlenecks before they impact revenue. Collect real user data across your distributed applications, measure optimization impact, and deliver faster experiences globally."
+      button "Start free" → https://console.azion.com/signup/
+      button "DOCS" → https://www.azion.com/en/documentation/products/observe/edge-pulse/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Real-Time Monitoring"
+          p "Track navigation data, availability, and latency in real time. Identify performance bottlenecks instantly across all routes."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Optimized Delivery"
+          p "Reduce latency and improve user satisfaction with performance insights that optimize content delivery globally."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Actionable Insights"
+          p "Transform raw metrics into strategic optimization opportunities with accurate, decision-ready data."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "GraphQL API Access"
+          p "Access real-time metrics programmatically and integrate Edge Pulse insights into your custom dashboards via Azion's GraphQL API."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Distributed Monitoring"
+          p "Collect performance data from multiple points across Azion’s global distributed infrastructure without impacting application performance."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Performance Benchmarking"
+          p "Measure improvement impact, track progress over time, and validate optimization strategies with real data."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  text: // ⏎ Complete, not complex
+  h2 "Monitor Performance, Improve User Experience"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Client-Side Tag Implementation']
+          h2 "Client-Side Tag Implementation"
+          p "Add the Edge Pulse JavaScript tag to your pages to enable real user monitoring. Collect experience data from multiple points across Azion’s distributed architecture with no impact on site performance. The script runs fully asynchronously to ensure fast, non-blocking page loads."
+          img "Client-side JavaScript tag implementation"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Real User Monitoring and Performance Measurement']
+          h2 "Real User Monitoring and Performance Measurement"
+          p "Measure real user experience by collecting navigation metrics such as load time, latency, and throughput directly from user sessions. Continuously monitor all delivery routes and detect performance issues early before they affect users."
+          img "Real user monitoring for navigation data and user metrics"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Performance Benchmarking and Analysis']
+          h2 "Performance Benchmarking and Analysis"
+          p "Establish performance benchmarks and measure the impact of optimizations on user experience. Track progress over time and validate strategies with real data, accessible via Azion’s GraphQL API for integration with custom dashboards and analytics platforms."
+          img "Performance benchmarking and analysis dashboard"
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Use Cases and Applications']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Use Cases and Applications"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "E-commerce and Payment Platforms Monitor checkout performance and transaction latency to reduce cart abandonment. Optimize payment processing speed across global markets." → https://www.azion.com/en/solutions/retail/
+        [marketing-topic icon=true described=true linked=true]
+        link "Content Delivery Networks Track content delivery performance and user experience metrics. Identify optimization opportunities to improve global content distribution." → https://www.azion.com/en/documentation/use-cases/improve-performance-and-reliability/accelerate-websites-and-apis-with-a-cdn/
+        [marketing-topic icon=true described=true linked=true]
+        link "SaaS Applications Monitor application performance and user experience across different regions. Ensure consistent performance for your global user base." → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/deploy-full-stack-applications-globally/
+        [marketing-topic icon=true described=true linked=true]
+        link "Media and Streaming Services Track streaming quality and playback performance. Optimize video delivery and reduce buffering for better user experience." → https://www.azion.com/en/documentation/use-cases/deliver-media-and-streaming/stream-live-events-to-large-audiences/
+        [marketing-topic icon=true described=true linked=true]
+        link "Financial services and banking Measure login and transaction performance from real user sessions to keep critical flows fast." → https://www.azion.com/en/solutions/financial-services/
+        [marketing-topic icon=true described=true linked=true]
+        link "Websites and web applications Track page performance from real user sessions and find slow regions before customers report them." → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-and-run-marketing-websites/
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Edge Pulse?"
+          [content-accordion-item]
+            h3 "How does Edge Pulse collect performance data?"
+          [content-accordion-item]
+            h3 "What metrics does Edge Pulse track?"
+          [content-accordion-item]
+            h3 "How quickly can I see performance data?"
+          [content-accordion-item]
+            h3 "Can I integrate Edge Pulse with my existing monitoring tools?"
+          [content-accordion-item]
+            h3 "Does Edge Pulse impact my application performance?"
+          [content-accordion-item]
+            h3 "How is my data secured with Edge Pulse?"
+          [content-accordion-item]
+            h3 "How can I access Edge Pulse data programmatically?"
+          [content-accordion-item]
+            h3 "What's the pricing model for Edge Pulse?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='See everything.']
+        text: // ⏎ Observe
+        h2 "See everything. Act faster."
+        button "Start free" → https://console.azion.com/signup?tck=observe_cta
+        p "Get clearer visibility, faster response, and fewer blind spots across your stack."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

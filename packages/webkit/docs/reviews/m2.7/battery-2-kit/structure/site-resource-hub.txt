@@ -1,0 +1,18 @@
+[block-hero-centered-band kind=centered]
+  [marketing-hero kind=screen size=large align=center width=site aria-label='Articles, ebooks, and customer stories']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Resource hub
+      h1 "Articles, ebooks, and customer stories"
+      p "Practical guides on performance, security, and scale, and the results teams get running on the Azion Platform."
+      button "Start for free" → https://console.azion.com/signup/
+      button "Talk to sales" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-newsletter aria-label='Subscribe to our newsletter']
+    [marketing-section-module kind=left]
+      text: // ⏎ Stay up to date
+      h2 "Product updates, event highlights, and industry insights, delivered to your inbox."
+      label "Subscribe to our newsletter"
+      [input-field-text size=large]
+        input[text] name=email placeholder="Your email"
+      button "Subscribe"

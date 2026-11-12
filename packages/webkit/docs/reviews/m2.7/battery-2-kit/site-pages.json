@@ -1,0 +1,540 @@
+{
+  "source": "https://www.azion.com/en/ — header bar, all 4 mega-menus (opened) and footer, collected 2026-11-12 by tools/discover.mjs",
+  "pages": [
+    {
+      "id": "site-home",
+      "url": "https://www.azion.com/en/",
+      "linked_from": ["header bar", "footer: \"Azion home\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/",
+      "title": "Azion Web Platform | Azion"
+    },
+    {
+      "id": "site-pricing",
+      "url": "https://www.azion.com/en/pricing/",
+      "linked_from": ["header bar: \"Pricing\"", "footer: \"Pricing\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/pricing/",
+      "title": "Pricing | Azion"
+    },
+    {
+      "id": "site-contact",
+      "url": "https://www.azion.com/en/contact/",
+      "linked_from": [
+        "header bar: \"Contact\"",
+        "header bar: \"Talk to a specialist\"",
+        "footer: \"Contact\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/contact/",
+      "title": "Contact Azion | Azion"
+    },
+    {
+      "id": "site-solution-web-apps",
+      "url": "https://www.azion.com/en/solutions/web-apps/",
+      "linked_from": [
+        "header › Solutions menu: \"Application Development Build and run applications\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/web-apps/",
+      "title": "Build applications on a globally distributed platform | Azion"
+    },
+    {
+      "id": "site-solution-performance",
+      "url": "https://www.azion.com/en/solutions/performance/",
+      "linked_from": [
+        "header › Solutions menu: \"Performance and Reliability Improve application performance and reliability\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/performance/",
+      "title": "Application performance and reliability | Azion | Azion"
+    },
+    {
+      "id": "site-solution-ai",
+      "url": "https://www.azion.com/en/solutions/ai/",
+      "linked_from": [
+        "header › Solutions menu: \"Artificial Intelligence (AI) Build and run AI workloads\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/ai/",
+      "title": "Run AI Inference globally to power smarter applications | Azion | Azion"
+    },
+    {
+      "id": "site-solution-security",
+      "url": "https://www.azion.com/en/solutions/security/",
+      "linked_from": [
+        "header › Solutions menu: \"Application Security Secure applications and networks\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/security/",
+      "title": "Secure applications and APIs | Azion | Azion"
+    },
+    {
+      "id": "site-solution-streaming",
+      "url": "https://www.azion.com/en/solutions/streaming/",
+      "linked_from": [
+        "header › Solutions menu: \"Media and Streaming Deliver media and streaming content\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/streaming/",
+      "title": "Deliver media and streaming content | Azion | Azion"
+    },
+    {
+      "id": "site-solution-financial-services",
+      "url": "https://www.azion.com/en/solutions/financial-services/",
+      "linked_from": [
+        "header › Solutions menu: \"Financial Services Accelerate digital financial services\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/financial-services/",
+      "title": "Financial services | Azion"
+    },
+    {
+      "id": "site-solution-technology",
+      "url": "https://www.azion.com/en/solutions/technology/",
+      "linked_from": [
+        "header › Solutions menu: \"Technology Build high-performance applications\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/technology/",
+      "title": "Technology | Azion"
+    },
+    {
+      "id": "site-solution-retail",
+      "url": "https://www.azion.com/en/solutions/retail/",
+      "linked_from": [
+        "header › Solutions menu: \"Retail Build high-performance shopping experiences\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/solutions/retail/",
+      "title": "Retail solutions for fast, secure storefronts | Azion"
+    },
+    {
+      "id": "site-product-functions",
+      "url": "https://www.azion.com/en/products/functions/",
+      "linked_from": [
+        "header › Products menu: \"Functions Implement serverless functions and scalable applications\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/functions/",
+      "title": "Functions | Azion"
+    },
+    {
+      "id": "site-product-cache",
+      "url": "https://www.azion.com/en/products/cache/",
+      "linked_from": ["header › Products menu: \"Cache Accelerate, optimize content delivery\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/cache/",
+      "title": "Cache | Azion"
+    },
+    {
+      "id": "site-product-application-accelerator",
+      "url": "https://www.azion.com/en/products/application-accelerator/",
+      "linked_from": [
+        "header › Products menu: \"Application Accelerator Boost performance, enhance delivery\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/application-accelerator/",
+      "title": "Application Accelerator | Azion"
+    },
+    {
+      "id": "site-product-image-processor",
+      "url": "https://www.azion.com/en/products/image-processor/",
+      "linked_from": [
+        "header › Products menu: \"Image Processor Optimize, transform images instantly\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/image-processor/",
+      "title": "Image Processor | Azion"
+    },
+    {
+      "id": "site-product-ai-inference",
+      "url": "https://www.azion.com/en/products/ai-inference/",
+      "linked_from": ["header › Products menu: \"AI Inference Perform AI inference globally\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/ai-inference/",
+      "title": "AI Inference | Azion"
+    },
+    {
+      "id": "site-product-durable-objects",
+      "url": "https://www.azion.com/en/products/durable-objects/",
+      "linked_from": ["header › Products menu: \"Durable Objects Run stateful compute worldwide\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/durable-objects/",
+      "title": "Durable Objects | Azion"
+    },
+    {
+      "id": "site-product-orchestrator",
+      "url": "https://www.azion.com/en/products/orchestrator/",
+      "linked_from": [
+        "header › Products menu: \"Orchestrator Deploy, manage, monitor and automate workloads\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/orchestrator/",
+      "title": "Orchestrate distributed workloads with full control | Azion"
+    },
+    {
+      "id": "site-product-sql-database",
+      "url": "https://www.azion.com/en/products/sql-database/",
+      "linked_from": [
+        "header › Products menu: \"SQL Database Store relational and structured data\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/sql-database/",
+      "title": "SQL Database | Azion"
+    },
+    {
+      "id": "site-product-object-storage",
+      "url": "https://www.azion.com/en/products/object-storage/",
+      "linked_from": [
+        "header › Products menu: \"Object Storage Store unstructured data in a scalable way\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/object-storage/",
+      "title": "Object Storage | Azion"
+    },
+    {
+      "id": "site-product-kv-store",
+      "url": "https://www.azion.com/en/products/kv-store/",
+      "linked_from": ["header › Products menu: \"KV Store Store key-value data instantly\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/kv-store/",
+      "title": "KV Store | Azion"
+    },
+    {
+      "id": "site-product-web-application-firewall",
+      "url": "https://www.azion.com/en/products/web-application-firewall/",
+      "linked_from": [
+        "header › Products menu: \"Web Application Firewall (WAF) Protect apps, block vulnerabilities\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/web-application-firewall/",
+      "title": "WAF | Web Application Firewall | Azion"
+    },
+    {
+      "id": "site-product-bot-manager",
+      "url": "https://www.azion.com/en/products/bot-manager/",
+      "linked_from": ["header › Products menu: \"Bot Manager Block bots and protect traffic\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/bot-manager/",
+      "title": "Bot Manager | Azion"
+    },
+    {
+      "id": "site-product-network-shield",
+      "url": "https://www.azion.com/en/products/network-shield/",
+      "linked_from": [
+        "header › Products menu: \"Network Shield Defend, prevent network-level attacks\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/network-shield/",
+      "title": "Network Shield | Azion"
+    },
+    {
+      "id": "site-product-edge-dns",
+      "url": "https://www.azion.com/en/products/edge-dns/",
+      "linked_from": ["header › Products menu: \"Edge DNS Resolve DNS quickly and securely\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/edge-dns/",
+      "title": "Edge DNS | Azion"
+    },
+    {
+      "id": "site-product-load-balancer",
+      "url": "https://www.azion.com/en/products/load-balancer/",
+      "linked_from": [
+        "header › Products menu: \"Load Balancer Distribute loads across servers with security and high performance\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/load-balancer/",
+      "title": "Load Balancer | Azion"
+    },
+    {
+      "id": "site-product-secure-internet-access",
+      "url": "https://www.azion.com/en/products/secure-internet-access/",
+      "linked_from": [
+        "header › Products menu: \"Secure Internet Access Protect user access to the web\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/secure-internet-access/",
+      "title": "Secure Internet Access | Azion"
+    },
+    {
+      "id": "site-product-ai-gateway",
+      "url": "https://www.azion.com/en/products/ai-gateway/",
+      "linked_from": [
+        "header › Products menu: \"AI Gateway Secure, manage, and optimize AI traffic\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/ai-gateway/",
+      "title": "AI Gateway | Azion"
+    },
+    {
+      "id": "site-product-data-stream",
+      "url": "https://www.azion.com/en/products/data-stream/",
+      "linked_from": ["header › Products menu: \"Data Stream Stream data for real-time analysis\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/data-stream/",
+      "title": "Data Stream | Azion"
+    },
+    {
+      "id": "site-product-real-time-events",
+      "url": "https://www.azion.com/en/products/real-time-events/",
+      "linked_from": [
+        "header › Products menu: \"Real-Time Events Track events, gain operational clarity\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/real-time-events/",
+      "title": "Real-Time Events | Azion"
+    },
+    {
+      "id": "site-product-edge-pulse",
+      "url": "https://www.azion.com/en/products/edge-pulse/",
+      "linked_from": ["header › Products menu: \"Edge Pulse Monitor, optimize edge performance\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/edge-pulse/",
+      "title": "Edge Pulse | Azion"
+    },
+    {
+      "id": "site-product-our-network",
+      "url": "https://www.azion.com/en/products/our-network/",
+      "linked_from": [
+        "header › Products menu: \"Our Network Global delivery, speed, reliability\"",
+        "footer: \"Our Network\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/products/our-network/",
+      "title": "Global Network for Fast, Resilient Applications | Azion | Azion"
+    },
+    {
+      "id": "site-blog",
+      "url": "https://www.azion.com/en/blog/",
+      "linked_from": [
+        "header › Resources menu: \"Blog Insights, industry trends\"",
+        "footer: \"Blog\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/blog/",
+      "title": "Blog | Azion"
+    },
+    {
+      "id": "site-resource-hub",
+      "url": "https://www.azion.com/en/resource-hub/",
+      "linked_from": [
+        "header › Resources menu: \"Resource Hub Resources, useful materials\"",
+        "footer: \"Resource Hub\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/resource-hub/",
+      "title": "Resource Hub | Azion"
+    },
+    {
+      "id": "site-success-cases",
+      "url": "https://www.azion.com/en/success-case/",
+      "linked_from": [
+        "header › Resources menu: \"Success Stories Real results from our customers\"",
+        "footer: \"Success cases\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/success-case/",
+      "title": "Success Cases | Azion"
+    },
+    {
+      "id": "site-partners",
+      "url": "https://www.azion.com/en/partners/",
+      "linked_from": ["header › Resources menu: \"Partners Let’s build together\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/partners/",
+      "title": "Partners | Azion"
+    },
+    {
+      "id": "site-marketplace",
+      "url": "https://www.azion.com/en/marketplace/",
+      "linked_from": [
+        "header › Resources menu: \"Marketplace Apps, ready-made solutions\"",
+        "footer: \"Marketplace\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/marketplace/",
+      "title": "Marketplace | Azion"
+    },
+    {
+      "id": "site-support",
+      "url": "https://www.azion.com/en/support/",
+      "linked_from": ["header › Resources menu: \"Support Expert help when you need it\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/support/",
+      "title": "Support | Azion"
+    },
+    {
+      "id": "site-professional-services",
+      "url": "https://www.azion.com/en/professional-services/",
+      "linked_from": [
+        "header › Resources menu: \"Professional Services Guidance to move faster with confidence\"",
+        "footer: \"Professional Services\""
+      ],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/professional-services/",
+      "title": "Professional Services | Azion"
+    },
+    {
+      "id": "site-about-us",
+      "url": "https://www.azion.com/en/about-us/",
+      "linked_from": ["footer: \"About us\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/about-us/",
+      "title": "About us | Azion"
+    },
+    {
+      "id": "site-careers",
+      "url": "https://www.azion.com/en/careers/",
+      "linked_from": ["footer: \"Careers\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/careers/",
+      "title": "Careers | Azion"
+    },
+    {
+      "id": "site-compliance",
+      "url": "https://www.azion.com/en/compliance/",
+      "linked_from": ["footer: \"Compliance\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/compliance/",
+      "title": "Compliance | Azion"
+    },
+    {
+      "id": "site-privacy-policy",
+      "url": "https://www.azion.com/en/documentation/agreements/privacy-policy/",
+      "linked_from": ["footer: \"Privacy Policy\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/documentation/agreements/privacy-policy/",
+      "title": "Privacy Policy - Azion Documentation"
+    },
+    {
+      "id": "site-learning",
+      "url": "https://www.azion.com/en/learning/",
+      "linked_from": ["footer: \"Learning\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/learning/",
+      "title": "Learning Center | Azion"
+    },
+    {
+      "id": "site-recognitions",
+      "url": "https://www.azion.com/en/recognitions/",
+      "linked_from": ["footer: \"Recognition and Awards\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/recognitions/",
+      "title": "Recognition and Awards | Azion"
+    },
+    {
+      "id": "site-scale-up",
+      "url": "https://www.azion.com/en/lp/azion-scale-up/",
+      "linked_from": ["footer: \"Scale-Up Program\""],
+      "http_status": 200,
+      "final_url": "https://www.azion.com/en/lp/azion-scale-up/",
+      "title": "Azion Scale Up | Azion"
+    }
+  ],
+  "not_found_404": [],
+  "excluded": [
+    {
+      "url": "https://console.azion.com/login",
+      "linked_from": ["header bar: \"Login\""],
+      "reason": "console app (login/signup), not a marketing page"
+    },
+    {
+      "url": "https://console.azion.com/signup",
+      "linked_from": ["header bar: \"Start for free\"", "footer: \"Start for free\""],
+      "reason": "console app (login/signup), not a marketing page"
+    },
+    {
+      "url": "https://console.azion.com/signup/",
+      "linked_from": ["header bar: \"Start free\""],
+      "reason": "console app (login/signup), not a marketing page"
+    },
+    {
+      "url": "https://www.azion.com/en/documentation/",
+      "linked_from": [
+        "header › Developer menu: \"Azion Docs Documentation, technical support\"",
+        "footer: \"Documentation\""
+      ],
+      "reason": "documentation (excluded by brief)"
+    },
+    {
+      "url": "https://www.azion.com/en/documentation/products/guides/",
+      "linked_from": ["header › Developer menu: \"Guides Practical guides, step-by-step\""],
+      "reason": "documentation (excluded by brief)"
+    },
+    {
+      "url": "https://www.azion.com/en/documentation/devtools/",
+      "linked_from": ["header › Developer menu: \"Dev Tools Tools, developer support\""],
+      "reason": "documentation (excluded by brief)"
+    },
+    {
+      "url": "https://www.azion.com/en/documentation/products/release-notes/",
+      "linked_from": [
+        "header › Developer menu: \"Release Notes Updates, new features\"",
+        "footer: \"Release Notes\""
+      ],
+      "reason": "documentation (excluded by brief)"
+    },
+    {
+      "url": "https://api.azion.com/v4",
+      "linked_from": [
+        "header › Developer menu: \"API Reference API, advanced integration\"",
+        "footer: \"API\""
+      ],
+      "reason": "external API reference site"
+    },
+    {
+      "url": "https://discord.com/invite/pM8ANzztuB",
+      "linked_from": [
+        "header › Developer menu: \"Join our community Developers and the Azion team on Discord\"",
+        "footer: \"Our Community\""
+      ],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://www.azion.com/for-ai.md",
+      "linked_from": ["footer: \"Hey AI, learn about us\""],
+      "reason": "raw Markdown file for AI crawlers, not an HTML page"
+    },
+    {
+      "url": "https://www.azion.com/en/documentation/products/azion-platform-overview/",
+      "linked_from": ["footer: \"How to start\""],
+      "reason": "documentation (excluded by brief)"
+    },
+    {
+      "url": "https://status.azion.com/",
+      "linked_from": ["footer: \"All Systems Operational\""],
+      "reason": "status page (external service)"
+    },
+    {
+      "url": "https://github.com/aziontech",
+      "linked_from": ["footer: \"GitHub\""],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://www.linkedin.com/company/aziontech",
+      "linked_from": ["footer: \"Linkedin\""],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://www.youtube.com/aziontech",
+      "linked_from": ["footer: \"YouTube\""],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://x.com/aziontech",
+      "linked_from": ["footer: \"X\""],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://www.instagram.com/aziontech",
+      "linked_from": ["footer: \"Instagram\""],
+      "reason": "external social/community link"
+    },
+    {
+      "url": "https://discord.gg/pM8ANzztuB",
+      "linked_from": ["footer: \"Discord\""],
+      "reason": "external social/community link"
+    }
+  ]
+}

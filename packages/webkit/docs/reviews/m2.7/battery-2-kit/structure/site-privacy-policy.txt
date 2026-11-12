@@ -1,0 +1,147 @@
+[layout-sidebar aria-label='Primary']
+  input[checkbox] name= placeholder=""
+  [navigation-menu]
+    [navigation-menu-group]
+      [navigation-menu-item]
+      li "Back to Docs"
+    [navigation-menu-group]
+      text "Agreements and Policies"
+      [navigation-menu-item]
+      li "Overview"
+      [navigation-menu-item]
+      li "Terms of Service"
+      [navigation-menu-item]
+      li "Customer Agreement"
+      [navigation-menu-item]
+      li "Service Level Agreement"
+      [navigation-menu-item]
+      li "Privacy Policy"
+      [navigation-menu-item]
+      li "Acceptable Use Policy"
+      [navigation-menu-item]
+      li "Terms and Conditions of Azion Plans"
+      [navigation-menu-item]
+      li "Savings Plan Terms and Conditions"
+      [navigation-menu-item]
+      li "Terms and Conditions of Reserved Capacity"
+      [navigation-menu-item]
+      li "Terms and Conditions of Azion Incentive Credits"
+      [navigation-menu-item]
+      li "Azion Marketplace Agreement"
+      [navigation-menu-item]
+      li "Azion Affiliate Program Terms"
+      [navigation-menu-item]
+      li "Data Privacy FAQs"
+      [navigation-menu-item]
+      li "Data Privacy FAQ – Customers"
+      [navigation-menu-item]
+      li "Data Privacy FAQ – End Users"
+    [navigation-menu-group]
+      text "Previous versions"
+      [navigation-menu-sub]
+      li "Terms of Service"
+      [navigation-menu-sub]
+      li "Customer Agreement"
+      [navigation-menu-sub]
+      li "Service Level Agreement"
+      [navigation-menu-sub]
+      li "Savings Plan Terms and Conditions"
+  [input-theme-switcher aria-label='Theme']
+    [overlay-tooltip]
+  [overlay-tooltip]
+[documentation-doc-page-header]
+  [navigation-breadcrumb aria-label='Breadcrumb']
+    list (2): Agreements and Policies · Privacy Policy
+  h1 "Privacy Policy"
+  p "Azion's privacy policy governs the way information is collected, stored and disseminated."
+  p "Last updated Nov 11, 2026"
+  [overlay-tooltip]
+    button "Copy as Markdown"
+  [overlay-tooltip]
+    button "View as Markdown" → /en/documentation/agreements/privacy-policy.md
+  [overlay-tooltip]
+    button "Agent setup" → /en/documentation/agent-setup/
+[documentation-doc-prose]
+  p "Last updated August 4, 2025."
+  p "Privacy and data protection are fundamental matters for AZION . Therefore, reinforcing our commitment to this subject, this PRIVACY POLICY (or simply “Policy”) governs the manner in which Azion collects, uses, stores, and discloses information collected from users (individually, “User”) across all content in connection with activities, Products and Services, functions, or features that we provide …"
+  h2 "Personal data processed and collection methods"
+  p "Azion may collect your personal data, such as name, residential address, email, phone number, or any other information from Azion website visitors, which, when used alone or with other data, may individually identify a visitor to Azion’s website. Data may be collected in the following ways: (a) if you provide it through platform registration, subscription to our products and services, newsletter s…"
+  h2 "Use of personal data and processing purposes"
+  p "Personal data processing may serve the following purposes:"
+  list (8): Improve our Products and Services; · Enhance Content; · Conduct promotions, contests, surveys, or other Content features; · Send periodic emails to respond to your questions, inquiries, or other requests; · Offer more targeted services and advertisements, making your visit to Azion’s website more productive; · Keep Products secure and protected; · Make suggestions for you and other users to improve and personalize your experience; · Internal operations, including error correction, data analysis, testing, research, development, and service improvement.
+  p "All these operations will always be based on authorized legal grounds, including but not limited to contract execution and preliminary procedures, compliance with legal obligations, regular exercise of rights in processes or contracts, credit protection, serving Azion’s or third parties’ legitimate interests, and fraud prevention. In other cases, personal data processing will be conditional upon t…"
+  p "If you no longer wish to receive marketing communications from Azion, you may unsubscribe directly through the unsubscribe link included in emails or by contacting privacy@azion.com ."
+  h2 "Data sharing"
+  p "Azion does not share, sell, or disclose your personal information except as described in this Policy. Your data, however, may be disclosed (i) if the company is required to do so by law, regulation, or legal process — for example, a court order or subpoena; (ii) in response to requests from government agencies, such as law enforcement authorities; (iii) with your express authorization; (iv) after …"
+  h2 "Data retention periods"
+  p "Azion will maintain data for as long as users and visitors maintain a relationship with the company. After termination of this relationship, Azion may continue to maintain data due to legal obligations or the company’s legitimate interest, to help respond to legal demands and/or audits and for other causes, such as combating fraud and responding to regulatory agency requests."
+  h2 "Data subject rights"
+  p "Azion guarantees each data subject the full exercise of rights provided under the applicable laws and regulations applicable to data protection and privacy. This includes: confirming the existence of personal data processing; accessing one’s own data; correcting incomplete, inaccurate, or outdated information; requesting anonymization, blocking, or elimination of unnecessary, excessive, or imprope…"
+  p "To exercise any of these rights, send your request to dpo@azion.com (“Rights Request”). Before fulfilling the request, we may request additional information to verify that the requesting person is indeed the data subject in question, thus ensuring information security and confidentiality."
+  p "If you are submitting a Rights Request on behalf of another person as an authorized agent, we require that: (a) the data subject verify their identity and confirm directly with Azion that they granted permission to the authorized agent to submit the Rights Request; (b) the authorized agent possess a power of attorney granted by the data subject, in accordance with the legislation of the data subje…"
+  h2 "Personal data security"
+  p "Azion employs technical and administrative measures, with the security standard usually adopted by the market for personal data protection, suitable to protect users’ and visitors’ personal data against unauthorized access and against accidental or unlawful situations of destruction, loss, alteration, communication, or dissemination."
+  p "Likewise, personal information of customers, users, and visitors is restricted access only to employees or parties who need the data for execution and performance of their duties."
+  h2 "Privacy Policy updates"
+  p "Azion may periodically modify the terms of this Privacy Policy at any time, publishing a revised version on Azion’s website. Modified documents will take effect immediately upon publication."
+  h2 "How to contact Azion"
+  p "In case of questions or comments about this Privacy Policy, or if you are a data subject and want to exercise your rights and access more information about personal data processing by the company, send an email to Azion’s Data Protection Officer (DPO) at dpo@azion.com ."
+  h2 "Change in control"
+  p "If Azion’s ownership is acquired by third parties, we may transfer your information to the new owner so they can continue operating Azion’s website, remaining obligated, however, to honor the commitments we made in this Privacy Policy."
+  h2 "International data transfer"
+  p "Your data may be processed on servers located outside Brazil, in countries where Azion or its providers maintain infrastructure. In these situations, we apply adequate safeguards — including standard contractual clauses, encryption, and access controls — to ensure a level of protection equivalent to that required by applicable regulations."
+  h2 "Cookies"
+  p "Content may use “cookies” to enhance user experience. The User’s browser stores cookies on their hard drive to maintain records and sometimes track information about them. Users may choose to configure their browser to refuse cookies or alert them when cookies are sent. If they do so, note that some parts of the Content may not function properly."
+  h2 "Application of Terms of Use"
+  p "The Terms of Use of all Azion virtual environments will be applicable, where appropriate, to this Privacy Policy."
+[documentation-doc-pagination aria-label='Page navigation']
+  link "Previous page Service Level Agreement" → /en/documentation/agreements/sla/
+  link "Next page Acceptable Use Policy" → /en/documentation/agreements/acceptable-use-policy/
+[layout-footer kind=content aria-label='Footer']
+  text "Company"
+  link "About us" → /en/about-us/
+  link "Our Network" → /en/products/our-network/
+  link "Careers" → /en/careers/
+  link "Compliance" → /en/compliance/
+  link "Privacy Policy" → /en/documentation/agreements/privacy-policy/
+  text "Resources"
+  link "Blog" → /en/blog/
+  link "Resource Hub" → /en/resource-hub/
+  link "Learning" → /en/learning/
+  link "Marketplace" → /en/marketplace/
+  link "Recognition and Awards" → /en/recognitions/
+  text "Getting Started"
+  link "Start for free" → https://console.azion.com/signup
+  link "How to start" → /en/documentation/fundamentals/how-it-works/
+  link "Pricing" → /en/pricing/
+  link "Contact Sales" → /en/contact/
+  link "Professional Services" → /en/professional-services/
+  text "Developer"
+  link "Documentation" → /en/documentation/
+  link "API" → https://api.azion.com/v4
+  link "Release Notes" → /en/documentation/changelog/
+  link "Our Community" → https://discord.com/invite/pM8ANzztuB
+  link "All Systems Operational" → https://status.azion.com/
+  [select size=medium filled=true]
+    [select-trigger size=medium filled=true aria-label='Language']
+    button "EN"
+  icon-button "Azion on GitHub" → https://github.com/aziontech
+  icon-button "Azion on LinkedIn" → https://www.linkedin.com/company/aziontech
+  icon-button "Azion on YouTube" → https://www.youtube.com/aziontech
+  icon-button "Azion on X" → https://x.com/aziontech
+  icon-button "Azion on Instagram" → https://www.instagram.com/aziontech
+  icon-button "Azion on Discord" → https://discord.gg/Yp9N7RMVZy
+[layout-scroll-area orientation=vertical]
+  [documentation-doc-on-this-page]
+    p "On this page"
+    list (13): Overview · Personal data processed and collection methods · Use of personal data and processing purposes · Data sharing · Data retention periods · Data subject rights · Personal data security · Privacy Policy updates · How to contact Azion · Change in control · International data transfer · Cookies · Application of Terms of Use
+    p "GitHub"
+    list (2): Azion Docs · Contribute to this page
+    p "Community"
+    list (3): Join us on Discord · Read our blog posts · Follow us on X
+  [doc-cta]
+    [content-brand kind=default size=small aria-label='Azion']
+    p "Ready to build?"
+    p "Deploy your first application for free and scale as your traffic grows. No credit card required."
+    button "Start for free" → https://console.azion.com/signup
+    button "See our plans" → /en/pricing/

@@ -1,0 +1,158 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Minimize downtime and achieve true scalability for your applications']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Load Balancer
+      h1 "Minimize downtime and achieve true scalability for your applications"
+      p "Avoid service interruptions for optimal performance with traffic distribution that automatically routes around server failures in real time."
+      button "Start free" → https://console.azion.com/signup/
+      button "DOCS" → https://www.azion.com/en/documentation/products/secure/connectors/load-balancer/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Eliminate single points of failure"
+          p "Automated failover distributes traffic across multiple origins, detecting failures in real time and rerouting to healthy servers."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Deploy in minutes"
+          p "Start immediately with preset algorithms. No hardware provisioning or complex setup required."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Scale automatically"
+          p "Handle traffic spikes with distributed global architecture delivering low-latency responses in any region."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Actively manage traffic with intelligent routing"
+          p "Choose Round-Robin, Least Connections, or IP Hash algorithms. Adjust weights dynamically and monitor origin health in real time."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Session persistence for stateful applications"
+          p "Maintain user sessions with cookie-based or IP-based persistence, routing returning users to the same origin server."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Multi-cloud and on-premises redundancy strategy"
+          p "Configure primary and backup CDN origins across multiple cloud providers with automatic failover when primary sources are unavailable."
+  · section-gap (hatched spacer band)
+  text: // ⏎ Automated and Scalable
+  h2 "Maximize availability and performance"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Intelligent Traffic distribution and origin monitoring']
+          h2 "Intelligent Traffic distribution and origin monitoring"
+          p "Manage requests between servers with configurable algorithms such as Round-Robin, Least Connections, and IP Hash. Adjust weights, monitor origin health in real time, and keep your infrastructure optimized and stable."
+          img "Traffic loads are distributed effectively across multiple servers, ensuring scalability and high performance."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Failover and error handling']
+          h2 "Failover and error handling"
+          p "Detect origin failures in real time, respond to HTTP 5xx and 404 errors, timeouts, and connectivity loss, and reroute traffic to healthy servers without disrupting service. Set primary and backup roles to trigger only when necessary, and tune connection and byte-timeout settings to speed detection and recovery."
+          img "Load balancing adds fault tolerance by protecting against server failures."
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Multi-origin flexibility and vendor independence']
+          h2 "Multi-origin flexibility and vendor independence"
+          p "Operate in hybrid environments with multiple data centers and clouds, avoid single points of failure, and scale by adding multiple origin addresses per configuration. Preserve freedom with a vendor-independent architecture and maintain consistent performance across environments."
+          img "Distributed architecture without single points of failure and no vendor lock-in."
+  · section-gap (hatched spacer band)
+  h2 "Optimize traffic distribution across industries"
+  h3 "E-commerce and retail platforms"
+  p "Handle peak shopping events and flash sales without downtime. Distribute traffic across multiple origins to ensure fast checkout experiences and prevent cart abandonment during high-traffic periods."
+  link "See solution" → https://www.azion.com/en/solutions/retail/
+  h3 "Media streaming and content delivery"
+  p "Deliver video and audio content with low latency and high availability. Balance traffic across CDN origins and streaming servers to maintain quality during live events and peak viewing times."
+  link "See solution" → https://www.azion.com/en/documentation/use-cases/deliver-media-and-streaming/stream-live-events-to-large-audiences/
+  h3 "Financial services and banking"
+  p "Ensure transaction processing reliability with automated failover. Distribute API traffic across multiple data centers to maintain service availability for critical financial operations."
+  link "See solution" → https://www.azion.com/en/solutions/financial-services/
+  h3 "SaaS and API platforms"
+  p "Maintain API uptime and performance for customers worldwide. Route requests intelligently across regions and automatically failover during maintenance or outages without impacting users."
+  link "See solution" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/deploy-full-stack-applications-globally/
+  h3 "Gaming and interactive applications"
+  p "Minimize latency for real-time gaming experiences. Balance player connections across game servers and automatically route to the nearest healthy origin for optimal performance."
+  link "See solution" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/deploy-full-stack-applications-globally/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Load Balancer and how does it work?"
+          [content-accordion-item]
+            h3 "What load balancing algorithms are available?"
+          [content-accordion-item]
+            h3 "How does automated failover work?"
+          [content-accordion-item]
+            h3 "Can I use Load Balancer with multi-cloud or hybrid infrastructure?"
+          [content-accordion-item]
+            h3 "How long does it take to deploy Load Balancer?"
+          [content-accordion-item]
+            h3 "What happens if all origins fail?"
+          [content-accordion-item]
+            h3 "How do I monitor origin health and performance?"
+          [content-accordion-item]
+            h3 "Does Load Balancer support session persistence?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

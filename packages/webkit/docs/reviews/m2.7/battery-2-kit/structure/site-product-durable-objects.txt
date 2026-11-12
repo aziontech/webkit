@@ -1,0 +1,170 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Serverless code with its own consistent state']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Durable Objects
+      h1 "Serverless code with its own consistent state"
+      p "Build and run chat services, multiplayer systems, and collaborative apps that keep users in sync worldwide, with no message brokers or state stores to manage."
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Your Stack, Your Way"
+      list (30): Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · OpenAI · Anthropic · Groq · SQLite · Drizzle
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Long-running serverless apps"
+          p "Durable objects run for as long as the work takes. They can compute in the background and handle high volumes of requests concurrently."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Every user in sync, instantly"
+          p "Each durable object works as a WebSocket server and client. Broadcast state to all connected clients in a few lines of code."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Scale to millions as you grow"
+          p "Give each unit of work in your app its own lightweight, isolated durable object. Run millions of them, with no capacity to plan."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Durable state, no lost writes"
+          p "Every durable object has an embedded SQLite database, so state survives restarts and failures. No write is confirmed until it's durable."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Background work on autopilot"
+          p "Run code in the background, poll APIs periodically, or schedule future work with alarms. The platform wakes the durable object on time."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Ship faster with no rewrites"
+          p "Use the Durable Objects API you already know. Existing classes run on Azion without a rewrite, so you write the logic, not the plumbing."
+  · section-gap (hatched spacer band)
+  [block-media-split-band-guide]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=medium align=center media=true divided=true fill=canvas aria-label='One coordinator for every unit of shared state']
+        h2 "One coordinator for every unit of shared state"
+        p "Every call to a durable object reaches its one active instance, wherever it runs across 100+ data centers. A conditional write in durable storage guarantees a single owner, even during network failures. You write the class. Azion handles placement, routing, and failover."
+        img "Users in different regions connected to durable objects running across Azion"
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Use cases']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Use cases"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true]
+          h3 "Stateful agent runtime"
+          p "Give each agent its own durable object to keep conversation and task state, run steps in order, and resume after a pause."
+        [marketing-topic icon=true described=true]
+          h3 "Real-time chat with presence"
+          p "Run one durable object per room to store messages, track who's online, and broadcast every update to connected users."
+        [marketing-topic icon=true described=true]
+          h3 "Authoritative game server"
+          p "Keep each match's players, rules, and score in one durable object and push every move to all players as it happens."
+        [marketing-topic icon=true described=true]
+          h3 "Live document sync"
+          p "Route all edits to a document through its durable object, so concurrent changes apply in order and everyone sees the same version."
+        [marketing-topic icon=true described=true]
+          h3 "Inventory and seat reservations"
+          p "Manage each event, cart, or SKU in its own durable object, so the same seat or item is never sold or added twice."
+        [marketing-topic icon=true described=true]
+          h3 "Consistent shared counters"
+          p "Count likes, votes, views, or quotas in a durable object, so every increment lands even when updates arrive all at once."
+  · section-gap (hatched spacer band)
+  [block-code-split]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=medium align=top media=true divided=true fill=canvas aria-label='The shortest path to real-time, stateful apps']
+        h2 "The shortest path to real-time, stateful apps"
+        p "Requests from anywhere reach the same durable object, so one instance coordinates every client that shares its state. It handles fan-in and fan-out over WebSockets, and its embedded SQLite database keeps state, events, and history next to your code."
+        [code-code-block]
+          button "counter.ts"
+          button "chat.ts"
+          button "agent.ts"
+          text "counter.ts"
+          icon-button "Copy the code sample"
+          text: import ⏎ DurableObject ⏎ from ⏎ 'azion/durable-objects' ⏎ export ⏎ class ⏎ Counter ⏎ extends ⏎ DurableObject ⏎ // Events run one at a time: two increments never interleave. ⏎ async ⏎ increment ⏎ () ⏎ const ⏎ next ⏎ (( ⏎ await ⏎ this ⏎ ctx ⏎ storage ⏎ get ⏎ 'count' ⏎ )) ⏎ ?? 0) + 1; ⏎ await ⏎ this ⏎ ctx ⏎ storage ⏎ put ⏎ 'count' ⏎ next ⏎ ); ⏎ return ⏎ next ⏎ export ⏎ default ⏎ async ⏎ fetch ⏎ request ⏎ env ⏎ const ⏎ name ⏎ new ⏎ URL ⏎ request ⏎ url ⏎ ). ⏎ searchParams ⏎ get ⏎ 'name' ⏎ ); ⏎ if ⏎ !name) ⏎ return ⏎ new ⏎ Response ⏎ 'Missing ?name' ⏎ status ⏎ }); ⏎ const ⏎ total ⏎ await ⏎ env ⏎ COUNTER ⏎ get ⏎ env ⏎ COUNTER ⏎ idFromName ⏎ name ⏎ )). ⏎ increment ⏎ (); ⏎ return ⏎ Response ⏎ json ⏎ ({ ⏎ name ⏎ total ⏎ }); ⏎ };
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='All the development primitives you need']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "All the development primitives you need"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Durable Objects?"
+          [content-accordion-item]
+            h3 "How do Durable Objects keep state consistent?"
+          [content-accordion-item]
+            h3 "How are Durable Objects different from Functions?"
+          [content-accordion-item]
+            h3 "When should I use Durable Objects instead of KV Store or SQL Database?"
+          [content-accordion-item]
+            h3 "How do WebSockets work in Durable Objects?"
+          [content-accordion-item]
+            h3 "How do alarms work?"
+          [content-accordion-item]
+            h3 "Can I build AI agents with Durable Objects?"
+          [content-accordion-item]
+            h3 "How does Durable Objects on Azion compare to other platforms?"
+          [content-accordion-item]
+            h3 "How do I migrate existing Durable Objects code to Azion?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

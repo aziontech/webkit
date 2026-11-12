@@ -1,0 +1,54 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Certifications and Compliance']
+    [marketing-hero-title width=xl centered=true]
+      h1 "Certifications and Compliance"
+      p "Azion adheres to rigorous security, availability, and privacy standards so customers can adopt our services with confidence."
+      button "Contact" → https://azion.com/en/contact/
+      button "View Responsibility Matrix" → https://www.azion.com/en/documentation/shared-responsibility/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-compliance-badges]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Security and Compliance are shared responsibilities between Azion and the customer.']
+        h2 "Security and Compliance are shared responsibilities between Azion and the customer."
+        p "This shared model can help relieve the customer's operational burden as Azion operates, manages and controls the components from the operating system and virtualization layer, including updates and security patches, down to the physical security of the facilities in which the service operates."
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Compliance certifications']
+          [marketing-card-grid-cell]
+            img "AICPA SOC 2 Type 2 badge"
+            text "SOC 2 Type 2"
+          [marketing-card-grid-cell]
+            img "AICPA SOC 3 Type 2 badge"
+            text "SOC 3 Type 2"
+          [marketing-card-grid-cell]
+            img "PCI DSS badge"
+            text "PCI DSS"
+          [marketing-card-grid-cell]
+            img "LGPD badge"
+            text "LGPD"
+          [marketing-card-grid-cell]
+            img "GDPR badge"
+            text "GDPR"
+          [marketing-card-grid-cell]
+            img "CCPA badge"
+            text "CCPA"
+          [marketing-card-grid-cell]
+            img "CPRA badge"
+            text "CPRA"
+  · section-gap (hatched spacer band)
+  [block-resource-grid]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Data Protection Regulations']
+        text: // ⏎ Data privacy
+        h2 "Data Protection Regulations"
+        p "Azion understands that the privacy of our customers' and end-users' data is essential. We are committed to data protection, and our controls are based on robust practices aligned with key international legislation, such as the General Data Protection Law (LGPD) and the European Union's General Data Protection Regulation (GDPR). We do not sell personal data and use it exclusively for maintaining an…"
+        [marketing-card-grid kind=frame columns=2 mobile-columns=1 filled=true]
+          [marketing-card-grid-cell]
+            [marketing-topic linked=true]
+            link "Data Privacy FAQ – Customers" → https://www.azion.com/en/documentation/agreements/faq-azion-customers/
+          [marketing-card-grid-cell]
+            [marketing-topic linked=true]
+            link "Data Privacy FAQ – End Users" → https://www.azion.com/en/documentation/agreements/faq-end-users/
+          [marketing-card-grid-cell]
+            [marketing-topic linked=true]
+            link "Privacy Policy" → https://www.azion.com/en/documentation/agreements/privacy-policy/
+  [marketing-section-gap-end]

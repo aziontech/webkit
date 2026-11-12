@@ -1,0 +1,71 @@
+[block-hero-form]
+  [marketing-hero kind=screen size=medium align=center width=5xl aria-label='Grow as an Azion Partner']
+    [marketing-hero-title width=lg]
+      h1 "Grow as an Azion Partner"
+      p "Join Azion's global partner ecosystem and unlock new business opportunities with a platform built to accelerate, protect and scale modern applications."
+    text "Grow as an Azion Partner"
+    [input-label]
+    label "First name (Required)"
+    [input-field-text size=large]
+      input[text] name=firstName placeholder="None"
+    [input-label]
+    label "Last name (Required)"
+    [input-field-text size=large]
+      input[text] name=lastName placeholder="None"
+    [input-label]
+    label "Work email (Required)"
+    [input-field-text size=large]
+      input[text] name=email placeholder="name@company.com"
+    [input-label]
+    label "Role (Required)"
+    [input-field-select size=large]
+      button "Select your role"
+    [input-label]
+    label "Company (Required)"
+    [input-field-text size=large]
+      input[text] name=company placeholder="None"
+    [input-label]
+    label "Phone"
+    [input-field-phone-number size=large]
+      [select-trigger size=large filled=true aria-label='Country dial code']
+      button "+1"
+      input[tel] name=phone placeholder="(999) 999-9999"
+    [input-label]
+    label "Street address (Required)"
+    [input-field-text size=large]
+      input[text] name=address placeholder="None"
+    [input-label]
+    label "City (Required)"
+    [input-field-text size=large]
+      input[text] name=city placeholder="None"
+    [input-label]
+    label "Country (Required)"
+    [input-field-select size=large]
+      button "Select your country"
+    button "Become a partner"
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-stats-band]
+    [marketing-section-module kind=left]
+      [marketing-big-numbers size=medium]
+        [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+          figcaption "Datacenters worldwide"
+          text "3k"
+          figcaption "ASNs directly connected to the Azion network"
+          figcaption "availability, guaranteed by SLA"
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Why you should be a partner of the Azion Marketplace?']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Why you should be a partner of the Azion Marketplace?"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true]
+          h3 "Agile"
+          p "Run code and deploy in minutes. From prototype to enterprise scale with NoOps, just code."
+        [marketing-topic icon=true described=true]
+          h3 "Diverse Use Cases"
+          p "Fraud detection, authentication and authorization, bot mitigation, and facial recognition, utilizing technologies such as visual computing and artificial intelligence executed at the edge."
+        [marketing-topic icon=true described=true]
+          h3 "Cost-Effective"
+          p "Pricing is based on the edge resources and/or private edge locations in use."
+  [marketing-section-gap-end]

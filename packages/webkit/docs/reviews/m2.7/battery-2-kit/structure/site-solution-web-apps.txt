@@ -1,0 +1,308 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Build lightning-fast websites and web apps and launch globally']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ Application Development
+      h1 "Build lightning-fast websites and web apps and launch globally"
+      p "Deploy serverless web applications and APIs from your git repository with built-in performance, security, and scalability."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Consistent global speed"
+          p "Serve content and run web apps across 100+ data centers with median latency under 30 ms. No infra to manage."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Safer high-traffic launches"
+          p "Scale automatically from routine traffic to campaign spikes without cold starts, manual provisioning, or release-day bottlenecks."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Higher conversion potential"
+          p "Improve web app responsiveness and user experience with caching, protocol optimizations, and request-level control."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Preview every release"
+          p "Validate web app changes in preview environments before production and reduce risk during content and campaign launches."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Compatible with your framework"
+          p "Deploy any modern framework or build tool to Azion, such as Next.js, React, Angular, Vue, Svelte, Astro, Nuxt, Remix, Qwik, and others."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Frontend and API logic together"
+          p "Deploy your frontend and backend API as a single, simple project — in one deploy."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Websites']
+          h2 "Websites"
+          p "Build and deploy websites and web apps without infrastructure management overhead. Deliver fast, reliable experiences through a global network."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-and-run-marketing-websites/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='APIs']
+          h2 "APIs"
+          p "Build serverless APIs and microservices with distributed execution. Scale globally without managing region-by-region infrastructure."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-rest-and-graphql-apis/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='E-commerce']
+          h2 "E-commerce"
+          p "Build secure storefronts that protect checkout and account flows while maintaining fast, reliable experiences under peak traffic."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/build-e-commerce-storefronts/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='SaaS platforms']
+          h2 "SaaS platforms"
+          p "Build multi-tenant applications that serve each customer on its own domain, with automatic TLS certificates and isolated data."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/run-multi-tenant-saas-applications/
+  · section-gap (hatched spacer band)
+  [block-template-gallery]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Quick start with templates']
+        text: // ⏎ Your stack, your way
+        h2 "Quick start with templates"
+        p "Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks."
+        button "Deploy now" → https://www.azion.com/en/documentation/platform/marketplace/templates/#application-development
+        [layout-scroll-area orientation=vertical aria-label='Templates you can deploy']
+          [marketing-card-grid kind=frame columns=2 mobile-columns=1 filled=true]
+            [marketing-card-grid-cell]
+              text: Angular Boilerplate ⏎ Angular single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/angular-boilerplate/
+            [marketing-card-grid-cell]
+              text: Astro Blog Starter Kit ⏎ Astro blog with posts you can customize.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/astro-blog-starter-kit/
+            [marketing-card-grid-cell]
+              text: Astro Boilerplate ⏎ Basic Astro project for content-driven sites.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/astro-boilerplate/
+            [marketing-card-grid-cell]
+              text: Astro E-commerce ⏎ Astro storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/astro-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Azion Starter Kit ⏎ Basic stack to explore Azion Web Platform.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/azion-starter-kit/
+            [marketing-card-grid-cell]
+              text: Book Store React ⏎ Storefront built with React.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/book-store-react/
+            [marketing-card-grid-cell]
+              text: ButterCMS Templates collection ⏎ ButterCMS web apps to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/butter-templates-collection/
+            [marketing-card-grid-cell]
+              text: Clean Astro + Sanity application ⏎ Minimal Astro site with Sanity.io as the CMS.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/clean-astro-sanity/
+            [marketing-card-grid-cell]
+              text: Cosmic + Simple Astro Blog ⏎ Astro blog managed in Cosmic.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/cosmic-simple-astro-blog/
+            [marketing-card-grid-cell]
+              text: Cosmic + Simple Next.js Blog ⏎ Next.js blog managed in Cosmic.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/cosmic-simple-next-blog/
+            [marketing-card-grid-cell]
+              text: CosmicJS + Agency Website ⏎ Agency site to show services and portfolio.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/cosmic-agency-website/
+            [marketing-card-grid-cell]
+              text: DevsCard ⏎ Online resume based on DevsCard.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/devscard/
+            [marketing-card-grid-cell]
+              text: Docusaurus JavaScript Boilerplate ⏎ Static Docusaurus project in JavaScript.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/docusaurus-javascript-boilerplate/
+            [marketing-card-grid-cell]
+              text: Eleventy E-commerce ⏎ Eleventy storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/eleventy-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Gatsby Blog Starter Kit ⏎ Gatsby blog with posts you can customize.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/gatsby-blog-starter-kit/
+            [marketing-card-grid-cell]
+              text: Gatsby Boilerplate ⏎ Gatsby single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/gatsby-boilerplate/
+            [marketing-card-grid-cell]
+              text: Gatsby E-commerce Theme ⏎ Storefront built with Gatsby.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/gatsby-ecommerce-theme/
+            [marketing-card-grid-cell]
+              text: Hexo Boilerplate ⏎ Hexo single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/hexo-boilerplate/
+            [marketing-card-grid-cell]
+              text: HTMX Boilerplate ⏎ Minimal HTMX example to test on Azion.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/htmx-boilerplate/
+            [marketing-card-grid-cell]
+              text: Hugo Boilerplate ⏎ Static site built with Hugo.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/hugo-boilerplate/
+            [marketing-card-grid-cell]
+              text: Hugo E-commerce ⏎ Hugo storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/hugo-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Jekyll Boilerplate ⏎ Static site built with Jekyll.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/jekyll-boilerplate/
+            [marketing-card-grid-cell]
+              text: Jekyll E-commerce ⏎ Jekyll storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/jekyll-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Neon Database Starter Kit with Drizzle ORM ⏎ Neon database app with Drizzle ORM.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/neon-database-with-drizzle/
+            [marketing-card-grid-cell]
+              text: Next.js E-commerce ⏎ Next.js storefronts to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/next-js-ecommerce-collection/
+            [marketing-card-grid-cell]
+              text: Next.js Static Boilerplate ⏎ Next.js single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/nextjs-static-boilerplate/
+            [marketing-card-grid-cell]
+              text: Nuxt 3 Static Boilerplate ⏎ Static app built with Nuxt 3.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/nuxt-static-boilerplate/
+            [marketing-card-grid-cell]
+              text: Nuxt Content ⏎ Blog or docs site with Nuxt Content.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/nuxt-content/
+            [marketing-card-grid-cell]
+              text: Nuxt Notes ⏎ Basic notes app built with Nuxt.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/nuxt-notes/
+            [marketing-card-grid-cell]
+              text: Preact JavaScript Boilerplate ⏎ Preact in JavaScript, with React's API.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/preact-javascript-boilerplate/
+            [marketing-card-grid-cell]
+              text: React Boilerplate ⏎ React single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/react-boilerplate/
+            [marketing-card-grid-cell]
+              text: SQL Database Starter Kit ⏎ JavaScript CRUD project on SQL Database.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/sqldatabase-starter-kit/
+            [marketing-card-grid-cell]
+              text: Stencil Boilerplate ⏎ Static web app built with Stencil.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/stencil-boilerplate/
+            [marketing-card-grid-cell]
+              text: TiDB Starter Kit with Drizzle ORM ⏎ TiDB database app with Drizzle ORM.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/tidb-with-drizzle/
+            [marketing-card-grid-cell]
+              text: VitePress JavaScript Boilerplate ⏎ Static VitePress project in JavaScript.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/vitepress-javascript-boilerplate/
+            [marketing-card-grid-cell]
+              text: Vue Boilerplate ⏎ Vue single-page application.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/vue-boilerplate/
+            [marketing-card-grid-cell]
+              text: Vue3/Vite Boilerplate ⏎ App built with Vue 3 and Vite.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/vue-vite-boilerplate/
+            [marketing-card-grid-cell]
+              text: Vuepress Boilerplate ⏎ Static web app built with VuePress.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/vuepress-boilerplate/
+            [marketing-card-grid-cell]
+              text: VuePress Templates collection ⏎ VuePress web apps to choose from.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/vuepress-templates-collection/
+            [marketing-card-grid-cell]
+              text: Webpage to PDF Resume ⏎ Online resume built with Astro.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/webpage-to-pdf-resume/
+      [marketing-section-module kind=left]
+        [marketing-ticker kind=plain size=small content=marks]
+          text "Compatible with Your Stack"
+          list (30): Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · OpenAI · Anthropic · Groq · SQLite · Drizzle
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-network-section kind=outcomes aria-label='One distributed infrastructure without the complexity of managing, securing, and scaling it']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=small]
+        text: // ⏎ Region: Earth.
+        h2 "One distributed infrastructure without the complexity of managing, securing, and scaling it"
+      p "Built around your users. Distributed around your data."
+      list (4): 100+ data centers · 100+ Tbps network capacity · 30 ms median latency · 100% availability
+      [marketing-card-grid kind=frame columns=4 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Global resilience beyond anycast. Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Low latency everywhere. Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Zero-ops autoscaling and failover. Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run."
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently asked questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What can I build on Azion?"
+          [content-accordion-item]
+            h3 "Does it have cold starts?"
+          [content-accordion-item]
+            h3 "Does it scale?"
+          [content-accordion-item]
+            h3 "Do I need to choose regions or manage infrastructure?"
+          [content-accordion-item]
+            h3 "What languages and frameworks can I use?"
+          [content-accordion-item]
+            h3 "How do I deploy an application?"
+          [content-accordion-item]
+            h3 "Can I combine Functions, Cache, AI, and image optimization in the same application?"
+          [content-accordion-item]
+            h3 "Can Azion help with dynamic and personalized applications, not just static content?"
+          [content-accordion-item]
+            h3 "How do I preview changes before promoting them to production?"
+          [content-accordion-item]
+            h3 "How do I debug and monitor my application in production?"
+          [content-accordion-item]
+            h3 "Can I start free and expand later?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

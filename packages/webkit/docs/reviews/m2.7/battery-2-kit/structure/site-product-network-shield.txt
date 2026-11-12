@@ -1,0 +1,101 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Block threats at the network layer before origin']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Network Shield
+      h1 "Block threats at the network layer before origin"
+      p "Programmable network-layer protection on Azion's distributed architecture. Filter traffic by IP/CIDR, ASN, and geolocation before it reaches your origin"
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/secure/firewall/network-shield/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Block traffic before origin"
+          p "Use Network Lists of IP addresses, CIDR blocks, ASNs, and countries combined with Rules Engine to create layered defense policies."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Eliminate bandwidth waste from attacks"
+          p "Block abusive traffic on the Azion Web Platform so your origin servers never process malicious requests."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Propagate rules in seconds"
+          p "Update Network Lists via Console or API and see changes live across all locations in seconds. No service interruptions, no downtime windows."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Protect any environment consistently"
+          p "One set of rules protects workloads across AWS, GCP, Azure, on-premises data centers, and hybrid architectures. Consistent protection regardless of where your applications are hosted."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Share lists across firewalls"
+          p "Create a catalog of Network Lists and reference them across multiple Firewall configurations. Update once, propagate everywhere."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Automate threat response at scale"
+          p "Stream security events to your SIEM and trigger automated playbooks to update Network Lists via API. Use Functions to implement programmable, per-request decisions."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  text: // ⏎ STRONGER PROTECTION
+  h2 "Block threats at the network layer, before they consume resources"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Programmable network-layer security']
+          h2 "Programmable network-layer security"
+          p "Define access policies with lists that combine IP addresses, CIDR blocks, geolocation, ASNs, and reputation scores. Reference these lists directly in the Firewall Rules Engine. Updates propagate automatically across all associated firewalls, with no service interruption."
+          img "Network Shield Rules Engine configuration showing network list criteria and deny behavior"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Rule-based traffic control with centralized list management']
+          h2 "Rule-based traffic control with centralized list management"
+          p "Create custom allowlists and blocklists using IPs, CIDR blocks, ASNs, countries, or Azion-managed lists like Tor Exit Nodes. Segment access by region or network type, and share the same lists across multiple firewalls for consistent policies at scale."
+          img "Network List configuration showing IP/CIDR, ASN, and country-based blocklist creation"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Automated threat response with real-time event streaming']
+          h2 "Automated threat response with real-time event streaming"
+          p "Stream events to your SIEM in real time and trigger automated playbooks to update Network Lists via API. Changes propagate in seconds. Use Functions to implement programmable, per-request blocks and adapt your risk response dynamically."
+          img "Architecture diagram showing Network Shield integration with SIEM and automated threat response workflow"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Lock down your infrastructure']
+          h2 "Lock down your infrastructure"
+          p "Use Origin Shield to restrict inbound traffic to your origin servers exclusively from Azion's trusted IP addresses. The dynamic Network List is maintained by Azion and updated automatically. Configure your origin's firewall to accept only Origin Shield addresses, establishing a Layer 3/4 perimeter that blocks all direct external access."
+          img "Origin Shield architecture showing trusted Azion IP addresses connecting to origin servers"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Network Shield and how does it work?"
+          [content-accordion-item]
+            h3 "What is the difference between Network Shield and a Web Application Firewall (WAF)?"
+          [content-accordion-item]
+            h3 "What types of Network Lists can I create?"
+          [content-accordion-item]
+            h3 "How quickly do Network List updates propagate?"
+          [content-accordion-item]
+            h3 "Can I share Network Lists across multiple firewalls?"
+          [content-accordion-item]
+            h3 "What is Origin Shield and how does it relate to Network Shield?"
+          [content-accordion-item]
+            h3 "How much does Network Shield cost?"
+          [content-accordion-item]
+            h3 "Can I automate Network List updates with my SIEM or security tools?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

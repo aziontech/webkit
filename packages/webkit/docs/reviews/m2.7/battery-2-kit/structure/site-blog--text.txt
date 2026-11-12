@@ -1,0 +1,106 @@
+//
+RESOURCES
+Blog
+
+Explore the latest in tech and Edge Computing on Azion's blog. Stay informed with updates on Edge technology and industry insights.
+
+COMPANY NEWS • AUG 28, 2026
+Azion Named Leader in Four Categories — G2 Fall 2026 Reports
+Azion earned Leader status in CDN, Web Security, DDoS Protection, and Bot Detection and Mitigation (Enterprise) in the G2 Fall 2026 Reports, plus High Performer recognition in five more categories.
+5 min read
+PERFORMANCE • NOV 12, 2026
+Can your store handle Black Friday? Prepare your cache before the peak
+Prepare your store's cache for Black Friday: what to cache, TTL, Tiered Cache, Stale cache, cache warming with azion warmup, purge, and offload metrics.
+13 min read
+SECURITY • NOV 11, 2026
+WAF, Firewall, and WAAP: how Azion organizes protection
+What's the difference between Firewall, WAF, and WAAP at Azion? See why WAF is a Firewall module, how rules are ordered, and how to find what blocked a request.
+11 min read
+SECURITY • NOV 10, 2026
+Black Friday bots: protect login, checkout, and APIs
+How to protect e-commerce from Black Friday bots without blocking customers: Bot Manager and WAF on login, checkout, and APIs, calibrated in phases.
+18 min read
+SECURITY • OCT 28, 2026
+How to structure an AI SaaS with security on Azion
+See how to combine your application, database, AI inference, and security on Azion, with Firewall and WAF policies versioned alongside the code.
+11 min read
+COMPANY NEWS • AUG 28, 2026
+Azion Named Leader in Four Categories — G2 Fall 2026 Reports
+
+Azion earned Leader status in CDN, Web Security, DDoS Protection, and Bot Detection and Mitigation (Enterprise) in the G2 Fall 2026 Reports, plus High Performer recognition in five more categories.
+
+5 min read
+Read article
+COMPANY NEWS • AUG 28, 2026
+Azion Named Leader in Four Categories — G2 Fall 2026 Reports
+PERFORMANCE • NOV 12, 2026
+Can your store handle Black Friday? Prepare your cache before the peak
+SECURITY • NOV 11, 2026
+WAF, Firewall, and WAAP: how Azion organizes protection
+SECURITY • NOV 10, 2026
+Black Friday bots: protect login, checkout, and APIs
+SECURITY • OCT 28, 2026
+How to structure an AI SaaS with security on Azion
+All Articles
+Developers
+Security
+Company News
+Market Trends
+Serverless
+Caching
+Observability
+Routing & Networking
+SECURITY · OCT 28, 2026
+How to protect a SaaS that's under attack, without migrating or rewriting anything
+Marilia Bafutto Costa · 14 min read
+READ ARTICLE
+SECURITY · OCT 22, 2026
+PHP2Shell: Azion releases a hotfix on Marketplace for CVE-2026-109618 and CVE-2026-109619
+Jonas Ferreira · 11 min read
+READ ARTICLE
+COMPANY NEWS · OCT 14, 2026
+Azion MCP servers: Connect Your Coding Agent to Azion
+Vitor Eltz · 7 min read
+READ ARTICLE
+SECURITY · OCT 7, 2026
+Bringing application security into the deployment process
+Marilia Bafutto Costa · 8 min read
+READ ARTICLE
+DEVELOPERS · OCT 5, 2026
+The agent that writes your code also suggests your security policy
+Marilia Bafutto Costa · 9 min read
+READ ARTICLE
+DEVELOPERS · SEP 25, 2026
+How I Shipped My Portfolio in Just Two Commands
+Patrick Menoti · 9 min read
+READ ARTICLE
+SERVERLESS · SEP 23, 2026
+How Do You Reduce AI Agent Latency?
+Marilia Bafutto Costa · 8 min read
+READ ARTICLE
+SECURITY · SEP 22, 2026
+Best Cloudflare Alternatives and Competitors
+Vitor Eltz · 13 min read
+READ ARTICLE
+COMPANY NEWS · SEP 22, 2026
+Which Azion Plan Is Right for Your Project?
+Marilia Bafutto Costa · 7 min read
+READ ARTICLE
+DEVELOPERS · SEP 14, 2026
+How to Optimize Operations at Scale with the Azion Enterprise Plan
+Marilia Bafutto Costa · 7 min read
+READ ARTICLE
+DEVELOPERS · SEP 10, 2026
+Azion Pro Plan: When Your Personal Project Becomes a Product
+Marilia Bafutto Costa · 4 min read
+READ ARTICLE
+DEVELOPERS · SEP 10, 2026
+What You Can Build with Azion’s Hobby Plan
+Marilia Bafutto Costa · 8 min read
+READ ARTICLE
+Show more
+//
+STAY UP TO DATE
+Product updates, event highlights, and industry insights, delivered to your inbox.
+Subscribe to our newsletter
+Subscribe

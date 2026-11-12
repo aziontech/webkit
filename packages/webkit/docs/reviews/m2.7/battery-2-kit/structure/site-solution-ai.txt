@@ -1,0 +1,200 @@
+[block-hero-title-band kind=title-band]
+  [marketing-hero kind=band size=large align=center width=5xl aria-label='Build and deploy AI agents and applications in seconds']
+    [marketing-hero-title width=4xl centered=true]
+      text: // ⏎ AI
+      h1 "Build and deploy AI agents and applications in seconds"
+      p "Run AI models close to users on highly distributed infrastructure for scalable, low-latency, and cost-effective inference while preserving data locality."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a specialist" → https://www.azion.com/en/contact/
+[marketing-section-container width=site]
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global inference on GPUs"
+          p "Run real-time serverless inference on GPUs across hundreds of locations with median latency under 30 ms. No infra to manage."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "OpenAI-compatible API"
+          p "Migrate and integrate AI features quickly using OpenAI-compatible endpoints and SDKs. Just swap the endpoint."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Real-time decisioning with AI agents"
+          p "Run ReAct-style AI agents on a distributed architecture to reason over context, call tools, and respond in real time."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "RAG with SQL vector search"
+          p "Integrate AI Inference with SQL Database vector search to power semantic retrieval and hybrid search."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Observability built for AI"
+          p "Track behavior and performance with Real-Time Metrics, Real-Time Events, and GraphQL APIs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "AI-powered security workflows"
+          p "Build autonomous security agents to detect abuse and mitigate threats before origin impact. Or deploy a pre-built one instantly."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-solutions kind=media-end]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='AI agents']
+          h2 "AI agents"
+          p "Run AI agents that call your APIs and tools, keep state, and hand off to a person for approval."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/build-ai-agents/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Remote MCP servers']
+          h2 "Remote MCP servers"
+          p "Deploy MCP servers that let AI agents use your services, protected by authentication and rate limits."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/deploy-remote-mcp-servers/
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='AI features for existing applications']
+          h2 "AI features for existing applications"
+          p "Add summarization, classification, or moderation to your applications, with no GPU infrastructure to run."
+          button "Docs" → https://www.azion.com/en/documentation/use-cases/build-and-run-ai-workloads/add-ai-features-to-existing-applications/
+  · section-gap (hatched spacer band)
+  [block-template-gallery]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Quick start with templates']
+        text: // ⏎ Your stack, your way
+        h2 "Quick start with templates"
+        p "Build faster with pre-built applications and starter kits for common use cases. Deploy complete projects in seconds with popular frameworks."
+        button "Deploy now" → https://www.azion.com/en/documentation/platform/marketplace/templates/#application-development
+        [layout-scroll-area orientation=vertical aria-label='Templates you can deploy']
+          [marketing-card-grid kind=frame columns=2 mobile-columns=1 filled=true]
+            [marketing-card-grid-cell]
+              text: AI Inference Starter Kit ⏎ AI app with no origin dependency.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/ai-inference-starter-kit/
+            [marketing-card-grid-cell]
+              text: Function Starter Kit ⏎ AI app with OpenAI-compatible APIs.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/function-starter-kit/
+            [marketing-card-grid-cell]
+              text: LangGraph AI Agent Boilerplate ⏎ AI agent with RAG, built with LangGraph.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/langgraph-ai-agent-boilerplate/
+            [marketing-card-grid-cell]
+              text: SQL Database Starter Kit ⏎ JavaScript CRUD project on SQL Database.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/sqldatabase-starter-kit/
+            [marketing-card-grid-cell]
+              text: TiDB Starter Kit with Drizzle ORM ⏎ TiDB database app with Drizzle ORM.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/tidb-with-drizzle/
+            [marketing-card-grid-cell]
+              text: Cosmic + Simple Next.js Blog ⏎ Next.js blog managed in Cosmic.
+              button "Deploy now" → https://www.azion.com/en/documentation/guides/application-development/frameworks/cosmic-simple-next-blog/
+      [marketing-section-module kind=left]
+        [marketing-ticker kind=plain size=small content=marks]
+          text "Compatible With Your Stack"
+          list (6): OpenAI · Anthropic · Groq · AWS · Google Cloud · Azure
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-network-section kind=outcomes aria-label='One distributed infrastructure without the complexity of managing, securing, and scaling it']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=small]
+        text: // ⏎ Region: Earth.
+        h2 "One distributed infrastructure without the complexity of managing, securing, and scaling it"
+      p "Built around your users. Distributed around your data."
+      list (4): 100+ data centers · 100+ Tbps network capacity · 30 ms median latency · 100% availability
+      [marketing-card-grid kind=frame columns=4 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Global resilience beyond anycast. Azion's software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Low latency everywhere. Compute, AI, databases, and security run across all data centers, close to your users, keeping median global latency under 30 ms, with a built-in CDN and tiered caching for every app."
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "Zero-ops autoscaling and failover. Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run."
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently asked questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "Which model types are supported?"
+          [content-accordion-item]
+            h3 "How do I use AI Inference in my application?"
+          [content-accordion-item]
+            h3 "Is Azion AI compatible with OpenAI APIs and SDKs?"
+          [content-accordion-item]
+            h3 "How do I implement RAG and semantic search?"
+          [content-accordion-item]
+            h3 "Can I fine-tune models with proprietary data?"
+          [content-accordion-item]
+            h3 "What if the model I need is not available?"
+          [content-accordion-item]
+            h3 "What is the difference between training and inference?"
+          [content-accordion-item]
+            h3 "How can I monitor AI application behavior in production?"
+          [content-accordion-item]
+            h3 "Do I need to manage servers or clusters for scaling?"
+          [content-accordion-item]
+            h3 "Can AI be used for autonomous security use cases?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

@@ -1,0 +1,60 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Orchestrate distributed workloads with full control']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Orchestrator
+      h1 "Orchestrate distributed workloads with full control"
+      p "Deploy, control, observe, and automate workloads anywhere: on a distributed architecture, on remote devices, on-premises, or across multi-cloud."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/deploy/orchestrator/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Centralized Management"
+          p "Instantly scale content delivery globally—even during traffic surges—and reduce the cost, time, and risk of managing infrastructure."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Improved Reliability and Monitoring"
+          p "Standardize your processes and monitor your entire application from a single place."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Multi-cloud and On-Prem"
+          p "Use with Google Cloud, AWS, Azure, or your own infrastructure. Keep everything running even if a provider fails—and deliver experiences that retain your customers."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  h2 "Orchestration with Control"
+  p "Multi-cloud"
+  h3 "Multi-cloud deployment and management"
+  p "Deploy to any cloud or on a distributed architecture with just a few clicks. Avoid the complexity of managing multiple interfaces—manage your data simply from Azion's single interface."
+  p "Workflows"
+  h3 "Application Management"
+  p "Manage workflows to automate deployment and management of applications easily and anywhere."
+  p "On-prem"
+  h3 "Azion on-premise"
+  p "Leverage the full power of Azion directly on your premises, with serverless, a powerful WAF, and caching at your location."
+  p "Observability"
+  h3 "360 Observability"
+  p "Observe your entire operation from a single screen, regardless of cloud provider or location."
+  p "Automation"
+  h3 "Real-time Automation"
+  p "Apply automatic policies for scaling, failover, and metric-driven routing."
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

@@ -1,0 +1,112 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Application and API protection you can control and trust']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ WAF
+      h1 "Application and API protection you can control and trust"
+      p "Stop emerging threats globally without slowing your applications."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://azion.com/en/documentation/products/secure/firewall/web-application-firewall/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Zero-day defense"
+          p "Block zero-day exploits and emerging threats with rules you don't need to update."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global performance"
+          p "Azion uses globally distributed infrastructure to keep your applications secure and fast."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Low false positives"
+          p "Security rules that can automatically adapt to your application to stop only malicious traffic."
+  · section-gap (hatched spacer band)
+  h2 "Distributed protection across every request"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Enable OWASP protection with customizable rules']
+          h2 "Enable OWASP protection with customizable rules"
+          p "Enable preset OWASP protections and tune sensitivity to reduce false positives while keeping applications available. Run multiple WAF profiles per application to match different traffic patterns."
+          img "Sensitivity threshold adjustment by threat type."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Stream security events for investigation and response']
+          h2 "Stream security events for investigation and response"
+          p "Send security events to SIEM, Splunk, Datadog, or analytics tools for fast visibility into suspicious traffic and application threats."
+          img "Third-party integrations with real-time visibility."
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Detect advanced threats with behavioral analysis']
+          h2 "Detect advanced threats with behavioral analysis"
+          p "Analyze requests with behavioral patterns and threat signatures to detect zero-day vulnerabilities and OWASP Top 10 attacks. Use Learning Mode to validate protections before enforcement."
+          img "Programmable threat analysis with conditional rules."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Extend protection with custom logic']
+          h2 "Extend protection with custom logic"
+          p "Write custom security rules with Functions to implement business-specific protections and automate mitigation workflows. Extend WAF behavior with your own detection logic or AI models."
+          img "Custom security logic with Functions."
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Adapt protection to legitimate traffic']
+          h2 "Adapt protection to legitimate traffic"
+          p "Create Custom Allowed Rules for trusted traffic patterns while blocking malicious requests before they reach your applications."
+          img "Third-party integrations with real-time visibility."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Protect critical applications and APIs']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Protect critical applications and APIs"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Prevent checkout abuse during traffic spikes WAF rules block bots and credential stuffing automatically, keeping checkout available for real users during peak events." → https://www.azion.com/en/solutions/retail/
+        [marketing-topic icon=true described=true linked=true]
+        link "Secure APIs from injection and abuse Protect REST and GraphQL APIs from injection attacks, abusive traffic, and automated exploitation attempts." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-public-apis-from-abuse/
+        [marketing-topic icon=true described=true linked=true]
+        link "Protect sensitive financial data Block attacks targeting payment flows and sensitive information while supporting PCI-DSS and regulatory compliance requirements." → https://www.azion.com/en/solutions/financial-services/
+        [marketing-topic icon=true described=true linked=true]
+        link "Secure multi-tenant applications at scale Apply distributed protection across multi-tenant SaaS environments with security policies that scale automatically alongside traffic growth." → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/modernize-a-monolithic-application-without-a-rewrite/
+        [marketing-topic icon=true described=true linked=true]
+        link "Stop zero-day exploits Block emerging OWASP-class attacks with rules that update as threats evolve, without waiting for an application patch." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-web-applications-from-owasp-top-10-and-zero-day-attacks/
+        [marketing-topic icon=true described=true linked=true]
+        link "Cut false positives on real traffic Tune rules to how your users and APIs behave, so legitimate requests keep flowing while attacks are blocked." → https://www.azion.com/en/solutions/security/
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is a WAF and how does it work?"
+          [content-accordion-item]
+            h3 "I'm under attack. What should I do?"
+          [content-accordion-item]
+            h3 "Can I use WAF alongside my existing security tools?"
+          [content-accordion-item]
+            h3 "What is the difference between a WAF and a traditional firewall?"
+          [content-accordion-item]
+            h3 "How long does it take to deploy and implement a WAF?"
+          [content-accordion-item]
+            h3 "Does Azion WAF protect against OWASP Top 10 vulnerabilities?"
+          [content-accordion-item]
+            h3 "What types of attacks can Azion's security platform prevent?"
+          [content-accordion-item]
+            h3 "How much does a web application firewall cost?"
+          [content-accordion-item]
+            h3 "Do I need a WAF if I already have a CDN or load balancer?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

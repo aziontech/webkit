@@ -1,0 +1,152 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Secure every connection your users make']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Secure Internet Access
+      h1 "Secure every connection your users make"
+      p "One policy for the web, SaaS apps, and AI tools your teams use, enforced at the Azion data center closest to each user. No backhaul to a central appliance."
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Trusted by our customers"
+      list (12): Global Fashion Group · HeroSpark · Magalu · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Inspected close to every user"
+          p "Traffic is checked at the nearest of Azion's 100+ data centers. No detour through a central appliance, so security doesn't slow people down."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Block threats before they land"
+          p "Stop malware, phishing pages, and known malicious domains before they reach a user's browser."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Filter the web by category"
+          p "Allow or block sites by category for each team. The same policy applies in the office, at home, or on the road."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Control SaaS usage"
+          p "See which SaaS apps your teams use. Allow the ones you approve and block the rest."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Bring AI tools under policy"
+          p "Allow approved AI tools, block the rest, and keep sensitive data out of prompts and file uploads."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "See every connection"
+          p "See each request and its policy decision in Real-Time Events. Stream the logs to your SIEM with Data Stream."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='One policy for every connection']
+          h2 "One policy for every connection"
+          p "Web browsing, SaaS apps, and AI tools go through the same inspection, in one pass. Write a policy once and it applies to every user, on any network."
+          img "Users at the office, at home, and on the road connect through one policy on Azion, which checks threats, web categories, SaaS apps, AI tools, data, and logs before traffic reaches the web, SaaS apps, and AI tools."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Bring shadow AI under policy']
+          h2 "Bring shadow AI under policy"
+          p "See which AI tools each team uses. Allow the approved ones, block the rest, and stop card numbers, personal data, and API keys from going into prompts."
+          img "Marketing, Engineering, and Sales teams connect through an AI policy on Azion that checks for card numbers, personal data, and API keys and logs each request. Approved chat apps and coding tools are allowed, and unapproved AI tools are blocked."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='What you can protect with Secure Internet Access']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "What you can protect with Secure Internet Access"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Drop the VPN backhaul Remote users reach the internet through the nearest data center instead of a detour through headquarters. Same policy, less latency." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Block phishing and malware Stop users from reaching phishing pages and malware downloads, wherever they connect from." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Govern AI tool usage Allow the AI tools your company approves, block the rest, and check prompts for data that shouldn't leave." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Approve the SaaS apps you trust See which SaaS apps your teams use, allow the approved ones, and block the rest." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Keep sensitive data from leaving Detect card numbers, personal data, and credentials in uploads and form posts, and block them before they leave." → https://www.azion.com/en/solutions/security/
+        [marketing-topic icon=true described=true linked=true]
+        link "Prove compliance with logs Keep a record of each user's connections and policy decisions, and stream it to your SIEM with Data Stream." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/prepare-regulated-web-applications-for-security-audits/
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Serverless AI-native primitives for autonomous workloads']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Serverless AI-native primitives for autonomous workloads"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Secure Internet Access?"
+          [content-accordion-item]
+            h3 "How does Secure Internet Access fit into SASE?"
+          [content-accordion-item]
+            h3 "Why inspect traffic close to the user?"
+          [content-accordion-item]
+            h3 "Can I control which AI tools people use?"
+          [content-accordion-item]
+            h3 "Can different teams have different policies?"
+          [content-accordion-item]
+            h3 "How do I get visibility and send logs to my SIEM?"
+          [content-accordion-item]
+            h3 "Can AI agents configure and maintain my policies?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

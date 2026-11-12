@@ -1,0 +1,87 @@
+[block-hero-form]
+  [marketing-hero kind=screen size=medium align=center width=5xl aria-label='Talk to our sales team']
+    [marketing-hero-title width=lg]
+      text: // ⏎ Contact
+      h1 "Talk to our sales team"
+      p "Get a custom demo, plan your migration, and explore plans and pricing built for your company."
+    list (4): Build AI applications Run AI agents and inference close to your users. · Modernize applications Go from commit to a live URL in minutes. · Protect applications and APIs Block DDoS attacks, malicious bots, and API abuse. · Speed up every workload 100+ data centers, with a 30 ms median latency.
+    text "Contact sales"
+    [input-label]
+    label "First name (Required)"
+    [input-field-text size=large]
+      input[text] name=firstName placeholder="None"
+    [input-label]
+    label "Last name (Required)"
+    [input-field-text size=large]
+      input[text] name=lastName placeholder="None"
+    [input-label]
+    label "Company e-mail (Required)"
+    [input-field-text size=large]
+      input[text] name=email placeholder="None"
+    [input-label]
+    label "Role (Required)"
+    [input-field-select size=large]
+      button "Select your role"
+    [input-label]
+    label "Company (Required)"
+    [input-field-text size=large]
+      input[text] name=company placeholder="None"
+    [input-label]
+    label "Phone (Required)"
+    [input-field-phone-number size=large]
+      [select-trigger size=large filled=true aria-label='Country dial code']
+      button "+1"
+      input[tel] name=phone placeholder="(999) 999-9999"
+    [input-label]
+    label "How can we help? (Required)"
+    [input-field-textarea]
+      textarea[] name=message placeholder="Tell us about your current stack, your use case, and what you want to run on Azion."
+    button "Contact sales"
+    [marketing-ticker kind=plain size=small width=5xl content=marks]
+      text "Trusted by mission-critical workloads"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-contact-hub kind=left]
+    [marketing-card-grid kind=frame columns=2 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        h2 "Support"
+        p "Log in with your Azion account to open a ticket. Our engineers pick it up 24/7 on paid support plans."
+        button "Log in to open a ticket" → https://tickets.azion.com/en/support/login
+        link "System status..." → https://status.azion.com/
+      [marketing-card-grid-cell]
+        h2 "Under a cyberattack?"
+        p "Get emergency mitigation for an attack in progress, even before you become a customer."
+        button "Request immediate contact" → https://www.azion.com/en/lp/under-attack-mitigation/
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true linked=true]
+        link "Join the community Ask developers and the Azion team on Discord. Open to everyone, on any plan." → https://discord.com/invite/pM8ANzztuB
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true linked=true]
+        link "Read the docs Guides, API reference, and troubleshooting for every Azion product." → https://www.azion.com/en/documentation/
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          blockquote "One of the best CDN and WAF solutions I've ever used. Easy to implement and integrate, with speed and low latency that make a real difference for our customers."
+          figcaption "Julian H. IT OPS, SRE & SEC Manager at Dafiti Group"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-recognition-marquee aria-label='Recognized as a market leader']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        text: // ⏎ Recognition and awards
+        h2 "Recognized as a market leader"
+      list (4): Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools. G2 Spring 2026 Reports · Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solutions. G2 Winter 2026 Reports · Named a Leader and the only platform purpose-built for the edge, whose capabilities meet all key criteria in the report. GigaOm Radar for Edge Platforms · Awarded in the Edge Serverless Computing category and recognized for consistently exceeding its customers' performance expectations. 2023 North American New Product Innovation Award
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/

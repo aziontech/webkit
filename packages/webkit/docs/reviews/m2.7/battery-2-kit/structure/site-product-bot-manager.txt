@@ -1,0 +1,163 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Stop bots before they reach your applications']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Bot Manager
+      h1 "Stop bots before they reach your applications"
+      p "Detect and stop malicious automation with machine learning, intent classification, and flexible mitigation policies."
+      button "Start free" → https://console.azion.com/signup/
+      button "DOCS" → https://www.azion.com/en/documentation/products/secure/firewall/bot-manager/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Stop fraud before it happens"
+          p "Block credential stuffing, account takeovers, and payment fraud with intent-based detection to protect customer accounts and reduce financial losses."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Defend against brute-force attacks"
+          p "Use intelligent scoring and adaptive mitigation to make brute-force attacks costly and time-consuming."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Control scraping and crawling"
+          p "Prevent unauthorized content extraction by distinguishing legitimate crawlers from malicious scrapers with granular policies."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Reduce infrastructure costs"
+          p "Block automated traffic before it reaches your origin to reduce bandwidth usage, compute consumption, and operational costs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Preserve legitimate user experience"
+          p "Minimize false positives by accurately distinguishing humans and good bots from malicious automation."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Gain visibility into bot traffic"
+          p "Monitor bot behavior and attack trends with real-time analytics to continuously optimize your defenses."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  text: // ⏎ AI Bot Management
+  h2 "Protect your business from automated threats"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Detect bots with precision']
+          h2 "Detect bots with precision"
+          p "Detect bots in real time with machine learning that evaluates device fingerprints, browser behavior, and network reputation. Use SDKs for web and mobile apps to reduce false positives."
+          img "Bot detection interface showing machine learning-based behavioral analysis and scoring"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Intent-based bot classification']
+          h2 "Intent-based bot classification"
+          p "Classify bot intent, including scraping, credential stuffing, brute force, and account takeover. Apply risk-based policies so each threat gets the right response."
+          img "Intent-based bot classification dashboard showing different attack categories and threat scores"
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Flexible mitigation actions']
+          h2 "Flexible mitigation actions"
+          p "Choose from 7 mitigation actions: block, challenge, rate limit, redirect, custom HTML, random delay, and connection hold. Adjust enforcement by risk level to protect critical flows while preserving legitimate traffic."
+          img "Bot mitigation actions configuration showing multiple response options and threshold settings"
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Reputation Intelligence for enhanced protection']
+          h2 "Reputation Intelligence for enhanced protection"
+          p "Strengthen detection with continuously updated Network Lists and IP reputation signals, including Tor exits, open proxies, malware sources, and fraud networks. Raise risk scores automatically and apply mitigation earlier."
+          img "Bot Manager architecture diagram showing Reputation Intelligence integration and network list processing"
+  · section-gap (hatched spacer band)
+  [block-use-case-links aria-label='Protect critical agentic applications and APIs']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=medium]
+        h2 "Protect critical agentic applications and APIs"
+      [marketing-card-grid kind=divider columns=3 mobile-columns=1 filled=true]
+        [marketing-topic icon=true described=true linked=true]
+        link "Stop inventory hoarding and scalping bots Detect scalper bots and credential stuffing in real time, keeping checkout open for real customers during flash sales and product drops." → https://www.azion.com/en/solutions/retail/
+        [marketing-topic icon=true described=true linked=true]
+        link "Block automated abuse of your APIs and AI Agents Detect scripted requests and bot-driven abuse against REST and GraphQL endpoints before they drain compute or expose data." → https://www.azion.com/en/documentation/use-cases/secure-applications-and-networks/protect-public-apis-from-abuse/
+        [marketing-topic icon=true described=true linked=true]
+        link "Stop card testing and account takeover Detect bots probing stolen cards and credentials on financial apps to cut fraud losses and chargebacks." → https://www.azion.com/en/solutions/financial-services/
+        [marketing-topic icon=true described=true linked=true]
+        link "Protect multi-tenant apps at scale Apply intent-based bot detection across multi-tenant SaaS environments, with policies that scale automatically as traffic grows." → https://www.azion.com/en/documentation/use-cases/build-and-run-applications/modernize-a-monolithic-application-without-a-rewrite/
+        [marketing-topic icon=true described=true linked=true]
+        link "Control scraping and crawling Tell good crawlers from scrapers and set the action for each, so content and pricing data stay yours." → https://www.azion.com/en/products/bot-manager/
+        [marketing-topic icon=true described=true linked=true]
+        link "Defend against brute-force logins Detect and block automated login attempts before they turn into account takeovers." → https://www.azion.com/en/solutions/security/
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Security that scale with You']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Security that scale with You"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is Bot Manager and how does it work?"
+          [content-accordion-item]
+            h3 "How does Bot Manager differ from traditional bot protection?"
+          [content-accordion-item]
+            h3 "What types of attacks does Bot Manager prevent?"
+          [content-accordion-item]
+            h3 "How long does it take to deploy Bot Manager?"
+          [content-accordion-item]
+            h3 "Will Bot Manager block legitimate users or good bots?"
+          [content-accordion-item]
+            h3 "What mitigation actions are available?"
+          [content-accordion-item]
+            h3 "How can I monitor and analyze bot traffic?"
+          [content-accordion-item]
+            h3 "Can I customize Bot Manager for my specific needs?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Protected by default.']
+        text: // ⏎ Secure
+        h2 "Protected by default. Always on."
+        button "Start free" → https://console.azion.com/signup?tck=secure_cta
+        p "Get stronger protection, less attack exposure, and less operational overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

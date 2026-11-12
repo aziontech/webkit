@@ -1,0 +1,163 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='One gateway for all your AI Applications']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ AI Gateway
+      h1 "One gateway for all your AI Applications"
+      p "Route requests to AI Inference and third-party providers, fall back when a model fails, and keep keys, limits, and usage logs in one place, with no proxy servers to run."
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+      button "Read the docs" → /en/documentation/use-cases/build-and-run-ai-workloads/govern-access-to-multiple-ai-models/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Your Stack, Your Way"
+      list (30): OpenAI · Anthropic · Groq · Next.js · Astro · React · Vue · Angular · Nuxt · Gatsby · Hugo · Preact · Remix · Qwik · Vite · VitePress · Docusaurus · Eleventy · Hexo · Jekyll · Hono · Node.js · AWS · Google Cloud · Azure · Cloudflare Workers · Terraform · GitHub · SQLite · Drizzle
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "One endpoint for every model"
+          p "Apps send OpenAI-format requests with a model alias. Change the model behind an alias once, and every app follows."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Fallback when a provider fails"
+          p "Each alias lists its models in order. When a call errors or times out, the gateway moves to the next one."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Provider keys stay server-side"
+          p "Provider keys live in secret environment variables. Each team gets its own gateway key, stored only as a SHA-256 hash."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Abuse blocked before it costs tokens"
+          p "Firewall applies WAF, rate limits, and DDoS Protection before requests reach the gateway, so blocked traffic never reaches a model."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Repeated prompts served from cache"
+          p "Callers opt in per request. A matching prompt gets a stored response, with no model call and no tokens spent."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Every call on the record"
+          p "Each call logs the team, model, fallback, cache result, and tokens used. Stream the logs to your SIEM or data warehouse."
+  · section-gap (hatched spacer band)
+  [block-media-split-band-guide]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=medium align=center media=true divided=true fill=canvas aria-label='Every AI request through one control point']
+        h2 "Every AI request through one control point"
+        p "Chatbots, AI agents, and coding agents call one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it."
+        img "Chatbots, AI agents, and coding agents connect through the AI gateway on Azion to models, MCP servers, and APIs"
+  · section-gap (hatched spacer band)
+  h2 "Use cases"
+  p "Platform teams"
+  h3 "Central model access for every team"
+  p "Give each team its own gateway key and list of allowed models, and block a team that reaches its budget."
+  p "Reliability"
+  h3 "Failover across providers"
+  p "Try a model on AI Inference first, then a third-party provider, so one provider's outage doesn't take your AI features down."
+  p "Cost control"
+  h3 "Spend tracked per team"
+  p "Sum token usage per team from the gateway logs, and answer repeated prompts from cache with no model call."
+  p "AI agents"
+  h3 "Governed model access for agents"
+  p "Point agents and MCP servers at the gateway, so every model call they make follows the same keys, limits, and logs."
+  p "Model choice"
+  h3 "Route by task, not by vendor"
+  p "Map aliases such as general and long-context to the model that fits each job, and swap models without touching app code."
+  p "Audit"
+  h3 "A record of every model call"
+  p "Know which team called which model, when, and with how many tokens. Keep the trail in Splunk, Datadog, or BigQuery."
+  · section-gap (hatched spacer band)
+  [block-code-split]
+    [marketing-section-module kind=left]
+      [marketing-media-split kind=media-end orientation=horizontal size=medium align=top media=true divided=true fill=canvas aria-label='The shortest path to a production AI gateway']
+        h2 "The shortest path to a production AI gateway"
+        p "Keep the OpenAI SDK you already use. Point it at your gateway and send a model alias. The gateway handles keys, routing, fallback, and logs."
+        button "Read the guide" → /en/documentation/use-cases/build-and-run-ai-workloads/govern-access-to-multiple-ai-models/
+        [code-code-block]
+          text "client.ts"
+          icon-button "Copy the client sample"
+          text: import ⏎ OpenAI ⏎ from ⏎ 'openai' ⏎ const ⏎ client ⏎ new ⏎ OpenAI ⏎ ({ ⏎ baseURL ⏎ process ⏎ env ⏎ AI_GATEWAY_URL ⏎ apiKey ⏎ process ⏎ env ⏎ AI_GATEWAY_KEY ⏎ }); ⏎ const ⏎ reply ⏎ await ⏎ client ⏎ chat ⏎ completions ⏎ create ⏎ ({ ⏎ model ⏎ 'general' ⏎ messages ⏎ [{ ⏎ role ⏎ 'user' ⏎ content ⏎ 'Summarize this ticket.' ⏎ }] ⏎ }); ⏎ console ⏎ log ⏎ reply ⏎ choices ⏎ 0].message.content);
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='All the development primitives you need']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "All the development primitives you need"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  h2 "Frequently Asked Questions"
+  h3 "What is AI Gateway?"
+  p "AI Gateway is one endpoint between your applications and the AI models they call, built on the Azion Web Platform. It authenticates each team, picks a model by policy, falls back when a call fails, caches responses the caller allows, and writes a usage and audit log line for every call. It runs as a function on Azion's distributed infrastructure, behind Firewall."
+  h3 "What is AI Gateway built with?"
+  p "Functions runs the gateway logic on an application, and AI Inference runs the models hosted on Azion. Firewall applies WAF, rate limits, and DDoS Protection before a request reaches the function. KV Store holds team keys and policies, the Cache API stores allowed responses, and Connectors reach your own model servers. Real-Time Events, Real-Time Metrics, and Data Stream record and export every cal…"
+  h3 "Which models and providers can I use?"
+  p "Any model on AI Inference, including Qwen3 30B A3B, GPT-OSS 20B, and Mistral 3 Small, plus embedding, reranking, and vision models. The gateway also calls third-party providers whose APIs accept the OpenAI chat completions format, and your own model servers through Connectors. For a provider with its own request format, adapt the request in the function."
+  h3 "Do I need to change my application code?"
+  p "Usually only the base URL and the key. The gateway accepts OpenAI chat completions requests at /v1/chat/completions, so OpenAI SDKs and compatible clients keep working. Teams send a model alias, such as general, and the platform team decides which model answers it."
+  h3 "How does fallback work?"
+  p "Each alias has an ordered list of models. When a call throws an error, returns no choices, answers with an error status, or runs past its timeout, the gateway tries the next model. Every failed attempt is logged, and if all of them fail, the gateway answers 502."
+  h3 "How do I control spend per team?"
+  p "Every call logs the team and the tokens the model used, so your analytics platform can sum spend per team. When a team reaches its budget, set its status to blocked, and the gateway answers 429 to its key. Third-party calls use your own provider keys, so providers bill your accounts at their own prices, with no markup from Azion."
+  h3 "How are provider keys and team keys protected?"
+  p "Provider keys are stored as secret environment variables and read inside the function, so they never appear in code or reach a team. Each team gets its own gateway key, and KV Store keeps only its SHA-256 hash. To validate JSON Web Tokens instead, run the JWT function from Marketplace on Firewall."
+  h3 "How do I monitor requests, latency, and errors?"
+  p "Real-Time Metrics charts requests, status codes, upstream status, and function invocations. Real-Time Events keeps each request's log lines for 7 days, grouped by request ID. Data Stream sends the same lines to Splunk, Datadog, Elasticsearch, Google BigQuery, Amazon S3, Apache Kafka, or any HTTPS endpoint."
+  h3 "How does AI Gateway on Azion compare to other AI gateways?"
+  p "Managed AI gateways give you a fixed set of features to configure. On Azion, the gateway is code you own: routing, fallback, caching, and authentication live in one function, so you can apply any policy your teams need. The same platform runs models on AI Inference and protects the endpoint with Firewall, so there's no separate proxy to secure."
+  h3 "What do I need to get started?"
+  p "An application with Application Accelerator, which lets a rule run the gateway function, and KV Store, which is in Preview and enabled through Technical Support. The documentation covers the full setup, from the function code to the usage stream. Talk to a specialist to plan the models, routes, and budgets for your teams."
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Build once.']
+        text: // ⏎ Build
+        h2 "Build once. Run everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=build_cta
+        p "Get a faster path to launch, lower latency, and less infrastructure overhead."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

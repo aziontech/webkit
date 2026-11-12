@@ -1,0 +1,158 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='Fast key-value storage built for global applications']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ KV Store
+      h1 "Fast key-value storage built for global applications"
+      p "Eventually consistent key-value storage with automatic global replication. Designed for read-heavy workloads and modern applications."
+      button "Start free" → https://console.azion.com/signup
+      button "Docs" → https://www.azion.com/en/documentation/products/store/overview/
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Low-latency reads worldwide"
+          p "Serve sessions, feature flags, configuration, and lookup data close to users for fast decisions in global applications."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Simple key-value API at scale"
+          p "Store and retrieve application state with a schemaless API that supports JSON, binary data, streams, metadata, and TTLs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Persistent state beyond cache"
+          p "Keep durable key-value data available for read-heavy workloads, instead of relying on volatile cache entries or repeated origin lookups."
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating]
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Native JavaScript API for Functions']
+          h2 "Native JavaScript API for Functions"
+          p "Access KV Store directly from Functions to store and retrieve sessions, flags, and counters without extra network hops. Cloudflare Workers KV API compatible for easy migration."
+          img "KV Store JavaScript API workflow for application state."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Store any data type, no schema required']
+          h2 "Store any data type, no schema required"
+          p "Store JSON objects, binary data, and streams without rigid schemas or serialization overhead. Attach metadata for additional context."
+          img "KV Store flexible data types including JSON objects, binary buffers, and streams with metadata"
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "Contabilizei"
+          blockquote "With Azion, Contabilizei improved request delivery at the Edge, reduced infrastructure costs, and gained fast access to support whenever needed."
+          figcaption "Fabrício Santos DevSecOps Manager at Contabilizei"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-code-split-accelerator kind=left]
+    h2 "From key-value to full application state"
+    p "KV Store integrates with Functions, SQL Database, and Object Storage for complete application state management."
+    button "Learn More" → https://www.azion.com/en/documentation/products/store/overview/
+    [code-code-block]
+      text "kv-store.ts"
+      icon-button "Copy the code sample"
+      text: import ⏎ createClient ⏎ from ⏎ 'azion/kv' ⏎ import ⏎ type ⏎ KVClient ⏎ from ⏎ 'azion/kv' ⏎ const ⏎ client ⏎ KVClient ⏎ await ⏎ createClient ⏎ ({ ⏎ namespace ⏎ 'app-state' ⏎ }) ⏎ on ⏎ 'error' ⏎ err ⏎ => ⏎ console ⏎ error ⏎ 'KV error:' ⏎ err ⏎ )) ⏎ connect ⏎ (); ⏎ // Store a session with TTL ⏎ await ⏎ client ⏎ set ⏎ 'session:user-123' ⏎ JSON ⏎ stringify ⏎ ({ ⏎ userId ⏎ 'user-123' ⏎ role ⏎ 'admin' ⏎ }), ⏎ expiration ⏎ type ⏎ 'EX' ⏎ value ⏎ 3600 ⏎ ); ⏎ // Retrieve the session ⏎ const ⏎ session ⏎ await ⏎ client ⏎ get ⏎ 'session:user-123' ⏎ ); ⏎ console ⏎ log ⏎ session ⏎ ); ⏎ // Increment a counter ⏎ await ⏎ client ⏎ incr ⏎ 'api:calls:today' ⏎ 1);
+  · section-gap (hatched spacer band)
+  [block-capability-grid kind=left]
+    [marketing-card-grid kind=frame columns=3 mobile-columns=1 filled=true]
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Session management and authentication"
+          p "Store user sessions, authentication tokens, and login states close to users for fast authentication. Fast reads enable responsive session validation without round-trips."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Feature flags and configuration"
+          p "Synchronize feature flags and application configuration globally with low latency. Safely roll out features, run A/B tests, and manage settings with TTL."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "API rate limiting and quotas"
+          p "Implement sliding window rate limits, token quotas, and access rules. Track API usage per IP, user, or token with fast lookups to protect APIs."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Global counters and analytics"
+          p "Count pageviews, inventory levels, and API usage in real time with distributed counters. Aggregate metrics across regions with eventual consistency."
+      [marketing-card-grid-cell]
+        [marketing-topic icon=true described=true]
+          h2 "Bad actor tracking and security lists"
+          p "Store IP addresses and threat signatures to block attackers in real time. Query large block lists with low-latency access to prevent malicious access."
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='A full-stack platform that scales instantly']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "A full-stack platform that scales instantly"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-faq-section]
+    [marketing-section-module kind=left]
+      [marketing-faq]
+        h2 "Frequently Asked Questions"
+        [content-accordion orientation=vertical size=large]
+          [content-accordion-item]
+            h3 "What is KV Store?"
+          [content-accordion-item]
+            h3 "What data types does KV Store support?"
+          [content-accordion-item]
+            h3 "How does replication work?"
+          [content-accordion-item]
+            h3 "Can I set expiration on keys?"
+          [content-accordion-item]
+            h3 "How do I access KV Store from Functions?"
+          [content-accordion-item]
+            h3 "What are common use cases for KV Store?"
+          [content-accordion-item]
+            h3 "What are the storage limits?"
+          [content-accordion-item]
+            h3 "Is KV Store compatible with Cloudflare Workers KV?"
+          [content-accordion-item]
+            h3 "Is there a free tier to test KV Store?"
+          [content-accordion-item]
+            h3 "How does pricing compare to Cloudflare Workers KV?"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-split kind=split]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=split aria-label='Your data.']
+        text: // ⏎ Store
+        h2 "Your data. Available everywhere."
+        button "Start free" → https://console.azion.com/signup?tck=store_cta
+        p "Get faster access, simpler scaling, and less storage overhead as data grows."
+        button "Talk to a specialist" → https://www.azion.com/en/contact/

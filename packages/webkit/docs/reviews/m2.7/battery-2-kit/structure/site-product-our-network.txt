@@ -1,0 +1,120 @@
+[block-hero-centered-carousel kind=centered]
+  [marketing-hero kind=screen size=medium align=center width=site aria-label='A global network built for fast applications']
+    [marketing-hero-title width=xl centered=true]
+      text: // ⏎ Our Network
+      h1 "A global network built for fast applications"
+      p "Run closer to users with low-latency delivery, stable routing, and built-in DDoS protection across **100+ data centers** and **3.3k directly connected ASNs**."
+      button "Start free" → https://console.azion.com/signup
+      button "Talk to a Specialist" → https://www.azion.com/en/contact/
+    [marketing-ticker kind=plain size=small width=site content=marks]
+      text "Trusted by Security Teams"
+      list (11): Global Fashion Group · HeroSpark · Itaú · NZN · Netshoes · Caixa · Agibank · Prime Video · América Móvil · GPA · Fourbank
+[marketing-section-container width=site]
+  · section-gap (hatched spacer band)
+  [block-network-section kind=outcomes aria-label='The most reliable infrastructure']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=left size=small]
+        text: // ⏎ Region: Earth.
+        h2 "The most reliable infrastructure"
+      p "Built around your users. Distributed around your data."
+      list (5): 100+ data centers · 100+ Tbps throughput · High availability · 30 ms median latency · PCI and SOC 2/3 compliant
+      [marketing-card-grid kind=frame columns=4 mobile-columns=1 filled=true]
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "7x faster pages"
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "90% lower cloud costs"
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "40x more simultaneous connections"
+        [marketing-card-grid-cell]
+          [marketing-quote kind=inline]
+            img (decorative)
+            blockquote "100% OWASP Top 10 mitigation"
+  · section-gap (hatched spacer band)
+  [block-media-split-stack-alternating kind=alternating aria-label='Stop managing regions and capacity by hand']
+    [marketing-section-title kind=centered size=large]
+      text: // ⏎ Managed Infrastructure
+      h2 "Stop managing regions and capacity by hand"
+    [marketing-section-module kind=left]
+      [marketing-band-stack sticky=true]
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Run closer to users']
+          h2 "Run closer to users"
+          p "Handle requests closer to users instead of sending everything back to a few central regions. That helps cut latency, absorb spikes automatically, and reduce backhaul overhead."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Keep delivery, logic, and data in one place']
+          h2 "Keep delivery, logic, and data in one place"
+          p "Use one platform for delivery, distributed execution, and data workflows. Support APIs and dynamic applications with real-time request handling, origin protection, and state kept close to execution with services like KV Store."
+        [marketing-media-split kind=media-start orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Get better routes and more stable delivery']
+          h2 "Get better routes and more stable delivery"
+          p "Place traffic entry points inside ISP last-mile networks and connect through IXPs, peering, and Tier 1 transit. Reduce hops, improve route quality, and keep delivery stable during traffic spikes, upstream issues, and regional incidents."
+        [marketing-media-split kind=media-end orientation=horizontal size=large align=center media=true divided=true fill=canvas aria-label='Stop attack traffic earlier']
+          h2 "Stop attack traffic earlier"
+          p "Block attack traffic in the delivery path before it reaches your origin. Deploy code and policies while the platform handles scaling, execution, and traffic steering, so your team spends less time managing regions, capacity, scaling rules, and extra layers."
+  · section-gap (hatched spacer band)
+  [block-client-quotes]
+    [marketing-section-module kind=left]
+      [marketing-quote-tabs]
+        [marketing-quote kind=highlight]
+          img "GPA"
+          blockquote "Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers."
+          figcaption "Allan Monteiro CISO & Head of Technology"
+          button "See success stories" → /en/success-case/
+        [marketing-card-grid kind=frame columns=3 mobile-columns=2 filled=true aria-label='Client stories']
+          [marketing-card-grid-cell]
+  · section-gap (hatched spacer band)
+  [block-platform-directory aria-label='Build, run, and protect applications on one platform']
+    [marketing-section-module kind=left]
+      [marketing-section-title kind=centered size=medium]
+        h2 "Build, run, and protect applications on one platform"
+      [marketing-column-navigation columns=4 mobile-columns=1 aria-label='Platform primitives']
+        [marketing-column-navigation-column]
+          text "Compute"
+          [marketing-column-navigation-item]
+          li "Functions Run serverless code closer to users"
+          [marketing-column-navigation-item]
+          li "Durable Objects Stateful compute, deployed worldwide"
+          [marketing-column-navigation-item]
+          li "Rules Engine Automate request handling with programmable rules"
+          [marketing-column-navigation-item]
+          li "Load Balancer Distribute traffic for performance and availability"
+          [marketing-column-navigation-item]
+          li "Image Processor Optimize and transform images in real time"
+        [marketing-column-navigation-column]
+          text "AI"
+          [marketing-column-navigation-item]
+          li "AI Inference Run AI models closer to users"
+          [marketing-column-navigation-item]
+          li "AI Gateway Secure, manage, and optimize AI traffic"
+        [marketing-column-navigation-column]
+          text "Data"
+          [marketing-column-navigation-item]
+          li "Object Storage Scalable, durable storage for unstructured data"
+          [marketing-column-navigation-item]
+          li "SQL Database Relational database built for distributed applications"
+          [marketing-column-navigation-item]
+          li "KV Store Globally distributed, low-latency key-value store"
+          [marketing-column-navigation-item]
+          li "Cache Accelerate content delivery and reduce origin load"
+        [marketing-column-navigation-column]
+          text "Security"
+          [marketing-column-navigation-item]
+          li "Web Application Firewall Protect human and AI applications from threats"
+          [marketing-column-navigation-item]
+          li "API Gateway Secure, manage, and scale API traffic"
+          [marketing-column-navigation-item]
+          li "Bot Manager Detect and stop automated threats instantly"
+          [marketing-column-navigation-item]
+          li "DNS Reliably host authoritative DNS zones worldwide"
+  · section-gap (hatched spacer band)
+  [block-closing-call-to-action-primary kind=primary]
+    [marketing-section-module kind=left]
+      [marketing-call-to-action kind=primary aria-label='Build, secure, and scale applications everywhere.']
+        [marketing-section-title kind=centered size=large]
+          h2 "Build, secure, and scale applications everywhere."
+          p "Get faster launches, lower latency, and less infrastructure overhead from day one."
+          button "Start free" → https://console.azion.com/signup?tck=generic_cta
+          button "Talk to a specialist" → https://www.azion.com/en/contact/
