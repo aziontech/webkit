@@ -3,7 +3,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
@@ -110,8 +110,6 @@
           </template>
         </EmptyState>
       </div>
-
-      <Toaster position="bottom-right" />
     </div>
   </div>
 </template>

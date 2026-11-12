@@ -9,7 +9,7 @@
   import Spinner from '@aziontech/webkit/spinner'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast, Toaster } from '@aziontech/webkit/toast'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
@@ -368,8 +368,6 @@
           </template>
         </Card>
       </div>
-
-      <Toaster position="bottom-right" />
     </div>
   </div>
 </template>
