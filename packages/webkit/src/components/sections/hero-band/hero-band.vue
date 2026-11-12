@@ -15,7 +15,7 @@
   export type HeroBandKind =
     'centered' | 'title-band' | 'centered-band' | 'compact-band' | 'pixel-floor' | 'copy-beside-art'
 
-  /** Length of the headline: `long` widens its column so it breaks into two lines instead of three. */
+  /** Length of the headline: `short` sets it on the narrow headline measure, `long` lets it take the whole column. */
   export type HeroBandTitleLength = 'short' | 'long'
 
   /** Vertical rhythm of the band. */
@@ -60,7 +60,7 @@
     illustrationAriaLabel?: string
     /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteNav bar's token, any CSS length, empty for a page with no header above it. */
     headerOffset?: string
-    /** Length of the headline; `long` widens its column so it breaks into two lines instead of three. */
+    /** Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. */
     titleLength?: HeroBandTitleLength
     /** Drops the dot texture of the `centered` layout. */
     plain?: boolean
@@ -133,6 +133,8 @@
     return '4xl'
   })
 
+  const narrowTitle = computed(() => isCentered.value && props.titleLength === 'short')
+
   const dots = computed(() => props.kind === 'centered' && !props.plain)
 
   const hasArt = computed(() => props.kind === 'copy-beside-art' && props.illustration.length > 0)
@@ -153,7 +155,8 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
-    class="data-[kind=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[kind=pixel-floor]:[--texture-pool-a:95%_64%] data-[kind=pixel-floor]:[--texture-pool-b:-2%_38%]"
+    :data-title-measure="narrowTitle ? 'narrow' : null"
+    class="data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[kind=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[kind=pixel-floor]:[--texture-pool-a:95%_64%] data-[kind=pixel-floor]:[--texture-pool-b:-2%_38%]"
   >
     <Hero
       v-if="title"
