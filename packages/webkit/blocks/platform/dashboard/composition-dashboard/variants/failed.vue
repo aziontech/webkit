@@ -114,8 +114,8 @@
               v-model="period"
               size="medium"
               :display-value="
-                (value: unknown) =>
-                  periods.find((option) => option.value === value)?.label ?? String(value)
+                (value: string) =>
+                  periods.find((option) => option.value === value)?.label ?? value
               "
             >
               <Select.Trigger aria-label="Period" />

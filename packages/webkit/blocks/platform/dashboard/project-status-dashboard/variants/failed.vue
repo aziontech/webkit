@@ -96,8 +96,8 @@
     points: (value: number) => `${value} pts`
   }
 
-  const labelOf = (options: { value: string; label: string }[]) => (value: unknown) =>
-    options.find((option) => option.value === value)?.label ?? String(value)
+  const labelOf = (options: { value: string; label: string }[]) => (value: string) =>
+    options.find((option) => option.value === value)?.label ?? value
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')

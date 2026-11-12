@@ -13,7 +13,7 @@
   import PasswordInput from '@aziontech/webkit/password-input'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -21,7 +21,7 @@
   import { computed, nextTick, reactive, ref } from 'vue'
 
   type FieldProblem = { kind: HelperTextKind; message: string }
-  type LabeledOption = { value: unknown; label: string }
+  type LabeledOption = SelectOptionItem
 
   const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
     const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
@@ -118,7 +118,7 @@
     { value: 'analytics', label: 'Log analytics service' }
   ]
 
-  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
+  const labelOf = (options: LabeledOption[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
 
   const sourceLabel = labelOf(sourceOptions)

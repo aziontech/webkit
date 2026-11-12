@@ -668,7 +668,7 @@
 
   const originFields = computed(() => originFieldsByType[scratch.origin.type])
 
-  const labelFor = (options: Option[]) => (value: unknown) =>
+  const labelFor = (options: Option[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
 
   const validate = () => {

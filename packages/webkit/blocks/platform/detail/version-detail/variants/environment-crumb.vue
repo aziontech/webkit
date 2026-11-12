@@ -12,7 +12,7 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
-  import Select, { type SelectValue } from '@aziontech/webkit/select'
+  import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import SplitButton from '@aziontech/webkit/split-button'
@@ -223,14 +223,14 @@
   })
   const servedIn = (id: string) =>
     environments.filter((entry) => entry.serves === id).map((entry) => entry.name)
-  const pickEnvironment = (value: SelectValue) => {
+  const pickEnvironment = (value: string) => {
     if (value === '__create-environment__') return
-    environment.value = String(value)
+    environment.value = value
     const served = environments.find((entry) => entry.name === value)?.serves
     if (served) versionId.value = served
   }
-  const pickVersion = (value: SelectValue) => {
-    if (value !== '__create-version__') versionId.value = String(value)
+  const pickVersion = (value: string) => {
+    if (value !== '__create-version__') versionId.value = value
   }
   const activeTab = ref('main-settings')
   const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({

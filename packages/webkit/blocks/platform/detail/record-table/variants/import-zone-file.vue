@@ -149,7 +149,7 @@
     { value: 'weighted', label: 'Weighted' }
   ]
 
-  const policyLabel = (value: unknown) =>
+  const policyLabel = (value: string) =>
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   const filterFields: FilterField[] = [

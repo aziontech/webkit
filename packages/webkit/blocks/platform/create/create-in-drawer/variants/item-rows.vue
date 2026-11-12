@@ -24,14 +24,14 @@
     { label: 'HTTP only', value: 'http' },
     { label: 'Match the request', value: 'match' }
   ]
-  const protocolLabel = (value: unknown) =>
+  const protocolLabel = (value: string) =>
     protocols.find((option) => option.value === value)?.label ?? ''
   const regions = [
     { label: 'US East (Washington)', value: 'us-east' },
     { label: 'South America (São Paulo)', value: 'sa-east' },
     { label: 'Europe (Frankfurt)', value: 'eu-west' }
   ]
-  const regionLabel = (value: unknown) =>
+  const regionLabel = (value: string) =>
     regions.find((option) => option.value === value)?.label ?? ''
 
   const origins = ref([

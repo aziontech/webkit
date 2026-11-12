@@ -116,7 +116,7 @@
   const selection = ref({ ...INITIAL_SELECTION })
   const sorting = ref([{ id: 'hits', desc: true }])
 
-  const rangeLabel = (value: unknown) => RANGES.find((item) => item.value === value)?.label ?? ''
+  const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
   const minimumHits = computed(() => {
     const value = Number.parseInt(threshold.value, 10)
     return Number.isFinite(value) && value > 0 ? value : 0

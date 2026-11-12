@@ -169,7 +169,7 @@
     { value: '90', label: '90 days' },
     { value: '365', label: '1 year' }
   ]
-  const expiryLabel = (value: unknown) =>
+  const expiryLabel = (value: string) =>
     expiryOptions.find((option) => option.value === value)?.label ?? ''
 
   const createOpen = ref(false)

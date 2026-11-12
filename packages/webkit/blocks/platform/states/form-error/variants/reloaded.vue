@@ -85,7 +85,7 @@
   const reloadingOrigins = ref(false)
   const deletedByOtherUser = ref('web-origin-prod')
 
-  const originLabel = (value: unknown) =>
+  const originLabel = (value: string) =>
     origins.value.find((origin) => origin.value === value)?.label ?? ''
 
   const portsLabel = (values: unknown[]) =>

@@ -8,7 +8,7 @@
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import Select from '@aziontech/webkit/select'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -16,7 +16,7 @@
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
   type FieldProblem = { kind: HelperTextKind; message: string }
-  type LabeledOption = { value: unknown; label: string }
+  type LabeledOption = SelectOptionItem
 
   const browserBehaviors = [
     { value: 'honor', label: 'Honor origin cache headers' },
@@ -43,8 +43,8 @@
     { value: 'OPTIONS', label: 'OPTIONS' }
   ]
 
-  const labelOf = (options: LabeledOption[]) => (value: unknown) =>
-    options.find((option) => option.value === value)?.label ?? String(value ?? '')
+  const labelOf = (options: LabeledOption[]) => (value: string) =>
+    options.find((option) => option.value === value)?.label ?? value
   const methodsLabel = (values: unknown[] | undefined) => (values?.length ? values.join(', ') : '')
 
   const form = reactive({

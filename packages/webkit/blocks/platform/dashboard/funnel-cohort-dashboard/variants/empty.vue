@@ -431,7 +431,7 @@
   const period = ref('6w')
   const segment = ref('partners')
 
-  const optionLabel = (options: FilterOption[]) => (value: unknown) =>
+  const optionLabel = (options: FilterOption[]) => (value: string) =>
     options.find((option) => option.value === value)?.label ?? ''
   const periodLabel = optionLabel(periods)
   const segmentLabel = optionLabel(segments)

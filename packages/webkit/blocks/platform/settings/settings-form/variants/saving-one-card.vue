@@ -14,7 +14,7 @@
     { label: 'Enabled', value: 'enabled' },
     { label: 'Disabled', value: 'disabled' }
   ]
-  const toolbarLabel = (value: unknown) =>
+  const toolbarLabel = (value: string) =>
     toolbarOptions.find((option) => option.value === value)?.label ?? ''
   const toolbar = reactive({ preprod: 'default', prod: 'default' })
   const savingToolbar = ref(true)
@@ -24,7 +24,7 @@
     { label: 'Only preview deployments', value: 'preview' },
     { label: 'All deployments', value: 'all' }
   ]
-  const protectionLabel = (value: unknown) =>
+  const protectionLabel = (value: string) =>
     protectionOptions.find((option) => option.value === value)?.label ?? ''
   const protection = reactive({ level: 'standard', shareableLinks: true })
   const savingProtection = ref(false)

@@ -442,7 +442,7 @@
       'a date as YYYY-MM-DD'
     ]
   }
-  const mappingLabel = (value: unknown) => (value === SKIP ? 'Skip' : String(value))
+  const mappingLabel = (value: string) => (value === SKIP ? 'Skip' : value)
   const columnByName = (name: string) =>
     selectedTable.value?.columns.find((column) => column.name === name) ?? null
   const mappedHeaders = computed(() =>

@@ -21,7 +21,7 @@
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const labelOf = (list: { label: string; value: string }[]) => (value: unknown) =>
+  const labelOf = (list: { label: string; value: string }[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
   const saved = ref({

@@ -20,7 +20,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
-  import type { SelectValue } from '@aziontech/webkit/select-root'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -353,10 +352,10 @@
     "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
 
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
-  const operatorLabel = (value: unknown) => OPERATORS.find((o) => o.value === value)?.label ?? ''
-  const takesArgument = (operator: unknown) =>
+  const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
+  const takesArgument = (operator: string) =>
     operator !== 'exists' && operator !== 'does-not-exist'
-  const behaviorLabel = (value: unknown) => byValue[String(value)]?.label ?? ''
+  const behaviorLabel = (value: string) => byValue[value]?.label ?? ''
   const behaviorArgument = (value: string) => byValue[value]?.argument ?? null
   const behaviorsFor = (phase: string) =>
     catalog.filter((behavior) => behavior.phases.includes(phase))
@@ -468,9 +467,9 @@
   const optionLabelIn = (source: string, value: unknown) =>
     optionsFor(source).find((option) => option.value === value)?.label ?? ''
 
-  const setBehaviorType = (index: number, type: SelectValue) => {
+  const setBehaviorType = (index: number, type: string) => {
     if (form.behaviors[index].type === type) return
-    form.behaviors[index] = { id: form.behaviors[index].id, type: String(type) }
+    form.behaviors[index] = { id: form.behaviors[index].id, type }
   }
   const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
@@ -716,7 +715,7 @@
                   <template #cell-variable="{ value, update, invalid }">
                     <div class="contents font-code">
                       <Combobox
-                        :model-value="value as string"
+                        :model-value="value"
                         :options="variablesForPhase"
                         size="large"
                         placeholder="${uri}"
@@ -730,7 +729,7 @@
                   </template>
                   <template #cell-operator="{ value, update }">
                     <Select
-                      :model-value="value as SelectValue"
+                      :model-value="value"
                       size="large"
                       class="w-full"
                       :disabled="submitting"
@@ -753,7 +752,7 @@
                     <Input
                       v-if="takesArgument(item.operator)"
                       key="argument"
-                      :model-value="value as string"
+                      :model-value="value"
                       size="large"
                       class="w-full"
                       autocomplete="off"

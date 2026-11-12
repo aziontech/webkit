@@ -420,7 +420,7 @@
                       <template #cell-value="{ value, update, invalid }">
                         <div class="contents font-code">
                           <Input
-                            :model-value="value as string"
+                            :model-value="value"
                             size="large"
                             :placeholder="copy.placeholder"
                             autocomplete="off"

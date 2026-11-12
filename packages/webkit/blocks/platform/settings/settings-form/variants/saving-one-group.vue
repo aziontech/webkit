@@ -15,7 +15,7 @@
     { label: 'Português', value: 'pt' },
     { label: 'Español', value: 'es' }
   ]
-  const languageLabel = (value: unknown) =>
+  const languageLabel = (value: string) =>
     languages.find((option) => option.value === value)?.label ?? ''
 
   const general = reactive({ fullName: 'Alex Morgan', language: 'en' })

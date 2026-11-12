@@ -26,7 +26,7 @@
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -117,12 +117,6 @@
     total: number
     levels: Record<string, number>
   }
-
-  interface ExportableTable {
-    exportCsv: (options?: { filename?: string }) => Promise<void>
-  }
-
-  type PopoverPlacement = NonNullable<InstanceType<typeof Popover>['$props']['placement']>
 
   const referenceNow = Date.UTC(2026, 10, 10, 14, 30)
 
@@ -645,7 +639,7 @@
     }, 700)
   }
 
-  const tableRef = ref<ExportableTable | null>(null)
+  const tableRef = ref<TableExposed<EventRecord> | null>(null)
   const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
 
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
@@ -735,7 +729,6 @@
 
   const topValues = 6
 
-  const fieldValuesPlacement = 'right-start' as string as PopoverPlacement
 
   const unfilterableFields = new Set(['time', 'sourceLabel'])
 
@@ -1569,7 +1562,7 @@
 
               <Popover
                 v-if="canFilterField(field) && fieldCounts[field.id]"
-                :placement="fieldValuesPlacement"
+                placement="right-start"
               >
                 <div
                   class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
@@ -1687,7 +1680,7 @@
 
                       <Popover
                         v-if="canFilterField(field) && fieldCounts[field.id]"
-                        :placement="fieldValuesPlacement"
+                        placement="right-start"
                       >
                         <div
                           class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"

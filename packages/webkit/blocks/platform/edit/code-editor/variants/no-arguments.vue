@@ -138,10 +138,10 @@ export async function handleRequest(request) {
     itemType: 'string'
   })
 
-  const fieldTypeLabel = (type: unknown) =>
-    fieldTypes.find((option) => option.value === type)?.label ?? String(type)
-  const itemTypeLabel = (type: unknown) =>
-    itemTypes.find((option) => option.value === type)?.label ?? String(type)
+  const fieldTypeLabel = (type: string) =>
+    fieldTypes.find((option) => option.value === type)?.label ?? type
+  const itemTypeLabel = (type: string) =>
+    itemTypes.find((option) => option.value === type)?.label ?? type
   const summary = (field: SchemaField) =>
     field.type === 'array' ? 'List of ' + itemTypeLabel(field.itemType) : fieldTypeLabel(field.type)
 
@@ -207,8 +207,8 @@ export async function handleRequest(request) {
     else if (field.type === 'array') field.default = []
     else field.default = typeof field.default === 'string' ? field.default : ''
   }
-  const linesToList = (text: unknown) =>
-    String(text)
+  const linesToList = (text: string) =>
+    text
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)

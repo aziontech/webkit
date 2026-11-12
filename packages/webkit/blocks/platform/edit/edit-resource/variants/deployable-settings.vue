@@ -16,7 +16,7 @@
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import type { SelectValue } from '@aziontech/webkit/select-root'
+  import type { SelectOptionItem } from '@aziontech/webkit/select-root'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -27,7 +27,7 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
 
-  type LabeledOption = { value: unknown; label: string }
+  type LabeledOption = SelectOptionItem<string | number>
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -179,7 +179,7 @@
   const record = {
     name: 'resource-01',
     active: true,
-    deploymentSettings: {} as Record<string, SelectValue>,
+    deploymentSettings: {} as Record<string, string>,
     protocols: {
       httpPorts: [80],
       useHttps: true,
@@ -200,16 +200,16 @@
   const secure = computed(() => form.protocols.useHttps || form.protocols.useHttp3)
   const armed = computed(() => form.protocols.useHttps && form.mtls.enabled)
 
-  const optionLabel = (options: LabeledOption[]) => (value: unknown) =>
-    options.find((option) => option.value === value)?.label ?? String(value ?? '')
+  const optionLabel = (options: LabeledOption[]) => (value: string | number) =>
+    options.find((option) => option.value === value)?.label ?? String(value)
 
-  const portsLabel = (values: unknown[]) =>
+  const portsLabel = (values: number[]) =>
     values.map((value) => optionLabel([...httpPortOptions, ...httpsPortOptions])(value)).join(', ')
   const tlsVersionLabel = optionLabel(tlsVersionOptions)
   const cipherSuiteLabel = optionLabel(cipherSuiteOptions)
-  const certificateName = (value: unknown) => (value ? optionLabel(trustedCaOptions)(value) : '')
-  const crlLabel = (values: unknown[]) => values.map(optionLabel(revocationListOptions)).join(', ')
-  const settingName = (value: unknown) =>
+  const certificateName = (value: string) => (value ? optionLabel(trustedCaOptions)(value) : '')
+  const crlLabel = (values: string[]) => values.map(optionLabel(revocationListOptions)).join(', ')
+  const settingName = (value: string) =>
     optionLabel(linkedEnvironments.flatMap((environment) => environment.options))(value)
 
   const setHttps = (value: boolean) => {

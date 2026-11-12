@@ -85,9 +85,9 @@
   )
   const isWeighted = computed(() => form.policy === 'weighted')
 
-  const typeLabel = (value: unknown) =>
+  const typeLabel = (value: string) =>
     recordTypes.find((type) => type.value === value)?.label ?? ''
-  const policyLabelOf = (value: unknown) =>
+  const policyLabelOf = (value: string) =>
     policyTypes.find((policy) => policy.value === value)?.label ?? ''
 
   watch(open, (isOpen) => {

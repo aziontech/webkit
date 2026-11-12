@@ -592,7 +592,7 @@
   const activeIndex = ref<number | null>(null)
 
   const periodOptions = periods.map(({ value, label }) => ({ value, label }))
-  const periodLabel = (value: unknown) =>
+  const periodLabel = (value: string) =>
     periods.find((entry) => entry.value === value)?.label ?? ''
 
   const currentPeriod = computed(

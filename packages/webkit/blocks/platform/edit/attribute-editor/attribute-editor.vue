@@ -304,8 +304,8 @@
     visible: false
   })
   const isEmptyEntry = (entry: Entry) => !entry.key.trim() && !entry.value.trim()
-  const formatKey = (value: unknown) =>
-    String(value ?? '')
+  const formatKey = (value: string) =>
+    value
       .replace(/\s/g, '_')
       .toUpperCase()
 
