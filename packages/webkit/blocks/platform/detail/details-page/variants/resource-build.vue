@@ -41,7 +41,7 @@
   }
 
   const discard = () => {
-    Object.assign(buildConfig, JSON.parse(baseline.value))
+    Object.assign(buildConfig, JSON.parse(baseline.value) as typeof buildConfig)
   }
 </script>
 

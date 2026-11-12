@@ -227,7 +227,7 @@
     if (form.template === 'custom') {
       required('templateName')
       if (required('dataSet')) {
-        let parsed = null
+        let parsed: unknown = null
         try {
           parsed = JSON.parse(form.dataSet)
         } catch {

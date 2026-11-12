@@ -400,7 +400,7 @@
     return { parsed, invalidLines }
   }
   const parseJsonObject = (content: string): Pair[] | null => {
-    const parsed = JSON.parse(content)
+    const parsed: unknown = JSON.parse(content)
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null
     return Object.entries(parsed)
       .filter(([key]) => key.trim())

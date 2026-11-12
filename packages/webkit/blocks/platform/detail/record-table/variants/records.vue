@@ -114,7 +114,7 @@
   }
 
   const discard = () => {
-    Object.assign(settings, JSON.parse(baseline.value))
+    Object.assign(settings, JSON.parse(baseline.value) as typeof settings)
     errors.name = ''
     errors.domain = ''
   }
