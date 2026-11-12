@@ -1,6 +1,7 @@
 import agibankColor from './agibank-extended-color.svg'
 import agibank from './agibank-extended-reversed.svg'
 import americamovil from './americamovil-extended-color.svg'
+import { CLIENT_BRANDS, type ClientBrand, normalizeClientName } from './brands'
 import caixa from './caixa-extended-color.svg'
 import caixaSymbol from './caixa-symbol-color.svg'
 import cocacola from './cocacola-extended-color.svg'
@@ -42,10 +43,8 @@ import rennerSymbol from './renner-symbol-reversed.svg'
 import traySymbol from './tray-symbol-color.svg'
 import zoop from './zoop-extended-color.svg'
 
-import { CLIENT_BRANDS, type ClientBrand, normalizeClientName } from './brands'
-
-export { CLIENT_BRANDS, clientBrand, normalizeClientName } from './brands'
 export type { ClientBrand } from './brands'
+export { CLIENT_BRANDS, clientBrand, normalizeClientName } from './brands'
 
 export type ClientArtwork = 'light' | 'dark' | 'color'
 
