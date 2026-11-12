@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 082917215150ba23c4f44ef41fc33cd8c4bf59f55bce767b85ed88e9e0f1476f
+checksum: 6fa2b20a73c52eb8f418ff0d436d40ac7d761b8398c06f8050cd3ed90b512349
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container, so one element serves the wide and the narrow bar.
+The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container (with its label as a tooltip), so one element serves the wide and the narrow bar.
 
 ## When to use
 
@@ -32,6 +32,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 - `Command` — the palette this button opens; when it is mounted it owns the global ⌘K / Ctrl+K listener and `v-model:open`, and the trigger stands its own listener down.
 - `Kbd` — draws the keycap with the OS-aware modifier glyph.
 - `IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
+- `Tooltip` — shows the label over the folded magnifier on hover and focus.
 - `GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`.
 
 ## Best practices
@@ -39,7 +40,8 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 - Wire `@open` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.
 - Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=""`) when no shortcut exists.
 - Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.
-- With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds below the container's `2xl` size and without a container it stays folded.
+- With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
+- With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
 
 ## Usage
@@ -65,7 +67,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 | ------------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `label`       | `string`  | `''`    | false    | Visible muted text and accessible name; empty uses the catalog's `Search`.                                             |
 | `shortcut`    | `string`  | `'K'`   | false    | Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. |
-| `collapsible` | `boolean` | `false` | false    | Folds to the magnifier alone below the nearest container's `2xl` size; the label stays the accessible name.            |
+| `collapsible` | `boolean` | `false` | false    | Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and focus. |
 | `disabled`    | `boolean` | `false` | false    | Disables the button and its shortcut; `open` is not emitted. |
 
 ## Events
@@ -82,6 +84,7 @@ _none_
 
 - Visual states: `default`, `hover` (border strengthens), `focus-visible` (ring), `disabled`.
 - `data-disabled` mirrors `disabled`; `data-collapsible` mirrors `collapsible`.
+- Folded (`collapsible` in a container narrower than 47rem): a `Tooltip` (`placement="bottom"`, test id `<testid>__tooltip`) shows the label on hover and focus. It is disabled while the trigger is unfolded or `disabled`; the trigger measures its own label with a `ResizeObserver` to know which form is drawn.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the palette owns open state).
 
 ## Motion & Animations
@@ -118,7 +121,7 @@ _none_
 - Disabled: native `disabled` (out of the tab order, not announced as actionable); text and border keep ≥ 3:1 against the surface.
 - Contrast: muted label ≥ 4.5:1 on `--bg-surface` in light and dark; magnifier ≥ 3:1.
 - `motion-reduce:transition-none` on the colour transition.
-- Touch target: 32 px tall in the wide form and 32 × 32 px folded on fine pointers (the `IconButton` medium it replaces); on coarse pointers `pointer-coarse:min-h-11` (and `pointer-coarse:min-w-11` folded) raises it to 44 px.
+- Touch target: drawn 32 px tall in the wide form and 32 × 32 px folded on every pointer, the same box as the header's `IconButton` medium neighbours. On a coarse pointer an invisible `aria-hidden` span (`data-slot="touch-target"`, `inset-[min(0rem,calc(50%-22px))]`, the `IconButton` technique) grows the hit area to at least 44 × 44 px without changing the drawn size.
 
 ## Internationalization
 
@@ -137,21 +140,21 @@ _none_
 
 ## Responsive
 
-- Container queries: with `collapsible`, below `@2xl` (the nearest `@container`) the label and keycap hide and the button becomes a 32 × 32 px square; from `@2xl` it is the field (`w-56`, shrinkable).
+- Container queries: with `collapsible`, while the nearest `@container` is narrower than 47rem (`@min-[47rem]`, 752 px, equal to the `--container-2xl` token) the label and keycap hide and the button becomes a 32 × 32 px square with a tooltip; from 47rem it is the field (`w-56`). The threshold is the design sample's measured one (the console bar with breadcrumb, Create, Agent and avatar runs out of room at 740 px of content box). It is written as `@min-[47rem]` and not `@2xl` because the theme ships its container scale in `:root`, not in `@theme`, so Tailwind's `@2xl` still compiles to its own 42rem.
 - Narrow: without `collapsible` the label truncates with an ellipsis and the keycap stays.
-- Touch: ≥ 32 px on fine pointers, 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border).
+- Touch: drawn at 32 px everywhere; the hit area grows invisibly to 44 px on `pointer: coarse`; no hover-only affordance (hover only strengthens the border; the folded tooltip also opens on focus).
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the field shrinks to its content.
 
 ## Performance
 
-- Bundle budget: 4 KB gzip for `./search-trigger` in `.size-limit.json` (3.78 KB measured; includes `Kbd`, the translate composable and the window `keydown` listener with the shared shortcut registry).
-- Runtime budget: one `keydown` listener on the window while mounted.
+- Bundle budget: 8.5 KB gzip for `./search-trigger` in `.size-limit.json` (8.05 KB measured standalone; includes `Kbd`, `Tooltip` with its placement composable, the translate composable and the window `keydown` listener with the shared shortcut registry). Raised from 4 KB for the folded tooltip: `Tooltip` is 4.5 KB of it, and an app header already ships `Tooltip` for its other icon buttons, so the marginal cost in a real bundle is the wrapper alone.
+- Runtime budget: one `keydown` listener on the window and one `ResizeObserver` on the button (VueUse, disposed with the component) while mounted.
 - Heavy parts: none.
 
 ## Examples
 
 - Default — the field with its `⌘K` / `Ctrl K` keycap.
-- Collapsible — the same trigger in a narrow and a wide `@container`, folded and unfolded.
+- Collapsible — the same trigger in a narrow and a wide `@container`, folded (tooltip on hover and focus) and unfolded.
 - Disabled — `disabled`.
 
 The Collapsible example is justified: `collapsible` is the prop whose output depends on the container, and only a side-by-side frame shows both forms.

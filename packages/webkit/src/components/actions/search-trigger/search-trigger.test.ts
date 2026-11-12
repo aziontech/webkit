@@ -69,6 +69,64 @@ describe('SearchTrigger', () => {
     expect(on.getByRole('button', { name: 'Search' })).toBeTruthy()
   })
 
+  it('keeps an invisible coarse-pointer hit area inside the button', () => {
+    const { getByTestId } = render(SearchTrigger, { props: { collapsible: true } })
+    const root = getByTestId('actions-search-trigger')
+    const target = root.querySelector('[data-slot="touch-target"]')
+    expect(target).not.toBeNull()
+    expect(target).toHaveAttribute('aria-hidden', 'true')
+    expect(target).toBeEmptyDOMElement()
+  })
+
+  it('wraps only the collapsible trigger in a tooltip', () => {
+    const plain = render(SearchTrigger)
+    expect(plain.queryByTestId('actions-search-trigger__tooltip')).toBeNull()
+    plain.unmount()
+    const folding = render(SearchTrigger, { props: { collapsible: true } })
+    const wrapper = folding.getByTestId('actions-search-trigger__tooltip')
+    expect(wrapper.contains(folding.getByTestId('actions-search-trigger'))).toBe(true)
+  })
+
+  const settle = () =>
+    new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+
+  it('shows the label as a tooltip on focus only while folded', async () => {
+    const { getByTestId } = render(SearchTrigger, {
+      props: { collapsible: true, label: 'Search docs' }
+    })
+    const button = getByTestId('actions-search-trigger')
+    const label = getByTestId('actions-search-trigger__label')
+    button.style.width = '224px'
+    await settle()
+    button.focus()
+    await nextTick()
+    expect(document.body.querySelector('[role="tooltip"]')).toBeNull()
+    button.blur()
+    label.style.display = 'none'
+    button.style.width = '32px'
+    await settle()
+    button.focus()
+    await nextTick()
+    const tip = document.body.querySelector('[role="tooltip"]')
+    expect(tip).toHaveTextContent('Search docs')
+    expect(button.getAttribute('aria-describedby')).toBe(tip?.id)
+    button.blur()
+  })
+
+  it('keeps the folded tooltip closed while disabled', async () => {
+    const { getByTestId } = render(SearchTrigger, {
+      props: { collapsible: true, disabled: true }
+    })
+    getByTestId('actions-search-trigger__label').style.display = 'none'
+    getByTestId('actions-search-trigger').style.width = '32px'
+    await settle()
+    getByTestId('actions-search-trigger__tooltip').dispatchEvent(
+      new FocusEvent('focusin', { bubbles: true })
+    )
+    await nextTick()
+    expect(document.body.querySelector('[role="tooltip"]')).toBeNull()
+  })
+
   it('emits open with the MouseEvent on pointer, Enter and Space', async () => {
     const user = userEvent.setup()
     const { getByRole, emitted } = render(SearchTrigger)
