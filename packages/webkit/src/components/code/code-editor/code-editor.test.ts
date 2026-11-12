@@ -13,7 +13,12 @@ import Field from '../../inputs/field/field.vue'
 import FieldDescription from '../../inputs/field/field-description/field-description.vue'
 import FieldLabel from '../../inputs/field/field-label/field-label.vue'
 import CodeEditor from './code-editor.vue'
-import type { CodeEditorMonaco, CodeEditorMonacoModel } from './monaco'
+import {
+  type CodeEditorMonaco,
+  type CodeEditorMonacoModel,
+  highlightCalls,
+  padLineNumber
+} from './monaco'
 
 const fakeMonaco = () => {
   const calls = {
@@ -200,6 +205,79 @@ describe('CodeEditor', () => {
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.getAttribute('aria-describedby')?.split(' ')[0]).toBe('help')
     expect(view.getByTestId('code-code-editor').hasAttribute('data-invalid')).toBe(true)
+  })
+
+  it('zero-pads the gutter to two digits with padLineNumbers', async () => {
+    const lines = Array.from({ length: 12 }, (_, index) => `line ${index + 1}`).join('\n')
+    const view = render(CodeEditor, { props: { modelValue: lines, ariaLabel: 'Script' } })
+    const labels = () =>
+      [...view.getByTestId('code-code-editor__gutter').querySelectorAll('li')].map((li) =>
+        li.textContent?.trim()
+      )
+    expect(labels().slice(0, 2)).toEqual(['1', '2'])
+    await view.rerender({ padLineNumbers: true })
+    expect(labels().slice(0, 2)).toEqual(['01', '02'])
+    expect(labels().at(-1)).toBe('12')
+    expect(padLineNumber(7)).toBe('07')
+    expect(padLineNumber(120)).toBe('120')
+  })
+
+  it('passes the padded line-number formatter to Monaco', async () => {
+    const fake = fakeMonaco()
+    const view = render(CodeEditor, {
+      props: {
+        modelValue: 'a\nb',
+        loader: () => Promise.resolve(fake.api),
+        padLineNumbers: true,
+        ariaLabel: 'Script'
+      }
+    })
+    await waitFor(() =>
+      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+    )
+    const format = fake.calls.options[0]?.['lineNumbers'] as (line: number) => string
+    expect(format(3)).toBe('03')
+    await view.rerender({ padLineNumbers: false })
+    expect(fake.calls.options.at(-1)?.['lineNumbers']).toBe('on')
+  })
+
+  it('colours function calls: JavaScript and TypeScript grammars gain call rules once', async () => {
+    const providers: [string, { tokenizer: Record<string, unknown[]> }][] = []
+    const grammar = { keywords: ['if'], tokenizer: { root: [], common: [['base']] } }
+    const loader = vi.fn(() => Promise.resolve({ language: grammar }))
+    const api = {
+      languages: {
+        getLanguages: () => [
+          { id: 'javascript', loader },
+          { id: 'typescript', loader },
+          { id: 'json', loader }
+        ],
+        setMonarchTokensProvider: (id: string, language: object) =>
+          providers.push([id, language as { tokenizer: Record<string, unknown[]> }])
+      }
+    }
+    await highlightCalls(api)
+    await highlightCalls(api)
+    expect(providers.map(([id]) => id)).toEqual(['javascript', 'typescript'])
+    expect(loader).toHaveBeenCalledTimes(2)
+    const common = providers[0]![1].tokenizer['common']!
+    expect(common.at(-1)).toEqual(['base'])
+    const call = common.find(
+      (rule) => Array.isArray(rule) && rule[0] instanceof RegExp && rule[0].test('fetch(')
+    ) as [RegExp, { cases: Record<string, string> }]
+    expect(call[1].cases['@default']).toBe('function')
+    expect(call[1].cases['@keywords']).toBe('keyword')
+    expect(grammar.tokenizer.common).toEqual([['base']])
+  })
+
+  it('mounts Monaco when the module has no languages API', async () => {
+    const fake = fakeMonaco()
+    const view = render(CodeEditor, {
+      props: { modelValue: 'x', loader: () => Promise.resolve(fake.api), ariaLabel: 'Script' }
+    })
+    await waitFor(() =>
+      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+    )
   })
 
   it('mounts Monaco from the loader with a token theme and syncs value and markers', async () => {

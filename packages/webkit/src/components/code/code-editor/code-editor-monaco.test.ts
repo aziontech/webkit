@@ -7,6 +7,9 @@ import { nextTick } from 'vue'
 
 import Monaco from '../../../../examples/code-editor/monaco.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import type { CodeEditorMonacoModule } from './monaco'
+
+const typedLoader: () => Promise<CodeEditorMonacoModule> = () => import('monaco-editor')
 
 const editors = () =>
   [...document.querySelectorAll<HTMLElement>('[data-testid="code-code-editor"]')].map((root) => ({
@@ -111,6 +114,33 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
       'Cache settings, compared with the saved version, Modified'
     ])
   }, 60_000)
+
+  it('colours function calls with the function token and zero-pads the function editor', async () => {
+    await mounted()
+    const functionEditor = editors()[2]!
+    await waitFor(
+      () => expect(functionEditor.host.querySelector('.line-numbers')?.textContent).toBe('01'),
+      { timeout: 10_000 }
+    )
+    const span = (text: string) =>
+      [...functionEditor.host.querySelectorAll<HTMLElement>('.view-line span span')].find(
+        (node) => node.textContent === text
+      )
+    const expected = toRgb(
+      getComputedStyle(functionEditor.root).getPropertyValue('--code-sintax-function').trim()
+    )
+    await waitFor(() => expect(getComputedStyle(span('handleRequest')!).color).toBe(expected), {
+      timeout: 10_000
+    })
+    expect(getComputedStyle(span('fetch')!).color).toBe(expected)
+    expect(getComputedStyle(span('request')!).color).not.toBe(expected)
+  }, 60_000)
+
+  it('types the real monaco-editor module as a loader result, languages API included', async () => {
+    const module = await typedLoader()
+    const api = 'editor' in module ? module : module.default
+    expect(typeof api.languages?.getLanguages).toBe('function')
+  }, 30_000)
 
   it('has no axe violations once Monaco is live', async () => {
     const view = render(Monaco)

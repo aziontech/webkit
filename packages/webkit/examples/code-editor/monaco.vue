@@ -4,15 +4,32 @@
   import { ref } from 'vue'
 
   const loadMonaco = async () => {
-    const [{ default: EditorWorker }, { default: JsonWorker }] = await Promise.all([
-      import('monaco-editor/editor/editor.worker?worker'),
-      import('monaco-editor/language/json/json.worker?worker')
-    ])
+    const [{ default: EditorWorker }, { default: JsonWorker }, { default: TsWorker }] =
+      await Promise.all([
+        import('monaco-editor/editor/editor.worker?worker'),
+        import('monaco-editor/languages/features/json/json.worker?worker'),
+        import('monaco-editor/languages/features/typescript/ts.worker?worker')
+      ])
     globalThis.MonacoEnvironment = {
-      getWorker: (_id, label) => (label === 'json' ? new JsonWorker() : new EditorWorker())
+      getWorker: (_id, label) => {
+        if (label === 'json') return new JsonWorker()
+        if (label === 'typescript' || label === 'javascript') return new TsWorker()
+        return new EditorWorker()
+      }
     }
     return import('monaco-editor')
   }
+
+  const handler = ref(`async function handleRequest(request) {
+  const token = request.headers.get('authorization')
+  if (!token) return new Response('Unauthorized', { status: 401 })
+  return fetch(request)
+}
+
+addEventListener('fetch', (event) => {
+  event.respondWith(handleRequest(event.request))
+})
+`)
 
   const original = `{
   "cache": {
@@ -63,6 +80,15 @@
       diff
       height="12rem"
       aria-label="Cache settings, compared with the saved version"
+    />
+    <CodeEditor
+      v-model="handler"
+      :loader="loadMonaco"
+      language="javascript"
+      path="handler.js"
+      pad-line-numbers
+      height="12rem"
+      aria-label="Function code"
     />
   </div>
 </template>

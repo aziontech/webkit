@@ -37,6 +37,7 @@
     v-model="value"
     :language="active === 'code' ? 'javascript' : 'json'"
     :markers="markers"
+    pad-line-numbers
     height="12rem"
     aria-label="Function editor"
   >
