@@ -272,6 +272,31 @@ describe('Pagination (composition)', () => {
     })
 
     it.each(['previous', 'next', 'number'] as const)(
+      'carries one hidden touch-target hit area inside the button (%s)',
+      (kind) => {
+        const { getByRole } = render(PaginationButton, { props: { kind }, slots: { default: 'x' } })
+        const targets = getByRole('button').querySelectorAll('[data-slot="touch-target"]')
+        expect(targets).toHaveLength(1)
+        expect(targets[0]?.getAttribute('aria-hidden')).toBe('true')
+        expect(targets[0]?.textContent).toBe('')
+      }
+    )
+
+    it('the touch-target hit area forwards a click to the button', async () => {
+      const { getByRole, emitted } = render(PaginationButton, { slots: { default: '2' } })
+      const target = getByRole('button').querySelector('[data-slot="touch-target"]') as HTMLElement
+      await fireEvent.click(target)
+      expect(emitted().click).toHaveLength(1)
+    })
+
+    it('the inert overflow ellipsis has no touch-target hit area', () => {
+      const { getByTestId } = render(PaginationButton, { props: { kind: 'more' } })
+      expect(
+        getByTestId('data-pagination__button').querySelector('[data-slot="touch-target"]')
+      ).toBeNull()
+    })
+
+    it.each(['previous', 'next', 'number'] as const)(
       'renders each kind and reflects it on data-kind (%s)',
       (kind) => {
         const { getByRole } = render(PaginationButton, { props: { kind }, slots: { default: 'x' } })
@@ -421,12 +446,25 @@ describe('Pagination in a narrow box', () => {
           button.dataset['kind'] === 'number' && getComputedStyle(button).display !== 'none'
       )
 
-  it('keeps only the current page between previous and next', () => {
+  it('keeps the whole windowed page list between previous and next on a phone', () => {
     const view = mountIn(320)
 
-    expect(visiblePages(view).map((button) => button.textContent?.trim())).toEqual(['4'])
+    expect(visiblePages(view).map((button) => button.textContent?.trim())).toEqual([
+      '1',
+      '3',
+      '4',
+      '5',
+      '10'
+    ])
     expect(view.getByRole('button', { name: 'Previous page' })).toBeTruthy()
     expect(view.getByRole('button', { name: 'Next page' })).toBeTruthy()
+  })
+
+  it('does not overflow a 320px box with the full page list', () => {
+    const view = mountIn(320)
+    const root = view.getByTestId('data-pagination')
+
+    expect(root.scrollWidth).toBeLessThanOrEqual(root.clientWidth)
   })
 
   it('lists the page numbers in a wide box', () => {

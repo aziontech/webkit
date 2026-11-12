@@ -316,7 +316,7 @@ stack into label/value cards below `--container-lg`; `:stackable="false"` keeps 
 `PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (the
 control moves under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
-`Pagination` (only previous / current / next in a narrow box), `Wizard` (the rail hides when the
+`Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
 wizard is narrow), `HelpPanel`, `ChartCard`, `StatTile`, and the body of every dialog and drawer
 (`@container/panel`). `KeyValuePairs` picks its column count from its own width, and
 `Field orientation="responsive"` follows whichever container encloses it.
