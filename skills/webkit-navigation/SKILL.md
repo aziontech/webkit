@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell (full sidebar + in-content GlobalHeader, always shown) for hub/browse pages, and the focused creation shell (no sidebar, GlobalHeader with back + brand + breadcrumb) for create/edit/deploy flows. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes second-level navigation and the content layout inside the persistent shell: a --spacing-md inset matching the header, a first-level module list with NO PageHeader (the crumb names it) opening on a controls row over a flush borderless Card table, tabbed pages putting the primary button on the TAB ROW (medium) while untabbed pages put it on the CONTROLS ROW (large), and the breadcrumb levels — one unlinked crumb at first level, `module › resource name` at second level, and never a tab. Built on @aziontech/webkit/global-header, /sidebar, /breadcrumb, /tabs.
 status: active
-last_updated: 2026-08-13
+last_updated: 2026-11-12
 scope: general
 enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -475,6 +475,10 @@ row above the table to put it on except the controls row, which is where narrowi
   — so the drawer, the form, and the pending flag never leave the file that renders them. A tab with
   nothing to create simply declares no action.
 - **The active tab lives in the URL (`?tab=`)**, so it survives reload and is linkable.
+- **A centred catalog centres its tabs with the prop, not a class.** A page whose content below is
+  centred (the Marketplace: Templates / Integrations over a card grid) uses
+  `<Tabs.List align="center">`; a `justify-center` class or a centring wrapper is a style override.
+  Resource pages and settings keep the default `start` (and `PageTabs`).
 - **Inside a tab, a list keeps its controls row for narrowing but takes no actions** — its create
   button was hoisted to the tab row. Two create buttons on one page is the failure this rule prevents.
 

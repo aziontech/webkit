@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
+import Centered from '../../../../examples/tabs/centered.vue'
 import Default from '../../../../examples/tabs/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tabs from './index'
@@ -432,6 +433,20 @@ describe('Tabs (composition)', () => {
       const { getByTestId, container } = render(Default)
 
       expect(getByTestId('navigation-tabs')).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('list alignment', () => {
+    it('starts the tabs by default and centres them with align="center"', async () => {
+      const start = render(Tree)
+      expect(start.getByRole('tablist').getAttribute('data-align')).toBe('start')
+      start.unmount()
+
+      const { getByRole, getAllByRole, container } = render(Centered)
+      expect(getByRole('tablist').getAttribute('data-align')).toBe('center')
+      await fireEvent.click(getAllByRole('tab')[1]!)
+      expect(getAllByRole('tab')[1]!.getAttribute('aria-selected')).toBe('true')
       await expectNoA11yViolations(container)
     })
   })
