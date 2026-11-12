@@ -105,8 +105,8 @@
     })
   )
 
-  const hasIconLeft = computed(() => Boolean(slots['iconLeft']))
-  const hasIconRight = computed(() => Boolean(slots['iconRight']))
+  const hasIconLeft = () => Boolean(slots['iconLeft'])
+  const hasIconRight = () => Boolean(slots['iconRight'])
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -129,8 +129,8 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-monospace="monospace || null"
-    :data-has-icon-left="hasIconLeft || null"
-    :data-has-icon-right="hasIconRight || null"
+    :data-has-icon-left="hasIconLeft() || null"
+    :data-has-icon-right="hasIconRight() || null"
     :class="[
       'group/input relative inline-flex items-center w-full cursor-text',
       'gap-(--spacing-xs) px-(--spacing-sm)',
@@ -153,7 +153,7 @@
     @mousedown="handleChromeMouseDown"
   >
     <span
-      v-if="hasIconLeft"
+      v-if="hasIconLeft()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
@@ -183,7 +183,7 @@
     />
 
     <span
-      v-if="hasIconRight"
+      v-if="hasIconRight()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >

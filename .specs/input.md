@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 6e44497865a60651e5250e64d56e65b6384901b8703e1e4b87a3b4245594bc0d
+checksum: d1926dbaa37dcee7a36cc830673cf9a92d070307649e5b84b8a617ab18dc4d0b
 created: 2026-05-22
 last_updated: 2026-11-12
 ---
@@ -106,7 +106,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`)
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
