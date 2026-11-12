@@ -84,6 +84,22 @@ describe('ConsoleLayout', () => {
     expect(getByText('Preview')).toBeTruthy()
   })
 
+  it('puts the middle region between the header start and end so the actions sit at the end', () => {
+    const { getByTestId } = mount()
+    const header = getByTestId('layout-console-layout__header')
+    const regions = [
+      ...header.querySelectorAll(
+        '[data-testid$="__left"], [data-testid$="__middle"], [data-testid$="__right"]'
+      )
+    ]
+      .filter(
+        (el) =>
+          el.parentElement?.closest('[data-testid="layout-console-layout__header"]') === header
+      )
+      .map((el) => el.getAttribute('data-testid')?.split('__').pop())
+    expect(regions).toEqual(['left', 'middle', 'right'])
+  })
+
   it('lets a consumer override data-testid', () => {
     const { getByTestId } = mount({ 'data-testid': 'console' })
     expect(getByTestId('console')).toBeTruthy()
@@ -512,20 +528,22 @@ describe('ConsoleLayout — page trail', () => {
     const trail = header.getByRole('navigation', { name: 'Breadcrumb' })
     const crumbs = within(trail).getAllByRole('listitem')
     expect(crumbs).toHaveLength(3)
-    expect(
-      within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })
-    ).toBeTruthy()
+    expect(within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })).toBeTruthy()
     expect(within(getByTestId('layout-console-layout__main')).queryByText('Production')).toBeNull()
   })
 
   it('gives each top-level control its own crumb', async () => {
-    const { getByRole } = mount({}, {}, {
-      default: () =>
-        pageTrail(() => [
-          h('button', { type: 'button' }, 'Production'),
-          h('button', { type: 'button' }, 'Version 3')
-        ])
-    })
+    const { getByRole } = mount(
+      {},
+      {},
+      {
+        default: () =>
+          pageTrail(() => [
+            h('button', { type: 'button' }, 'Production'),
+            h('button', { type: 'button' }, 'Version 3')
+          ])
+      }
+    )
     const header = within(getByRole('banner'))
     await waitFor(() => expect(header.getByRole('button', { name: 'Version 3' })).toBeTruthy())
     const crumbs = within(header.getByRole('navigation', { name: 'Breadcrumb' })).getAllByRole(
@@ -540,9 +558,13 @@ describe('ConsoleLayout — page trail', () => {
   })
 
   it('renders data-only page crumbs with the last one as the current page', async () => {
-    const { getByRole } = mount({ breadcrumbs: [{ label: 'Layout crumb' }] }, {}, {
-      default: () => pageTrail()
-    })
+    const { getByRole } = mount(
+      { breadcrumbs: [{ label: 'Layout crumb' }] },
+      {},
+      {
+        default: () => pageTrail()
+      }
+    )
     const header = within(getByRole('banner'))
     await waitFor(() => expect(header.getByText('azion-site')).toBeTruthy())
     expect(header.queryByText('Layout crumb')).toBeNull()
@@ -551,12 +573,16 @@ describe('ConsoleLayout — page trail', () => {
 
   it('keeps the page reactivity in the control crumb', async () => {
     const count = ref(0)
-    const { getByRole } = mount({}, {}, {
-      default: () =>
-        pageTrail(() =>
-          h('button', { type: 'button', onClick: () => count.value++ }, `Version ${count.value}`)
-        )
-    })
+    const { getByRole } = mount(
+      {},
+      {},
+      {
+        default: () =>
+          pageTrail(() =>
+            h('button', { type: 'button', onClick: () => count.value++ }, `Version ${count.value}`)
+          )
+      }
+    )
     const header = within(getByRole('banner'))
     const control = await waitFor(() => header.getByRole('button', { name: 'Version 0' }))
     await userEvent.click(control)
@@ -565,9 +591,13 @@ describe('ConsoleLayout — page trail', () => {
 
   it('follows a page crumb with the router', async () => {
     const router = fakeRouter('/applications/azion-site')
-    const { getByRole } = mount({}, { router }, {
-      default: () => pageTrail(() => h('span', 'Production'))
-    })
+    const { getByRole } = mount(
+      {},
+      { router },
+      {
+        default: () => pageTrail(() => h('span', 'Production'))
+      }
+    )
     const header = within(getByRole('banner'))
     await fireEvent.click(await waitFor(() => header.getByRole('link', { name: 'Applications' })))
     expect(router.push).toHaveBeenCalledWith('/applications')
@@ -575,9 +605,13 @@ describe('ConsoleLayout — page trail', () => {
 
   it('restores the layout trail when the page unmounts', async () => {
     const shown = ref(true)
-    const { getByRole } = mount({ breadcrumbs: [{ label: 'Layout crumb' }] }, {}, {
-      default: () => (shown.value ? pageTrail(() => h('span', 'Production')) : null)
-    })
+    const { getByRole } = mount(
+      { breadcrumbs: [{ label: 'Layout crumb' }] },
+      {},
+      {
+        default: () => (shown.value ? pageTrail(() => h('span', 'Production')) : null)
+      }
+    )
     const header = within(getByRole('banner'))
     await waitFor(() => expect(header.getByText('Production')).toBeTruthy())
     shown.value = false
@@ -588,12 +622,16 @@ describe('ConsoleLayout — page trail', () => {
 
   it('shows the most recent page trail and falls back to the earlier one', async () => {
     const second = ref(true)
-    const { getByRole } = mount({}, {}, {
-      default: () => [
-        h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'First page' }] }),
-        second.value ? h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Second page' }] }) : null
-      ]
-    })
+    const { getByRole } = mount(
+      {},
+      {},
+      {
+        default: () => [
+          h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'First page' }] }),
+          second.value ? h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Second page' }] }) : null
+        ]
+      }
+    )
     const header = within(getByRole('banner'))
     await waitFor(() => expect(header.getByText('Second page')).toBeTruthy())
     expect(header.queryByText('First page')).toBeNull()
@@ -608,9 +646,13 @@ describe('ConsoleLayout — page trail', () => {
     })
     const PageB = defineComponent({ name: 'PageB', render: () => h('p', 'Page B body') })
     const current = ref<'a' | 'b'>('a')
-    const { getByRole } = mount({ breadcrumbs: [{ label: 'Layout crumb' }] }, {}, {
-      default: () => h(KeepAlive, null, [current.value === 'a' ? h(PageA) : h(PageB)])
-    })
+    const { getByRole } = mount(
+      { breadcrumbs: [{ label: 'Layout crumb' }] },
+      {},
+      {
+        default: () => h(KeepAlive, null, [current.value === 'a' ? h(PageA) : h(PageB)])
+      }
+    )
     const header = within(getByRole('banner'))
     await waitFor(() => expect(header.getByText('Page A')).toBeTruthy())
     current.value = 'b'
@@ -677,9 +719,7 @@ describe('ConsoleLayout — page trail', () => {
         render: () => h('div', { style: { width: '1200px' } }, [h(PageBreadcrumbsExample)])
       })
     )
-    await waitFor(() =>
-      expect(within(getByRole('banner')).getByText('azion-site')).toBeTruthy()
-    )
+    await waitFor(() => expect(within(getByRole('banner')).getByText('azion-site')).toBeTruthy())
     await expectNoA11yViolations(container)
   })
 })

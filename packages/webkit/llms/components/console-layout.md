@@ -245,7 +245,7 @@ packages/webkit/src/components/layout/console-layout/
           icon="pi pi-plus-circle"
           kind="primary"
           size="medium"
-          ariaLabel="Create"
+          aria-label="Create"
         />
       </Tooltip>
       <template v-else>

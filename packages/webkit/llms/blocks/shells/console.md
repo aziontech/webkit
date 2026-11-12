@@ -343,7 +343,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
             icon="pi pi-plus-circle"
             kind="primary"
             size="medium"
-            ariaLabel="Create"
+            aria-label="Create"
           />
         </Tooltip>
         <Tooltip
@@ -354,7 +354,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
             icon="ai ai-ask-azion"
             kind="outlined"
             size="medium"
-            ariaLabel="Agent"
+            aria-label="Agent"
           />
         </Tooltip>
       </template>
@@ -553,7 +553,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
               icon="pi pi-refresh"
               kind="outlined"
               size="medium"
-              ariaLabel="Refresh"
+              aria-label="Refresh"
             />
           </Tooltip>
           <Tooltip text="Download CSV">
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
               icon="pi pi-download"
               kind="outlined"
               size="medium"
-              ariaLabel="Download CSV"
+              aria-label="Download CSV"
             />
           </Tooltip>
           <Tooltip text="Columns">
@@ -569,7 +569,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
               icon="ai ai-column"
               kind="outlined"
               size="medium"
-              ariaLabel="Columns"
+              aria-label="Columns"
             />
           </Tooltip>
         </div>

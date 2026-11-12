@@ -237,7 +237,6 @@
     active-id="applications"
     @search-select="onSearchSelect"
   >
-
     <template #actions="{ compact }">
       <template v-if="compact">
         <Tooltip
@@ -248,7 +247,7 @@
             icon="pi pi-plus-circle"
             kind="primary"
             size="medium"
-            ariaLabel="Create"
+            aria-label="Create"
           />
         </Tooltip>
         <Tooltip
@@ -259,7 +258,7 @@
             icon="ai ai-ask-azion"
             kind="outlined"
             size="medium"
-            ariaLabel="Agent"
+            aria-label="Agent"
           />
         </Tooltip>
       </template>

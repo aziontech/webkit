@@ -79,7 +79,7 @@
 <template>
   <CopyButton
     value="https://example.com/deploy/abc123"
-    ariaLabel="Copy URL"
+    aria-label="Copy URL"
   />
 </template>
 ```
@@ -94,7 +94,7 @@
 <template>
   <CopyButton
     value="https://example.com/deploy/abc123"
-    ariaLabel="Copy URL"
+    aria-label="Copy URL"
     disabled
   />
 </template>

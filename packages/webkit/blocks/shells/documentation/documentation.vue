@@ -203,7 +203,7 @@
         icon="pi pi-github"
         kind="outlined"
         size="medium"
-        ariaLabel="Azion on GitHub"
+        aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
         target="_blank"
         class="shrink-0"
@@ -270,7 +270,7 @@
               kind="transparent"
               size="small"
               :icon="social.icon"
-              :ariaLabel="social.label"
+              :aria-label="social.label"
               :href="social.href"
               target="_blank"
             />

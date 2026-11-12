@@ -325,7 +325,7 @@
         icon="pi pi-github"
         kind="outlined"
         size="medium"
-        ariaLabel="Azion on GitHub"
+        aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
         target="_blank"
         class="shrink-0"

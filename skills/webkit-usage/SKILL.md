@@ -4,7 +4,14 @@ description: Entry point for building UI on @aziontech/webkit. Use when adding o
 scope: general
 status: active
 last_updated: 2026-11-12
-enforced_by: [webkit-imports, webkit-tokens, webkit-style-override, webkit-prefer-over-custom, webkit-performance]
+enforced_by:
+  [
+    webkit-imports,
+    webkit-tokens,
+    webkit-style-override,
+    webkit-prefer-over-custom,
+    webkit-performance
+  ]
 ---
 
 # Skill: webkit-usage
@@ -53,9 +60,8 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
-`SiteFooter` or `Command`. Some platform blocks still inline a whole console shell around their body:
-keep what is inside their `<main>` and drop the rest. The one exception is a screen with no rail — a
-create / edit / deploy flow (`platform/create/*`, headed by the `headers/creation-header` bar) or a
+`SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
+create flow (`platform/create/*`, headed by the `headers/creation-header` bar) or a
 signed-out screen (`platform/auth`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`).
 

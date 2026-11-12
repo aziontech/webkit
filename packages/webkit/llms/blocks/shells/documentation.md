@@ -337,7 +337,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
         icon="pi pi-github"
         kind="outlined"
         size="medium"
-        ariaLabel="Azion on GitHub"
+        aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
         target="_blank"
         class="shrink-0"
@@ -404,7 +404,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
               kind="transparent"
               size="small"
               :icon="social.icon"
-              :ariaLabel="social.label"
+              :aria-label="social.label"
               :href="social.href"
               target="_blank"
             />

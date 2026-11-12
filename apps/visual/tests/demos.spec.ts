@@ -81,7 +81,7 @@ test.describe('demo flows', () => {
     await page.goto(`${DEMOS}/resources/${FIRST}/deploy`)
     await page.getByRole('button', { name: 'Deploy', exact: true }).first().click()
     await expect(page.getByText('Deploying resource-01…')).toBeVisible()
-    await page.getByRole('button', { name: 'Resources', exact: true }).first().click()
+    await page.getByRole('link', { name: 'Resources', exact: true }).first().click()
     await expect(page).toHaveURL(/\/resources$/)
     await expect(page.getByText('resource-01 is live.')).toBeVisible({ timeout: 15_000 })
     const toast = page.locator('[data-type="success"]', { hasText: 'resource-01 is live.' })

@@ -278,7 +278,7 @@
             icon="pi pi-plus-circle"
             kind="primary"
             size="medium"
-            ariaLabel="Create"
+            aria-label="Create"
           />
         </Tooltip>
         <Tooltip
@@ -289,7 +289,7 @@
             icon="ai ai-ask-azion"
             kind="outlined"
             size="medium"
-            ariaLabel="Agent"
+            aria-label="Agent"
           />
         </Tooltip>
       </template>
@@ -315,7 +315,7 @@
             icon="pi pi-bell"
             kind="outlined"
             size="medium"
-            :ariaLabel="bellLabel"
+            :aria-label="bellLabel"
             :aria-pressed="notificationsOpen"
             @click="notificationsOpen = !notificationsOpen"
           />
@@ -629,7 +629,7 @@
               icon="pi pi-refresh"
               kind="outlined"
               size="medium"
-              ariaLabel="Refresh"
+              aria-label="Refresh"
             />
           </Tooltip>
           <Tooltip text="Download CSV">
@@ -637,7 +637,7 @@
               icon="pi pi-download"
               kind="outlined"
               size="medium"
-              ariaLabel="Download CSV"
+              aria-label="Download CSV"
             />
           </Tooltip>
           <Tooltip text="Columns">
@@ -645,7 +645,7 @@
               icon="ai ai-column"
               kind="outlined"
               size="medium"
-              ariaLabel="Columns"
+              aria-label="Columns"
             />
           </Tooltip>
         </div>

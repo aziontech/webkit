@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create/edit/deploy flows routed outside the layout. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab.
 status: active
 last_updated: 2026-11-12
 scope: general
@@ -31,7 +31,7 @@ flow) and `webkit-ux-heuristics` (states + feedback).
 
 ## When to invoke
 
-- Starting a new page and deciding how it sits in the app (a hub page vs a create/edit/deploy flow).
+- Starting a new page and deciding how it sits in the app (a hub page vs a create flow).
 - The user asks "which header goes here", "should this have a sidebar", "how do I get back", "the user
   disappeared on the create screen".
 - Reviewing a screen for whether it uses the right shell and shows exactly one header.
@@ -68,7 +68,7 @@ A page picks **exactly one**. The choice is not stylistic — it follows from wh
 |                      | **Persistent console shell**                                                                       | **Focused creation shell**                                                                                 |
 | -------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `headers/creation-header` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
-| Use for              | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                | Create / edit / deploy / wizard — a single task with a start and an end                                    |
+| Use for              | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                | Create / import / deploy a template / wizard — a single task with a start and an end                       |
 | Rail                 | **Yes** — the layout's navigation rail, built from your `navigation` data                          | **No** — removed so the task is the only focus                                                             |
 | Header               | The layout's: `breadcrumbs`, `SearchTrigger` (⌘K palette), your `actions` slot, the account avatar | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                    |
 | Way out              | Lateral — pick any other module from the rail or the ⌘K palette                                    | Linear — the **back** button (and breadcrumb) returns to where the flow started                            |
@@ -84,8 +84,8 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
 `RouterView`; every route renders only its page body through the default slot.
 
 ```vue
-<!-- App.vue — the console chrome, composed once. Focused create / edit / deploy
-     routes (meta.shell === 'focused') render outside it, with no rail. -->
+<!-- App.vue — the console chrome, composed once. Focused create routes
+     (meta.shell === 'focused') render outside it, with no rail. -->
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import ConsoleLayout, { type ConsoleLayoutCrumb } from '@aziontech/webkit/console-layout'
@@ -271,7 +271,7 @@ do compose yourself follows rule `webkit-header-search` (lint `webkit/header-sea
 
 ### Shell 2 — focused creation: the `headers/creation-header` bar
 
-For a **single task** — create, edit, deploy, a wizard step. The rail is gone so nothing competes with
+For a **single task** — create a resource, import, deploy a template, a wizard step. Editing an existing resource and watching its deploy stay inside `ConsoleLayout` as page bodies. The rail is gone so nothing competes with
 the form. The only chrome is one `GlobalHeader`: a **back** button, the Azion brand, the flow
 breadcrumb and the account avatar.
 
@@ -743,7 +743,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 - **The user is always visible.** `ConsoleLayout` takes `account` (rail footer + header avatar); a
   focused flow keeps the avatar at the end of its bar. Never ship a screen where the user looks signed
   out.
-- **Focused flows have no rail.** Route create / edit / deploy outside `ConsoleLayout` (a route meta
+- **Focused flows have no rail.** Route create flows outside `ConsoleLayout` (a route meta
   the `App.vue` reads); if such a page renders the rail, it is the wrong shell.
 - **Focused flows have a back way out.** The creation bar without a working back button (or a
   terminal screen that justifies dropping it) strands the user.

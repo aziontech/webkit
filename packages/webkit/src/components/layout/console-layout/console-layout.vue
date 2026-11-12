@@ -52,6 +52,7 @@
   import AppLayout from '../app-layout/app-layout.vue'
   import GlobalHeader from '../global-header/global-header.vue'
   import GlobalHeaderLeft from '../global-header/global-header-left.vue'
+  import GlobalHeaderMiddle from '../global-header/global-header-middle.vue'
   import GlobalHeaderRight from '../global-header/global-header-right.vue'
   import Sidebar from '../sidebar/sidebar.vue'
   import {
@@ -217,7 +218,9 @@
 
   const pageTrail = computed(() => trails.value[trails.value.length - 1] ?? null)
 
-  const activeCrumbs = computed(() => (pageTrail.value ? pageTrail.value.items() : props.breadcrumbs))
+  const activeCrumbs = computed(() =>
+    pageTrail.value ? pageTrail.value.items() : props.breadcrumbs
+  )
 
   const crumbItems = computed(() =>
     activeCrumbs.value.map((crumb) => {
@@ -483,6 +486,7 @@
                 </div>
               </div>
             </GlobalHeaderLeft>
+            <GlobalHeaderMiddle />
             <GlobalHeaderRight>
               <SearchTrigger
                 collapsible

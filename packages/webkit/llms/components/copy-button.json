@@ -88,11 +88,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    aria-label=\"Copy URL\"\n  />\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    ariaLabel=\"Copy URL\"\n    disabled\n  />\n</template>"
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n</script>\n\n<template>\n  <CopyButton\n    value=\"https://example.com/deploy/abc123\"\n    aria-label=\"Copy URL\"\n    disabled\n  />\n</template>"
   }
  ],
  "docs": "components/copy-button.md"

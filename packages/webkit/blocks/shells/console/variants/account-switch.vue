@@ -392,7 +392,7 @@
               icon="pi pi-plus-circle"
               kind="primary"
               size="medium"
-              ariaLabel="Create"
+              aria-label="Create"
             />
           </Tooltip>
           <Tooltip
@@ -403,7 +403,7 @@
               icon="ai ai-ask-azion"
               kind="outlined"
               size="medium"
-              ariaLabel="Agent"
+              aria-label="Agent"
             />
           </Tooltip>
         </template>
@@ -604,7 +604,7 @@
                 icon="pi pi-refresh"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Refresh"
+                aria-label="Refresh"
               />
             </Tooltip>
             <Tooltip text="Download CSV">
@@ -612,7 +612,7 @@
                 icon="pi pi-download"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Download CSV"
+                aria-label="Download CSV"
               />
             </Tooltip>
             <Tooltip text="Columns">
@@ -620,7 +620,7 @@
                 icon="ai ai-column"
                 kind="outlined"
                 size="medium"
-                ariaLabel="Columns"
+                aria-label="Columns"
               />
             </Tooltip>
           </div>
@@ -686,7 +686,7 @@
                           :icon="row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                           kind="transparent"
                           size="small"
-                          :ariaLabel="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
+                          :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
                           :aria-expanded="row.expanded"
                           :disabled="Boolean(accountQuery.trim())"
                           @click="toggleAccount(row)"
