@@ -96,18 +96,20 @@
 ```vue
 <script setup>
   import DocFrame from '@aziontech/webkit/doc-frame'
+  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-lg)">
     <DocFrame
-      src="/docs/create-application-step-3.png"
+      :src="placeholderImage"
       alt="Step 3 of Create application: the imported repository, the name, build and deploy commands, and the firewall toggle"
     >
       <template #caption>Console, <strong>Create application</strong> — step 3</template>
     </DocFrame>
     <DocFrame
-      src="/media/create-application-flow.webm"
+      :src="placeholderClip"
       alt="Creating an application from a Git repository, start to step 3"
       caption="The same flow, from the method to the deploy"
     />
@@ -120,12 +122,13 @@
 ```vue
 <script setup>
   import DocFrame from '@aziontech/webkit/doc-frame'
+  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-lg)">
     <DocFrame
-      src="/media/create-application-step-3-loop.webm"
+      :src="placeholderClip"
       alt="Landing on step 3 of Create application"
       autoplay
       caption="Autoplay: muted, inline, looping, no controls"
@@ -133,7 +136,7 @@
     <DocFrame caption="The same rule reaches a clip written by hand">
       <video
         autoplay
-        src="/media/create-application-step-3-loop.webm"
+        :src="placeholderClip"
         class="block h-auto w-full rounded-(--shape-elements)"
       ></video>
     </DocFrame>

@@ -1339,6 +1339,18 @@ const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
   nodes are centred, connectors run through the centre of each node and an edge label sits on its
   line. Do not offset nodes or labels to fake that.
 
+### Logos, badges and photos
+
+Logos, compliance badges and illustrations ship in the package: import the file and pass the URL
+(`import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'`, then
+`logo: magalu`). Names follow `<brand>-<extended|symbol>-<color|mono|reversed>` (`extended` is the
+wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark ones, `mono` in one
+ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. Photos, covers,
+banners and clips are your content: pass URLs your app serves, or
+`@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you have them.
+Never copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the docs
+site: your app does not serve it (lint `webkit/no-root-relative-asset`).
+
 ### Large data and server rendering
 
 - Pass the whole list: `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.
@@ -38349,12 +38361,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ArticleBody from '@aziontech/webkit/article-body'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
   <ArticleBody
     eyebrow="Blog"
-    banner="/media/blog/banner.svg"
+    :banner="placeholderImage"
     body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',
@@ -38464,6 +38477,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ArticleCards from '@aziontech/webkit/article-cards'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -38479,7 +38493,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         description:
           'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state with distributed architecture, caching, and observability.',
         meta: 'SEP 23, 2026 • 8 min read',
-        image: '/media/blog/reduce-ai-agent-latency.png'
+        image: placeholderImage
       },
       {
         key: 'cloudflare-alternatives-and-competitors',
@@ -38488,7 +38502,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         description:
           'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting. Assess trade-offs, operating costs, and migration paths with Azion.',
         meta: 'SEP 22, 2026 • 13 min read',
-        image: '/media/blog/best-cloudflare-alternatives.png'
+        image: placeholderImage
       },
       {
         key: 'which-azion-plan-is-right-for-your-project',
@@ -38497,7 +38511,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         description:
           'Compare Azion’s Hobby, Pro, and Enterprise plans for personal projects, production applications, and operations that need customized terms.',
         meta: 'SEP 22, 2026 • 7 min read',
-        image: '/media/blog/which-azion-plan.png'
+        image: placeholderImage
       }
     ]"
   />
@@ -38577,6 +38591,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ArticleHighlight from '@aziontech/webkit/article-highlight'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -38588,8 +38603,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'ship-portfolio-two-commands-azion-cli',
         href: '/blog/ship-portfolio-two-commands-azion-cli',
-        image: '/media/blog/ship-portfolio-two-commands.png',
-        highlightImage: '/media/blog/ship-portfolio-two-commands-highlight.png',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
         meta: 'Developers • SEP 25, 2026',
         title: 'How I Shipped My Portfolio in Just Two Commands',
         description:
@@ -38599,8 +38614,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        image: '/media/blog/reduce-ai-agent-latency.png',
-        highlightImage: '/media/blog/reduce-ai-agent-latency-highlight.png',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
         title: 'How Do You Reduce AI Agent Latency?',
         description:
@@ -38610,8 +38625,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
-        image: '/media/blog/best-cloudflare-alternatives.png',
-        highlightImage: '/media/blog/best-cloudflare-alternatives-highlight.png',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
         meta: 'Security • SEP 22, 2026',
         title: 'Best Cloudflare Alternatives and Competitors',
         description:
@@ -38621,8 +38636,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'which-azion-plan-is-right-for-your-project',
         href: '/blog/which-azion-plan-is-right-for-your-project',
-        image: '/media/blog/which-azion-plan.png',
-        highlightImage: '/media/blog/which-azion-plan-highlight.png',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
         meta: 'Company news • SEP 22, 2026',
         title: 'Which Azion Plan Is Right for Your Project?',
         description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',
@@ -38702,6 +38717,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -38718,7 +38734,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'ship-portfolio-two-commands-azion-cli',
         href: '/blog/ship-portfolio-two-commands-azion-cli',
-        image: '/media/blog/ship-portfolio-two-commands.png',
+        image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',
         title: 'How I Shipped My Portfolio in Just Two Commands',
         description:
@@ -38730,7 +38746,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        image: '/media/blog/reduce-ai-agent-latency.png',
+        image: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
         title: 'How Do You Reduce AI Agent Latency?',
         description:
@@ -38742,7 +38758,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       {
         key: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
-        image: '/media/blog/best-cloudflare-alternatives.png',
+        image: placeholderImage,
         meta: 'Security • SEP 22, 2026',
         title: 'Best Cloudflare Alternatives and Competitors',
         description:
@@ -39143,6 +39159,16 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ClientMosaic from '@aziontech/webkit/client-mosaic'
+  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
+  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
+  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
+  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.jpg'
+  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'
+  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
+  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'
 </script>
 
 <template>
@@ -39151,18 +39177,18 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     link-label="Read the case study"
     :stories="[
       {
-        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        logo: netshoesExtendedColor,
         logoAlt: 'Netshoes',
-        photo: '/marketing-components/photos/netshoes.jpg',
+        photo: netshoesPhoto,
         text: 'Netshoes automatically blocks more than 4 million threats in six months',
         href: 'https://www.azion.com/en/success-case/netshoes/',
         fill: 'surface',
         logoTreatment: 'monochrome'
       },
       {
-        logo: '/marketing-components/logos/gpa-extended-reversed.svg',
+        logo: gpaExtendedReversed,
         logoAlt: 'GPA',
-        photo: '/marketing-components/photos/gpa.jpg',
+        photo: gpaPhoto,
         text: 'Grupo Pão de Açúcar (GPA) stops a cyberattack and reduces costs by 30%',
         href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/',
         fill: 'surface',
@@ -39171,42 +39197,42 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     ]"
     :logos="[
       {
-        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logo: dafitiExtendedMono,
         logoAlt: 'Dafiti',
         href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
         fill: 'white',
         logoTreatment: 'knockout'
       },
       {
-        logo: '/marketing-components/logos/agibank-extended-reversed.svg',
+        logo: agibankExtendedReversed,
         logoAlt: 'Agibank',
         href: 'https://www.azion.com/en/success-case/agibank/',
         fill: 'canvas',
         logoTreatment: 'monochrome'
       },
       {
-        logo: '/marketing-components/logos/renner-extended-reversed.svg',
+        logo: rennerExtendedReversed,
         logoAlt: 'Renner',
         href: 'https://www.azion.com/en/success-case/renner/',
         fill: 'canvas',
         logoTreatment: 'monochrome'
       },
       {
-        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',
+        logo: fourbankExtendedReversed,
         logoAlt: 'Fourbank',
         href: 'https://www.azion.com/en/success-case/fourbank/',
         fill: 'primary',
         logoTreatment: 'knockout'
       },
       {
-        logo: '/marketing-components/logos/exame-extended-mono.svg',
+        logo: exameExtendedMono,
         logoAlt: 'Exame',
         href: 'https://www.azion.com/en/success-case/exame/',
         fill: 'canvas',
         logoTreatment: 'monochrome'
       },
       {
-        logo: '/marketing-components/logos/nzn-extended-reversed.svg',
+        logo: nznExtendedReversed,
         logoAlt: 'NZN',
         href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/',
         fill: 'primary',
@@ -39278,6 +39304,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
+  import dafitiExtendedReversed from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
 </script>
 
 <template>
@@ -39287,7 +39316,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     :cells="[
       {
         name: 'Magalu',
-        logo: '/marketing-components/logos/magalu-extended-color.svg',
+        logo: magaluExtendedColor,
         href: 'https://www.azion.com/en/success-case/magalu/',
         story:
           'Explore how Magalu enhances cybersecurity with Azion\'s Firewall and WAF, improving threat intelligence and bot management in retail.',
@@ -39296,7 +39325,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       },
       {
         name: 'Dafiti',
-        logo: '/marketing-components/logos/dafiti-extended-reversed.svg',
+        logo: dafitiExtendedReversed,
         href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',
         story:
           'Dafiti modernized its digital architecture to deliver faster, scalable, and resilient experiences for millions of consumers across Latin America.',
@@ -39305,7 +39334,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       },
       {
         name: 'MadeiraMadeira',
-        logo: '/marketing-components/logos/madeiramadeira-extended-reversed.svg',
+        logo: madeiramadeiraExtendedReversed,
         href: 'https://www.azion.com/en/success-case/madeiramadeira/',
         story:
           'Faster product delivery and scalable infrastructure allowed MadeiraMadeira to support massive traffic growth during major e-commerce campaigns.',
@@ -39378,6 +39407,9 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ClientQuotes from '@aziontech/webkit/client-quotes'
+  import herosparkExtendedColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
+  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 
   const items = [
     {
@@ -39394,21 +39426,21 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       jobTitle: 'CEO at Axur'
     },
     {
-      logo: '/marketing-components/logos/magalu-extended-color.svg',
+      logo: magaluExtendedColor,
       clientName: 'Magalu',
       text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
       name: 'Allan Monteiro',
       jobTitle: 'CISO & Head of Technology at Magalu'
     },
     {
-      logo: '/marketing-components/logos/herospark-extended-color.svg',
+      logo: herosparkExtendedColor,
       clientName: 'HeroSpark',
       text: 'Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development.',
       name: 'Mateus Leonardi',
       jobTitle: 'CTO at HeroSpark'
     },
     {
-      logo: '/marketing-components/logos/zoop-extended-color.svg',
+      logo: zoopExtendedColor,
       clientName: 'Zoop',
       text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
       name: 'Ismael Aguilar',
@@ -40452,11 +40484,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ComparisonTable from '@aziontech/webkit/comparison-table'
+  import cloudflareExtendedColor from '@aziontech/webkit/assets/cloudflare-extended-color.svg'
+  import cloudflareExtendedReversed from '@aziontech/webkit/assets/cloudflare-extended-reversed.svg'
 
   const competitor = {
     name: 'Cloudflare',
-    logo: '/marketing-components/competitors/cloudflare-extended-reversed.svg',
-    logoLight: '/marketing-components/competitors/cloudflare-extended-color.svg'
+    logo: cloudflareExtendedReversed,
+    logoLight: cloudflareExtendedColor
   }
 
   const groups = [
@@ -40715,6 +40749,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import ComplianceBadges from '@aziontech/webkit/compliance-badges'
+  import ccpaSymbolColor from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
+  import gdprSymbolColor from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
+  import lgpdSymbolColor from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
+  import pciDssSymbolColor from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
+  import socSymbolColor from '@aziontech/webkit/assets/soc-symbol-color.svg'
 </script>
 
 <template>
@@ -40726,27 +40765,27 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     :certifications="[
       {
         label: 'SOC 2 & 3',
-        badge: '/marketing-components/badges/soc.svg',
+        badge: socSymbolColor,
         alt: 'AICPA SOC 2 Type 2 and SOC 3 badge'
       },
       {
         label: 'PCI DSS',
-        badge: '/marketing-components/badges/pci-dss.svg',
+        badge: pciDssSymbolColor,
         alt: 'PCI DSS badge'
       },
       {
         label: 'LGPD',
-        badge: '/marketing-components/badges/lgpd.svg',
+        badge: lgpdSymbolColor,
         alt: 'LGPD badge'
       },
       {
         label: 'GDPR',
-        badge: '/marketing-components/badges/gdpr.svg',
+        badge: gdprSymbolColor,
         alt: 'GDPR badge'
       },
       {
         label: 'CCPA',
-        badge: '/marketing-components/badges/ccpa.svg',
+        badge: ccpaSymbolColor,
         alt: 'CCPA badge'
       }
     ]"
@@ -41105,25 +41144,28 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
+  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
+  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
+  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
 
   const cards = [
     {
       name: 'Agibank',
-      logo: '/marketing-components/logos/agibank-extended-reversed.svg',
+      logo: agibankExtendedReversed,
       href: '/customers/agibank',
       description: 'Agibank moved its digital bank to a platform that scales with every campaign.',
       brand: { base: '#0e89ff', glow: '#0e89ff' }
     },
     {
       name: 'Americanas',
-      logo: '/marketing-components/logos/americanas-extended-reversed.svg',
+      logo: americanasExtendedReversed,
       href: '/customers/americanas',
       description: 'Americanas serves Black Friday traffic with no capacity planning.',
       brand: { base: '#e60014', glow: '#ff4d5e' }
     },
     {
       name: 'Arezzo',
-      logo: '/marketing-components/logos/arezzo-extended-reversed.svg',
+      logo: arezzoExtendedReversed,
       href: '/customers/arezzo',
       description: 'Arezzo cut image weight by half across its storefronts.',
       brand: { base: '#2b2b2b', glow: '#6b6b6b' }
@@ -41534,6 +41576,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import FeatureTiles from '@aziontech/webkit/feature-tiles'
+  import branches from '@aziontech/webkit/assets/branches.svg'
+  import personalTokens from '@aziontech/webkit/assets/personal-tokens.svg'
 </script>
 
 <template>
@@ -41544,13 +41588,13 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     :tiles="[
       {
-        image: '/marketing-components/illustrations/branches.svg',
+        image: branches,
         title: 'Build at AI speed.',
         description:
           'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
       },
       {
-        image: '/marketing-components/illustrations/personal-tokens.svg',
+        image: personalTokens,
         title: 'Secure by default.',
         description:
           'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
@@ -42324,6 +42368,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import InvestorMarks from '@aziontech/webkit/investor-marks'
+  import monasheesExtendedMono from '@aziontech/webkit/assets/monashees-extended-mono.svg'
+  import monasheesExtendedReversed from '@aziontech/webkit/assets/monashees-extended-reversed.svg'
+  import qualcommExtendedMono from '@aziontech/webkit/assets/qualcomm-extended-mono.svg'
+  import qualcommExtendedReversed from '@aziontech/webkit/assets/qualcomm-extended-reversed.svg'
 </script>
 
 <template>
@@ -42334,14 +42382,14 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     :items="[
       {
         name: 'monashees+',
-        logo: '/marketing-components/logos/monashees-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/monashees-extended-mono.svg',
+        logo: monasheesExtendedReversed,
+        logoLight: monasheesExtendedMono,
         href: 'https://www.monashees.com'
       },
       {
         name: 'Qualcomm Ventures',
-        logo: '/marketing-components/logos/qualcomm-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/qualcomm-extended-mono.svg',
+        logo: qualcommExtendedReversed,
+        logoLight: qualcommExtendedMono,
         href: 'https://www.qualcommventures.com'
       }
     ]"
@@ -42697,6 +42745,16 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'
+  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'
+  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
+  import bancoDeLaNacionExtendedMono from '@aziontech/webkit/assets/banco-de-la-nacion-extended-mono.svg'
+  import crefisaExtendedReversed from '@aziontech/webkit/assets/crefisa-extended-reversed.svg'
+  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
+  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import marisaExtendedColor from '@aziontech/webkit/assets/marisa-extended-color.svg'
+  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'
+  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 </script>
 
 <template>
@@ -42707,51 +42765,51 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     :logos="[
       {
         name: 'Magalu',
-        logo: '/marketing-components/logos/magalu-extended-color.svg',
+        logo: magaluExtendedColor,
         href: 'https://www.azion.com/en/success-case/magalu/'
       },
       {
         name: 'Banco de la Nación',
-        logo: '/marketing-components/logos/banco-de-la-nacion-extended-mono.svg',
+        logo: bancoDeLaNacionExtendedMono,
         logoTreatment: 'monochrome',
         href: 'https://www.azion.com/en/success-case/banco-de-la-nacion-achieves-speed-and-reduces-costs/'
       },
       {
         name: 'Netshoes',
-        logo: '/marketing-components/logos/netshoes-extended-color.svg',
+        logo: netshoesExtendedColor,
         href: 'https://www.azion.com/en/success-case/netshoes/'
       },
       {
         name: 'Agibank',
-        logo: '/marketing-components/logos/agibank-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/agibank-extended-color.svg',
+        logo: agibankExtendedReversed,
+        logoLight: agibankExtendedColor,
         href: 'https://www.azion.com/en/success-case/agibank/'
       },
       {
         name: 'Zoop',
-        logo: '/marketing-components/logos/zoop-extended-color.svg',
+        logo: zoopExtendedColor,
         href: 'https://www.azion.com/en/success-case/zoop-case-performance-at-scale/'
       },
       {
         name: 'Crefisa',
-        logo: '/marketing-components/logos/crefisa-extended-reversed.svg',
+        logo: crefisaExtendedReversed,
         logoTreatment: 'invert-light',
         href: 'https://www.azion.com/en/success-case/crefisa/'
       },
       {
         name: 'Renner',
-        logo: '/marketing-components/logos/renner-extended-color.svg',
+        logo: rennerExtendedColor,
         href: 'https://www.azion.com/en/success-case/renner/'
       },
       {
         name: 'Fourbank',
-        logo: '/marketing-components/logos/fourbank-extended-reversed.svg',
+        logo: fourbankExtendedReversed,
         logoTreatment: 'invert-light',
         href: 'https://www.azion.com/en/success-case/fourbank/'
       },
       {
         name: 'Marisa',
-        logo: '/marketing-components/logos/marisa-extended-color.svg',
+        logo: marisaExtendedColor,
         href: 'https://www.azion.com/en/success-case/marisa/'
       }
     ]"
@@ -42759,7 +42817,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       text: '&quot;Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.&quot;',
       name: 'Ismael Aguilar',
       jobTitle: 'Information Security Manager at Zoop',
-      logo: '/marketing-components/logos/zoop-extended-color.svg',
+      logo: zoopExtendedColor,
       logoAlt: 'Zoop'
     }"
     :primary-action="{
@@ -42922,10 +42980,11 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import MediaSplitStack from '@aziontech/webkit/media-split-stack'
+  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'
 
   const bands = [
     {
-      image: '/marketing-components/illustrations/quick-start-with-templates.svg',
+      image: quickStartWithTemplates,
       title: 'Modern applications',
       description: 'Build static sites, run serverless applications, or modernize legacy systems.',
       action: {
@@ -43054,6 +43113,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import NetworkSection from '@aziontech/webkit/network-section'
+  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
+  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
+  import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
+  import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
 </script>
 
 <template>
@@ -43070,28 +43133,28 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     ]"
     :outcomes="[
       {
-        logo: '/marketing-components/logos/dafiti-extended-mono.svg',
+        logo: dafitiExtendedMono,
         logoAlt: 'Dafiti',
         logoTreatment: 'monochrome',
         text: '86% faster load times, with a 45% cost reduction in data transfer.',
         highlights: ['86% faster load times', '45% cost reduction']
       },
       {
-        logo: '/marketing-components/clients/madeiramadeira.svg',
+        logo: madeiramadeiraExtendedReversed,
         logoAlt: 'MadeiraMadeira',
         logoTreatment: 'as-is',
         text: '90% lower cloud costs and faster applications at scale.',
         highlights: ['90% lower cloud costs']
       },
       {
-        logo: '/marketing-components/clients/renner-color.svg',
+        logo: rennerExtendedColor,
         logoAlt: 'Renner',
         logoTreatment: 'as-is',
         text: '67% saved on data transfer, even during massive traffic spikes.',
         highlights: ['67% saved']
       },
       {
-        logo: '/marketing-components/clients/fourbank.svg',
+        logo: fourbankExtendedReversed,
         logoAlt: 'Fourbank',
         logoTreatment: 'monochrome',
         text: 'DDoS mitigated on applications and APIs, with a programmable security layer.',
@@ -43174,6 +43237,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import PhotoMarquee from '@aziontech/webkit/photo-marquee'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -43184,37 +43248,37 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     aria-label="Azion offices"
     :photos="[
       {
-        src: '/media/careers/office-desks.jpg',
+        src: placeholderImage + '#office-desks',
         alt: 'An open-plan office with a fern-lined shelf and a person working at a shared desk',
         width: 1066,
         height: 1600
       },
       {
-        src: '/media/careers/office-lounge.jpg',
+        src: placeholderImage + '#office-lounge',
         alt: 'A lounge corridor with a sofa and two sling chairs along a wall of windows',
         width: 1600,
         height: 1066
       },
       {
-        src: '/media/careers/team-talk.jpg',
+        src: placeholderImage + '#team-talk',
         alt: 'A team member giving a talk in front of a screen while colleagues listen with laptops',
         width: 900,
         height: 1600
       },
       {
-        src: '/media/careers/office-window-bar.jpg',
+        src: placeholderImage + '#office-window-bar',
         alt: 'One person reading on a window bench while two colleagues talk at a window counter',
         width: 1066,
         height: 1600
       },
       {
-        src: '/media/careers/office-shelves.jpg',
+        src: placeholderImage + '#office-shelves',
         alt: 'Shelves of ferns and collectible figures beside a glass-walled meeting room',
         width: 1600,
         height: 1066
       },
       {
-        src: '/media/careers/office-private-room.jpg',
+        src: placeholderImage + '#office-private-room',
         alt: 'A wood-panelled meeting room with a person working on a laptop by the window',
         width: 1600,
         height: 1066
@@ -43735,6 +43799,15 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 ```vue
 <script setup>
   import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'
+  import forresterExtendedColor from '@aziontech/webkit/assets/forrester-extended-color.svg'
+  import forresterExtendedReversed from '@aziontech/webkit/assets/forrester-extended-reversed.svg'
+  import frostAndSullivanExtendedColor from '@aziontech/webkit/assets/frost-and-sullivan-extended-color.svg'
+  import frostAndSullivanExtendedReversed from '@aziontech/webkit/assets/frost-and-sullivan-extended-reversed.svg'
+  import g2SymbolColor from '@aziontech/webkit/assets/g2-symbol-color.svg'
+  import gartnerExtendedColor from '@aziontech/webkit/assets/gartner-extended-color.svg'
+  import gartnerExtendedReversed from '@aziontech/webkit/assets/gartner-extended-reversed.svg'
+  import gigaomExtendedColor from '@aziontech/webkit/assets/gigaom-extended-color.svg'
+  import gigaomExtendedReversed from '@aziontech/webkit/assets/gigaom-extended-reversed.svg'
 </script>
 
 <template>
@@ -43748,54 +43821,54 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         reportName: 'GigaOm Radar for Full-Stack Edge Deployments v3',
         date: 'May 2026',
         firmName: 'GigaOm',
-        logo: '/marketing-components/logos/gigaom-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/gigaom-extended-color.svg'
+        logo: gigaomExtendedReversed,
+        logoLight: gigaomExtendedColor
       },
       {
         text: 'Evaluated as a Strong Performer among the edge development platforms that matter most.',
         reportName: 'The Forrester Wave™: Edge Development Platforms',
         date: 'March 2026',
         firmName: 'Forrester',
-        logo: '/marketing-components/logos/forrester-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/forrester-extended-color.svg'
+        logo: forresterExtendedReversed,
+        logoLight: forresterExtendedColor
       },
       {
         text: 'Covered as a vendor in the market guide that defines the edge distribution platform category, in two consecutive editions.',
         reportName: 'Gartner Market Guide for Edge Distribution Platforms',
         date: 'November 2025',
         firmName: 'Gartner',
-        logo: '/marketing-components/logos/gartner-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/gartner-extended-color.svg'
+        logo: gartnerExtendedReversed,
+        logoLight: gartnerExtendedColor
       },
       {
         text: 'Recognized as Latin America Company of the Year in the edge distribution platform industry, after being profiled among the Companies to Action on the Frost Radar™.',
         reportName: 'Frost & Sullivan Latin America Company of the Year',
         date: 'June 2026',
         firmName: 'Frost & Sullivan',
-        logo: '/marketing-components/logos/frost-and-sullivan-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/frost-and-sullivan-extended-color.svg'
+        logo: frostAndSullivanExtendedReversed,
+        logoLight: frostAndSullivanExtendedColor
       },
       {
         text: 'Positioned as a Challenger and Fast Mover, with the application and API security stack evaluated as one platform rather than a set of bolt-ons.',
         reportName: 'GigaOm Radar for Application and API Security v5',
         date: 'March 2026',
         firmName: 'GigaOm',
-        logo: '/marketing-components/logos/gigaom-extended-reversed.svg',
-        logoLight: '/marketing-components/logos/gigaom-extended-color.svg'
+        logo: gigaomExtendedReversed,
+        logoLight: gigaomExtendedColor
       },
       {
         text: 'Recognized as a Leader in CDN, Web Security, and DDoS Protection, and a High Performer in Cloud Security, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and API Security Tools.',
         reportName: 'G2 Reports',
         date: 'March 2026',
         firmName: 'G2',
-        logo: '/marketing-components/logos/g2-symbol-color.svg'
+        logo: g2SymbolColor
       },
       {
         text: 'Recognized as a Leader in CDN and a High Performer in Web Security, DDoS Protection, WAF, Bot Detection and Mitigation, SSL & TLS Certificate Tools, and DNS Security Solution.',
         reportName: 'G2 Reports',
         date: 'December 2025',
         firmName: 'G2',
-        logo: '/marketing-components/logos/g2-symbol-color.svg'
+        logo: g2SymbolColor
       }
     ]"
   />
@@ -44746,6 +44819,9 @@ import SiteNav from '@aziontech/webkit/site-nav'
 ```vue
 <script setup>
   import StoryLibrary from '@aziontech/webkit/story-library'
+  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
 </script>
 
 <template>
@@ -44759,7 +44835,7 @@ import SiteNav from '@aziontech/webkit/site-nav'
       {
         key: 'case-gpa',
         href: '/site/success-cases/gpa',
-        client: { name: 'GPA', logo: '/marketing-components/logos/gpa-extended-reversed.svg' },
+        client: { name: 'GPA', logo: gpaExtendedReversed },
         category: 'Retail',
         description:
           'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',
@@ -44768,7 +44844,7 @@ import SiteNav from '@aziontech/webkit/site-nav'
       {
         key: 'case-axur',
         href: '/site/success-cases/axur',
-        client: { name: 'Axur', logo: '/marketing-components/logos/axur-extended-reversed.svg' },
+        client: { name: 'Axur', logo: axurExtendedReversed },
         category: 'Tech',
         description:
           'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',
@@ -44777,7 +44853,7 @@ import SiteNav from '@aziontech/webkit/site-nav'
       {
         key: 'case-exame',
         href: '/site/success-cases/exame',
-        client: { name: 'Exame', logo: '/marketing-components/logos/exame-extended-reversed.svg' },
+        client: { name: 'Exame', logo: exameExtendedReversed },
         category: 'Media',
         description:
           'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',

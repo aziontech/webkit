@@ -8,6 +8,8 @@ import { loadCatalog } from '../eslint-plugin/catalog.js'
 export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
+  'no-root-relative-asset':
+    'site-only /marketing-components or /media URL a copied app does not serve',
   'valid-import-path': 'import path that does not exist in the installed version',
   'no-deep-internal-import': 'reaches into the package internals instead of a published entry',
   'no-barrel-import': 'bare-package barrel import (there is no barrel entry)',

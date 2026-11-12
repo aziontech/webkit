@@ -773,6 +773,8 @@
     "./assets/pernambucanas-extended-mono.svg": "./src/assets/logos/clients/pernambucanas-extended-mono.svg",
     "./assets/pernambucanas-extended-reversed.svg": "./src/assets/logos/clients/pernambucanas-extended-reversed.svg",
     "./assets/personal-tokens.svg": "./src/assets/illustrations/personal-tokens.svg",
+    "./assets/placeholder-clip.webm": "./src/assets/placeholders/placeholder-clip.webm",
+    "./assets/placeholder-image.svg": "./src/assets/placeholders/placeholder-image.svg",
     "./assets/petz-extended-color.png": "./src/assets/logos/clients/petz-extended-color.png",
     "./assets/petz-extended-mono.svg": "./src/assets/logos/clients/petz-extended-mono.svg",
     "./assets/petz-extended-reversed.svg": "./src/assets/logos/clients/petz-extended-reversed.svg",

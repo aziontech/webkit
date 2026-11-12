@@ -63,6 +63,7 @@
 ```vue
 <script setup>
   import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
@@ -79,7 +80,7 @@
       {
         key: 'ship-portfolio-two-commands-azion-cli',
         href: '/blog/ship-portfolio-two-commands-azion-cli',
-        image: '/media/blog/ship-portfolio-two-commands.png',
+        image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',
         title: 'How I Shipped My Portfolio in Just Two Commands',
         description:
@@ -91,7 +92,7 @@
       {
         key: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
-        image: '/media/blog/reduce-ai-agent-latency.png',
+        image: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
         title: 'How Do You Reduce AI Agent Latency?',
         description:
@@ -103,7 +104,7 @@
       {
         key: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
-        image: '/media/blog/best-cloudflare-alternatives.png',
+        image: placeholderImage,
         meta: 'Security • SEP 22, 2026',
         title: 'Best Cloudflare Alternatives and Competitors',
         description:

@@ -19905,6 +19905,18 @@
    "treeShakeableImport": "@aziontech/webkit/assets/personal-tokens.svg",
    "surface": "marketing"
   },
+  "assets/placeholder-clip.webm": {
+   "import": "@aziontech/webkit/assets/placeholder-clip.webm",
+   "target": "./src/assets/placeholders/placeholder-clip.webm",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/placeholder-clip.webm"
+  },
+  "assets/placeholder-image.svg": {
+   "import": "@aziontech/webkit/assets/placeholder-image.svg",
+   "target": "./src/assets/placeholders/placeholder-image.svg",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/placeholder-image.svg"
+  },
   "assets/petz-extended-color.png": {
    "import": "@aziontech/webkit/assets/petz-extended-color.png",
    "target": "./src/assets/logos/clients/petz-extended-color.png",

@@ -62,12 +62,13 @@
 ```vue
 <script setup>
   import ArticleBody from '@aziontech/webkit/article-body'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
   <ArticleBody
     eyebrow="Blog"
-    banner="/media/blog/banner.svg"
+    :banner="placeholderImage"
     body="## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year."
     :article="{
       title: 'Magalu Ensures High Availability at Scale with Azion',

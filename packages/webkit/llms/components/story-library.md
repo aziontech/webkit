@@ -70,6 +70,9 @@
 ```vue
 <script setup>
   import StoryLibrary from '@aziontech/webkit/story-library'
+  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
+  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
 </script>
 
 <template>
@@ -83,7 +86,7 @@
       {
         key: 'case-gpa',
         href: '/site/success-cases/gpa',
-        client: { name: 'GPA', logo: '/marketing-components/logos/gpa-extended-reversed.svg' },
+        client: { name: 'GPA', logo: gpaExtendedReversed },
         category: 'Retail',
         description:
           'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',
@@ -92,7 +95,7 @@
       {
         key: 'case-axur',
         href: '/site/success-cases/axur',
-        client: { name: 'Axur', logo: '/marketing-components/logos/axur-extended-reversed.svg' },
+        client: { name: 'Axur', logo: axurExtendedReversed },
         category: 'Tech',
         description:
           'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',
@@ -101,7 +104,7 @@
       {
         key: 'case-exame',
         href: '/site/success-cases/exame',
-        client: { name: 'Exame', logo: '/marketing-components/logos/exame-extended-reversed.svg' },
+        client: { name: 'Exame', logo: exameExtendedReversed },
         category: 'Media',
         description:
           'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',

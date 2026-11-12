@@ -55,6 +55,9 @@
 ```vue
 <script setup>
   import ClientQuotes from '@aziontech/webkit/client-quotes'
+  import herosparkExtendedColor from '@aziontech/webkit/assets/herospark-extended-color.svg'
+  import magaluExtendedColor from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import zoopExtendedColor from '@aziontech/webkit/assets/zoop-extended-color.svg'
 
   const items = [
     {
@@ -71,21 +74,21 @@
       jobTitle: 'CEO at Axur'
     },
     {
-      logo: '/marketing-components/logos/magalu-extended-color.svg',
+      logo: magaluExtendedColor,
       clientName: 'Magalu',
       text: 'Azion shielded us from sophisticated cyberattacks and empowered us to modernize our infrastructure, reduce costs, and deliver the best shopping experiences to millions of customers across Latin America.',
       name: 'Allan Monteiro',
       jobTitle: 'CISO & Head of Technology at Magalu'
     },
     {
-      logo: '/marketing-components/logos/herospark-extended-color.svg',
+      logo: herosparkExtendedColor,
       clientName: 'HeroSpark',
       text: 'Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development.',
       name: 'Mateus Leonardi',
       jobTitle: 'CTO at HeroSpark'
     },
     {
-      logo: '/marketing-components/logos/zoop-extended-color.svg',
+      logo: zoopExtendedColor,
       clientName: 'Zoop',
       text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',
       name: 'Ismael Aguilar',

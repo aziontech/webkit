@@ -70,9 +70,11 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
   `site-<example>.vue` renders the same props inside `SectionContainer` / `SectionGap` as a
   copyable SFC (the big arrays as `<script setup>` consts). `examples.json` lists both, and the
   example's `README.md` prints the JSON under "Use it on the site".
-- When the data carries the site's image URLs (`/marketing-components/…`), the docs site and the
-  demos map them to the package assets through `packages/webkit/src/assets/site-assets.json`
-  (`siteAssets()` in `apps/docs/plugins/paths.ts`); the example and the JSON keep the site URLs.
+- The copyable example imports every logo, badge and illustration from `@aziontech/webkit/assets/<file>`
+  and passes the neutral placeholders (`@aziontech/webkit/assets/placeholder-image.svg`,
+  `placeholder-clip.webm`) for editorial media WebKit does not ship; the `webkit/no-root-relative-asset`
+  lint blocks `/marketing-components/…` and `/media/…` URLs. The site JSON (`site-*.json`) keeps the
+  site's own URLs because it is the marketing site's data; `src/assets/site-assets.json` maps them.
 - The docs page (`/components/<name>`), the bare frame (`/example?path=<name>/<file>`) and the styled
   visual test of the first example follow from these files.
 
