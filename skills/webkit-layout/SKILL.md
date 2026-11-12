@@ -400,6 +400,9 @@ truncating text `min-w-0`.
   `App.vue`, and every page is only the body of its default slot.
 - **NEVER** cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay
   fluid. The cap lives on the page's own column.
+- **NEVER** size a page body with `calc(100dvh - …)` to fill the space under the header: inside
+  `ConsoleLayout` a workspace page puts `data-layout-fill` on its root (lint
+  `webkit/no-viewport-height-calc`).
 
 ## Review output
 

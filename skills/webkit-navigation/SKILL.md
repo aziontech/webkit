@@ -241,6 +241,10 @@ import { useConsoleLayout } from '@aziontech/webkit/use-console-layout'
 const { openSearch } = useConsoleLayout()
 ```
 
+- A page body that also renders on its own (a block preview, a docs example, a test) calls
+  `useConsoleLayout({ optional: true })`: it returns `null` outside a layout, so guard the call
+  (`layout?.openSearch()`). The bare call throws outside a layout; never wrap it in `try` / `catch`.
+
 - The rail is the way out — the user moves laterally to any other module. It is never removed on a
   browse page; it only collapses (below) or moves into a drawer when the layout is narrow.
 
@@ -438,6 +442,9 @@ measure with the `layout-*` utilities (`/webkit-layout`):
   `layout-column-form` for a settings form) on the body's outer blocks.
 - **Detail page with tabs:** opens **flush** on a full-bleed `PageTabs`, kept sticky at the top of the
   layout's scrolling region; each tab's view then carries `layout-boundary` + its own column.
+- **Workspace (an editor, pinned panes):** `data-layout-fill` on the body's root makes the `<main>` a
+  fixed-height region that does not scroll, and the body's own panes scroll. Never size a body with
+  `calc(100dvh - …)` (lint `webkit/no-viewport-height-calc`).
 
 Never a bespoke `p-(--spacing-*)` page inset, never a `max-w-*` of your own, and never a `<main>`.
 
@@ -631,7 +638,9 @@ Each tab renders one of two bodies:
 
 ## Breadcrumb — first level and second-level resource nav
 
-In the console the trail is `ConsoleLayout`'s `breadcrumbs` prop, derived from the route meta. It is
+In the console the trail is `ConsoleLayout`'s `breadcrumbs` prop, derived from the route meta. A
+page that owns its trail (a loaded resource name, a control crumb) renders `ConsoleLayout.Breadcrumbs`
+with `items` instead: it replaces the layout's trail while the page is mounted. The trail is
 top chrome that says _where you are_ below a module; it is not the page's title block, and it is
 hidden while the layout is compact (the brand takes its place).
 
@@ -658,9 +667,10 @@ These rules hold across every row:
    the trail.
 5. **A switcher that ends the trail reads as a crumb.** A resource that lives in several environments
    (or versions) ends its trail on the current one as a switcher: `Workloads › workload_01 ›
-Production ⌄`. Compose it in `ConsoleLayout`'s `breadcrumbs` slot: `<Select kind="transparent" size="small">`
-   with `aria-label` on `Select.Trigger` ("Switch environment") in the last `<li>` of
-   `Breadcrumb.List`: no border or fill until hover, sized to its value. Never a bordered `Select` in
+Production ⌄`. The page composes it in the default slot of its `ConsoleLayout.Breadcrumbs`
+   (never `App.vue`'s `breadcrumbs` slot): `<Select kind="transparent" size="small">` with
+   `aria-label` on `Select.Trigger` ("Switch environment"): no border or fill until hover, sized to
+   its value. Never a bordered `Select` in
    the header, and never a trigger restyled with `!` overrides.
 
 ## Wiring Vue Router — `href` plus `@navigate`
