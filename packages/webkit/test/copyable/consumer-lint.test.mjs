@@ -29,16 +29,6 @@ const IMPORTED_PACKAGES = [
 // once an entry no longer matches anything, so the list only shrinks.
 const KNOWN_CONFLICTS = [
   {
-    rule: 'webkit/no-hardcoded-color',
-    files: [
-      'examples/client-mosaic/site-columns.vue',
-      'examples/client-mosaic-columns/default.vue',
-      'examples/customer-spotlight/default.vue'
-    ],
-    reason:
-      "the component API takes the client's brand colours as CSS colours (brand: { base, glow }); every spelling of one is a hardcoded colour to the rule"
-  },
-  {
     rule: 'webkit/no-dropped-children',
     files: [
       'blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue',

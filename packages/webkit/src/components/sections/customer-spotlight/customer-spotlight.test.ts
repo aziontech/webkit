@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { h } from 'vue'
 
 import Default from '../../../../examples/customer-spotlight/default.vue'
+import { CLIENT_BRANDS } from '../../../assets/logos/clients/brands'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
@@ -60,6 +61,30 @@ describe('CustomerSpotlight', () => {
   it('mirrors the arrow glyph under rtl', () => {
     const { container } = render({ render: () => h('div', { dir: 'rtl' }, [h(Default)]) })
     expect(container.querySelector('.pi-arrow-up-right')?.className).toContain('rtl:-scale-x-100')
+  })
+
+  it('paints a card left without brand in the client registry colours for its name', () => {
+    const card = { name: 'Agibank', logo: '/agibank.svg', href: '/a', description: 'Story.' }
+    const faceOf = (cards: object[]) => {
+      const { getByRole, unmount } = render(CustomerSpotlight, { props: { cards } })
+      const style = getByRole('link')
+        .querySelector('div[aria-hidden="true"]')
+        ?.getAttribute('style')
+      unmount()
+      return style
+    }
+    const fromRegistry = faceOf([card])
+    expect(fromRegistry).toBeTruthy()
+    expect(fromRegistry).toBe(faceOf([{ ...card, brand: CLIENT_BRANDS['agibank'] }]))
+    expect(faceOf([{ ...card, name: 'Northwind' }])).toBe(
+      faceOf([
+        {
+          ...card,
+          name: 'Northwind',
+          brand: { base: 'var(--color-base-black)', glow: 'var(--color-base-black)' }
+        }
+      ])
+    )
   })
 
   it('has no axe violations', async () => {

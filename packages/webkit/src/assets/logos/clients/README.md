@@ -51,7 +51,16 @@ here, including the rasters `itau-extended-reversed.webp` and `magalu-symbol-col
 ## Story clients
 
 HeroSpark, Magalu, MadeiraMadeira and Renner also carry `symbol` (centred on the card) and `brand`
-(`base` fill + `glow` ellipses, read off the Figma `Illustrations` node 456:140792). Three of those
+(`base` fill + `glow` ellipses, read off the Figma `Illustrations` node 456:140792).
+
+## Brand colours
+
+`CLIENT_BRANDS` in `brands.ts` holds each story client's brand colours (`base`, `glow`, and `ink:
+'dark'` for a light face), keyed by the normalized client name; `clientBrand(name)` reads it and the
+registry re-exports both. `CustomerSpotlight` and `ClientMosaicColumns` paint a face from it when a
+card or cell leaves `brand` out, so a page never carries a client's hex colours. Add a client's colours
+here, not in the page. `brands.ts` imports no artwork, so a component reading it does not pull the logos
+into its bundle. Three of those
 symbols are `-symbol-reversed` white silhouettes that need `brand.base` painted behind them; Magalu's
 is a raster that already is the tile.
 
@@ -68,7 +77,7 @@ so a mark can move between folders without breaking an import.
 
 ```js
 import caixa from '@aziontech/webkit/assets/caixa-extended-color.svg'
-import { CLIENTS, clientSymbolFor } from '@aziontech/webkit/assets/client-registry'
+import { CLIENTS, clientBrand, clientSymbolFor } from '@aziontech/webkit/assets/client-registry'
 ```
 
 ## Adding a mark

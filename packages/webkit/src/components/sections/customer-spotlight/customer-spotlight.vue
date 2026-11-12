@@ -2,6 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { clientBrand } from '../../../assets/logos/clients/brands'
   import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -28,8 +29,8 @@
     href: string
     /** The story line revealed while the card is open. */
     description: string
-    /** The face the card paints. */
-    brand: CustomerSpotlightBrand
+    /** The face the card paints; defaults to the client registry's colours for `name`. */
+    brand?: CustomerSpotlightBrand
   }
 
   interface Props {
@@ -67,13 +68,21 @@
   const glowOf = (color: string, at: string, radius: string) =>
     `radial-gradient(circle ${radius} at ${at}, ${color} 0%, ${color} 22%, color-mix(in srgb, ${color} 50%, transparent) 51%, color-mix(in srgb, ${color} 16%, transparent) 75%, transparent 100%)`
 
-  const faceOf = (brand: CustomerSpotlightBrand) => ({
-    background: [
-      glowOf(brand.glow, '0 0', '82cqw'),
-      glowOf(brand.glow, '100% 113cqw', '88cqw'),
-      brand.base
-    ].join(', ')
-  })
+  const NO_BRAND: CustomerSpotlightBrand = {
+    base: 'var(--color-base-black)',
+    glow: 'var(--color-base-black)'
+  }
+
+  const faceOf = (card: CustomerSpotlightCard) => {
+    const brand = card.brand ?? clientBrand(card.name) ?? NO_BRAND
+    return {
+      background: [
+        glowOf(brand.glow, '0 0', '82cqw'),
+        glowOf(brand.glow, '100% 113cqw', '88cqw'),
+        brand.base
+      ].join(', ')
+    }
+  }
 
   const flushOf = (index: number) => {
     if (index === 0) return 'left'
@@ -142,7 +151,7 @@
                 <div
                   aria-hidden="true"
                   class="absolute inset-0"
-                  :style="faceOf(card.brand)"
+                  :style="faceOf(card)"
                 />
 
                 <div
