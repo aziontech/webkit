@@ -427,11 +427,15 @@ written (the M1 intents fixed them); both are in the set.
 
 ## M2.7 — Final AI evaluation
 
-**Deferred (2026-11-11, project owner):** runs only when the owner asks, after the rest of Milestone 2 is done.
+**Run 1 — 2026-11-12 (owner asked).** Three AI-only journeys, each a fresh agent learning WebKit only from the package (or, for C, the repository), against 16 reference pages (4 site, 4 docs, 4 console, 4 demo). Material: `eval-m27` (references, apps, journals, `SCORES.md`, `FINDINGS.md`); side-by-side viewer at the preview server `/compare/m27/`.
 
-Fresh sessions with two agents (Claude Code and Codex or Cursor) build a fixed list of console
-screens from intent-only prompts; score component choice, block reuse, lint, `doctor`, a11y,
-RTL and mobile rendering against v5.11.0. Then run it on every release.
+| Journey | Result | Fidelity (0–5) |
+|---|---|---|
+| A — product dev builds a console-like app | 8/8 pages (create wizard partial: block covers steps 1–2) | console 4.0 · demo 4.7 |
+| B — web dev builds site + docs | 8/8 pages (docs home partial) | site 4.2 · docs 3.4 |
+| C — contributor adds components | `SearchTrigger` + docs `Article`/`Reference`/`Landing` variants on branch `eval/journey-c`, gates green | — |
+
+Changes it asks for, ranked (detail and evidence in `FINDINGS.md`): (1) real `ConsoleLayout`/`DocsLayout`/`SiteLayout` with slots, page blocks without embedded shells; (2) TypeScript that works for consumers (strict-clean sources, `.d.ts`, icons types, TS blocks, a fresh-Vite-app CI test); (3) merge `SearchTrigger`, migrate the 75 hand-copied search fields, bind ⌘K; (4) docs shell dark-mode scroller bug, theme paints `body`; (5) `useColorMode()`; (6) a consumer lint preset for `init`/`check`; (7) theme as peer dependency (no duplicate copy); (8) detail-page tabs switch content and sync to `?tab=`; (9) examples that run as pasted + a published list of marks/illustrations/diagrams; (10) block taxonomy written down and checked early; (11) local contributor commands (hooks, spec approval, per-component size/gates); (12) spec approval and catalog that survive formatting; (13) Markdown/MDX → `Doc*` path and a docs landing hero; (14) no internal agent rules in consumer docs; (15) docs outline composable with scroll-spy, `DocHeading` with its own scale, `DocProse` leaving buttons alone. Also: create wizard steps 3–4, create form submit, date sort in table-view, real photos removed from block data, Rubik on fonts.azion.com.
 
 ## M2.8 — Migrate the marketing site to the new WebKit
 
