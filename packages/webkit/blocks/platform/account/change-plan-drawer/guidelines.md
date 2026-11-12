@@ -106,6 +106,10 @@ Mounted once with the drawers. A failure no section owns (the payment service di
 
 The plate before the card on file in the Payment method section, named after the brand.
 
+### X. Included features — `FeatureList` (required)
+
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
+
 ## Do
 
 - Disable every field and secondary action while the upgrade submits, and release the lock when it ends, on success and on failure.

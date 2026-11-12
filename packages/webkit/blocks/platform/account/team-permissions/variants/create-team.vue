@@ -355,26 +355,26 @@
               </SettingsSection>
             </fieldset>
           </div>
-        </div>
 
-        <SaveBar kind="plain">
-          <template #actions>
-            <Button
-              type="button"
-              label="Cancel"
-              kind="outlined"
-              size="medium"
-              href="/account/teams"
-            />
-            <Button
-              label="Create"
-              kind="primary"
-              size="medium"
-              type="submit"
-              :loading="submitting"
-            />
-          </template>
-        </SaveBar>
+          <SaveBar kind="centered">
+            <template #actions>
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                href="/account/teams"
+              />
+              <Button
+                label="Create"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="submitting"
+              />
+            </template>
+          </SaveBar>
+        </div>
       </form>
     </main>
 

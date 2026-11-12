@@ -89,7 +89,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create.
+- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
 - EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the search row and the table's loading rows.

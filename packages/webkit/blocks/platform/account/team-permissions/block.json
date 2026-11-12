@@ -42,7 +42,7 @@
   "variants": [
     {
       "name": "CreateTeam",
-      "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Save in a SaveBar; errors on the name field and above the matrix.",
+      "summary": "The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.",
       "file": "variants/create-team.vue"
     },
     {
