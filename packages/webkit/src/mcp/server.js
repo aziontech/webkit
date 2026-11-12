@@ -3,6 +3,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 
+import { LAYOUT_CLASS_FAMILIES } from '../eslint-plugin/layout-classes.js'
 import { loadCatalog } from './catalog.js'
 import {
   getBestPractices,
@@ -327,7 +328,7 @@ async function main() {
           .string()
           .optional()
           .describe(
-            'The webkit component the classes sit on (kebab-case). When set, any class outside the layout utilities (w-full, max-w-*, self-*, shrink-0) is reported as a style override.'
+            `The webkit component the classes sit on (kebab-case). When set, any class outside the layout utilities (${LAYOUT_CLASS_FAMILIES.join(', ')}) is reported as a style override.`
           )
       }
     },

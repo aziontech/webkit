@@ -46,8 +46,8 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
 - **Tokens only.** Color, typography, shape, spacing come from `@aziontech/theme`
   (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`) — never hex, `rgb`, `hsl`, or Tailwind palette.
 - **Never restyle a webkit component.** No `class`/`:class`/`style` on its tag — compose inside its
-  slots or use its props. The only exception is a static `class` of layout utilities: `w-full`,
-  `max-w-*`, `self-*`, `shrink-0`.
+  slots or use its props. The only exception is a static `class` of layout utilities:
+  `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
 - **Styles + theme.** Load `src/webkit.css` once at the app entry — it `@import`s the theme's
   Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + fonts) and `@source`s webkit so its
   component classes compile. Import `webkit.css`, not `@aziontech/theme` bare (the `@source` is what

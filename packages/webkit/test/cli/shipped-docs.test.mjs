@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-import { nonLayoutClasses } from '../../src/eslint-plugin/layout-classes.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/layout-classes.js'
 import { PKG_ROOT } from './_helpers/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
@@ -122,4 +122,34 @@ test('the README and the webkit-usage skill say how to force the dark theme', ()
       `${relative(REPO_ROOT, file)} does not say light is the default`
     )
   }
+})
+
+test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAMILIES', () => {
+  const full = LAYOUT_CLASS_FAMILIES.map((family) => `\`${family}\``).join(', ')
+  const stale = []
+  for (const rel of [
+    'rules/webkit-style-override.md',
+    'skills/webkit-usage/SKILL.md',
+    'adapters/AGENTS.fragment.md'
+  ]) {
+    const text = readFileSync(join(REPO_ROOT, rel), 'utf8').replace(/\s*\n\s*/g, ' ')
+    if (!text.includes(full)) stale.push(rel)
+  }
+  assert.deepEqual(stale, [], `paste the full list: ${full}`)
+  const fourOnly = SHIPPED_DOCS.filter((file) =>
+    /`w-full`,? (and )?`max-w-\*`,? (and )?`self-\*`,? (and )?`shrink-0`/.test(
+      readFileSync(file, 'utf8').replace(/\s*\n\s*/g, ' ')
+    )
+  ).map((file) => relative(REPO_ROOT, file))
+  assert.deepEqual(fourOnly, [])
+})
+
+test('the MCP validate_usage description reads LAYOUT_CLASS_FAMILIES', () => {
+  const server = readFileSync(join(PKG_ROOT, 'src/mcp/server.js'), 'utf8')
+  assert.match(
+    server,
+    /import \{ LAYOUT_CLASS_FAMILIES \} from '\.\.\/eslint-plugin\/layout-classes\.js'/
+  )
+  assert.match(server, /\$\{LAYOUT_CLASS_FAMILIES\.join\(', '\)\}/)
+  assert.doesNotMatch(server, /w-full, max-w-\*, self-\*, shrink-0\)/)
 })
