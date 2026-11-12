@@ -134,7 +134,7 @@
                   width="360"
                   height="165"
                   decoding="async"
-                  class="absolute inset-0 m-auto block h-full w-[60.81%] object-contain"
+                  class="absolute inset-0 m-auto block h-[55%] w-[60.81%] object-contain"
                 />
               </div>
             </template>
