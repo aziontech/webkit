@@ -54,6 +54,8 @@
 
   const attrs = useAttrs()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-title'
   )
@@ -87,7 +89,7 @@
       >
         <Overline
           v-if="eyebrow"
-          prefix="//"
+          :prefix="EYEBROW_PREFIX"
           show-cursor
           >{{ eyebrow }}</Overline
         >
@@ -112,7 +114,7 @@
       >
         <Overline
           v-if="eyebrow"
-          prefix="//"
+          :prefix="EYEBROW_PREFIX"
           show-cursor
           >{{ eyebrow }}</Overline
         >

@@ -58,6 +58,8 @@
   const attrs = useAttrs()
   const headingId = useId()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-use-cases'
   )
@@ -96,7 +98,7 @@
             <div class="flex h-full flex-col items-start gap-(--spacing-md)">
               <Overline
                 v-if="eyebrow"
-                prefix="//"
+                :prefix="EYEBROW_PREFIX"
                 show-cursor
               >
                 {{ eyebrow }}

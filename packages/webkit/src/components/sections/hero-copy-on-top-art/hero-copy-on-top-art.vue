@@ -78,6 +78,8 @@
 
   const attrs = useAttrs()
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-copy-on-top-art'
   )
@@ -115,7 +117,7 @@
         centered
         max-width="xl"
         :eyebrow="eyebrow"
-        eyebrow-prefix="//"
+        :eyebrow-prefix="EYEBROW_PREFIX"
         :highlight="highlight"
         :title="title"
         :description="description"

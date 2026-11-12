@@ -73,6 +73,8 @@
   const email = ref('')
   const invalidMessage = ref('')
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () =>
       (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action-newsletter'
@@ -131,7 +133,7 @@
           <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
               v-if="eyebrow"
-              prefix="//"
+              :prefix="EYEBROW_PREFIX"
               show-cursor
               >{{ eyebrow }}</Overline
             >

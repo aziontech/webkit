@@ -101,6 +101,8 @@
 
   const LAST = FRAMES.length - 1
 
+  const DOCS_HREF = 'https://www.azion.com/en/documentation/products/secure/edge-dns/'
+
   const wanted = () => props.active && (props.hover || !canHover)
 
   const step = ref(reduced || !canHover ? LAST : 0)
@@ -201,7 +203,7 @@
                 <Link
                   label="Read more about record types"
                   size="medium"
-                  href="https://www.azion.com/en/documentation/products/secure/edge-dns/"
+                  :href="DOCS_HREF"
                   target="_blank"
                 />
               </HelperText>

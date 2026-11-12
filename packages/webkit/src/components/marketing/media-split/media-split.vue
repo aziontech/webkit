@@ -110,6 +110,8 @@
 
   const root = ref<globalThis.HTMLElement | null>(null)
 
+  const EYEBROW_PREFIX = '//' as const
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
   )
@@ -190,7 +192,7 @@
             >
               <Overline
                 v-if="eyebrow"
-                prefix="//"
+                :prefix="EYEBROW_PREFIX"
                 show-cursor
                 >{{ eyebrow }}</Overline
               >
