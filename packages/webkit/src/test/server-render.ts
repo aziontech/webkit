@@ -17,7 +17,7 @@ export interface ServerRender {
 }
 
 const PKG = fileURLToPath(new URL('../..', import.meta.url))
-const EXPORTS: Record<string, string> = JSON.parse(
+const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
   readFileSync(join(PKG, 'package.json'), 'utf8')
 ).exports
 
@@ -26,7 +26,8 @@ const selfExports = {
   enforce: 'pre' as const,
   resolveId(id: string) {
     if (!id.startsWith('@aziontech/webkit/')) return null
-    const target = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const target = typeof entry === 'string' ? entry : entry?.default
     return target ? join(PKG, target) : null
   }
 }

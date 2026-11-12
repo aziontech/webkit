@@ -34,11 +34,11 @@ export function packWorkspace(root, packDir) {
   const themeTgz = pack(join(root, 'packages/theme'), packDir)
   const iconsTgz = pack(join(root, 'packages/icons'), packDir)
   const webkitDir = join(root, 'packages/webkit')
-  runLogged('node', ['scripts/copy-ai-bundle.mjs'], webkitDir)
+  runLogged('node', ['scripts/pack-files.mjs'], webkitDir)
   try {
     return { themeTgz, iconsTgz, webkitTgz: pack(webkitDir, packDir) }
   } finally {
-    runLogged('node', ['scripts/copy-ai-bundle.mjs', '--clean'], webkitDir)
+    runLogged('node', ['scripts/pack-files.mjs', '--clean'], webkitDir)
   }
 }
 

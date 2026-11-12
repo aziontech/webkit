@@ -180,6 +180,11 @@ This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webk
 [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md) and [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md) (its
 "What to update when WebKit changes" section) before changing a component, a story or a skill.
 
+A new or moved export is written as a plain path and then typed by `pnpm --filter @aziontech/webkit exports:build`
+(`exports:check` fails until it is). `pnpm pack` builds `types/` (`types:build`) and removes it afterwards;
+`consumer:types` packs the three packages, installs them into a fresh Vite `vue-ts` app and runs its
+`npm run build` (needs the network; CI job `consumer-types`).
+
 ## Packages
 
 | Package             | What it is                                                 |
@@ -192,7 +197,7 @@ This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webk
 
 - Vue 3.5+ (components use `defineModel` and `useId`)
 - VeeValidate 4.x (form fields only)
-- TypeScript (optional): WebKit ships `.vue` and `.ts` sources with declarations for its few `.js` modules, so `vue-tsc --noEmit` checks it under `strict`. Required ARIA props such as `IconButton`'s `ariaLabel` are written `aria-label` in templates (as in the examples); add `"vueCompilerOptions": { "htmlAttributes": [] }` to your `tsconfig.json` so `vue-tsc` maps `aria-*` attributes to those props, as `apps/docs/tsconfig.json` does.
+- TypeScript (optional): every export carries a `types` condition that points at a declaration in `types/` (built at pack time), so a fresh Vite `vue-ts` app type-checks WebKit with its default `vue-tsc -b`, under `strict`, without reading WebKit's sources; bundlers load the `.vue` and `.ts` sources. CSS entries (`@aziontech/webkit/styles`, `@aziontech/icons`) declare an empty module, so side-effect imports pass `noUncheckedSideEffectImports`. Required ARIA props such as `IconButton`'s `ariaLabel` are written `aria-label` in templates (as in the examples); add `"vueCompilerOptions": { "htmlAttributes": [] }` to your `tsconfig.json` so `vue-tsc` maps `aria-*` attributes to those props, as `apps/docs/tsconfig.json` does.
 
 ## License
 

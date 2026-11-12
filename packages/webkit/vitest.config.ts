@@ -10,7 +10,7 @@ import { ariaSnapshot } from './src/test/aria-snapshot'
 import { emulateMedia } from './src/test/emulate-media'
 import { renderOnServer } from './src/test/server-render'
 
-const EXPORTS: Record<string, string> = JSON.parse(
+const EXPORTS: Record<string, string | { default: string }> = JSON.parse(
   readFileSync(new URL('./package.json', import.meta.url), 'utf8')
 ).exports
 const selfExports = {
@@ -18,7 +18,8 @@ const selfExports = {
   enforce: 'pre' as const,
   resolveId(id: string) {
     if (!id.startsWith('@aziontech/webkit/')) return null
-    const target = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const entry = EXPORTS[`./${id.slice('@aziontech/webkit/'.length)}`]
+    const target = typeof entry === 'string' ? entry : entry?.default
     return target ? fileURLToPath(new URL(target, import.meta.url)) : null
   }
 }

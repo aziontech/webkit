@@ -281,6 +281,9 @@ jobs:
       - name: Declarations for the runtime .js modules are in sync
         run: pnpm --filter @aziontech/webkit run js-dts:check
 
+      - name: Every source export declares types (types condition into types/)
+        run: pnpm --filter @aziontech/webkit run exports:check
+
       - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
         run: pnpm --filter @aziontech/webkit run marketing:check
 
@@ -289,7 +292,6 @@ jobs:
 
       - name: Hook tests (spec, authoring and reference hooks)
         run: pnpm --filter @aziontech/webkit run hooks:test
-
 
       - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
@@ -329,6 +331,30 @@ jobs:
 
       - name: Init + build a bare consumer app
         run: pnpm --filter @aziontech/webkit run smoke:consume
+
+  consumer-types:
+    name: Consumer TypeScript build (fresh vue-ts app, packed tarballs)
+    needs: changes
+    if: needs.changes.outputs.webkit == 'true' || needs.changes.outputs.visual == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pack, install into a fresh vue-ts app, run its npm run build
+        run: pnpm --filter @aziontech/webkit run consumer:types
 
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
@@ -420,8 +446,7 @@ jobs:
   governance-check:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs:
-      [changes, security, lint-canary, lint, types, build, site, toolkit, smoke, tests, visual]
+    needs: [changes, security, lint-canary, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped

@@ -49,7 +49,8 @@ function resolveAziontechWebkit(specifier) {
   try {
     const pkg = JSON.parse(readFileSync(join(ROOT, 'packages/webkit/package.json'), 'utf-8'))
     const subpath = specifier.replace(/^@aziontech\/webkit/, '.')
-    const target = pkg.exports?.[subpath]
+    const entry = pkg.exports?.[subpath]
+    const target = typeof entry === 'string' ? entry : entry?.default
     if (!target) return false
     const rel = target.replace(/^\.\//, '')
     return existsSync(join(ROOT, 'packages/webkit', rel))

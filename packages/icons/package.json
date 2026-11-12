@@ -23,11 +23,24 @@
     "fantasticon": "^4.1.0"
   },
   "main": "./dist/index.css",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.css",
-    "./azionicons": "./dist/azionicons.css",
-    "./azionicons-color": "./dist/azionicons-color.css",
-    "./primeicons": "./dist/primeicons.css",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.css"
+    },
+    "./azionicons": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons.css"
+    },
+    "./azionicons-color": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/azionicons-color.css"
+    },
+    "./primeicons": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/primeicons.css"
+    },
     "./catalog": "./dist/catalog.json",
     "./color-catalog": "./dist/color-catalog.json"
   }

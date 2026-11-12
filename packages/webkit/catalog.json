@@ -24021,7 +24021,7 @@
   },
   "use-controllable": {
    "import": "@aziontech/webkit/use-controllable",
-   "target": "./src/composables/use-controllable/index.js",
+   "target": "./src/composables/use-controllable/index.ts",
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-controllable"
   },
