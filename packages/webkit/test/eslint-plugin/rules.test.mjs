@@ -823,6 +823,17 @@ test('no-deprecated-component', () => {
       {
         code: "import X from '@aziontech/webkit/chips'",
         errors: [{ messageId: 'deprecated', suggestions: 1 }]
+      },
+      // a non-component entry deprecated by its source JSDoc carries the note, no replacement
+      {
+        code: "import { webkitViteConfig } from '@aziontech/webkit/vite'",
+        errors: [
+          {
+            message:
+              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.0 — nothing to pre-bundle. Removed in 7.0.",
+            suggestions: []
+          }
+        ]
       }
     ]
   })

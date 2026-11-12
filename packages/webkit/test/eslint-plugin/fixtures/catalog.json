@@ -48,6 +48,13 @@
       "deprecated": true,
       "replacedBy": "chip"
     },
+    "vite": {
+      "import": "@aziontech/webkit/vite",
+      "kind": "other",
+      "treeShakeableImport": "@aziontech/webkit/vite",
+      "deprecated": true,
+      "deprecation": "since 6.0 — nothing to pre-bundle. Removed in 7.0."
+    },
     "table": {
       "import": "@aziontech/webkit/table",
       "kind": "component",
