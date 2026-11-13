@@ -7,20 +7,12 @@
   import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
   import {
-    drawerPanelPositionClasses,
-    drawerShellPositionClasses
-  } from '../presets/mobile-position'
-  import {
     DrawerInjectionKey,
     DrawerMotionInjectionKey,
     DrawerPanelScrollInjectionKey
   } from './injection-key'
   import { getDrawerShellSizeStyle } from './presets/sizes'
-  import {
-    drawerPanelStateClasses,
-    drawerPanelTransitionClasses,
-    getDrawerTransitionStyle
-  } from './presets/transitions'
+  import { drawerPanelStateClasses, getDrawerTransitionStyle } from './presets/transitions'
 
   defineOptions({
     name: 'DrawerContent',
@@ -74,10 +66,19 @@
   const shellClasses = computed(() =>
     cn(
       'fixed z-1001 flex p-0',
-      drawerShellPositionClasses,
+      'max-md:inset-x-0 max-md:bottom-0 max-md:top-auto',
+      'max-md:justify-center',
+      'max-md:w-full',
+      'max-md:h-fit',
+      'max-md:max-h-[80dvh]',
+      'max-sm:h-dvh',
+      'max-sm:max-h-dvh',
+      'max-sm:top-0',
+      'md:inset-y-0 md:h-full md:min-h-full md:w-full',
       isLeft.value ? 'md:start-0 md:justify-start' : 'md:end-0 md:justify-end',
       'pointer-events-none',
-      drawerPanelTransitionClasses,
+      'motion-reduce:transition-none',
+      'motion-reduce:transform-none',
       drawerPanelStateClasses[sideKey.value],
       attrs.class as string | undefined
     )
@@ -91,7 +92,15 @@
   const panelClasses = computed(() =>
     cn(
       'pointer-events-auto flex min-h-0 h-full flex-col',
-      drawerPanelPositionClasses,
+      'max-md:w-full',
+      'max-md:h-fit',
+      'max-md:max-h-[80dvh]',
+      'max-sm:h-dvh',
+      'max-sm:max-h-dvh',
+      'max-md:max-w-none',
+      'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
+      'max-sm:rounded-none max-sm:border-0',
+      'md:h-full md:min-h-0 md:max-h-full',
       isLeft.value
         ? 'md:rounded-e-(--shape-card) md:rounded-s-(--shape-flat)'
         : 'md:rounded-s-(--shape-card) md:rounded-e-(--shape-flat)'

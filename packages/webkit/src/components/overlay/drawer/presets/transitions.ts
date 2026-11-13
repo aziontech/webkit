@@ -1,10 +1,5 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-import {
-  bottomSheetPanelMotionClasses,
-  bottomSheetPanelStateClasses
-} from '../../presets/bottom-sheet-transitions'
-
 export type DrawerMotionState = 'open' | 'closed'
 
 export type DrawerMotionPhase = 'open' | 'close'
@@ -64,18 +59,20 @@ export const getDrawerTransitionStyle = (
   }
 }
 
-export const drawerPanelTransitionClasses = bottomSheetPanelMotionClasses
-
 export const drawerPanelStateClasses = {
   left: [
-    ...bottomSheetPanelStateClasses,
+    'max-md:data-[state=closed]:translate-y-full',
+    'max-md:data-[state=open]:translate-y-0',
+    'max-md:translate-x-0',
     'md:data-[state=closed]:-translate-x-full',
     'rtl:md:data-[state=closed]:translate-x-full',
     'md:data-[state=open]:translate-x-0',
     'md:translate-y-0'
   ] as const,
   right: [
-    ...bottomSheetPanelStateClasses,
+    'max-md:data-[state=closed]:translate-y-full',
+    'max-md:data-[state=open]:translate-y-0',
+    'max-md:translate-x-0',
     'md:data-[state=closed]:translate-x-full',
     'rtl:md:data-[state=closed]:-translate-x-full',
     'md:data-[state=open]:translate-x-0',

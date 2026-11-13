@@ -1,10 +1,6 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
 import { DRAWER_EXIT_MS, getDrawerTransitionStyle } from '../../drawer/presets/transitions'
-import {
-  bottomSheetPanelMotionClasses,
-  bottomSheetPanelStateClasses
-} from '../../presets/bottom-sheet-transitions'
 
 export type DialogMotionState = 'open' | 'closed'
 
@@ -74,8 +70,11 @@ export const getDialogResponsiveTransitionStyle = (
   isMobile ? getDrawerTransitionStyle(state, target) : getDialogTransitionStyle(state, target)
 
 export const dialogPanelTransitionClasses = [
-  ...bottomSheetPanelStateClasses,
-  ...bottomSheetPanelMotionClasses,
+  'max-md:data-[state=closed]:translate-y-full',
+  'max-md:data-[state=open]:translate-y-0',
+  'max-md:translate-x-0',
+  'motion-reduce:transition-none',
+  'motion-reduce:transform-none',
   'md:origin-center',
   'md:translate-y-0',
   'md:scale-[0.9]',

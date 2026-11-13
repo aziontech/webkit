@@ -7,11 +7,6 @@
   import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
   import { dialogPanelSizeClasses } from '../panel/presets/sizes'
-  import {
-    dialogPanelPositionClasses,
-    dialogPanelShapeClasses,
-    dialogShellPositionClasses
-  } from '../presets/mobile-position'
   import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
   import {
     dialogPanelTransitionClasses,
@@ -62,7 +57,8 @@
   const shellClasses = computed(() =>
     cn(
       'fixed inset-0 z-1001 flex',
-      dialogShellPositionClasses,
+      'max-md:items-end max-md:justify-center max-md:p-0',
+      'md:items-center md:justify-center md:p-(--spacing-md)',
       'pointer-events-none',
       attrs.class as string | undefined
     )
@@ -76,7 +72,7 @@
     cn(
       'pointer-events-auto mx-auto w-full',
       dialogPanelSizeClasses[ctx?.size ?? 'medium'],
-      dialogPanelPositionClasses,
+      'max-md:w-full',
       dialogPanelTransitionClasses
     )
   )
@@ -101,7 +97,7 @@
       <Panel
         :size="ctx?.size ?? 'medium'"
         size-at-md
-        :class="dialogPanelShapeClasses"
+        class="max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card) max-md:w-full max-md:h-fit max-h-[80dvh] max-sm:h-dvh max-sm:max-h-dvh max-sm:rounded-none max-sm:border-0"
         :data-testid="`${ctx?.testId}__panel-shell`"
       >
         <slot />
