@@ -11,20 +11,16 @@
   })
 
   interface Props {
-    /** Selected rows-per-page value. */
-    modelValue?: number
     /** Available page-size options. */
     options?: number[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: 10,
     options: () => [10, 25, 50, 100]
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: number]
-  }>()
+  /** Selected rows-per-page value. */
+  const model = defineModel<number>({ default: 10 })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ pagination: en.pagination })
@@ -37,13 +33,13 @@
   )
 
   const displayOptions = computed<number[]>(() =>
-    props.options.includes(props.modelValue)
+    props.options.includes(model.value)
       ? props.options
-      : [...props.options, props.modelValue].sort((a, b) => a - b)
+      : [...props.options, model.value].sort((a, b) => a - b)
   )
 
   const handleChange = (event: Event) => {
-    emit('update:modelValue', Number((event.target as HTMLSelectElement).value))
+    model.value = Number((event.target as HTMLSelectElement).value)
   }
 </script>
 
@@ -54,7 +50,7 @@
     class="relative inline-flex h-7 min-w-16 items-center rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-muted) has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-(--ring-color) has-[select:focus-visible]:ring-offset-2 has-[select:focus-visible]:ring-offset-(--bg-canvas)"
   >
     <select
-      :value="modelValue"
+      :value="model"
       class="h-full w-full cursor-pointer appearance-none rounded-(--shape-elements) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
       :aria-label="t('pagination.pageSize')"
       @change="handleChange"

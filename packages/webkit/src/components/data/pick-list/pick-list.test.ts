@@ -1,6 +1,6 @@
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/pick-list/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -174,6 +174,53 @@ describe('PickList (composition compound)', () => {
       expect(targetOptions).toHaveLength(2)
       expect(sourceOptions.map((o) => o.textContent?.trim())).toEqual(['WAF', 'Image Processor'])
       expect(targetOptions.map((o) => o.textContent?.trim())).toEqual(['Cache', 'Edge Functions'])
+    })
+
+    it('moves within local state and still emits update:modelValue when no v-model is bound', async () => {
+      const { getByTestId, emitted } = render(PickList, {
+        props: { modelValue: makeModel(), dataKey: 'id' },
+        slots: {
+          default: () => [
+            h(PickListSource, { title: 'Available' }),
+            h(PickListControls),
+            h(PickListTarget, { title: 'Selected' })
+          ]
+        }
+      })
+      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-target'))
+
+      expect(within(getByTestId('pick-list-source__list')).queryAllByRole('option')).toHaveLength(0)
+      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(4)
+      const updates = emitted()['update:modelValue'] as unknown[][]
+      expect(updates).toHaveLength(1)
+      expect(updates[0][0]).toEqual([[], [...makeModel()[1], ...makeModel()[0]]])
+    })
+
+    it('keeps the parent pair when a controlled v-model refuses the update', async () => {
+      const Controlled = defineComponent({
+        components: { PickList, PickListSource, PickListTarget, PickListControls },
+        setup() {
+          const model = ref(makeModel())
+          const refused = ref(0)
+          return { model, refused }
+        },
+        template: `
+          <div>
+            <PickList :model-value="model" data-key="id" @update:model-value="refused++">
+              <PickListSource title="Available" />
+              <PickListControls />
+              <PickListTarget title="Selected" />
+            </PickList>
+            <output data-testid="refused">{{ refused }}</output>
+          </div>
+        `
+      })
+      const { getByTestId } = render(Controlled)
+      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-target'))
+
+      expect(getByTestId('refused').textContent).toBe('1')
+      expect(within(getByTestId('pick-list-source__list')).getAllByRole('option')).toHaveLength(3)
+      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(1)
     })
 
     it('move-all-to-target empties the source and fills the target', async () => {

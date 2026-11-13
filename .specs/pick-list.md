@@ -4,9 +4,9 @@ category: data
 structure: composition
 status: implemented
 spec_version: 2
-checksum: ca75dc3368f74f9553cf7e41053909c3df3befe74ce7bbe0bb11d007303d9ed0
+checksum: 4d004fa3d92fdbf2ffa7efd5f6dc5a38d85571bbb11bd3622108ff2551f330f7
 created: 2026-06-25
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Pick List — Component Spec
@@ -111,18 +111,22 @@ Each part is also a standalone import (`import PickListSource from '@aziontech/w
 
 ## Props
 
-| Prop                | Type                     | Default          | Required | JSDoc                                                                                                                            |
-| ------------------- | ------------------------ | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`        | `[unknown[], unknown[]]` | `() => [[], []]` | false    | Bound pair of lists as `[sourceItems, targetItems]` (v-model).                                                                   |
-| `dataKey`           | `string`                 | `''`             | false    | Item field used as each row's render key (falls back to the index). Selection is always tracked by index.                        |
-| `disabled`          | `boolean`                | `false`          | false    | Disables all selection and move controls and applies disabled tokens.                                                            |
-| `moveOnDoubleClick` | `boolean`                | `true`           | false    | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
+| Prop                | Type      | Default | Required | JSDoc                                                                                                                            |
+| ------------------- | --------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `dataKey`           | `string`  | `''`    | false    | Item field used as each row's render key (falls back to the index). Selection is always tracked by index.                        |
+| `disabled`          | `boolean` | `false` | false    | Disables all selection and move controls and applies disabled tokens.                                                            |
+| `moveOnDoubleClick` | `boolean` | `true`  | false    | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
+
+## v-model
+
+| Model     | Type                     | Default          | Emits               | Notes                                                                                                                                                                                          |
+| --------- | ------------------------ | ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `[unknown[], unknown[]]` | `() => [[], []]` | `update:modelValue` | Bound pair of lists as `[sourceItems, targetItems]`, two-way through `defineModel`. Each move writes the new pair back; without a bound `v-model` the component keeps the pair as local state. |
 
 ## Events
 
 | Event               | Payload                                                                                      | Notes                                                                                                                                                                                                                                    |
 | ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:modelValue` | `[unknown[], unknown[]]`                                                                     | v-model update with the new `[sourceItems, targetItems]` pair.                                                                                                                                                                           |
 | `move`              | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }`                                | Fired after items move between lists, with the moved items.                                                                                                                                                                              |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 

@@ -15,8 +15,6 @@
   })
 
   interface Props {
-    /** Bound pair of lists as [sourceItems, targetItems] (v-model). */
-    modelValue?: PickListValue
     /** Item field that uniquely identifies a record; enables selection tracking and stable keys. */
     dataKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
@@ -26,20 +24,21 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: () => [[], []],
     dataKey: '',
     disabled: false,
     moveOnDoubleClick: true
   })
 
   const emit = defineEmits<{
-    'update:modelValue': [value: PickListValue]
     move: [payload: { direction: MoveDirection; items: PickListItems }]
     'item-double-click': [
       event: MouseEvent,
       payload: { list: PickListSide; item: unknown; index: number }
     ]
   }>()
+
+  /** Bound pair of lists as [sourceItems, targetItems] (v-model). */
+  const model = defineModel<PickListValue>({ default: () => [[], []] })
 
   defineSlots<{
     default(props: {
@@ -58,8 +57,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'data-pick-list'
   )
 
-  const sourceItems = computed<PickListItems>(() => props.modelValue?.[0] ?? [])
-  const targetItems = computed<PickListItems>(() => props.modelValue?.[1] ?? [])
+  const sourceItems = computed<PickListItems>(() => model.value?.[0] ?? [])
+  const targetItems = computed<PickListItems>(() => model.value?.[1] ?? [])
 
   const items = (side: PickListSide): PickListItems =>
     side === 'source' ? sourceItems.value : targetItems.value
@@ -103,7 +102,7 @@
   }
 
   const emitModel = (next: PickListValue): void => {
-    emit('update:modelValue', next)
+    model.value = next
   }
 
   const pickSelectedIndexes = (side: PickListSide): number[] =>

@@ -2,6 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import DataDriven from '../../../../examples/pagination/data-driven.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -334,6 +335,47 @@ describe('Pagination (composition)', () => {
       await fireEvent.update(select, '50')
       expect(emitted()['update:modelValue']).toBeTruthy()
       expect(emitted()['update:modelValue'][0]).toEqual([50])
+    })
+
+    it('keeps the selection as local state when no v-model is bound', async () => {
+      const { getByRole, emitted } = render(PaginationPageSize)
+      const select = getByRole('combobox', { name: 'Rows per page' }) as HTMLSelectElement
+      expect(select.value).toBe('10')
+      await fireEvent.update(select, '25')
+      await nextTick()
+      expect(select.value).toBe('25')
+      expect(emitted()['update:modelValue'][0]).toEqual([25])
+    })
+
+    it('round-trips through a controlled v-model and holds a refused value', async () => {
+      const Harness = defineComponent({
+        components: { PaginationPageSize },
+        setup() {
+          const size = ref(10)
+          const locked = ref(false)
+          const onUpdate = (value: number) => {
+            if (!locked.value) size.value = value
+          }
+          return { size, locked, onUpdate }
+        },
+        template: `
+          <div>
+            <PaginationPageSize :model-value="size" @update:model-value="onUpdate" />
+            <output data-testid="size">{{ size }}</output>
+            <button type="button" @click="locked = true">lock</button>
+          </div>
+        `
+      })
+      const { getByRole, getByTestId } = render(Harness)
+      const select = getByRole('combobox', { name: 'Rows per page' }) as HTMLSelectElement
+      await fireEvent.update(select, '50')
+      expect(getByTestId('size').textContent).toBe('50')
+      expect(select.value).toBe('50')
+
+      await fireEvent.click(getByRole('button', { name: 'lock' }))
+      await fireEvent.update(select, '100')
+      await nextTick()
+      expect(getByTestId('size').textContent).toBe('50')
     })
   })
 
