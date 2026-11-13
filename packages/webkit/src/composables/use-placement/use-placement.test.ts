@@ -285,4 +285,55 @@ describe('usePlacement (composable, real layout)', () => {
     expect(pr.bottom).toBeLessThanOrEqual(tr.top)
     expect(panel().style.maxHeight).toBe('')
   })
+  it('re-anchors on scroll when a controlled open refuses the dismiss', async () => {
+    const Pinned = defineComponent({
+      setup() {
+        const triggerRef = ref<HTMLElement | null>(null)
+        const panelRef = ref<HTMLElement | null>(null)
+        const isOpen = ref(true)
+        const dismissed = ref(0)
+        const placement = usePlacement({
+          triggerRef,
+          panelRef,
+          isOpen,
+          placement: 'bottom-start',
+          onDismiss: () => {
+            dismissed.value += 1
+          }
+        })
+        return () =>
+          h('div', { style: 'height:3000px' }, [
+            h(
+              'button',
+              { ref: triggerRef, type: 'button', style: 'margin-top:40px;width:120px;height:32px' },
+              'trigger'
+            ),
+            h('output', { 'data-testid': 'up-dismissed' }, String(dismissed.value)),
+            h(Teleport, { to: 'body' }, [
+              h(
+                'div',
+                {
+                  ref: panelRef,
+                  'data-testid': 'up-panel',
+                  style: { ...placement.panelStyle.value, height: '80px', width: '120px' }
+                },
+                'panel'
+              )
+            ])
+          ])
+      }
+    })
+    const { getByText, getByTestId } = render(Pinned)
+    await nextTick()
+    await nextTick()
+    window.scrollTo(0, 24)
+    document.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    await nextTick()
+    const tr = getByText('trigger').getBoundingClientRect()
+    const pr = panel().getBoundingClientRect()
+    expect(getByTestId('up-dismissed').textContent).toBe('1')
+    expect(Math.abs(pr.top - tr.bottom)).toBeLessThanOrEqual(1 + 4)
+    window.scrollTo(0, 0)
+  })
 })

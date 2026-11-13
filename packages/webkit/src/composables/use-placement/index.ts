@@ -353,6 +353,9 @@ export function usePlacement({
     if (target && panelRef.value?.contains(target)) return
     if (onDismiss) {
       onDismiss()
+      nextTick(() => {
+        if (isOpen.value) updatePosition()
+      })
       return
     }
     updatePosition()
