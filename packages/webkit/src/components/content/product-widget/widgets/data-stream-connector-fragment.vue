@@ -36,13 +36,13 @@
 
   const FIELDS = {
     Datadog: {
-      url: 'https://http-intake.logs.datadoghq.com/v1/input',
+      url: 'https://logs.example.com/v1/input',
       urlHelp: 'URL or URI of the Datadog endpoint.',
       key: 'ij9076f1ujik17a81f938yhru5g713422',
       keyHelp: 'API key generated through the Datadog dashboard.'
     },
     Splunk: {
-      url: 'https://inputs.splunk-client.splunkcloud.com:123456/services/collector',
+      url: 'https://splunk.example.com:8088/services/collector',
       urlHelp:
         "URL that'll receive the collected data. If you have an alternative index to point, add it at the end of the URL.",
       key: 'crfe25d2-23j8-48gf-a9ks-6b75w3ska674',
@@ -220,7 +220,7 @@
       </ShellMockupPart>
 
       <MockupCursor
-        name="Diego"
+        name="Chris"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

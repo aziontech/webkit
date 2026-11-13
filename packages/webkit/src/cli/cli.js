@@ -334,11 +334,13 @@ function printResult({ action, result, detail }) {
 function printPlan(plan) {
   for (const action of plan) {
     switch (action.type) {
-      case 'add-dep':
+      case 'add-dep': {
+        const { dev } = action
         process.stdout.write(
-          `PLAN   add-dep ${action.dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
+          `PLAN   add-dep ${dev ? '(dev) ' : ''}${action.dep}@${action.version}${action.replace ? ` (replaces ${action.replace})` : ''}\n`
         )
         break
+      }
       case 'advise':
         process.stdout.write(`\nPLAN   note: ${action.message}\n`)
         break

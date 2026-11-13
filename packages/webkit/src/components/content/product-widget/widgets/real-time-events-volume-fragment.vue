@@ -275,7 +275,7 @@
       </ShellMockupPart>
 
       <MockupCursor
-        name="Lia"
+        name="Jane"
         :x="position.x"
         :y="position.y"
       />

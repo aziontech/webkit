@@ -181,7 +181,7 @@
       </div>
 
       <MockupCursor
-        name="Lucas"
+        name="John"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

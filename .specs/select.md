@@ -9,7 +9,7 @@ figma:
   node_id: 3714:10801
 checksum: 8526b38f2c399022637b6580bf2bf186f6ac0edf322c46e5ff7f909c6c5f6210
 created: 2026-06-15
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Select — Component Spec

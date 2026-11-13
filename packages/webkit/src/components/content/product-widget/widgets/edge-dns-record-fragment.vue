@@ -172,7 +172,7 @@
                 placeholder="subdomain"
                 aria-label="Name"
               />
-              <InputGroupAddon>.edgeflow.com</InputGroupAddon>
+              <InputGroupAddon>.example.com</InputGroupAddon>
             </InputGroupRoot>
             <HelperText label="Use @ to create a record for the root domain." />
           </div>

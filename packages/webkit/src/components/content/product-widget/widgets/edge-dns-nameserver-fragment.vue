@@ -41,12 +41,12 @@
           <Item.Content>
             <Item.Title>Domain Name</Item.Title>
             <Item.Description>
-              Provide the domain name you want to host. Example: mydomain.com.
+              Provide the domain name you want to host. Example: example.com.
             </Item.Description>
           </Item.Content>
           <Item.Actions class="w-full justify-start">
             <Input
-              model-value="edgeflow.com"
+              model-value="example.com"
               size="medium"
               class="w-full"
               aria-label="Domain Name"

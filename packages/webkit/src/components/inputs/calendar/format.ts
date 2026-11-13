@@ -218,7 +218,7 @@ export const defaultTimezones = (): string[] => {
     local,
     'UTC',
     'America/New_York',
-    'America/Sao_Paulo',
+    'America/Los_Angeles',
     'Europe/London',
     'Europe/Paris',
     'Asia/Tokyo'

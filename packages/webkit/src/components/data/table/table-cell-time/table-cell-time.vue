@@ -17,7 +17,7 @@
     defineProps<{
       /** The moment: a `Date`, an epoch in milliseconds or an ISO string. Empty or unparseable renders a muted dash. */
       value?: string | number | Date
-      /** Who made the change: a name or an email (`maria.silva@example.com` reads `Maria Silva`). Shows an avatar with the name on its tooltip. */
+      /** Who made the change: a name or an email (`jane.doe@example.com` reads `Jane Doe`). Shows an avatar with the name on its tooltip. */
       author?: string
       /** Avatar image for `author`. */
       avatarSrc?: string
