@@ -221,3 +221,25 @@ test('the base ref comes from GITHUB_BASE_REF, then the integration branch', () 
     'v5.0.0'
   ])
 })
+
+test('a prop and its update event moved into defineModel are not a change', () => {
+  const base = surfaceFromCatalog(
+    catalog({
+      props: [prop('modelValue', 'string', "''"), prop('label', 'string', "''")],
+      events: [{ name: 'update:modelValue', payload: 'string', notes: '' }],
+      models: []
+    })
+  )
+  const head = surfaceFromCatalog(
+    catalog({ props: [prop('label', 'string', "''")], events: [], models: ['modelValue'] })
+  )
+  assert.deepEqual(diffSurface(base, head), [])
+})
+
+test('a prop removed without becoming a model is still breaking', () => {
+  const base = surfaceFromCatalog(catalog({ props: [prop('modelValue', 'string', "''")] }))
+  const head = surfaceFromCatalog(catalog({ props: [], models: [] }))
+  const [c] = diffSurface(base, head)
+  assert.equal(c.kind, 'removed')
+  assert.equal(c.breaking, true)
+})

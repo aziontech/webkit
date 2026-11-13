@@ -185,7 +185,23 @@ export function diffSurface(base, head) {
       )
     }
   }
-  return changes
+  return changes.filter((c) => !movedToModel(c, base.components, head.components))
+}
+
+export function movedToModel(c, baseComponents, headComponents) {
+  const before = baseComponents[c.subpath]
+  const after = headComponents[c.subpath]
+  if (!before || !after) return false
+  const headModels = new Set(after.models || [])
+  const baseModels = new Set(before.models || [])
+  if (c.area === 'prop' && c.kind === 'removed') return headModels.has(c.name)
+  if (c.area === 'event' && c.kind === 'removed' && c.name.startsWith('update:')) {
+    return headModels.has(c.name.slice('update:'.length))
+  }
+  if (c.area === 'model' && c.kind === 'added') {
+    return c.name in before.props && !baseModels.has(c.name)
+  }
+  return false
 }
 
 export function isBreakingTitle(title) {
