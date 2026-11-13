@@ -12130,7 +12130,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+     "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
     }
    ],
    "surface": "product",
@@ -12179,7 +12179,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+     "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
     }
    ],
    "surface": "product",
@@ -12303,7 +12303,7 @@
     {
      "name": "prefix",
      "scope": "—",
-     "notes": "Content rendered before the input (e.g. `R$`)."
+     "notes": "Content rendered before the input (e.g. `$`)."
     },
     {
      "name": "suffix",
@@ -12583,7 +12583,7 @@
     {
      "name": "country",
      "type": "string",
-     "default": "'BR'",
+     "default": "'US'",
      "required": "false",
      "doc": "Two-way value (`v-model:country`)."
     }
@@ -12592,7 +12592,7 @@
     {
      "name": "update:phone",
      "payload": "[value: PhoneNumber]",
-     "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
+     "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
     }
    ],
    "surface": "product",
@@ -28726,7 +28726,7 @@
    "variants": [
     {
      "name": "Form",
-     "summary": "GitHub connected: the gab-lisboa scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token."
+     "summary": "GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token."
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-template.json"
@@ -30063,7 +30063,7 @@
    "variants": [
     {
      "name": "Empty",
-     "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or my-new-site.dev (available) into the second door to run the availability check."
+     "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check."
     }
    ],
    "file": "catalog/patterns/platform/dashboard/home-dashboard.json"

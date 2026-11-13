@@ -421,7 +421,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const entities: Entity[] = [
     {
       id: 'entity-01',
-      name: 'ana.ribeiro',
+      name: 'ava.wilson',
       type: 'User',
       score: 92,
       level: 'critical',
@@ -461,7 +461,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     {
       id: 'entity-06',
-      name: 'lucia.alves',
+      name: 'lisa.martin',
       type: 'User',
       score: 41,
       level: 'low',
@@ -509,7 +509,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       level: 'critical',
       rank: 5,
       title: 'Data sent to a new destination',
-      entity: 'ana.ribeiro',
+      entity: 'ava.wilson',
       opened: 'Nov 10, 09:42',
       status: 'Open'
     },
@@ -518,7 +518,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       level: 'critical',
       rank: 5,
       title: 'Impossible travel',
-      entity: 'ana.ribeiro',
+      entity: 'ava.wilson',
       opened: 'Nov 10, 07:15',
       status: 'Investigating'
     },
@@ -581,7 +581,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       level: 'medium',
       rank: 3,
       title: 'Repeated failed sign-ins',
-      entity: 'lucia.alves',
+      entity: 'lisa.martin',
       opened: 'Nov 8, 14:09',
       status: 'Investigating'
     },
@@ -590,7 +590,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       level: 'low',
       rank: 2,
       title: 'Sign-in from a new device',
-      entity: 'lucia.alves',
+      entity: 'lisa.martin',
       opened: 'Nov 8, 09:36',
       status: 'Open'
     },

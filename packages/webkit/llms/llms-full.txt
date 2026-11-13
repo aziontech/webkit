@@ -1218,7 +1218,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   <ConsoleLayout
     :navigation="navigation"
     :breadcrumbs="$route.meta.breadcrumbs ?? []"
-    :account="{ name: 'Ana Souza', email: 'ana@example.com' }"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
   >
     <RouterView />
   </ConsoleLayout>
@@ -6565,7 +6565,7 @@ What each part takes: [blocks/platform/detail/details-page.md](blocks/platform/d
 - **Breadcrumb:** module, then the resource name as created, e.g. "Resources" › "analytics-app".
 - **Tabs:** one or two nouns, e.g. "Overview", "Versions", "Build", "Deployments".
 - **Fact labels:** a short noun, sentence case, no colon, e.g. "Deployment", "Domains", "Status", "Created", "Source", "Framework".
-- **Created:** relative time and author, e.g. "2 weeks ago by Herbert Júlio".
+- **Created:** relative time and author, e.g. "2 weeks ago by John Smith".
 - **Actions:** a verb, e.g. "Visit", "Deploy", "Redeploy"; menu options "Copy URL", "Settings".
 - **Link tooltips:** say where the link goes, e.g. "Open analytics-app-z1x2c3.example.com in a new tab".
 - **State band:** one sentence on the next step, e.g. "To deploy to Production, drop your project anywhere on this page, connect Git, or run platform deploy via the CLI."
@@ -11707,7 +11707,7 @@ packages/webkit/src/components/ai/chat-message/
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)">
     <ChatMessageRoot
       from="user"
-      author="Ana Lima"
+      author="Jane Doe"
       timestamp="10:41"
     >
       How do I purge the cache of one URL?
@@ -13951,13 +13951,13 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 
   const series = [
     {
-      id: 'Brazil',
-      name: 'Brazil',
+      id: 'United States',
+      name: 'United States',
       values: [48210]
     },
     {
-      id: 'United States',
-      name: 'United States',
+      id: 'United Kingdom',
+      name: 'United Kingdom',
       values: [31620]
     },
     {
@@ -17268,7 +17268,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
       />
     </KeyValuePairs.Item>
     <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+    <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
     <KeyValuePairs.Item label="Domain">
       <Link
         label="shop.example.com"
@@ -17920,7 +17920,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Do
 
 - Always give the code a typed alternative next to it: the setup key or the link as text.
-- Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.
+- Name the code after what it does (`QR code to add jane.doe@example.com to an authenticator app`), not `QR code`.
 - Keep the default `M` error correction; raise it only when the code is printed or shown small.
 
 ## Don’t
@@ -17986,7 +17986,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   import CopyButton from '@aziontech/webkit/copy-button'
   import QrCode from '@aziontech/webkit/qr-code'
 
-  const account = 'ana.silva@example.com'
+  const account = 'jane.doe@example.com'
   const secret = 'JBSWY3DPEHPK3PXP'
   const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
 </script>
@@ -25633,7 +25633,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 # Input Group
 
-> Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
+> Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
 
 - Import: `import InputGroupRoot from '@aziontech/webkit/input-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/webkit/input-group'`
@@ -25676,7 +25676,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
+| `default` | — | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
 
 ## Sub-component imports
 
@@ -25702,7 +25702,7 @@ Public members of the compound:
 | Member               | Attached name           | Standalone export                     | Purpose                                                                                                                                                                                                                                                                                                                  |
 | -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
-| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `R$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
 | `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`. Props: `modelValue` (`''`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group.
@@ -26055,7 +26055,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `prefix` | — | Content rendered before the input (e.g. `R$`). |
+| `prefix` | — | Content rendered before the input (e.g. `$`). |
 | `suffix` | — | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States
@@ -26465,7 +26465,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
 - v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.
 - Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.
+- v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
 - searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Don’t
@@ -26494,20 +26494,20 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
-| `country` | `string` | `'BR'` | false | Two-way value (`v-model:country`). |
+| `country` | `string` | `'US'` | false | Two-way value (`v-model:country`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## v-model
 
-| Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                |
-| ----------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
-| `v-model:country` | `string` | `'BR'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.                             |
+| Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                               |
+| ----------------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'4155550100'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
+| `v-model:country` | `string` | `'US'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.                            |
 
 ## States
 
@@ -26537,7 +26537,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
   import { ref } from 'vue'
 
   const digits = ref('')
-  const country = ref('BR')
+  const country = ref('US')
   const phone = ref(null)
 </script>
 
@@ -28452,7 +28452,7 @@ packages/webkit/src/components/layout/console-layout/
   <ConsoleLayout
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
-    :account="{ name: 'Ana Souza', email: 'ana.souza@example.com' }"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
     active-id="workloads"
   >
     <template #actions="{ compact }">
@@ -29664,7 +29664,7 @@ context, so a consumer never wires one part to the other.
   import Textarea from '@aziontech/webkit/textarea'
   import { reactive } from 'vue'
 
-  const form = reactive({ companyName: '', companyId: '', billingEmails: 'jane.doe@example.com' })
+  const form = reactive({ companyName: '', taxId: '', billingEmails: 'jane.doe@example.com' })
 </script>
 
 <template>
@@ -29680,19 +29680,17 @@ context, so a consumer never wires one part to the other.
             size="large"
             class="w-full"
             aria-label="Company Name"
-            placeholder="Company S.A."
           />
         </SettingRow>
         <SettingRow
-          title="Company ID"
-          description="Personal or company ID number that identifies account ownership."
+          title="Tax ID"
+          description="The tax identification number of the entity that owns this account."
         >
           <Input
-            v-model="form.companyId"
+            v-model="form.taxId"
             size="large"
             class="w-full"
-            aria-label="Company ID"
-            placeholder="00.000.000/0001-00"
+            aria-label="Tax ID"
           />
         </SettingRow>
         <SettingRow
@@ -30222,11 +30220,11 @@ between them is the ring-offset surface below.
             <Avatar
               kind="square"
               size="small"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-              alt="Alex Moreira"
+              label="AM"
+              alt="Alex Morgan"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-              >Alex Moreira</span
+              >Alex Morgan</span
             >
             <DropdownMenu
               v-model:open="accountMenuOpen"
@@ -30243,7 +30241,7 @@ between them is the ring-offset surface below.
               <DropdownMenuGroup>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
+                    <span class="truncate text-label-md text-(--text-default)">Alex Morgan</span>
                     <span class="truncate text-body-xs text-(--text-muted)"
                       >rafael.umman@example.com</span
                     >
@@ -31416,7 +31414,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
     <Carousel.Item size="large">
       <Quote
         text="We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five."
-        name="Renata Alves"
+        name="Jane Doe"
         job-title="Head of Information Security, Netshoes"
       />
     </Carousel.Item>
@@ -32910,7 +32908,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
         },
         {
           text: 'We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five.',
-          name: 'Renata Alves',
+          name: 'Jane Doe',
           jobTitle: 'Head of Information Security',
           mark: 'netshoes'
         }
@@ -41114,7 +41112,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       name: 'email',
       kind: 'email',
       label: 'Work email',
-      placeholder: 'name@company.com',
+      placeholder: 'm@example.com',
       required: true
     },
     {
@@ -41212,9 +41210,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     'fourbank'
   ]
 
-  const onSubmit = (event, values) => {
-    console.log(event.type, values)
-  }
+  const onSubmit = (_event, _values) => {}
 </script>
 
 <template>
@@ -41522,20 +41518,20 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         group: 'Engineering',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · Porto Alegre',
+          team: 'Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         },
-        facets: { area: ['Engineering'], location: ['Porto Alegre'] }
+        facets: { area: ['Engineering'], location: ['San Francisco'] }
       },
       {
         href: '/careers/grc-analyst',
         group: 'Security',
         values: {
           role: 'GRC Analyst (Governance, Risk & Compliance)',
-          team: 'Compliance and Corporate IT · Porto Alegre / São Paulo',
+          team: 'Compliance and Corporate IT · San Francisco / New York',
           type: 'Hybrid · Full-time'
         },
-        facets: { area: ['Security'], location: ['Porto Alegre', 'São Paulo'] }
+        facets: { area: ['Security'], location: ['San Francisco', 'New York'] }
       }
     ]"
     :groups="['Engineering', 'Security']"
@@ -41554,8 +41550,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         label: 'Location',
         allLabel: 'All locations',
         options: [
-          { value: 'São Paulo', label: 'São Paulo, Brazil' },
-          { value: 'Porto Alegre', label: 'Porto Alegre, Brazil' }
+          { value: 'New York', label: 'New York, United States' },
+          { value: 'San Francisco', label: 'San Francisco, United States' }
         ]
       }
     ]"
@@ -41657,7 +41653,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/senior-platform-engineer',
         values: {
           role: 'Senior Platform Engineer',
-          team: 'Delivery Engineering · Porto Alegre',
+          team: 'Delivery Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -41665,7 +41661,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/senior-quality-automation-engineer',
         values: {
           role: 'Senior Quality Automation Engineer',
-          team: 'Delivery Engineering · Porto Alegre',
+          team: 'Delivery Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -41673,7 +41669,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/software-engineer-go',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · Porto Alegre',
+          team: 'Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -41681,7 +41677,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/software-engineer-rust',
         values: {
           role: 'Software Engineer (Rust and/or C/C++)',
-          team: 'Platform Engineering · Porto Alegre / São Paulo',
+          team: 'Platform Engineering · San Francisco / New York',
           type: 'Hybrid · Full-time'
         }
       },
@@ -41689,7 +41685,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/senior-infrastructure-analyst',
         values: {
           role: 'Senior Infrastructure Analyst',
-          team: 'SRE · Porto Alegre / São Paulo',
+          team: 'SRE · San Francisco / New York',
           type: 'Hybrid · Full-time'
         }
       },
@@ -41697,7 +41693,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
         href: '/careers/software-engineer-frontend',
         values: {
           role: 'Software Engineer (Frontend)',
-          team: 'UX Engineering · Porto Alegre',
+          team: 'UX Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       }

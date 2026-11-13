@@ -476,15 +476,15 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     'cdn.example.com'
   ]
   const addresses = [
-    '45.132.11.9',
-    '189.6.44.12',
-    '201.17.88.3',
-    '177.92.10.55',
-    '91.220.4.18',
-    '200.147.3.21',
-    '138.99.7.42'
+    '203.0.113.9',
+    '198.51.100.12',
+    '192.0.2.3',
+    '198.51.100.55',
+    '203.0.113.18',
+    '192.0.2.21',
+    '203.0.113.42'
   ]
-  const countries = ['Brazil', 'United States', 'Portugal', 'Germany', 'Chile']
+  const countries = ['United States', 'Brazil', 'Portugal', 'Germany', 'Chile']
   const agents = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',

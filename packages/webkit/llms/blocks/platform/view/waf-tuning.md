@@ -159,7 +159,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
       threat: 'SQL injection',
       hits: 18432,
       ips: ['203.0.113.41', '198.51.100.7', '203.0.113.90', '192.0.2.15'],
-      countries: ['Brazil', 'United States', 'Germany'],
+      countries: ['United States', 'Brazil', 'Germany'],
       paths: ['/api/v1/search', '/api/v1/login', '/checkout']
     },
     {

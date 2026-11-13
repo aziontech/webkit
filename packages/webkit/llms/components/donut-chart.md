@@ -104,13 +104,13 @@
 
   const series = [
     {
-      id: 'Brazil',
-      name: 'Brazil',
+      id: 'United States',
+      name: 'United States',
       values: [48210]
     },
     {
-      id: 'United States',
-      name: 'United States',
+      id: 'United Kingdom',
+      name: 'United Kingdom',
       values: [31620]
     },
     {
@@ -153,13 +153,13 @@
 
   const series = [
     {
-      id: 'Brazil',
-      name: 'Brazil',
+      id: 'United States',
+      name: 'United States',
       values: [48210]
     },
     {
-      id: 'United States',
-      name: 'United States',
+      id: 'United Kingdom',
+      name: 'United Kingdom',
       values: [31620]
     },
     {
@@ -210,13 +210,13 @@
 
   const series = [
     {
-      id: 'Brazil',
-      name: 'Brazil',
+      id: 'United States',
+      name: 'United States',
       values: [48210]
     },
     {
-      id: 'United States',
-      name: 'United States',
+      id: 'United Kingdom',
+      name: 'United Kingdom',
       values: [31620]
     },
     {

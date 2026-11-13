@@ -17,7 +17,7 @@
   "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
   "v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.",
   "Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
-  "v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.",
+  "v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
   "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
  ]
 }

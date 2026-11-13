@@ -187,7 +187,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { value: 'service-19', label: 'service-19', description: 'service-19.example.com' },
     { value: 'service-20', label: 'service-20', description: 'service-20.example.com' },
     { value: 'web-prod', label: 'web-prod', description: 'www.example.com' },
-    { value: 'web-br-prod', label: 'web-br-prod', description: 'www.example.com.br' },
+    { value: 'web-eu-prod', label: 'web-eu-prod', description: 'eu.example.com' },
     { value: 'stage-preview', label: 'stage-preview', description: '*-preview.example.com' },
     { value: 'campaign-landing', label: 'campaign-landing', description: 'campaign.example.com' },
     { value: 'docs-prod', label: 'docs-prod', description: 'docs.example.com' }

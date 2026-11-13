@@ -15,7 +15,7 @@
  ],
  "bestPractices": [
   "Always give the code a typed alternative next to it: the setup key or the link as text.",
-  "Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.",
+  "Name the code after what it does (`QR code to add jane.doe@example.com to an authenticator app`), not `QR code`.",
   "Keep the default `M` error correction; raise it only when the code is printed or shown small."
  ]
 }

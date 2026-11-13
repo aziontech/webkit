@@ -52,7 +52,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `prefix` | — | Content rendered before the input (e.g. `R$`). |
+| `prefix` | — | Content rendered before the input (e.g. `$`). |
 | `suffix` | — | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States

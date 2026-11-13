@@ -136,7 +136,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
       />
     </KeyValuePairs.Item>
     <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+    <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
     <KeyValuePairs.Item label="Domain">
       <Link
         label="shop.example.com"
@@ -178,7 +178,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -205,7 +205,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -232,7 +232,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -289,7 +289,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         <template #info>
           <Hint text="Where the workload was first provisioned." />
         </template>
-        South America (São Paulo)
+        US East (Virginia)
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Custom certificate" />
     </KeyValuePairs.Group>

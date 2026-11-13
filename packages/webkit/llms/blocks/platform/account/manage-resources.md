@@ -187,12 +187,12 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const seedResources: Resource[] = [
     {
       id: 'org-1001',
-      name: 'Northwind Holdings',
+      name: 'Acme Inc.',
       type: 'organization',
       parentId: null,
       labels: ['primary']
     },
-    { id: 'org-1002', name: 'Contoso Partners', type: 'organization', parentId: null },
+    { id: 'org-1002', name: 'Acme Partners', type: 'organization', parentId: null },
     { id: 'grp-2101', name: 'Retail and marketplace', type: 'group', parentId: 'org-1001' },
     { id: 'grp-2102', name: 'Digital services', type: 'group', parentId: 'org-1001' },
     { id: 'grp-2201', name: 'Resellers', type: 'group', parentId: 'org-1002' },

@@ -122,7 +122,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 ## Variants
 
 - `Default` — primary (the code below)
-- `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or my-new-site.dev (available) into the second door to run the availability check.
+- `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/home-dashboard", { variant })`, or the file under `blocks/platform/dashboard/home-dashboard/variants/`.
 

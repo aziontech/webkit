@@ -257,14 +257,14 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
   }
 
   const people = [
-    'Robson Junior',
-    'Isaque Böck',
-    'Rafael Garbinatto',
-    'Herbert Júlio',
-    'Rafael Umman',
-    'Marcus Grando',
-    'Bruno Germano',
-    'Gab Lisboa'
+    'Ethan Brooks',
+    'Jordan Kim',
+    'Taylor Reed',
+    'John Smith',
+    'Sam Lee',
+    'Priya Patel',
+    'Chris Taylor',
+    'Riley Carter'
   ]
 
   const GLYPHS: Record<string, string> = {

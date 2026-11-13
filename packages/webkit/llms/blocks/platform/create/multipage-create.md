@@ -148,21 +148,21 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb'
-  import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import Alert from '@aziontech/webkit/alert'
   import PageHeader from '@aziontech/webkit/page-header'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import RadioButton from '@aziontech/webkit/radio-button'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
@@ -280,7 +280,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     },
     ip_cidr: {
       label: 'List',
-      placeholder: '185.241.208.232\n194.26.192.64\n171.25.193.25 #comment',
+      placeholder: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment',
       helper:
         'One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed.'
     },

@@ -81,7 +81,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { reactive } from 'vue'
 
-  const form = reactive({ companyName: '', companyId: '', billingEmails: 'jane.doe@example.com' })
+  const form = reactive({ companyName: '', taxId: '', billingEmails: 'jane.doe@example.com' })
 </script>
 
 <template>
@@ -97,19 +97,17 @@
             size="large"
             class="w-full"
             aria-label="Company Name"
-            placeholder="Company S.A."
           />
         </SettingRow>
         <SettingRow
-          title="Company ID"
-          description="Personal or company ID number that identifies account ownership."
+          title="Tax ID"
+          description="The tax identification number of the entity that owns this account."
         >
           <Input
-            v-model="form.companyId"
+            v-model="form.taxId"
             size="large"
             class="w-full"
-            aria-label="Company ID"
-            placeholder="00.000.000/0001-00"
+            aria-label="Tax ID"
           />
         </SettingRow>
         <SettingRow

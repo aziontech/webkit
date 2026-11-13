@@ -128,7 +128,7 @@
       name: 'email',
       kind: 'email',
       label: 'Work email',
-      placeholder: 'name@company.com',
+      placeholder: 'm@example.com',
       required: true
     },
     {
@@ -226,9 +226,7 @@
     'fourbank'
   ]
 
-  const onSubmit = (event, values) => {
-    console.log(event.type, values)
-  }
+  const onSubmit = (_event, _values) => {}
 </script>
 
 <template>
@@ -413,7 +411,7 @@
       name: 'email',
       kind: 'email',
       label: 'Work email',
-      placeholder: 'name@company.com',
+      placeholder: 'm@example.com',
       required: true
     },
     {
@@ -511,9 +509,7 @@
     'fourbank'
   ]
 
-  const onSubmit = (event, values) => {
-    console.log(event.type, values)
-  }
+  const onSubmit = (_event, _values) => {}
 </script>
 
 <template>

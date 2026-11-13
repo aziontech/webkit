@@ -114,7 +114,7 @@
         },
         {
           text: 'We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five.',
-          name: 'Renata Alves',
+          name: 'Jane Doe',
           jobTitle: 'Head of Information Security',
           mark: 'netshoes'
         }
@@ -137,13 +137,13 @@
     :items="[
       {
         text: 'Orders peak in the same forty minutes every night. Azion holds the edge steady through it, so our release window is no longer the riskiest hour of the day.',
-        name: 'Camila Duarte',
+        name: 'Jane Doe',
         jobTitle: 'VP of Engineering',
         mark: 'iFood'
       },
       {
         text: 'Payments cannot wait on an origin round trip. Running the checks at the edge cut our approval latency in half and took a whole tier out of the stack.',
-        name: 'Rafael Nunes',
+        name: 'John Smith',
         jobTitle: 'CTO',
         mark: 'Zoop'
       },

@@ -324,11 +324,11 @@ between them is the ring-offset surface below.
             <Avatar
               kind="square"
               size="small"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-              alt="Alex Moreira"
+              label="AM"
+              alt="Alex Morgan"
             />
             <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-              >Alex Moreira</span
+              >Alex Morgan</span
             >
             <DropdownMenu
               v-model:open="accountMenuOpen"
@@ -345,7 +345,7 @@ between them is the ring-offset surface below.
               <DropdownMenuGroup>
                 <template #top>
                   <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-label-md text-(--text-default)">Alex Moreira</span>
+                    <span class="truncate text-label-md text-(--text-default)">Alex Morgan</span>
                     <span class="truncate text-body-xs text-(--text-muted)"
                       >rafael.umman@example.com</span
                     >

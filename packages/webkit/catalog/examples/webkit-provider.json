@@ -2,7 +2,7 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.",
+   "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers in the pt-BR style.",
    "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ptBR } from '@aziontech/webkit/locales/pt-BR'\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n  import { ref } from 'vue'\n\n  const page = ref(1)\n  const open = ref(false)\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :catalogs=\"{ 'pt-BR': ptBR }\"\n  >\n    <div class=\"flex flex-col gap-(--spacing-md)\">\n      <PaginationRoot\n        v-model:page=\"page\"\n        :total=\"120\"\n      />\n      <ConfirmDialog\n        v-model:open=\"open\"\n        title=\"Remover domínio\"\n        description=\"shop.example.com deixa de responder por este recurso.\"\n        @confirm=\"open = false\"\n      >\n        <template #trigger>\n          <Button\n            label=\"Remover domínio\"\n            kind=\"outlined\"\n            size=\"medium\"\n          />\n        </template>\n      </ConfirmDialog>\n    </div>\n  </WebkitProvider>\n</template>"
   },
   {

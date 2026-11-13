@@ -27,7 +27,7 @@
   "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
   "v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.",
   "Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
-  "v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.",
+  "v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
   "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
  ],
  "props": [
@@ -111,7 +111,7 @@
   {
    "name": "country",
    "type": "string",
-   "default": "'BR'",
+   "default": "'US'",
    "required": "false",
    "doc": "Two-way value (`v-model:country`)."
   }
@@ -120,7 +120,7 @@
   {
    "name": "update:phone",
    "payload": "[value: PhoneNumber]",
-   "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
+   "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
   }
  ],
  "slots": [],
@@ -129,7 +129,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('BR')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('US')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
   }
  ],
  "docs": "components/phone-input.md"

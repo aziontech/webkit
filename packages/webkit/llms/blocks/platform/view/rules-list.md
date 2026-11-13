@@ -248,7 +248,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
         'Redirect www',
         'Sends the www host to the apex domain.',
         'request',
-        'Ana Ruiz',
+        'Emily Clark',
         '12 days ago'
       ),
       rule(
@@ -282,7 +282,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
         'Security headers',
         'Adds the security header set to successful responses.',
         'response',
-        'Ana Ruiz',
+        'Emily Clark',
         '9 days ago'
       ),
       rule(

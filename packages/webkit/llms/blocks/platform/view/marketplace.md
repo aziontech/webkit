@@ -255,7 +255,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     integration(
       'request-signer',
       'Request Signer',
-      'Northwind Labs',
+      'Acme',
       'pi pi-key',
       'Access control',
       'firewall',
@@ -265,7 +265,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     integration(
       'waiting-room',
       'Waiting Room',
-      'Tidewater',
+      'Acme',
       'pi pi-hourglass',
       'Traffic management',
       'application',
@@ -313,7 +313,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     integration(
       'rate-guard',
       'Rate Guard',
-      'Brightline',
+      'Acme',
       'pi pi-sliders-h',
       'Access control',
       'firewall',
@@ -340,7 +340,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     integration(
       'phone-check',
       'Phone Check',
-      'Quillstone',
+      'Acme',
       'pi pi-phone',
       'Fraud prevention',
       'firewall',

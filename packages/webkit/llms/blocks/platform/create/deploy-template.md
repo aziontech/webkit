@@ -97,7 +97,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 ## Variants
 
 - `ConnectGit` — primary (the code below)
-- `Form` — GitHub connected: the gab-lisboa scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.
+- `Form` — GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deploy-template", { variant })`, or the file under `blocks/platform/create/deploy-template/variants/`.
 

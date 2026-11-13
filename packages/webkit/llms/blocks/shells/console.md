@@ -310,7 +310,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     }
   ]
 
-  const account = { name: 'Ana Souza', email: 'ana.souza@example.com' }
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 
   const recents = [
     { id: 'azion-site', label: 'azion-site', icon: 'ai ai-edge-application', type: 'Application' },

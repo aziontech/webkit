@@ -25,7 +25,7 @@
  ],
  "bestPractices": [
   "Always give the code a typed alternative next to it: the setup key or the link as text.",
-  "Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.",
+  "Name the code after what it does (`QR code to add jane.doe@example.com to an authenticator app`), not `QR code`.",
   "Keep the default `M` error correction; raise it only when the code is printed or shown small."
  ],
  "props": [
@@ -65,7 +65,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'ana.silva@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'jane.doe@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

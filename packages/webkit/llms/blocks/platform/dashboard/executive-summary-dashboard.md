@@ -495,7 +495,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const notes: Note[] = [
     {
       id: 'note-04',
-      author: 'Maria Santos',
+      author: 'Emma Wilson',
       initials: 'MS',
       role: 'Head of Finance',
       date: '2026-09-30',
@@ -522,7 +522,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     {
       id: 'note-01',
-      author: 'Lucas Moreau',
+      author: 'Daniel Moore',
       initials: 'LM',
       role: 'VP of Engineering',
       date: '2026-09-12',

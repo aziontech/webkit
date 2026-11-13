@@ -119,7 +119,7 @@
   {
    "name": "prefix",
    "scope": "—",
-   "notes": "Content rendered before the input (e.g. `R$`)."
+   "notes": "Content rendered before the input (e.g. `$`)."
   },
   {
    "name": "suffix",

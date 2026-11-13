@@ -184,7 +184,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'draft',
       tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
       comment: 'Cache static assets for 30 days',
-      author: 'Herbert Júlio',
+      author: 'John Smith',
       createdAgo: '14 hours ago'
     },
     {
@@ -193,7 +193,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'active',
       tag: { label: 'Deployed', severity: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
-      author: 'Rafael Umman',
+      author: 'Sam Lee',
       createdAgo: '1 day ago'
     },
     {
@@ -202,7 +202,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Enable image optimization',
-      author: 'Marcus Grando',
+      author: 'Priya Patel',
       createdAgo: '3 days ago'
     },
     {
@@ -211,7 +211,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Update function"ab-test" arguments',
-      author: 'Bruno Germano',
+      author: 'Chris Taylor',
       createdAgo: '3 days ago'
     },
     {
@@ -220,7 +220,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Add variable"API_URL"',
-      author: 'Gab Lisboa',
+      author: 'Riley Carter',
       createdAgo: '4 days ago'
     },
     {
@@ -229,7 +229,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Cache static assets for 30 days',
-      author: 'Robson Junior',
+      author: 'Ethan Brooks',
       createdAgo: '6 days ago'
     },
     {
@@ -238,7 +238,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
-      author: 'Isaque Böck',
+      author: 'Jordan Kim',
       createdAgo: '1 week ago'
     }
   ]
@@ -248,7 +248,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     state: 'draft',
     tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
     comment: 'Cache static assets for 30 days',
-    author: 'Herbert Júlio',
+    author: 'John Smith',
     createdAgo: '14 hours ago'
   }
   const earlier: VersionEntry[] = [
@@ -258,7 +258,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'active',
       tag: { label: 'Deployed', severity: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
-      author: 'Rafael Umman',
+      author: 'Sam Lee',
       createdAgo: '1 day ago'
     },
     {
@@ -267,7 +267,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Enable image optimization',
-      author: 'Marcus Grando',
+      author: 'Priya Patel',
       createdAgo: '3 days ago'
     },
     {
@@ -276,7 +276,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Update function"ab-test" arguments',
-      author: 'Bruno Germano',
+      author: 'Chris Taylor',
       createdAgo: '3 days ago'
     },
     {
@@ -285,7 +285,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Add variable"API_URL"',
-      author: 'Gab Lisboa',
+      author: 'Riley Carter',
       createdAgo: '4 days ago'
     },
     {
@@ -294,7 +294,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Cache static assets for 30 days',
-      author: 'Robson Junior',
+      author: 'Ethan Brooks',
       createdAgo: '6 days ago'
     },
     {
@@ -303,7 +303,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       state: 'ready',
       tag: { label: 'Ready', severity: 'success', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
-      author: 'Isaque Böck',
+      author: 'Jordan Kim',
       createdAgo: '1 week ago'
     }
   ]

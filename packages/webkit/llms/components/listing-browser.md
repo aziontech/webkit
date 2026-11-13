@@ -88,20 +88,20 @@
         group: 'Engineering',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · Porto Alegre',
+          team: 'Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         },
-        facets: { area: ['Engineering'], location: ['Porto Alegre'] }
+        facets: { area: ['Engineering'], location: ['San Francisco'] }
       },
       {
         href: '/careers/grc-analyst',
         group: 'Security',
         values: {
           role: 'GRC Analyst (Governance, Risk & Compliance)',
-          team: 'Compliance and Corporate IT · Porto Alegre / São Paulo',
+          team: 'Compliance and Corporate IT · San Francisco / New York',
           type: 'Hybrid · Full-time'
         },
-        facets: { area: ['Security'], location: ['Porto Alegre', 'São Paulo'] }
+        facets: { area: ['Security'], location: ['San Francisco', 'New York'] }
       }
     ]"
     :groups="['Engineering', 'Security']"
@@ -120,8 +120,8 @@
         label: 'Location',
         allLabel: 'All locations',
         options: [
-          { value: 'São Paulo', label: 'São Paulo, Brazil' },
-          { value: 'Porto Alegre', label: 'Porto Alegre, Brazil' }
+          { value: 'New York', label: 'New York, United States' },
+          { value: 'San Francisco', label: 'San Francisco, United States' }
         ]
       }
     ]"

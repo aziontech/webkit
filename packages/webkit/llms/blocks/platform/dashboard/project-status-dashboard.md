@@ -419,8 +419,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const owners: OwnerRow[] = [
     {
-      id: 'ana-souza',
-      owner: 'Ana Souza',
+      id: 'amy-chen',
+      owner: 'Amy Chen',
       initials: 'AS',
       open: 12,
       done: 18,

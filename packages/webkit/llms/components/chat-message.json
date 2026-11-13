@@ -115,7 +115,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)\">\n    <ChatMessageRoot\n      from=\"user\"\n      author=\"Ana Lima\"\n      timestamp=\"10:41\"\n    >\n      How do I purge the cache of one URL?\n    </ChatMessageRoot>\n    <ChatMessageRoot timestamp=\"10:41\">\n      <StreamingResponse\n        content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address. The purge reaches every edge location in a few seconds.\"\n      />\n    </ChatMessageRoot>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)\">\n    <ChatMessageRoot\n      from=\"user\"\n      author=\"Jane Doe\"\n      timestamp=\"10:41\"\n    >\n      How do I purge the cache of one URL?\n    </ChatMessageRoot>\n    <ChatMessageRoot timestamp=\"10:41\">\n      <StreamingResponse\n        content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address. The purge reaches every edge location in a few seconds.\"\n      />\n    </ChatMessageRoot>\n  </div>\n</template>"
   },
   {
    "name": "Actions",

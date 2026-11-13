@@ -14,7 +14,7 @@
 ## Do
 
 - Always give the code a typed alternative next to it: the setup key or the link as text.
-- Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.
+- Name the code after what it does (`QR code to add jane.doe@example.com to an authenticator app`), not `QR code`.
 - Keep the default `M` error correction; raise it only when the code is printed or shown small.
 
 ## Don’t
@@ -81,7 +81,7 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import QrCode from '@aziontech/webkit/qr-code'
 
-  const account = 'ana.silva@example.com'
+  const account = 'jane.doe@example.com'
   const secret = 'JBSWY3DPEHPK3PXP'
   const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
 </script>

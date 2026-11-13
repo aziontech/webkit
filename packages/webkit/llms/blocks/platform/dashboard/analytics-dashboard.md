@@ -330,7 +330,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const countries: string[] = ['Brazil', 'United States', 'Germany', 'India', 'Mexico', 'Argentina']
+  const countries: string[] = ['United States', 'Brazil', 'Germany', 'India', 'Mexico', 'Argentina']
 
   const countryRequests: ChartSeries[] = [
     {
