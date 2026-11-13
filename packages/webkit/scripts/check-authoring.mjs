@@ -6,6 +6,12 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+import {
+  EXAMPLE_DATA_DIRS,
+  EXAMPLE_DATA_MESSAGES,
+  exampleDataApplies,
+  scanExampleData
+} from '../src/eslint-plugin/example-data.js'
 import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
 import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
 import noViewportHeightCalc from '../src/eslint-plugin/rules/no-viewport-height-calc.js'
@@ -137,8 +143,44 @@ function viewportHeightViolations() {
   return keys
 }
 
+function walkAll(dir) {
+  const out = []
+  let entries = []
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return out
+  }
+  for (const entry of entries) {
+    const p = join(dir, entry.name)
+    if (entry.isDirectory()) {
+      if (!SKIP_DIRS.has(entry.name)) out.push(...walkAll(p))
+    } else out.push(p)
+  }
+  return out
+}
+
+function exampleDataViolations() {
+  const keys = []
+  for (const dir of EXAMPLE_DATA_DIRS) {
+    for (const abs of walkAll(join(ROOT, dir))) {
+      const rel = relative(ROOT, abs).split('\\').join('/')
+      if (!exampleDataApplies(rel)) continue
+      for (const id of scanExampleData(readFileSync(abs, 'utf-8'))) {
+        keys.push(`${rel}::example-data:${id}`)
+      }
+    }
+  }
+  return keys
+}
+
 function currentViolations() {
-  const keys = [...directionViolations(), ...clockViolations(), ...viewportHeightViolations()]
+  const keys = [
+    ...directionViolations(),
+    ...clockViolations(),
+    ...viewportHeightViolations(),
+    ...exampleDataViolations()
+  ]
   for (const abs of walk(SRC)) {
     const rel = relative(ROOT, abs).split('\\').join('/')
     if (rel.startsWith(WIP_PREFIX) || rel.endsWith('.d.ts')) continue
@@ -237,6 +279,8 @@ if (introduced.length) {
       console.error(`    [spec] ${id.slice(5)}`)
     } else if (id.startsWith('direction:') || id.startsWith('clock:') || id.startsWith('layout:')) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
+    } else if (id.startsWith('example-data:')) {
+      console.error(`    [${id}] ${EXAMPLE_DATA_MESSAGES[id.slice('example-data:'.length)]}`)
     } else {
       console.error(`    [${id}] ${ALL_MESSAGES[id.replace(/^(token|i18n):/, '')] ?? id}`)
     }
