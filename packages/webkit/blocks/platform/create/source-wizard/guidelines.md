@@ -32,7 +32,7 @@ A `Stepper` labelled with the create label. Steps reached earlier are `complete`
 
 ### D. Where it runs — `Input`, `Item`, `Button` (required)
 
-A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `clickable` `Item` (a native `button`) with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
+A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `clickable` `Item` (a native `button`) with `aria-pressed` (which fills the row) and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
 
 ### E. Inline create — `Field`, `Input`, `Button` (optional)
 

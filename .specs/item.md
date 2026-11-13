@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 2
 created: 2026-05-24
-last_updated: 2026-11-12
-checksum: b4ac6a2919eb8b200bfb7c3786cbec374404cd0bc3b75d421b1f32410110dc29
+last_updated: 2026-11-13
+checksum: dc0b1ccb151b2d18d55dee333e28c06e1e87fb71ac54d77350e7bc657739fdbf
 ---
 
 # Item — Component Spec
@@ -139,6 +139,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 ## States
 
 - Visual states on Item shell: `default` only, **except with `href` or `clickable`**, where the root is the whole-row anchor or button and gains row-level `hover`, `active`, and `focus-visible`
+- With `href` or `clickable`, the row paints `var(--bg-selected)` while it carries `aria-pressed="true"` or `aria-selected="true"`, whatever its `kind`: a pressed chooser row binds `:aria-pressed` on the Item and adds no fill class of its own
 - Without `href` or `clickable`, the root is a `div` and slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
 - `kind="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
@@ -157,7 +158,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 | title typography       | `.text-body-sm`                                       |
 | title (option kind)    | `.text-body-md`                                       |
 | option padding         | `var(--spacing-xs)` block, `var(--spacing-sm)` inline |
-| option selected        | `var(--bg-selected)`                                  |
+| selected fill          | `var(--bg-selected)`                                  |
 | description typography | `.text-body-sm`                                       |
 | surface (default)      | `var(--bg-surface)`                                   |
 | surface (muted kind)   | `var(--bg-mask)`                                      |

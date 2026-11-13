@@ -210,6 +210,17 @@ describe('Item (composition)', () => {
       expect(clicks).toBe(1)
     })
 
+    it('forwards aria-pressed to the button root of a clickable row of any kind', () => {
+      const { getByRole } = render(Item, {
+        props: { clickable: true, size: 'small' },
+        attrs: { 'aria-pressed': 'true' },
+        slots: { default: 'Chosen' }
+      })
+      const root = getByRole('button', { name: 'Chosen', pressed: true })
+      expect(root.getAttribute('data-kind')).toBe('default')
+      expect(root.hasAttribute('data-selected')).toBe(false)
+    })
+
     it('prefers the anchor when both href and clickable are set', () => {
       const { getByTestId } = render(Item, {
         props: { href: '#one', clickable: true },

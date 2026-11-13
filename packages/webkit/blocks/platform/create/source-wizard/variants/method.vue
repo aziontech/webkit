@@ -364,9 +364,7 @@
                             :key="option.value"
                             size="small"
                             clickable
-                            class="data-[selected]:bg-(--bg-selected)"
                             :aria-pressed="service === option.value"
-                            :data-selected="service === option.value || null"
                             @click="choose(option)"
                           >
                             <Item.Media>

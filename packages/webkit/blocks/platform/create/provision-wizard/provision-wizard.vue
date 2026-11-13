@@ -904,8 +904,6 @@
                                   :key="option.value"
                                   size="small"
                                   clickable
-                                  class="data-[selected]:bg-(--bg-selected)"
-                                  :data-selected="option.value === projectPicker.chosen || null"
                                   :aria-pressed="option.value === projectPicker.chosen"
                                   @click="projectPicker.chosen = option.value"
                                 >
@@ -1499,10 +1497,6 @@
                                       :key="option.value"
                                       size="small"
                                       clickable
-                                      class="data-[selected]:bg-(--bg-selected)"
-                                      :data-selected="
-                                        option.value === deploymentPicker.chosen || null
-                                      "
                                       :aria-pressed="option.value === deploymentPicker.chosen"
                                       @click="deploymentPicker.chosen = option.value"
                                     >
