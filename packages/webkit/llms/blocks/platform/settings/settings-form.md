@@ -146,7 +146,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
 
   const saved = ref({
     fullName: 'Alex Morgan',
-    email: 'name@example.com',
+    email: '',
     timezone: 'utc',
     language: 'en',
     productUpdates: true

@@ -81,7 +81,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { reactive } from 'vue'
 
-  const form = reactive({ companyName: '', taxId: '', billingEmails: 'jane.doe@example.com' })
+  const form = reactive({ companyName: '', taxId: '', billingEmails: '' })
 </script>
 
 <template>

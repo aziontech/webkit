@@ -153,7 +153,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     clientId: '9757a',
     companyName: '',
     taxId: '',
-    billingEmails: 'name@example.com',
+    billingEmails: '',
     postalCode: '94105',
     country: 'us',
     state: 'ca',
