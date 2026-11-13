@@ -65,7 +65,7 @@
     socials?: SiteFooterSocial[]
     /** Line of the system status indicator; the indicator is not rendered when empty. */
     statusLabel?: string
-    /** Options of the language select, as the reader sees them; the first one is selected. The select is not rendered when empty. */
+    /** Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty. */
     languages?: string[]
     /** Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`). */
     languageAriaLabel?: string
@@ -130,7 +130,7 @@
           {{ link.label }}
           <template v-if="link.external">
             <i
-              class="pi pi-external-link text-(--text-muted)"
+              class="pi pi-external-link shrink-0 text-body-xs leading-none"
               aria-hidden="true"
             />
             <span class="sr-only">{{ ` ${t('siteFooter.newTab')}` }}</span>

@@ -4,9 +4,10 @@ category: sections
 structure: monolithic
 status: implemented
 spec_version: 1
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: cac84321b0375c8384b96197298fa5bf7185c51b7cac1eecbe8ae654ed6b00db
+last_updated: 2026-11-13
+checksum: 9103db8a77f430354ff72f95b14c71d7546571c029f3e5fa4008b4d44bb0d822
 ---
 
 # SiteFooter — Component Spec
@@ -94,7 +95,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - The footer never renders a signature band, so it ends on its social row on every width; the Azion mark leads the social row from `md` and is not shown below it
 - Below `md` the status indicator stacks over the language select at the start of the bottom bar; from `md` they sit side by side at its end
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: the mark is always in the DOM and CSS shows it from `md`, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations
@@ -105,12 +106,13 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)       |
-| --------------- | ----------------------- |
-| top hairline    | `var(--border-default)` |
-| language glyph  | `var(--text-muted)`     |
-| mark link shape | `var(--shape-elements)` |
-| mark gap        | `var(--spacing-xs)`     |
+| Region          | Token (DESIGN.md)                  |
+| --------------- | ---------------------------------- |
+| top hairline    | `var(--border-default)`            |
+| language glyph  | `var(--text-muted)`                |
+| external glyph  | `.text-body-xs`, the link's colour |
+| mark link shape | `var(--shape-elements)`            |
+| mark gap        | `var(--spacing-xs)`                |
 
 ## Theme gaps
 
@@ -125,7 +127,38 @@ The footer under every marketing page: the link columns, then the social row bes
 - ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`; an external link's name ends with “(opens in a new tab)” from the locale catalog.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
-- Touch target ≥40×40 px — owned by `icon-button` and `select`.
+- Touch target ≥40×40 px — owned by `icon-button` and `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+
+## Internationalization
+
+| Key                   | English source       | Override prop       |
+| --------------------- | -------------------- | ------------------- |
+| `siteFooter.label`    | Footer               | `ariaLabel`         |
+| `siteFooter.home`     | Azion home           | `homeAriaLabel`     |
+| `siteFooter.language` | Language             | `languageAriaLabel` |
+| `siteFooter.newTab`   | (opens in a new tab) | —                   |
+
+- Formatting: none; link labels, the status line and the language options are the page's own text.
+
+## Right-to-left
+
+- Layout: logical utilities only (`me-` on the mark); the bottom bar's start and end follow the direction.
+- Icons: the external-link glyph, the social glyphs and the globe are not mirrored.
+- Keyboard: no arrow-key handling of its own; the select owns its arrows.
+- User data: none.
+
+## Responsive
+
+- Container queries: none; the bottom bar switches at the `md` viewport breakpoint.
+- Narrow (below `md`, 768 px; the footer reads the viewport, not its container): no Azion mark; the status indicator stacks over the language select at the start of the bar; the columns stack as `footer` lays them out.
+- Touch: social buttons and the select follow `icon-button` and `select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 36 KB gzip, the `.size-limit.json` entry `site-footer` (it carries `footer`, `brand`, `icon-button`, `status-indicator` and `select`).
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 
