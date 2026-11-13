@@ -55,7 +55,7 @@
   {
     "name": "button",
     "path": "src/components/actions/button/button.vue",
-    "limit": "2.5 KB"
+    "limit": "2.6 KB"
   },
   {
     "name": "diagram",
@@ -66,7 +66,7 @@
   {
     "name": "input",
     "path": "src/components/inputs/input/input.vue",
-    "limit": "2 KB"
+    "limit": "2.1 KB"
   },
   {
     "name": "accordion-root",
@@ -76,7 +76,7 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "20.8 KB"
+    "limit": "20.95 KB"
   },
   {
     "name": "date-range-picker",
@@ -1331,7 +1331,7 @@
   {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
-    "limit": "12.5 KB"
+    "limit": "12.7 KB"
   },
   {
     "name": "payment-brand",
@@ -1373,7 +1373,7 @@
   {
     "name": "table-cell-tags",
     "path": "src/components/data/table/table-cell-tags/table-cell-tags.vue",
-    "limit": "13.45 KB"
+    "limit": "13.6 KB"
   },
   {
     "name": "table-cell-actions",
@@ -2375,7 +2375,7 @@
   {
     "name": "spinner",
     "path": "src/components/utils/spinner/spinner.vue",
-    "limit": "0.55 KB"
+    "limit": "0.6 KB"
   },
   {
     "name": "card-grid",

@@ -461,3 +461,14 @@ The other 25 entries are raised to the measured size plus about 0.1 KB:
 ### `gates.mjs` runs the size check
 
 `gates.mjs` mirrored only the `toolkit` job of `governance.yml`, which runs on every PR in under a minute; the size check lives in the `build` job (only when `packages/webkit` changes), so it was left out and a local `gates` run passed while CI failed. `check-size.mjs` takes about 14 s for the 265 entries on the 32-core host (Vite 8 with Rolldown), so it is now the `size` gate, run by default; `--only` still skips it. `test/standards/gates.test.mjs` accepts a `pnpm run <script>` step whose `working-directory` is `packages/webkit` as the CI twin of a gate.
+
+## Signature standardization (2026-11-13)
+
+| Entry           | Budget before | Measured now | New budget | Reason                                                                                                           |
+| --------------- | ------------- | ------------ | ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| spinner         | 0.55          | 0.56         | 0.6        | The root now carries an overridable `data-testid` (`utils-spinner`), read from `attrs`.                          |
+| button          | 2.5           | 2.51         | 2.6        | Ships `Spinner` for `loading`, so it carries the same `data-testid` code.                                        |
+| input           | 2             | 2.03         | 2.1        | `defineModel` replaces the hand-written prop and emit pair and pulls in Vue's `useModel` helper.                 |
+| calendar-root   | 20.8          | 20.81        | 20.95      | `defineModel` for the value and `open`, and `apply` passes the DOM event first.                                  |
+| overflow-count  | 12.5          | 12.58        | 12.7       | Its search field is `Input` (now on `defineModel`), and its popover and buttons gained the event-first payloads. |
+| table-cell-tags | 13.45         | 13.48        | 13.6       | Renders `OverflowCount`.                                                                                         |
