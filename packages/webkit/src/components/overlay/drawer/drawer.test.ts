@@ -504,3 +504,43 @@ describe('DrawerPortal data-testid', () => {
     expect(byTestId('overlay-drawer__portal')).toBeNull()
   })
 })
+
+describe('Drawer unmounted while open', () => {
+  it('cancels its pending motion frames and runs nothing after dispose', async () => {
+    const pending = new Map<number, (time: number) => void>()
+    let nextId = 0
+    const request = vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback) => {
+      nextId += 1
+      pending.set(nextId, callback)
+      return nextId
+    })
+    const cancel = vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation((id) => {
+      pending.delete(id)
+    })
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+
+    try {
+      const { unmount } = render(composed({ defaultOpen: true }))
+      await nextTick()
+      await nextTick()
+      const scheduled = [...pending.keys()]
+      expect(scheduled.length).toBeGreaterThan(0)
+
+      unmount()
+
+      for (const id of scheduled) expect(cancel).toHaveBeenCalledWith(id)
+      const leftover = [...pending.values()]
+      pending.clear()
+      expect(() => leftover.forEach((callback) => callback(performance.now()))).not.toThrow()
+      await nextTick()
+      expect(warn).not.toHaveBeenCalled()
+      expect(error).not.toHaveBeenCalled()
+    } finally {
+      request.mockRestore()
+      cancel.mockRestore()
+      warn.mockRestore()
+      error.mockRestore()
+    }
+  })
+})
