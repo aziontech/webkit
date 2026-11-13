@@ -236,10 +236,35 @@ describe('Calendar', () => {
 
     const applied = emitted()['apply']
     expect(applied).toHaveLength(1)
+    const [applyEvent, applyValue] = applied[0] as [Event, { start: Date | null; end: Date | null }]
+    expect(applyEvent).toBeInstanceOf(MouseEvent)
+    expect(applyValue.start?.getDate()).toBe(8)
+    expect(applyValue.end?.getDate()).toBe(12)
 
     // Apply also closes the popover.
     await waitFor(() => expect(getPopover()).toBeNull())
     expect(getByTestId('input-calendar').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('Apply from the keyboard emits apply with the event first and the committed range', async () => {
+    const { getByTestId, emitted } = render(Calendar, {
+      props: { mode: 'range', modelValue: { start: null, end: null } }
+    })
+
+    const popover = await openCalendar(getByTestId)
+
+    await fireEvent.click(findDayButton(popover, 8))
+    await fireEvent.click(findDayButton(popover, 12))
+
+    within(popover).getByTestId('input-calendar__apply').focus()
+    await userEvent.keyboard('{Enter}')
+
+    const applied = emitted()['apply']
+    expect(applied).toHaveLength(1)
+    const [event, value] = applied[0] as [Event, { start: Date | null; end: Date | null }]
+    expect(event).toBeInstanceOf(Event)
+    expect(value.start?.getDate()).toBe(8)
+    expect(value.end?.getDate()).toBe(12)
   })
 
   it('show-apply=false commits the clicked Date immediately in single mode', async () => {
@@ -606,6 +631,12 @@ describe('Calendar', () => {
     expect(payload.start?.getDate()).toBe(13)
     expect(payload.end?.getDate()).toBe(19)
     expect(emitted()['apply']).toHaveLength(1)
+    const [presetEvent, presetValue] = emitted()['apply'][0] as [
+      Event,
+      { start: Date | null; end: Date | null }
+    ]
+    expect(presetEvent).toBeInstanceOf(MouseEvent)
+    expect(presetValue.start?.getDate()).toBe(13)
 
     await waitFor(() => expect(getPresetsMenu()).toBeNull())
 

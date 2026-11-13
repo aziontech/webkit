@@ -102,7 +102,7 @@
   const emit = defineEmits<{
     'update:timezone': [value: string]
     'month-change': [value: CalendarMonth]
-    apply: [value: CalendarValue]
+    apply: [event: Event, value: CalendarValue]
   }>()
 
   /** Committed selection for v-model. A Date (or null) in single mode; a range in range mode. Only updated on Apply (or immediately when showApply is false). */
@@ -246,7 +246,7 @@
     commitIfImmediate()
   }
 
-  const selectValue = (value: Date | CalendarRange, periodLabel?: string) => {
+  const selectValue = (event: Event, value: Date | CalendarRange, periodLabel?: string) => {
     if (props.disabled) {
       return
     }
@@ -263,7 +263,7 @@
     if (props.period) {
       committedPeriodLabel.value = periodLabel ?? ''
       model.value = cloneValue(draft.value)
-      emit('apply', cloneValue(draft.value))
+      emit('apply', event, cloneValue(draft.value))
       setOpen(false)
       return
     }
@@ -271,7 +271,7 @@
     commitIfImmediate()
   }
 
-  const applyPreset = (value: Date | CalendarRange, label: string) => {
+  const applyPreset = (event: Event, value: Date | CalendarRange, label: string) => {
     if (props.disabled) {
       return
     }
@@ -287,7 +287,7 @@
     }
     committedPeriodLabel.value = label
     model.value = cloneValue(draft.value)
-    emit('apply', cloneValue(draft.value))
+    emit('apply', event, cloneValue(draft.value))
     setPresetsOpen(false)
   }
 
@@ -329,13 +329,13 @@
     return asSingle(value) !== null
   }
 
-  const applySelection = () => {
+  const applySelection = (event: Event) => {
     if (props.disabled) {
       return
     }
     committedPeriodLabel.value = ''
     model.value = cloneValue(draft.value)
-    emit('apply', cloneValue(draft.value))
+    emit('apply', event, cloneValue(draft.value))
     setOpen(false)
   }
 
@@ -718,7 +718,7 @@
               :data-selected="preset.label === committedPeriodLabel || null"
               :data-testid="`${testId}__preset`"
               class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-start text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[selected]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-              @click="applyPreset(preset.value, preset.label)"
+              @click="applyPreset($event, preset.value, preset.label)"
             >
               <span class="min-w-0 truncate">{{ preset.label }}</span>
               <i

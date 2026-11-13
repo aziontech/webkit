@@ -55,12 +55,12 @@
     return false
   })
 
-  const onClick = () => {
+  const onClick = (event: MouseEvent) => {
     if (disabled.value) {
       return
     }
 
-    ctx?.selectValue(props.value)
+    ctx?.selectValue(event, props.value)
   }
 </script>
 

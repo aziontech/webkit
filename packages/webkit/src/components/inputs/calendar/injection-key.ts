@@ -60,7 +60,7 @@ export interface CalendarContext {
   selectDay: (date: Date) => void
   /** Apply a full value (preset / period) to the draft; `periodLabel` records the
    * relative token (e.g. `45m`) so the trigger can show it above the resolved window. */
-  selectValue: (value: Date | CalendarRange, periodLabel?: string) => void
+  selectValue: (event: Event, value: Date | CalendarRange, periodLabel?: string) => void
   /** Set a range endpoint (or the single value) from the date/time fields. */
   setEndpoint: (which: 'start' | 'end', date: Date | null) => void
   /** Clear the draft selection. */

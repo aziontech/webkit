@@ -31,14 +31,14 @@
 
   const activeExpr = ref('')
 
-  const apply = (expr: string, label: string) => {
+  const apply = (event: Event, expr: string, label: string) => {
     const range = parsePeriod(expr, new Date(), {
       locale: locale.value,
       separators: t('calendar.rangeSeparators').split('|')
     })
     if (range) {
       activeExpr.value = expr
-      ctx?.selectValue(range, label)
+      ctx?.selectValue(event, range, label)
     }
   }
 </script>
@@ -60,7 +60,7 @@
         :disabled="disabled"
         :data-active="activeExpr === preset.expr || null"
         class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-start text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[active]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-        @click="apply(preset.expr, preset.label)"
+        @click="apply($event, preset.expr, preset.label)"
       >
         <span>{{ preset.label }}</span>
         <i
@@ -81,7 +81,7 @@
             type="button"
             :disabled="disabled"
             class="text-label-sm inline-flex items-center rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-            @click="apply(hint, hint)"
+            @click="apply($event, hint, hint)"
           >
             {{ hint }}
           </button>
@@ -97,7 +97,7 @@
             type="button"
             :disabled="disabled"
             class="text-label-sm inline-flex items-center rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
-            @click="apply(hint, hint)"
+            @click="apply($event, hint, hint)"
           >
             {{ hint }}
           </button>

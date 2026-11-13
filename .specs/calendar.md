@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 85e70450b15231f4cc7244616df63ee36129be19213c4d1e0967024b05865463
+checksum: 4048a2e66437007f33bd846791efe9148fa747bddce597c7facf8e3ec2bc1f38
 created: 2026-06-25
 last_updated: 2026-11-13
 ---
@@ -38,7 +38,7 @@ Date-range picker. A trigger button opens a popover that holds a month grid, Sta
 
 ## Best practices
 
-- `modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply="false"` when every edit should commit at once.
+- `modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
 - Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode="single"`.
 - Bound the selectable days with `min` and `max` instead of validating after commit.
 - Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.
@@ -142,11 +142,11 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ## Events
 
-| Event             | Payload                         | Notes                                                                                                                              |
-| ----------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `update:timezone` | `string`                        | v-model:timezone. Emitted when the timezone selection changes.                                                                     |
-| `month-change`    | `CalendarMonth`                 | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed). |
-| `apply`           | `Date \| null \| CalendarRange` | Emitted when the draft selection is committed via Apply.                                                                           |
+| Event             | Payload                                                | Notes                                                                                                                                                         |
+| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `update:timezone` | `string`                                               | v-model:timezone. Emitted when the timezone selection changes.                                                                                                |
+| `month-change`    | `CalendarMonth`                                        | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed).                            |
+| `apply`           | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
 
 ## Slots
 

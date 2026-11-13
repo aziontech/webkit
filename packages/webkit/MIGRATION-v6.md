@@ -226,6 +226,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                   |
 | `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
 | `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
+| `Calendar`              | `apply`             | `(value)`                        | `(event, value)`                                    |
 
 ```vue
 <!-- v5 -->
