@@ -54,6 +54,8 @@
     activeIndex,
     searchId,
     optionId,
+    setOpen,
+    setQuery,
     setActive,
     onTriggerKeydown,
     onContentKeydown,
@@ -77,7 +79,8 @@
 <template>
   <Select
     v-bind="$attrs"
-    v-model:open="open"
+    :open="open"
+    @update:open="setOpen"
     :model-value="modelValue || undefined"
     :placeholder="placeholder"
     size="large"
@@ -96,7 +99,8 @@
       <template #search>
         <Input
           :id="searchId"
-          v-model="query"
+          :model-value="query"
+          @update:model-value="setQuery"
           :placeholder="t('heroForm.search')"
           :aria-label="t('heroForm.search')"
           :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"

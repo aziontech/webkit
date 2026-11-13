@@ -172,6 +172,8 @@
     activeIndex,
     searchId,
     optionId,
+    setOpen,
+    setQuery,
     setActive,
     onTriggerKeydown,
     onContentKeydown,
@@ -216,7 +218,8 @@
     :data-testid="testId"
   >
     <Select
-      v-model:open="open"
+      :open="open"
+      @update:open="setOpen"
       :model-value="country"
       :size="size"
       :disabled="isDisabled || readonly"
@@ -237,7 +240,8 @@
         <template #search>
           <Input
             :id="searchId"
-            v-model="query"
+            :model-value="query"
+            @update:model-value="setQuery"
             :placeholder="searchPlaceholder || t('phoneInput.search')"
             :aria-label="searchPlaceholder || t('phoneInput.search')"
             :aria-activedescendant="activeKey ? optionId(activeKey) : undefined"
