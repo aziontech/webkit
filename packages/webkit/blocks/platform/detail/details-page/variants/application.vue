@@ -566,9 +566,9 @@
             <TopologyDiagram
               v-model:expanded="expanded"
               :levels="levels"
-              @bind="(event, { key, value }) => bind(key, value)"
-              @remove="(event, key) => unbind(key)"
-              @create="(event, key) => createTarget(key)"
+              @bind="(_event, { key, value }) => bind(key, value)"
+              @remove="(_event, key) => unbind(key)"
+              @create="(_event, key) => createTarget(key)"
             />
           </div>
           <p

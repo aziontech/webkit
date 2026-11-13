@@ -544,7 +544,7 @@
     }
   ])
 
-  const applyQuery = (event: KeyboardEvent, { text, query }: PropertyFilterSubmit) => {
+  const applyQuery = ({ text, query }: PropertyFilterSubmit) => {
     if (!query) {
       queryNotice.value =
         'This query mixes AND and OR. Use one of them throughout, then press Enter again.'
@@ -560,6 +560,8 @@
       ...recentQueries.value.filter((entry) => entry.text !== appliedText.value)
     ].slice(0, recentLimit)
   }
+
+  const submitQuery = (_event: KeyboardEvent, payload: PropertyFilterSubmit) => applyQuery(payload)
 
   const runQuery = (entry: QueryEntry) => {
     queryText.value = entry.text
@@ -1069,7 +1071,7 @@
               aria-label="Query events"
               placeholder="Query events, for example status >= 500 AND host = example.com"
               data-testid="events-query"
-              @submit="applyQuery"
+              @submit="submitQuery"
             />
           </div>
         </div>
