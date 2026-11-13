@@ -1,18 +1,46 @@
-import { nextTick, onMounted, type Ref, ref, watch } from 'vue'
+import {
+  type MaybeRefOrGetter,
+  nextTick,
+  onMounted,
+  onScopeDispose,
+  readonly,
+  type Ref,
+  ref,
+  toValue,
+  watch
+} from 'vue'
 
 import type { DialogMotionState } from '../presets/transitions'
 
 export type { DialogMotionState }
 
-export function useDialogMotionState(isOpen: Ref<boolean>) {
+export interface UseDialogMotionStateReturn {
+  motionState: Readonly<Ref<DialogMotionState>>
+}
+
+export function useDialogMotionState(
+  isOpen: MaybeRefOrGetter<boolean>
+): UseDialogMotionStateReturn {
   const motionState = ref<DialogMotionState>('closed')
+  const frames = new Set<number>()
+  let disposed = false
+
+  const requestFrame = (callback: () => void) => {
+    if (disposed) return
+    const id = globalThis.requestAnimationFrame(() => {
+      frames.delete(id)
+      if (disposed) return
+      callback()
+    })
+    frames.add(id)
+  }
 
   const paintOpen = async () => {
     motionState.value = 'closed'
     await nextTick()
 
-    globalThis.requestAnimationFrame(() => {
-      if (isOpen.value) {
+    requestFrame(() => {
+      if (toValue(isOpen)) {
         motionState.value = 'open'
       }
     })
@@ -21,15 +49,15 @@ export function useDialogMotionState(isOpen: Ref<boolean>) {
   const paintClose = async () => {
     await nextTick()
 
-    globalThis.requestAnimationFrame(() => {
-      if (!isOpen.value) {
+    requestFrame(() => {
+      if (!toValue(isOpen)) {
         motionState.value = 'closed'
       }
     })
   }
 
   watch(
-    isOpen,
+    () => toValue(isOpen),
     (open) => {
       if (!open) {
         void paintClose()
@@ -42,10 +70,16 @@ export function useDialogMotionState(isOpen: Ref<boolean>) {
   )
 
   onMounted(() => {
-    if (isOpen.value) {
+    if (toValue(isOpen)) {
       void paintOpen()
     }
   })
 
-  return { motionState }
+  onScopeDispose(() => {
+    disposed = true
+    for (const id of frames) globalThis.cancelAnimationFrame(id)
+    frames.clear()
+  })
+
+  return { motionState: readonly(motionState) }
 }
