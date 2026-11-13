@@ -40,7 +40,7 @@
   )
 
   /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting; update:modelValue sends the same type. */
-  const model = defineModel<TModel, string, TModel, TModel>({ default: undefined })
+  const model = defineModel<TModel>({ default: undefined as never })
 
   const attrs = useAttrs()
 
