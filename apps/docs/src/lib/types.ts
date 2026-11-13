@@ -1,5 +1,10 @@
 export type Highlighted = { code: string; html: string }
 export type MarkdownDoc = { html: string; title: string }
+export type GuidelinesDoc = {
+  title: string
+  intro: string
+  sections: { heading: string; html: string }[]
+}
 export type Row = Record<string, string>
 
 export type ComponentDoc = {

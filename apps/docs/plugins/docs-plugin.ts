@@ -10,6 +10,7 @@ import {
   buildTokens,
   highlight,
   highlighter,
+  renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
 import { CATALOG, LLMS, readCatalog, THEME } from './paths.ts'
@@ -20,6 +21,7 @@ const LOADERS = 'virtual:docs-component-loaders'
 const COMPONENT = 'virtual:docs-component:'
 const HIGHLIGHT = '\0docs-highlight:'
 const MARKDOWN = '\0docs-markdown:'
+const GUIDELINES = '\0docs-guidelines:'
 
 const STATIC_DIRS: { prefix: string; dir: string }[] = [{ prefix: '/llms/', dir: LLMS }]
 
@@ -51,13 +53,14 @@ export function docsPlugin(): Plugin {
       if (id === INDEX || id === TOKENS || id === LOADERS || id.startsWith(COMPONENT)) {
         return `\0${id}`
       }
-      const query = id.match(/\?(highlight|markdown)$/)
+      const query = id.match(/\?(highlight|markdown|guidelines)$/)
       if (query) {
         const resolved = await this.resolve(id.slice(0, -query[0].length), importer, {
           skipSelf: true
         })
         if (!resolved) return null
-        const prefix = query[1] === 'highlight' ? HIGHLIGHT : MARKDOWN
+        const prefix =
+          query[1] === 'highlight' ? HIGHLIGHT : query[1] === 'guidelines' ? GUIDELINES : MARKDOWN
         return `${prefix}${resolved.id}.js`
       }
       return null
@@ -91,6 +94,11 @@ export function docsPlugin(): Plugin {
         const code = readFileSync(file, 'utf8').trimEnd()
         const html = highlight(await highlighter(), code, languageOf(file))
         return `export default ${JSON.stringify({ code, html })}`
+      }
+      if (id.startsWith(GUIDELINES)) {
+        const file = id.slice(GUIDELINES.length, -3)
+        this.addWatchFile(file)
+        return `export default ${JSON.stringify(await renderGuidelinesFile(file))}`
       }
       if (id.startsWith(MARKDOWN)) {
         const file = id.slice(MARKDOWN.length, -3)

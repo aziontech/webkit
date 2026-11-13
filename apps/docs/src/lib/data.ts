@@ -3,7 +3,7 @@ import index from 'virtual:docs-index'
 import { type Component, shallowReactive } from 'vue'
 import type { RouteLocationNormalized } from 'vue-router'
 
-import type { ComponentDoc, Highlighted, MarkdownDoc } from './types'
+import type { ComponentDoc, GuidelinesDoc, Highlighted, MarkdownDoc } from './types'
 
 const EXAMPLES = '../../../../packages/webkit/examples/'
 const BLOCKS = '../../../../packages/webkit/blocks/'
@@ -30,9 +30,9 @@ const blockManifests = import.meta.glob<Record<string, unknown>>(
   '../../../../packages/webkit/blocks/**/block.json',
   { import: 'default' }
 )
-const blockGuidelines = import.meta.glob<MarkdownDoc>(
+const blockGuidelines = import.meta.glob<GuidelinesDoc>(
   '../../../../packages/webkit/blocks/**/guidelines.md',
-  { query: '?markdown', import: 'default' }
+  { query: '?guidelines', import: 'default' }
 )
 const foundationDocs = import.meta.glob<MarkdownDoc>(
   ['../../../../rules/*.md', '../../../../packages/webkit/README.md'],

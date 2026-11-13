@@ -267,10 +267,21 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
   }
 }
 
-export async function buildBlockGuidelines(dir: string): Promise<string> {
-  const file = join(WEBKIT, 'blocks', dir, 'guidelines.md')
-  if (!existsSync(file)) return ''
-  return (await renderMarkdownFile(file)).html
+export async function renderGuidelinesFile(
+  file: string
+): Promise<{ title: string; intro: string; sections: { heading: string; html: string }[] }> {
+  const md = await markdown()
+  const source = stripFrontMatter(readFileSync(file, 'utf8'))
+  const title = /^#\s+(.+)$/m.exec(source)?.[1]?.trim() ?? basename(dirname(file))
+  const [head, ...parts] = source.replace(/^#\s+.+\n/m, '').split(/^## /m)
+  return {
+    title,
+    intro: md.render(head.trim()),
+    sections: parts.map((part) => ({
+      heading: part.slice(0, part.indexOf('\n')).trim(),
+      html: md.render(part.slice(part.indexOf('\n') + 1).trim())
+    }))
+  }
 }
 
 type TokenGroup = { id: string; vars: { name: string; value: string; dark?: string }[] }
