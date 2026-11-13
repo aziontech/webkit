@@ -30,6 +30,8 @@
     "llms:build": "node scripts/build-llms.mjs",
     "llms:check": "node scripts/build-llms.mjs --check",
     "size": "node scripts/check-size.mjs",
+    "size:ratchet": "node scripts/check-size-ratchet.mjs",
+    "complete:check": "node scripts/check-complete.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
     "test:ssr": "node --test src/test/ssr.test.mjs",
     "authoring": "node scripts/check-authoring.mjs",

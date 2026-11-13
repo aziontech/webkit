@@ -311,6 +311,14 @@ jobs:
       - name: Every component has its test (testing.md)
         run: pnpm --filter @aziontech/webkit run test:gate
 
+      - name: Every component is complete — exports, -root, size budget, examples, visual baseline, spec status (ratcheted by a baseline)
+        run: pnpm --filter @aziontech/webkit run complete:check
+
+      - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
+        run: pnpm --filter @aziontech/webkit run size:ratchet
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+
       - name: Skill/agent doc standards ratchet (no new out-of-standard docs)
         run: pnpm --filter @aziontech/webkit run doc-standards
 
