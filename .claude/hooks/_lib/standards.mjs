@@ -109,7 +109,11 @@ export const STANDARDS = [
     id: 'release-types',
     kind: 'foundational',
     scope: 'webkit',
-    enforce: [{ surface: 'ci', by: 'commitlint' }]
+    enforce: [
+      { surface: 'ci', by: 'commitlint' },
+      { surface: 'ci', by: 'check-api-diff' }
+    ],
+    note: 'commitlint checks every commit and, on pull requests, the PR title (the squash commit release-please reads); check-api-diff fails a breaking public API change whose PR title has no "!" before the colon.'
   },
   {
     id: 'git-workflow',
@@ -175,9 +179,10 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
+      { surface: 'ci', by: 'check-api-diff' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Activation events emit (event, item?). The spec Events table states the payload and spec⇄code compliance pins the emit set to it; the (event-first, no-duplication) shape itself is confirmed in review.'
+    note: 'Activation events emit (event, item?). check-api-diff fails a changed or removed event payload that is not marked breaking and migrated. The spec Events table states the payload and spec⇄code compliance pins the emit set to it; the (event-first, no-duplication) shape itself is confirmed in review.'
   },
   {
     id: 'slots',
@@ -252,8 +257,10 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'no-deprecated-component' },
-      { surface: 'lint', by: 'authoring-standards' }
-    ]
+      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'ci', by: 'check-api-diff' }
+    ],
+    note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION-v<N>.md line naming the component).'
   },
   {
     id: 'bundle-budget',

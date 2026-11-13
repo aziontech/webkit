@@ -196,6 +196,7 @@ export function modelProps(target) {
   if (/[\\/]index\.(ts|js)$/.test(file)) {
     file = file.replace(/index\.(ts|js)$/, `${file.split(/[\\/]/).at(-2)}.vue`)
   }
+  if (!existsSync(file) && file.endsWith('.vue')) file = file.replace(/\.vue$/, '-root.vue')
   if (!file.endsWith('.vue') || !existsSync(file)) return []
   const src = readFileSync(file, 'utf-8')
   const models = []
@@ -401,6 +402,10 @@ export async function build() {
     }
 
     const spec = loadSpec(subpath) || (entry.kind === 'root' ? loadSpec(entry.rootOf) : null)
+    if (['component', 'root', 'subcomponent'].includes(entry.kind)) {
+      const modelNames = modelProps(target).map((m) => m.name)
+      if (modelNames.length) entry.models = modelNames
+    }
     if (spec) {
       entry.category = spec.category ?? categoryFromTarget(target)
       entry.structure = spec.structure

@@ -223,7 +223,8 @@ const CI_ENFORCERS = new Set([
   'vitest',
   'check-tests',
   'check-authoring-docs',
-  'check-spec-integrity'
+  'check-spec-integrity',
+  'check-api-diff'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {

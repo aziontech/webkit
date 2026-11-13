@@ -43,6 +43,13 @@
    "default": "null",
    "required": "false",
    "doc": "Initial active tab when uncontrolled."
+  },
+  {
+   "name": "modelValue",
+   "type": "TabsValue | null | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [],

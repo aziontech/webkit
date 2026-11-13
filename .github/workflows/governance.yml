@@ -260,6 +260,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: PR title is a valid Conventional Commit (the squash commit release-please reads)
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --verbose
+
       - name: Catalog is in sync (no drift from exports/specs)
         run: pnpm --filter @aziontech/webkit catalog:check
 
@@ -295,6 +301,11 @@ jobs:
 
       - name: Public API changes have a codemod entry (removed or renamed export, pattern, prop or value)
         run: pnpm --filter @aziontech/webkit run migrations:check
+
+      - name: Public API diff against the base branch — breaking needs "!" in the PR title and a migration, any change bumps spec_version
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: pnpm --filter @aziontech/webkit run api-diff
 
       - name: Hook tests (spec, authoring and reference hooks)
         run: pnpm --filter @aziontech/webkit run hooks:test

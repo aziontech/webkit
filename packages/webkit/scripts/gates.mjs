@@ -34,6 +34,11 @@ export const GATES = [
     steps: [['node', 'scripts/check-migrations.mjs']]
   },
   {
+    id: 'api-diff',
+    label: 'Public API diff against the base branch',
+    steps: [['node', 'scripts/check-api-diff.mjs']]
+  },
+  {
     id: 'marketing',
     label: 'Marketing and docs inventory',
     steps: [['node', 'scripts/check-marketing-inventory.mjs']]

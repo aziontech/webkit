@@ -46,6 +46,7 @@
 | `orientation` | `NavigationMenuOrientation` | `'horizontal'` | false | Menu orientation. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). |
 | `as` | `string \| object` | `'nav'` | false | Polymorphic root element. |
+| `modelValue` | `NavigationMenuValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Events
 

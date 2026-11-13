@@ -50,6 +50,7 @@
     "exports:build": "node scripts/build-exports.mjs",
     "types:build": "node scripts/build-types.mjs",
     "migrations:check": "node scripts/check-migrations.mjs",
+    "api-diff": "node scripts/check-api-diff.mjs",
     "hooks:test": "node ../../.claude/hooks/__tests__/run.mjs",
     "cited-names": "node scripts/check-cited-names.mjs",
     "smoke:consume": "node scripts/smoke-consume.mjs",
