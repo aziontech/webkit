@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-13
-checksum: c025f0b784cad2c9550d6c4fa636608572b926150d0647daf1ac7b2183ca6454
+checksum: cf2f16bb60ca0d8b8ce001e34964f7ea6dcc6221af4e90409c595f852e4666a1
 ---
 # MediaSplitStack — Component Spec
 
@@ -30,8 +30,7 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## Best practices
 
-- Give every band its art as `illustration`, a name of the illustration registry, with `illustrationLabel` when it says something; a band with neither `illustration` nor `image` renders without its media cell. A name the registry does not hold draws the placeholder scene and warns in the console.
-- Do not give a band `image` and `imageAlt` (a URL and its alternative text): they are deprecated since 5.13 and removed in 6.0, and still draw when a band has no `illustration`.
+- Give every band its art as `illustration`, a name of the illustration registry, with `illustrationLabel` when it says something; a band without one renders without its media cell. A name the registry does not hold draws the placeholder scene and warns in the console.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Usage
@@ -66,7 +65,7 @@ import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 | `kind` | `MediaSplitStackKind` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
-| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action?, image?, imageAlt? }` where `illustration` is a registry name, `action` `{ label, href }` the outlined button and the link the whole band follows, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. |
+| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action? }` where `illustration` is a registry name and `action` `{ label, href }` the outlined button and the link the whole band follows. |
 
 ## Events
 
@@ -103,7 +102,7 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel`, or decorative when empty.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.

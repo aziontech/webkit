@@ -6,7 +6,7 @@ export const SOLUTIONS_SECTION = {
     kind: 'media-end',
     bands: [
       {
-        image: '/marketing-components/illustrations/quick-start-with-templates.svg',
+        illustration: 'quick-start-with-templates',
         title: 'Modern applications',
         description:
           'Build static sites, run serverless applications, or modernize legacy systems.',

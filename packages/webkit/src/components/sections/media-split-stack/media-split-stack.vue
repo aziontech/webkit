@@ -36,16 +36,6 @@
     illustrationLabel?: string
     /** The outlined button and the link the whole band follows; `{ label, href }`. Omitted when absent. */
     action?: MediaSplitStackAction
-    /**
-     * URL of the picture shown in the media cell when the band has no `illustration`.
-     * @deprecated since 5.13 — use `illustration` instead. Removed in 6.0.
-     */
-    image?: string
-    /**
-     * Alternative text of the picture; empty keeps it decorative.
-     * @deprecated since 5.13 — use `illustrationLabel` with `illustration` instead. Removed in 6.0.
-     */
-    imageAlt?: string
   }
 
   interface Props {
@@ -55,7 +45,7 @@
     eyebrow?: string
     /** Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. */
     title?: string
-    /** The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action?, image?, imageAlt? }` where `illustration` is a registry name, `action` `{ label, href }` the outlined button and the link the whole band follows, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. */
+    /** The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action? }` where `illustration` is a registry name and `action` `{ label, href }` the outlined button and the link the whole band follows. */
     bands?: MediaSplitStackBand[]
   }
 
@@ -128,21 +118,6 @@
                 :name="band.illustration"
                 :aria-label="band.illustrationLabel ?? ''"
               />
-            </template>
-            <template
-              v-else-if="band.image"
-              #media
-            >
-              <div class="relative aspect-592/300 w-full">
-                <img
-                  :src="band.image"
-                  :alt="band.imageAlt ?? ''"
-                  width="360"
-                  height="165"
-                  decoding="async"
-                  class="absolute inset-0 m-auto block h-full w-[60.81%] object-contain"
-                />
-              </div>
             </template>
             <template
               v-if="band.action"

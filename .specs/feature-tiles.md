@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-04
 last_updated: 2026-11-13
-checksum: fe2d661bc1f5d6f26814d1e3e03508ab7a5aa7718b937639d901a4911de5488a
+checksum: 7304175752451ac2700d23438f8e9574c0d0660973432947eb2c222442b07d00
 ---
 # FeatureTiles — Component Spec
 
@@ -32,7 +32,6 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 - Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.
 - Give every tile its art as `illustration`, a name of the illustration registry; `scale` sizes it inside its frame. A name the registry does not hold draws the placeholder scene and warns in the console.
-- Do not give a tile `image` (a URL): it is deprecated since 5.13 and removed in 6.0, and still draws when a tile has no `illustration`.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
 ## Usage
@@ -65,7 +64,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale?, image? }` where `illustration` is a registry name drawn fluid, `scale` its media scale, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. |
+| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale. |
 
 ## Events
 

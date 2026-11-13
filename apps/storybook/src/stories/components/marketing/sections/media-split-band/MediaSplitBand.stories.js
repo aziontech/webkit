@@ -59,27 +59,17 @@ const meta = {
     scene: {
       control: 'object',
       description:
-        'Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`.',
+        'Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `illustration`.',
       table: {
         category: 'props',
         type: { summary: 'MediaSplitBandScene' },
         defaultValue: { summary: 'undefined' }
       }
     },
-    image: {
-      control: 'object',
-      description:
-        'Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. Deprecated since 5.13 and removed in 6.0 in favour of `illustration`.',
-      table: {
-        category: 'props',
-        type: { summary: 'MediaSplitBandImage' },
-        defaultValue: { summary: 'undefined' }
-      }
-    },
     illustration: {
       control: 'text',
       description:
-        'Registry name of the illustration drawn in the media cell when neither a scene nor an image is set.',
+        'Registry name of the illustration drawn in the media cell when no scene is set.',
       table: { category: 'props', type: { summary: 'string' }, defaultValue: { summary: "''" } }
     },
     illustrationAriaLabel: {

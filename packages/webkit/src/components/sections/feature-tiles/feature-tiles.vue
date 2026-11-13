@@ -27,11 +27,6 @@
     illustration?: string
     /** Scale of the illustration inside its frame, around its centre. */
     scale?: number
-    /**
-     * URL of the picture shown above the caption when the tile has no `illustration`.
-     * @deprecated since 5.13 — use `illustration` instead. Removed in 6.0.
-     */
-    image?: string
   }
 
   interface Props {
@@ -45,7 +40,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale?, image? }` where `illustration` is a registry name drawn fluid, `scale` its media scale, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. */
+    /** The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale. */
     tiles?: FeatureTilesTile[]
   }
 
@@ -139,7 +134,6 @@
               kind="plain"
               :title="tile.title"
               :description="tile.description"
-              :src="tile.image"
             />
           </CardGridCell>
         </CardGrid>

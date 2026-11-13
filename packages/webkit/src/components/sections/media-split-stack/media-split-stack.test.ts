@@ -11,8 +11,8 @@ const TITLE = 'Stop managing regions and capacity by hand'
 
 const bands = [
   {
-    image: '/illustrations/quick-start-with-templates.svg',
-    imageAlt: 'A project started from a template',
+    illustration: 'quick-start-with-templates',
+    illustrationLabel: 'A project started from a template',
     title: 'Modern applications',
     description: 'Build static sites, run serverless applications.',
     action: { label: 'Learn more about apps', href: '/solutions/web-apps/' }
@@ -80,14 +80,6 @@ describe('MediaSplitStack', () => {
       expect(getByRole('region', { name: band.title })).toBeInTheDocument()
       expect(getByRole('heading', { level: 2, name: band.title })).toBeInTheDocument()
     })
-  })
-
-  it('renders the image of a band with its alt text', () => {
-    const { getByAltText } = run()
-
-    expect(getByAltText('A project started from a template').getAttribute('src')).toBe(
-      bands[0]?.image
-    )
   })
 
   it('renders each band action as a link to its href', () => {

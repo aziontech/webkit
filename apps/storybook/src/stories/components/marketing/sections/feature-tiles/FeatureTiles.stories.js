@@ -78,7 +78,7 @@ const meta = {
     tiles: {
       control: 'object',
       description:
-        'The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale?, image? }` where `illustration` is a registry name drawn fluid, `scale` its media scale, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`.',
+        'The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale.',
       table: {
         category: 'props',
         type: { summary: 'FeatureTilesTile[]' },
