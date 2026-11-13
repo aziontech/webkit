@@ -17,7 +17,10 @@
     :tabs="tabs"
   >
     <template #scene="{ tab }">
-      <ConsoleTraceScene :tab="tab" />
+      <ConsoleTraceScene
+        :tab="tab"
+        :width="1200"
+      />
     </template>
   </ConsolePanel>
 </template>

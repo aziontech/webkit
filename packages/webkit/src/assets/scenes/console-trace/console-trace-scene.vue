@@ -32,6 +32,8 @@
     tab?: ConsoleTraceSceneTab | string
     /** Whether this scene is the one showing; the page entrance replays each time it turns back on. */
     active?: boolean
+    /** Design width of the screen from the medium breakpoint up; the picture scales to fit its host, so a wider design draws smaller type. */
+    width?: number
     /** Plays the page entrance; off draws the document in place. */
     animated?: boolean
   }
@@ -39,6 +41,7 @@
   const props = withDefaults(defineProps<Props>(), {
     tab: '',
     active: true,
+    width: 760,
     animated: true
   })
 
@@ -76,7 +79,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-tab="step.value"
-    :width="760"
+    :width="width"
     :chrome="false"
     :active="active"
     :animated="animated"

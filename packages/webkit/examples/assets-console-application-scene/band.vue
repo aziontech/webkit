@@ -14,11 +14,6 @@
       description: 'Group requests by user-agent, so a rule can treat a phone differently.'
     },
     {
-      value: 'cache-settings',
-      title: 'Cache Settings',
-      description: 'Set browser and edge TTLs per policy, and turn tiered cache on where it pays.'
-    },
-    {
       value: 'rules-engine',
       title: 'Rules Engine',
       description: 'Order what happens on request and on response, rule by rule.'
@@ -30,13 +25,14 @@
   <MediaTabs
     :items="tabs"
     position="right"
-    size="small"
+    size="large"
     :autoplay-interval="4600"
   >
     <template #media="{ index, active }">
       <ConsoleApplicationScene
         :tab="tabs[index].value"
         :active="active"
+        :width="760"
         class="size-full"
       />
     </template>

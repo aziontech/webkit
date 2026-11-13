@@ -43,6 +43,8 @@
     tab?: ConsoleApplicationSceneTab | string
     /** Whether this scene is the one showing; its second move replays each time it turns back on. */
     active?: boolean
+    /** Design width of the screen from the medium breakpoint up; the picture scales to fit its host, so a wider design draws smaller type. */
+    width?: number
     /** Plays the page entrance and the second move; off draws the settled frame, drawer open and save bar up. */
     animated?: boolean
   }
@@ -50,6 +52,7 @@
   const props = withDefaults(defineProps<Props>(), {
     tab: '',
     active: true,
+    width: 1200,
     animated: true
   })
 
@@ -151,7 +154,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-tab="step.value"
-    :width="1040"
+    :width="width"
     :chrome="false"
     :active="active"
     :animated="animated"

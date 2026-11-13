@@ -8,7 +8,7 @@
   {
    "name": "Console panel",
    "summary": "The same scene in a `ConsolePanel` `#scene` slot, switched by the panel's tabs.",
-   "sfc": "<script setup>\n  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n\n  const tabs = [\n    { value: 'trace', title: 'Trace' },\n    { value: 'logs', title: 'Logs' },\n    { value: 'path', title: 'Request path' }\n  ]\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Observability\"\n    title=\"Inspect every run end to end\"\n    description=\"Spans, logs and the path the request took, traced on the platform itself.\"\n    :tabs=\"tabs\"\n  >\n    <template #scene=\"{ tab }\">\n      <ConsoleTraceScene :tab=\"tab\" />\n    </template>\n  </ConsolePanel>\n</template>"
+   "sfc": "<script setup>\n  import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n\n  const tabs = [\n    { value: 'trace', title: 'Trace' },\n    { value: 'logs', title: 'Logs' },\n    { value: 'path', title: 'Request path' }\n  ]\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Observability\"\n    title=\"Inspect every run end to end\"\n    description=\"Spans, logs and the path the request took, traced on the platform itself.\"\n    :tabs=\"tabs\"\n  >\n    <template #scene=\"{ tab }\">\n      <ConsoleTraceScene\n        :tab=\"tab\"\n        :width=\"1200\"\n      />\n    </template>\n  </ConsolePanel>\n</template>"
   }
  ]
 }

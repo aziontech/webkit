@@ -4,10 +4,8 @@
 
   const tabs = [
     { value: 'build', title: 'Build' },
-    { value: 'device-groups', title: 'Device Groups' },
-    { value: 'cache-settings', title: 'Cache Settings' },
-    { value: 'functions-instances', title: 'Functions Instances' },
-    { value: 'rules-engine', title: 'Rules Engine' },
+    { value: 'device-groups', title: 'Devices' },
+    { value: 'rules-engine', title: 'Rules' },
     { value: 'main-settings', title: 'Settings' }
   ]
 </script>
@@ -18,7 +16,6 @@
     title="The Application, tab by tab"
     description="Every tab owns its own list, its own create drawer and its own save."
     :tabs="tabs"
-    :crop="0.2"
   >
     <template #scene="{ tab }">
       <ConsoleApplicationScene :tab="tab" />
