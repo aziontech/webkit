@@ -1,11 +1,21 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-export const tooltipMotion = {
+export interface TooltipMotionPhase {
+  duration: string
+  curve: string
+}
+
+export interface TooltipMotion {
+  open: TooltipMotionPhase
+  close: TooltipMotionPhase
+}
+
+export const tooltipMotion: TooltipMotion = {
   open: { duration: duration['moderate-01'], curve: curve['productive-entrance'] },
   close: { duration: duration['fast-02'], curve: curve['productive-exit'] }
 }
 
-export const TOOLTIP_EXIT_MS = Number.parseInt(tooltipMotion.close.duration, 10)
+export const TOOLTIP_EXIT_MS: number = Number.parseInt(tooltipMotion.close.duration, 10)
 
 export const popupScaleTransitionEnterActiveClasses = [
   'transition-[transform,opacity]',

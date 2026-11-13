@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: a89876f15bb40a670e7620f616a3b6a0878f5598704f2b8c7788e5a6fe3c2597
+checksum: d7b00efd907fe89e7c1e74000a7be12c7ca47ce80e9083f6923825e2658a146d
 created: 2026-05-22
 last_updated: 2026-11-13
 ---
@@ -141,7 +141,6 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 | `closeDelay`   | `number`                    | `300`          | false    | Hover-close delay in milliseconds.                                                        |
 | `orientation`  | `NavigationMenuOrientation` | `'horizontal'` | false    | Menu orientation.                                                                         |
 | `ariaLabel`    | `string`                    | `''`           | false    | Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). |
-| `as`           | `string \| object`          | `'nav'`        | false    | Polymorphic root element.                                                                 |
 
 ## v-model
 

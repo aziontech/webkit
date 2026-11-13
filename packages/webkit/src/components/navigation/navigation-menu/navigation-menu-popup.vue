@@ -17,13 +17,10 @@
   interface Props {
     /** Surface treatment. */
     kind?: NavigationMenuPopupKind
-    /** Polymorphic popup element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'default',
-    as: 'nav'
+    kind: 'default'
   })
 
   defineSlots<{ default(): unknown }>()
@@ -85,8 +82,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <nav
     ref="popupHostRef"
     :hidden="popupHidden"
     :class="popupClasses"
@@ -99,5 +95,5 @@
     @keydown="root.onPopupKeydown"
   >
     <slot />
-  </component>
+  </nav>
 </template>

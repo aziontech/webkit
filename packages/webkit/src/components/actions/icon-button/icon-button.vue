@@ -12,7 +12,7 @@
     iconTransitionLeaveActiveClasses,
     iconTransitionLeaveFromClasses,
     iconTransitionLeaveToClasses
-  } from './presets/icon-transition.js'
+  } from './presets/icon-transition'
 
   export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'

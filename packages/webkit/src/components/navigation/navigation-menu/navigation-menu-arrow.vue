@@ -7,15 +7,6 @@
 
   defineOptions({ name: 'NavigationMenuArrow', inheritAttrs: false })
 
-  interface Props {
-    /** Polymorphic arrow element. */
-    as?: string | object
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    as: 'div'
-  })
-
   const attrs = useAttrs()
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__arrow'
@@ -48,8 +39,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <div
     ref="arrowEl"
     :class="arrowClasses"
     :style="arrowStyle"

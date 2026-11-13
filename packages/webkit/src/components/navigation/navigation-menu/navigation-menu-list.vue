@@ -25,16 +25,13 @@
     href?: string
     /** Enables sliding highlight on the root horizontal list. */
     highlight?: boolean
-    /** Polymorphic list element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
     label: undefined,
     prefix: '',
     href: '',
-    highlight: true,
-    as: 'ul'
+    highlight: true
   })
 
   defineSlots<{ default(): unknown }>()
@@ -119,14 +116,13 @@
       >
       <span class="min-w-0 flex-1 truncate">{{ label }}</span>
     </component>
-    <component
-      :is="props.as"
+    <ul
       :class="listClasses"
       role="list"
       :data-testid="testId"
     >
       <slot />
-    </component>
+    </ul>
   </div>
   <div
     v-else-if="useHighlight"
@@ -141,24 +137,22 @@
       :style="selectorStyle"
       :data-testid="`${testId}__selector`"
     />
-    <component
-      :is="props.as"
+    <ul
       :class="listClasses"
       role="list"
       :data-testid="testId"
       :data-open="root.menuOpen.value ? '' : undefined"
     >
       <slot />
-    </component>
+    </ul>
   </div>
-  <component
+  <ul
     v-else
-    :is="props.as"
     :class="listClasses"
     role="list"
     :data-testid="testId"
     :data-open="root.menuOpen.value ? '' : undefined"
   >
     <slot />
-  </component>
+  </ul>
 </template>

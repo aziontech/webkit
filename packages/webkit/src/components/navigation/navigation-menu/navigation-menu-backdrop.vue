@@ -7,15 +7,6 @@
 
   defineOptions({ name: 'NavigationMenuBackdrop', inheritAttrs: false })
 
-  interface Props {
-    /** Polymorphic backdrop element. */
-    as?: string | object
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    as: 'div'
-  })
-
   const attrs = useAttrs()
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__backdrop'
@@ -38,8 +29,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <div
     :hidden="backdropHidden"
     :class="backdropClasses"
     :data-testid="testId"

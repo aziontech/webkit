@@ -34,8 +34,6 @@
     active?: boolean
     /** Submenu item value (auto-generated when omitted). */
     value?: string | number
-    /** Polymorphic wrapper element for root items. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -45,8 +43,7 @@
     featured: false,
     closeOnClick: false,
     active: false,
-    value: undefined,
-    as: 'li'
+    value: undefined
   })
 
   defineSlots<{
@@ -91,15 +88,13 @@
 </script>
 
 <template>
-  <component
+  <li
     v-if="!isEntry"
-    :is="props.as"
     :class="itemClasses"
-    :role="props.as === 'li' ? undefined : 'listitem'"
     :data-testid="testId"
   >
     <slot />
-  </component>
+  </li>
   <li
     v-else
     :data-testid="testId"

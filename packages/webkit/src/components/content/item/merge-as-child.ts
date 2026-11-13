@@ -1,10 +1,13 @@
+import type { Slot, VNode, VNodeArrayChildren, VNodeNormalizedChildren } from 'vue'
 import { cloneVNode, Comment, Fragment, isVNode, mergeProps } from 'vue'
 
-function resolveSingleChild(nodes) {
-  if (!nodes) {
+function resolveSingleChild(
+  nodes: VNodeArrayChildren | VNodeNormalizedChildren | undefined
+): VNode | null {
+  if (!Array.isArray(nodes)) {
     return null
   }
-  let resolved = null
+  let resolved: VNode | null = null
   for (const node of nodes) {
     if (!isVNode(node)) {
       continue
@@ -30,7 +33,11 @@ function resolveSingleChild(nodes) {
   }
   return resolved
 }
-export function mergeAsChildSlot(attrs, defaultSlot) {
+
+export function mergeAsChildSlot(
+  attrs: Record<string, unknown>,
+  defaultSlot: Slot | undefined
+): VNode | null {
   const child = resolveSingleChild(defaultSlot?.())
   if (!child) {
     return null

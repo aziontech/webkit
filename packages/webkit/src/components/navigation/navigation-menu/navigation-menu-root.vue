@@ -24,8 +24,6 @@
     orientation?: NavigationMenuOrientation
     /** Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). */
     ariaLabel?: string
-    /** Polymorphic root element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -33,8 +31,7 @@
     delay: 50,
     closeDelay: 300,
     orientation: 'horizontal',
-    ariaLabel: '',
-    as: 'nav'
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -82,8 +79,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <nav
     :class="rootClasses"
     :data-testid="testId"
     :aria-label="ariaLabel || t('navigationMenu.label')"
@@ -91,5 +87,5 @@
     :data-orientation="orientation"
   >
     <slot />
-  </component>
+  </nav>
 </template>

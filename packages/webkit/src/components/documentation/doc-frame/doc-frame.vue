@@ -3,7 +3,7 @@
   import type { VNode } from 'vue'
   import { cloneVNode, computed, nextTick, ref, useAttrs, useSlots, watch } from 'vue'
 
-  import { useFocusTrap } from '../../../composables/use-focus-trap/index.js'
+  import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { flattenSlot } from './flatten-slot'

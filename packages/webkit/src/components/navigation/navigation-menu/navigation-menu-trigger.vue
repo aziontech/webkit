@@ -40,16 +40,13 @@
     closeOnClick?: boolean
     /** Uses a native button element when not a link. */
     nativeButton?: boolean
-    /** Polymorphic control element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
     href: undefined,
     active: false,
     closeOnClick: false,
-    nativeButton: true,
-    as: undefined
+    nativeButton: true
   })
 
   defineSlots<{ default(): unknown }>()
@@ -76,10 +73,6 @@
   const itemValueResolved = computed(() => itemContext?.itemValue.value ?? '')
 
   const componentTag = computed(() => {
-    if (props.as) {
-      return props.as
-    }
-
     if (isLink.value) {
       return 'a'
     }

@@ -7,15 +7,6 @@
 
   defineOptions({ name: 'NavigationMenuIcon', inheritAttrs: false })
 
-  interface Props {
-    /** Polymorphic icon wrapper element. */
-    as?: string | object
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    as: 'span'
-  })
-
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
@@ -31,13 +22,12 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <span
     :class="iconClasses"
     aria-hidden="true"
     :data-testid="testId"
     :data-open="item.itemOpen.value ? '' : undefined"
   >
     <slot />
-  </component>
+  </span>
 </template>

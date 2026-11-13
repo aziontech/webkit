@@ -1,27 +1,31 @@
 import { defaultDocument, useEventListener } from '@vueuse/core'
-import { nextTick, onUnmounted, watch } from 'vue'
+import type { MaybeRefOrGetter } from 'vue'
+import { nextTick, toValue, watch } from 'vue'
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export function useFocusTrap(containerRef, active) {
-  const stop = useEventListener(defaultDocument, 'keydown', (event) => {
-    if (!active.value || event.key !== 'Tab') return
+export function useFocusTrap(
+  containerRef: MaybeRefOrGetter<HTMLElement | null | undefined>,
+  active: MaybeRefOrGetter<boolean>
+): void {
+  useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
+    if (!toValue(active) || event.key !== 'Tab') return
 
-    const root = containerRef.value
+    const root = toValue(containerRef)
     if (!root) return
 
-    const focusable = Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
+    const focusable = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
       (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
     )
 
-    if (focusable.length === 0) {
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (!first || !last) {
       event.preventDefault()
       return
     }
 
-    const first = focusable[0]
-    const last = focusable[focusable.length - 1]
     const activeEl = document.activeElement
 
     if (event.shiftKey) {
@@ -39,15 +43,15 @@ export function useFocusTrap(containerRef, active) {
   })
 
   watch(
-    active,
+    () => toValue(active),
     (isActive) => {
       if (!isActive) return
       void nextTick(() => {
-        const root = containerRef.value
+        const root = toValue(containerRef)
         if (!root) return
-        const focusable = root.querySelectorAll(FOCUSABLE_SELECTOR)
-        if (focusable.length > 0) {
-          focusable[0].focus()
+        const first = root.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
+        if (first) {
+          first.focus()
         } else {
           root.focus()
         }
@@ -55,8 +59,4 @@ export function useFocusTrap(containerRef, active) {
     },
     { immediate: true }
   )
-
-  onUnmounted(() => {
-    stop()
-  })
 }

@@ -33,8 +33,6 @@
     sticky?: boolean
     /** Disables tracking the active trigger as anchor. */
     disableAnchorTracking?: boolean
-    /** Polymorphic positioner element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -45,8 +43,7 @@
     arrowPadding: 8,
     collisionPadding: 8,
     sticky: false,
-    disableAnchorTracking: false,
-    as: 'div'
+    disableAnchorTracking: false
   })
 
   defineSlots<{ default(): unknown }>()
@@ -143,8 +140,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <div
     ref="positionerRef"
     :hidden="positionerHidden"
     :class="positionerClasses"
@@ -161,5 +157,5 @@
     @pointerenter="onPointerEnter"
   >
     <slot />
-  </component>
+  </div>
 </template>

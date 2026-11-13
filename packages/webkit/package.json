@@ -2366,7 +2366,7 @@
     },
     "./use-focus-trap": {
       "types": "./types/composables/use-focus-trap/index.d.ts",
-      "default": "./src/composables/use-focus-trap/index.js"
+      "default": "./src/composables/use-focus-trap/index.ts"
     },
     "./use-heading-nav": {
       "types": "./types/composables/use-heading-nav/index.d.ts",

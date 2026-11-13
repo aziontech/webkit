@@ -16,13 +16,10 @@
   interface Props {
     /** Keeps content mounted when closed. */
     keepMounted?: boolean
-    /** Polymorphic content element. */
-    as?: string | object
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    keepMounted: false,
-    as: 'div'
+    keepMounted: false
   })
 
   defineSlots<{ default(): unknown }>()
@@ -127,8 +124,7 @@
     v-if="viewportTarget && shouldRender"
     :to="viewportTarget"
   >
-    <component
-      :is="props.as"
+    <div
       ref="contentRef"
       :class="contentClasses"
       :style="contentStyle"
@@ -137,6 +133,6 @@
       role="region"
     >
       <slot />
-    </component>
+    </div>
   </Teleport>
 </template>

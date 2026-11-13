@@ -8,15 +8,6 @@
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
-  interface Props {
-    /** Polymorphic viewport element. */
-    as?: string | object
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    as: 'div'
-  })
-
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
@@ -50,8 +41,7 @@
 </script>
 
 <template>
-  <component
-    :is="props.as"
+  <div
     ref="viewportRef"
     :class="viewportClasses"
     :data-testid="testId"
@@ -63,5 +53,5 @@
     >
       <slot />
     </div>
-  </component>
+  </div>
 </template>
