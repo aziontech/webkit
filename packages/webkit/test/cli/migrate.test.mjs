@@ -106,6 +106,19 @@ test('migrateSource lists removed components as manual work and leaves other cod
   ])
 })
 
+test('migrateSource flags a removed prop as manual work and leaves the tag alone', () => {
+  const v6 = loadMigration(6)
+  const sfc =
+    '<script setup>\nimport Item from \'@aziontech/webkit/item\'\n</script>\n<template>\n  <Item as-child><a href="/x">X</a></Item>\n  <Item size="small">Y</Item>\n</template>'
+  const { source, warnings } = migrateSource(sfc, v6)
+  assert.equal(source, sfc)
+  assert.equal(warnings.length, 1)
+  assert.match(
+    warnings[0],
+    /^@aziontech\/webkit\/item: <Item> prop asChild was removed in v6: set href/
+  )
+})
+
 test('planMigrate rewrites files under the project and honours --dry-run', () => {
   const dir = mkdtempSync(join(tmpdir(), 'migrate-'))
   try {

@@ -7,11 +7,31 @@
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
-  "item": { "kind": { "to": "kind", "values": { "outline": "outlined" } } },
-  "item-root": { "kind": { "to": "kind", "values": { "outline": "outlined" } } },
+  "item": {
+    "kind": { "to": "kind", "values": { "outline": "outlined" } },
+    "asChild": {
+      "removed": "set href to render the row as a link or clickable to render it as a button, move the child's attributes and listeners onto the Item, and drop the inner element."
+    }
+  },
+  "item-root": {
+    "kind": { "to": "kind", "values": { "outline": "outlined" } },
+    "asChild": {
+      "removed": "set href to render the row as a link or clickable to render it as a button, move the child's attributes and listeners onto the Item, and drop the inner element."
+    }
+  },
   "log-view": { "border": "bordered", "showCopy": "copyable" },
   "media-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
-  "navigation-menu": { "value": "modelValue" },
+  "navigation-menu": {
+    "value": "modelValue",
+    "as": {
+      "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
+    }
+  },
+  "navigation-menu-root": {
+    "as": {
+      "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
+    }
+  },
   "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
   "severity-tag": { "level": "severity" },
   "shell-mockup": { "still": { "to": "animated", "values": { "true": "false", "false": "true" } } },

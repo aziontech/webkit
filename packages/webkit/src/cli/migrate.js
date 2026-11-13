@@ -133,6 +133,7 @@ function renameAttributes(attrs, rules) {
   let out = attrs
   for (const [oldProp, ruleSpec] of Object.entries(rules)) {
     const rule = typeof ruleSpec === 'string' ? { to: ruleSpec } : ruleSpec
+    if (rule.removed) continue
     const forms = [...new Set([oldProp, kebab(oldProp)])]
     const toKebab = kebab(rule.to)
     const toModel = rule.to === 'modelValue'
@@ -307,6 +308,16 @@ export function migrateSource(source, migration, { fromMajor = null } = {}) {
       const end = scanTag(out, start)
       if (end < 0) continue
       const attrs = out.slice(start, end)
+      for (const [prop, spec] of Object.entries(rules)) {
+        if (typeof spec === 'string' || !spec.removed) continue
+        const used = [...new Set([prop, kebab(prop)])].some((form) =>
+          new RegExp(`\\s(?::|v-bind:)?${escapeRe(form)}(?=[\\s=/>]|$)`).test(attrs)
+        )
+        if (used)
+          warnings.push(
+            `${PREFIX}${subpath}: <${binding}> prop ${prop} was removed in v6: ${spec.removed}`
+          )
+      }
       const renamed = renameAttributes(attrs, rules)
       result += out.slice(cursor, start) + renamed
       cursor = end

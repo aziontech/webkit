@@ -96,6 +96,7 @@ export function diffApi(before, after, migrations) {
     const rules = { ...migrations.props[subpath], ...migrations.props[target] }
     for (const [prop, values] of Object.entries(props)) {
       const rule = rules[prop] ? ruleOf(rules[prop]) : null
+      if (rule && rule.removed) continue
       const to =
         prop in now ? prop : rule && (rule.to in now || rule.to === 'modelValue') ? rule.to : null
       if (!to) {
