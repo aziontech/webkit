@@ -27800,7 +27800,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 <script setup>
   import Alert from '@aziontech/webkit/alert'
   import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -34223,7 +34223,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
@@ -35430,14 +35430,16 @@ even when the row carries nothing but its title.
 - `motion-reduce:transition-none` on every animated state
 - Touch target ≥40×40 px — the step button is a full-width row at least 40px tall
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Stepper from '@aziontech/webkit/stepper'
   import { ref } from 'vue'
 
-  const step = ref('host')
+  const step = ref('configure')
 </script>
 
 <template>
@@ -35457,13 +35459,20 @@ even when the row carries nothing but its title.
       description="Name it and add the addresses."
     />
     <Stepper.Step
+      value="rules"
+      title="Rules"
+      description="What the firewall does with a match."
+    />
+    <Stepper.Step
       value="review"
       title="Review"
-      disabled
+      description="Check the list before it goes live."
     />
   </Stepper>
 </template>
 ```
+
+2 more example(s) in [components/stepper.md](https://github.com/aziontech/webkit/blob/main/.specs/components/stepper.md).
 
 ---
 
@@ -36709,15 +36718,17 @@ packages/webkit/src/components/overlay/command/
 - Touch target ≥40×40 px where the control is interactive.
 - Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Panel from '@aziontech/webkit/panel'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
 </script>
 
 <template>

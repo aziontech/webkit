@@ -96,7 +96,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
@@ -119,7 +119,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const single = [{ label: 'Page Name', current: true }]
   const two = [
@@ -148,7 +148,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },

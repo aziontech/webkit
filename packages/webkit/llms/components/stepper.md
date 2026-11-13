@@ -127,14 +127,16 @@ even when the row carries nothing but its title.
 - `motion-reduce:transition-none` on every animated state
 - Touch target ≥40×40 px — the step button is a full-width row at least 40px tall
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Stepper from '@aziontech/webkit/stepper'
   import { ref } from 'vue'
 
-  const step = ref('host')
+  const step = ref('configure')
 </script>
 
 <template>
@@ -154,8 +156,102 @@ even when the row carries nothing but its title.
       description="Name it and add the addresses."
     />
     <Stepper.Step
+      value="rules"
+      title="Rules"
+      description="What the firewall does with a match."
+    />
+    <Stepper.Step
       value="review"
       title="Review"
+      description="Check the list before it goes live."
+    />
+  </Stepper>
+</template>
+```
+
+### States
+
+```vue
+<script setup>
+  import Stepper from '@aziontech/webkit/stepper'
+  import { ref } from 'vue'
+
+  const step = ref('configure')
+</script>
+
+<template>
+  <Stepper
+    v-model="step"
+    aria-label="Step states"
+  >
+    <Stepper.Step
+      value="host"
+      title="Complete"
+      description="The owner marked this step as answered."
+      state="complete"
+    />
+    <Stepper.Step
+      value="configure"
+      title="Current"
+      description="The step the reader is on."
+    />
+    <Stepper.Step
+      value="addresses"
+      title="Error"
+      description="Two addresses are not valid IPv4 ranges."
+      state="error"
+    />
+    <Stepper.Step
+      value="rules"
+      title="Loading"
+      description="Checking the rules against the firewall."
+      state="loading"
+    />
+    <Stepper.Step
+      value="review"
+      title="Upcoming"
+      description="Not reached yet."
+    />
+  </Stepper>
+</template>
+```
+
+### Disabled
+
+```vue
+<script setup>
+  import Stepper from '@aziontech/webkit/stepper'
+  import { ref } from 'vue'
+
+  const step = ref('host')
+</script>
+
+<template>
+  <Stepper
+    v-model="step"
+    aria-label="Create network list"
+  >
+    <Stepper.Step
+      value="host"
+      title="Where it runs"
+      description="The firewall that reads this list."
+    />
+    <Stepper.Step
+      value="configure"
+      title="Configure"
+      description="Name it and add the addresses."
+      disabled
+    />
+    <Stepper.Step
+      value="rules"
+      title="Rules"
+      description="What the firewall does with a match."
+      disabled
+    />
+    <Stepper.Step
+      value="review"
+      title="Review"
+      description="Check the list before it goes live."
       disabled
     />
   </Stepper>

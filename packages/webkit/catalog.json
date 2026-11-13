@@ -18060,6 +18060,7 @@
     }
    ],
    "surface": "product",
+   "examplesFile": "catalog/examples/stepper.json",
    "docsFile": "catalog/components/stepper.json"
   },
   "stepper-root": {
@@ -19011,6 +19012,7 @@
     }
    ],
    "surface": "product",
+   "examplesFile": "catalog/examples/panel.json",
    "docsFile": "catalog/components/panel.json"
   },
   "panel-content": {
@@ -26822,7 +26824,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button"
    ],
@@ -26920,7 +26922,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/global-header",
@@ -28387,7 +28389,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/empty-state",
@@ -28889,7 +28891,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/empty-state",
@@ -29044,7 +29046,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -29136,7 +29138,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -29378,7 +29380,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
@@ -29476,7 +29478,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -32244,7 +32246,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -32642,7 +32644,7 @@
    ],
    "imports": [
     "@aziontech/webkit/alert",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/combobox",
@@ -32925,7 +32927,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",

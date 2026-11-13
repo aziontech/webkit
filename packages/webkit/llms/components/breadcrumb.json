@@ -62,15 +62,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb\n    :items=\"items\"\n    class=\"max-w-[42.5rem]\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb\n    :items=\"items\"\n    class=\"max-w-[42.5rem]\"\n  />\n</template>"
   },
   {
    "name": "Depths",
-   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const single = [{ label: 'Page Name', current: true }]\n  const two = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n  const full = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-[42.5rem]\">\n    <Breadcrumb :items=\"single\" />\n    <Breadcrumb :items=\"two\" />\n    <Breadcrumb :items=\"full\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n\n  const single = [{ label: 'Page Name', current: true }]\n  const two = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n  const full = [\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Page Name', href: '#' },\n    { label: 'Current Page', current: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-4 max-w-[42.5rem]\">\n    <Breadcrumb :items=\"single\" />\n    <Breadcrumb :items=\"two\" />\n    <Breadcrumb :items=\"full\" />\n  </div>\n</template>"
   },
   {
    "name": "LongLabel",
-   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'production-edge-application-with-a-very-long-configuration-name', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb :items=\"items\" />\n</template>"
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n\n  const items = [\n    { label: 'Page Name', href: '#' },\n    { label: 'production-edge-application-with-a-very-long-configuration-name', current: true }\n  ]\n</script>\n\n<template>\n  <Breadcrumb :items=\"items\" />\n</template>"
   }
  ],
  "docs": "components/breadcrumb.md"

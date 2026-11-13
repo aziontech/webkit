@@ -97,7 +97,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
 
