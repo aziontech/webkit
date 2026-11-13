@@ -56,7 +56,7 @@ An issue from **Change a component** (`.github/ISSUE_TEMPLATE/change-component.y
 from step 2, with the existing spec:
 
 - **Non-breaking** (a new prop, event, slot, state or example; a fix). Edit the spec first, then
-  the code. Bump `spec_version` for any API addition, and move the spec to `template: 2`. The
+  the code. Bump `spec_version` for any API change, and move the spec to `template: 2`. The
   spec stays `implemented`; recompute its `checksum` after the edit:
   ```bash
   node -e "import('./.claude/hooks/_lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
@@ -66,8 +66,9 @@ from step 2, with the existing spec:
   payload). Put `!` in the PR title (`feat(webkit)!: …`): merges are squashed, so the title is the
   commit release-please reads, and it cuts a major. Ship a codemod entry in
   `packages/webkit/src/cli/migrations/` (the `webkit migrate` map), or, when no codemod can do it,
-  a note in the migration guide (`packages/webkit/MIGRATION-v6.md` for the current major). Prefer a
-  deprecation cycle (below) to a direct break.
+  a new line naming the component in the migration guide (`packages/webkit/MIGRATION-v6.md` for
+  the current major). Bump `spec_version` too. Prefer a deprecation cycle (below) to a direct
+  break.
 
 ### Deprecate
 
@@ -108,9 +109,15 @@ or the migration note that moves consumers to the replacement.
 
 Two more gates hold the Change and Remove stages to their rules:
 
-- `api-diff` compares the public API with `main`. A breaking change fails without `!` in the PR
-  title and a migration (codemod entry or migration note); an API addition fails without a
-  `spec_version` bump.
+- `api-diff` compares the public API (exports, props, events, slots, models, sub-components)
+  with the PR's base branch. A breaking change fails without `!` in the PR title and a
+  migration: a codemod entry, or a new line naming the component in
+  `packages/webkit/MIGRATION-v<N>.md`. Any API change, breaking or not, fails without a
+  `spec_version` bump in that component's spec. Run it locally with
+  `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run api-diff`.
+- The PR title must pass commitlint; CI checks it.
+- A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back
+  to `approved`, re-validate, then edit. A shipped component's spec never goes back to `draft`.
 - The bundle budget only goes down. A PR that raises a limit in `.size-limit.json` needs a
   `Budget-raise: <entry> <old> → <new>, <reason>` line in its body.
 
