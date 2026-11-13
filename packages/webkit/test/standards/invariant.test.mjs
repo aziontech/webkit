@@ -178,6 +178,14 @@ test('authoring-docs hook AND ratchet share the single _lib/authoring-docs-check
   assert.match(ratchet, /authoring-docs-checks\.mjs/, 'ratchet does not import the engine')
 })
 
+test('spec-integrity hook AND CI gate share the single _lib/spec-integrity engine', () => {
+  assert.ok(existsSync(join(ROOT, '.claude/hooks/_lib/spec-integrity.mjs')))
+  const hook = readFileSync(join(ROOT, '.claude/hooks/enforce-spec-exists.mjs'), 'utf-8')
+  assert.match(hook, /_lib\/spec-integrity\.mjs/, 'hook does not import the engine')
+  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-spec-integrity.mjs'), 'utf-8')
+  assert.match(gate, /_lib\/spec-integrity\.mjs/, 'CI gate does not import the engine')
+})
+
 // The skill-side invariant: a skill is guidance, so on its own it is advisory. Every skill
 // (internal + consumer) declares enforced_by naming what makes it non-optional — the same
 // "nothing advisory" guarantee rules already have. Presence is also caught write-time/ratchet
@@ -216,7 +224,9 @@ const CI_ENFORCERS = new Set([
   'check-tests',
   'check-authoring-docs',
   'check-complete',
-  'check-size-ratchet'
+  'check-size-ratchet',
+  'check-spec-integrity',
+  'check-api-diff'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {

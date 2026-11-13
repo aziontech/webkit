@@ -77,6 +77,13 @@
    "default": "'nav'",
    "required": "false",
    "doc": "Polymorphic root element."
+  },
+  {
+   "name": "modelValue",
+   "type": "NavigationMenuValue | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [

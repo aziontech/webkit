@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { renameSubpath } from '../src/cli/migrate.js'
+import { resolveBase, showAtBase } from './lib/base-ref.mjs'
 
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const CATALOG = resolve(PKG, 'catalog.json')
@@ -63,7 +63,7 @@ export function renamedSubpath(subpath, components) {
   return next === subpath ? null : next
 }
 
-const ruleOf = (spec) => (typeof spec === 'string' ? { to: spec } : spec)
+export const ruleOf = (spec) => (typeof spec === 'string' ? { to: spec } : spec)
 
 export function diffApi(before, after, migrations) {
   const uncovered = []
@@ -128,14 +128,18 @@ export function diffApi(before, after, migrations) {
   return { uncovered, additions }
 }
 
-function readApi(ref) {
-  if (!ref) return apiFromCatalog(JSON.parse(readFileSync(CATALOG, 'utf8')))
-  const raw = execFileSync('git', ['show', `${ref}:packages/webkit/catalog.json`], {
-    cwd: PKG,
-    encoding: 'utf8',
-    maxBuffer: 256 * 1024 * 1024
-  })
-  return apiFromCatalog(JSON.parse(raw))
+function readBaseApi(against) {
+  if (process.argv.includes('--snapshot')) return null
+  const base = resolveBase({ against })
+  const raw = base ? showAtBase(base, 'packages/webkit/catalog.json') : null
+  if (!raw) {
+    if (against) throw new Error(`cannot read packages/webkit/catalog.json at ${against}`)
+    return null
+  }
+  return {
+    api: apiFromCatalog(JSON.parse(raw)),
+    source: `${base.ref} (${base.commit.slice(0, 9)})`
+  }
 }
 
 const invoked = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)
@@ -143,8 +147,10 @@ if (invoked) {
   const args = process.argv.slice(2)
   const update = args.includes('--update')
   const refIndex = args.indexOf('--against')
-  const ref = refIndex >= 0 ? args[refIndex + 1] : null
-  const after = readApi(null)
+  const against = refIndex >= 0 ? args[refIndex + 1] : null
+  const after = apiFromCatalog(JSON.parse(readFileSync(CATALOG, 'utf8')))
+  const base = update ? null : readBaseApi(against)
+  const ref = base ? base.source : null
   if (!ref && !existsSync(SNAPSHOT)) {
     if (!update) {
       console.error('scripts/api-snapshot.json is missing: record it with --update.')
@@ -154,9 +160,9 @@ if (invoked) {
     console.log('Recorded the public API in scripts/api-snapshot.json.')
     process.exit(0)
   }
-  const before = ref ? readApi(ref) : JSON.parse(readFileSync(SNAPSHOT, 'utf8'))
+  const before = base ? base.api : JSON.parse(readFileSync(SNAPSHOT, 'utf8'))
   const { uncovered, additions } = diffApi(before, after, loadMigrations())
-  const source = ref ? `${ref}:packages/webkit/catalog.json` : 'scripts/api-snapshot.json'
+  const source = ref ? `the catalog.json of ${ref}` : 'scripts/api-snapshot.json'
   if (uncovered.length) {
     console.error(
       `Public API changed without a codemod entry (${uncovered.length}, against ${source}):`

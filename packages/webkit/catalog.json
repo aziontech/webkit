@@ -2301,6 +2301,9 @@
    "target": "./src/components/ai/artifact-canvas/artifact-canvas.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/artifact-canvas",
+   "models": [
+    "version"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -2666,6 +2669,9 @@
    "kind": "subcomponent",
    "parent": "chat-message",
    "treeShakeableImport": "@aziontech/webkit/chat-message-feedback",
+   "models": [
+    "modelValue"
+   ],
    "surface": "product"
   },
   "citation": {
@@ -2707,6 +2713,9 @@
    "target": "./src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/feedback-reason-dialog",
+   "models": [
+    "open"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -2789,6 +2798,9 @@
    "target": "./src/components/ai/conversation-history/conversation-history.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/conversation-history",
+   "models": [
+    "modelValue"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -2851,6 +2863,10 @@
    "target": "./src/components/ai/prompt-input/prompt-input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/prompt-input",
+   "models": [
+    "modelValue",
+    "references"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -3030,6 +3046,9 @@
    "target": "./src/components/ai/response-branches/response-branches.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/response-branches",
+   "models": [
+    "modelValue"
+   ],
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -3696,6 +3715,9 @@
    "target": "./src/components/actions/toggle-group/toggle-group.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/toggle-group",
+   "models": [
+    "modelValue"
+   ],
    "category": "actions",
    "structure": "monolithic",
    "props": [
@@ -3935,6 +3957,11 @@
     "@aziontech/webkit/chart-scatter",
     "@aziontech/webkit/chart-tooltip"
    ],
+   "models": [
+    "activeIndex",
+    "hiddenSeries",
+    "range"
+   ],
    "category": "chart",
    "structure": "composition",
    "props": [
@@ -4137,6 +4164,11 @@
    "kind": "root",
    "rootOf": "chart",
    "treeShakeableImport": "@aziontech/webkit/chart-root",
+   "models": [
+    "activeIndex",
+    "hiddenSeries",
+    "range"
+   ],
    "category": "chart",
    "structure": "composition",
    "props": [
@@ -4428,6 +4460,10 @@
     "@aziontech/webkit/chart-card-resize-handle",
     "@aziontech/webkit/chart-card-title"
    ],
+   "models": [
+    "span",
+    "height"
+   ],
    "category": "chart",
    "structure": "composition",
    "props": [
@@ -4539,6 +4575,10 @@
    "kind": "root",
    "rootOf": "chart-card",
    "treeShakeableImport": "@aziontech/webkit/chart-card-root",
+   "models": [
+    "span",
+    "height"
+   ],
    "category": "chart",
    "structure": "composition",
    "props": [
@@ -4712,6 +4752,10 @@
    "target": "./src/components/chart/donut-chart/donut-chart.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/donut-chart",
+   "models": [
+    "activeIndex",
+    "hiddenSeries"
+   ],
    "category": "chart",
    "structure": "monolithic",
    "props": [
@@ -4997,6 +5041,9 @@
    "target": "./src/components/chart/map-chart/map-chart.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/map-chart",
+   "models": [
+    "activeId"
+   ],
    "category": "chart",
    "structure": "monolithic",
    "props": [
@@ -5629,6 +5676,10 @@
    "target": "./src/components/content/browser-frame/browser-frame.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/browser-frame",
+   "models": [
+    "width",
+    "height"
+   ],
    "category": "content",
    "structure": "monolithic",
    "props": [
@@ -5732,6 +5783,9 @@
     "@aziontech/webkit/accordion-trigger",
     "@aziontech/webkit/accordion-content"
    ],
+   "models": [
+    "modelValue"
+   ],
    "category": "content",
    "structure": "composition",
    "props": [
@@ -5795,6 +5849,9 @@
    "kind": "root",
    "rootOf": "accordion",
    "treeShakeableImport": "@aziontech/webkit/accordion-root",
+   "models": [
+    "modelValue"
+   ],
    "category": "content",
    "structure": "composition",
    "props": [
@@ -7544,6 +7601,10 @@
     "@aziontech/webkit/log-view-footer",
     "@aziontech/webkit/log-view-header"
    ],
+   "models": [
+    "search",
+    "warningsOnly"
+   ],
    "category": "code",
    "structure": "composition",
    "props": [
@@ -7658,6 +7719,9 @@
    "target": "./src/components/code/code-block/code-block.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/code-block",
+   "models": [
+    "modelValue"
+   ],
    "category": "code",
    "structure": "monolithic",
    "props": [
@@ -8861,6 +8925,9 @@
    "target": "./src/components/data/collection-preferences/collection-preferences.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/collection-preferences",
+   "models": [
+    "open"
+   ],
    "category": "data",
    "structure": "monolithic",
    "props": [
@@ -8954,6 +9021,9 @@
    "target": "./src/components/data/cards/cards.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/cards",
+   "models": [
+    "selectedKeys"
+   ],
    "category": "data",
    "structure": "monolithic",
    "props": [
@@ -9297,6 +9367,9 @@
    "target": "./src/components/data/topology-diagram/topology-diagram.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/topology-diagram",
+   "models": [
+    "expanded"
+   ],
    "category": "data",
    "structure": "monolithic",
    "props": [
@@ -9578,6 +9651,10 @@
    "target": "./src/components/data/tree/tree.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/tree",
+   "models": [
+    "expanded",
+    "selected"
+   ],
    "category": "data",
    "structure": "monolithic",
    "props": [
@@ -9933,6 +10010,9 @@
    "target": "./src/components/documentation/doc-layout/doc-layout.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/doc-layout",
+   "models": [
+    "searchOpen"
+   ],
    "category": "documentation",
    "structure": "monolithic",
    "props": [
@@ -11334,6 +11414,9 @@
    "target": "./src/components/feedback/upload-progress/upload-progress.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/upload-progress",
+   "models": [
+    "collapsed"
+   ],
    "category": "feedback",
    "structure": "monolithic",
    "props": [
@@ -11461,6 +11544,10 @@
    "target": "./src/components/inputs/date-range-picker/date-range-picker.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/date-range-picker",
+   "models": [
+    "modelValue",
+    "timeZone"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -12199,6 +12286,9 @@
    "kind": "subcomponent",
    "parent": "input-group",
    "treeShakeableImport": "@aziontech/webkit/input-group-input",
+   "models": [
+    "modelValue"
+   ],
    "surface": "product"
   },
   "number-input": {
@@ -12500,6 +12590,10 @@
    "target": "./src/components/inputs/phone-input/phone-input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/phone-input",
+   "models": [
+    "modelValue",
+    "country"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -12706,6 +12800,9 @@
    "target": "./src/components/inputs/otp-input/otp-input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/otp-input",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -13138,6 +13235,9 @@
    "target": "./src/components/inputs/chip/chip.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/chip",
+   "models": [
+    "selected"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -13412,6 +13512,9 @@
    "target": "./src/components/inputs/slider/slider.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/slider",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -13509,6 +13612,9 @@
    "target": "./src/components/inputs/theme-switcher/theme-switcher.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/theme-switcher",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -13625,6 +13731,9 @@
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option"
    ],
+   "models": [
+    "open"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -13691,6 +13800,9 @@
    "kind": "root",
    "rootOf": "dropdown-menu",
    "treeShakeableImport": "@aziontech/webkit/dropdown-menu-root",
+   "models": [
+    "open"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -14734,6 +14846,11 @@
    "subcomponents": [
     "@aziontech/webkit/console-layout-breadcrumbs"
    ],
+   "models": [
+    "searchOpen",
+    "toolsOpen",
+    "navigationExpanded"
+   ],
    "category": "layout",
    "structure": "composition",
    "props": [
@@ -14879,6 +14996,11 @@
    "kind": "root",
    "rootOf": "console-layout",
    "treeShakeableImport": "@aziontech/webkit/console-layout-root",
+   "models": [
+    "searchOpen",
+    "toolsOpen",
+    "navigationExpanded"
+   ],
    "category": "layout",
    "structure": "composition",
    "props": [
@@ -15037,6 +15159,9 @@
    "target": "./src/components/layout/site-layout/site-layout.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/site-layout",
+   "models": [
+    "searchOpen"
+   ],
    "category": "layout",
    "structure": "monolithic",
    "props": [
@@ -15105,6 +15230,9 @@
    "treeShakeableImport": "@aziontech/webkit/board-root",
    "subcomponents": [
     "@aziontech/webkit/board-item"
+   ],
+   "models": [
+    "layout"
    ],
    "category": "layout",
    "structure": "composition",
@@ -15195,6 +15323,9 @@
    "kind": "root",
    "rootOf": "board",
    "treeShakeableImport": "@aziontech/webkit/board-root",
+   "models": [
+    "layout"
+   ],
    "category": "layout",
    "structure": "composition",
    "props": [
@@ -15372,6 +15503,10 @@
    "kind": "subcomponent",
    "parent": "resizable",
    "treeShakeableImport": "@aziontech/webkit/resizable-pane",
+   "models": [
+    "basis",
+    "collapsed"
+   ],
    "surface": "product"
   },
   "scroll-area": {
@@ -15526,6 +15661,9 @@
    "target": "./src/components/layout/settings-section/settings-section.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/settings-section",
+   "models": [
+    "open"
+   ],
    "category": "layout",
    "structure": "monolithic",
    "props": [
@@ -15790,6 +15928,10 @@
     "@aziontech/webkit/sidebar-group",
     "@aziontech/webkit/sidebar-header",
     "@aziontech/webkit/sidebar-footer"
+   ],
+   "models": [
+    "collapsed",
+    "width"
    ],
    "category": "layout",
    "structure": "composition",
@@ -17729,6 +17871,10 @@
     "@aziontech/webkit/menu-back",
     "@aziontech/webkit/menu-item"
    ],
+   "models": [
+    "path",
+    "expanded"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -17809,6 +17955,10 @@
    "kind": "root",
    "rootOf": "menu",
    "treeShakeableImport": "@aziontech/webkit/menu-root",
+   "models": [
+    "path",
+    "expanded"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -17896,6 +18046,9 @@
    "kind": "subcomponent",
    "parent": "menu",
    "treeShakeableImport": "@aziontech/webkit/menu-sub",
+   "models": [
+    "open"
+   ],
    "surface": "product"
   },
   "menu-sub-trigger": {
@@ -17937,6 +18090,9 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/tabs-root",
    "subcomponents": [],
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -17946,6 +18102,13 @@
      "default": "null",
      "required": "false",
      "doc": "Initial active tab when uncontrolled."
+    },
+    {
+     "name": "modelValue",
+     "type": "TabsValue | null | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -17998,6 +18161,9 @@
    "target": "./src/components/navigation/page-tabs/page-tabs.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/page-tabs",
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "monolithic",
    "props": [
@@ -18034,6 +18200,9 @@
    "subcomponents": [
     "@aziontech/webkit/stepper-step"
    ],
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -18069,6 +18238,9 @@
    "kind": "root",
    "rootOf": "stepper",
    "treeShakeableImport": "@aziontech/webkit/stepper-root",
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -18113,6 +18285,9 @@
    "treeShakeableImport": "@aziontech/webkit/wizard-root",
    "subcomponents": [
     "@aziontech/webkit/wizard-step"
+   ],
+   "models": [
+    "activeStep"
    ],
    "category": "navigation",
    "structure": "composition",
@@ -18180,6 +18355,9 @@
    "kind": "root",
    "rootOf": "wizard",
    "treeShakeableImport": "@aziontech/webkit/wizard-root",
+   "models": [
+    "activeStep"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -18254,6 +18432,9 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
    "subcomponents": [],
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -18298,6 +18479,13 @@
      "default": "'nav'",
      "required": "false",
      "doc": "Polymorphic root element."
+    },
+    {
+     "name": "modelValue",
+     "type": "NavigationMenuValue | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
@@ -18399,6 +18587,9 @@
    "target": "./src/components/overlay/tooltip/tooltip.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/tooltip",
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "monolithic",
    "props": [
@@ -18482,6 +18673,9 @@
     "@aziontech/webkit/command-empty",
     "@aziontech/webkit/command-separator"
    ],
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "composition",
    "props": [
@@ -18538,6 +18732,9 @@
    "kind": "root",
    "rootOf": "command",
    "treeShakeableImport": "@aziontech/webkit/command-root",
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "composition",
    "props": [
@@ -18650,6 +18847,9 @@
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dialog-trigger"
    ],
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "composition",
    "props": [
@@ -18754,6 +18954,9 @@
    "target": "./src/components/overlay/confirm-dialog/confirm-dialog.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/confirm-dialog",
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "monolithic",
    "props": [
@@ -18868,6 +19071,9 @@
     "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger"
+   ],
+   "models": [
+    "open"
    ],
    "category": "overlay",
    "structure": "composition",
@@ -19054,6 +19260,9 @@
     "@aziontech/webkit/popover-close",
     "@aziontech/webkit/popover-footer"
    ],
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "composition",
    "props": [
@@ -19117,6 +19326,9 @@
    "kind": "root",
    "rootOf": "popover",
    "treeShakeableImport": "@aziontech/webkit/popover-root",
+   "models": [
+    "open"
+   ],
    "category": "overlay",
    "structure": "composition",
    "props": [
@@ -22086,6 +22298,9 @@
    "target": "./src/components/sections/article-highlight/article-highlight.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/article-highlight",
+   "models": [
+    "modelValue"
+   ],
    "category": "sections",
    "structure": "monolithic",
    "props": [
@@ -22402,6 +22617,9 @@
    "target": "./src/components/sections/client-quotes/client-quotes.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/client-quotes",
+   "models": [
+    "modelValue"
+   ],
    "category": "sections",
    "structure": "monolithic",
    "props": [
@@ -24784,6 +25002,9 @@
    "target": "./src/components/sections/site-footer/site-footer.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/site-footer",
+   "models": [
+    "language"
+   ],
    "category": "sections",
    "structure": "monolithic",
    "props": [
@@ -25821,6 +26042,9 @@
    "target": "./src/components/marketing/quote-tabs/quote-tabs.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/quote-tabs",
+   "models": [
+    "modelValue"
+   ],
    "category": "marketing",
    "structure": "monolithic",
    "props": [
@@ -26148,6 +26372,9 @@
    "target": "./src/components/inputs/combobox/combobox.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/combobox",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
@@ -26278,6 +26505,9 @@
    "target": "./src/components/code/code-editor/code-editor.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/code-editor",
+   "models": [
+    "modelValue"
+   ],
    "category": "code",
    "structure": "monolithic",
    "props": [
@@ -26505,6 +26735,9 @@
    "target": "./src/components/inputs/schema-form/schema-form.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/schema-form",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [

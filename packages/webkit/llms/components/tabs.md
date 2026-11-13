@@ -43,6 +43,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `defaultValue` | `TabsValue \| null` | `null` | false | Initial active tab when uncontrolled. |
+| `modelValue` | `TabsValue \| null \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
 

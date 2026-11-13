@@ -34967,6 +34967,7 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 | `orientation` | `NavigationMenuOrientation` | `'horizontal'` | false | Menu orientation. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`). |
 | `as` | `string \| object` | `'nav'` | false | Polymorphic root element. |
+| `modelValue` | `NavigationMenuValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Events
 
@@ -35521,6 +35522,7 @@ even when the row carries nothing but its title.
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `defaultValue` | `TabsValue \| null` | `null` | false | Initial active tab when uncontrolled. |
+| `modelValue` | `TabsValue \| null \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
 
