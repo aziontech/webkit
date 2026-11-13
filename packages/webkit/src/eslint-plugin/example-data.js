@@ -27,7 +27,11 @@ export const EXAMPLE_DATA_ALLOWED_HOSTS = [
   'discord.gg',
   'reddit.com',
   'creativecommons.org',
-  'figma.com'
+  'figma.com',
+  'opencode.ai',
+  'monashees.com',
+  'qualcommventures.com',
+  'vanta.com'
 ]
 
 export const EXAMPLE_DATA_DIRS = [

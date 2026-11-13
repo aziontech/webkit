@@ -143,8 +143,7 @@
   ]
 
   const submission = {
-    endpoint:
-      'https://api.hsforms.com/submissions/v3/integration/submit/5759082/a22128e2-cd17-4ed2-968a-52aa64800a87',
+    endpoint: 'https://api.example.com/forms/contact',
     pageName: 'Contact',
     hiddenFields: {
       form_action: 'contact_us',
