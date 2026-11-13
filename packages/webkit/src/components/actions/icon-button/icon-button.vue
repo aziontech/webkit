@@ -3,16 +3,6 @@
 
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
-  import {
-    iconTransitionEnterActiveClasses,
-    iconTransitionEnterFromClasses,
-    iconTransitionEnterToClasses,
-    iconTransitionHostClasses,
-    iconTransitionIconClasses,
-    iconTransitionLeaveActiveClasses,
-    iconTransitionLeaveFromClasses,
-    iconTransitionLeaveToClasses
-  } from './presets/icon-transition'
 
   export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'
@@ -157,7 +147,10 @@
     <span
       :class="
         iconTransition
-          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          ? [
+              'relative z-1 inline-flex shrink-0 items-center justify-center overflow-hidden',
+              iconSlotSizeClasses[size]
+            ]
           : 'relative z-1 inline-flex items-center justify-center'
       "
     >
@@ -169,12 +162,12 @@
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        :enter-active-class="iconTransitionEnterActiveClasses"
-        :enter-from-class="iconTransitionEnterFromClasses"
-        :enter-to-class="iconTransitionEnterToClasses"
-        :leave-active-class="iconTransitionLeaveActiveClasses"
-        :leave-from-class="iconTransitionLeaveFromClasses"
-        :leave-to-class="iconTransitionLeaveToClasses"
+        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[transform,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:transform-none"
+        enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
+        enter-to-class="scale-100 opacity-100"
+        leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
         <i
           :key="icon"
@@ -182,7 +175,7 @@
             icon,
             directionalIconClass(icon),
             iconClasses,
-            iconTransitionIconClasses,
+            'pointer-events-none absolute inset-0 inline-flex items-center justify-center',
             iconClass
           ]"
           aria-hidden="true"
@@ -217,7 +210,10 @@
     <span
       :class="
         iconTransition
-          ? [iconTransitionHostClasses, iconSlotSizeClasses[size]]
+          ? [
+              'relative z-1 inline-flex shrink-0 items-center justify-center overflow-hidden',
+              iconSlotSizeClasses[size]
+            ]
           : 'relative z-1 inline-flex items-center justify-center'
       "
     >
@@ -229,12 +225,12 @@
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        :enter-active-class="iconTransitionEnterActiveClasses"
-        :enter-from-class="iconTransitionEnterFromClasses"
-        :enter-to-class="iconTransitionEnterToClasses"
-        :leave-active-class="iconTransitionLeaveActiveClasses"
-        :leave-from-class="iconTransitionLeaveFromClasses"
-        :leave-to-class="iconTransitionLeaveToClasses"
+        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[transform,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:transform-none"
+        enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
+        enter-to-class="scale-100 opacity-100"
+        leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
       >
         <i
           :key="icon"
@@ -242,7 +238,7 @@
             icon,
             directionalIconClass(icon),
             iconClasses,
-            iconTransitionIconClasses,
+            'pointer-events-none absolute inset-0 inline-flex items-center justify-center',
             iconClass
           ]"
           aria-hidden="true"
