@@ -315,10 +315,10 @@
   <div
     v-bind="rootAttrs"
     :data-testid="testId"
-    class="@container/trace flex w-full min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem]"
+    class="@container/trace flex w-full min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div
-      class="grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
+      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
     >
       <div class="border-e border-(--border-muted) p-(--spacing-xs)">
         <Input
@@ -363,7 +363,7 @@
     <div class="relative">
       <div
         aria-hidden="true"
-        class="pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden @xl/trace:block"
+        class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] pointer-events-none absolute inset-y-0 start-[calc(var(--trace-name)+var(--spacing-md))] end-(--spacing-md) hidden @xl/trace:block"
       >
         <span class="absolute inset-y-0 start-1/4 w-px bg-(--border-muted)" />
         <span class="absolute inset-y-0 start-1/2 w-px bg-(--border-muted)" />
@@ -398,7 +398,7 @@
             '--span-width': String(row.width),
             '--span-depth': String(row.depth)
           }"
-          class="grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
           @click="select(row)"
           @focus="focusedId = row.span.id"
           @keydown="onKeydown($event, index)"
@@ -432,7 +432,7 @@
               class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
-            <span class="truncate text-label-code-sm text-(--text-default)"
+            <span class="truncate text-body-code-sm text-(--text-default)"
               ><bdi>{{ row.span.name }}</bdi></span
             >
             <span
@@ -511,7 +511,7 @@
           class="shrink-0 text-[0.9em] leading-none text-(--text-muted)"
           aria-hidden="true"
         />
-        <span class="truncate text-label-code-sm text-(--text-default)"
+        <span class="truncate text-body-code-sm text-(--text-default)"
           ><bdi>{{ detail.name }}</bdi></span
         >
         <Tag
