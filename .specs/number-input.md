@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: f20b56f56e94899558d59ca9ac2117d8a468e36d66ba0e072f0a5eb32e2277f0
+checksum: 00c8af6aee7930f34cabdbf317ca2b46ab4e894693c492fa8818b40cc9371f02
 created: 2026-06-22
 last_updated: 2026-11-11
 ---
@@ -84,7 +84,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 
 | Slot     | Scope | Notes                                                                    |
 | -------- | ----- | ------------------------------------------------------------------------ |
-| `prefix` | —     | Content rendered before the input (e.g. `R$`).                           |
+| `prefix` | —     | Content rendered before the input (e.g. `$`).                           |
 | `suffix` | —     | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States
