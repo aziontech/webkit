@@ -116,4 +116,4 @@ export const navigation: ConsoleLayoutNavGroup[] = [
   }
 ]
 
-export const account = { name: 'Ana Souza', email: 'ana.souza@example.com' }
+export const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
