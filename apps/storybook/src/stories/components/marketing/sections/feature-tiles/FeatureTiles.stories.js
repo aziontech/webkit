@@ -21,7 +21,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both."
+          "The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both."
       },
       canvas: { sourceState: 'shown' }
     }
@@ -78,7 +78,7 @@ const meta = {
     tiles: {
       control: 'object',
       description:
-        'The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale.',
+        'The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale.',
       table: {
         category: 'props',
         type: { summary: 'FeatureTilesTile[]' },
@@ -106,12 +106,12 @@ const DEFAULT_MARKUP = `<FeatureTiles
   description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
   :tiles="[
     {
-      image: '/marketing-components/illustrations/branches.svg',
+      illustration: 'branches',
       title: 'Build at AI speed.',
       description: 'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
     },
     {
-      image: '/marketing-components/illustrations/personal-tokens.svg',
+      illustration: 'personal-tokens',
       title: 'Secure by default.',
       description: 'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
     }
@@ -140,12 +140,12 @@ const TYPES_TEMPLATE = `<div class="flex flex-col gap-(--spacing-xl)">
     description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
     :tiles="[
       {
-        image: '/marketing-components/illustrations/branches.svg',
+        illustration: 'branches',
         title: 'Build at AI speed.',
         description: 'Go from commit to a live URL in minutes. Test on a preview, promote when you are ready, and roll back without a rebuild.'
       },
       {
-        image: '/marketing-components/illustrations/personal-tokens.svg',
+        illustration: 'personal-tokens',
         title: 'Secure by default.',
         description: 'Every workload runs in its own isolated environment, with WAF, rate limits, and leading compliance practices. No configuration required.'
       }

@@ -5,14 +5,14 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: bd9aea4dd51c485abea0ff6b1e4b1027c1c239654402f7a8c3df305e5d748632
+last_updated: 2026-11-13
+checksum: 7304175752451ac2700d23438f8e9574c0d0660973432947eb2c222442b07d00
 ---
 # FeatureTiles — Component Spec
 
 ## Purpose
 
-The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 ## When to use
 
@@ -31,7 +31,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 ## Best practices
 
 - Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.
-- Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.
+- Give every tile its art as `illustration`, a name of the illustration registry; `scale` sizes it inside its frame. A name the registry does not hold draws the placeholder scene and warns in the console.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
 ## Usage
@@ -48,8 +48,8 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
     title="From commit to live traffic, on one platform"
     description="Build, ship, and run an application on the same platform that serves it."
     :tiles="[
-      { image: '/illustrations/branches.svg', title: 'Build at AI speed.', description: 'Go from commit to a live URL in minutes.' },
-      { image: '/illustrations/personal-tokens.svg', title: 'Secure by default.', description: 'Every workload runs in its own isolated environment.' }
+      { illustration: 'branches', title: 'Build at AI speed.', description: 'Go from commit to a live URL in minutes.' },
+      { illustration: 'personal-tokens', title: 'Secure by default.', description: 'Every workload runs in its own isolated environment.' }
     ]"
   />
 </template>
@@ -64,7 +64,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale? }` where `illustration` is a registry name drawn fluid and `scale` its media scale. |
 
 ## Events
 
@@ -80,6 +80,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 - `data-kind` mirrors the `kind` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
+- In the `artwork` layout an illustration is drawn in a 170:128 frame at the tile's width, the canvas the tile art is exported on; in `illustrated` it keeps the 592×300 canvas of the illustration library
 
 ## Motion & Animations
 

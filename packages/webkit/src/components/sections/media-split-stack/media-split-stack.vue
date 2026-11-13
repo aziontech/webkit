@@ -30,11 +30,7 @@
     title: string
     /** Supporting sentence under the headline. */
     description: string
-    /** URL of the picture shown in the media cell. */
-    image?: string
-    /** Alternative text of the picture; empty keeps it decorative. */
-    imageAlt?: string
-    /** Registry name of the illustration shown in the media cell, instead of `image`. */
+    /** Registry name of the illustration shown in the media cell. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationLabel?: string
@@ -49,7 +45,7 @@
     eyebrow?: string
     /** Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. */
     title?: string
-    /** The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. */
+    /** The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action? }` where `illustration` is a registry name and `action` `{ label, href }` the outlined button and the link the whole band follows. */
     bands?: MediaSplitStackBand[]
   }
 
@@ -122,21 +118,6 @@
                 :name="band.illustration"
                 :aria-label="band.illustrationLabel ?? ''"
               />
-            </template>
-            <template
-              v-else-if="band.image"
-              #media
-            >
-              <div class="relative aspect-592/300 w-full">
-                <img
-                  :src="band.image"
-                  :alt="band.imageAlt ?? ''"
-                  width="360"
-                  height="165"
-                  decoding="async"
-                  class="absolute inset-0 m-auto block h-full w-[60.81%] object-contain"
-                />
-              </div>
             </template>
             <template
               v-if="band.action"

@@ -73,7 +73,7 @@ const meta = {
     bands: {
       control: 'object',
       description:
-        'The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows.',
+        'The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action? }` where `illustration` is a registry name and `action` `{ label, href }` the outlined button and the link the whole band follows.',
       table: {
         category: 'props',
         type: { summary: 'MediaSplitStackBand[]' },

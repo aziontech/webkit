@@ -29,6 +29,7 @@ const ASSETS = [
   'azion-to-cloudflare',
   'azion-to-fastly',
   'azion-to-vercel',
+  'branches',
   'build-applications',
   'build-databases-from-code',
   'combine-data-and-vector-search',
@@ -55,6 +56,7 @@ const ASSETS = [
   'multi-format-optimization-with-automatic-detection',
   'network-lists-rules-engine',
   'no-idle-no-waste',
+  'personal-tokens',
   'preview',
   'profiles-per-application',
   'programmable-security',
@@ -70,6 +72,7 @@ const ASSETS = [
   'stay-in-control',
   'stream-security-events-for-investigation-and-response',
   'url-based-transformations-without-api-complexity',
+  'usage-chart',
   'white-gloves-when-it-matters'
 ]
 
