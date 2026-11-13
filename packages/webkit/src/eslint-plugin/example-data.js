@@ -44,6 +44,7 @@ export function exampleDataApplies(rel) {
   if (/\.(test|spec)\.|\/(test|__tests__|fixtures)\//.test(rel)) return false
   if (/\/(i18n\/messages|locales)\/(pt-BR|es)\b/.test(rel)) return false
   if (rel.endsWith('/eslint-plugin/example-data.js')) return false
+  if (rel === 'rules/webkit-example-data.md') return false
   if (rel.endsWith('/phone-input/countries.ts')) return false
   return !rel.endsWith('/assets/logos/SOURCES.md')
 }

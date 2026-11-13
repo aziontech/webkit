@@ -1,6 +1,6 @@
 # Rules — index
 
-The 27 construction standards, each a single `.md` in this folder. `scope: general` ships to
+The 28 construction standards, each a single `.md` in this folder. `scope: general` ships to
 consuming projects; `scope: webkit` is internal to the design system. The **machine-readable
 source of truth** for rule → enforcement is
 [`../hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs), whose pairing with the rule
@@ -23,7 +23,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
 | [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `dev` | commitlint · branch-protection |
 
-## Construction (16)
+## Construction (17)
 
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
@@ -42,6 +42,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 | [testing](./testing.md) | webkit | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
 | [comments](./comments.md) | general | No prose comments; API JSDoc + directives only | authoring · ratchet · lint · review |
+| [example-data](./example-data.md) | general | `example.com` domains, Acme, fictional US data, no national formats | check-authoring · review |
 | [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · doc-standards (CI) |
 
-**Split:** 15 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 12 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).
+**Split:** 16 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 12 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`packages/webkit/docs/PROCESS.md`](../../packages/webkit/docs/PROCESS.md).

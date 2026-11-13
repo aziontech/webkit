@@ -73,7 +73,6 @@ test('exampleDataApplies skips tests, translated catalogs and the country list',
   assert.ok(!exampleDataApplies('packages/webkit/src/components/inputs/chip/chip.test.ts'))
   assert.ok(!exampleDataApplies('packages/webkit/src/i18n/messages/pt-BR.ts'))
   assert.ok(!exampleDataApplies('packages/webkit/src/locales/pt-BR.ts'))
-  assert.ok(
-    !exampleDataApplies('packages/webkit/src/components/inputs/phone-input/countries.ts')
-  )
+  assert.ok(!exampleDataApplies('rules/webkit-example-data.md'))
+  assert.ok(!exampleDataApplies('packages/webkit/src/components/inputs/phone-input/countries.ts'))
 })

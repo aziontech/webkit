@@ -287,6 +287,16 @@ export const STANDARDS = [
     note: 'Implementation code carries no prose comments: only component API JSDoc (props, emits, slots, models, exposed members, exported types), tool directives, @deprecated and .js JSDoc type tags. prose-comment in the shared authoring-checks engine (comment-scan.js), one key per comment, scoped to every non-test source under packages/.'
   },
   {
+    id: 'example-data',
+    kind: 'construction',
+    scope: 'general',
+    enforce: [
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'Sample data uses example.com/.org/.net (RFC 2606), Acme as the one sample company, fictional US-format people, phones and addresses, and no national ID formats or masks. example-data:domain, :regional-format and :invented-brand in the check-authoring ratchet (src/eslint-plugin/example-data.js) over src, blocks, examples, apps/demos, skills and rules; defaults and preselected options are held in review.'
+  },
+  {
     id: 'authoring-docs',
     kind: 'foundational',
     scope: 'webkit',

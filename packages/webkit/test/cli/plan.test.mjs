@@ -363,6 +363,7 @@ test('planInit copies the .claude/rules/webkit-*.md bundle', () => {
       '.claude/rules/webkit-styling.md',
       '.claude/rules/webkit-direction.md',
       '.claude/rules/webkit-strings.md',
+      '.claude/rules/webkit-example-data.md',
       '.claude/rules/webkit-component-structure.md',
       '.claude/rules/webkit-props.md',
       '.claude/rules/webkit-v-model.md',
