@@ -1,8 +1,3 @@
-import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-import pciDssBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
-
 import { successCaseLink } from '../../success-case-articles.js'
 import { SUCCESS_CASES } from '../../success-cases.js'
 import { MARKET_RECOGNITIONS } from '../home.js'
@@ -87,18 +82,11 @@ export default {
     { section: 'RecognitionMarquee', items: MARKET_RECOGNITIONS },
     {
       section: 'ComplianceBadges',
-      eyebrow: '',
+      eyebrow: 'Compliance',
       title: 'Trust built on the strictest certifications in the market',
       description:
         'Azion follows strict security, availability, and privacy standards, so customers can adopt our services with confidence.',
-      certifications: [
-        { label: 'SOC 2 Type 2', badge: socBadge, alt: 'AICPA SOC 2 Type 2 badge' },
-        { label: 'SOC 3', badge: socBadge, alt: 'AICPA SOC 3 badge' },
-        { label: 'PCI DSS', badge: pciDssBadge, alt: 'PCI DSS badge' },
-        { label: 'GDPR', badge: gdprBadge, alt: 'GDPR' },
-        { label: 'LGPD', badge: lgpdBadge, alt: 'LGPD badge' }
-      ],
-      more: null
+      ariaLabel: 'Compliance certifications'
     }
   ]
 }

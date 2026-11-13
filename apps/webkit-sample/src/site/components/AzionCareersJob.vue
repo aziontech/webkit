@@ -43,11 +43,6 @@
   //     column. It ENDS where the form begins, because a sticky `Apply` beside the form it points
   //     at is a button pointing at itself.
   //
-  //   • THE BAND IS START-ALIGNED, not centred like every other hero on this site. A centred hero
-  //     belongs to a page whose headline is its statement; this headline is a label on a document
-  //     the reader reads down the start edge, so the trail, the facets, the h1 and the action all
-  //     open on the frame's own inset — the vertical the body column and the rail hang from.
-  //
   //   • THE DESCRIPTION IS PORTUGUESE. The source writes this posting's body in Portuguese inside
   //     an otherwise English page. Translating it is the one thing the translation rule forbids
   //     outright, so it stands as the source renders it. The chrome AROUND it is ours and follows
@@ -63,7 +58,6 @@
   //     locked-scope shape (validate on submit, one flag disabling every control, the primary
   //     showing `loading`) and then confirms it in a `Dialog`: the outcome of a submission is a
   //     moment the reader should acknowledge, so it is modal, and closing it clears the form.
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
   import DialogClose from '@aziontech/webkit/dialog-close'
@@ -76,7 +70,6 @@
   import FieldText from '@aziontech/webkit/field-text'
   import FrameBox from '@aziontech/webkit/frame-box'
   import HelperText from '@aziontech/webkit/helper-text'
-  import Hero from '@aziontech/webkit/hero'
   import Label from '@aziontech/webkit/label'
   import Overline from '@aziontech/webkit/overline'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -91,6 +84,7 @@
 
   import { CAREERS_JOBS, jobFacets, jobId } from '../data/careers.js'
   import { CAREERS_JOB_FORM, CAREERS_JOB_SECTIONS, CAREERS_JOB_SENT } from '../data/careers-job.js'
+  import Heroes from '../ui/sections/Heroes.vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -114,12 +108,6 @@
   const facets = computed(() =>
     jobFacets(job.value).map((label, index) => ({ label, icon: FACET_ICONS[index] }))
   )
-
-  const trail = computed(() => [
-    { label: 'Careers', href: '/site/careers' },
-    { label: 'Jobs', href: '/site/careers/jobs' },
-    { label: job.value.title, current: true }
-  ])
 
   const formId = useId()
   const fieldId = (key) => `${formId}-${key}`
@@ -211,46 +199,14 @@
     sent.value = false
     router.push('/site/careers/jobs')
   }
-
-  function goToTrail(event, href) {
-    event.preventDefault()
-    router.push(href)
-  }
 </script>
 
 <template>
-  <!-- ══ The header band ════════════════════════════════════════════════════════
-       A BAND, not a screen: the reader came for the posting, so the headline takes its own
-       register and hands the rest of the viewport to the body.
-
-       THE COLUMN IS START-ALIGNED, and that is the one place this page parts with the site's
-       other heroes. A centred hero is right for a page whose headline IS its statement; a
-       posting's headline is a label on a document the reader is about to read down the start
-       edge, and centring it puts the title on one vertical and every line under it on another. -->
-  <Hero
-    kind="band"
-    max-width="full"
-  >
-    <!-- No `items-*`: a flex column stretches its children, so every row opens on the
-         container's start edge and the actions row can still go full width on a phone. -->
-    <div
-      class="mx-auto flex w-full max-w-(--layout-measure-site) flex-col gap-(--spacing-lg) border-x border-transparent px-(--spacing-xl)"
-    >
-      <!-- The trail leads now, where a start-aligned page puts it. Centred, it read as a
-           caption under the headline; on the start edge it is the way back up, which is what
-           it is. -->
-      <Breadcrumb
-        :items="trail"
-        @navigate="goToTrail"
-      />
-
-      <Hero.Title
-        eyebrow="Careers"
-        eyebrow-prefix="//"
-        :title="job.title"
-      />
-    </div>
-  </Hero>
+  <Heroes
+    kind="title-band-small"
+    eyebrow="Careers"
+    :title="job.title"
+  />
 
   <SectionContainer max-width="site">
     <!-- ── The description, and the rail beside it ──────────────────────────────

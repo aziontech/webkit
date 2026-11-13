@@ -13,6 +13,7 @@
 
   import type { PageSection } from './sections'
   import { HERO_SECTIONS, SECTIONS } from './sections'
+  import type { DeclaredProps } from './sections/block-id'
   import { toPageJson } from './sections/block-id'
 
   defineOptions({ name: 'SitePage' })
@@ -79,13 +80,16 @@
       })
   )
 
+  const declaredProps: DeclaredProps = (section) =>
+    (SECTIONS[section] as { props?: ReturnType<DeclaredProps> } | undefined)?.props
+
   const isComponent = (value: object) =>
     'render' in value || 'setup' in value || '__name' in value || 'template' in value
 
   const serialize = (sections: PageSection[]) => {
     const seen = new WeakSet<object>()
     return JSON.stringify(
-      toPageJson(sections),
+      toPageJson(sections, declaredProps),
       (key, value: unknown) => {
         if (typeof value === 'function') return { $function: value.name || key }
         if (value && typeof value === 'object') {

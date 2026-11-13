@@ -1,23 +1,21 @@
-import { COMPLIANCE_CERTIFICATIONS, COMPLIANCE_PRIVACY_LINKS } from '../compliance.js'
+import { COMPLIANCE_PRIVACY_LINKS } from '../compliance.js'
 
 export const COMPLIANCE_PAGE = [
   {
     section: 'Heroes',
-    eyebrow: 'Conformidade',
-    kind: 'centered-band',
-    title: 'Certificações e conformidade da Azion',
+    kind: 'title-band',
+    title: 'Certifications and Compliance',
     description:
-      'A Azion adere a rigorosos padrões de segurança, disponibilidade e privacidade para que os clientes possam adotar nossos serviços com confiança.',
+      'Azion adheres to rigorous security, availability, and privacy standards so customers can adopt our services with confidence.',
     actions: [
       {
-        label: 'Contato',
-        href: 'https://www.azion.com/pt-br/contato/',
-        kind: 'secondary',
-        external: true
+        label: 'Contact',
+        href: '/site/contact',
+        kind: 'secondary'
       },
       {
-        label: 'Ver Matriz de Responsabilidade',
-        href: 'https://www.azion.com/pt-br/documentacao/responsabilidade-compartilhada/',
+        label: 'View Responsibility Matrix',
+        href: 'https://www.azion.com/en/documentation/shared-responsibility/',
         kind: 'outlined',
         trailing: true,
         external: true
@@ -27,20 +25,18 @@ export const COMPLIANCE_PAGE = [
   {
     section: 'ComplianceBadges',
     eyebrow: '',
-    title:
-      'Segurança e Conformidade são responsabilidades compartilhadas entre a Azion e o cliente.',
+    title: 'Security and Compliance are shared responsibilities between Azion and the customer.',
     description:
-      'Esse modelo compartilhado pode ajudar a aliviar o fardo operacional do cliente, pois a Azion opera, gerencia e controla os componentes desde o sistema operacional e camada de virtualização, incluindo atualizações e patches de segurança, até a segurança física das instalações onde o serviço opera.',
-    certifications: COMPLIANCE_CERTIFICATIONS,
+      "This shared model can help relieve the customer's operational burden as Azion operates, manages and controls the components from the operating system and virtualization layer, including updates and security patches, down to the physical security of the facilities in which the service operates.",
     more: null,
-    ariaLabel: 'Certificações de conformidade'
+    ariaLabel: 'Compliance certifications'
   },
   {
     section: 'ResourceGrid',
-    eyebrow: 'Privacidade de dados',
-    title: 'Regulamentações para proteção de dados',
+    eyebrow: 'Data privacy',
+    title: 'Data Protection Regulations',
     description:
-      'A Azion entende que a privacidade dos dados de nossos clientes e usuários finais é fundamental. Temos compromisso com a proteção de dados e nossos controles se baseiam em práticas robustas, alinhados às principais legislações internacionais, como a Lei Geral de Proteção de Dados (LGPD) e o Regulamento Geral de Proteção de Dados da União Europeia (GDPR). Não comercializamos dados pessoais e os utilizamos exclusivamente para a execução dos nossos serviços. Oferecemos aos usuários dos nossos produtos a capacidade de acessar, corrigir e excluir suas informações pessoais, aderindo ao princípio de que nossos clientes e usuários finais devem ter controle total sobre os dados de sua propriedade que transitam pela nossa rede. Convidamos você a explorar nossas Perguntas Frequentes sobre Privacidade de Dados ou consultar nossa política de privacidade detalhada.',
+      "Azion understands that the privacy of our customers' and end-users' data is essential. We are committed to data protection, and our controls are based on robust practices aligned with key international legislation, such as the General Data Protection Law (LGPD) and the European Union's General Data Protection Regulation (GDPR). We do not sell personal data and use it exclusively for maintaining and delivering our services. We offer users of our products the ability to access, correct, and delete their personal information, adhering to the principle that our customers and end-users should have full control over the data they own that transits through our network. We invite you to explore our Data Privacy FAQs or consult our detailed privacy policy.",
     items: COMPLIANCE_PRIVACY_LINKS.map((link) => ({
       title: link.label,
       description: '',

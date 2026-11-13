@@ -55,9 +55,8 @@ const INDEX = RESOURCES.map((resource, index) => ({
 export const RESOURCE_HUB_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
     eyebrow: RESOURCE_HUB_HERO.eyebrow,
-    eyebrowPrefix: '//',
     title: RESOURCE_HUB_HERO.title,
     description: RESOURCE_HUB_HERO.description,
     actions: [

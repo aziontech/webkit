@@ -146,7 +146,7 @@
           />
           <div
             v-else-if="band.image"
-            class="flex aspect-592/300 w-full items-center justify-center"
+            class="relative aspect-592/300 w-full"
           >
             <img
               :src="band.image.src"
@@ -154,7 +154,7 @@
               :width="band.image.width"
               :height="band.image.height"
               decoding="async"
-              class="block h-auto w-[60.81%]"
+              class="absolute inset-0 m-auto block h-full w-[60.81%] object-contain"
             />
           </div>
           <Illustration

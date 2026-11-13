@@ -1,8 +1,4 @@
 import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
-import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-import pciDssBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
 import { CLIENT_STRIP } from '@shared/ui/brand/strips.js'
 
 import { AREZZO, AXUR, CONTABILIZEI, CREFISA } from '../../clients.js'
@@ -98,13 +94,7 @@ export default {
       eyebrow: "We've got you covered",
       title: 'Compliant with your current and future needs',
       description: '',
-      certifications: [
-        { label: 'SOC 2 Type 2', badge: socBadge, alt: 'AICPA SOC 2 Type 2 badge' },
-        { label: 'SOC 3', badge: socBadge, alt: 'AICPA SOC 3 badge' },
-        { label: 'PCI DSS', badge: pciDssBadge, alt: 'PCI DSS badge' },
-        { label: 'GDPR', badge: gdprBadge, alt: 'GDPR' },
-        { label: 'LGPD', badge: lgpdBadge, alt: 'LGPD badge' }
-      ],
+      ariaLabel: 'Compliance certifications',
       more: null
     },
     {

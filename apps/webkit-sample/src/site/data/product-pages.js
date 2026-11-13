@@ -89,6 +89,14 @@ export const PRODUCT_CLOSING = primaryClosing({
   description: 'Get faster launches, lower latency, and less infrastructure overhead from day one.'
 })
 
+export const PRODUCT_TEMPLATES_CLOSING = {
+  ...primaryClosing({
+    title: 'Start from a template. Ship it today.',
+    description: 'Deploy a ready-made starter in seconds, then make it yours.'
+  }),
+  kind: 'templates'
+}
+
 // The closing every Company page (the footer's Company column) ends on.
 export const COMPANY_CLOSING = PRODUCT_CLOSING
 

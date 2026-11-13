@@ -28,7 +28,7 @@ const LATEST_ROLES = CAREERS_JOBS.slice(0, CAREERS_ROLES.previewCount).map((job)
 export const CAREERS_HOME_PAGE = [
   {
     section: 'Heroes',
-    kind: 'centered-band',
+    kind: 'title-band',
     eyebrow: CAREERS_HOME_HERO.eyebrow,
     title: CAREERS_HOME_HERO.title,
     description: CAREERS_HOME_HERO.description,

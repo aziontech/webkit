@@ -1,39 +1,7 @@
-// THE CERTIFICATIONS ROW AND THE PRIVACY LINKS — copy and shape read off the Figma file
-// (`Azion.com`, node 13113:6593) via the `figma-design-to-code` MCP flow, which grew the row from
-// five badges to seven: CCPA and CPRA (California's two privacy statutes) joined SOC 2/3, PCI,
-// LGPD and GDPR. Their marks (`ccpa.svg`, `cpra.svg`) didn't exist in the shared brand
-// registry, so they were downloaded from this node's own Figma assets and added there — the same
-// registry the other four badges already draw from. The Figma layer for CPRA's badge text is
-// literally "CpRA" (a source typo); the badge renders it uppercase either way, so the label here
-// is spelled out correctly as CPRA.
+const DOCS = 'https://www.azion.com/en/documentation/agreements'
 
-import ccpaBadge from '@aziontech/webkit/assets/ccpa-symbol-color.svg'
-import cpraBadge from '@aziontech/webkit/assets/cpra-symbol-color.svg'
-import gdprBadge from '@aziontech/webkit/assets/gdpr-symbol-color.svg'
-import lgpdBadge from '@aziontech/webkit/assets/lgpd-symbol-color.svg'
-import pciBadge from '@aziontech/webkit/assets/pci-dss-symbol-color.svg'
-import socBadge from '@aziontech/webkit/assets/soc-symbol-color.svg'
-
-const DOCS = 'https://www.azion.com/pt-br/documentacao'
-
-// THE BADGE LABELS ARE IN ENGLISH IN THE SOURCE DESIGN, verbatim, even though the rest of the
-// page is Portuguese — "SOC 2 Type 2", not "SOC 2 Tipo 2". Carried across as shown, not
-// translated to match the surrounding copy.
-
-/** The seven trust badges, in the Figma's own order. SOC 2 and SOC 3 share one badge image, same as the design (`imgSlot` reused for both). */
-export const COMPLIANCE_CERTIFICATIONS = [
-  { label: 'SOC 2 Type 2', badge: socBadge, alt: 'Selo AICPA SOC 2 Type 2' },
-  { label: 'SOC 3 Type 2', badge: socBadge, alt: 'Selo AICPA SOC 3 Type 2' },
-  { label: 'PCI DSS', badge: pciBadge, alt: 'Selo PCI DSS' },
-  { label: 'LGPD', badge: lgpdBadge, alt: 'Selo LGPD' },
-  { label: 'GDPR', badge: gdprBadge, alt: 'Selo GDPR' },
-  { label: 'CCPA', badge: ccpaBadge, alt: 'Selo CCPA' },
-  { label: 'CPRA', badge: cpraBadge, alt: 'Selo CPRA' }
-]
-
-/** The privacy section's link rail — three rows, in the Figma's own order. */
 export const COMPLIANCE_PRIVACY_LINKS = [
-  { label: 'Privacidade de Dados - Clientes', href: `${DOCS}/contratos/faq-clientes-azion/` },
-  { label: 'Privacidade de Dados - Usuários Finais', href: `${DOCS}/contratos/faq-usuarios-finais/` },
-  { label: 'Política de Privacidade', href: `${DOCS}/contratos/politica-de-privacidade/` }
+  { label: 'Data Privacy FAQ – Customers', href: `${DOCS}/faq-azion-customers/` },
+  { label: 'Data Privacy FAQ – End Users', href: `${DOCS}/faq-end-users/` },
+  { label: 'Privacy Policy', href: `${DOCS}/privacy-policy/` }
 ]

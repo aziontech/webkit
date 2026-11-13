@@ -1,4 +1,4 @@
-import { PRODUCT_CLOSING, PRODUCT_DOCS, PRODUCT_HERO_ACTIONS } from '../product-pages.js'
+import { PRODUCT_DOCS, PRODUCT_HERO_ACTIONS, PRODUCT_TEMPLATES_CLOSING } from '../product-pages.js'
 import { quotesLedBy } from '../solutions.js'
 
 const IMPORT = 'import'
@@ -315,5 +315,5 @@ export const FUNCTIONS_PAGE = [
   },
   { section: 'ClientQuotes', quotes: quotesLedBy('contabilizei') },
   { section: 'FaqSection', items: FAQ },
-  PRODUCT_CLOSING
+  PRODUCT_TEMPLATES_CLOSING
 ]
