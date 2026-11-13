@@ -20,10 +20,11 @@ export function limitToBytes(limit) {
 }
 
 export function raisedBudgets(baseEntries, headEntries) {
-  const base = new Map(baseEntries.map((e) => [e.name, e]))
+  const key = (e) => e.path ?? e.name
+  const base = new Map(baseEntries.map((e) => [key(e), e]))
   const raised = []
   for (const e of headEntries) {
-    const before = base.get(e.name)
+    const before = base.get(key(e))
     if (!before) continue
     if (limitToBytes(e.limit) > limitToBytes(before.limit)) {
       raised.push({ name: e.name, from: before.limit, to: e.limit })

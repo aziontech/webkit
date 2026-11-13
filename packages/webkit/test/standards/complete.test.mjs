@@ -174,6 +174,18 @@ test('raisedBudgets flags only a raised limit, not a lowered, unchanged or new o
   assert.deepEqual(raisedBudgets(base, head), [{ name: 'a', from: '2 KB', to: '2.5 KB' }])
 })
 
+test('raisedBudgets keys entries by measured path, so a renamed entry is compared with its own path', () => {
+  const base = [
+    { name: 'shell', path: 'src/shell.vue', limit: '66 KB' },
+    { name: 'other', path: 'src/index.ts', limit: '10 KB' }
+  ]
+  const head = [
+    { name: 'shell-root', path: 'src/shell.vue', limit: '66 KB' },
+    { name: 'shell', path: 'src/index.ts', limit: '72 KB' }
+  ]
+  assert.deepEqual(raisedBudgets(base, head), [{ name: 'shell', from: '10 KB', to: '72 KB' }])
+})
+
 test('hasBudgetRaise needs a line starting Budget-raise: with a reason', () => {
   assert.equal(hasBudgetRaise('Summary\r\nBudget-raise: the chart gained a brush'), true)
   assert.equal(hasBudgetRaise('  Budget-raise: indented is fine'), true)
