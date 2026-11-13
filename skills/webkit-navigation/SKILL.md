@@ -189,7 +189,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
   }
 ]
 
-export const account = { name: 'Ana Souza', email: 'ana.souza@example.com' }
+export const account = { name: 'Jane Doe', email: 'jane.doe@example.com' }
 ```
 
 A browse page then renders **only its body** — no shell import, no `<main>`, no header:
@@ -398,7 +398,7 @@ A create page uses **your** shell and wires the exit:
       { label: 'Create Application' }
     ]"
     back-label="Back to Applications"
-    account="ana.souza@example.com"
+    account="jane.doe@example.com"
     @back="cancel"
   >
     <!-- the focused task: the body of a platform/create/* block -->

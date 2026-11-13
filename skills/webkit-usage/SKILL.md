@@ -27,7 +27,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   <ConsoleLayout
     :navigation="navigation"
     :breadcrumbs="$route.meta.breadcrumbs ?? []"
-    :account="{ name: 'Ana Souza', email: 'ana@example.com' }"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
   >
     <RouterView />
   </ConsoleLayout>
