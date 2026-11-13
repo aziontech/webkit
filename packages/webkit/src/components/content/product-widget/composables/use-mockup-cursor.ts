@@ -30,16 +30,16 @@ const SETTLE_DELAYS = [0, 200]
 const ENTRANCE_DELAYS = [0, 200, 1400]
 
 export function useMockupCursor(
-  container: Ref<globalThis.HTMLElement | null>,
+  container: MaybeRefOrGetter<globalThis.HTMLElement | null>,
   target: MaybeRefOrGetter<MockupCursorTarget>,
-  scroller?: Ref<globalThis.HTMLElement | null>
+  scroller?: MaybeRefOrGetter<globalThis.HTMLElement | null>
 ): UseMockupCursorReturn {
   const position = ref<MockupCursorPosition>({ x: 0, y: 0 })
   const timers = new Set<ReturnType<typeof globalThis.setTimeout>>()
   let disposed = false
 
   const locate = () => {
-    const root = container.value
+    const root = toValue(container)
     const { key, x = 0.5, y = 0.5 } = toValue(target)
     const element = root?.querySelector<globalThis.HTMLElement>(`[data-cursor="${key}"]`)
     if (!root || !element) return
@@ -65,10 +65,10 @@ export function useMockupCursor(
   }
 
   const onScrolled = (event: globalThis.TransitionEvent) => {
-    if (event.target === scroller?.value && event.propertyName === 'translate') locate()
+    if (event.target === toValue(scroller) && event.propertyName === 'translate') locate()
   }
 
-  useEventListener(() => scroller?.value, 'transitionend', onScrolled)
+  useEventListener(() => toValue(scroller), 'transitionend', onScrolled)
 
   watch(
     () => toValue(target),

@@ -112,11 +112,17 @@ export function createMessageHelpers(
   return { t, fill, selectForm, formatNumber }
 }
 
-export function useLocaleContext(): {
+/** What `useLocaleContext()` returns; `context` is null when no `WebkitProvider` is above the caller. */
+export interface UseLocaleContextReturn {
+  /** The provider's context, or null with no provider. */
   context: LocaleContext | null
+  /** Active BCP 47 locale tag (`en` with no provider). */
   locale: ComputedRef<string>
+  /** Active text direction (`ltr` with no provider). */
   dir: ComputedRef<Direction>
-} {
+}
+
+export function useLocaleContext(): UseLocaleContextReturn {
   const context = inject(LocaleInjectionKey, null)
   return {
     context,

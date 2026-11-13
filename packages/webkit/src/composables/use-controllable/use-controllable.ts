@@ -1,7 +1,7 @@
-import { computed, type ComputedRef, type Ref, ref, unref } from 'vue'
+import { computed, type ComputedRef, type MaybeRefOrGetter, type Ref, ref, toValue } from 'vue'
 
 export interface UseControllableOptions<T> {
-  prop: Ref<T | undefined> | ComputedRef<T | undefined>
+  prop: MaybeRefOrGetter<T | undefined>
   defaultProp: T
   onChange: (next: T) => void
 }
@@ -16,13 +16,15 @@ export function useControllable<T>({
   const internal = ref(defaultProp) as Ref<T>
 
   const set = (next: T) => {
-    if (unref(prop) === undefined) {
+    if (toValue(prop) === undefined) {
       internal.value = next
     }
     onChange(next)
   }
 
-  const value = computed(() => (unref(prop) !== undefined ? (unref(prop) as T) : internal.value))
+  const value = computed(() =>
+    toValue(prop) !== undefined ? (toValue(prop) as T) : internal.value
+  )
 
   return Object.assign(value, { set })
 }

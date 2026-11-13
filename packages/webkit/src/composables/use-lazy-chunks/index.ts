@@ -1,4 +1,4 @@
-import { onBeforeUnmount, shallowRef } from 'vue'
+import { onScopeDispose, shallowRef } from 'vue'
 
 export interface LazyChunk<T> {
   index: number
@@ -15,7 +15,7 @@ export interface UseLazyChunksOptions {
   rootMargin?: string
 }
 
-export interface UseLazyChunks {
+export interface UseLazyChunksReturn {
   split: <T>(items: readonly T[]) => LazyChunk<T>[]
   observe: (el: unknown, index: number) => void
   revealAll: () => void
@@ -31,7 +31,7 @@ export function scrollParent(el: Element | null | undefined): HTMLElement | null
   return null
 }
 
-export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunks {
+export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunksReturn {
   const chunkSize = options.chunkSize ?? 100
   const threshold = options.threshold ?? 300
   const mounted = shallowRef<ReadonlySet<number> | 'all'>(new Set([0]))
@@ -98,7 +98,7 @@ export function useLazyChunks(options: UseLazyChunksOptions): UseLazyChunks {
     observer?.observe(el)
   }
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
     observer?.disconnect()
     observer = null
     observed.clear()

@@ -1,9 +1,9 @@
 import { inject } from 'vue'
 
-import { LogViewInjectionKey } from '../injection-key'
+import { type LogViewContext, LogViewInjectionKey } from '../injection-key'
 
-export function useLogViewContext() {
-  const ctx = inject(LogViewInjectionKey)
+export function useLogViewContext(): LogViewContext {
+  const ctx = inject(LogViewInjectionKey, null)
 
   if (!ctx) {
     throw new Error('LogView sub-components must be used within LogView.')

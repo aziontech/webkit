@@ -1,12 +1,12 @@
 import {
-  type MaybeRef,
+  type MaybeRefOrGetter,
   nextTick,
-  onBeforeUnmount,
   onMounted,
+  onScopeDispose,
   readonly,
   type Ref,
   ref,
-  unref,
+  toValue,
   watch
 } from 'vue'
 
@@ -69,11 +69,11 @@ export interface ComputePlacementResult {
 }
 
 export interface UsePlacementOptions {
-  triggerRef: Ref<globalThis.HTMLElement | null>
-  panelRef: Ref<globalThis.HTMLElement | null>
-  isOpen: Ref<boolean>
-  placement: MaybeRef<Placement | 'auto'>
-  offset?: MaybeRef<number>
+  triggerRef: MaybeRefOrGetter<globalThis.HTMLElement | null>
+  panelRef: MaybeRefOrGetter<globalThis.HTMLElement | null>
+  isOpen: MaybeRefOrGetter<boolean>
+  placement: MaybeRefOrGetter<Placement | 'auto'>
+  offset?: MaybeRefOrGetter<number>
   collisionPadding?: CollisionPadding
   flip?: boolean
   autoPlacements?: Placement[]
@@ -274,7 +274,7 @@ export function usePlacement({
   onDismiss,
   matchTriggerWidth = false
 }: UsePlacementOptions): UsePlacementReturn {
-  const initial = unref(placement)
+  const initial = toValue(placement)
   const resolvedPlacement = ref<Placement>(
     initial === 'auto' ? (autoPlacements?.[0] ?? 'bottom') : initial
   )
@@ -287,10 +287,12 @@ export function usePlacement({
   }
   const panelStyle = ref<Record<string, string>>({ ...offScreenStyle })
   const anchored = ref(false)
+  let anchorFrame = 0
+  let disposed = false
 
   function updatePosition() {
-    const trigger = triggerRef.value
-    const panel = panelRef.value
+    const trigger = toValue(triggerRef)
+    const panel = toValue(panelRef)
     if (!trigger || !panel) {
       panelStyle.value = { ...offScreenStyle }
       return
@@ -311,10 +313,10 @@ export function usePlacement({
       triggerRect,
       panelSize,
       boundary: getClippingBoundary(trigger, viewport),
-      placement: unref(placement),
+      placement: toValue(placement),
       autoPlacements,
       flip,
-      offset: unref(offset),
+      offset: toValue(offset),
       collisionPadding,
       matchTriggerWidth
     })
@@ -343,18 +345,18 @@ export function usePlacement({
   }
 
   function onResize() {
-    if (!isOpen.value) return
+    if (!toValue(isOpen)) return
     updatePosition()
   }
 
   function onScroll(event?: globalThis.Event) {
-    if (!isOpen.value) return
+    if (!toValue(isOpen)) return
     const target = (event?.target ?? null) as globalThis.Node | null
-    if (target && panelRef.value?.contains(target)) return
+    if (target && toValue(panelRef)?.contains(target)) return
     if (onDismiss) {
       onDismiss()
       nextTick(() => {
-        if (isOpen.value) updatePosition()
+        if (toValue(isOpen)) updatePosition()
       })
       return
     }
@@ -362,27 +364,32 @@ export function usePlacement({
   }
 
   watch(
-    () => isOpen.value,
+    () => toValue(isOpen),
     async (open) => {
       if (!open) {
         anchored.value = false
         return
       }
       await nextTick()
+      if (disposed) return
       updatePosition()
       await nextTick()
+      if (disposed) return
       updatePosition()
-      globalThis.requestAnimationFrame?.(() => {
-        if (isOpen.value) anchored.value = true
-      })
+      if (anchorFrame) globalThis.cancelAnimationFrame?.(anchorFrame)
+      anchorFrame =
+        globalThis.requestAnimationFrame?.(() => {
+          anchorFrame = 0
+          if (!disposed && toValue(isOpen)) anchored.value = true
+        }) ?? 0
     },
     { immediate: true }
   )
 
   watch(
-    () => unref(placement),
+    () => toValue(placement),
     () => {
-      if (isOpen.value) nextTick(() => updatePosition())
+      if (toValue(isOpen)) nextTick(() => updatePosition())
     }
   )
 
@@ -391,15 +398,16 @@ export function usePlacement({
   function observePanelSize() {
     panelObserver?.disconnect()
     panelObserver = null
-    if (typeof globalThis.ResizeObserver === 'undefined' || !panelRef.value) return
+    const panel = toValue(panelRef)
+    if (typeof globalThis.ResizeObserver === 'undefined' || !panel) return
     panelObserver = new globalThis.ResizeObserver(() => {
-      if (isOpen.value) updatePosition()
+      if (toValue(isOpen)) updatePosition()
     })
-    panelObserver.observe(panelRef.value)
+    panelObserver.observe(panel)
   }
 
   watch(
-    () => panelRef.value,
+    () => toValue(panelRef),
     () => observePanelSize()
   )
 
@@ -408,7 +416,10 @@ export function usePlacement({
     globalThis.document?.addEventListener('scroll', onScroll, true)
   })
 
-  onBeforeUnmount(() => {
+  onScopeDispose(() => {
+    disposed = true
+    if (anchorFrame) globalThis.cancelAnimationFrame?.(anchorFrame)
+    anchorFrame = 0
     globalThis.window?.removeEventListener('resize', onResize)
     globalThis.document?.removeEventListener('scroll', onScroll, true)
     panelObserver?.disconnect()

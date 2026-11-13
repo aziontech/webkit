@@ -14,13 +14,13 @@ import {
 /** The elements a pinned row is measured from. */
 export interface PinnedRowElements {
   /** The tall box the page scrolls through while the band stays pinned. */
-  runway: Ref<HTMLElement | null>
+  runway: MaybeRefOrGetter<HTMLElement | null>
   /** The band that sticks under the header. */
-  pinned: Ref<HTMLElement | null>
+  pinned: MaybeRefOrGetter<HTMLElement | null>
   /** The clipping window of the row. */
-  viewport: Ref<HTMLElement | null>
+  viewport: MaybeRefOrGetter<HTMLElement | null>
   /** The row that slides sideways. */
-  track: Ref<HTMLElement | null>
+  track: MaybeRefOrGetter<HTMLElement | null>
 }
 
 /** What a pinned row exposes to its band. */
@@ -49,10 +49,10 @@ export function usePinnedRow(
 
   const measure = () => {
     frame = null
-    const runway = elements.runway.value
-    const pinned = elements.pinned.value
-    const viewport = elements.viewport.value
-    const track = elements.track.value
+    const runway = toValue(elements.runway)
+    const pinned = toValue(elements.pinned)
+    const viewport = toValue(elements.viewport)
+    const track = toValue(elements.track)
     if (!toValue(enabled) || !runway || !pinned || !viewport || !track) return reset()
     if (getComputedStyle(pinned).position !== 'sticky') return reset()
 
@@ -74,8 +74,10 @@ export function usePinnedRow(
     document.addEventListener('scroll', schedule, SCROLL_OPTIONS)
     window.addEventListener('resize', schedule, { passive: true })
     observer = new ResizeObserver(schedule)
-    if (elements.pinned.value) observer.observe(elements.pinned.value)
-    if (elements.track.value) observer.observe(elements.track.value)
+    const pinned = toValue(elements.pinned)
+    const track = toValue(elements.track)
+    if (pinned) observer.observe(pinned)
+    if (track) observer.observe(track)
     measure()
   }
 
@@ -108,7 +110,7 @@ export function usePinnedRow(
 
   const shift = computed(() => {
     if (!offset.value) return undefined
-    const rtl = elements.runway.value?.closest('[dir]')?.getAttribute('dir') === 'rtl'
+    const rtl = toValue(elements.runway)?.closest('[dir]')?.getAttribute('dir') === 'rtl'
     return `${rtl ? offset.value : -offset.value}px 0`
   })
 

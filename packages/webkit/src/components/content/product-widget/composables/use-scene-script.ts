@@ -1,4 +1,4 @@
-import { onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
+import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
 
 export type SceneWait = (ms: number) => Promise<void>
 
@@ -18,7 +18,7 @@ export interface UseSceneScriptReturn {
 class Cancelled extends Error {}
 
 export function useSceneScript(
-  target: Ref<Element | null>,
+  target: MaybeRefOrGetter<Element | null>,
   { reset, settle, play, hold = 3200, lead = 600, active = () => true }: SceneScriptOptions
 ): UseSceneScriptReturn {
   const playing = ref(false)
@@ -77,7 +77,7 @@ export function useSceneScript(
   watch(active, start)
 
   watch(
-    target,
+    () => toValue(target),
     (element) => {
       observer?.disconnect()
       if (!element) return

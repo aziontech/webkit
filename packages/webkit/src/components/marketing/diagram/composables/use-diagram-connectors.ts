@@ -127,7 +127,7 @@ const route = (s: Box, t: Box, inset: number, radius: number): Route => {
 }
 
 export function useDiagramConnectors(
-  canvas: Ref<globalThis.HTMLElement | null>,
+  canvas: MaybeRefOrGetter<globalThis.HTMLElement | null>,
   edges: MaybeRefOrGetter<DiagramEdge[]>
 ): UseDiagramConnectorsReturn {
   const width = ref(0)
@@ -139,10 +139,11 @@ export function useDiagramConnectors(
 
   let observer: globalThis.ResizeObserver | null = null
   let frame = 0
+  let disposed = false
 
   const measure = () => {
     frame = 0
-    const element = canvas.value
+    const element = toValue(canvas)
     if (!element) return
     const frameBox = element.getBoundingClientRect()
     const style = globalThis.getComputedStyle(element)
@@ -203,12 +204,12 @@ export function useDiagramConnectors(
   }
 
   const schedule = () => {
-    if (frame) return
+    if (frame || disposed) return
     frame = globalThis.requestAnimationFrame(measure)
   }
 
   watch(
-    canvas,
+    () => toValue(canvas),
     (element) => {
       observer?.disconnect()
       if (!element) return
@@ -224,8 +225,10 @@ export function useDiagramConnectors(
   watch(() => toValue(edges), schedule, { deep: true })
 
   onScopeDispose(() => {
+    disposed = true
     observer?.disconnect()
     if (frame) globalThis.cancelAnimationFrame(frame)
+    frame = 0
   })
 
   return {
