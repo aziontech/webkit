@@ -1,14 +1,64 @@
 import { useEventListener, useResizeObserver } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, toValue, unref, watch } from 'vue'
+import {
+  computed,
+  type ComputedRef,
+  type CSSProperties,
+  type MaybeRefOrGetter,
+  onScopeDispose,
+  readonly,
+  type Ref,
+  ref,
+  toValue,
+  watch
+} from 'vue'
 
-import { computePlacement, getClippingBoundary } from '../../../../composables/use-placement'
+import {
+  type Align,
+  type CollisionPadding,
+  computePlacement,
+  getClippingBoundary,
+  type Side,
+  type Size
+} from '../../../../composables/use-placement'
 import { getFixedFrame } from '../../../../utils/containing-block'
 
-const ALIGN_VALUES = new Set(['start', 'center', 'end'])
-const SIDE_VALUES = new Set(['top', 'bottom', 'left', 'right'])
+export interface NavigationMenuPositionerOptions {
+  side?: Side
+  align?: Align
+  sideOffset?: number
+  alignOffset?: number
+  arrowPadding?: number
+  collisionPadding?: CollisionPadding
+}
+
+export interface UseNavigationMenuPositionerReturn {
+  floatingStyles: ComputedRef<CSSProperties>
+  resolvedSide: ComputedRef<Side>
+  resolvedAlign: ComputedRef<Align>
+  availableWidth: ComputedRef<number | null>
+  availableHeight: ComputedRef<number | null>
+  arrowStyles: ComputedRef<CSSProperties>
+  placed: Readonly<Ref<boolean>>
+  popupOrigin: Readonly<Ref<string>>
+  resetPlacement: () => void
+}
+
+interface PlacementState {
+  x: number
+  y: number
+  side: Side
+  align: Align
+  width: number
+  height: number
+  maxWidth: number | null
+  maxHeight: number | null
+}
+
+const ALIGN_VALUES: ReadonlySet<string> = new Set<Align>(['start', 'center', 'end'])
+const SIDE_VALUES: ReadonlySet<string> = new Set<Side>(['top', 'bottom', 'left', 'right'])
 const DEFAULT_COLLISION_PADDING = 8
 
-function normalizeCollisionPadding(raw) {
+function normalizeCollisionPadding(raw: CollisionPadding | undefined): CollisionPadding {
   if (typeof raw === 'number') return raw
   if (raw && typeof raw === 'object') {
     return {
@@ -19,27 +69,36 @@ function normalizeCollisionPadding(raw) {
   return DEFAULT_COLLISION_PADDING
 }
 
-function readRect(el) {
+function readRect(el: HTMLElement | null | undefined): DOMRect | null {
   if (!el || typeof el.getBoundingClientRect !== 'function') return null
   return el.getBoundingClientRect()
 }
 
-/**
- * @param {import('vue').MaybeRef<HTMLElement | null>} anchorRef
- * @param {import('vue').Ref<HTMLElement | null>} floatingRef
- * @param {import('vue').Ref<HTMLElement | null>} arrowRef
- * @param {import('vue').MaybeRefOrGetter<{
- *   side?: string
- *   align?: string
- *   sideOffset?: number
- *   alignOffset?: number
- *   arrowPadding?: number
- *   collisionPadding?: number | { x: number; y: number }
- * }>} options
- * @param {import('vue').MaybeRefOrGetter<{ width: number; height: number } | null>} [targetSize]
- */
-export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, options, targetSize) {
-  const state = ref({
+function isSide(value: unknown): value is Side {
+  return typeof value === 'string' && SIDE_VALUES.has(value)
+}
+
+function isAlign(value: unknown): value is Align {
+  return typeof value === 'string' && ALIGN_VALUES.has(value)
+}
+
+function requestFrame(callback: () => void): () => void {
+  if (typeof globalThis.requestAnimationFrame === 'function') {
+    const id = globalThis.requestAnimationFrame(callback)
+    return () => globalThis.cancelAnimationFrame(id)
+  }
+  const id = setTimeout(callback, 16)
+  return () => clearTimeout(id)
+}
+
+export function useNavigationMenuPositioner(
+  anchor: MaybeRefOrGetter<HTMLElement | null>,
+  floating: MaybeRefOrGetter<HTMLElement | null>,
+  arrow: MaybeRefOrGetter<HTMLElement | null>,
+  options: MaybeRefOrGetter<NavigationMenuPositionerOptions>,
+  targetSize?: MaybeRefOrGetter<Size | null>
+): UseNavigationMenuPositionerReturn {
+  const state = ref<PlacementState>({
     x: 0,
     y: 0,
     side: 'bottom',
@@ -53,11 +112,14 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
   const placed = ref(false)
   const popupOrigin = ref('top left')
 
+  const anchorEl = computed(() => toValue(anchor))
+  const floatingEl = computed(() => toValue(floating))
+
   const opts = computed(() => {
-    const raw = unref(options) ?? {}
+    const raw = toValue(options) ?? {}
     return {
-      side: SIDE_VALUES.has(raw.side) ? raw.side : 'bottom',
-      align: ALIGN_VALUES.has(raw.align) ? raw.align : 'center',
+      side: isSide(raw.side) ? raw.side : 'bottom',
+      align: isAlign(raw.align) ? raw.align : 'center',
       sideOffset: typeof raw.sideOffset === 'number' ? raw.sideOffset : 8,
       alignOffset: typeof raw.alignOffset === 'number' ? raw.alignOffset : 0,
       arrowPadding: typeof raw.arrowPadding === 'number' ? raw.arrowPadding : 8,
@@ -65,29 +127,32 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     }
   })
 
+  const readTargetSize = () => (targetSize ? toValue(targetSize) : null)
+
   const update = () => {
-    const anchorEl = unref(anchorRef)
-    const floatingEl = unref(floatingRef)
-    const anchorRect = readRect(anchorEl)
-    const settledSize = targetSize ? toValue(targetSize) : null
-    const naturalSize = settledSize ?? readRect(floatingEl)
-    if (!anchorRect || !naturalSize) return
+    const anchorElement = anchorEl.value
+    const floatingElement = floatingEl.value
+    const anchorRect = readRect(anchorElement)
+    const naturalSize = readTargetSize() ?? readRect(floatingElement)
+    if (!anchorElement || !anchorRect || !naturalSize) return
     const { side, align, sideOffset, alignOffset, collisionPadding } = opts.value
     const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
 
     const result = computePlacement({
       triggerRect: anchorRect,
       panelSize: { width: naturalSize.width, height: naturalSize.height },
-      boundary: getClippingBoundary(anchorEl, viewport),
+      boundary: getClippingBoundary(anchorElement, viewport),
       placement: align === 'center' ? side : `${side}-${align}`,
       flip: true,
       offset: sideOffset,
       alignOffset,
       collisionPadding
     })
-    const [resolvedSide, resolvedAlign = 'center'] = result.placement.split('-')
+    const [sidePart, alignPart] = result.placement.split('-')
+    const resolvedSide: Side = isSide(sidePart) ? sidePart : side
+    const resolvedAlign: Align = isAlign(alignPart) ? alignPart : 'center'
 
-    const frame = getFixedFrame(floatingEl)
+    const frame = getFixedFrame(floatingElement)
     state.value = {
       x: (result.left - frame.left) / frame.scaleX,
       y: (result.top - frame.top) / frame.scaleY,
@@ -99,7 +164,7 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
       maxHeight: result.maxHeight === null ? null : result.maxHeight / frame.scaleY
     }
 
-    const clamp = (value, max) => Math.min(Math.max(value, 0), Math.max(max, 0))
+    const clamp = (value: number, max: number) => Math.min(Math.max(value, 0), Math.max(max, 0))
     popupOrigin.value =
       resolvedSide === 'top' || resolvedSide === 'bottom'
         ? `${clamp(anchorRect.left + anchorRect.width / 2 - result.left, result.width).toFixed(2)}px ${resolvedSide === 'bottom' ? 'top' : 'bottom'}`
@@ -113,22 +178,19 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     placed.value = false
   }
 
-  const nextFrame = (cb) =>
-    typeof globalThis.requestAnimationFrame === 'function'
-      ? globalThis.requestAnimationFrame(cb)
-      : setTimeout(cb, 16)
+  let cancelUpdateFrame: (() => void) | null = null
+  let cancelPlacedFrame: (() => void) | null = null
 
-  let rafId = null
   const scheduleUpdate = () => {
-    if (rafId !== null) return
-    rafId = nextFrame(() => {
-      rafId = null
+    if (cancelUpdateFrame) return
+    cancelUpdateFrame = requestFrame(() => {
+      cancelUpdateFrame = null
       update()
     })
   }
 
   watch(
-    [() => unref(anchorRef), floatingRef, opts, () => (targetSize ? toValue(targetSize) : null)],
+    [anchorEl, floatingEl, opts, readTargetSize],
     () => {
       if (!hasPlacement.value) {
         update()
@@ -141,7 +203,9 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
 
   watch(hasPlacement, (value) => {
     if (!value) return
-    nextFrame(() => {
+    cancelPlacedFrame?.()
+    cancelPlacedFrame = requestFrame(() => {
+      cancelPlacedFrame = null
       if (hasPlacement.value) placed.value = true
     })
   })
@@ -155,21 +219,17 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
   })
 
   if (!targetSize) {
-    useResizeObserver(floatingRef, scheduleUpdate)
+    useResizeObserver(floatingEl, scheduleUpdate)
   }
 
-  useResizeObserver(
-    computed(() => unref(anchorRef)),
-    scheduleUpdate
-  )
+  useResizeObserver(anchorEl, scheduleUpdate)
 
-  onBeforeUnmount(() => {
-    if (rafId !== null && typeof globalThis.cancelAnimationFrame === 'function') {
-      globalThis.cancelAnimationFrame(rafId)
-    }
+  onScopeDispose(() => {
+    cancelUpdateFrame?.()
+    cancelPlacedFrame?.()
   })
 
-  const floatingStyles = computed(() => ({
+  const floatingStyles = computed<CSSProperties>(() => ({
     position: 'fixed',
     top: '0',
     left: '0',
@@ -183,9 +243,9 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
   const availableWidth = computed(() => state.value.maxWidth)
   const availableHeight = computed(() => state.value.maxHeight)
 
-  const arrowStyles = computed(() => {
-    const anchorRect = readRect(unref(anchorRef))
-    const arrowEl = unref(arrowRef)
+  const arrowStyles = computed((): CSSProperties => {
+    const anchorRect = readRect(anchorEl.value)
+    const arrowEl = toValue(arrow)
     if (!anchorRect || !hasPlacement.value) return {}
 
     const arrowSize = arrowEl ? arrowEl.offsetWidth || 8 : 8
@@ -207,8 +267,8 @@ export function useNavigationMenuPositioner(anchorRef, floatingRef, arrowRef, op
     availableWidth,
     availableHeight,
     arrowStyles,
-    placed,
-    popupOrigin,
+    placed: readonly(placed),
+    popupOrigin: readonly(popupOrigin),
     resetPlacement
   }
 }

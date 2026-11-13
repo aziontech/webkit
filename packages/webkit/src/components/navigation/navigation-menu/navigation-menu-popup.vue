@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { type MaybeElement, onClickOutside } from '@vueuse/core'
-  import { computed, shallowRef, useAttrs, watch } from 'vue'
+  import { computed, type CSSProperties, shallowRef, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element.js'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
-  import { navigationMenuTransitionClasses } from './presets/animations.js'
+  import { resolveHostElement } from './composables/resolve-host-element'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
+  import { navigationMenuTransitionClasses } from './presets/animations'
   import { navigationMenuPopupSurfaceClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuPopup', inheritAttrs: false })
@@ -51,7 +51,7 @@
     'data-ending-style': root.popupTransitionStatus.value === 'ending' ? '' : undefined
   }))
 
-  const popupStyle = computed(() => ({
+  const popupStyle = computed((): CSSProperties => ({
     '--transform-origin': 'var(--transform-origin, center)',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
@@ -59,7 +59,7 @@
   watch(
     popupHostRef,
     (target) => {
-      root.popupEl.value = resolveHostElement(target)
+      root.setPopupEl(resolveHostElement(target))
     },
     { immediate: true }
   )

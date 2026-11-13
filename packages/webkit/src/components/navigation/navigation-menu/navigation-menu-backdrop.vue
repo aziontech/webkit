@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
   import { navigationMenuBackdropClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuBackdrop', inheritAttrs: false })

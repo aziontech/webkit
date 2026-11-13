@@ -1,33 +1,14 @@
 <script setup lang="ts">
-  import {
-    computed,
-    type ComputedRef,
-    inject,
-    onMounted,
-    onUnmounted,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
-  import { resolveHostElement } from './composables/resolve-host-element.js'
+  import { resolveHostElement } from './composables/resolve-host-element'
   import {
-    NAVIGATION_MENU_ITEM_KEY,
-    useNavigationMenuRoot
-  } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
+    useNavigationMenuRoot,
+    useOptionalNavigationMenuItem
+  } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
   import { getNavigationMenuTriggerClasses } from './presets/styles'
-
-  interface NavigationMenuItemContext {
-    itemValue: ComputedRef<string | number>
-    open: ComputedRef<boolean>
-  }
-
-  interface NavigationMenuListHighlightContext {
-    setTarget: (element: HTMLElement | null) => void
-    handleTargetPointerLeave: (event: globalThis.Event, element: HTMLElement | null) => void
-  }
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
@@ -62,9 +43,8 @@
   )
 
   const root = useNavigationMenuRoot()
-  const listHighlight =
-    useNavigationMenuListHighlight() as NavigationMenuListHighlightContext | null
-  const itemContext = inject(NAVIGATION_MENU_ITEM_KEY, null) as NavigationMenuItemContext | null
+  const listHighlight = useNavigationMenuListHighlight()
+  const itemContext = useOptionalNavigationMenuItem()
   const controlRef = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href != null && props.href !== '')

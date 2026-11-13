@@ -1,22 +1,27 @@
-import { onScopeDispose, ref, watch } from 'vue'
+import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
 
-/** @typedef {'starting' | 'ending' | 'idle' | undefined} TransitionStatus */
+export type TransitionStatus = 'starting' | 'ending' | 'idle' | undefined
 
-/**
- * @param {import('vue').MaybeRefOrGetter<boolean>} open
- * @param {boolean} [enableIdleState]
- */
-export function useTransitionStatus(open, enableIdleState = false) {
+export interface UseTransitionStatusReturn {
+  mounted: Readonly<Ref<boolean>>
+  setMounted: (value: boolean) => void
+  transitionStatus: Readonly<Ref<TransitionStatus>>
+}
+
+export function useTransitionStatus(
+  open: MaybeRefOrGetter<boolean>,
+  enableIdleState = false
+): UseTransitionStatusReturn {
   const mounted = ref(false)
-  const transitionStatus = ref(/** @type {TransitionStatus} */ (undefined))
+  const transitionStatus = ref<TransitionStatus>(undefined)
 
   let clearStartingFrame = 0
   let idleFrame = 0
 
-  const readOpen = () => (typeof open === 'function' ? open() : open)
+  const readOpen = (): boolean => toValue(open)
 
   watch(
-    () => readOpen(),
+    readOpen,
     (isOpen) => {
       if (isOpen && !mounted.value) {
         mounted.value = true
@@ -53,7 +58,7 @@ export function useTransitionStatus(open, enableIdleState = false) {
     })
   }
 
-  watch(() => readOpen(), scheduleClearStarting, { flush: 'post' })
+  watch(readOpen, scheduleClearStarting, { flush: 'post' })
 
   watch(transitionStatus, (status) => {
     if (status === 'starting') {
@@ -62,7 +67,7 @@ export function useTransitionStatus(open, enableIdleState = false) {
   })
 
   watch(
-    () => [readOpen(), transitionStatus.value, mounted.value],
+    (): [boolean, TransitionStatus, boolean] => [readOpen(), transitionStatus.value, mounted.value],
     ([isOpen, status, isMounted]) => {
       if (!isOpen || !enableIdleState || !isMounted || status === 'idle') {
         return
@@ -82,7 +87,7 @@ export function useTransitionStatus(open, enableIdleState = false) {
     { flush: 'post' }
   )
 
-  const setMounted = (value) => {
+  const setMounted = (value: boolean) => {
     mounted.value = value
 
     if (!value) {
@@ -96,8 +101,8 @@ export function useTransitionStatus(open, enableIdleState = false) {
   })
 
   return {
-    mounted,
+    mounted: readonly(mounted) as Readonly<Ref<boolean>>,
     setMounted,
-    transitionStatus
+    transitionStatus: readonly(transitionStatus) as Readonly<Ref<TransitionStatus>>
   }
 }

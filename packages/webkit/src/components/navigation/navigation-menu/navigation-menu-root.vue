@@ -4,8 +4,11 @@
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
-  import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuRootState } from './composables/use-navigation-menu-root.js'
+  import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import {
+    type NavigationMenuRootEmit,
+    useNavigationMenuRootState
+  } from './composables/use-navigation-menu-root'
   import { getNavigationMenuRootClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenu', inheritAttrs: false })
@@ -50,21 +53,17 @@
   const isControlled = computed(() => model.value !== undefined)
   const controlledValue = computed(() => (isControlled.value ? (model.value ?? null) : null))
 
-  const emitBridge = emit as (event: string, ...args: unknown[]) => void
-
   const rootState = useNavigationMenuRootState(
     controlledValue,
-    computed(() => props.defaultValue),
     isControlled,
     internalValue,
     {
-      delay: props.delay,
-      closeDelay: props.closeDelay,
-      orientation: props.orientation,
-      nested: false,
+      delay: () => props.delay,
+      closeDelay: () => props.closeDelay,
+      orientation: () => props.orientation,
       dir: useDirection()
     },
-    emitBridge
+    emit as unknown as NavigationMenuRootEmit
   )
 
   provideNavigationMenuRoot(rootState)

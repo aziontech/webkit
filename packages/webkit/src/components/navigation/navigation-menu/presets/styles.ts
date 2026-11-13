@@ -13,14 +13,14 @@ const triggerBaseClasses = [
 const navigationMenuTriggerStateClasses =
   'data-[popup-open]:text-(--text-default) data-[pressed]:text-(--text-default)'
 const navigationMenuLinkStateClasses = 'data-[active]:text-(--text-default)'
-export function getNavigationMenuTriggerClasses(isLink, extra) {
+export function getNavigationMenuTriggerClasses(isLink: boolean, extra?: string): string {
   return cn(
     triggerBaseClasses,
     isLink ? navigationMenuLinkStateClasses : navigationMenuTriggerStateClasses,
     extra
   )
 }
-export function getNavigationMenuRootClasses(extra) {
+export function getNavigationMenuRootClasses(extra?: string): string {
   return cn('relative', navigationMenuNavSelectorVar, extra)
 }
 export const navigationMenuEntryAnchorClasses = [

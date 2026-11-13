@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, watch } from 'vue'
+  import { computed, type CSSProperties, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element.js'
+  import { resolveHostElement } from './composables/resolve-host-element'
   import {
     useNavigationMenuItem,
     useNavigationMenuRoot
-  } from './composables/use-navigation-menu-context.js'
-  import { useTransitionStatus } from './composables/use-transition-status.js'
-  import { navigationMenuTransitionClasses, waitForCloseTransition } from './presets/animations.js'
+  } from './composables/use-navigation-menu-context'
+  import { useTransitionStatus } from './composables/use-transition-status'
+  import { navigationMenuTransitionClasses, waitForCloseTransition } from './presets/animations'
   import { navigationMenuContentPaddingClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuContent', inheritAttrs: false })
@@ -59,7 +59,7 @@
     'data-activation-direction': root.activationDirection.value ?? undefined
   }))
 
-  const contentStyle = computed(() =>
+  const contentStyle = computed((): CSSProperties | undefined =>
     isExiting.value
       ? {
           position: 'absolute',
@@ -76,7 +76,7 @@
     const element = resolveHostElement(target)
 
     if (contentOpen.value && element) {
-      root.currentContentEl.value = element
+      root.setCurrentContentEl(element)
     }
   })
 
@@ -84,7 +84,7 @@
     const element = resolveHostElement(contentRef.value)
 
     if (open && element) {
-      root.currentContentEl.value = element
+      root.setCurrentContentEl(element)
       return
     }
 

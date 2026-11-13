@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs, watch } from 'vue'
+  import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element.js'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner.js'
-  import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context.js'
-  import { navigationMenuTransitionClasses } from './presets/animations.js'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
+  import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context'
+  import { navigationMenuTransitionClasses } from './presets/animations'
   import { navigationMenuPositionerLayoutClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
@@ -98,7 +97,9 @@
   )
 
   provide(NAVIGATION_MENU_POSITIONER_KEY, {
-    arrowRef,
+    setArrowEl: (element) => {
+      arrowRef.value = element
+    },
     arrowStyles,
     resolvedSide,
     resolvedAlign
@@ -118,21 +119,13 @@
     () => availableWidth.value !== null || availableHeight.value !== null
   )
 
-  const positionerStyle = computed(() => ({
+  const positionerStyle = computed((): CSSProperties => ({
     ...floatingStyles.value,
     '--popup-origin': popupOrigin.value,
     '--available-width': availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
     '--available-height': availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
-
-  watch(
-    positionerRef,
-    (target) => {
-      root.positionerEl.value = resolveHostElement(target)
-    },
-    { immediate: true }
-  )
 
   const onPointerEnter = () => {
     root.cancelTimers()

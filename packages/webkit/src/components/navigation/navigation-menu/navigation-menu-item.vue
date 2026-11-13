@@ -5,8 +5,8 @@
   import {
     provideNavigationMenuItem,
     useNavigationMenuRoot
-  } from './composables/use-navigation-menu-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
+  } from './composables/use-navigation-menu-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
   import {
     navigationMenuEntryAnchorClasses,
     navigationMenuEntryDescriptionClasses,

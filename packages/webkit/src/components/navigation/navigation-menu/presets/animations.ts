@@ -1,15 +1,12 @@
-import {
-  NAVIGATION_MENU_CLOSE_DURATION_MS,
-  NAVIGATION_MENU_DURATION_MS,
-  NAVIGATION_MENU_EASING
-} from '../composables/navigation-menu-css-vars.js'
-
-export { NAVIGATION_MENU_CLOSE_DURATION_MS, NAVIGATION_MENU_DURATION_MS, NAVIGATION_MENU_EASING }
+import { NAVIGATION_MENU_DURATION_MS } from '../composables/navigation-menu-css-vars'
 
 const STARTING_STYLE_ATTR = 'data-starting-style'
 const ENDING_STYLE_ATTR = 'data-ending-style'
 
-export const navigationMenuTransitionClasses = {
+export const navigationMenuTransitionClasses: Record<
+  'positioner' | 'popup' | 'content' | 'viewport',
+  string
+> = {
   positioner:
     'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[instant]:transition-none data-[starting-style]:transition-none',
   popup:
@@ -20,21 +17,13 @@ export const navigationMenuTransitionClasses = {
     'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
 }
 
-export const PRESET_IDS = {
-  POPUP_MORPH: 'popup.morph',
-  CONTENT_DIRECTIONAL: 'content.directional',
-  INSTANT: 'instant'
-}
-
-/** @param {number} ms */
-function delay(ms) {
+function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
     globalThis.setTimeout(resolve, ms)
   })
 }
 
-/** @param {number} [frameCount] */
-export function waitForAnimationFrames(frameCount = 1) {
+function waitForAnimationFrames(frameCount = 1): Promise<void> {
   return new Promise((resolve) => {
     let remaining = frameCount
 
@@ -42,7 +31,7 @@ export function waitForAnimationFrames(frameCount = 1) {
       remaining -= 1
 
       if (remaining <= 0) {
-        resolve(undefined)
+        resolve()
         return
       }
 
@@ -53,27 +42,21 @@ export function waitForAnimationFrames(frameCount = 1) {
   })
 }
 
-/**
- * @param {Element} element
- * @param {string} attribute
- * @param {(present: boolean) => boolean} predicate
- * @param {number} [timeoutMs]
- */
 function waitForDataAttribute(
-  element,
-  attribute,
-  predicate,
+  element: Element,
+  attribute: string,
+  predicate: (present: boolean) => boolean,
   timeoutMs = NAVIGATION_MENU_DURATION_MS * 2
-) {
+): Promise<void> {
   if (predicate(element.hasAttribute(attribute))) {
     return Promise.resolve()
   }
 
-  return new Promise((resolve) => {
+  return new Promise<void>((resolve) => {
     const observer = new globalThis.MutationObserver(() => {
       if (predicate(element.hasAttribute(attribute))) {
         cleanup()
-        resolve(undefined)
+        resolve()
       }
     })
 
@@ -89,13 +72,12 @@ function waitForDataAttribute(
 
     const timeoutId = globalThis.setTimeout(() => {
       cleanup()
-      resolve(undefined)
+      resolve()
     }, timeoutMs)
   })
 }
 
-/** @param {Element | null | undefined} element */
-export async function waitForElementAnimations(element) {
+export async function waitForElementAnimations(element: Element | null | undefined): Promise<void> {
   if (!element || typeof element.getAnimations !== 'function') {
     return
   }
@@ -104,8 +86,7 @@ export async function waitForElementAnimations(element) {
   await Promise.all(animations.map((animation) => animation.finished.catch(() => undefined)))
 }
 
-/** @param {Element | null | undefined} element */
-export async function waitForOpenTransition(element) {
+export async function waitForOpenTransition(element: Element | null | undefined): Promise<void> {
   if (!element) {
     await delay(NAVIGATION_MENU_DURATION_MS)
     return
@@ -117,8 +98,7 @@ export async function waitForOpenTransition(element) {
   await Promise.all([delay(NAVIGATION_MENU_DURATION_MS), waitForElementAnimations(element)])
 }
 
-/** @param {Element | null | undefined} element */
-export async function waitForCloseTransition(element) {
+export async function waitForCloseTransition(element: Element | null | undefined): Promise<void> {
   if (!element) {
     await delay(NAVIGATION_MENU_DURATION_MS)
     return

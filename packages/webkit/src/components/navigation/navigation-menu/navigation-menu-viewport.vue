@@ -2,9 +2,9 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element.js'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { navigationMenuTransitionClasses } from './presets/animations.js'
+  import { resolveHostElement } from './composables/resolve-host-element'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { navigationMenuTransitionClasses } from './presets/animations'
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
@@ -16,7 +16,6 @@
   )
 
   const root = useNavigationMenuRoot()
-  const viewportRef = ref<HTMLElement | null>(null)
   const viewportTargetRef = ref<HTMLElement | null>(null)
 
   const viewportClasses = computed(() =>
@@ -24,17 +23,9 @@
   )
 
   watch(
-    viewportRef,
-    (target) => {
-      root.viewportEl.value = resolveHostElement(target)
-    },
-    { immediate: true }
-  )
-
-  watch(
     viewportTargetRef,
     (target) => {
-      root.viewportTargetEl.value = resolveHostElement(target)
+      root.setViewportTargetEl(resolveHostElement(target))
     },
     { immediate: true }
   )
@@ -42,7 +33,6 @@
 
 <template>
   <div
-    ref="viewportRef"
     :class="viewportClasses"
     :data-testid="testId"
   >

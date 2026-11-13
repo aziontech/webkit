@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuItem } from './composables/use-navigation-menu-context.js'
+  import { useNavigationMenuItem } from './composables/use-navigation-menu-context'
   import { navigationMenuIconClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuIcon', inheritAttrs: false })

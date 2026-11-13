@@ -2,10 +2,10 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight.js'
-  import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context.js'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root.js'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight'
+  import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
+  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
   import {
     navigationMenuGroupLabelClasses,
     navigationMenuGroupLabelLinkClasses,

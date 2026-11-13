@@ -3,7 +3,7 @@
 
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context.js'
+  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
 
   defineOptions({ name: 'NavigationMenuPortal', inheritAttrs: false })
 
