@@ -4,9 +4,9 @@ category: content
 structure: composition
 status: implemented
 spec_version: 1
-checksum: fc0a32f7a4a405466d00090b546d2ab40fbfbce5ab28c1a46d196a0fbb422f01
+checksum: 421aa4845665667f15a9dca0ef1d15395dc9ccb918674c8d2b9ba8dc4655c722
 created: 2026-10-21
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ShellMockup — Component Spec
@@ -143,7 +143,7 @@ _No events — the mockup is a picture; nothing in it reports activation._
 - The bars and the rail are drawings: plain `div`s (no `header`, `aside` or `nav` landmark), each `inert` and `aria-hidden="true"` whatever `interactive` says, so only the slot body is ever operable.
 - Shell matrix: `shell="console"` without `rail` draws the slim bar (brand, title, avatar); with `rail` it draws the side rail (from `md` up) and a top bar with breadcrumbs, a search field, Create, Agent and the avatar; `shell="legacy"` draws the previous console's top bar (menu, brand, Create, Copilot, Feedback, help, account) and swaps the legacy typography weights and line heights onto the frame. `chrome` off removes the bars; the rail stays.
 - Entrance: parts are at rest offset and transparent until the root is at least 30% on screen and `active`; two animation frames later the root flips to entered and each part lands on its beat. `active` turning off resets it so it replays. `animated` off, or a reduced-motion preference, starts entered with no transition.
-- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; it re-measures when the host resizes and when `width` or `mobileWidth` changes.
+- Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; It measures the host's layout box (its untransformed border box), never its on-screen box, so a mockup nested in another scaled mockup (a fragment framed in a window) scales once, at any frame width. It re-measures when the host resizes and when `width` or `mobileWidth` changes.
 
 ## Motion & Animations
 

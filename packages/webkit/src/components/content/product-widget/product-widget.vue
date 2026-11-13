@@ -4,6 +4,7 @@
   import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
   import type { ShellMockupFade, ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
   import { ProductWidgetInjectionKey } from './injection-key'
+  import type * as Plates from './plates'
   import { resolveProductWidget } from './registry'
 
   defineOptions({ name: 'ProductWidget', inheritAttrs: false })
@@ -100,9 +101,9 @@
     active?: boolean
     /** Whether the pointer is over the host; a fragment plays its beat while it is. */
     hover?: boolean
-    /** How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating. */
+    /** How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating. */
     kind?: ShellMockupKind
-    /** Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar. */
+    /** Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it. */
     chrome?: boolean
     /** Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. */
     width?: number
@@ -137,29 +138,20 @@
 
   const widget = shallowRef<Component | null>(null)
   const declared = shallowRef<string[]>([])
+  const plates = shallowRef<typeof Plates | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-product-widget'
   )
 
-  const forwarded = computed(() => {
-    const values: Record<string, unknown> = {
-      active: props.active,
-      hover: props.hover,
-      kind: props.kind,
-      chrome: props.chrome,
-      width: props.width,
-      fade: props.fade,
-      texture: props.texture,
-      tab: props.tab,
-      interval: props.interval
-    }
-    return Object.fromEntries(
-      Object.entries(values).filter(
-        ([key, value]) => value !== undefined && declared.value.includes(key)
-      )
-    )
-  })
+  const plate = computed(
+    () =>
+      (plates.value?.productWidgetPlates as Partial<Record<string, Plates.ProductWidgetPlating>>)?.[
+        props.name
+      ]
+  )
+
+  const plating = computed(() => plate.value && (props.kind ?? plate.value.kind))
 
   provide(ProductWidgetInjectionKey, { cursor: computed(() => props.cursor) })
 
@@ -174,10 +166,13 @@
       tab: props.tab !== undefined,
       interval: props.interval !== undefined
     }
-    const ignored = Object.keys(set).filter((key) => set[key] && !keys.includes(key))
+    const plated = plating.value ? ['kind', plating.value === 'window' ? 'chrome' : ''] : []
+    const ignored = Object.keys(set).filter(
+      (key) => set[key] && !keys.includes(key) && !plated.includes(key)
+    )
     if (!ignored.length) return
     console.warn(
-      `[webkit] <ProductWidget name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments are drawn bare at their own width; only the workload screens take kind, chrome, width and fade (see the product-widget spec).`
+      `[webkit] <ProductWidget name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments keep their own width and fade and take only kind, and chrome while framed; the workload screens take kind, chrome, width and fade (see the product-widget spec).`
     )
   }
 
@@ -192,9 +187,10 @@
           console.warn(`[webkit] <ProductWidget>: no widget registered under name "${name}".`)
         return
       }
-      load()
-        .then(({ default: component }) => {
+      Promise.all([load(), import('./plates')])
+        .then(([{ default: component }, module]) => {
           if (props.name !== name) return
+          plates.value = module
           declared.value = Object.keys((component as { props?: object }).props ?? {})
           widget.value = markRaw(component)
           warnIgnored(name, declared.value)
@@ -212,12 +208,13 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-name="name"
+    :data-kind="plating"
     class="h-full w-full min-w-0"
   >
     <component
-      :is="widget"
-      v-if="widget"
-      v-bind="forwarded"
+      :is="plates.ProductWidgetPlate"
+      v-if="widget && plates"
+      v-bind="{ testId, kind: plating, plate, widget, declared, values: props }"
     />
   </div>
 </template>

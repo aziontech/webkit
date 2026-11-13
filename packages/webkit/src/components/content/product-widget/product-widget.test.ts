@@ -10,6 +10,8 @@ import { productWidgets } from './registry'
 
 const TESTID = 'content-product-widget'
 const FRAME_TESTID = 'content-shell-mockup'
+const WINDOW_TESTID = `${TESTID}__frame`
+const BODY_TESTID = `${TESTID}__frame-body`
 const NAMES = Object.keys(productWidgets) as ProductWidgetName[]
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -32,6 +34,12 @@ const host = (props: Record<string, unknown>) =>
 
 const frameOf = (view: ReturnType<typeof render>) =>
   within(view.container).findByTestId(FRAME_TESTID, {}, { timeout: 5000 })
+
+const windowOf = (view: ReturnType<typeof render>) =>
+  within(view.container).findByTestId(WINDOW_TESTID, {}, { timeout: 5000 })
+
+const barText = (plated: HTMLElement) =>
+  (plated.textContent ?? '').replace(within(plated).getByTestId(BODY_TESTID).textContent ?? '', '')
 
 describe('ProductWidget', () => {
   let fixtureSheet: globalThis.HTMLStyleElement
@@ -83,11 +91,99 @@ describe('ProductWidget', () => {
 
     await expect
       .poll(() =>
-        Array.from(view.container.querySelectorAll(`[data-testid="${FRAME_TESTID}"]`)).map(
-          (frame) => frame.getAttribute('data-kind')
-        )
+        Array.from(view.container.querySelectorAll(`[data-testid="${TESTID}"]`)).map((root) => [
+          root.getAttribute('data-name'),
+          root.getAttribute('data-kind'),
+          root.querySelector(`[data-testid="${WINDOW_TESTID}"]`)?.getAttribute('data-kind') ??
+            root.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
+        ])
       )
-      .toEqual(['window', 'bare'])
+      .toEqual([
+        ['workload-topology', null, 'window'],
+        ['workload-topology', null, 'bare'],
+        ['edge-dns-record', 'window', 'window'],
+        ['edge-dns-record', 'bare', 'bare']
+      ])
+  })
+
+  it('frames a fragment the registry plates as a window, titled with its module', async () => {
+    const view = render(host({ name: 'data-stream-source' }))
+    const plated = await windowOf(view)
+    const root = view.getByTestId(TESTID)
+
+    expect(root.getAttribute('data-kind')).toBe('window')
+    expect(plated.getAttribute('data-kind')).toBe('window')
+    expect(plated.getAttribute('data-fade')).toBe('bottom')
+    expect(plated.hasAttribute('inert')).toBe(true)
+    expect(plated.getAttribute('aria-hidden')).toBe('true')
+    expect(barText(plated)).toContain('Data Stream')
+    expect(
+      within(plated)
+        .getByTestId(BODY_TESTID)
+        .contains(await frameOf(view))
+    ).toBe(true)
+  })
+
+  it('resets the fade color and start to the window body for the fragment inside', async () => {
+    const view = render(host({ name: 'waf-allowed-rule' }))
+    const plated = await windowOf(view)
+    const body = within(plated).getByTestId(BODY_TESTID)
+
+    expect(body.style.getPropertyValue('--mockup-fade-color')).toBe('var(--bg-canvas)')
+    expect(body.style.getPropertyValue('--mockup-fade-start')).toBe('initial')
+    expect(plated.style.getPropertyValue('--mockup-fade-start')).toBe('80%')
+  })
+
+  it('draws a fragment the registry plates bare without a window', async () => {
+    const view = render(host({ name: 'waf-threat' }))
+    await frameOf(view)
+
+    expect(view.getByTestId(TESTID).getAttribute('data-kind')).toBe('bare')
+    expect(view.queryByTestId(WINDOW_TESTID)).toBeNull()
+  })
+
+  it('lets kind override the plating of a fragment either way', async () => {
+    const bare = render(host({ name: 'data-stream-source', kind: 'bare' }))
+    await frameOf(bare)
+    expect(bare.getByTestId(TESTID).getAttribute('data-kind')).toBe('bare')
+    expect(bare.queryByTestId(WINDOW_TESTID)).toBeNull()
+    bare.unmount()
+
+    const framed = render(host({ name: 'waf-threat', kind: 'window' }))
+    const plated = await windowOf(framed)
+    expect(framed.getByTestId(TESTID).getAttribute('data-kind')).toBe('window')
+    expect(barText(plated)).toContain('WAF')
+  })
+
+  it('drops the console bar of a framed fragment when chrome is off', async () => {
+    const view = render(host({ name: 'edge-dns-record', chrome: false }))
+    const plated = await windowOf(view)
+
+    expect(barText(plated)).not.toContain('Edge DNS')
+  })
+
+  it('leaves data-kind off the root of a workload screen and never frames one', async () => {
+    const view = render(host({ name: 'workloads-list' }))
+    await frameOf(view)
+
+    expect(view.getByTestId(TESTID).hasAttribute('data-kind')).toBe(false)
+    expect(view.queryByTestId(WINDOW_TESTID)).toBeNull()
+  })
+
+  it('does not warn when kind and chrome plate a fragment', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(host({ name: 'waf-threat', kind: 'window', chrome: false }))
+    await windowOf(view)
+
+    expect(warn.mock.calls.flat().join(' ')).not.toContain('no effect')
+    warn.mockRestore()
+  })
+
+  it('has no axe violations around a framed fragment', async () => {
+    const view = render(host({ name: 'edge-dns-record' }))
+    await windowOf(view)
+
+    await expectNoA11yViolations(view.container)
   })
 
   it('never leaks a prop the widget does not declare onto its root', async () => {
@@ -165,12 +261,21 @@ describe('ProductWidget', () => {
     expect(frame.textContent).not.toContain('Priya')
   })
 
-  it('warns in development when a plating prop is set on a fragment that ignores it', async () => {
+  it('warns in development when chrome is set on a bare fragment', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const view = render(host({ name: 'data-stream-source', kind: 'window', chrome: true }))
+    const view = render(host({ name: 'waf-threat', chrome: false }))
     await frameOf(view)
 
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('kind, chrome have no effect'))
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('chrome has no effect'))
+    warn.mockRestore()
+  })
+
+  it('warns in development when a plating prop is set on a fragment that ignores it', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const view = render(host({ name: 'data-stream-source', width: 720, fade: 'top' }))
+    await frameOf(view)
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('width, fade have no effect'))
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('name="data-stream-source"'))
     warn.mockRestore()
   })

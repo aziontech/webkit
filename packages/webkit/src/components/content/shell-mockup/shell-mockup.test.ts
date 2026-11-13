@@ -163,6 +163,35 @@ describe('ShellMockup (composition)', () => {
     expect(frame.style.transform).not.toBe(before)
   })
 
+  it('scales a mockup inside a transformed host by its layout width, not its on-screen box', async () => {
+    const Host = defineComponent({
+      components: { ShellMockup, ShellMockupPart },
+      template: `
+        <div>
+          <div data-host="plain" style="width: 430px; height: 240px">
+            <ShellMockup :width="860" :mobile-width="860" style="display: block; height: 100%">
+              <ShellMockupPart><p>Plain</p></ShellMockupPart>
+            </ShellMockup>
+          </div>
+          <div data-host="scaled" style="width: 430px; height: 240px; transform: scale(0.5); transform-origin: top left">
+            <ShellMockup :width="860" :mobile-width="860" style="display: block; height: 100%">
+              <ShellMockupPart><p>Scaled</p></ShellMockupPart>
+            </ShellMockup>
+          </div>
+        </div>
+      `
+    })
+    const { container } = render(Host)
+    const frameIn = (host: string) =>
+      container.querySelector(`[data-host="${host}"] [data-testid="${TESTID}"]`)
+        ?.firstElementChild as globalThis.HTMLElement
+
+    await expect.poll(() => frameIn('plain').style.transform).toMatch(/^scale\(/)
+    await expect
+      .poll(() => frameIn('scaled').style.transform)
+      .toBe(frameIn('plain').style.transform)
+  })
+
   it('renders the overlay slot over the frame', () => {
     const { getByText } = render(host({}, true))
 
