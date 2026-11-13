@@ -1,0 +1,84 @@
+{
+ "name": "site-page",
+ "binding": "SitePage",
+ "import": "@aziontech/webkit/site-page",
+ "treeShakeableImport": "@aziontech/webkit/site-page",
+ "category": "marketing",
+ "surface": "marketing",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width=\"site\"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer (in the design sample that break is drawn by the closing call to action of every page), as the design sample's `SitePage` lays a page out. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` (\"the package ships no registry and no dispatcher\"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shells/website` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-band` drew from a private map) and with `Diagram`, `ProductWidget` and `Illustration`, the components a scene slot already takes. `media-split-band` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind=\"$attrs\"` and the `data-testid` fallback `marketing-site-page`.",
+ "setup": null,
+ "useWhen": [
+  "Rendering a marketing page stored as data (a CMS entry, a JSON file, the site's page modules) on WebKit sections.",
+  "A campaign landing built from existing sections with no page-specific code."
+ ],
+ "avoidWhen": [
+  "A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `SectionContainer` / `SectionGap` instead.",
+  "A console screen or a docs page — use `shells/console` or `shells/documentation`.",
+  "One section on its own — import that section (`@aziontech/webkit/<name>`) and bind its props."
+ ],
+ "related": [
+  "section-container` — the column the renderer lays `sections` in.",
+  "section-gap` — the hatched break it draws before each band.",
+  "The page sections (`hero-band`, `use-cases`, `faq-section`, …) — what each `_id` names.",
+  "shells/website` — the nav and footer frame a page renders inside."
+ ],
+ "bestPractices": [
+  "Write `_id` as the section's public subpath (`use-cases` for `@aziontech/webkit/use-cases`); the `props` object is exactly what the section's own `site-*.json` example carries.",
+  "Put openings (`hero-band`, `hero-form`, `hero-with-opening`, `hero-copy-on-top-art`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.",
+  "Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.",
+  "Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.",
+  "Keep transport details of a form (`endpoint`, `hiddenFields`) in `submission`, next to `props`; the renderer passes the entry back on `submit` and the site sends.",
+  "Watch the development console after changing a page: an unknown `_id` or scene is named there.",
+  "Keep one opening per page: every opening renders the page `h1`, so two openings put two `h1` on the page.",
+  "Render the page on the server when layout shift matters: a section still loading on the client reserves no space."
+ ],
+ "props": [
+  {
+   "name": "hero",
+   "type": "SitePageSection[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Opening sections, rendered full bleed above the column in order; each is `{ _id, props?, scenes?, gap?, submission? }`."
+  },
+  {
+   "name": "sections",
+   "type": "SitePageSection[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Column sections, rendered in order inside the site column with a hatched gap before each and after the last; each is `{ _id, props?, scenes?, gap?, submission? }`."
+  }
+ ],
+ "events": [
+  {
+   "name": "submit",
+   "payload": "(event: SubmitEvent, payload: SitePageSubmit)",
+   "notes": "A section's form passed its own validation (`hero-form`, `closing-call-to-action-newsletter`); the site sends it and feeds `loading` / `submitted` / `error` back through that entry's `props`."
+  }
+ ],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [
+  {
+   "kind": "illustrations",
+   "page": "foundations/illustrations.md"
+  },
+  {
+   "kind": "diagrams",
+   "page": "foundations/diagrams.md"
+  },
+  {
+   "kind": "brandMarks",
+   "page": "foundations/brand-marks.md"
+  }
+ ],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup lang=\"ts\">\n  import SitePage, { type SitePageSection } from '@aziontech/webkit/site-page'\n\n  const hero: SitePageSection[] = [\n    {\n      _id: 'hero-band',\n      props: {\n        kind: 'title-band',\n        size: 'large',\n        eyebrow: 'SQL Database',\n        title: 'Relational data, next to every user',\n        description:\n          'Query a distributed SQL database from your functions, with reads served from the nearest location.',\n        primaryAction: { label: 'Start for free', href: '/signup' },\n        secondaryAction: { label: 'Docs', href: '/docs', trailing: true }\n      }\n    }\n  ]\n\n  const sections: SitePageSection[] = [\n    {\n      _id: 'use-cases',\n      props: {\n        eyebrow: 'SQL Database',\n        title: 'What teams use SQL Database for',\n        description: 'Teams use it to:',\n        primaryAction: { label: 'Docs', href: '/docs', trailing: true },\n        items: [\n          {\n            icon: 'pi pi-comments',\n            title: 'RAG applications',\n            description: 'Build topic-specific chatbots on data stored in SQL Database.'\n          },\n          {\n            icon: 'pi pi-search',\n            title: 'Search applications',\n            description: 'Power search with vector similarity queries on stored embeddings.'\n          },\n          {\n            icon: 'pi pi-sync',\n            title: 'AI context injection',\n            description: 'Give AI applications relevant context from vector embeddings.'\n          },\n          {\n            icon: 'pi pi-globe',\n            title: 'AI workflows',\n            description: 'Pair stored embeddings with AI Inference to run RAG on Azion.'\n          }\n        ]\n      }\n    },\n    {\n      _id: 'faq-section',\n      props: {\n        anchor: 'faq',\n        title: 'Frequently asked questions',\n        items: [\n          {\n            question: 'Which SQL dialect does it speak?',\n            answer: 'SQLite-compatible SQL, so existing queries and tools work unchanged.'\n          },\n          {\n            question: 'Where are reads served from?',\n            answer: 'From the replica closest to the request; writes go to the primary.'\n          }\n        ]\n      }\n    },\n    {\n      _id: 'closing-call-to-action',\n      props: {\n        kind: 'primary',\n        anchor: 'contact',\n        title: 'Build, run, and protect applications everywhere.',\n        description: 'Get faster launches, lower latency, and less infrastructure overhead.',\n        primaryAction: { label: 'Start for free', href: '/signup' },\n        secondaryAction: { label: 'Docs', href: '/docs', trailing: true }\n      }\n    }\n  ]\n</script>\n\n<template>\n  <SitePage\n    :hero=\"hero\"\n    :sections=\"sections\"\n  />\n</template>"
+  }
+ ],
+ "docs": "components/site-page.md"
+}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
 
+  import { resolveScene } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { ProductWidgetName } from '../../content/product-widget/product-widget.vue'
@@ -93,13 +94,6 @@
     secondaryAction: undefined
   })
 
-  const SCENES = {
-    BrandGlobeScene: defineAsyncComponent(
-      () => import('../../../assets/globe/brand-globe-scene.vue')
-    ),
-    SpinningGlobe: defineAsyncComponent(() => import('../../../assets/globe/spinning-globe.vue'))
-  }
-
   const ProductWidget = defineAsyncComponent(
     () => import('../../content/product-widget/product-widget.vue')
   )
@@ -113,9 +107,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-media-split-band'
   )
 
-  const sceneComponent = computed(() =>
-    props.scene ? (SCENES[props.scene.component] ?? null) : null
-  )
+  const sceneComponent = computed(() => (props.scene ? resolveScene(props.scene.component) : null))
 
   const hasImage = computed(() => Boolean(props.image?.src))
 

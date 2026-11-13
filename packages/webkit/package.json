@@ -2388,6 +2388,10 @@
       "types": "./types/components/marketing/section-container/section-container.vue.d.ts",
       "default": "./src/components/marketing/section-container/section-container.vue"
     },
+    "./site-page": {
+      "types": "./types/components/marketing/site-page/site-page.vue.d.ts",
+      "default": "./src/components/marketing/site-page/site-page.vue"
+    },
     "./media-tile": {
       "types": "./types/components/marketing/media-tile/media-tile.vue.d.ts",
       "default": "./src/components/marketing/media-tile/media-tile.vue"
