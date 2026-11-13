@@ -59,9 +59,9 @@ export const pageState = (initial) => {
 
   const eventSources = {
     http: 'HTTP Requests',
-    waf: 'WAF',
-    functions: 'Functions',
-    firewall: 'Firewall'
+    security: 'Security',
+    services: 'Services',
+    access: 'Access Control'
   }
 
   const eventSourceOptions = Object.entries(eventSources).map(([value, label]) => ({
@@ -145,7 +145,7 @@ export const pageState = (initial) => {
     { id: 'geolocation', label: 'Geolocation' },
     { id: 'client', label: 'Client' },
     { id: 'security', label: 'Security' },
-    { id: 'functions', label: 'Functions' },
+    { id: 'services', label: 'Services' },
     { id: 'identifiers', label: 'Identifiers' }
   ]
 
@@ -178,17 +178,17 @@ export const pageState = (initial) => {
     { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
     { id: 'remoteAddress', label: 'Remote Address', category: 'client', minWidth: 80, mono: true },
     { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
-    { id: 'functionName', label: 'Function', category: 'functions', minWidth: 80, mono: true },
+    { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
     {
-      id: 'functionDurationMs',
-      label: 'Function Duration',
-      category: 'functions',
+      id: 'serviceDurationMs',
+      label: 'Service Duration',
+      category: 'services',
       align: 'end',
       minWidth: 80,
       format: (value) => `${value} ms`
     },
     { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
-    { id: 'workloadId', label: 'Workload ID', category: 'identifiers', minWidth: 80, mono: true },
+    { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
     { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
   ]
 
@@ -204,11 +204,11 @@ export const pageState = (initial) => {
   }
 
   const hosts = [
-    'edgeflow.com',
-    'api.edgeflow.com',
-    'staging.edgeflow.com',
-    'legacy.edgeflow.com',
-    'azion.design'
+    'example.com',
+    'api.example.com',
+    'staging.example.com',
+    'legacy.example.com',
+    'cdn.example.com'
   ]
   const addresses = [
     '45.132.11.9',
@@ -224,14 +224,14 @@ export const pageState = (initial) => {
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
     'curl/8.12.1',
-    'Azion-Health-Check/1.0'
+    'Health-Check/1.0'
   ]
   const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
-  const workloads = ['wl-3f9a21', 'wl-77c40b', 'wl-91de55']
+  const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
   const eventTemplates = [
     {
-      source: 'waf',
+      source: 'security',
       level: 'Error',
       message: 'Blocked SQL injection attempt on /api/session',
       requestMethod: 'POST',
@@ -248,14 +248,14 @@ export const pageState = (initial) => {
       status: 502
     },
     {
-      source: 'functions',
+      source: 'services',
       level: 'Info',
       message: 'auth-handler completed in 12ms',
-      functionName: 'auth-handler',
-      functionDurationMs: 12
+      serviceName: 'auth-handler',
+      serviceDurationMs: 12
     },
     {
-      source: 'firewall',
+      source: 'access',
       level: 'Warning',
       message: 'Rate limit reached for a single address',
       requestMethod: 'GET',
@@ -264,11 +264,11 @@ export const pageState = (initial) => {
       ruleName: 'Rate Limit · 100 rpm'
     },
     {
-      source: 'functions',
+      source: 'services',
       level: 'Debug',
-      message: 'geo-router resolved region sa-east-1',
-      functionName: 'geo-router',
-      functionDurationMs: 4
+      message: 'geo-router resolved region south-america',
+      serviceName: 'geo-router',
+      serviceDurationMs: 4
     },
     {
       source: 'http',
@@ -279,13 +279,13 @@ export const pageState = (initial) => {
       status: 200
     },
     {
-      source: 'firewall',
+      source: 'access',
       level: 'Error',
-      message: 'Network list “Known scrapers” denied the request',
+      message: 'IP list “Known scrapers” denied the request',
       requestMethod: 'GET',
       requestUri: '/products',
       status: 403,
-      ruleName: 'Network list · Known scrapers'
+      ruleName: 'IP list · Known scrapers'
     },
     {
       source: 'http',
@@ -320,7 +320,7 @@ export const pageState = (initial) => {
       const template = rotation[index % rotation.length]
       const progress = (index + pick(100) / 100) / eventCount
       const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
-      const requestScoped = template.source !== 'functions'
+      const requestScoped = template.source !== 'services'
       return {
         id: `ev-${String(index + 1).padStart(3, '0')}`,
         at,
@@ -339,10 +339,10 @@ export const pageState = (initial) => {
         country: countries[pick(countries.length)],
         remoteAddress: addresses[pick(addresses.length)],
         ruleName: template.ruleName,
-        functionName: template.functionName,
-        functionDurationMs: template.functionDurationMs,
+        serviceName: template.serviceName,
+        serviceDurationMs: template.serviceDurationMs,
         requestId: `${(pick(0xffffff) + 0x100000).toString(16)}-${(pick(0xffff) + 0x1000).toString(16)}`,
-        workloadId: workloads[pick(workloads.length)],
+        resourceId: resources[pick(resources.length)],
         userAgent: requestScoped ? agents[pick(agents.length)] : undefined
       }
     })
@@ -768,14 +768,14 @@ export const pageState = (initial) => {
     'requestMethod',
     'requestUri',
     'status',
-    'functionName',
-    'functionDurationMs',
+    'serviceName',
+    'serviceDurationMs',
     'ruleName',
     'requestTimeMs',
     'remoteAddress',
     'country',
     'cacheStatus',
-    'workloadId'
+    'resourceId'
   ]
 
   const summaryLimit = 6
@@ -1151,7 +1151,7 @@ export const pageState = (initial) => {
     countries,
     agents,
     cacheStatuses,
-    workloads,
+    resources,
     eventTemplates,
     sequence,
     eventCount,
@@ -1327,9 +1327,9 @@ const formatEventStamp = (date) =>
 
 const eventSources = {
   http: 'HTTP Requests',
-  waf: 'WAF',
-  functions: 'Functions',
-  firewall: 'Firewall'
+  security: 'Security',
+  services: 'Services',
+  access: 'Access Control'
 }
 
 const eventSourceOptions = Object.entries(eventSources).map(([value, label]) => ({ value, label }))
@@ -1410,7 +1410,7 @@ const eventFieldCategories = [
   { id: 'geolocation', label: 'Geolocation' },
   { id: 'client', label: 'Client' },
   { id: 'security', label: 'Security' },
-  { id: 'functions', label: 'Functions' },
+  { id: 'services', label: 'Services' },
   { id: 'identifiers', label: 'Identifiers' }
 ]
 
@@ -1443,17 +1443,17 @@ const eventFields = [
   { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
   { id: 'remoteAddress', label: 'Remote Address', category: 'client', minWidth: 80, mono: true },
   { id: 'ruleName', label: 'Rule', category: 'security', minWidth: 80 },
-  { id: 'functionName', label: 'Function', category: 'functions', minWidth: 80, mono: true },
+  { id: 'serviceName', label: 'Service', category: 'services', minWidth: 80, mono: true },
   {
-    id: 'functionDurationMs',
-    label: 'Function Duration',
-    category: 'functions',
+    id: 'serviceDurationMs',
+    label: 'Service Duration',
+    category: 'services',
     align: 'end',
     minWidth: 80,
     format: (value) => \`\${value} ms\`
   },
   { id: 'requestId', label: 'Request ID', category: 'identifiers', minWidth: 80, mono: true },
-  { id: 'workloadId', label: 'Workload ID', category: 'identifiers', minWidth: 80, mono: true },
+  { id: 'resourceId', label: 'Resource ID', category: 'identifiers', minWidth: 80, mono: true },
   { id: 'userAgent', label: 'User Agent', category: 'client', grow: 3, mono: true }
 ]
 
@@ -1470,11 +1470,11 @@ const formatEventValue = (field, value) => {
 
 __SEED_START__
 const hosts = [
-  'edgeflow.com',
-  'api.edgeflow.com',
-  'staging.edgeflow.com',
-  'legacy.edgeflow.com',
-  'azion.design'
+  'example.com',
+  'api.example.com',
+  'staging.example.com',
+  'legacy.example.com',
+  'cdn.example.com'
 ]
 const addresses = [
   '45.132.11.9',
@@ -1490,14 +1490,14 @@ const agents = [
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
   'curl/8.12.1',
-  'Azion-Health-Check/1.0'
+  'Health-Check/1.0'
 ]
 const cacheStatuses = ['HIT', 'MISS', 'BYPASS', 'EXPIRED']
-const workloads = ['wl-3f9a21', 'wl-77c40b', 'wl-91de55']
+const resources = ['res-3f9a21', 'res-77c40b', 'res-91de55']
 
 const eventTemplates = [
   {
-    source: 'waf',
+    source: 'security',
     level: 'Error',
     message: 'Blocked SQL injection attempt on /api/session',
     requestMethod: 'POST',
@@ -1514,14 +1514,14 @@ const eventTemplates = [
     status: 502
   },
   {
-    source: 'functions',
+    source: 'services',
     level: 'Info',
     message: 'auth-handler completed in 12ms',
-    functionName: 'auth-handler',
-    functionDurationMs: 12
+    serviceName: 'auth-handler',
+    serviceDurationMs: 12
   },
   {
-    source: 'firewall',
+    source: 'access',
     level: 'Warning',
     message: 'Rate limit reached for a single address',
     requestMethod: 'GET',
@@ -1530,11 +1530,11 @@ const eventTemplates = [
     ruleName: 'Rate Limit · 100 rpm'
   },
   {
-    source: 'functions',
+    source: 'services',
     level: 'Debug',
-    message: 'geo-router resolved region sa-east-1',
-    functionName: 'geo-router',
-    functionDurationMs: 4
+    message: 'geo-router resolved region south-america',
+    serviceName: 'geo-router',
+    serviceDurationMs: 4
   },
   {
     source: 'http',
@@ -1545,13 +1545,13 @@ const eventTemplates = [
     status: 200
   },
   {
-    source: 'firewall',
+    source: 'access',
     level: 'Error',
-    message: 'Network list “Known scrapers” denied the request',
+    message: 'IP list “Known scrapers” denied the request',
     requestMethod: 'GET',
     requestUri: '/products',
     status: 403,
-    ruleName: 'Network list · Known scrapers'
+    ruleName: 'IP list · Known scrapers'
   },
   {
     source: 'http',
@@ -1586,7 +1586,7 @@ const seedEvents = () => {
     const template = rotation[index % rotation.length]
     const progress = (index + pick(100) / 100) / eventCount
     const at = minutesAgo(0.2 + seedWindowMinutes * ageFraction(progress))
-    const requestScoped = template.source !== 'functions'
+    const requestScoped = template.source !== 'services'
     return {
       id: \`ev-\${String(index + 1).padStart(3, '0')}\`,
       at,
@@ -1605,10 +1605,10 @@ const seedEvents = () => {
       country: countries[pick(countries.length)],
       remoteAddress: addresses[pick(addresses.length)],
       ruleName: template.ruleName,
-      functionName: template.functionName,
-      functionDurationMs: template.functionDurationMs,
+      serviceName: template.serviceName,
+      serviceDurationMs: template.serviceDurationMs,
       requestId: \`\${(pick(0xffffff) + 0x100000).toString(16)}-\${(pick(0xffff) + 0x1000).toString(16)}\`,
-      workloadId: workloads[pick(workloads.length)],
+      resourceId: resources[pick(resources.length)],
       userAgent: requestScoped ? agents[pick(agents.length)] : undefined
     }
   })
@@ -2035,14 +2035,14 @@ const summaryPriority = [
   'requestMethod',
   'requestUri',
   'status',
-  'functionName',
-  'functionDurationMs',
+  'serviceName',
+  'serviceDurationMs',
   'ruleName',
   'requestTimeMs',
   'remoteAddress',
   'country',
   'cacheStatus',
-  'workloadId'
+  'resourceId'
 ]
 
 const summaryLimit = 6
@@ -3010,7 +3010,7 @@ const EVENT_TABLE = `<section class="flex min-h-0 min-w-0 flex-1 flex-col">
         size="small"
         icon="pi pi-inbox"
         title="No events yet"
-        description="Events appear here as soon as traffic reaches this workspace's workloads."
+        description="Events appear here as soon as traffic reaches this workspace's resources."
       />
       <EmptyState
         v-else-if="search.trim()"

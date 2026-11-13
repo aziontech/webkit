@@ -13,7 +13,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ArgumentListCell from '../../components/list/ArgumentListCell.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import ConfirmDialog from '../../components/list/ConfirmDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
@@ -29,8 +28,8 @@
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
   import {
-    PURGES,
     purgeLayerOptions,
+    PURGES,
     purgeSummary,
     purgeTypeOptions
   } from '../../lib/data/real-time-purge'
@@ -51,7 +50,6 @@
     },
     { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: TAG_COLUMN_WIDE },
     { accessorKey: 'layerLabel', header: 'Layer', enableSorting: true, minWidth: FIT_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'lastModified', header: 'Purged', enableSorting: true, minWidth: FIT_COLUMN },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -300,15 +298,12 @@
                     <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
                   </template>
 
-                  <template #cell-author="{ row }">
-                    <AuthorCell
+                  <template #cell-lastModified="{ row }">
+                    <LastModifiedCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
+                      :date="row.modifiedAt"
                     />
-                  </template>
-
-                  <template #cell-lastModified="{ row }">
-                    <LastModifiedCell :date="row.modifiedAt" />
                   </template>
 
                   <template #cell-actions="{ row }">

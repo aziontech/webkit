@@ -24,7 +24,7 @@
     class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
     aria-hidden="true"
   >
-    <div class="flex items-center">
+    <div class="flex min-h-[1lh] items-center text-heading-sm">
       <Skeleton
         width="12rem"
         height="1.5rem"
@@ -39,25 +39,27 @@
         class="min-w-0 xl:flex-1"
       >
         <template #content>
-          <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-            <div
-              v-for="metric in METRICS"
-              :key="metric"
-              class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) max-sm:nth-[n+2]:border-t sm:max-xl:[&:nth-child(n+3)]:border-t sm:[&:nth-child(even)]:border-l xl:[&:nth-child(n+2)]:border-l"
-            >
-              <Skeleton
-                width="60%"
-                height="0.875rem"
-              />
-              <div class="flex items-center justify-between gap-(--spacing-sm)">
+          <div class="@container w-full grow">
+            <div class="grid h-full grid-cols-1 @sm:grid-cols-2 @3xl:grid-cols-4">
+              <div
+                v-for="metric in METRICS"
+                :key="metric"
+                class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) border-(--border-default) p-(--spacing-md) @max-sm:nth-[n+2]:border-t @sm:@max-3xl:nth-[n+3]:border-t @sm:even:border-l @3xl:nth-[n+2]:border-l"
+              >
                 <Skeleton
-                  width="40%"
-                  height="1.75rem"
+                  width="60%"
+                  height="0.875rem"
                 />
-                <Skeleton
-                  width="3.25rem"
-                  height="1.25rem"
-                />
+                <div class="flex items-center justify-between gap-(--spacing-sm)">
+                  <Skeleton
+                    width="40%"
+                    height="1.75rem"
+                  />
+                  <Skeleton
+                    width="3.25rem"
+                    height="1.25rem"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -98,7 +100,7 @@
     </div>
 
     <div
-      class="grid grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:grow xl:grid-cols-5 xl:gap-(--layout-section-gap)"
+      class="mt-(--spacing-lg) grid grid-cols-1 gap-(--layout-group-gap) sm:grid-cols-2 lg:grid-cols-3 xl:min-h-0 xl:grow xl:grid-cols-5 xl:gap-(--layout-section-gap)"
     >
       <div
         v-for="panel in PANELS"
@@ -109,10 +111,6 @@
         <div
           class="flex min-h-(--size-6) items-center gap-(--spacing-xs) px-[calc(var(--spacing-md)+1px)]"
         >
-          <span
-            v-if="MARKED_PANELS.includes(panel)"
-            class="shrink-0"
-          />
           <Skeleton
             width="5rem"
             height="0.875rem"

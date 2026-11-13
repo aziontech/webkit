@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 79a4c066e6520a355b505f55dfa0e3c9b8fbf4c7a9677c0f5225fce9fcd1417a
+checksum: 7fcef4a0ed7c677a4b4862fc5804d70dfc584be96a15684f3c500e403c5ee6ef
 ---
 # HeroForm — Component Spec
 
@@ -38,7 +38,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 ```vue
 <script setup>
-import HeroForm from '@aziontech/webkit/sections/hero-form'
+import HeroForm from '@aziontech/webkit/hero-form'
 import { ref } from 'vue'
 
 const loading = ref(false)

@@ -1,5 +1,6 @@
 export const COMPONENT_CATEGORIES = [
   'actions',
+  'chart',
   'code',
   'content',
   'data',

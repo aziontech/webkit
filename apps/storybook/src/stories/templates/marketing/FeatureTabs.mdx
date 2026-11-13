@@ -6,11 +6,11 @@ import * as FeatureTabsStories from './FeatureTabs.stories'
 
 # FeatureTabs
 
-A band that walks through up to three features, one at a time. A horizontal title with its button opens the module, the tabs stand on the left at `size="medium"`, each with its own title, description and progress, and the open tab's media fills the other side. On small screens the tabs stack and the open tab's media sits inside its row.
+A band that walks through the features behind one claim, one at a time. Up to three tabs sit on one side and the active tab's picture on the other. The Functions page uses it for its Observability section.
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-Built from `SectionModule`, `SectionTitle`, `FrameBox` and `MediaTabs`.
+The band is the `FeatureTabs` component from `@aziontech/webkit/feature-tabs`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `MediaTabs`, `Illustration` and `MiniButton`.
 
 <p
   style={{
@@ -25,26 +25,25 @@ Built from `SectionModule`, `SectionTitle`, `FrameBox` and `MediaTabs`.
   Stories
 </p>
 
-### Code
+### Default
 
-From the website bundle: every tab opens its own code file — the workload config, a request handler and a storage handler. The code sits on a pixelate texture that fades out toward the top. The open tab replays its lines as it opens.
+The Observability band from Functions: Trace, Logs and Request path, each held for 5.2 seconds. Each tab shows one `Illustration` scene, named by its `illustration`.
 
-<Canvas of={FeatureTabsStories.Code} />
+<Canvas of={FeatureTabsStories.Default} />
 
 ##### Use it on the site
 
-Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
+Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` make the section title.
-- `tabs` are up to three features, each a `value`, a `title`, a `description` and the `code` file it opens. A tab without `code` draws the band's `scene`, set in the page's data file, instead.
-- `action` is the button in the section title. Without it the title stands alone.
-- `copyAriaLabel` names the copy control on each file.
+- `tabs` are up to three features, each a `title`, a `description`, an `illustration` name and its `illustrationLabel`.
+- `primaryAction` is the small link under the frame, a `label`, an `href` and `trailing` for the chevron. Leave it out to drop the link.
 
 Example:
 
 <div className="sb-site-json">
   <Source
-    of={FeatureTabsStories.CodeJson}
+    of={FeatureTabsStories.DefaultJson}
     dark
   />
 </div>

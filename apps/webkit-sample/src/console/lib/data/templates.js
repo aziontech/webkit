@@ -79,6 +79,8 @@ const authored = {
     settings: [
       {
         name: 'shopifyAccessToken',
+        variable: 'SHOPIFY_ACCESS_TOKEN',
+        secret: true,
         label: 'Shopify Access Token',
         placeholder: 'Access Token',
         description: 'You can find this token in Credentials on Shopify Project Configurations.',
@@ -86,12 +88,15 @@ const authored = {
       },
       {
         name: 'shopifyRevalidationSecret',
+        variable: 'SHOPIFY_REVALIDATION_SECRET',
+        secret: true,
         label: 'Shopify revalidation secret',
         placeholder: 'Revalidation secret',
         description: 'You can find this secret in Credentials on Shopify Project Configurations.'
       },
       {
         name: 'shopifyStoreDomain',
+        variable: 'SHOPIFY_STORE_DOMAIN',
         label: 'Shopify Store Domain',
         placeholder: 'https://your-shopify-store-subdomain.myshopify.com',
         description: 'Your Shopify Store Domain'
@@ -111,6 +116,7 @@ const authored = {
     settings: [
       {
         name: 'tursoDatabaseUrl',
+        variable: 'TURSO_DATABASE_URL',
         label: 'Turso Database URL',
         placeholder: 'libsql://your-database.turso.io',
         description: 'The libSQL connection URL for your Turso database.',
@@ -118,6 +124,8 @@ const authored = {
       },
       {
         name: 'tursoAuthToken',
+        variable: 'TURSO_AUTH_TOKEN',
+        secret: true,
         label: 'Turso Auth Token',
         placeholder: 'Auth Token',
         description: 'Generate a token with `turso db tokens create`.',
@@ -226,6 +234,8 @@ const authored = {
     settings: [
       {
         name: 'aiApiKey',
+        variable: 'AI_API_KEY',
+        secret: true,
         label: 'Model provider API key',
         placeholder: 'sk-…',
         description: 'Written to the repository as a secret; the chatbot reads it at runtime.',
@@ -247,17 +257,25 @@ const authored = {
     defaultRepoName: 'nextjs-commerce',
     settings: [
       {
-        name: 'shopifyAccessToken',
-        label: 'Shopify Access Token',
-        placeholder: 'Access Token',
-        description: 'You can find this token in Credentials on Shopify Project Configurations.',
-        required: true
+        name: 'siteName',
+        variable: 'SITE_NAME',
+        label: 'Site Name',
+        placeholder: 'Store'
       },
       {
         name: 'shopifyStoreDomain',
+        variable: 'SHOPIFY_STORE_DOMAIN',
         label: 'Shopify Store Domain',
         placeholder: 'https://your-shopify-store-subdomain.myshopify.com',
-        description: 'Your Shopify Store Domain'
+        required: true
+      },
+      {
+        name: 'shopifyStorefrontAccessToken',
+        variable: 'SHOPIFY_STOREFRONT_ACCESS_TOKEN',
+        secret: true,
+        label: 'Shopify Access Token',
+        placeholder: 'shpat_…',
+        required: true
       }
     ]
   },
@@ -298,6 +316,8 @@ const authored = {
     settings: [
       {
         name: 'shopifyAccessToken',
+        variable: 'SHOPIFY_ACCESS_TOKEN',
+        secret: true,
         label: 'Shopify Access Token',
         placeholder: 'Access Token',
         description: 'You can find this token in Credentials on Shopify Project Configurations.',
@@ -305,6 +325,7 @@ const authored = {
       },
       {
         name: 'shopifyStoreDomain',
+        variable: 'SHOPIFY_STORE_DOMAIN',
         label: 'Shopify Store Domain',
         placeholder: 'https://your-shopify-store-subdomain.myshopify.com',
         description: 'Your Shopify Store Domain'
@@ -326,6 +347,7 @@ const authored = {
     settings: [
       {
         name: 'cosmicBucketSlug',
+        variable: 'COSMIC_BUCKET_SLUG',
         label: 'Cosmic bucket slug',
         placeholder: 'my-bucket',
         description: 'The bucket the site reads its content from.',
@@ -333,6 +355,8 @@ const authored = {
       },
       {
         name: 'cosmicReadKey',
+        variable: 'COSMIC_READ_KEY',
+        secret: true,
         label: 'Cosmic read key',
         placeholder: 'Read key',
         description: 'Found under Bucket Settings → API Access on Cosmic.',
@@ -355,6 +379,7 @@ const authored = {
     settings: [
       {
         name: 'cosmicBucketSlug',
+        variable: 'COSMIC_BUCKET_SLUG',
         label: 'Cosmic bucket slug',
         placeholder: 'my-bucket',
         description: 'The bucket the blog reads its posts from.',
@@ -362,6 +387,8 @@ const authored = {
       },
       {
         name: 'cosmicReadKey',
+        variable: 'COSMIC_READ_KEY',
+        secret: true,
         label: 'Cosmic read key',
         placeholder: 'Read key',
         description: 'Found under Bucket Settings → API Access on Cosmic.',

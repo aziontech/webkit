@@ -1,64 +1,142 @@
 <script setup>
-  import CardBox from '@aziontech/webkit/card-box'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref } from 'vue'
-  import { useRoute } from 'vue-router'
+  import Hint from '@aziontech/webkit/hint'
+  import Link from '@aziontech/webkit/link'
+  import SegmentedButton from '@aziontech/webkit/segmented-button'
+  import StatTile from '@aziontech/webkit/stat-tile'
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import FilterButton from '../../components/list/FilterButton.vue'
   import FilterChips from '../../components/list/FilterChips.vue'
-  import MetricPanel from '../../components/observability/MetricPanel.vue'
+  import RefreshButton from '../../components/list/RefreshButton.vue'
+  import MetricReportCard from '../../components/observability/MetricReportCard.vue'
+  import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import {
-    DEFAULT_PERIOD,
-    METRIC_DASHBOARDS,
-    METRIC_PERIODS,
-    metricsFor,
-    periodLabel
-  } from '../../lib/data/observability'
+    comparisonLabel,
+    resolveReport,
+    resolveSummary,
+    RTM_DEFAULT_PERIOD,
+    RTM_HIGHLIGHTS,
+    RTM_PERIODS,
+    RTM_SUMMARY,
+    rtmPage
+  } from '../../lib/data/real-time-metrics'
+  import { useSampleMode } from '../../lib/state/sample-mode'
 
   const route = useRoute()
+  const router = useRouter()
+  const { accountEmpty } = useSampleMode()
+
+  const page = computed(() => rtmPage(route.query.dashboard))
+
+  const dashboardOptions = computed(
+    () => page.value?.dashboards.map(({ id, label }) => ({ label, value: id })) ?? []
+  )
 
   const dashboard = computed(
-    () => METRIC_DASHBOARDS.find((entry) => entry.id === route.query.dashboard) ?? null
+    () =>
+      page.value?.dashboards.find((entry) => entry.id === route.query.view) ??
+      page.value?.dashboards[0] ??
+      null
   )
 
-  const activeId = computed(() =>
-    dashboard.value ? `rtm-${dashboard.value.id}` : 'real-time-metrics'
-  )
+  const dashboardId = computed({
+    get: () => dashboard.value?.id ?? '',
+    set: (view) => router.replace({ query: { ...route.query, view } })
+  })
 
-  const heading = computed(() => dashboard.value?.label ?? 'Real-Time Metrics')
+  const activeId = computed(() => (page.value ? `rtm-${page.value.id}` : 'real-time-metrics'))
+
+  const heading = computed(() => page.value?.label ?? 'Real-Time Metrics')
 
   const description = computed(
     () =>
-      dashboard.value?.description ??
-      'Traffic as the edge served it — requests, data transferred and errors, for the selected period.'
+      page.value?.description ?? 'Operational metrics from every Azion product, in near real time.'
   )
 
   const crumbs = computed(() =>
-    dashboard.value
-      ? [
-          { label: 'Real-Time Metrics', href: '/real-time-metrics' },
-          { label: dashboard.value.label }
-        ]
+    page.value
+      ? [{ label: 'Real-Time Metrics', href: '/real-time-metrics' }, { label: page.value.label }]
       : [{ label: 'Real-Time Metrics' }]
   )
 
-  const filters = ref({ period: [DEFAULT_PERIOD] })
+  const filters = ref({ period: [RTM_DEFAULT_PERIOD] })
 
   const filterFields = [
     {
       id: 'period',
       label: 'Period',
       kind: 'range',
-      options: METRIC_PERIODS,
+      options: RTM_PERIODS,
       match: () => true
     }
   ]
 
-  const period = computed(() => filters.value.period?.[0] ?? DEFAULT_PERIOD)
-  const windowLabel = computed(() => periodLabel(period.value))
-  const data = computed(() => metricsFor(period.value))
+  const period = computed(() => filters.value.period?.[0] ?? RTM_DEFAULT_PERIOD)
+  const comparison = computed(() => comparisonLabel(period.value))
+
+  const loading = ref(true)
+  const refetching = ref(false)
+  const activeIndex = ref(null)
+  let timer = null
+
+  const settle = (state, delay) => {
+    globalThis.clearTimeout(timer)
+    state.value = true
+    timer = globalThis.setTimeout(() => {
+      state.value = false
+    }, delay)
+  }
+
+  settle(loading, 700)
+
+  watch([() => route.query.dashboard, () => dashboard.value?.id], () => {
+    activeIndex.value = null
+    settle(loading, 500)
+  })
+
+  watch(period, () => {
+    activeIndex.value = null
+    settle(refetching, 600)
+  })
+
+  onScopeDispose(() => globalThis.clearTimeout(timer))
+
+  const refresh = () => settle(refetching, 600)
+
+  const resolve = (report, dataset) =>
+    resolveReport({ ...report, dataset }, period.value, { empty: accountEmpty.value })
+
+  const reports = computed(() =>
+    (dashboard.value?.reports ?? []).map((report) => resolve(report, dashboard.value.dataset))
+  )
+
+  const figures = computed(() => reports.value.filter((report) => report.type === 'big-numbers'))
+  const panels = computed(() => reports.value.filter((report) => report.type !== 'big-numbers'))
+
+  const summary = computed(() =>
+    RTM_SUMMARY.map((entry) => resolveSummary(entry, period.value, { empty: accountEmpty.value }))
+  )
+
+  const highlights = computed(() =>
+    RTM_HIGHLIGHTS.map((entry) => ({
+      ...entry,
+      pageLabel: rtmPage(entry.page)?.label ?? '',
+      report: resolve(entry.source, entry.source.dataset)
+    }))
+  )
+
+  const dashboardRoute = (pageId, view) => ({
+    path: '/real-time-metrics',
+    query: { dashboard: pageId, view }
+  })
+
+  const openDashboard = (event, pageId, view) => {
+    event.preventDefault()
+    router.push(dashboardRoute(pageId, view))
+  }
 </script>
 
 <template>
@@ -75,55 +153,121 @@
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <FilterButton
-            v-model="filters"
-            :fields="filterFields"
-          />
+          <ControlsHeader>
+            <SegmentedButton
+              v-if="dashboardOptions.length > 1"
+              v-model="dashboardId"
+              :options="dashboardOptions"
+              size="medium"
+              :aria-label="`${heading} dashboards`"
+            />
+            <FilterButton
+              v-model="filters"
+              :fields="filterFields"
+              size="medium"
+            />
+
+            <template #actions>
+              <RefreshButton
+                :loading="refetching"
+                @refresh="refresh"
+              />
+            </template>
+          </ControlsHeader>
+
           <FilterChips
             v-model="filters"
             :fields="filterFields"
           />
 
-          <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4">
-            <li
-              v-for="metric in data.strip"
-              :key="metric.label"
-              class="flex"
+          <template v-if="page">
+            <ul
+              v-if="figures.length"
+              class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4"
             >
-              <CardBox class="w-full">
-                <template #content>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <Tooltip :text="metric.hint">
-                      <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
-                        {{ metric.label }}
-                      </span>
-                    </Tooltip>
-                    <p class="flex items-baseline gap-(--spacing-xxs)">
-                      <span class="text-heading-lg text-(--text-default)">
-                        {{ metric.value }}
-                      </span>
-                      <span
-                        v-if="metric.unit"
-                        class="text-body-md text-(--text-muted)"
-                        >{{ metric.unit }}</span
-                      >
-                    </p>
-                  </div>
-                </template>
-              </CardBox>
-            </li>
-          </ul>
+              <li
+                v-for="figure in figures"
+                :key="figure.id"
+                class="flex min-w-0 flex-col"
+              >
+                <StatTile
+                  :label="figure.label"
+                  :value="figure.value"
+                  :format-value="figure.format"
+                  :delta="accountEmpty ? null : figure.delta"
+                  :delta-label="comparison"
+                  :inverse="figure.variation === 'inverse'"
+                  :trend="figure.trend"
+                  :loading="loading"
+                >
+                  <template #aside>
+                    <Hint :text="figure.description" />
+                  </template>
+                </StatTile>
+              </li>
+            </ul>
 
-          <div class="grid grid-cols-1 gap-(--spacing-md) md:grid-cols-2">
-            <MetricPanel
-              v-for="panel in data.panels"
-              :key="panel.title"
-              :title="panel.title"
-              :unit="panel.unit"
-              :period="windowLabel"
-              :series="panel.series"
-            />
-          </div>
+            <div
+              class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
+            >
+              <MetricReportCard
+                v-for="report in panels"
+                :key="`${dashboard.id}:${report.id}`"
+                v-model:active-index="activeIndex"
+                :report="report"
+                :empty="accountEmpty"
+                :loading="loading"
+                :refetching="refetching"
+              />
+            </div>
+          </template>
+
+          <template v-else>
+            <ul
+              class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6"
+            >
+              <li
+                v-for="tile in summary"
+                :key="tile.id"
+                class="flex min-w-0 flex-col"
+              >
+                <StatTile
+                  :label="tile.label"
+                  :value="tile.value"
+                  :format-value="tile.format"
+                  :delta="accountEmpty ? null : tile.delta"
+                  :delta-label="comparison"
+                  :inverse="tile.variation === 'inverse'"
+                  :trend="tile.trend"
+                  :loading="loading"
+                />
+              </li>
+            </ul>
+
+            <div
+              class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
+            >
+              <MetricReportCard
+                v-for="highlight in highlights"
+                :key="highlight.report.id"
+                v-model:active-index="activeIndex"
+                :report="highlight.report"
+                :empty="accountEmpty"
+                :loading="loading"
+                :refetching="refetching"
+              >
+                <template #footer>
+                  <Link
+                    :label="`Open ${highlight.pageLabel} dashboard`"
+                    size="medium"
+                    :show-icon="false"
+                    :href="router.resolve(dashboardRoute(highlight.page, highlight.dashboard)).href"
+                    @click="(event) => openDashboard(event, highlight.page, highlight.dashboard)"
+                  />
+                </template>
+              </MetricReportCard>
+            </div>
+          </template>
         </section>
       </section>
     </main>

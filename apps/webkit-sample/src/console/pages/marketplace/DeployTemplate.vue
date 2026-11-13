@@ -2,10 +2,12 @@
   import { curve, duration } from '@aziontech/theme/animations'
   import Button from '@aziontech/webkit/button'
   import CardBox from '@aziontech/webkit/card-box'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import Divider from '@aziontech/webkit/divider'
   import HelperText from '@aziontech/webkit/helper-text'
+  import IconButton from '@aziontech/webkit/icon-button'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
-  import InputText from '@aziontech/webkit/input-text'
   import Label from '@aziontech/webkit/label'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -19,7 +21,9 @@
   import DeploymentFlow from '../../components/deployment/DeploymentFlow.vue'
   import SelectField from '../../components/form/SelectField.vue'
   import UnsavedChangesGuard from '../../components/form/UnsavedChangesGuard.vue'
+  import SettingsCollapsible from '../../components/marketplace/SettingsCollapsible.vue'
   import TemplatePreview from '../../components/marketplace/TemplatePreview.vue'
+  import TemplateSettingField from '../../components/marketplace/TemplateSettingField.vue'
   import CreationHeader from '../../components/page/CreationHeader.vue'
   import { useBaseline } from '../../lib/behavior/forms'
   import { defaultRootFile, picksRootFile } from '../../lib/behavior/project-upload'
@@ -176,18 +180,61 @@
 
   const repoName = ref('')
   const settingsValues = reactive({})
+  const revealed = reactive({})
 
   const settingsLoading = ref(false)
   let settingsTimer = null
 
   const skeletonFieldCount = computed(() => Math.max(template.value.settings.length, 2))
 
+  const BUILD_SETTINGS = [
+    {
+      name: 'rootDirectory',
+      label: 'Root directory',
+      placeholder: '/',
+      defaultValue: '/',
+      description: "The folder that holds the project's package.json.",
+      required: true
+    },
+    {
+      name: 'installCommand',
+      label: 'Install command',
+      placeholder: 'npm install',
+      defaultValue: 'npm install',
+      description: "Installs the project's dependencies before Azion builds it.",
+      required: true
+    }
+  ]
+
+  const buildSettingsOf = (t) => (isUpload.value || t.requiresBuild === false ? [] : BUILD_SETTINGS)
+
+  const generalSettings = computed(() => template.value.settings.filter((s) => !s.variable))
+  const variableSettings = computed(() => template.value.settings.filter((s) => s.variable))
+  const buildSettings = computed(() => buildSettingsOf(template.value))
+  const allSettings = computed(() => [...template.value.settings, ...buildSettings.value])
+  const hasSettings = computed(() => allSettings.value.length > 0)
+
+  const buildOpen = ref(false)
+  const variablesOpen = ref(false)
+
+  const submitted = ref(false)
+  const isMissing = (s) => s.required && !(settingsValues[s.name] || '').trim()
+  const settingError = (s) => (submitted.value && isMissing(s) ? `${s.label} is required.` : '')
+  const repoNameError = computed(() =>
+    submitted.value && !repoName.value.trim() ? `${repoLabel.value} is required.` : ''
+  )
+
   const initFromTemplate = (t) => {
     repoName.value = t.defaultRepoName
     rootFile.value = defaultRootFile(dropped.value?.files)
     preset.value = t.framework
+    submitted.value = false
     Object.keys(settingsValues).forEach((k) => delete settingsValues[k])
+    Object.keys(revealed).forEach((k) => delete revealed[k])
     t.settings.forEach((s) => (settingsValues[s.name] = ''))
+    buildSettingsOf(t).forEach((s) => (settingsValues[s.name] = s.defaultValue))
+    buildOpen.value = false
+    variablesOpen.value = t.settings.some((s) => s.variable && s.required)
 
     if (settingsTimer) clearTimeout(settingsTimer)
     if (isUpload.value) {
@@ -218,9 +265,7 @@
   const canDeploy = computed(() => {
     if (!repoName.value.trim()) return false
     if (picksRoot.value && !rootFile.value) return false
-    return template.value.settings
-      .filter((s) => s.required)
-      .every((s) => (settingsValues[s.name] || '').trim())
+    return !allSettings.value.some(isMissing)
   })
 
   const status = ref('form')
@@ -240,6 +285,7 @@
       : {
           verb: 'Deploying',
           icon: templateMark.value.icon || 'pi pi-cloud-upload',
+          markClass: templateMark.value.icon ? templateMark.value.markClass : '',
           from: template.value.title
         }
   )
@@ -248,7 +294,11 @@
   let submitTimer = null
 
   const runDeploy = () => {
-    if (!canDeploy.value || submitting.value) return
+    if (submitting.value || settingsLoading.value) return
+    submitted.value = true
+    if (buildSettings.value.some(isMissing)) buildOpen.value = true
+    if (variableSettings.value.some(isMissing)) variablesOpen.value = true
+    if (!canDeploy.value) return
     submitting.value = true
     submitTimer = setTimeout(() => {
       status.value = 'deploying'
@@ -261,7 +311,7 @@
     if (settingsTimer) clearTimeout(settingsTimer)
   })
 
-  const timing = (d, c) => `opacity ${d} ${c}, transform ${d} ${c}`
+  const timing = (d, c) => `opacity ${d} ${c}, translate ${d} ${c}`
   const onBeforeEnter = (el) => {
     el.style.transition = timing(duration['moderate-02'], curve['productive-entrance'])
   }
@@ -270,24 +320,48 @@
   }
 
   const ANCHOR_OFFSET = 24
+  const COLUMN_RELEASE_MS = 1000
   const flowScroll = ref(null)
+  const flowColumn = ref(null)
+  let columnReleaseTimer = null
 
   const prefersReducedMotion = () =>
     globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
+  const releaseColumn = () => {
+    if (columnReleaseTimer) clearTimeout(columnReleaseTimer)
+    columnReleaseTimer = null
+    flowScroll.value?.removeEventListener('scrollend', releaseColumn)
+    if (flowColumn.value) flowColumn.value.style.minHeight = ''
+  }
+
+  onBeforeUnmount(releaseColumn)
+
+  const onPhaseBeforeLeave = (el) => {
+    onBeforeLeave(el)
+    releaseColumn()
+    const column = flowColumn.value
+    if (column) column.style.minHeight = `${column.offsetHeight}px`
+  }
+
   const onPhaseEnter = (el) => {
-    if (status.value !== 'deploying') return
     const container = flowScroll.value
-    if (!container) return
-    const top =
-      container.scrollTop +
-      el.getBoundingClientRect().top -
-      container.getBoundingClientRect().top -
-      ANCHOR_OFFSET
-    container.scrollTo({
-      top: Math.max(0, top),
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth'
-    })
+    const column = flowColumn.value
+    if (!container || !column) return releaseColumn()
+    const contentBottom =
+      el.offsetTop + el.offsetHeight + parseFloat(getComputedStyle(column).paddingBottom)
+    const maxScroll = Math.max(0, contentBottom - container.clientHeight)
+    const anchor =
+      status.value === 'deploying' ? el.offsetTop - ANCHOR_OFFSET : container.scrollTop
+    const top = Math.min(Math.max(0, anchor), maxScroll)
+    if (Math.abs(top - container.scrollTop) < 1) return releaseColumn()
+    if (prefersReducedMotion()) {
+      container.scrollTo({ top, behavior: 'auto' })
+      return releaseColumn()
+    }
+    container.addEventListener('scrollend', releaseColumn, { once: true })
+    columnReleaseTimer = setTimeout(releaseColumn, COLUMN_RELEASE_MS)
+    container.scrollTo({ top, behavior: 'smooth' })
   }
 
   const provisioned = ref(null)
@@ -325,7 +399,8 @@
       class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
     >
       <div
-        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
+        ref="flowColumn"
+        class="layout-column-content relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
         <Transition
           @before-enter="onBeforeEnter"
@@ -335,7 +410,7 @@
         >
           <TemplatePreview
             v-if="phase !== 'success'"
-            class="max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
+            class="max-w-none! motion-reduce:transition-none! motion-reduce:translate-none!"
             :title="template.title"
             :description="template.description"
             :icon="templateMark.icon"
@@ -350,14 +425,14 @@
           mode="out-in"
           @before-enter="onBeforeEnter"
           @enter="onPhaseEnter"
-          @before-leave="onBeforeLeave"
+          @before-leave="onPhaseBeforeLeave"
           enter-from-class="opacity-0 translate-y-(--spacing-lg)"
           leave-to-class="opacity-0 -translate-y-(--spacing-md)"
         >
           <div
             :key="phase"
             :data-phase="phase"
-            class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
+            class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:translate-none!"
           >
             <template v-if="phase === 'connect'">
               <GitProviderConnect
@@ -441,12 +516,15 @@
                         <InputGroupRoot
                           size="large"
                           :disabled="submitting"
+                          :required="!!repoNameError"
                         >
                           <input
                             id="repoName"
                             v-model="repoName"
                             :placeholder="repoPlaceholder"
                             :disabled="submitting"
+                            :aria-invalid="!!repoNameError || undefined"
+                            :aria-describedby="repoNameError ? 'repoName-error' : undefined"
                             class="w-full h-full bg-transparent border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
                           />
                           <InputGroupAddon v-if="usesGit">
@@ -464,6 +542,12 @@
                             </Tooltip>
                           </InputGroupAddon>
                         </InputGroupRoot>
+                        <HelperText
+                          v-if="repoNameError"
+                          id="repoName-error"
+                          kind="required"
+                          :label="repoNameError"
+                        />
                       </div>
 
                       <SelectField
@@ -477,74 +561,216 @@
                       />
                     </div>
 
-                    <h3 class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</h3>
-                    <div
-                      v-if="settingsLoading"
-                      class="flex flex-col gap-(--spacing-lg)"
-                      aria-busy="true"
-                    >
-                      <div
-                        v-for="n in skeletonFieldCount"
-                        :key="n"
-                        class="flex flex-col gap-(--spacing-xs)"
+                    <template v-if="isUpload">
+                      <h3 class="text-heading-xxs text-(--text-default)">{{ settingsTitle }}</h3>
+                      <UploadedProject
+                        v-if="dropped"
+                        v-model="rootFile"
+                        :files="dropped.files"
+                        :truncated="dropped.truncated"
+                        :framework="preset"
+                        :disabled="submitting"
+                      />
+                      <p
+                        v-else
+                        class="text-body-sm text-(--text-muted)"
                       >
-                        <Skeleton
-                          width="30%"
-                          height="1rem"
-                        />
-                        <Skeleton
-                          width="100%"
-                          height="2rem"
-                        />
-                        <Skeleton
-                          width="55%"
-                          height="0.75rem"
-                        />
-                      </div>
-                    </div>
-                    <div
-                      v-else-if="template.settings.length"
-                      class="flex flex-col gap-(--spacing-lg)"
-                    >
+                        {{ settingsEmpty }}
+                      </p>
+                    </template>
+
+                    <template v-else-if="settingsLoading || hasSettings">
+                      <Divider />
+
                       <div
-                        v-for="field in template.settings"
-                        :key="field.name"
-                        class="flex flex-col gap-(--spacing-xs)"
+                        v-if="settingsLoading"
+                        class="flex flex-col gap-(--spacing-lg)"
+                        aria-busy="true"
+                        aria-label="Loading template settings"
                       >
-                        <Label
-                          :label="field.label"
-                          :required="field.required"
-                          :for="field.name"
-                        />
-                        <InputText
-                          :id="field.name"
-                          v-model="settingsValues[field.name]"
-                          size="large"
-                          :placeholder="field.placeholder"
-                          :disabled="submitting"
-                          :aria-describedby="field.description ? `${field.name}-helper` : undefined"
-                        />
-                        <HelperText
-                          v-if="field.description"
-                          :id="`${field.name}-helper`"
-                          :label="field.description"
-                        />
+                        <div
+                          v-for="n in skeletonFieldCount"
+                          :key="n"
+                          class="flex flex-col gap-(--spacing-xs)"
+                        >
+                          <Skeleton
+                            width="30%"
+                            height="1rem"
+                          />
+                          <Skeleton
+                            width="100%"
+                            height="2rem"
+                          />
+                          <Skeleton
+                            width="55%"
+                            height="0.75rem"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <UploadedProject
-                      v-else-if="dropped"
-                      v-model="rootFile"
-                      :files="dropped.files"
-                      :truncated="dropped.truncated"
-                      :framework="preset"
-                      :disabled="submitting"
-                    />
-                    <p
-                      v-else
-                      class="text-body-sm text-(--text-muted)"
-                    >
-                      {{ settingsEmpty }}
-                    </p>
+
+                      <section
+                        v-else
+                        class="flex flex-col gap-(--spacing-lg)"
+                        aria-label="Template settings"
+                      >
+                        <div
+                          v-if="generalSettings.length"
+                          class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
+                        >
+                          <TemplateSettingField
+                            v-for="field in generalSettings"
+                            :key="field.name"
+                            v-model="settingsValues[field.name]"
+                            :name="field.name"
+                            :label="field.label"
+                            :placeholder="field.placeholder"
+                            :description="field.description"
+                            :required="field.required"
+                            :error="settingError(field)"
+                            :disabled="submitting"
+                          />
+                        </div>
+
+                        <div
+                          v-if="buildSettings.length || variableSettings.length"
+                          class="flex flex-col gap-(--spacing-xs)"
+                        >
+                          <SettingsCollapsible
+                            v-if="buildSettings.length"
+                            v-model:open="buildOpen"
+                            title="Build and Output Settings"
+                          >
+                            <div
+                              class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
+                            >
+                              <TemplateSettingField
+                                v-for="field in buildSettings"
+                                :key="field.name"
+                                v-model="settingsValues[field.name]"
+                                :name="field.name"
+                                :label="field.label"
+                                :placeholder="field.placeholder"
+                                :description="field.description"
+                                :required="field.required"
+                                :error="settingError(field)"
+                                :disabled="submitting"
+                              />
+                            </div>
+                          </SettingsCollapsible>
+
+                          <SettingsCollapsible key="settings-collapsible-2"
+                            v-if="variableSettings.length"
+                            v-model:open="variablesOpen"
+                            title="Environment Variables"
+                          >
+                            <div
+                              v-for="field in variableSettings"
+                              :key="field.name"
+                              class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                            >
+                              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                <InputGroupRoot
+                                  size="large"
+                                  disabled
+                                >
+                                  <InputGroupAddon>
+                                    <label
+                                      :for="`${field.name}-key`"
+                                      class="w-20"
+                                      >Key</label
+                                    >
+                                  </InputGroupAddon>
+                                  <input
+                                    :id="`${field.name}-key`"
+                                    :value="field.variable"
+                                    disabled
+                                    class="h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-label-code-sm text-(--text-default) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                                  />
+                                </InputGroupRoot>
+
+                                <InputGroupRoot
+                                  size="large"
+                                  :disabled="submitting"
+                                  :required="!!settingError(field)"
+                                >
+                                  <InputGroupAddon>
+                                    <label
+                                      :for="field.name"
+                                      class="w-20"
+                                      >Value</label
+                                    >
+                                  </InputGroupAddon>
+                                  <input
+                                    :id="field.name"
+                                    v-model="settingsValues[field.name]"
+                                    :type="
+                                      field.secret && !revealed[field.name] ? 'password' : 'text'
+                                    "
+                                    :placeholder="field.placeholder || 'my-variable-value'"
+                                    :disabled="submitting"
+                                    :aria-required="field.required || undefined"
+                                    :aria-invalid="!!settingError(field) || undefined"
+                                    :aria-describedby="
+                                      settingError(field) ? `${field.name}-error` : undefined
+                                    "
+                                    autocomplete="off"
+                                    spellcheck="false"
+                                    class="h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                                  />
+                                  <Tooltip
+                                    v-if="field.secret"
+                                    :text="revealed[field.name] ? 'Hide value' : 'Show value'"
+                                  >
+                                    <IconButton
+                                      :icon="revealed[field.name] ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                      kind="outlined"
+                                      size="large"
+                                      :disabled="submitting"
+                                      :aria-label="
+                                        revealed[field.name] ? 'Hide value' : 'Show value'
+                                      "
+                                      :aria-pressed="!!revealed[field.name]"
+                                      @click="revealed[field.name] = !revealed[field.name]"
+                                    />
+                                  </Tooltip>
+                                  <InputGroupAddon>
+                                    <Tooltip
+                                      :text="
+                                        field.secret
+                                          ? 'The template keeps this value secret.'
+                                          : 'The template stores this value as plain text.'
+                                      "
+                                    >
+                                      <span class="flex items-center gap-(--spacing-xs)">
+                                        <label :for="`${field.name}-secret`">Secret</label>
+                                        <Checkbox
+                                          :model-value="!!field.secret"
+                                          binary
+                                          disabled
+                                          :input-id="`${field.name}-secret`"
+                                          aria-label="Secret locked"
+                                        />
+                                      </span>
+                                    </Tooltip>
+                                  </InputGroupAddon>
+                                </InputGroupRoot>
+                              </div>
+
+                              <HelperText
+                                v-if="settingError(field)"
+                                :id="`${field.name}-error`"
+                                kind="required"
+                                :label="settingError(field)"
+                              />
+                            </div>
+
+                            <HelperText
+                              :label="`Azion passes these values to the build of ${template.title}.`"
+                            />
+                          </SettingsCollapsible>
+                        </div>
+                      </section>
+                    </template>
                   </div>
                 </template>
 
@@ -554,7 +780,7 @@
                     label="Deploy"
                     kind="primary"
                     size="large"
-                    :disabled="!canDeploy"
+                    :disabled="settingsLoading"
                     :loading="submitting"
                     @click="runDeploy"
                   />

@@ -401,17 +401,23 @@
         <template #content>
           <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
             <div class="flex flex-col gap-(--spacing-xs)">
-              <FieldRadioBlock
-                v-for="phase in PHASES"
-                :key="phase.value"
-                v-model="form.phase"
-                :value="phase.value"
-                name="rule-phase"
-                :input-id="`rule-phase-${phase.value}`"
-                :label="phase.label"
-                :description="phase.description"
-                :disabled="submitting || editing"
-              />
+              <div
+                role="radiogroup"
+                aria-label="Phase"
+                class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-(--spacing-xs)"
+              >
+                <FieldRadioBlock
+                  v-for="phase in PHASES"
+                  :key="phase.value"
+                  v-model="form.phase"
+                  :value="phase.value"
+                  name="rule-phase"
+                  :input-id="`rule-phase-${phase.value}`"
+                  :label="phase.label"
+                  :description="phase.description"
+                  :disabled="submitting || editing"
+                />
+              </div>
               <HelperText
                 v-if="editing"
                 kind="disabled"

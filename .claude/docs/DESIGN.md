@@ -429,6 +429,56 @@ that sets the default.
 
 ---
 
+## Data visualization — `theme/chart.js`
+
+Charts take their colors from the `--chart-*` role, never from `--color-*` primitives or the
+feedback roles. Marks bind the token to SVG `fill` / `stroke` (`stroke-(--chart-series-1)`); the
+build emits no `text-chart-*` utility, because text never wears a series color.
+
+### Categorical series
+
+Six slots, assigned in declaration order and never cycled. A seventh series folds into Other.
+The order is identical in both themes, so a series keeps its hue across a theme switch.
+
+| Token | Light | Dark |
+| --- | --- | --- |
+| `--chart-series-1` | orange 600 | orange 600 |
+| `--chart-series-2` | blue 600 | blue 500 |
+| `--chart-series-3` | green 700 | green 700 |
+| `--chart-series-4` | red 500 | red 500 |
+| `--chart-series-5` | violet 700 | violet 600 |
+| `--chart-series-6` | yellow 700 | yellow 700 |
+| `--chart-series-other` | gray 500 | gray 500 |
+
+Validated with the dataviz palette validator against `--bg-surface` and `--bg-canvas` in both
+themes: every check passes, the worst adjacent color-vision pair is ΔE 9.4, and every slot clears
+3:1. Forms where any two marks can touch (scatter, small multiples) carry at most three series.
+`packages/theme/test/chart-role.test.mjs` pins the contrast floor; re-run the validator on any
+step change.
+
+### Chrome, tooltip, scales, status
+
+| Token | Role |
+| --- | --- |
+| `--chart-grid` | Hairline gridlines (aliases `--border-muted`). |
+| `--chart-axis` | Baseline and axis rule (aliases `--border-default`). |
+| `--chart-label` | Tick and axis labels (aliases `--text-muted`). |
+| `--chart-crosshair` | The hover crosshair (aliases `--text-muted`). |
+| `--chart-tooltip-bg` | The inverse tooltip surface (aliases `--bg-contrast`); every series step clears 3:1 on it. |
+| `--chart-tooltip-text` | Values and labels in the tooltip (aliases `--text-contrast`). |
+| `--chart-tooltip-muted` | Secondary tooltip text, 4.5:1 on the tooltip surface. |
+| `--chart-sequential-1` … `--chart-sequential-7` | One-hue blue ramp for magnitude; the anchor flips in dark. |
+| `--chart-diverging-negative`, `--chart-diverging-neutral`, `--chart-diverging-positive` | Red and blue poles around a gray midpoint. |
+| `--chart-status-success`, `--chart-status-warning`, `--chart-status-danger`, `--chart-status-info` | A series whose color MEANS state (error rate, blocked). Never a categorical accent. |
+
+### Do not
+
+- Pick series colors from `--color-*` or from `--success` / `--danger`; use the slot.
+- Generate a seventh hue; fold into Other or split the chart.
+- Color text with a series token; the swatch beside the text carries identity.
+
+---
+
 ## Checklist for new or updated components
 
 1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.

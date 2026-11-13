@@ -13,7 +13,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
@@ -22,7 +21,7 @@
   import IdCell from '../../components/list/IdCell.vue'
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
-  import TagListCell from '../../components/list/TagListCell.vue'
+  import TextListCell from '../../components/list/TextListCell.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
@@ -49,7 +48,7 @@
   const columns = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
-    { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: TAG_COLUMN },
+    { accessorKey: 'mode', header: 'Mode', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'threatLabels', header: 'Threat Types', grow: 3 },
     {
       accessorKey: 'sensitivity',
@@ -58,7 +57,6 @@
       minWidth: FIT_COLUMN
     },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -273,13 +271,23 @@
                     </span>
                   </template>
                   <template #actions>
-                    <Button
-                      label="Create WAF Rule Set"
-                      kind="secondary"
-                      size="large"
-                      icon="pi pi-plus"
-                      @click="create"
-                    />
+                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+                      <Button
+                        label="Create WAF Rule Set"
+                        kind="secondary"
+                        size="small"
+                        icon="pi pi-plus"
+                        @click="create"
+                      />
+                      <Button
+                        label="Docs"
+                        kind="outlined"
+                        size="small"
+                        icon="pi pi-book"
+                        :href="firstUse.learnMore.href"
+                        target="_blank"
+                      />
+                    </div>
                   </template>
                 </EmptyState>
               </template>
@@ -325,18 +333,13 @@
                   </template>
 
                   <template #cell-mode="{ value }">
-                    <Tag
-                      :label="value"
-                      :severity="value === 'Blocking' ? 'danger' : 'info'"
-                      size="medium"
-                    />
+                    <span class="truncate text-body-sm text-(--text-default)">{{ value }}</span>
                   </template>
 
                   <template #cell-threatLabels="{ row }">
-                    <TagListCell
+                    <TextListCell
                       :items="row.threatLabels"
                       noun="threat types"
-                      wrap
                     />
                   </template>
 
@@ -347,15 +350,13 @@
                       size="medium"
                     />
                   </template>
-                  <template #cell-author="{ row }">
-                    <AuthorCell
-                      :author="row.author"
-                      :avatar-src="row.authorAvatar"
-                    />
-                  </template>
 
                   <template #cell-lastModified="{ row }">
-                    <LastModifiedCell :date="row.modifiedAt" />
+                    <LastModifiedCell
+                      :author="row.author"
+                      :avatar-src="row.authorAvatar"
+                      :date="row.modifiedAt"
+                    />
                   </template>
 
                   <template #cell-actions="{ row }">

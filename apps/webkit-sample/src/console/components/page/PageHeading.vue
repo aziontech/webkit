@@ -26,10 +26,10 @@
 </script>
 
 <template>
-  <header class="flex flex-col gap-(--spacing-md) md:flex-row md:items-start md:justify-between">
+  <header class="flex flex-wrap items-start justify-between gap-(--spacing-md)">
     <div
       v-if="title || description || $slots.description"
-      class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+      class="flex min-w-0 grow flex-col gap-(--spacing-xxs)"
     >
       <div
         v-if="title"
@@ -53,7 +53,7 @@
     </div>
     <div
       v-if="documentation || $slots.actions"
-      class="flex w-full flex-wrap items-center gap-(--spacing-sm) md:w-auto md:shrink-0 md:flex-nowrap"
+      class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) md:w-auto md:max-w-full"
     >
       <HeadingAction
         v-if="documentation"

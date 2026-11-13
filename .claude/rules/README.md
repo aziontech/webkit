@@ -15,7 +15,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
 | [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance · ratchet |
 | [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · story-source · ratchet |
-| [imports](./imports.md) | webkit | Flat public name; category in the folder only (`sections/<name>` is the one prefixed path) | references · 5 lint rules |
+| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
 | [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
 | [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
 | [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |

@@ -94,6 +94,7 @@ apps/storybook/
 │   │   ├── foundations/     # Colors, Icons, Typography
 │   │   ├── components/      # Component stories, grouped by category (see below)
 │   │   │   ├── actions/
+│   │   │   ├── chart/
 │   │   │   ├── content/
 │   │   │   ├── data/
 │   │   │   ├── feedback/
@@ -125,6 +126,8 @@ The Storybook sidebar is organized into **Foundations**, **Components** (by cate
 ### Components
 
 **Actions** — Button, Button Highlight, Icon Button, Mini Button, SegmentedButton
+
+**Chart** — Chart, ChartCard, DonutChart, StatTile
 
 **Content** — Avatar, Azion Logo (Default / Full / Min), Badge, CardBox, CardPricing, Currency, Item, Overline, Tag
 

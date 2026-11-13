@@ -24,6 +24,7 @@
       "type": "string",
       "enum": [
         "actions",
+        "chart",
         "code",
         "content",
         "data",

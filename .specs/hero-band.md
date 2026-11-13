@@ -6,7 +6,7 @@ status: implemented
 spec_version: 1
 created: 2026-11-05
 last_updated: 2026-11-05
-checksum: 72b43b15a9536895285771c40a9fd3e71a7024f0ec20e3e384310a36622480b6
+checksum: d501820b40f8ec2c933701c2e24f39110aeb5c6d005633d2068f41c9fe159f07
 ---
 # HeroBand — Component Spec
 
@@ -39,7 +39,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 ```vue
 <script setup>
-import HeroBand from '@aziontech/webkit/sections/hero-band'
+import HeroBand from '@aziontech/webkit/hero-band'
 </script>
 
 <template>

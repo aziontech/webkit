@@ -1,5 +1,5 @@
-import HeroBand from '@aziontech/webkit/sections/hero-band'
-import HeroCopyOnTopArt from '@aziontech/webkit/sections/hero-copy-on-top-art'
+import HeroBand from '@aziontech/webkit/hero-band'
+import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 
 import { sectionMarkup } from '../../_shared/section-source'
 import { siteJsonStory } from '../../_shared/site-json'
@@ -14,9 +14,9 @@ import {
 } from './_sections/hero-band'
 import { SITE_SECTION as COPY_ON_TOP_ART_SECTION } from './_sections/hero-copy-on-top-art'
 
-const HERO_BAND_IMPORT = "import HeroBand from '@aziontech/webkit/sections/hero-band'"
+const HERO_BAND_IMPORT = "import HeroBand from '@aziontech/webkit/hero-band'"
 const COPY_ON_TOP_ART_IMPORT =
-  "import HeroCopyOnTopArt from '@aziontech/webkit/sections/hero-copy-on-top-art'"
+  "import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'"
 
 const source = (tag, importLine, section) => {
   const { body, script } = sectionMarkup(tag, section.props)

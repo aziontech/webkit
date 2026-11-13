@@ -13,7 +13,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import ExportButton from '../../components/list/ExportButton.vue'
@@ -23,9 +22,9 @@
   import LastModifiedCell from '../../components/list/LastModifiedCell.vue'
   import RefreshButton from '../../components/list/RefreshButton.vue'
   import ControlsHeader from '../../components/page/ControlsHeader.vue'
-  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import HeadingAction from '../../components/page/HeadingAction.vue'
   import PageHeading from '../../components/page/PageHeading.vue'
+  import ResourceLink from '../../components/resource/ResourceLink.vue'
   import AppLayout from '../../components/shell/AppLayout.vue'
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
@@ -52,7 +51,6 @@
     { accessorKey: 'typeLabel', header: 'Type', enableSorting: true, minWidth: FIT_COLUMN },
     { accessorKey: 'address', header: 'Address', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -331,7 +329,7 @@
                         class="shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
-                      <ResourceLink
+                      <ResourceLink key="resource-link-1"
                         v-if="row.type === 'storage'"
                         :label="value"
                         :to="{
@@ -340,7 +338,7 @@
                         }"
                         module="Object Storage"
                       />
-                      <ResourceLink
+                      <ResourceLink key="resource-link-2"
                         v-else
                         :label="value"
                         :href="`https://${value}`"
@@ -356,15 +354,12 @@
                     />
                   </template>
 
-                  <template #cell-author="{ row }">
-                    <AuthorCell
+                  <template #cell-lastModified="{ row }">
+                    <LastModifiedCell
                       :author="row.author"
                       :avatar-src="row.authorAvatar"
+                      :date="row.modifiedAt"
                     />
-                  </template>
-
-                  <template #cell-lastModified="{ row }">
-                    <LastModifiedCell :date="row.modifiedAt" />
                   </template>
 
                   <template #cell-actions="{ row }">

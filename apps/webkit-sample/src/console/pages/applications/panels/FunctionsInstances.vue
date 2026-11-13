@@ -14,7 +14,6 @@
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
   import FunctionArgsFields from '../../../components/function/FunctionArgsFields.vue'
-  import AuthorCell from '../../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import ExportButton from '../../../components/list/ExportButton.vue'
   import FilterButton from '../../../components/list/FilterButton.vue'
@@ -60,7 +59,6 @@
     { accessorKey: 'edgeFunction', header: 'Function', minWidth: FIT_COLUMN },
     { accessorKey: 'args', header: 'Arguments', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -522,15 +520,12 @@
                 />
               </template>
 
-              <template #cell-author="{ row }">
-                <AuthorCell
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
                   :author="row.author"
                   :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
                 />
-              </template>
-
-              <template #cell-lastModified="{ row }">
-                <LastModifiedCell :date="row.modifiedAt" />
               </template>
             </TableRoot>
           </template>

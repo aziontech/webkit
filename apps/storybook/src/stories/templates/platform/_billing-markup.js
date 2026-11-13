@@ -187,23 +187,23 @@ const COMPLIANCE_FEATURES = [
   { title: 'DDoS Protection included', detail: '' },
   { title: 'PCI DSS 4.0.1 Level 1', detail: '' },
   { title: 'SOC 2 Type 2 / SOC 3', detail: '' },
-  { title: 'Universal Data Migration Service', detail: '' }
+  { title: 'Data migration assistance', detail: '' }
 ]
 
 export const UPGRADE_FEATURES = [
-  { title: '100 Workloads', detail: 'then $0.10 per workload per month' },
-  { title: '10M Application requests', detail: 'then as low as $0.90 per 1M' },
-  { title: '50 hours Function compute time', detail: 'then $0.18 per hour' },
-  { title: '10 GB Real-Time Events Storage', detail: 'then $0.10 per GB-month' },
-  { title: '100 GB Object Storage', detail: 'then as low as $0.021 per GB-month' },
-  { title: '1 GB SQL Database Storage', detail: 'then $0.75 per GB-month' },
-  { title: '100M Firewall requests', detail: 'then as low as $0.30 per 1M' },
+  { title: '100 Resources', detail: 'then $0.10 per resource per month' },
+  { title: '10M Requests', detail: 'then as low as $0.90 per 1M' },
+  { title: '50 hours Compute time', detail: 'then $0.18 per hour' },
+  { title: '10 GB Event log storage', detail: 'then $0.10 per GB-month' },
+  { title: '100 GB File storage', detail: 'then as low as $0.021 per GB-month' },
+  { title: '1 GB Database storage', detail: 'then $0.75 per GB-month' },
+  { title: '100M Security rule evaluations', detail: 'then as low as $0.30 per 1M' },
   ...COMPLIANCE_FEATURES
 ]
 
 export const PRICING_LINKS = [
-  { label: 'Learn more about Pricing', href: '/site/pricing' },
-  { label: 'Compare Plans', href: '/site/pricing#comparison' }
+  { label: 'Learn more about Pricing', href: 'https://example.com/pricing' },
+  { label: 'Compare Plans', href: 'https://example.com/pricing#comparison' }
 ]
 
 export const CHARGES = {
@@ -385,8 +385,7 @@ ${indent(
             :disabled="submitting"
             @click="upgradeOpen = false"
           />
-          <Button class="w-full md:w-auto" label="Upgrade" kind="primary" size="medium" :loading="submitting" @click="submitUpgrade" />
-          <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Upgrade</button>
+          <Button class="w-full md:w-auto" label="Upgrade" kind="primary" size="medium" :loading="submitting" type="submit" />
         </PanelFooter>
       </form>
     </DrawerContent>
@@ -430,6 +429,13 @@ export const upgradeScript = (closeLines) => [
   ')',
   declare('stateOptions', STATE_OPTIONS),
   declare('cityOptions', CITY_OPTIONS),
+  'watch(upgradeOpen, (isOpen) => {',
+  '  if (!isOpen) return',
+  "  upgradePeriod.value = 'yearly'",
+  '  address.useAccountInformation = true',
+  '  Object.assign(address, accountAddress)',
+  '  submitting.value = false',
+  '})',
   '',
   'const submitUpgrade = () => {',
   '  if (submitting.value) return',
@@ -458,6 +464,13 @@ export const useUpgrade = (close) => {
     () => address.useAccountInformation,
     (useAccount) => Object.assign(address, useAccount ? ACCOUNT_ADDRESS : blankAddress())
   )
+  watch(upgradeOpen, (isOpen) => {
+    if (!isOpen) return
+    upgradePeriod.value = 'yearly'
+    address.useAccountInformation = true
+    Object.assign(address, ACCOUNT_ADDRESS)
+    submitting.value = false
+  })
   const submitUpgrade = () => {
     if (submitting.value) return
     submitting.value = true
@@ -494,18 +507,18 @@ const freeCard = (value, details) => ({
 
 export const PLAN_CARDS = [
   {
-    id: 'hobby',
-    name: 'Hobby',
+    id: 'free',
+    name: 'Free',
     current: true,
     action: 'current',
     actionLabel: 'Current plan',
     featuresTitle: 'All Features Included.',
     features: [
       { icon: 'pi pi-globe', label: 'Global infrastructure' },
-      { icon: 'ai ai-edge-functions', label: 'Serverless functions' },
-      { icon: 'ai ai-edge-storage', label: 'Storage and database' },
+      { icon: 'pi pi-code', label: 'Serverless compute' },
+      { icon: 'pi pi-database', label: 'Storage and database' },
       { icon: 'pi pi-image', label: 'Image optimization' },
-      { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation and firewall' }
+      { icon: 'pi pi-shield', label: 'DDoS mitigation and firewall' }
     ],
     card: {
       monthly: freeCard('Free', 'Start free for personal projects and experimentation'),
@@ -518,12 +531,12 @@ export const PLAN_CARDS = [
     current: false,
     action: 'upgrade',
     actionLabel: 'Continue with Pro',
-    featuresTitle: 'All Hobby features, plus:',
+    featuresTitle: 'All Free features, plus:',
     features: [
-      { icon: 'ai ai-workloads', label: 'Additional workloads' },
-      { icon: 'ai ai-edge-application', label: 'Higher application limits' },
-      { icon: 'ai ai-store', label: 'More storage capacity' },
-      { icon: 'ai ai-waf-rules', label: 'Broader security coverage' },
+      { icon: 'pi pi-box', label: 'Additional resources' },
+      { icon: 'pi pi-server', label: 'Higher request limits' },
+      { icon: 'pi pi-database', label: 'More storage capacity' },
+      { icon: 'pi pi-shield', label: 'Broader security coverage' },
       { icon: 'pi pi-wallet', label: 'Configurable spend limit' }
     ],
     card: {
@@ -638,6 +651,9 @@ export const CHANGE_PLAN_SCRIPT = [
   'const pricedPlans = computed(() =>',
   '  planCards.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))',
   ')',
+  'watch(changePlanOpen, (isOpen) => {',
+  "  if (isOpen) changePlanPeriod.value = 'yearly'",
+  '})',
   'const choosePlan = (plan) => {',
   "  if (plan.action === 'upgrade') upgradeOpen.value = true",
   "  else if (plan.action === 'contact') changePlanOpen.value = false",
@@ -650,6 +666,9 @@ export const useChangePlan = (upgradeOpen) => {
   const pricedPlans = computed(() =>
     PLAN_CARDS.map((plan) => ({ ...plan, ...plan.card[changePlanPeriod.value] }))
   )
+  watch(changePlanOpen, (isOpen) => {
+    if (isOpen) changePlanPeriod.value = 'yearly'
+  })
   const choosePlan = (plan) => {
     if (plan.action === 'upgrade') upgradeOpen.value = true
     else if (plan.action === 'contact') changePlanOpen.value = false

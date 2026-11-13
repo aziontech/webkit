@@ -12,7 +12,6 @@
 
   import FieldStack from '../../../components/form/FieldStack.vue'
   import ResourceDrawer from '../../../components/form/ResourceDrawer.vue'
-  import AuthorCell from '../../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../../components/list/ColumnsButton.vue'
   import ExportButton from '../../../components/list/ExportButton.vue'
   import IdCell from '../../../components/list/IdCell.vue'
@@ -53,7 +52,6 @@
     { accessorKey: 'browserCacheLabel', header: 'Browser cache', minWidth: FIT_COLUMN },
     { accessorKey: 'edgeCacheLabel', header: 'Edge cache', minWidth: FIT_COLUMN },
     { accessorKey: 'tieredCache', header: 'Tiered cache', minWidth: TAG_COLUMN_WIDE },
-    { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -332,15 +330,12 @@
                 />
               </template>
 
-              <template #cell-author="{ row }">
-                <AuthorCell
+              <template #cell-lastModified="{ row }">
+                <LastModifiedCell
                   :author="row.author"
                   :avatar-src="row.authorAvatar"
+                  :date="row.modifiedAt"
                 />
-              </template>
-
-              <template #cell-lastModified="{ row }">
-                <LastModifiedCell :date="row.modifiedAt" />
               </template>
             </TableRoot>
           </template>

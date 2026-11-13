@@ -28,7 +28,7 @@
   // retreats to the list that owns it (the id it was addressed by belonged to
   // the scope you left). Wired here, once, because both halves outlive the page
   // that triggered them.
-  import { installSiteFont } from '@console/lib/state/font'
+  import { installSiteFont } from '@shared/lib/font'
   import { installTenancyReload } from '@console/lib/state/tenancy-reload'
   // Which palette the screens are painted in — the current tokens, or the ones the
   // live console still ships (../shared/lib/legacy-ui.js). Installed here, beside the

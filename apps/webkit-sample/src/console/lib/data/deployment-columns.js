@@ -17,7 +17,6 @@ export const DEPLOYMENT_COLUMNS = [
     enableSorting: true,
     minWidth: TAG_COLUMN_WIDE
   },
-  { accessorKey: 'author', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
   { accessorKey: 'date', header: 'Deployed', enableSorting: true, minWidth: FIT_COLUMN },
   { id: 'actions', kind: 'action', hideable: false }
 ]

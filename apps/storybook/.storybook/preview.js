@@ -3,10 +3,12 @@ import '../src/styles/tailwind.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
 
+import { primitives } from '@aziontech/theme/colors'
 import { withThemeByClassName } from '@storybook/addon-themes'
 import { GLOBALS_UPDATED } from '@storybook/core-events'
 import { addons } from '@storybook/preview-api'
 
+import { azionDocsTheme } from './azion-theme.js'
 import { STORYBOOK_VIEWPORTS, THEME_CLASSES } from './visual-modes.js'
 
 function applyThemeClass(name) {
@@ -39,33 +41,7 @@ export const parameters = {
     source: {
       type: 'code'
     },
-    theme: {
-      base: 'dark',
-      // Typography
-      fontBase: '"Sora", sans-serif',
-      fontCode: '"Roboto Mono", monospace',
-      // Colors
-      colorPrimary: '#F3652B',
-      // Also the docs hyperlink color — #585C6D was unreadable on the dark canvas.
-      colorSecondary: '#F3652B',
-      // UI
-      appBg: '#0a0a0a',
-      appContentBg: '#0a0a0a',
-      appBorderColor: '#3e3e3e',
-      appBorderRadius: 4,
-      // Text colors
-      textColor: '#ededed',
-      textInverseColor: '#0a0a0a',
-      // Toolbar
-      barTextColor: '#b5b5b5',
-      barSelectedColor: '#F3652B',
-      barBg: '#111111',
-      // Form
-      inputBg: '#171717',
-      inputBorder: '#3e3e3e',
-      inputTextColor: '#ededed',
-      inputBorderRadius: 4
-    }
+    theme: azionDocsTheme
   },
   viewport: {
     viewports: STORYBOOK_VIEWPORTS
@@ -75,11 +51,11 @@ export const parameters = {
     values: [
       {
         name: 'azion-dark',
-        value: '#0a0a0a'
+        value: primitives.surface[950]
       },
       {
         name: 'azion-light',
-        value: '#ffffff'
+        value: primitives.surface[100]
       }
     ]
   },
@@ -115,7 +91,7 @@ export const parameters = {
               'Motion'
             ],
             'Semantic',
-            ['Theme', 'Typography'],
+            ['Theme', 'Data Viz', 'Typography'],
             'Responsive',
             ['Spacing', 'Layout']
           ],
@@ -136,7 +112,10 @@ export const parameters = {
             'Navigation',
             'Overlay'
           ],
+          'Chart',
+          ['Overview', 'Chart', 'DonutChart', 'StatTile', 'ChartCard'],
           'Marketing',
+          ['Primitives', 'Sections'],
           'Documentation'
         ],
         'Documentation',
@@ -165,12 +144,13 @@ export const parameters = {
             'Overview',
             'Shell',
             [
-              'PlatformShell',
-              'CreatePage',
-              'SummaryPage',
+              'HomeDashboard',
+              'SinglePageCreate',
+              'MultipageCreate',
+              'DetailsPageWithTabs',
+              'SplitView',
               'CodeEditor',
-              'QueryEditor',
-              'EventsVisualizer'
+              'QueryEditor'
             ],
             'Page',
             'Lists',
@@ -179,11 +159,31 @@ export const parameters = {
             'Creation',
             'States',
             'Detail',
-            'Observe',
+            'Dashboards',
+            [
+              'AnalyticsDashboard',
+              'DataDashboard',
+              'ServiceMonitoringDashboard',
+              'SecurityDashboard',
+              'ExecutiveSummaryDashboard',
+              'FunnelCohortDashboard',
+              'CompositionDashboard',
+              'ProjectStatusDashboard',
+              'AlertsDashboard',
+              'HealthScoreDashboard',
+              'ScanResultsDashboard',
+              'ActivityOutcomesDashboard',
+              'ConfigurableDashboard',
+              'Metrics',
+              'MetricPanel',
+              'RequestHistory'
+            ],
+            'Auth',
             'Account'
           ],
           'Headers',
-          'Shells'
+          'Shells',
+          ['Overview', 'Console', 'Documentation', 'Website']
         ],
         'Site'
       ]

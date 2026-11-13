@@ -134,11 +134,15 @@ const stateBand = (
 ${indent(body)}
 </div>`
 
-const resourceLink = ({ label, href, tooltip, external = false }) =>
+const RESOURCE_LINK =
+  'group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+export const resourceLink = ({ label, href, tooltip, external = false }) =>
   `<Tooltip text="${tooltip}" class="min-w-0 shrink!">
   <a
     href="${href}"${external ? '\n    target="_blank"\n    rel="noopener noreferrer"' : ''}
-    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
+    data-link
+    class="${RESOURCE_LINK}"
   >
     <span class="truncate underline-offset-2 group-hover/link:underline">${label}</span>${
       external ? `\n    <span class="sr-only">{{ ' (opens in a new tab)' }}</span>` : ''
@@ -172,7 +176,7 @@ const domainOverflow = (listName, total) => `<Popover placement="bottom-start" w
         :href="\`https://\${domain}\`"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline"
+        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
       >
         <span class="truncate">{{ domain }}</span>
         <i class="pi pi-external-link ml-auto shrink-0 text-body-xs leading-none" aria-hidden="true" />
@@ -201,7 +205,7 @@ ${groups.map((options) => `  <Dropdown.Group>\n${each(options, menuOption, 2)}\n
 
 const COPY_URL = { value: 'copy-url', label: 'Copy URL', icon: 'pi pi-copy' }
 
-const MANAGE_DOMAINS = { value: 'manage-domains', label: 'Manage Domains', icon: 'ai ai-domains' }
+const MANAGE_DOMAINS = { value: 'manage-domains', label: 'Manage Domains', icon: 'pi pi-globe' }
 
 const SETTINGS = { value: 'settings', label: 'Settings', icon: 'pi pi-cog' }
 
@@ -260,41 +264,40 @@ const WIDE = 'flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2'
 
 const NARROW_ROW = 'flex min-h-7 min-w-0 items-center'
 
-const CLI_DOCS = 'https://www.azion.com/en/documentation/products/azion-cli/overview/'
+const CLI_DOCS = 'https://example.com/docs/cli'
 
-export const APPLICATION = {
-  name: 'ecommerce-v2',
-  addresses: ['shop.shopco.com', 'y6u7i8o9p0.azion.run'],
-  deployment: '1213288756',
+export const RESOURCE = {
+  id: '4532109876',
+  name: 'web-app',
+  domain: 'web-app-y6u7i8.example.com',
+  deployment: '1213284258',
   environment: 'Production',
   status: { label: 'Ready', severity: 'success' },
-  author: 'Isaque Böck',
-  deployedAgo: '1 month ago',
-  repository: 'shopco/ecommerce-v2',
+  author: 'Gab Lisboa',
+  deployedAgo: '4 weeks ago',
+  repository: 'acme/web-app',
   branch: 'develop',
   framework: { icon: 'ai-cor ai-nuxt', label: 'Nuxt' }
 }
 
-export const CLI_APPLICATION = {
-  name: 'analytics-edge',
-  addresses: ['z1x2c3v4b5.azion.run'],
-  deployment: '1213279760',
+export const CLI_RESOURCE = {
+  id: '5120983746',
+  name: 'analytics-app',
+  domain: 'analytics-app-z1x2c3.example.com',
+  deployment: '1213275262',
   environment: 'Production',
   status: { label: 'Ready', severity: 'success' },
-  author: 'Marcus Grando',
-  deployedAgo: '3 weeks ago',
+  author: 'Herbert Júlio',
+  deployedAgo: '2 weeks ago',
   repository: '',
   branch: '',
   framework: { icon: 'ai-cor ai-next', label: 'Next.js' }
 }
 
-const domainCell = (domain, listName, total) =>
-  [siteLink(domain), ...(total > 1 ? [domainOverflow(listName, total)] : [])].join('\n')
-
 const sourceCell = (app) =>
   app.repository
     ? `<div class="flex min-w-0 items-center gap-(--spacing-xs)">
-  <i class="pi pi-github shrink-0 text-(--text-muted)" aria-hidden="true" />
+  <i class="ai ai-github shrink-0 text-(--text-muted)" aria-hidden="true" />
 ${indent(
   resourceLink({
     label: app.repository,
@@ -315,28 +318,26 @@ ${indent(
   <span class="truncate">Connect Git Repository</span>
 </button>`
 
-const applicationState = (app) =>
+const resourceState = (app) =>
   app.repository
     ? `Every push to
   <code class="${CODE}">${app.branch}</code>
-  deploys this application to Production. To ship from your machine, drop your project
+  deploys this resource to Production. To ship from your machine, drop your project
   anywhere on this page or run
-  <code class="${CODE}">azion deploy</code>
+  <code class="${CODE}">platform deploy</code>
   via the CLI.`
     : `To deploy to Production, drop your project anywhere on this page, connect Git, or run
-  <code class="${CODE}">azion deploy</code>
+  <code class="${CODE}">platform deploy</code>
   via the CLI.`
 
-const applicationTemplate = (app) => {
-  const [domain] = app.addresses
-  const total = app.addresses.length
-  return summaryCard([
+const resourceTemplate = (app) =>
+  summaryCard([
     subjectBand(
-      `<i class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
-${siteLink(domain)}`,
+      `<i class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+${siteLink(app.domain)}`,
       `${VISIT}
 
-${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
+${actionsMenu('Resource actions', [[COPY_URL], [SETTINGS]])}`
     ),
     factsBand('grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6', [
       fact({
@@ -351,8 +352,8 @@ ${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
       }),
       fact({
         cell: WIDE,
-        heading: labelWithAdd('Domains', 'div'),
-        body: domainCell(domain, 'addresses', total)
+        heading: label('Domains'),
+        body: siteLink(app.domain)
       }),
       fact({
         cell: WIDE,
@@ -381,15 +382,14 @@ ${actionsMenu('Application actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
       })
     ]),
     stateBand(`<p class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)">
-  ${applicationState(app)}
+  ${resourceState(app)}
 </p>
 
 ${documentationButton(CLI_DOCS)}`)
   ])
-}
 
-const applicationSummary = (app) => ({
-  template: applicationTemplate(app),
+const resourceSummary = (app) => ({
+  template: resourceTemplate(app),
   parts: [
     'Avatar',
     'Button',
@@ -398,107 +398,116 @@ const applicationSummary = (app) => ({
     'IconButton',
     'StatusIndicator',
     'Tag',
-    'Tooltip',
-    ...(app.addresses.length > 1 ? ['Popover'] : [])
-  ],
-  script: app.addresses.length > 1 ? [declare('addresses', app.addresses)] : [],
-  state: () => (app.addresses.length > 1 ? { addresses: app.addresses } : {})
+    'Tooltip'
+  ]
 })
 
-export const APPLICATION_SUMMARY = applicationSummary(APPLICATION)
+export const RESOURCE_SUMMARY = resourceSummary(RESOURCE)
 
-export const CLI_APPLICATION_SUMMARY = applicationSummary(CLI_APPLICATION)
+export const CLI_RESOURCE_SUMMARY = resourceSummary(CLI_RESOURCE)
 
-export const WORKLOAD = {
+export const SERVICE = {
   id: '1020655',
-  name: 'workload_01',
+  name: 'service-01',
   domains: [
-    'my-workload-1.azion.run',
-    'my-workload-1-alias-1.azion.run',
-    'my-workload-1-alias-2.azion.run',
-    'my-workload-1-alias-3.azion.run',
-    'my-workload-1-alias-4.azion.run',
-    'my-workload-1-alias-5.azion.run',
-    'my-workload-1-alias-6.azion.run',
-    'my-workload-1-alias-7.azion.run'
+    'service-01.example.com',
+    'service-01-alias-1.example.com',
+    'service-01-alias-2.example.com',
+    'service-01-alias-3.example.com',
+    'service-01-alias-4.example.com',
+    'service-01-alias-5.example.com',
+    'service-01-alias-6.example.com',
+    'service-01-alias-7.example.com'
   ],
-  environments: [{ name: 'Production' }, { name: 'Stage' }],
-  createdOn: 'Aug 20',
+  environments: [{ name: 'Production' }, { name: 'Preview' }],
+  createdOn: 'Sep 22',
   owner: 'Robson Junior'
 }
 
-const ENVIRONMENT_MENU = `<Tooltip
-  text="Select an environment to see its deployment and settings, or add another one"
->
-  <Dropdown
-    placement="bottom-end"
-    @select="(event, value) => { if (value !== '__add-environment__') environment = value }"
+const ENVIRONMENT_MENU = `<div class="contents md:hidden">
+  <Tooltip
+    text="Select an environment to see its deployment and settings, or add another one"
   >
-    <Dropdown.Trigger>
-      <span
-        class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-      >
-        <i class="ai ai-layers shrink-0 text-(--text-muted)" aria-hidden="true" />
-        <span class="truncate">{{ environment }}</span>
-        <i class="pi pi-chevron-down shrink-0 text-(--text-muted)" aria-hidden="true" />
-      </span>
-    </Dropdown.Trigger>
+    <Dropdown
+      placement="bottom-end"
+      @select="(event, value) => { if (value !== '__add-environment__') environment = value }"
+    >
+      <Dropdown.Trigger>
+        <span
+          class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
+        >
+          <i class="ai ai-layers shrink-0 text-(--text-muted)" aria-hidden="true" />
+          <span class="truncate">{{ environment }}</span>
+          <i class="pi pi-chevron-down shrink-0 text-(--text-muted)" aria-hidden="true" />
+        </span>
+      </Dropdown.Trigger>
 
-    <Dropdown.Group label="Environments">
-      <Dropdown.Option
-        v-for="option in environments"
-        :key="option.name"
-        :value="option.name"
-        :label="option.name"
-        :selected="option.name === environment"
-      />
-    </Dropdown.Group>
+      <Dropdown.Group label="Environments">
+        <Dropdown.Option
+          v-for="option in environments"
+          :key="option.name"
+          :value="option.name"
+          :label="option.name"
+          :selected="option.name === environment"
+        />
+      </Dropdown.Group>
 
-    <Dropdown.Group>
-      <Dropdown.Option value="__add-environment__" label="Add Environment">
-        <template #left>
-          <i class="pi pi-plus" aria-hidden="true" />
-        </template>
-      </Dropdown.Option>
-    </Dropdown.Group>
-  </Dropdown>
-</Tooltip>`
+      <Dropdown.Group>
+        <Dropdown.Option value="__add-environment__" label="Add Environment">
+          <template #left>
+            <i class="pi pi-plus" aria-hidden="true" />
+          </template>
+        </Dropdown.Option>
+      </Dropdown.Group>
+    </Dropdown>
+  </Tooltip>
+</div>`
 
 const DISC = 'M8 0a8 8 0 100 16A8 8 0 008 0z'
 
 const CHECK =
   'M11.53 5.47a.75.75 0 010 1.06l-4 4a.75.75 0 01-1.06 0l-2-2a.75.75 0 011.06-1.06L7 8.94l3.47-3.47a.75.75 0 011.06 0z'
 
-const POLICY_FIELDS = [
+const DASH = 'M4.25 8a.75.75 0 01.75-.75h6a.75.75 0 010 1.5H5A.75.75 0 014.25 8z'
+
+const SHARED_POLICIES = [
   { label: 'Binding policy', value: 'Strict' },
   { label: 'Deployment policy', value: 'Single' },
-  { label: 'Canary', value: 'Enabled', enabled: true },
-  { label: 'Skew protection', value: 'Enabled', enabled: true }
+  { label: 'Canary', value: 'Enabled', state: true },
+  { label: 'Skew protection', value: 'Enabled', state: true }
 ]
 
-const policyField = (field) => `<div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-  <span class="${LABEL}">${field.label}</span>
-  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">${
-    field.enabled
-      ? `
+const stateMark = (enabled) => `
     <svg
-      class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-contrast)"
+      class="h-(--size-4) w-(--size-4) shrink-0 ${enabled ? 'text-(--success-contrast)' : 'text-(--text-muted)'}"
       viewBox="0 0 16 16"
       fill="currentColor"
       fill-rule="evenodd"
       aria-hidden="true"
     >
-      <path d="${DISC} ${CHECK}" />
+      <path d="${DISC} ${enabled ? CHECK : DASH}" />
     </svg>`
-      : ''
+
+const policyField = (field) => `<div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+  <span class="${LABEL}">${field.label}</span>
+  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">${
+    field.state === undefined ? '' : stateMark(field.state)
   }
-    <span class="${VALUE}">
+    <span class="truncate text-body-sm ${field.state === false ? 'text-(--text-muted)' : 'text-(--text-default)'}">
       ${field.value}
     </span>
   </span>
 </div>`
 
-const DEPLOYMENT_FOOTER = `<Accordion
+const SETTINGS_LINK =
+  'group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)'
+
+export const deploymentFooter = ({
+  name = 'acme-production',
+  reach = '3 services',
+  others = ['service-05', 'service-09'],
+  fields = SHARED_POLICIES
+} = {}) => `<Accordion
   class="[--accordion-inset:var(--spacing-md)]"
   type="single"
   arrow-position="left"
@@ -514,18 +523,19 @@ const DEPLOYMENT_FOOTER = `<Accordion
 
       <div
         class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:right-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pr-(--spacing-md) @lg/band:pb-0"
-      >
-        <Tag label="Shared · 3 workloads" severity="warning" size="medium" class="shrink-0" />
+      >${
+        reach
+          ? `
+        <Tag label="Shared · ${reach}" severity="warning" size="medium" class="shrink-0" />`
+          : ''
+      }
         <Tooltip
           class="pointer-events-auto"
-          text="Open magalu-storefront in Build & Deployment settings"
+          text="Open ${name} in Build & Deployment settings"
         >
-          <a
-            href="/account/build-deployment"
-            class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default) no-underline"
-          >
+          <a href="/account/build-deployment" class="${SETTINGS_LINK}">
             <span class="truncate underline-offset-2 group-hover/link:underline">
-              magalu-storefront
+              ${name}
             </span>
             <i class="pi pi-external-link shrink-0 text-body-xs leading-none" aria-hidden="true" />
           </a>
@@ -533,33 +543,42 @@ const DEPLOYMENT_FOOTER = `<Accordion
       </div>
     </div>
 
-    <Accordion.Content>
+    <Accordion.Content>${
+      reach
+        ? `
       <div class="px-(--spacing-md) pt-(--spacing-xs)">
         <Message
           severity="warning"
           size="small"
-          label="Deploying with this setting also publishes to workload_05, workload_09."
+          label="Deploying with this setting also publishes to ${others.join(', ')}."
         />
       </div>
-
+`
+        : ''
+    }
       <div
         class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
       >
-${each(POLICY_FIELDS, policyField, 4)}
+${each(fields, policyField, 4)}
       </div>
     </Accordion.Content>
   </Accordion.Item>
 </Accordion>`
 
-const WORKLOAD_TEMPLATE = summaryCard([
+const DEPLOYMENT_FOOTER = deploymentFooter()
+
+const domainCell = (domain, listName, total) =>
+  [siteLink(domain), ...(total > 1 ? [domainOverflow(listName, total)] : [])].join('\n')
+
+const SERVICE_TEMPLATE = summaryCard([
   subjectBand(
-    `<i class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
-${domainCell(WORKLOAD.domains[0], 'domains', WORKLOAD.domains.length)}`,
+    `<i class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+${domainCell(SERVICE.domains[0], 'domains', SERVICE.domains.length)}`,
     `${VISIT}
 
 ${ENVIRONMENT_MENU}
 
-${actionsMenu('Workload actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
+${actionsMenu('Service actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
   ),
   factsBand('grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-4', [
     fact({
@@ -574,81 +593,85 @@ ${actionsMenu('Workload actions', [[COPY_URL], [MANAGE_DOMAINS, SETTINGS]])}`
       body: '<StatusIndicator severity="success" label="Live" />'
     }),
     fact({
-      heading: label('Workload ID'),
+      heading: label('Service ID'),
       body: `<span class="truncate text-body-sm tabular-nums text-(--text-default)">
-  ${WORKLOAD.id}
+  ${SERVICE.id}
 </span>
 <CopyButton
   kind="outlined"
-  value="${WORKLOAD.id}"
-  aria-label="Copy workload ID"
+  value="${SERVICE.id}"
+  aria-label="Copy service ID"
   class="shrink-0"
 />`
     }),
     fact({
       heading: label('Created'),
-      body: person(WORKLOAD.owner, `${WORKLOAD.createdOn} by ${WORKLOAD.owner}`)
+      body: person(SERVICE.owner, `${SERVICE.createdOn} by ${SERVICE.owner}`)
     })
   ]),
   stateBand(DEPLOYMENT_FOOTER, false)
 ])
 
-export const WORKLOAD_SUMMARY = {
-  template: WORKLOAD_TEMPLATE,
-  parts: [
-    'Accordion',
-    'Avatar',
-    'Button',
-    'CardBox',
-    'CopyButton',
-    'Dropdown',
-    'IconButton',
-    'Message',
-    'Popover',
-    'StatusIndicator',
-    'Tag',
-    'Tooltip'
-  ],
+const SERVICE_PARTS = [
+  'Accordion',
+  'Avatar',
+  'Button',
+  'CardBox',
+  'CopyButton',
+  'Dropdown',
+  'IconButton',
+  'Message',
+  'Popover',
+  'StatusIndicator',
+  'Tag',
+  'Tooltip'
+]
+
+export const SERVICE_SUMMARY = {
+  template: SERVICE_TEMPLATE,
+  parts: SERVICE_PARTS,
   vue: ['ref'],
   script: [
-    declare('domains', WORKLOAD.domains),
-    declare('environments', WORKLOAD.environments),
+    declare('domains', SERVICE.domains),
+    declare('environments', SERVICE.environments),
     "const environment = ref('Production')"
   ],
   state: () => ({
-    domains: WORKLOAD.domains,
-    environments: WORKLOAD.environments,
+    domains: SERVICE.domains,
+    environments: SERVICE.environments,
     environment: ref('Production')
   })
 }
 
-export const FIREWALL = {
-  name: 'edgeflow-production',
-  application: { name: 'edgeflow-site', id: '3344556677' },
+export const SERVICE_SUMMARY_IN_PAGE = {
+  template: SERVICE_TEMPLATE,
+  parts: SERVICE_PARTS,
+  script: [declare('domains', SERVICE.domains)],
+  state: () => ({ domains: SERVICE.domains })
+}
+
+export const POLICY = {
+  name: 'production-policy',
+  resource: { name: 'web-app', id: '3344556677' },
   environment: 'Production',
   rules: 14,
   author: 'Robson Junior',
   editedAgo: '6 days ago',
-  modules: ['DDoS Protection', 'WAF', 'Network Shield', 'Bot Manager'],
-  documentation: 'https://www.azion.com/en/documentation/products/secure/edge-firewall/'
+  modules: ['Rate limiting', 'Request inspection', 'IP filtering', 'Bot detection'],
+  documentation: 'https://example.com/docs/policies'
 }
 
-const firewallSentence = (modules) => {
-  const inspecting = modules.slice(1)
-  return `DDoS Protection, ${inspecting.slice(0, -1).join(', ')} and ${inspecting.at(-1)}`
-}
-
-const FIREWALL_TEMPLATE = summaryCard([
+const POLICY_TEMPLATE = summaryCard([
   subjectBand(
-    `<i class="ai ai-edge-application shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
+    `<i class="pi pi-box shrink-0 text-body-lg text-(--text-muted)" aria-hidden="true" />
 ${resourceLink({
-  label: FIREWALL.application.name,
-  href: `/applications/${FIREWALL.application.id}`,
-  tooltip: `Open ${FIREWALL.application.name} in Applications`
+  label: POLICY.resource.name,
+  href: `/resources/${POLICY.resource.id}`,
+  tooltip: `Open ${POLICY.resource.name} in Resources`
 })}`,
-    `<Button label="Rules Engine" kind="secondary" size="medium" icon="pi pi-sort-alt" />
+    `<Button label="Rules" kind="secondary" size="medium" icon="pi pi-list" />
 
-${actionsMenu('Firewall actions', [[COPY_ID], [SETTINGS]])}`
+${actionsMenu('Policy actions', [[COPY_ID], [SETTINGS]])}`
   ),
   factsBand('grid grid-cols-2 gap-(--spacing-sm) lg:grid-cols-4', [
     fact({
@@ -659,7 +682,7 @@ ${actionsMenu('Firewall actions', [[COPY_ID], [SETTINGS]])}`
     fact({
       row: NARROW_ROW,
       heading: label('Environment'),
-      body: `<Tag label="${FIREWALL.environment}" severity="secondary" size="small" class="shrink-0" />`
+      body: `<Tag label="${POLICY.environment}" severity="secondary" size="small" class="shrink-0" />`
     }),
     fact({
       row: NARROW_ROW,
@@ -668,33 +691,33 @@ ${actionsMenu('Firewall actions', [[COPY_ID], [SETTINGS]])}`
   type="button"
   class="truncate ${LINK_BUTTON}"
 >
-  ${FIREWALL.rules} rules
+  ${POLICY.rules} rules
 </button>`
     }),
     fact({
       heading: label('Last Modified'),
-      body: person(FIREWALL.author, `${FIREWALL.editedAgo} by ${FIREWALL.author}`)
+      body: person(POLICY.author, `${POLICY.editedAgo} by ${POLICY.author}`)
     }),
     fact({
       cell: 'col-span-2 flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-4',
       row: 'flex min-h-7 min-w-0 flex-wrap items-center gap-(--spacing-xs)',
       heading: label('Modules'),
-      body: FIREWALL.modules
+      body: POLICY.modules
         .map((name) => `<Tag label="${name}" severity="secondary" size="small" class="shrink-0" />`)
         .join('\n')
     })
   ]),
   stateBand(`<p class="min-w-0 flex-1 basis-(--container-2xs) text-pretty text-body-sm text-(--text-muted)">
-  ${firewallSentence(FIREWALL.modules)} inspect every request before it reaches
-  ${FIREWALL.application.name}. The rules run in order, and the first one that refuses a request
+  Every request passes through these modules before it reaches
+  ${POLICY.resource.name}. The rules run in order, and the first one that refuses a request
   ends it.
 </p>
 
-${documentationButton(FIREWALL.documentation)}`)
+${documentationButton(POLICY.documentation)}`)
 ])
 
-export const FIREWALL_SUMMARY = {
-  template: FIREWALL_TEMPLATE,
+export const POLICY_SUMMARY = {
+  template: POLICY_TEMPLATE,
   parts: [
     'Avatar',
     'Button',
@@ -708,19 +731,19 @@ export const FIREWALL_SUMMARY = {
 }
 
 const PATHS = [
-  { label: 'Azion CLI', value: 'cli' },
+  { label: 'CLI', value: 'cli' },
   { label: 'GitHub Actions', value: 'actions' }
 ]
 
 const INSTALL_STEP = {
-  title: 'Install the Azion CLI',
+  title: 'Install the CLI',
   description:
-    'Install it globally. It builds with your framework preset and ships straight to the edge.',
+    'Install it globally. It builds with your framework preset and ships the build in one step.',
   tabs: [
-    { label: 'npm', value: 'npm', language: 'bash', code: 'npm install -g azion' },
-    { label: 'yarn', value: 'yarn', language: 'bash', code: 'yarn global add azion' },
-    { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g azion' },
-    { label: 'brew', value: 'brew', language: 'bash', code: 'brew install azion' }
+    { label: 'npm', value: 'npm', language: 'bash', code: 'npm install -g platform-cli' },
+    { label: 'yarn', value: 'yarn', language: 'bash', code: 'yarn global add platform-cli' },
+    { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g platform-cli' },
+    { label: 'brew', value: 'brew', language: 'bash', code: 'brew install platform-cli' }
   ]
 }
 
@@ -729,26 +752,26 @@ const cliSteps = (name) => [
   {
     title: 'Link your project',
     description:
-      'Authenticate, then link the local project to this application so every deploy lands on it.',
+      'Authenticate, then link the local project to this resource so every deploy lands on it.',
     tabs: [
       {
         label: 'Link',
         value: 'link',
         language: 'bash',
-        code: ['azion login', `azion link \\\n  --name ${name}`].join('\n')
+        code: ['platform login', `platform link \\\n  --name ${name}`].join('\n')
       }
     ]
   },
   {
     title: 'Deploy and visit your site',
     description:
-      'Build and ship. The CLI prints the domain when it finishes, and sync reconciles azion.json with what Console shows.',
+      'Build and ship. The CLI prints the domain when it finishes, and sync reconciles platform.json with what the console shows.',
     tabs: [
       {
         label: 'Deploy',
         value: 'deploy',
         language: 'bash',
-        code: ['azion deploy --auto --local', 'azion sync'].join('\n')
+        code: ['platform deploy --auto --local', 'platform sync'].join('\n')
       }
     ]
   }
@@ -764,9 +787,9 @@ const WORKFLOW = [
   '    runs-on: ubuntu-latest',
   '    steps:',
   '      - uses: actions/checkout@v4',
-  '      - run: npm install -g azion',
-  '      - run: azion login --token ${{ secrets.AZION_PERSONAL_TOKEN }}',
-  '      - run: azion deploy --auto --local'
+  '      - run: npm install -g platform-cli',
+  '      - run: platform login --token ${{ secrets.PLATFORM_TOKEN }}',
+  '      - run: platform deploy --auto --local'
 ].join('\n')
 
 const ACTIONS_STEPS = [
@@ -779,7 +802,7 @@ const ACTIONS_STEPS = [
         label: 'Secret',
         value: 'secret',
         language: 'bash',
-        code: ['gh secret set \\', '  AZION_PERSONAL_TOKEN'].join('\n')
+        code: ['gh secret set \\', '  PLATFORM_TOKEN'].join('\n')
       }
     ]
   },
@@ -789,9 +812,9 @@ const ACTIONS_STEPS = [
       'One job that installs the CLI and deploys the build. Every push to the production branch runs it.',
     tabs: [
       {
-        label: 'azion-deploy.yml',
+        label: 'deploy.yml',
         value: 'workflow',
-        fileName: '.github/workflows/azion-deploy.yml',
+        fileName: '.github/workflows/deploy.yml',
         language: 'yaml',
         code: WORKFLOW
       }
@@ -807,25 +830,25 @@ const ACTIONS_STEPS = [
 
 const GET_STARTED_TEMPLATE = `<div class="@container flex min-w-0 flex-col gap-(--spacing-md)">
   <header class="group/heading flex flex-col">
-    <div class="flex flex-col gap-(--spacing-md) px-(--spacing-xs) md:flex-row md:items-start md:justify-between">
-      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
+      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
           <h2 class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)">
             Get started
           </h2>
         </div>
         <p class="text-pretty text-body-sm text-(--text-muted)">
-          Two ways to build and deploy this application. Pick one and follow the steps, or read the
+          Two ways to build and deploy this resource. Pick one and follow the steps, or read the
           <a
             href="${CLI_DOCS}"
             target="_blank"
             rel="noopener noreferrer"
             class="${LINK_BUTTON.replace('text-body-sm ', '')}"
-            >Azion CLI docs</a
+            >CLI docs</a
           >.
         </p>
       </div>
-      <div class="flex w-full flex-wrap items-center gap-(--spacing-xs) md:w-auto md:shrink-0 md:flex-nowrap">
+      <div class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-xs) md:w-auto md:max-w-full">
         <SegmentedButton v-model="path" :options="PATHS" size="large" aria-label="Deploy with" />
       </div>
     </div>

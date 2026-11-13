@@ -76,7 +76,7 @@ const CLEAN_SCHEMA = JSON.stringify({ type: 'object', properties: {} }, null, 2)
 
 const JS_IMAGE = `const ALLOWED = ['webp', 'avif']
 
-async function handleRequest(request, args) {
+export async function handleRequest(request, args = {}) {
   const url = new URL(request.url)
   const format = url.searchParams.get('format') ?? args.defaultFormat
 
@@ -86,15 +86,11 @@ async function handleRequest(request, args) {
   url.searchParams.set('quality', String(args.quality))
   return fetch(url.toString())
 }
-
-addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request, event.args ?? {}))
-})
 `
 
 const JS_AUTH = `const SECRET = 'demo-only'
 
-async function handleRequest(request) {
+export async function handleRequest(request) {
   const token = request.headers.get('authorization')?.replace('Bearer ', '')
   if (!token) return new Response('Unauthorized', { status: 401 })
 
@@ -102,10 +98,6 @@ async function handleRequest(request) {
   response.headers.set('x-authenticated', 'true')
   return response
 }
-
-addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request))
-})
 `
 
 const blankField = (id) => ({
@@ -130,7 +122,7 @@ const DEFAULT_FORMAT_DESCRIPTION =
 
 export const IMAGE_OPTIMIZER = {
   name: 'image-optimizer',
-  executionEnvironment: 'application',
+  executionEnvironment: 'request',
   runtimeLabel: 'JavaScript',
   code: JS_IMAGE,
   schema: {
@@ -180,7 +172,7 @@ export const IMAGE_OPTIMIZER = {
 
 export const AUTH_HANDLER = {
   name: 'auth-handler',
-  executionEnvironment: 'application',
+  executionEnvironment: 'request',
   runtimeLabel: 'JavaScript',
   code: JS_AUTH,
   schema: null,
@@ -604,14 +596,14 @@ const section = (
   body
 ) => `<section class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)">
   <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-    <div class="relative flex min-w-0 items-center gap-(--spacing-xxs)">
+    <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
       <h2 class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)">
         <span class="flex items-center gap-(--spacing-xs)">${title}</span>
       </h2>${hint ? `\n      <Hint text="${hint}" class="shrink-0" />` : ''}
     </div>
   </div>
   <div class="grid min-w-0 grid-rows-[1fr]">
-    <div class="min-w-0 overflow-hidden">
+    <div class="min-w-0">
       <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
 ${indent(body, 4)}
       </div>
@@ -640,7 +632,7 @@ const CODE_DOCUMENT = editorFrame(
   v-model="form.code"
   resizable="none"
   :invalid="!!codeError"
-  aria-label="Function code"
+  aria-label="Source code"
   class="flex-1 rounded-none! border-0! font-code"
   @update:model-value="codeError = ''"
 />`,
@@ -722,7 +714,7 @@ const numericInput = (model, placeholder, label) => `<InputText
 const DEFAULT_ROW = `<Item size="small" :class="field.type === 'array' ? 'flex-col items-stretch gap-(--spacing-sm)' : 'items-start'">
   <Item.Content>
     <Item.Title>Default</Item.Title>
-    <Item.Description>Seeds default_args, and what an instance starts from.</Item.Description>
+    <Item.Description>Seeds the arguments an instance starts from.</Item.Description>
   </Item.Content>
   <Item.Actions
     :class="field.type === 'boolean' ? 'justify-end' : field.type === 'array' ? 'w-full justify-start' : 'flex-1 justify-end max-w-(--container-3xs)'"
@@ -770,7 +762,7 @@ const DEFAULT_ROW = `<Item size="small" :class="field.type === 'array' ? 'flex-c
 const FIELD_SETTINGS = [
   fieldRow(
     'Name',
-    'The key in the arguments object, and what the function reads.',
+    'The key in the arguments object, and what the service reads.',
     `<InputText
   :id="formId + '-key-' + field.id"
   v-model="field.key"
@@ -944,15 +936,15 @@ ${indent(SCHEMA_DOCUMENT, 3)}
           bordered
           icon="pi pi-plus-circle"
           title="This form has no fields"
-          description="Add the first argument the function reads."
+          description="Add the first argument the service reads."
           class="min-h-0 flex-1"
         >
           <template #actions>
             <Button label="Add field" kind="secondary" size="medium" icon="pi pi-plus" @click="addField" />
             <Link
-              label="Read about function arguments"
+              label="Read about arguments"
               size="medium"
-              href="https://www.azion.com/en/documentation/products/build/edge-application/edge-functions/"
+              href="https://example.com/docs/arguments"
               target="_blank"
             />
           </template>
@@ -999,7 +991,7 @@ const SETTINGS_TAB = [
     card([
       fieldRow(
         'Name',
-        'Give a unique and descriptive name to identify your function.',
+        'Give a unique and descriptive name to identify your service.',
         `<InputText
   v-model="form.name"
   size="large"
@@ -1020,7 +1012,7 @@ const SETTINGS_TAB = [
     card([
       fieldRow(
         'Runtime',
-        "The runtime isn't editable after the function is created.",
+        "The runtime isn't editable after the service is created.",
         `<InputText :model-value="runtimeLabel" size="large" class="w-full" aria-label="Runtime" readonly disabled>
   <template #iconRight>
     <i class="pi pi-lock" aria-hidden="true" />
@@ -1031,7 +1023,7 @@ const SETTINGS_TAB = [
   ),
   section(
     'Execution environment',
-    'Which product runs the function, each handing the code a different request.',
+    'Where in the request path the service runs, each stage handing the code a different request.',
     card([
       wideRow(
         'Runs on',
@@ -1040,17 +1032,17 @@ const SETTINGS_TAB = [
   <legend class="sr-only">Execution environment</legend>
   <FieldRadioBlock
     v-model="form.executionEnvironment"
-    value="application"
+    value="request"
     :name="groupName"
-    label="Application"
-    description="Runs on requests an application serves, after routing."
+    label="On request"
+    description="Runs on each request the service handles, after routing."
   />
   <FieldRadioBlock
     v-model="form.executionEnvironment"
-    value="firewall"
+    value="gateway"
     :name="groupName"
-    label="Firewall"
-    description="Runs inside Firewall, before the request reaches an application, where a request can still be refused."
+    label="At the gateway"
+    description="Runs at the gateway, before routing, where a request can still be refused."
   />
 </fieldset>`
       )
@@ -1062,7 +1054,7 @@ const SETTINGS_TAB = [
     card([
       compactRow(
         'Active',
-        'An inactive function keeps its code and stops running.',
+        'An inactive service keeps its code and stops running.',
         '<Switch v-model="form.active" aria-label="Active" />'
       )
     ])
@@ -1070,28 +1062,30 @@ const SETTINGS_TAB = [
 ].join('\n\n')
 
 const SAVE_BAR = `<Transition
-  enter-active-class="origin-bottom transition-[scale,opacity] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
-  enter-from-class="scale-95 opacity-0"
-  leave-active-class="origin-bottom transition-[scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-  leave-to-class="scale-95 opacity-0"
+  enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+  enter-from-class="translate-y-2 opacity-0"
+  leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
+  leave-to-class="translate-y-2 opacity-0"
 >
-  <footer v-if="dirty" class="pointer-events-none sticky bottom-0 z-10 h-0 shrink-0">
-    <div class="absolute inset-x-0 bottom-0 flex justify-center px-(--spacing-md) pb-(--spacing-lg)">
-      <div class="pointer-events-auto flex max-w-[min(100%,var(--container-3xl))] items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) py-(--spacing-sm) pr-(--spacing-sm) pl-(--spacing-lg) shadow-lg">
+  <footer v-if="dirty" class="sticky bottom-0 z-10 h-0 shrink-0">
+    <div class="absolute inset-x-0 bottom-0 border-t border-(--border-default) bg-(--bg-canvas) lg:h-14">
+      <div class="layout-boundary-inline flex min-w-0 flex-col gap-(--spacing-sm) py-(--spacing-sm) lg:h-full lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-x-(--spacing-xl) lg:py-0">
         <div class="flex min-w-0 items-start gap-(--spacing-xs)">
           <i class="pi pi-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)" aria-hidden="true" />
-          <p class="min-w-0 text-body-sm text-(--text-default)">You have unsaved changes.</p>
+          <p class="min-w-0 text-body-sm text-(--text-default)">
+            You have unsaved changes.
+          </p>
         </div>
-        <div class="flex shrink-0 items-center gap-(--spacing-sm)">
-          <Button type="button" label="Discard" kind="outlined" size="large" @click="discard" />
-          <Button label="Save" kind="primary" size="large" @click="save" />
+        <div class="flex flex-col-reverse gap-(--spacing-xs) lg:ml-auto lg:shrink-0 lg:flex-row lg:items-center lg:gap-(--spacing-sm)">
+          <Button type="button" label="Discard" kind="outlined" size="medium" @click="discard" />
+          <Button label="Save" kind="primary" size="medium" @click="save" />
         </div>
       </div>
     </div>
   </footer>
 </Transition>`
 
-export const TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
+const TEMPLATE = `<div class="flex h-screen min-h-0 flex-col bg-(--bg-canvas)">
   <main class="flex h-full min-h-0 flex-col">
     <h1 class="sr-only">{{ form.name }}</h1>
 ${indent(PAGE_TABS, 2)}
@@ -1114,7 +1108,7 @@ ${indent(SAVE_BAR, 2)}
   </main>
 </div>`
 
-export const FUNCTION_MAIN = TEMPLATE.split('\n')
+export const WORKSPACE_MAIN = TEMPLATE.split('\n')
   .slice(1, -1)
   .map((line) => line.replace(/^ {2}/, ''))
   .join('\n')

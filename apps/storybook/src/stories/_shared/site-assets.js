@@ -122,3 +122,17 @@ const resolve = (value) => {
  * @returns {Record<string, unknown>}
  */
 export const withStoryAssets = (props) => resolve(props)
+
+/**
+ * @param {string} template
+ * @returns {string}
+ */
+export const withTemplateAssets = (template) =>
+  Object.entries(SITE_ASSETS).reduce(
+    (markup, [sitePath, asset]) =>
+      markup.replaceAll(
+        `'${sitePath}'`,
+        `'${asset.replaceAll("'", '%27').replaceAll('"', '%22')}'`
+      ),
+    template
+  )

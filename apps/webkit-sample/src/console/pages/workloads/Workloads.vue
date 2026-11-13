@@ -12,7 +12,6 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
-  import AuthorCell from '../../components/list/AuthorCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import DeleteDialog from '../../components/list/DeleteDialog.vue'
   import DomainOverflowPopover from '../../components/list/DomainOverflowPopover.vue'
@@ -51,7 +50,6 @@
     { accessorKey: 'id', header: 'ID', minWidth: FIT_COLUMN },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: TAG_COLUMN },
-    { accessorKey: 'owner', header: 'Last Editor', enableSorting: true, minWidth: FIT_COLUMN },
     {
       accessorKey: 'lastModified',
       header: 'Last Modified',
@@ -306,15 +304,13 @@
                       size="medium"
                     />
                   </template>
-                  <template #cell-owner="{ row }">
-                    <AuthorCell
-                      :author="row.owner"
-                      :avatar-src="row.ownerAvatar"
-                    />
-                  </template>
 
                   <template #cell-lastModified="{ row }">
-                    <LastModifiedCell :date="row.modifiedAt" />
+                    <LastModifiedCell
+                      :author="row.owner"
+                      :avatar-src="row.ownerAvatar"
+                      :date="row.modifiedAt"
+                    />
                   </template>
 
                   <template #cell-actions="{ row }">
