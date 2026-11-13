@@ -62,6 +62,19 @@
  ],
  "styleSeam": false,
  "assets": [],
- "examples": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n      state=\"complete\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n    />\n  </Stepper>\n</template>"
+  },
+  {
+   "name": "States",
+   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Step states\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Complete\"\n      description=\"The owner marked this step as answered.\"\n      state=\"complete\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Current\"\n      description=\"The step the reader is on.\"\n    />\n    <Stepper.Step\n      value=\"addresses\"\n      title=\"Error\"\n      description=\"Two addresses are not valid IPv4 ranges.\"\n      state=\"error\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Loading\"\n      description=\"Checking the rules against the firewall.\"\n      state=\"loading\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Upcoming\"\n      description=\"Not reached yet.\"\n    />\n  </Stepper>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('host')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n      disabled\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n      disabled\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n      disabled\n    />\n  </Stepper>\n</template>"
+  }
+ ],
  "docs": "components/stepper.md"
 }

@@ -173,7 +173,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'

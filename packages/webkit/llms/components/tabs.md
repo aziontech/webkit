@@ -2,7 +2,8 @@
 
 > Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tabs/`.
 
-- Import: `import Tabs from '@aziontech/webkit/tabs'`
+- Import: `import TabsRoot from '@aziontech/webkit/tabs-root'`
+- Compound import (dot notation, not tree-shakeable): `import Tabs from '@aziontech/webkit/tabs'`
 - Category: navigation · Surface: product · Structure: composition
 - API as JSON: [tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/tabs.json)
 

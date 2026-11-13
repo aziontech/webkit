@@ -2,7 +2,8 @@
 
 > Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
 
-- Import: `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
+- Import: `import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'`
+- Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
 - Category: navigation · Surface: product · Structure: composition
 - API as JSON: [breadcrumb.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb.json)
 
@@ -95,7 +96,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
@@ -118,7 +119,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const single = [{ label: 'Page Name', current: true }]
   const two = [
@@ -147,7 +148,7 @@
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },

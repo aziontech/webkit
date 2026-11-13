@@ -18705,7 +18705,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 </template>
 ```
 
-1 more example(s) in [components/tutorial-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tutorial-panel.md).
+2 more example(s) in [components/tutorial-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tutorial-panel.md).
 
 ---
 
@@ -27800,7 +27800,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 <script setup>
   import Alert from '@aziontech/webkit/alert'
   import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -28850,7 +28850,8 @@ packages/webkit/src/components/layout/console-layout/
 
 > Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in. The bar has two placements, chosen with `kind`, and the only difference is where the inset is measured from. `content` is the default and the one every app shell wants: the bar runs full bleed across whatever zone holds it — a content zone beside a rail, or the whole window when nothing sits beside it — insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content. It reads the token the page reads, so retuning the boundary moves both. A third placement, `app`, was removed in favour of that default. It insetted by a flat `--spacing-md` (16 at every width) on the theory that window-wide chrome above a navigation rail has no page column to answer to. Every shell that was placed deliberately chose `content` instead — including the bars that do span the whole window with no zone beside them — because a flat 16 disagrees with the page's 16-then-24 boundary at exactly the widths where nothing sits between the bar and the page, putting the brand on a different vertical from the title under it. Nothing selected `app` on purpose; the only bars on it had inherited it as the default. `site` is the marketing placement, for a page that is a FRAMED column rather than an app zone: the surface stays full bleed (the hairline and the fill run to the window edges, because a bar is chrome) while the regions are capped and centred, so the bar answers to the page under it at every width. It is one declaration, not a sub-component: `padding-inline: max(boundary, (100% - measure) / 2 + boundary)` — the cap and the boundary hand off to each other, so below the measure the boundary is the whole inset and the placement collapses to `content`. An uncapped bar over a capped page comes apart above the measure: the column stops growing and the bar does not, which on a 2560px window put the logo 684px to the left of the headline under it. The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), one rung wider than the page frame (`--layout-measure-site`, 1388px) that the hero, the sections and the footer share. A bar carries the brand at one end of the window and the account actions at the other, held apart by a navigation region in the middle: it wants the room a reading frame refuses, and held to the page's measure that middle region ran out of room on a laptop long before the page did. The two share one inset up to 1280 and part company only above the caps, by a fixed 92px from 1668 — half the 232px between the measures, less the boundary the bar keeps. It is the one band deliberately outside the frame, and the separate token is what keeps that exception reviewable in both directions.
 
-- Import: `import GlobalHeader from '@aziontech/webkit/global-header'`
+- Import: `import GlobalHeaderRoot from '@aziontech/webkit/global-header-root'`
+- Compound import (dot notation, not tree-shakeable): `import GlobalHeader from '@aziontech/webkit/global-header'`
 - Category: layout · Surface: product · Structure: composition
 
 ## When to use
@@ -34130,7 +34131,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 > Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
 
-- Import: `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
+- Import: `import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'`
+- Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
 - Category: navigation · Surface: product · Structure: composition
 
 ## When to use
@@ -34221,7 +34223,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ```vue
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
@@ -34922,7 +34924,8 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 
 > Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.
 
-- Import: `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
+- Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
+- Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
 - Category: navigation · Surface: product · Structure: composition
 
 ## When to use
@@ -35427,14 +35430,16 @@ even when the row carries nothing but its title.
 - `motion-reduce:transition-none` on every animated state
 - Touch target ≥40×40 px — the step button is a full-width row at least 40px tall
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Stepper from '@aziontech/webkit/stepper'
   import { ref } from 'vue'
 
-  const step = ref('host')
+  const step = ref('configure')
 </script>
 
 <template>
@@ -35454,13 +35459,20 @@ even when the row carries nothing but its title.
       description="Name it and add the addresses."
     />
     <Stepper.Step
+      value="rules"
+      title="Rules"
+      description="What the firewall does with a match."
+    />
+    <Stepper.Step
       value="review"
       title="Review"
-      disabled
+      description="Check the list before it goes live."
     />
   </Stepper>
 </template>
 ```
+
+2 more example(s) in [components/stepper.md](https://github.com/aziontech/webkit/blob/main/.specs/components/stepper.md).
 
 ---
 
@@ -35470,7 +35482,8 @@ even when the row carries nothing but its title.
 
 > Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tabs/`.
 
-- Import: `import Tabs from '@aziontech/webkit/tabs'`
+- Import: `import TabsRoot from '@aziontech/webkit/tabs-root'`
+- Compound import (dot notation, not tree-shakeable): `import Tabs from '@aziontech/webkit/tabs'`
 - Category: navigation · Surface: product · Structure: composition
 
 ## When to use
@@ -36705,15 +36718,17 @@ packages/webkit/src/components/overlay/command/
 - Touch target ≥40×40 px where the control is interactive.
 - Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Panel from '@aziontech/webkit/panel'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
 </script>
 
 <template>

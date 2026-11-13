@@ -11,6 +11,11 @@
       "name": "Completed",
       "summary": "The completion screen after the last step, with Restart, Back to tutorials and a feedback link in the completion slot.",
       "file": "completed.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the tutorials load: skeleton lines stand in for the whole panel, heading included, and the panel reports itself busy.",
+      "file": "loading.vue"
     }
   ]
 }

@@ -1298,6 +1298,10 @@
       "types": "./types/components/layout/global-header/index.d.ts",
       "default": "./src/components/layout/global-header/index.ts"
     },
+    "./global-header-root": {
+      "types": "./types/components/layout/global-header/global-header.vue.d.ts",
+      "default": "./src/components/layout/global-header/global-header.vue"
+    },
     "./sidebar": {
       "types": "./types/components/layout/sidebar/sidebar.vue.d.ts",
       "default": "./src/components/layout/sidebar/sidebar.vue"
@@ -1438,6 +1442,10 @@
       "types": "./types/components/navigation/breadcrumb/index.d.ts",
       "default": "./src/components/navigation/breadcrumb/index.ts"
     },
+    "./breadcrumb-root": {
+      "types": "./types/components/navigation/breadcrumb/breadcrumb.vue.d.ts",
+      "default": "./src/components/navigation/breadcrumb/breadcrumb.vue"
+    },
     "./breadcrumb-item": {
       "types": "./types/components/navigation/breadcrumb-item/breadcrumb-item.vue.d.ts",
       "default": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue"
@@ -1482,6 +1490,10 @@
       "types": "./types/components/navigation/tabs/index.d.ts",
       "default": "./src/components/navigation/tabs/index.ts"
     },
+    "./tabs-root": {
+      "types": "./types/components/navigation/tabs/tabs-root.vue.d.ts",
+      "default": "./src/components/navigation/tabs/tabs-root.vue"
+    },
     "./page-tabs": {
       "types": "./types/components/navigation/page-tabs/page-tabs.vue.d.ts",
       "default": "./src/components/navigation/page-tabs/page-tabs.vue"
@@ -1513,6 +1525,10 @@
     "./navigation-menu": {
       "types": "./types/components/navigation/navigation-menu/index.d.ts",
       "default": "./src/components/navigation/navigation-menu/index.ts"
+    },
+    "./navigation-menu-root": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-root.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-root.vue"
     },
     "./tooltip": {
       "types": "./types/components/overlay/tooltip/tooltip.vue.d.ts",

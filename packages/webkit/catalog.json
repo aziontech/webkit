@@ -15695,8 +15695,7 @@
    "target": "./src/components/layout/global-header/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./global-header-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/global-header-root",
    "subcomponents": [],
    "category": "layout",
    "structure": "composition",
@@ -15736,6 +15735,50 @@
    "surface": "product",
    "examplesFile": "catalog/examples/global-header.json",
    "docsFile": "catalog/components/global-header.json"
+  },
+  "global-header-root": {
+   "import": "@aziontech/webkit/global-header-root",
+   "target": "./src/components/layout/global-header/global-header.vue",
+   "kind": "root",
+   "rootOf": "global-header",
+   "treeShakeableImport": "@aziontech/webkit/global-header-root",
+   "category": "layout",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the header landmark. Empty uses the locale catalog (`Global header`)."
+    },
+    {
+     "name": "kind",
+     "type": "'content' | 'site'",
+     "default": "'content'",
+     "required": "false",
+     "doc": "Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components."
+    },
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Each sub-component (incl. `Container`) exposes `default` for region content."
+    },
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "global-header-brand` exposes `default` for logo markup."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/global-header-root.json"
   },
   "sidebar": {
    "import": "@aziontech/webkit/sidebar",
@@ -17473,8 +17516,7 @@
    "target": "./src/components/navigation/breadcrumb/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./breadcrumb-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/breadcrumb-root",
    "subcomponents": [
     "@aziontech/webkit/breadcrumb-item"
    ],
@@ -17506,6 +17548,40 @@
    "surface": "product",
    "examplesFile": "catalog/examples/breadcrumb.json",
    "docsFile": "catalog/components/breadcrumb.json"
+  },
+  "breadcrumb-root": {
+   "import": "@aziontech/webkit/breadcrumb-root",
+   "target": "./src/components/navigation/breadcrumb/breadcrumb.vue",
+   "kind": "root",
+   "rootOf": "breadcrumb",
+   "treeShakeableImport": "@aziontech/webkit/breadcrumb-root",
+   "category": "navigation",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "items",
+     "type": "BreadcrumbItemData[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry."
+    }
+   ],
+   "events": [
+    {
+     "name": "navigate",
+     "payload": "(event: MouseEvent, href: string)",
+     "notes": "Fires when an ancestor segment is activated. `event` is the activation event; `href` is the segment's destination."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Custom composition (`BreadcrumbList` + items + separators). Used when `items` is empty."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/breadcrumb-root.json"
   },
   "breadcrumb-item": {
    "import": "@aziontech/webkit/breadcrumb-item",
@@ -17859,8 +17935,7 @@
    "target": "./src/components/navigation/tabs/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./tabs-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/tabs-root",
    "subcomponents": [],
    "category": "navigation",
    "structure": "composition",
@@ -17883,6 +17958,40 @@
    "surface": "product",
    "examplesFile": "catalog/examples/tabs.json",
    "docsFile": "catalog/components/tabs.json"
+  },
+  "tabs-root": {
+   "import": "@aziontech/webkit/tabs-root",
+   "target": "./src/components/navigation/tabs/tabs-root.vue",
+   "kind": "root",
+   "rootOf": "tabs",
+   "treeShakeableImport": "@aziontech/webkit/tabs-root",
+   "category": "navigation",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "defaultValue",
+     "type": "TabsValue | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Initial active tab when uncontrolled."
+    },
+    {
+     "name": "modelValue",
+     "type": "TabsValue | null | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "—"
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/tabs-root.json"
   },
   "page-tabs": {
    "import": "@aziontech/webkit/page-tabs",
@@ -17951,6 +18060,7 @@
     }
    ],
    "surface": "product",
+   "examplesFile": "catalog/examples/stepper.json",
    "docsFile": "catalog/components/stepper.json"
   },
   "stepper-root": {
@@ -18142,8 +18252,7 @@
    "target": "./src/components/navigation/navigation-menu/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./navigation-menu-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
    "subcomponents": [],
    "category": "navigation",
    "structure": "composition",
@@ -18208,6 +18317,82 @@
    "surface": "product",
    "examplesFile": "catalog/examples/navigation-menu.json",
    "docsFile": "catalog/components/navigation-menu.json"
+  },
+  "navigation-menu-root": {
+   "import": "@aziontech/webkit/navigation-menu-root",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-root.vue",
+   "kind": "root",
+   "rootOf": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
+   "category": "navigation",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "defaultValue",
+     "type": "NavigationMenuValue",
+     "default": "null",
+     "required": "false",
+     "doc": "Uncontrolled initial open item value."
+    },
+    {
+     "name": "delay",
+     "type": "number",
+     "default": "50",
+     "required": "false",
+     "doc": "Hover-open delay in milliseconds."
+    },
+    {
+     "name": "closeDelay",
+     "type": "number",
+     "default": "300",
+     "required": "false",
+     "doc": "Hover-close delay in milliseconds."
+    },
+    {
+     "name": "orientation",
+     "type": "NavigationMenuOrientation",
+     "default": "'horizontal'",
+     "required": "false",
+     "doc": "Menu orientation."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`)."
+    },
+    {
+     "name": "as",
+     "type": "string | object",
+     "default": "'nav'",
+     "required": "false",
+     "doc": "Polymorphic root element."
+    },
+    {
+     "name": "modelValue",
+     "type": "NavigationMenuValue | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "open-change-complete",
+     "payload": "open: boolean",
+     "notes": "—"
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "—"
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/navigation-menu-root.json"
   },
   "tooltip": {
    "import": "@aziontech/webkit/tooltip",
@@ -18827,6 +19012,7 @@
     }
    ],
    "surface": "product",
+   "examplesFile": "catalog/examples/panel.json",
    "docsFile": "catalog/components/panel.json"
   },
   "panel-content": {
@@ -26638,7 +26824,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/icon-button"
    ],
@@ -26736,7 +26922,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/button-highlight",
     "@aziontech/webkit/global-header",
@@ -28203,7 +28389,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/empty-state",
@@ -28705,7 +28891,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/empty-state",
@@ -28860,7 +29046,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -28952,7 +29138,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -29194,7 +29380,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
@@ -29292,7 +29478,7 @@
    "imports": [
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -32060,7 +32246,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/field",
@@ -32458,7 +32644,7 @@
    ],
    "imports": [
     "@aziontech/webkit/alert",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/combobox",
@@ -32741,7 +32927,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
-    "@aziontech/webkit/breadcrumb",
+    "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",

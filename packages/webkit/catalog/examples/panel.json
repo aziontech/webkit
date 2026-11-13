@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "A static medium panel with a header, a body and a footer of actions, the shell a dialog or drawer renders around its content.",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Panel from '@aziontech/webkit/panel'\n  import PanelContent from '@aziontech/webkit/panel-content'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n</script>\n\n<template>\n  <Panel size=\"medium\">\n    <PanelHeader>\n      <h2 class=\"text-heading-sm text-(--text-default)\">Cache settings</h2>\n    </PanelHeader>\n    <PanelContent>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        Objects are cached at the edge for the TTL set on each rule.\n      </p>\n    </PanelContent>\n    <PanelFooter>\n      <Button\n        label=\"Cancel\"\n        kind=\"outlined\"\n      />\n      <Button\n        label=\"Save\"\n        kind=\"primary\"\n      />\n    </PanelFooter>\n  </Panel>\n</template>"
+  }
+ ]
+}

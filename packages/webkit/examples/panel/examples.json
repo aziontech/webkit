@@ -1,0 +1,11 @@
+{
+  "component": "panel",
+  "title": "Components/Primitives/Overlay/Panel",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A static medium panel with a header, a body and a footer of actions, the shell a dialog or drawer renders around its content.",
+      "file": "default.vue"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
  "name": "navigation-menu",
  "binding": "NavigationMenu",
  "import": "@aziontech/webkit/navigation-menu",
- "treeShakeableImport": "@aziontech/webkit/navigation-menu",
+ "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
  "category": "navigation",
  "surface": "product",
  "structure": "composition",

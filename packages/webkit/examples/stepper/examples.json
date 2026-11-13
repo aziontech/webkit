@@ -1,0 +1,21 @@
+{
+  "component": "stepper",
+  "title": "Components/Primitives/Navigation/Stepper",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A four-step rail: the first step is complete, the reader is on the second, and the last two are upcoming. Selecting an earlier step moves the reader back to it.",
+      "file": "default.vue"
+    },
+    {
+      "name": "States",
+      "summary": "Every step state in one rail: complete, current, error, loading and upcoming. Error and loading outrank current, so a step on screen that failed still says it failed.",
+      "file": "states.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "The steps after the current one are disabled until the reader answers it, which is how a create wizard renders the rail.",
+      "file": "disabled.vue"
+    }
+  ]
+}

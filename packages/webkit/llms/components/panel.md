@@ -73,15 +73,17 @@
 - Touch target ≥40×40 px where the control is interactive.
 - Scroll region: when `PanelContent` (outside a drawer's `ScrollArea`) overflows and holds nothing focusable, it takes `tabindex="0"` with an inset focus ring, so a keyboard user can scroll it (WCAG 2.1.1, axe `scrollable-region-focusable`); it is measured on resize and on content changes.
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Panel from '@aziontech/webkit/panel'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
   import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
   import GlobalHeader from '@aziontech/webkit/global-header'

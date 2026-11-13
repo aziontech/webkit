@@ -1,5 +1,5 @@
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import GlobalHeader from '@aziontech/webkit/global-header'
 </script>

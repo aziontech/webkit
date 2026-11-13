@@ -2,7 +2,8 @@
 
 > Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.
 
-- Import: `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
+- Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
+- Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
 - Category: navigation · Surface: product · Structure: composition
 - API as JSON: [navigation-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/navigation-menu.json)
 

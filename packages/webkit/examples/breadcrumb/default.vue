@@ -1,5 +1,5 @@
 <script setup>
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
   const items = [
     { label: 'Page Name', href: '#' },
