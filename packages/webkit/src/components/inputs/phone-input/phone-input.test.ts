@@ -171,7 +171,7 @@ describe('PhoneInput', () => {
     })
 
     it('switches a BR number from the landline to the mobile mask as it grows', async () => {
-      const { getByRole } = render(Default)
+      const { getByRole } = render(PhoneInput, {})
       const input = getByRole('textbox') as HTMLInputElement
 
       await fireEvent.update(input, '1199998888')
@@ -266,9 +266,9 @@ describe('PhoneInput', () => {
       const { getByTestId, getByRole } = render(Default)
 
       await fireEvent.click(getByTestId('select-trigger'))
-      await fireEvent.click(getOptions()[1]) // US
+      await fireEvent.click(getOptions()[2]) // GB
 
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('9999 999999')
     })
 
     it('disables the trigger and keeps the dropdown closed when disabled', async () => {
@@ -576,10 +576,10 @@ describe('PhoneInput', () => {
 
       expect(getByTestId('phone-input')).toBeTruthy()
       expect(getByTestId('select-trigger').getAttribute('role')).toBe('combobox')
-      expect(input.getAttribute('placeholder')).toBe('(99) 99999-9999')
+      expect(input.getAttribute('placeholder')).toBe('(999) 999-9999')
 
-      await fireEvent.update(input, '11999999999')
-      expect(input.value).toBe('(11) 99999-9999')
+      await fireEvent.update(input, '4155550100')
+      expect(input.value).toBe('(415) 555-0100')
     })
   })
 })

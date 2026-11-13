@@ -39,7 +39,7 @@
         <template #info>
           <Hint text="Where the workload was first provisioned." />
         </template>
-        South America (São Paulo)
+        US East (Virginia)
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Custom certificate" />
     </KeyValuePairs.Group>

@@ -1,10 +1,9 @@
 <script setup>
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import Avatar from '@aziontech/webkit/avatar'
 
   const kinds = ['circle', 'square']
   const sizes = ['small', 'medium', 'large']
-  const sampleImage =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face'
 </script>
 
 <template>
@@ -42,7 +41,7 @@
             :key="'img-' + kind + size"
             :kind="kind"
             :size="size"
-            :src="sampleImage"
+            :src="placeholderImage"
             alt="User portrait"
           />
         </div>

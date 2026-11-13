@@ -67,7 +67,7 @@
   <ConsoleLayout
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
-    :account="{ name: 'Ana Souza', email: 'ana.souza@example.com' }"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
     active-id="workloads"
   >
     <template #actions="{ compact }">

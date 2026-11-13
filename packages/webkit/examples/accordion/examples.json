@@ -24,7 +24,7 @@
     },
     {
       "name": "WithLogView",
-      "summary": "Composição real: o slot `Accordion.Content` aceita qualquer componente. Aqui, cada item de deploy encapsula um `LogView` completo (header + content) sobre um log de deploy real.",
+      "summary": "Real composition: the `Accordion.Content` slot takes any component. Here each deploy item wraps a full `LogView` (header and content) over a deploy log.",
       "file": "with-log-view.vue"
     },
     {

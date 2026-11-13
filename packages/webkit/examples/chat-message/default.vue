@@ -7,7 +7,7 @@
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-lg)">
     <ChatMessageRoot
       from="user"
-      author="Ana Lima"
+      author="Jane Doe"
       timestamp="10:41"
     >
       How do I purge the cache of one URL?

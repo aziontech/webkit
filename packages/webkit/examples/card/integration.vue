@@ -11,7 +11,7 @@
     <Card
       kind="integration"
       title="Request Signer"
-      vendor="Northwind Labs"
+      vendor="Acme Inc."
       logo="pi pi-key"
       description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
       :badges="[{ label: 'Firewall' }]"

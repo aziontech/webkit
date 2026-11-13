@@ -15,7 +15,7 @@
         href: '/careers/senior-platform-engineer',
         values: {
           role: 'Senior Platform Engineer',
-          team: 'Delivery Engineering · Porto Alegre',
+          team: 'Delivery Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -23,7 +23,7 @@
         href: '/careers/senior-quality-automation-engineer',
         values: {
           role: 'Senior Quality Automation Engineer',
-          team: 'Delivery Engineering · Porto Alegre',
+          team: 'Delivery Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -31,7 +31,7 @@
         href: '/careers/software-engineer-go',
         values: {
           role: 'Software Engineer (Go)',
-          team: 'Engineering · Porto Alegre',
+          team: 'Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       },
@@ -39,7 +39,7 @@
         href: '/careers/software-engineer-rust',
         values: {
           role: 'Software Engineer (Rust and/or C/C++)',
-          team: 'Platform Engineering · Porto Alegre / São Paulo',
+          team: 'Platform Engineering · San Francisco / New York',
           type: 'Hybrid · Full-time'
         }
       },
@@ -47,7 +47,7 @@
         href: '/careers/senior-infrastructure-analyst',
         values: {
           role: 'Senior Infrastructure Analyst',
-          team: 'SRE · Porto Alegre / São Paulo',
+          team: 'SRE · San Francisco / New York',
           type: 'Hybrid · Full-time'
         }
       },
@@ -55,7 +55,7 @@
         href: '/careers/software-engineer-frontend',
         values: {
           role: 'Software Engineer (Frontend)',
-          team: 'UX Engineering · Porto Alegre',
+          team: 'UX Engineering · San Francisco',
           type: 'Hybrid · Full-time'
         }
       }

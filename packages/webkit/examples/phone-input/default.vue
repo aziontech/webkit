@@ -4,7 +4,7 @@
   import { ref } from 'vue'
 
   const digits = ref('')
-  const country = ref('BR')
+  const country = ref('US')
   const phone = ref(null)
 </script>
 

@@ -10,7 +10,7 @@
       kind="quote"
       :quote="{
         text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',
-        name: 'Ana Souza',
+        name: 'Jane Doe',
         jobTitle: 'Head of Platform, Agibank',
         logo: agibankExtendedColor,
         logoAlt: 'Agibank'
@@ -22,7 +22,7 @@
       quote-kind="highlight"
       :quote="{
         text: 'Our checkout got faster in every country on the first deploy.',
-        name: 'Rafael Lima',
+        name: 'John Smith',
         jobTitle: 'CTO, Netshoes',
         logo: netshoesExtendedColor,
         logoAlt: 'Netshoes'

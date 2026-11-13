@@ -19,7 +19,7 @@
       name: 'email',
       kind: 'email',
       label: 'Work email',
-      placeholder: 'name@company.com',
+      placeholder: 'm@example.com',
       required: true
     },
     {
@@ -33,7 +33,7 @@
       name: 'mobilephone',
       kind: 'phone',
       label: 'Phone',
-      placeholder: '(999) 999-9999',
+      placeholder: '555-0100',
       country: 'US',
       visuallyHiddenLabel: true
     }

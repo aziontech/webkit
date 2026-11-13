@@ -329,7 +329,7 @@ describe('DateRangePicker', () => {
 
   it('renders the time zone example', async () => {
     const view = render(TimeZone)
-    expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC−03:00')
+    expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC+00:00')
   })
 
   it('follows the provider: right-to-left and pt-BR labels', async () => {

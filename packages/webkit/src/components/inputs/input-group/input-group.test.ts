@@ -187,7 +187,7 @@ describe('InputGroup', () => {
     it('passes consumer attrs (e.g. aria-hidden) through to the span', () => {
       const { getByTestId } = render(InputGroupAddon, {
         attrs: { 'aria-hidden': 'true' },
-        slots: { default: 'R$' }
+        slots: { default: '$' }
       })
 
       expect(getByTestId('input-group-addon').getAttribute('aria-hidden')).toBe('true')
@@ -254,13 +254,13 @@ describe('InputGroup', () => {
       expect(button.closest('[data-testid="input-group"]')).not.toBeNull()
     })
 
-    it('renders the WithSelect story with a closed combobox trigger showing BRL', () => {
+    it('renders the WithSelect story with a closed combobox trigger showing USD', () => {
       const { getByTestId } = render(WithSelect)
 
       const trigger = getByTestId('select-trigger')
       expect(trigger.getAttribute('role')).toBe('combobox')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('BRL')
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('USD')
     })
 
     it('renders the Sizes story with one group per size, each carrying data-size', () => {

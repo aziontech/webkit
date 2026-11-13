@@ -44,7 +44,7 @@
       name: 'email',
       kind: 'email',
       label: 'Work email',
-      placeholder: 'name@company.com',
+      placeholder: 'm@example.com',
       required: true
     },
     {

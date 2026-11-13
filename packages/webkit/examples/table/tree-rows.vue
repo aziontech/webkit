@@ -5,7 +5,7 @@
   const accounts = [
     {
       id: 'org-1',
-      name: 'Northwind Group',
+      name: 'Acme Inc.',
       type: 'Organization',
       children: [
         {
@@ -25,7 +25,7 @@
         }
       ]
     },
-    { id: 'org-2', name: 'Contoso Labs', type: 'Organization' }
+    { id: 'org-2', name: 'Acme Labs', type: 'Organization' }
   ]
 
   const columns = [

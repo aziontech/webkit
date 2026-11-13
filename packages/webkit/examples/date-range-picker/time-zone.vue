@@ -2,8 +2,8 @@
   import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import { ref } from 'vue'
 
-  const zones = ['UTC', 'America/Sao_Paulo', 'America/New_York', 'Europe/Lisbon', 'Asia/Tokyo']
-  const timeZone = ref('America/Sao_Paulo')
+  const zones = ['UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Asia/Tokyo']
+  const timeZone = ref('UTC')
   const range = ref({
     type: 'absolute',
     start: '2026-11-10T11:00:00.000Z',
