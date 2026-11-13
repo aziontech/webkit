@@ -1143,7 +1143,7 @@
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "8.64 KB"
+    "limit": "8.7 KB"
   },
   {
     "name": "phone-input",

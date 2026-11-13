@@ -143,6 +143,26 @@ describe('SitePage', () => {
     expect(await findByTestId('content-illustration')).toBeInTheDocument()
   })
 
+  it.each([
+    ['ConsoleApplicationScene', 'assets-console-application-scene'],
+    ['ConsoleTraceScene', 'assets-console-trace-scene'],
+    ['FunctionsHeroCanvas', 'assets-runtime-api-scene'],
+    ['RuntimeApiCloud', 'assets-runtime-api-cloud']
+  ])('draws the ported %s scene by name', async (component, testId) => {
+    const { findByTestId } = page({
+      hero: [],
+      sections: [
+        {
+          _id: 'console-panel',
+          props: { kind: 'diagram', title: 'Requests take the shortest path' },
+          scenes: { scene: { component, props: { animated: false } } }
+        }
+      ]
+    })
+
+    expect(await findByTestId(testId)).toBeInTheDocument()
+  })
+
   it('skips a scene the registry does not hold, with a development warning', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const { findByRole, queryByTestId } = page({

@@ -4,9 +4,14 @@ export type SceneLoader = () => Promise<{ default: Component }>
 
 export const sceneAssets = {
   BrandGlobeScene: () => import('./globe/brand-globe-scene.vue'),
+  ConsoleApplicationScene: () =>
+    import('./scenes/console-application/console-application-scene.vue'),
+  ConsoleTraceScene: () => import('./scenes/console-trace/console-trace-scene.vue'),
+  FunctionsHeroCanvas: () => import('./scenes/runtime-api/runtime-api-scene.vue'),
   Diagram: () => import('../components/marketing/diagram/diagram.vue'),
   Illustration: () => import('../components/content/illustration/illustration.vue'),
   ProductWidget: () => import('../components/content/product-widget/product-widget.vue'),
+  RuntimeApiCloud: () => import('./scenes/runtime-api/runtime-api-cloud.vue'),
   SpinningGlobe: () => import('./globe/spinning-globe.vue')
 } satisfies Record<string, SceneLoader>
 

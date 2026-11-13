@@ -452,6 +452,12 @@ The other 25 entries are raised to the measured size plus about 0.1 KB:
 | file-token-group           | 7             | 7.04         | 7.15       | `Button kind="link"`.                                                                                                                                 |
 | webkit-provider            | 9.16          | 9.22         | 9.35       | Ships the `en` catalog, which gained `searchTrigger`, `artifactCanvas`, `consoleLayout` and the DocLayout rail strings, and the `now` reference time. |
 
+## M2.10 owner decisions — merge pass (2026-11-13)
+
+| Entry      | Budget before | Measured now | New budget | Reason                                                                                                                                              |
+| ---------- | ------------- | ------------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| locales-es | 8.64          | 8.65         | 8.7        | Two lanes each added one Spanish string (`tableFilter.triggerCount`, row 64; `runtimeApiCloud.label`, row 42) and fit alone; together 0.01 KB over. |
+
 ### `gates.mjs` runs the size check
 
 `gates.mjs` mirrored only the `toolkit` job of `governance.yml`, which runs on every PR in under a minute; the size check lives in the `build` job (only when `packages/webkit` changes), so it was left out and a local `gates` run passed while CI failed. `check-size.mjs` takes about 14 s for the 265 entries on the 32-core host (Vite 8 with Rolldown), so it is now the `size` gate, run by default; `--only` still skips it. `test/standards/gates.test.mjs` accepts a `pnpm run <script>` step whose `working-directory` is `packages/webkit` as the CI twin of a gate.
