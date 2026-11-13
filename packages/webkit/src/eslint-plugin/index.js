@@ -15,6 +15,7 @@ import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noLinkInSentence from './rules/no-link-in-sentence.js'
 import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
+import noPolymorphicAsProp from './rules/no-polymorphic-as-prop.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
 import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
@@ -51,7 +52,8 @@ const rules = {
   'no-viewport-height-calc': noViewportHeightCalc,
   'no-link-in-sentence': noLinkInSentence,
   'composable-readonly-return': composableReadonlyReturn,
-  'composable-scope-cleanup': composableScopeCleanup
+  'composable-scope-cleanup': composableScopeCleanup,
+  'no-polymorphic-as-prop': noPolymorphicAsProp
 }
 
 const FILES = [
@@ -109,7 +111,8 @@ const RECOMMENDED = {
   'no-viewport-height-calc': 'error',
   'no-link-in-sentence': 'error',
   'composable-readonly-return': 'error',
-  'composable-scope-cleanup': 'error'
+  'composable-scope-cleanup': 'error',
+  'no-polymorphic-as-prop': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])

@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { RuleTester } from 'eslint'
+import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 import plugin from '../../src/eslint-plugin/index.js'
 import composableReadonlyReturn from '../../src/eslint-plugin/rules/composable-readonly-return.js'
 import composableScopeCleanup from '../../src/eslint-plugin/rules/composable-scope-cleanup.js'
+import noPolymorphicAsProp from '../../src/eslint-plugin/rules/no-polymorphic-as-prop.js'
 import {
   scanSignatures,
   SIGNATURE_MESSAGES,
@@ -17,6 +19,15 @@ import { STANDARDS_BY_ID } from '../../../../.claude/hooks/_lib/standards.mjs'
 const ts = new RuleTester({
   languageOptions: { parser: tsParser, ecmaVersion: 2022, sourceType: 'module' }
 })
+const vueTs = new RuleTester({
+  languageOptions: {
+    parser: vueParser,
+    parserOptions: { parser: tsParser },
+    ecmaVersion: 2022,
+    sourceType: 'module'
+  }
+})
+
 const FILE = 'src/composables/use-thing/use-thing.ts'
 
 test('composable-readonly-return', () => {
@@ -199,6 +210,44 @@ test('composable-scope-cleanup', () => {
   })
 })
 
+test('no-polymorphic-as-prop', () => {
+  const sfc = (script) => `<script setup lang="ts">${script}</script><template><div /></template>`
+  vueTs.run('no-polymorphic-as-prop', noPolymorphicAsProp, {
+    valid: [
+      {
+        filename: 'a.vue',
+        code: sfc(
+          "interface Props { href?: string } withDefaults(defineProps<Props>(), { href: '' })"
+        )
+      },
+      { filename: 'b.vue', code: sfc('defineProps<{ alias?: string; asset?: string }>()') },
+      { filename: 'c.vue', code: sfc('const as = 1; defineProps<{ label?: string }>()') }
+    ],
+    invalid: [
+      {
+        filename: 'd.vue',
+        code: sfc(
+          'interface Props { as?: string; asChild?: boolean } withDefaults(defineProps<Props>(), {})'
+        ),
+        errors: [
+          { messageId: 'polymorphic', data: { name: 'as' } },
+          { messageId: 'polymorphic', data: { name: 'asChild' } }
+        ]
+      },
+      {
+        filename: 'e.vue',
+        code: sfc("type Props = { as?: 'a' | 'button' }; defineProps<Props>()"),
+        errors: [{ messageId: 'polymorphic', data: { name: 'as' } }]
+      },
+      {
+        filename: 'f.vue',
+        code: sfc('defineProps({ asChild: { type: Boolean, default: false } })'),
+        errors: [{ messageId: 'polymorphic', data: { name: 'asChild' } }]
+      }
+    ]
+  })
+})
+
 test('the signature rules ship as errors in recommended and strict', () => {
   for (const preset of ['recommended', 'strict']) {
     const [config] = plugin.configs[preset]
@@ -231,6 +280,12 @@ test('scanSignatures feeds the hook and the ratchet with rule ids and lines', ()
       ['composable-readonly-return', 1],
       ['composable-readonly-return', 3]
     ]
+  )
+  const sfc =
+    '<script setup lang="ts">\ndefineProps<{ as?: string }>()\n</script>\n<template><div /></template>'
+  assert.deepEqual(
+    scanSignatures('/abs/src/a.vue', sfc).map((f) => f.id),
+    ['no-polymorphic-as-prop']
   )
   assert.deepEqual(scanSignatures('/abs/src/helpers.ts', composable), [])
   assert.deepEqual(scanSignatures('/abs/src/b.vue', '<template><div /></template>'), [])

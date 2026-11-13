@@ -12,6 +12,7 @@
 //   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
 //   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
 //     timer, frame or observer with no onScopeDispose                 (composables.md)
+//   - defineProps declaring `as` / `asChild`                          (root-element.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
 // block when a check's occurrence count GROWS past the baseline's.
