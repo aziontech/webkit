@@ -10,7 +10,7 @@ Seed data, placeholders, mocks, fixtures and screenshots are **sample data**. Wr
 - Write phones as `+1 555-0100` … `+1 555-0199` (reserved fictional numbers) and addresses in US format: `100 Market Street`, `Suite 400`, `San Francisco`, `California`, `94105`, `United States`.
 - Show money in USD (`$49`), dates in en-US or ISO, and default time zones to UTC.
 - Take sample IPs from the documentation ranges: `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24`, `2001:db8::/32`.
-- Start blank forms **empty**. A placeholder is at most a short example in this format (`m@example.com`) or nothing.
+- Start blank forms **empty**, and never seed a field the person edits with a sample value: sample emails and names belong in tables, lists and menus, not as a field's starting value. A placeholder is at most a short example in this format (`m@example.com`) or nothing.
 - Label a company tax field `Tax ID`, with no mask.
 
 ## Do not

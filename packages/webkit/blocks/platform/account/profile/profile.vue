@@ -20,7 +20,7 @@
     clientId: '9757a',
     companyName: '',
     taxId: '',
-    billingEmails: 'name@example.com',
+    billingEmails: '',
     postalCode: '94105',
     country: 'us',
     state: 'ca',

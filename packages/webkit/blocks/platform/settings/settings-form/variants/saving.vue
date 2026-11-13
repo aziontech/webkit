@@ -28,7 +28,7 @@
 
   const saved = ref({
     fullName: 'Alex Morgan',
-    email: 'name@example.com',
+    email: '',
     timezone: 'utc',
     language: 'en',
     productUpdates: true
