@@ -44,3 +44,24 @@ run the suite inside the same image:
 docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/visual \
   mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test
 ```
+
+## Reviewing a change
+
+Each place the suite runs leaves a page to review, linked from the run's job summary:
+
+| Run                                                        | Artifact                  | What it shows                                                                         |
+| ---------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------- |
+| `visual` job, a comparison fails                           | `visual-report-shard-<n>` | The Playwright HTML report: expected, actual and diff image of each failed screenshot |
+| `visual` job, the pull request changes `baselines/`        | `visual-report-shard-<n>` | The same report for the shard, to confirm the new baselines pass                      |
+| `visual-review` job, the pull request changes `baselines/` | `visual-baseline-review`  | Every added, modified and removed baseline, before and after, side by side            |
+| `visual-baselines.yml` with `update_baselines=true`        | `visual-baseline-review`  | The committed and the regenerated baselines, side by side, for the files that changed |
+
+Download the artifact, unzip it, and open `index.html` (for the Playwright report, run
+`npx playwright show-report playwright-report`). The page comes from `scripts/baseline-review.mjs`,
+which compares two folders of images; locally, after mirroring new baselines:
+
+```bash
+mkdir -p /tmp/before && git archive HEAD apps/visual/baselines | tar -x -C /tmp/before
+node apps/visual/scripts/baseline-review.mjs --before /tmp/before/apps/visual/baselines \
+  --after apps/visual/baselines --out apps/visual/baseline-review
+```

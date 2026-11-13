@@ -2,7 +2,7 @@
 name: regen-baselines
 description: Regenerate the styled visual baselines (Playwright over the docs site's examples and blocks and over the demos) for a branch/PR via the CI workflow, download the artifact, mirror it into apps/visual/baselines, and commit it to the branch. Baselines come only from the Playwright container image.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 scope: webkit
 enforced_by: [git-workflow, release-types, review]
 ---
@@ -47,18 +47,51 @@ committed by hand. This skill is that end-to-end flow.
 3. **Wait** for `status == "completed"` (`gh run view <id> --json status,conclusion`). Never name
    the poll variable `status` (read-only in zsh). Re-triggering on the same ref cancels the run.
 4. **Download** into a fresh directory: `gh run download <id> -n visual-baselines -D <dir>`.
+   The run also uploads `visual-baseline-review`, a page with every changed file before and
+   after (the job summary links it): `gh run download <id> -n visual-baseline-review -D <dir2>`,
+   then open `<dir2>/index.html`.
 5. **Mirror** on a clean checkout of the branch:
    `rsync -a --delete <dir>/ apps/visual/baselines/` (with a `grep`, copy without `--delete`).
-6. **Review the scope**: `git status --porcelain apps/visual/baselines | awk '{print $1}' | sort | uniq -c`
-   and look at the changed images. Every change must be explained by the branch; anything else
-   is a flake or an unintended global change — stop and investigate.
-7. **Commit only the baselines folder** and push:
+6. **List the changed files** by name, grouped by status:
+   ```sh
+   git status --porcelain --untracked-files=all apps/visual/baselines | awk '
+     $1 == "??" || $1 == "A" { print "added    " $2; next }
+     $1 == "D"               { print "removed  " $2; next }
+                             { print "modified " $2 }' | sort
+   ```
+7. **Review the scope**: look at each listed image on the review page. Every change must be
+   explained by the branch; anything else is a flake or an unintended global change — stop and
+   investigate.
+8. **Commit only the baselines folder** and push:
    `git commit -m "test(visual): regenerate baselines <context>"`.
+9. **Report** (format below).
 
 Locally, the same container gives the same pixels:
 `docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/visual mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --update-snapshots=all`
 after `pnpm docs:build && pnpm demos:build`. Use it to look at a change before dispatching; the
 committed baselines still come from the workflow or from that exact image.
+
+## Report
+
+The final message names every changed snapshot, not only the counts:
+
+```text
+Baselines regenerated: run <url>, head <sha>, grep <pattern or "none">
+Review page: visual-baseline-review artifact of that run
+Commit: <sha> test(visual): regenerate baselines <context>
+
+Added (2)
+- apps/visual/baselines/examples/date-picker/default--light-1280.png
+- apps/visual/baselines/examples/date-picker/default--dark-1280.png
+Modified (1)
+- apps/visual/baselines/blocks/platform/auth/login--dark-1280.png
+Removed (0)
+
+Why each change: <one line per group, tied to the branch's scope>
+```
+
+A list longer than 50 files per group is cut to 50 lines plus `and <n> more`; the full list is
+`changes.json` in the review page artifact.
 
 ## Rules
 
@@ -77,4 +110,5 @@ committed baselines still come from the workflow or from that exact image.
 - [ ] Workflow run concluded `success` on the intended branch HEAD.
 - [ ] `apps/visual/baselines/` mirrors the artifact.
 - [ ] Every changed image is explained by the branch's scope.
+- [ ] The report lists each added, modified and removed snapshot by file name.
 - [ ] One `test(visual): …` commit with only the baselines, pushed.

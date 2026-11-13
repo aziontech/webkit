@@ -114,6 +114,7 @@ packages/webkit/.vitest-attachments/
 # are the CI contract and ARE committed; results and reports are local-only.
 apps/visual/test-results/
 apps/visual/playwright-report/
+apps/visual/baseline-review/
 
 # AI bundle copies made by packages/webkit's prepack (sources live in skills/, rules/, adapters/)
 packages/webkit/skills/

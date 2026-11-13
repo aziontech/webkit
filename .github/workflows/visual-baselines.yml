@@ -3,7 +3,8 @@ name: Visual baselines
 # The committed baselines in apps/visual/baselines are the CI contract. They are taken in the
 # same container image the visual job runs in, so fonts and rasterization match. Dispatch this
 # on a branch (pnpm visual:update:baseline) after an intended visual change, review the uploaded
-# images, then commit them to the branch.
+# images (the visual-baseline-review artifact shows each changed file before and after), then
+# commit them to the branch.
 
 on:
   workflow_dispatch:
@@ -53,6 +54,12 @@ jobs:
       - name: Build the demos
         run: pnpm demos:build
 
+      - name: Keep a copy of the committed baselines
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/before"
+          cp -R apps/visual/baselines "$RUNNER_TEMP/before/baselines"
+
       - name: Regenerate baselines
         if: ${{ github.event.inputs.update_baselines == 'true' }}
         run: pnpm --filter @aziontech/webkit-visual exec playwright test --update-snapshots=all ${GREP:+--grep "$GREP"}
@@ -73,7 +80,39 @@ jobs:
           path: apps/visual/baselines/
           retention-days: 7
 
+      - name: Build the before/after page
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        run: >-
+          node apps/visual/scripts/baseline-review.mjs
+          --before "$RUNNER_TEMP/before/baselines"
+          --after apps/visual/baselines
+          --out "$RUNNER_TEMP/review"
+          --title "Regenerated visual baselines"
+
+      - name: Upload the review page
+        id: review
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-baseline-review
+          path: ${{ runner.temp }}/review/
+          retention-days: 7
+
+      - name: Link the review page in the job summary
+        if: ${{ github.event.inputs.update_baselines == 'true' }}
+        env:
+          REVIEW_URL: ${{ steps.review.outputs.artifact-url }}
+        run: |
+          {
+            echo "### Regenerated visual baselines"
+            echo ""
+            echo "Review page (committed and regenerated, side by side): [visual-baseline-review](${REVIEW_URL}). Download it, unzip, and open \`index.html\`. The baselines to commit are in the \`visual-baselines\` artifact."
+            echo ""
+            cat "$RUNNER_TEMP/review/summary.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload the report on failure
+        id: report
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -83,3 +122,14 @@ jobs:
             apps/visual/test-results/
           retention-days: 7
           if-no-files-found: ignore
+
+      - name: Link the report in the job summary
+        if: failure()
+        env:
+          REPORT_URL: ${{ steps.report.outputs.artifact-url }}
+        run: |
+          {
+            echo "### Visual diffs"
+            echo ""
+            echo "Playwright report with the expected, actual and diff images: [visual-report](${REPORT_URL}). Download it, unzip, and run \`npx playwright show-report playwright-report\`."
+          } >> "$GITHUB_STEP_SUMMARY"
