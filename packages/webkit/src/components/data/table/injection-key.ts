@@ -61,6 +61,12 @@ export interface TableStateSnapshot {
   filters?: AppliedFilter[]
 }
 
+/** Which rows an export writes. */
+export type TableExportScope = 'page' | 'filtered' | 'all'
+
+/** Body row density. */
+export type TableDensity = 'comfortable' | 'compact'
+
 /** Imperative API a Table template ref exposes; type the ref with it, as a generic component has no InstanceType. */
 export interface TableExposed<TRecord extends object = TableRowRecord> {
   /** Emits refresh so the app refetches; no-op while loading. */
@@ -70,7 +76,7 @@ export interface TableExposed<TRecord extends object = TableRowRecord> {
   /** Writes the visible, ordered columns of the chosen rows to a CSV download, or emits export when it is bound. */
   exportCsv: (options?: {
     filename?: string
-    scope?: 'page' | 'filtered' | 'all'
+    scope?: TableExportScope
     rows?: TRecord[]
   }) => Promise<void>
   /** Deep-cloned snapshot of sorting, pagination, column visibility and order, search and filters. */
@@ -109,7 +115,7 @@ export interface TableContext {
   /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`). */
   exportCsv: (options?: {
     filename?: string
-    scope?: 'page' | 'filtered' | 'all'
+    scope?: TableExportScope
     rows?: Record<string, unknown>[]
   }) => Promise<void>
   /** Signal a refresh; the root emits `refresh` (the app refetches). */

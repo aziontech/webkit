@@ -8,7 +8,8 @@
     inheritAttrs: false
   })
 
-  type TableHeaderKind = 'default' | 'compact'
+  /** Header density. */
+  export type TableHeaderKind = 'default' | 'compact'
 
   interface Props {
     /** Sticks the header to the top of the scroll container. */

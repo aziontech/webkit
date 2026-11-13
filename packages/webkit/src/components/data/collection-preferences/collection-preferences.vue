@@ -51,6 +51,9 @@
     inheritAttrs: false
   })
 
+  /** Overlay the panel opens in. */
+  export type CollectionPreferencesContainer = 'dialog' | 'drawer'
+
   interface Props {
     /** The saved preferences. Supports v-model:preferences; changes apply on Confirm. */
     preferences?: CollectionPreferencesValue
@@ -61,7 +64,7 @@
     /** Sections the panel shows, in this order. */
     sections?: CollectionPreferencesSection[]
     /** Opens in a centered dialog or a side drawer. */
-    container?: 'dialog' | 'drawer'
+    container?: CollectionPreferencesContainer
     /** Panel title and trigger label. Empty uses the locale catalog. */
     title?: string
     /** Disables the trigger. */
