@@ -13,6 +13,7 @@ export const illustrationAssets = {
   'azion-to-cloudflare': () => import('./azion-to-cloudflare.svg'),
   'azion-to-fastly': () => import('./azion-to-fastly.svg'),
   'azion-to-vercel': () => import('./azion-to-vercel.svg'),
+  branches: () => import('./branches.svg'),
   'build-applications': () => import('./build-applications.svg'),
   'build-databases-from-code': () => import('./build-databases-from-code.svg'),
   'combine-data-and-vector-search': () => import('./combine-data-and-vector-search.svg'),
@@ -43,6 +44,7 @@ export const illustrationAssets = {
     import('./multi-format-optimization-with-automatic-detection.svg'),
   'network-lists-rules-engine': () => import('./network-lists-rules-engine.svg'),
   'no-idle-no-waste': () => import('./no-idle-no-waste.svg'),
+  'personal-tokens': () => import('./personal-tokens.svg'),
   preview: () => import('./preview.svg'),
   'profiles-per-application': () => import('./profiles-per-application.svg'),
   'programmable-security': () => import('./programmable-security.svg'),
@@ -61,6 +63,7 @@ export const illustrationAssets = {
     import('./stream-security-events-for-investigation-and-response.svg'),
   'url-based-transformations-without-api-complexity': () =>
     import('./url-based-transformations-without-api-complexity.svg'),
+  'usage-chart': () => import('./usage-chart.svg'),
   'white-gloves-when-it-matters': () => import('./white-gloves-when-it-matters.svg')
 } satisfies Record<string, IllustrationAssetLoader>
 
