@@ -18705,7 +18705,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutori
 </template>
 ```
 
-1 more example(s) in [components/tutorial-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tutorial-panel.md).
+2 more example(s) in [components/tutorial-panel.md](https://github.com/aziontech/webkit/blob/main/.specs/components/tutorial-panel.md).
 
 ---
 

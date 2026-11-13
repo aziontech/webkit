@@ -9,6 +9,11 @@
    "name": "Completed",
    "summary": "The completion screen after the last step, with Restart, Back to tutorials and a feedback link in the completion slot.",
    "sfc": "<script setup>\n  import TutorialPanel from '@aziontech/webkit/tutorial-panel'\n  import { ref } from 'vue'\n\n  const tutorials = [\n    {\n      id: 'first-service',\n      title: 'Create your first service',\n      description: 'Two tasks, about three minutes.',\n      tasks: [\n        {\n          title: 'Create a service',\n          steps: [\n            {\n              title: 'Start a new service',\n              content: 'Select New service.',\n              hotspotId: 'new-service'\n            },\n            {\n              title: 'Name the service',\n              content: 'Type a name your team will recognize.',\n              hotspotId: 'service-name'\n            }\n          ]\n        },\n        {\n          title: 'Publish it',\n          steps: [{ title: 'Deploy', content: 'Select Deploy.', hotspotId: 'deploy' }]\n        }\n      ]\n    }\n  ]\n\n  const active = ref('first-service')\n  const step = ref(3)\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs) rounded-(--shape-card) border border-(--border-default)\">\n    <TutorialPanel.Provider\n      v-model:active=\"active\"\n      v-model:step=\"step\"\n      :tutorials=\"tutorials\"\n    >\n      <TutorialPanel>\n        <template #completion>\n          <a\n            href=\"#feedback\"\n            class=\"text-link w-fit\"\n          >\n            Tell us how this tutorial went\n          </a>\n        </template>\n      </TutorialPanel>\n    </TutorialPanel.Provider>\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "While the tutorials load: skeleton lines stand in for the whole panel, heading included, and the panel reports itself busy.",
+   "sfc": "<script setup>\n  import TutorialPanel from '@aziontech/webkit/tutorial-panel'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs) rounded-(--shape-card) border border-(--border-default)\">\n    <TutorialPanel.Provider>\n      <TutorialPanel loading />\n    </TutorialPanel.Provider>\n  </div>\n</template>"
   }
  ]
 }
