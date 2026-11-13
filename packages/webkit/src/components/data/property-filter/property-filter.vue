@@ -49,6 +49,9 @@
     inheritAttrs: false
   })
 
+  /** How the field edits the query. */
+  export type PropertyFilterMode = 'tokens' | 'query'
+
   interface Props {
     /** The tokens and how they combine. Supports v-model:query. */
     query?: PropertyFilterQuery
@@ -65,7 +68,7 @@
     /** Disables the field and the tokens. */
     disabled?: boolean
     /** `tokens` turns each choice into a token; `query` edits one query string. */
-    mode?: 'tokens' | 'query'
+    mode?: PropertyFilterMode
     /** The query string in query mode. Supports v-model:text. */
     text?: string
     /** Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. */
