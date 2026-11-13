@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 0616367d0737b57b2c18a2198e86a4a8a9ba957f1a2ff0aa43b6228481ede414
+checksum: bc3e35ed0533c57d7db94e8ef085e05d06250bc0615709948e4ad5233b9cb93e
 created: 2026-11-12
 last_updated: 2026-11-12
 ---
@@ -112,7 +112,7 @@ The app's root renders only `<ConsoleLayout>`, so it imports the standalone root
   <ConsoleLayout
     :navigation="navigation"
     :breadcrumbs="[{ label: 'Workloads' }]"
-    :account="{ name: 'Ana', email: 'ana@example.com' }"
+    :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
   >
     <RouterView />
   </ConsoleLayout>

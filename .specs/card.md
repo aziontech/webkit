@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 7ef2784a116a1ea179d9df3ce8441ce549acf6fc50d6837075112ab3607994b3
+checksum: c3ba957e93e1171881d38cc160a0925dc7e67a4fc8afe8ca8bd27fe6ffe4b6a7
 created: 2026-05-22
 last_updated: 2026-11-11
 ---
@@ -98,7 +98,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
   <Card
     kind="integration"
     title="Request Signer"
-    vendor="Northwind Labs"
+    vendor="Acme Inc."
     logo="pi pi-key"
     description="Sign every request at the edge with a rotating key."
     :badges="[{ label: 'Firewall' }]"

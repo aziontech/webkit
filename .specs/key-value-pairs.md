@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 52df63bb57644c5729588f520c936351be0eea0f38ba7f37a23cc4d60221a2de
+checksum: c2e51b8dc14b387f9e2f4f1ca6a36271a320daa8a92c518d32d614c27a48cf36
 spec_version: 1
 created: 2026-11-10
 last_updated: 2026-11-12
@@ -96,7 +96,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
         <template #info>
           <Hint text="Where the workload was first provisioned." />
         </template>
-        South America (São Paulo)
+        US East (Virginia)
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Custom certificate" />
     </KeyValuePairs.Group>
