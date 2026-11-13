@@ -748,11 +748,11 @@
                     <span class="text-label-sm text-(--text-muted)">Created</span>
                     <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                       <span class="truncate text-body-sm text-(--text-default)">
-                        Sep 22 by Robson Junior
+                        Sep 22 by Ethan Brooks
                       </span>
                       <Avatar
-                        alt="Robson Junior"
-                        label="Robson Junior"
+                        alt="Ethan Brooks"
+                        label="Ethan Brooks"
                         size="small"
                         kind="square"
                         class="shrink-0"

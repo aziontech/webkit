@@ -52,7 +52,7 @@
   const domains = [
     {
       id: 'generated',
-      domain: 'resource-01.example.app',
+      domain: 'resource-01.azion.app',
       environment: 'Production',
       policy: 'Single',
       certificate: 'Platform (free)',

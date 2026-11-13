@@ -93,9 +93,9 @@
     sharedWith: ['checkout-api', 'account-api'],
     total: 8,
     versions: [
-      version('APICRFV0', 'Rafael Umman', '2 days ago', true),
-      version('AQW6HBBH', 'Marcus Grando', '3 days ago'),
-      version('ASA076RY', 'Bruno Germano', '5 days ago')
+      version('APICRFV0', 'Sam Lee', '2 days ago', true),
+      version('AQW6HBBH', 'Priya Patel', '3 days ago'),
+      version('ASA076RY', 'Chris Taylor', '5 days ago')
     ]
   })
 
@@ -120,9 +120,9 @@
     total: ready ? 11 : 0,
     versions: ready
       ? [
-          version('AK16MQ4R', 'Herbert Júlio', '2 days ago', true),
-          version('ALF0CLL8', 'Rafael Umman', '4 days ago'),
-          version('AMSU2H1P', 'Marcus Grando', '4 days ago')
+          version('AK16MQ4R', 'John Smith', '2 days ago', true),
+          version('ALF0CLL8', 'Sam Lee', '4 days ago'),
+          version('AMSU2H1P', 'Priya Patel', '4 days ago')
         ]
       : []
   })
@@ -141,11 +141,11 @@
       note: '',
       total: 6,
       versions: [
-        version('AEO25I38', 'Rafael Umman', '1 day ago', true),
-        version('AG1VVDJP', 'Marcus Grando', '3 days ago'),
-        version('AHFPL906', 'Bruno Germano', '3 days ago'),
-        version('AITJB4GN', 'Gab Lisboa', '4 days ago'),
-        version('AK7D0ZX4', 'Robson Junior', '6 days ago')
+        version('AEO25I38', 'Sam Lee', '1 day ago', true),
+        version('AG1VVDJP', 'Priya Patel', '3 days ago'),
+        version('AHFPL906', 'Chris Taylor', '3 days ago'),
+        version('AITJB4GN', 'Riley Carter', '4 days ago'),
+        version('AK7D0ZX4', 'Ethan Brooks', '6 days ago')
       ],
       owner: true
     },
@@ -157,8 +157,8 @@
       note: '',
       total: 2,
       versions: [
-        version('AB3K9QX2', 'Gab Lisboa', '2 days ago', true),
-        version('AC71ZT0M', 'Isaque Böck', '8 days ago')
+        version('AB3K9QX2', 'Riley Carter', '2 days ago', true),
+        version('AC71ZT0M', 'Jordan Kim', '8 days ago')
       ],
       owner: true
     }

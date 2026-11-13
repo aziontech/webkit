@@ -397,15 +397,15 @@
             <div class="flex flex-col gap-(--spacing-xxs)">
               <span class="text-label-sm text-(--text-muted)">Created</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <Tooltip text="Herbert Júlio · November 06, 2026, 10:30:58 AM">
+                <Tooltip text="John Smith · November 06, 2026, 10:30:58 AM">
                   <Avatar
-                    alt="Herbert Júlio"
-                    label="Herbert Júlio"
+                    alt="John Smith"
+                    label="John Smith"
                     size="small"
                     kind="square"
                   />
                 </Tooltip>
-                <span class="truncate text-body-sm text-(--text-default)"> Herbert Júlio </span>
+                <span class="truncate text-body-sm text-(--text-default)"> John Smith </span>
                 <span class="shrink-0 text-body-sm text-(--text-muted)"> 1 hour ago </span>
               </div>
             </div>

@@ -9,7 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
 
-  const account = 'ana.silva@example.com'
+  const account = 'grace.hall@example.com'
 
   const recovery = ref(false)
   const code = ref('')

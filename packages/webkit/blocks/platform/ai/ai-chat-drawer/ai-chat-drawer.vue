@@ -272,7 +272,7 @@
                 <KeyValuePairs.Item label="Origin">api.example.com</KeyValuePairs.Item>
                 <KeyValuePairs.Item label="Cache hit ratio">91%</KeyValuePairs.Item>
                 <KeyValuePairs.Item label="Last deployment">Today, 13:58</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Region">US East (Washington)</KeyValuePairs.Item>
               </KeyValuePairs>
             </div>
           </template>

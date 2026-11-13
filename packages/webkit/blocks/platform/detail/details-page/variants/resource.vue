@@ -174,11 +174,11 @@
           <span class="text-label-sm text-(--text-muted)">Created</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm text-(--text-default)">
-              4 weeks ago by Gab Lisboa
+              4 weeks ago by Riley Carter
             </span>
             <Avatar
-              alt="Gab Lisboa"
-              label="Gab Lisboa"
+              alt="Riley Carter"
+              label="Riley Carter"
               size="small"
               kind="square"
               class="shrink-0"

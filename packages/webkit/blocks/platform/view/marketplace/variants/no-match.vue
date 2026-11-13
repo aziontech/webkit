@@ -73,7 +73,7 @@
     integration(
       'request-signer',
       'Request Signer',
-      'Northwind Labs',
+      'Acme',
       'pi pi-key',
       'Access control',
       'firewall',
@@ -83,7 +83,7 @@
     integration(
       'waiting-room',
       'Waiting Room',
-      'Tidewater',
+      'Acme',
       'pi pi-hourglass',
       'Traffic management',
       'application',
@@ -131,7 +131,7 @@
     integration(
       'rate-guard',
       'Rate Guard',
-      'Brightline',
+      'Acme',
       'pi pi-sliders-h',
       'Access control',
       'firewall',
@@ -158,7 +158,7 @@
     integration(
       'phone-check',
       'Phone Check',
-      'Quillstone',
+      'Acme',
       'pi pi-phone',
       'Fraud prevention',
       'firewall',

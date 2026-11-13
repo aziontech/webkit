@@ -35,23 +35,23 @@
     lastModified: string
   }
 
-  const avatars = {
-    'Robson Junior': 'https://ca.slack-edge.com/TDVATDGUU-UDW2MSZAP-81cad567c9a1-512',
-    'Isaque Böck': 'https://ca.slack-edge.com/TDVATDGUU-U09745PDX6D-971b0e576ab1-512',
-    'Rafael Garbinatto': 'https://ca.slack-edge.com/TDVATDGUU-ULU0NHDSM-5c3d561a39e1-512',
-    'Herbert Júlio': 'https://ca.slack-edge.com/TDVATDGUU-U036GK4J347-399781903ba3-512',
-    'Rafael Umman': 'https://ca.slack-edge.com/TDVATDGUU-UDUPJUL1E-d70389018587-512',
-    'Marcus Grando': 'https://ca.slack-edge.com/TDVATDGUU-UDVG1K05Q-g75bb0e36e1c-512',
-    'Bruno Germano': 'https://ca.slack-edge.com/TDVATDGUU-U08HZ0M4P1D-16b5a8e0519a-512',
-    'Gab Lisboa': 'https://ca.slack-edge.com/TDVATDGUU-U0279S2BC12-d09077d857f7-512'
-  }
+  const owners = [
+    'Ethan Brooks',
+    'Jordan Kim',
+    'Taylor Reed',
+    'John Smith',
+    'Sam Lee',
+    'Priya Patel',
+    'Chris Taylor',
+    'Riley Carter'
+  ]
 
   const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'owner',
       label: 'Author',
-      options: Object.keys(avatars).map((owner) => ({ value: owner }))
+      options: owners.map((owner) => ({ value: owner }))
     },
     { key: 'status', label: 'Status', options: [{ value: 'Live' }, { value: 'Inactive' }] },
     { key: 'domain', label: 'Domain' }
@@ -95,16 +95,16 @@
   }
 
   const rows: Resource[] = [
-    resource(1, 'Robson Junior', 0, 'just now'),
-    resource(2, 'Isaque Böck', 18, '3 weeks ago'),
-    resource(3, 'Rafael Garbinatto', 36, '1 month ago'),
-    resource(4, 'Herbert Júlio', 54, '2 months ago'),
-    resource(5, 'Rafael Umman', 72, '2 months ago'),
-    resource(6, 'Marcus Grando', 90, '3 months ago'),
-    resource(7, 'Bruno Germano', 108, '4 months ago'),
-    resource(8, 'Gab Lisboa', 126, '4 months ago'),
-    resource(9, 'Robson Junior', 144, '5 months ago', 'Inactive'),
-    resource(10, 'Isaque Böck', 162, '5 months ago')
+    resource(1, 'Ethan Brooks', 0, 'just now'),
+    resource(2, 'Jordan Kim', 18, '3 weeks ago'),
+    resource(3, 'Taylor Reed', 36, '1 month ago'),
+    resource(4, 'John Smith', 54, '2 months ago'),
+    resource(5, 'Sam Lee', 72, '2 months ago'),
+    resource(6, 'Priya Patel', 90, '3 months ago'),
+    resource(7, 'Chris Taylor', 108, '4 months ago'),
+    resource(8, 'Riley Carter', 126, '4 months ago'),
+    resource(9, 'Ethan Brooks', 144, '5 months ago', 'Inactive'),
+    resource(10, 'Jordan Kim', 162, '5 months ago')
   ]
 
   const items = ref<Resource[]>(rows)

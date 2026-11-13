@@ -37,7 +37,7 @@
   const record = {
     name: 'office-ranges',
     type: 'ip_cidr',
-    items: '185.241.208.232\n194.26.192.64\n171.25.193.25 #comment'
+    items: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment'
   }
 
   const form = reactive(structuredClone(record))
@@ -228,7 +228,7 @@
                       class="w-full"
                       :rows="5"
                       aria-label="List"
-                      placeholder="185.241.208.232&#10;194.26.192.64&#10;171.25.193.25 #comment"
+                      placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
                       :required="errors.items?.kind === 'required'"
                       :invalid="errors.items?.kind === 'invalid'"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"

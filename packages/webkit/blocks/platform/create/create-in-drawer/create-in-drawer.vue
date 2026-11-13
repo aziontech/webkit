@@ -51,7 +51,7 @@
     {
       value: 'free',
       label: 'Use a free platform domain',
-      description: 'You can use a free example.app subdomain.'
+      description: 'You can use a free azion.app subdomain.'
     },
     {
       value: 'own',
@@ -99,7 +99,7 @@
   const fullDomain = computed(() => {
     const name = form.domain.trim()
     if (!name) return ''
-    return form.kind === 'free' ? `${name}.example.app` : name
+    return form.kind === 'free' ? `${name}.azion.app` : name
   })
 
   watch(
@@ -313,7 +313,7 @@
                         placeholder="my-resource"
                         @update:model-value="errors.domain = ''"
                       />
-                      <InputGroup.Addon v-if="form.kind === 'free'">.example.app</InputGroup.Addon>
+                      <InputGroup.Addon v-if="form.kind === 'free'">.azion.app</InputGroup.Addon>
                     </InputGroup>
                     <Field.Description v-if="errors.domain">{{ errors.domain }}</Field.Description>
                   </Field>
@@ -355,7 +355,7 @@
 
                   <Alert
                     severity="info"
-                    label="Your resource is always accessible at an example.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
+                    label="Your resource is always accessible at an azion.app subdomain based on its name. Custom domains allow visitors to reach it at your own domain."
                   />
                 </div>
               </SettingsSection>

@@ -29,7 +29,7 @@
   "variants": [
     {
       "name": "Form",
-      "summary": "GitHub connected: the gab-lisboa scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.",
+      "summary": "GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.",
       "file": "variants/form.vue"
     }
   ]

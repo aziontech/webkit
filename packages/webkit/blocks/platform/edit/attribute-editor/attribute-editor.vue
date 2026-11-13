@@ -81,7 +81,7 @@
       value: 'https://api.example.com',
       secret: false,
       scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Robson Junior',
+      lastEditor: 'Ethan Brooks',
       lastEditorAvatar: '',
       lastModified: '1 month ago'
     },
@@ -91,7 +91,7 @@
       value: 'sk_live_51H8sX2eZv...',
       secret: true,
       scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
-      lastEditor: 'Isaque Böck',
+      lastEditor: 'Jordan Kim',
       lastEditorAvatar: '',
       lastModified: '2 months ago'
     },
@@ -101,7 +101,7 @@
       value: 'checkout_v2,dark_mode',
       secret: false,
       scope: [{ type: 'service', id: '3344556677', name: 'storefront' }],
-      lastEditor: 'Rafael Garbinatto',
+      lastEditor: 'Taylor Reed',
       lastEditorAvatar: '',
       lastModified: '2 months ago'
     },
@@ -111,7 +111,7 @@
       value: 'p4ssw0rd-r0t4t3d',
       secret: true,
       scope: [{ type: 'policy', id: '5540117', name: 'production-policy' }],
-      lastEditor: 'Herbert Júlio',
+      lastEditor: 'John Smith',
       lastEditorAvatar: '',
       lastModified: '2 months ago'
     },
@@ -121,20 +121,13 @@
       value: '25',
       secret: false,
       scope: [{ type: 'global', id: '', name: '' }],
-      lastEditor: 'Rafael Umman',
+      lastEditor: 'Sam Lee',
       lastEditorAvatar: '',
       lastModified: '3 months ago'
     }
   ]
 
-  const authors = [
-    'Robson Junior',
-    'Isaque Böck',
-    'Rafael Garbinatto',
-    'Herbert Júlio',
-    'Rafael Umman',
-    'myemail'
-  ]
+  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'myemail']
   const properties = [
     { key: 'key', label: 'Key' },
     { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },

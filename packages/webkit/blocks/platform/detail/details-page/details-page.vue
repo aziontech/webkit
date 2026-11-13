@@ -324,11 +324,11 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Created</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <span class="truncate text-body-sm text-(--text-default)">
-                          2 weeks ago by Herbert Júlio
+                          2 weeks ago by John Smith
                         </span>
                         <Avatar
-                          alt="Herbert Júlio"
-                          label="Herbert Júlio"
+                          alt="John Smith"
+                          label="John Smith"
                           size="small"
                           kind="square"
                           class="shrink-0"

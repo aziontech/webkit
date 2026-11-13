@@ -35,7 +35,7 @@
   "variants": [
     {
       "name": "Empty",
-      "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or my-new-site.dev (available) into the second door to run the availability check.",
+      "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.",
       "file": "variants/empty.vue"
     }
   ]

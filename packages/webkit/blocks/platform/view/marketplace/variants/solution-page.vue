@@ -16,7 +16,7 @@
   const integration = {
     id: 'waiting-room',
     name: 'Waiting Room',
-    vendor: 'Tidewater',
+    vendor: 'Acme',
     category: 'Traffic management',
     context: 'Application',
     version: '1.4.0',

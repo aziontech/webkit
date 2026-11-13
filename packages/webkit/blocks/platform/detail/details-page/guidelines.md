@@ -75,7 +75,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - **Breadcrumb:** module, then the resource name as created, e.g. "Resources" › "analytics-app".
 - **Tabs:** one or two nouns, e.g. "Overview", "Versions", "Build", "Deployments".
 - **Fact labels:** a short noun, sentence case, no colon, e.g. "Deployment", "Domains", "Status", "Created", "Source", "Framework".
-- **Created:** relative time and author, e.g. "2 weeks ago by Herbert Júlio".
+- **Created:** relative time and author, e.g. "2 weeks ago by John Smith".
 - **Actions:** a verb, e.g. "Visit", "Deploy", "Redeploy"; menu options "Copy URL", "Settings".
 - **Link tooltips:** say where the link goes, e.g. "Open analytics-app-z1x2c3.example.com in a new tab".
 - **State band:** one sentence on the next step, e.g. "To deploy to Production, drop your project anywhere on this page, connect Git, or run platform deploy via the CLI."
