@@ -3,7 +3,7 @@ name: upload-progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 583320bf62842a86dd93f083d99da5ffd37fb794eb77045983f870e0ee13dfc2
 created: 2026-11-11

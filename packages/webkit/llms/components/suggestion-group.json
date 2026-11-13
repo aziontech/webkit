@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.",
+ "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the click event and the item, and the owner either sends it or places it in the prompt input to edit.",
  "setup": null,
  "useWhen": [
   "The empty state of an assistant, to show what it can do (vertical, up to five).",
@@ -64,7 +64,7 @@
  "events": [
   {
    "name": "select",
-   "payload": "SuggestionItem",
+   "payload": "(event: MouseEvent, item: SuggestionItem)",
    "notes": ""
   }
  ],
@@ -74,7 +74,7 @@
  "examples": [
   {
    "name": "FollowUpQuestions",
-   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n  import { ref } from 'vue'\n\n  const sent = ref('')\n  const items = [\n    { id: 'ttl', label: 'What TTL should my images use?' },\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'origin', label: 'Why does the origin still get requests?' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      aria-label=\"Follow-up questions\"\n      @select=\"(item) => (sent = item.label)\"\n    />\n    <p\n      v-if=\"sent\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Sent: {{ sent }}\n    </p>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n  import { ref } from 'vue'\n\n  const sent = ref('')\n  const items = [\n    { id: 'ttl', label: 'What TTL should my images use?' },\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'origin', label: 'Why does the origin still get requests?' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      aria-label=\"Follow-up questions\"\n      @select=\"(event, item) => (sent = item.label)\"\n    />\n    <p\n      v-if=\"sent\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Sent: {{ sent }}\n    </p>\n  </div>\n</template>"
   },
   {
    "name": "SupportPrompts",

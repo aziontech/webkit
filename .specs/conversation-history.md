@@ -3,7 +3,7 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 7d6731c3e27b452cf929efd412e715fbe0247ea828dab73450badf998d3acf58
 created: 2026-11-11

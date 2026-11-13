@@ -37,13 +37,6 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "[unknown[], unknown[]]",
-   "default": "() => [[], []]",
-   "required": "false",
-   "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
-  },
-  {
    "name": "dataKey",
    "type": "string",
    "default": "''",
@@ -63,14 +56,16 @@
    "default": "true",
    "required": "false",
    "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+  },
+  {
+   "name": "modelValue",
+   "type": "PickListValue",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [
-  {
-   "name": "update:modelValue",
-   "payload": "[unknown[], unknown[]]",
-   "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
-  },
   {
    "name": "move",
    "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",

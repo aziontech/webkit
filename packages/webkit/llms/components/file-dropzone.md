@@ -205,7 +205,7 @@
       :items="items"
       :limit="6"
       aria-label="Files to upload"
-      @dismiss="remove"
+      @dismiss="(_event, { index }) => remove(index)"
     />
   </div>
 </template>

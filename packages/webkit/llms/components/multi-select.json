@@ -40,20 +40,6 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "TValue[]",
-   "default": "() => []",
-   "required": "false",
-   "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
-  },
-  {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
-  },
-  {
    "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
@@ -108,20 +94,23 @@
    "default": "undefined",
    "required": "false",
    "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
-  }
- ],
- "events": [
-  {
-   "name": "update:modelValue",
-   "payload": "TValue[]",
-   "notes": "Fires when an option is toggled; payload is the next selection array."
   },
   {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": "Fires when the dropdown opens or closes."
+   "name": "modelValue",
+   "type": "TValue[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "default",

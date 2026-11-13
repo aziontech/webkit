@@ -37,7 +37,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string` | `''` | false | Two-way bound value of the field. |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state. |
@@ -47,12 +46,7 @@
 | `toggleable` | `boolean` | `true` | false | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows. |
 | `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -60,6 +54,12 @@
 | --- | --- | --- |
 | `iconLeft` | — | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`). |
 | `iconRight` | — | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
 
 ## States
 

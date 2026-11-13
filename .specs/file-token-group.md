@@ -3,7 +3,7 @@ name: file-token-group
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: f3ff7ca12140a91a6a6feb8e58d39f5f7c9c0cc36385de932f13d9347aac520a
 created: 2026-11-11

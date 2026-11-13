@@ -3,7 +3,7 @@ name: item
 category: content
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-05-24
 last_updated: 2026-11-13
 checksum: dc0b1ccb151b2d18d55dee333e28c06e1e87fb71ac54d77350e7bc657739fdbf

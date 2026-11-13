@@ -3,7 +3,7 @@ name: prompt-input
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 94beacfad100e371a9fc03c5650b1de552187e00a16cd38c15678f4db3f8d613
 created: 2026-11-11

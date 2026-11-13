@@ -172,12 +172,12 @@
   },
   {
    "name": "add",
-   "payload": "{ index: number; groupIndex?: number }",
+   "payload": "(event: MouseEvent, detail: { index: number; groupIndex?: number })",
    "notes": "After a row is added; `groupIndex` only in grouped mode."
   },
   {
    "name": "remove",
-   "payload": "{ index: number; item: TItem; groupIndex?: number }",
+   "payload": "(event: MouseEvent | KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })",
    "notes": "After a row is removed."
   }
  ],
@@ -185,12 +185,12 @@
   {
    "name": "row",
    "scope": "{ item, index, groupIndex, errors, update, remove, removable, removeLabel }",
-   "notes": "Replaces the whole row; the column header is not drawn."
+   "notes": "Replaces the whole row; the column header is not drawn. `remove` takes the activating event (`@click=\"remove\"`)."
   },
   {
    "name": "row-actions",
    "scope": "{ item, index, groupIndex, remove, removable, removeLabel }",
-   "notes": "Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it)."
+   "notes": "Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). `remove` takes the activating event."
   },
   {
    "name": "empty",

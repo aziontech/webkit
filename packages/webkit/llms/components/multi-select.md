@@ -39,8 +39,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `TValue[]` | `() => []` | false | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. |
-| `open` | `boolean` | `undefined` | false | Controlled open state for the dropdown. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `placeholder` | `string` | `''` | false | Trigger placeholder shown when no option is selected. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`. |
@@ -49,13 +47,8 @@
 | `required` | `boolean` | `false` | false | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger. |
 | `displayValue` | `(value: TValue[]) => string` | `undefined` | false | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `TValue[]` | Fires when an option is toggled; payload is the next selection array. |
-| `update:open` | `boolean` | Fires when the dropdown opens or closes. |
+| `modelValue` | `TValue[]` | `() => []` | false | Two-way value (`v-model`). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -76,6 +69,13 @@
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+
+## v-model
+
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
+| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
 
 ## States
 

@@ -32,7 +32,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string` | `''` | false | Bound value (v-model). |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
@@ -40,12 +39,13 @@
 | `required` | `boolean` | `false` | false | Marks the field as required and sets `aria-required`. |
 | `resizable` | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior. |
 | `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `string` | v-model update. |
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
 
 ## States
 

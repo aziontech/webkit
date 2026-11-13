@@ -377,12 +377,12 @@
   },
   {
    "name": "filter-apply",
-   "payload": "filters: AppliedFilter[]",
+   "payload": "(event: Event, filters: AppliedFilter[])",
    "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
   },
   {
    "name": "filter-remove",
-   "payload": "filter: AppliedFilter",
+   "payload": "(event: Event, filter: AppliedFilter)",
    "notes": "One applied filter/chip was removed."
   },
   {

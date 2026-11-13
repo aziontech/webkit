@@ -60,7 +60,7 @@
  "events": [
   {
    "name": "submit",
-   "payload": "{ reason: string; details: string }",
+   "payload": "(event: SubmitEvent, payload: { reason: string; details: string })",
    "notes": ""
   }
  ],

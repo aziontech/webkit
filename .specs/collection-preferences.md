@@ -3,7 +3,7 @@ name: collection-preferences
 category: data
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: bc68e500c29feb7a6b34cc1b9a975e7c7f85a08c00428b91252046cf69fce574
 created: 2026-11-11

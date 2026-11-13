@@ -74,7 +74,7 @@
   },
   {
    "name": "skip",
-   "payload": "—",
+   "payload": "(event: MouseEvent)",
    "notes": ""
   }
  ],

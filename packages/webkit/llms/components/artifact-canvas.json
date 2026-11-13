@@ -96,7 +96,7 @@
  "events": [
   {
    "name": "close",
-   "payload": "—",
+   "payload": "(event: MouseEvent | KeyboardEvent)",
    "notes": ""
   },
   {

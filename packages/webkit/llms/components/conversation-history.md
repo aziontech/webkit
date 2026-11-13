@@ -44,7 +44,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `remove` | `string` |  |
+| `remove` | `(event: MouseEvent, id: string)` |  |
 
 ## v-model
 
@@ -120,7 +120,7 @@
   ])
   const active = ref('c2')
 
-  const remove = (id) => {
+  const remove = (event, id) => {
     items.value = items.value.filter((item) => item.id !== id)
     if (active.value === id) active.value = null
   }

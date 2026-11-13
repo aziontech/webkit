@@ -35,13 +35,6 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "TModel",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting."
-  },
-  {
    "name": "value",
    "type": "unknown",
    "default": "undefined",
@@ -96,15 +89,16 @@
    "default": "0",
    "required": "false",
    "doc": "Forwarded to the inner `<input tabindex>`."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:modelValue",
-   "payload": "TModel",
-   "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode)."
+   "name": "modelValue",
+   "type": "TModel",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "assets": [],

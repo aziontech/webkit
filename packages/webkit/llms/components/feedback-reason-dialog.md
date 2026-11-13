@@ -41,7 +41,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `submit` | `{ reason: string; details: string }` |  |
+| `submit` | `(event: SubmitEvent, payload: { reason: string; details: string })` |  |
 
 ## v-model
 

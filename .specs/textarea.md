@@ -3,7 +3,7 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730

@@ -45,7 +45,7 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `update:open` | `boolean` |  |
-| `skip` | `—` |  |
+| `skip` | `(event: MouseEvent)` |  |
 
 ## Slots
 

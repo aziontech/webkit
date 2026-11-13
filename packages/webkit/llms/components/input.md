@@ -36,7 +36,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string` | `''` | false | Two-way bound value of the field. |
 | `placeholder` | `string` | `''` | false | Placeholder shown when the field is empty. |
 | `type` | `'text' \| 'email' \| 'number'` | `'text'` | false | Native input type. Restricted to single-line variants the field treats identically. |
 | `maxLength` | `number \| undefined` | `undefined` | false | Native `maxlength` — maximum number of characters allowed. |
@@ -48,12 +47,7 @@
 | `required` | `boolean` | `false` | false | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
 | `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`). |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
+| `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -61,6 +55,12 @@
 | --- | --- | --- |
 | `iconLeft` |  | Hidden from assistive tech (`aria-hidden="true"`). |
 | `iconRight` |  | Hidden from assistive tech (`aria-hidden="true"`). |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
 
 ## States
 

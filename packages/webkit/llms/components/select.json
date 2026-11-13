@@ -43,25 +43,11 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "TValue",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`."
-  },
-  {
    "name": "multiple",
    "type": "boolean",
    "default": "false",
    "required": "false",
    "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
-  },
-  {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
   },
   {
    "name": "defaultOpen",
@@ -125,20 +111,23 @@
    "default": "undefined",
    "required": "false",
    "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model."
-  }
- ],
- "events": [
-  {
-   "name": "update:modelValue",
-   "payload": "TValue",
-   "notes": "Fires when an option is selected (single) or toggled (multi)."
   },
   {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": "Fires when the dropdown opens or closes."
+   "name": "modelValue",
+   "type": "TValue",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "default",

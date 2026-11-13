@@ -35,13 +35,6 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "boolean",
-   "default": "false",
-   "required": "false",
-   "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma checked/on variant."
-  },
-  {
    "name": "kind",
    "type": "'default' | 'privacy'",
    "default": "'default'",
@@ -61,15 +54,16 @@
    "default": "false",
    "required": "false",
    "doc": "Disables interaction and applies the disabled tokens."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:modelValue",
-   "payload": "boolean",
-   "notes": "Emitted when the user toggles the switch. Paired with `v-model`."
+   "name": "modelValue",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "assets": [],

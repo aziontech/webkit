@@ -38,7 +38,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `TModel` | `undefined` | false | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. |
 | `value` | `unknown` | `undefined` | false | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). |
 | `binary` | `boolean` | `false` | false | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). |
 | `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
@@ -47,12 +46,13 @@
 | `inputId` | `string` | `''` | false | Forwarded to the inner `<input id>` for label association. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
 | `tabindex` | `number` | `0` | false | Forwarded to the inner `<input tabindex>`. |
+| `modelValue` | `TModel` | `undefined as never` | false | Two-way value (`v-model`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `TModel` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                |
+| --------- | -------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. Fires on activation with the next boolean (binary mode) or the next array (every other mode). Uncontrolled when unbound. |
 
 ## States
 

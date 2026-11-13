@@ -3,7 +3,7 @@ name: action-confirmation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: e761c689a0068e9c974ad12899aea4fa958ff0f060cfa3948f2ed9caa11bcb10
 created: 2026-11-11

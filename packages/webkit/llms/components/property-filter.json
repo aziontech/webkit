@@ -127,8 +127,8 @@
   },
   {
    "name": "submit",
-   "payload": "PropertyFilterSubmit",
-   "notes": "Enter with no active suggestion and a valid query. Query mode only."
+   "payload": "(event: KeyboardEvent, payload: PropertyFilterSubmit)",
+   "notes": "Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only."
   }
  ],
  "slots": [],
@@ -145,7 +145,7 @@
   },
   {
    "name": "QueryMode",
-   "sfc": "<script setup>\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { matchesQuery } from '@aziontech/webkit/use-collection'\n  import { computed, ref } from 'vue'\n\n  const events = Array.from({ length: 40 }, (_, i) => ({\n    id: String(i + 1),\n    level: ['Info', 'Warning', 'Error', 'Info'][i % 4],\n    method: ['GET', 'POST', 'GET', 'DELETE', 'GET'][i % 5],\n    status: [200, 404, 500, 200, 301][i % 5],\n    host: ['shop.example.com', 'api.example.com'][i % 2]\n  }))\n\n  const properties = [\n    {\n      key: 'level',\n      label: 'Level',\n      options: [{ value: 'Info' }, { value: 'Warning' }, { value: 'Error' }]\n    },\n    {\n      key: 'method',\n      label: 'Method',\n      options: [{ value: 'GET' }, { value: 'POST' }, { value: 'DELETE' }]\n    },\n    { key: 'status', label: 'Status code', type: 'number' },\n    {\n      key: 'host',\n      label: 'Host',\n      options: [{ value: 'shop.example.com' }, { value: 'api.example.com' }]\n    }\n  ]\n\n  const text = ref('level = Error AND method = GET')\n  const applied = ref({\n    tokens: [\n      { propertyKey: 'level', operator: '=', value: 'Error' },\n      { propertyKey: 'method', operator: '=', value: 'GET' }\n    ],\n    operation: 'and'\n  })\n\n  const matches = computed(\n    () => events.filter((event) => matchesQuery(event, applied.value, properties)).length\n  )\n\n  const apply = ({ query }) => {\n    if (query) applied.value = query\n  }\n</script>\n\n<template>\n  <PropertyFilter\n    v-model:text=\"text\"\n    mode=\"query\"\n    :properties=\"properties\"\n    :total-count=\"matches\"\n    aria-label=\"Query events\"\n    @submit=\"apply\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { matchesQuery } from '@aziontech/webkit/use-collection'\n  import { computed, ref } from 'vue'\n\n  const events = Array.from({ length: 40 }, (_, i) => ({\n    id: String(i + 1),\n    level: ['Info', 'Warning', 'Error', 'Info'][i % 4],\n    method: ['GET', 'POST', 'GET', 'DELETE', 'GET'][i % 5],\n    status: [200, 404, 500, 200, 301][i % 5],\n    host: ['shop.example.com', 'api.example.com'][i % 2]\n  }))\n\n  const properties = [\n    {\n      key: 'level',\n      label: 'Level',\n      options: [{ value: 'Info' }, { value: 'Warning' }, { value: 'Error' }]\n    },\n    {\n      key: 'method',\n      label: 'Method',\n      options: [{ value: 'GET' }, { value: 'POST' }, { value: 'DELETE' }]\n    },\n    { key: 'status', label: 'Status code', type: 'number' },\n    {\n      key: 'host',\n      label: 'Host',\n      options: [{ value: 'shop.example.com' }, { value: 'api.example.com' }]\n    }\n  ]\n\n  const text = ref('level = Error AND method = GET')\n  const applied = ref({\n    tokens: [\n      { propertyKey: 'level', operator: '=', value: 'Error' },\n      { propertyKey: 'method', operator: '=', value: 'GET' }\n    ],\n    operation: 'and'\n  })\n\n  const matches = computed(\n    () => events.filter((event) => matchesQuery(event, applied.value, properties)).length\n  )\n\n  const apply = (event, { query }) => {\n    if (query) applied.value = query\n  }\n</script>\n\n<template>\n  <PropertyFilter\n    v-model:text=\"text\"\n    mode=\"query\"\n    :properties=\"properties\"\n    :total-count=\"matches\"\n    aria-label=\"Query events\"\n    @submit=\"apply\"\n  />\n</template>"
   }
  ],
  "docs": "components/property-filter.md"

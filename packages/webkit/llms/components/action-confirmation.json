@@ -93,12 +93,12 @@
  "events": [
   {
    "name": "approve",
-   "payload": "—",
+   "payload": "(event: MouseEvent)",
    "notes": ""
   },
   {
    "name": "deny",
-   "payload": "—",
+   "payload": "(event: MouseEvent)",
    "notes": ""
   }
  ],

@@ -47,7 +47,7 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
-`Item.List` of small `Item`s rendered `as-child` on a `button`, one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `data-selected` and `aria-pressed`. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
+`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `aria-pressed`, which fills it. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
 
 ### F. Load more — `Button` (optional)
 
@@ -339,38 +339,32 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               <Item
                 v-for="option in projectPicker.visible"
                 :key="option.value"
-                as-child
                 size="small"
+                clickable
+                :aria-pressed="option.value === projectPicker.chosen"
+                @click="projectPicker.chosen = option.value"
               >
-                <button
-                  type="button"
-                  class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                  :data-selected="option.value === projectPicker.chosen || null"
-                  :aria-pressed="option.value === projectPicker.chosen"
-                  @click="projectPicker.chosen = option.value"
-                >
-                  <Item.Media>
-                    <span
-                      class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
-                      <i
-                        class="pi pi-box text-body-md leading-none text-(--text-default)"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ option.label }}</Item.Title>
-                    <Item.Description>{{ option.description }}</Item.Description>
-                  </Item.Content>
-                  <Item.Actions>
+                <Item.Media>
+                  <span
+                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                  >
                     <i
-                      v-if="option.value === projectPicker.chosen"
-                      class="pi pi-check shrink-0 text-(--text-default)"
+                      class="pi pi-box text-body-md leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
-                  </Item.Actions>
-                </button>
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ option.label }}</Item.Title>
+                  <Item.Description>{{ option.description }}</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <i
+                    v-if="option.value === projectPicker.chosen"
+                    class="pi pi-check shrink-0 text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </Item.Actions>
               </Item>
 
               <template v-if="projectPicker.loading">

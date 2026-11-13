@@ -50,7 +50,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `retry` | `—` |  |
+| `retry` | `(event: MouseEvent)` |  |
 
 ## Slots
 

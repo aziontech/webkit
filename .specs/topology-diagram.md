@@ -3,7 +3,7 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 7916656ab00720094563e39adf0c23f5851ab7dbb4c42daead88c0192f0885c1
 created: 2026-11-11

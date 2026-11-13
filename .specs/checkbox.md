@@ -3,7 +3,7 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 checksum: edcfdc3007a5dd3d7aa5323f36fdf027cb7bab59dc20950d6ac1beaf79905938
 created: 2026-05-22
 last_updated: 2026-11-13

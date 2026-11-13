@@ -175,21 +175,20 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
         v-if="!complete"
         class="flex flex-col"
       >
-        <Item
+        <div
           v-for="step in steps"
           :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
-          as-child
-          size="small"
+          :data-done="step.done || null"
+          class="group/step transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
         >
-          <button
-            type="button"
-            :data-done="step.done || null"
-            class="w-full rounded-none text-start transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
+          <Item
+            size="small"
+            clickable
           >
             <Item.Media>
               <i
                 :class="step.icon"
-                class="text-body-sm leading-none text-(--text-muted) group-data-done/item:text-(--primary)"
+                class="text-body-sm leading-none text-(--text-muted) group-data-done/step:text-(--primary)"
                 aria-hidden="true"
               />
             </Item.Media>
@@ -208,8 +207,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               />
               <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
             </Item.Actions>
-          </button>
-        </Item>
+          </Item>
+        </div>
       </div>
     </template>
   </Card>

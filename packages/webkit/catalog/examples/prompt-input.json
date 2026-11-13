@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "The composer with its disclaimer under it: Enter submits, Shift+Enter adds a line, and the text area grows up to six rows before it scrolls.",
-   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref('')\n  const last = ref('')\n\n  function send(text) {\n    last.value = text\n    prompt.value = ''\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <PromptInput\n      v-model=\"prompt\"\n      @submit=\"send\"\n    >\n      <template #hint>The AI assistant can make mistakes. Check important information.</template>\n    </PromptInput>\n    <p\n      v-if=\"last\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Submitted: {{ last }}\n    </p>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { ref } from 'vue'\n\n  const prompt = ref('')\n  const last = ref('')\n\n  function send(event, { value }) {\n    last.value = value\n    prompt.value = ''\n  }\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <PromptInput\n      v-model=\"prompt\"\n      @submit=\"send\"\n    >\n      <template #hint>The AI assistant can make mistakes. Check important information.</template>\n    </PromptInput>\n    <p\n      v-if=\"last\"\n      class=\"text-body-sm text-(--text-muted)\"\n    >\n      Submitted: {{ last }}\n    </p>\n  </div>\n</template>"
   },
   {
    "name": "Streaming",

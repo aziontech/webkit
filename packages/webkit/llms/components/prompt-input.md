@@ -52,8 +52,8 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `submit` | `(value: string, references: PromptInputReference[])` |  |
-| `stop` | `—` |  |
+| `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[] })` |  |
+| `stop` | `(event: MouseEvent)` |  |
 
 ## Slots
 
@@ -134,8 +134,8 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
   const prompt = ref('')
   const last = ref('')
 
-  function send(text) {
-    last.value = text
+  function send(event, { value }) {
+    last.value = value
     prompt.value = ''
   }
 </script>

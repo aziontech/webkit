@@ -3,7 +3,7 @@ name: property-filter
 category: data
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 09d20ec72b208f6554c021ad0c88a234e247964002bdb4d69d5fbe354971322e
 created: 2026-11-11

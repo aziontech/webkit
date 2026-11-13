@@ -47,9 +47,9 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `bind` | `[key: string, value: string]` | An existing option was picked in the bind control. |
-| `remove` | `[key: string]` | Remove was activated on a bound, removable node. |
-| `create` | `[key: string]` | Create was picked in the bind control. |
+| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { key: string; value: string })` | An existing option was picked in the bind control; `key` is the node's key. |
+| `remove` | `(event: MouseEvent, key: string)` | Remove was activated on a bound, removable node. |
+| `create` | `(event: MouseEvent \| KeyboardEvent, key: string)` | Create was picked in the bind control. |
 
 ## Slots
 
@@ -275,7 +275,7 @@
   ]
 
   const expanded = ref(['project'])
-  const event = ref('')
+  const note = ref('')
 </script>
 
 <template>
@@ -284,9 +284,9 @@
       <TopologyDiagram
         v-model:expanded="expanded"
         :levels="levels"
-        @bind="(key, value) => (event = `Bind ${value} to ${key}.`)"
-        @remove="(key) => (event = `Remove ${key}.`)"
-        @create="(key) => (event = `Create a new ${key}.`)"
+        @bind="(event, { key, value }) => (note = `Bind ${value} to ${key}.`)"
+        @remove="(event, key) => (note = `Remove ${key}.`)"
+        @create="(event, key) => (note = `Create a new ${key}.`)"
       >
         <template #actions="{ node }">
           <Tooltip
@@ -298,7 +298,7 @@
               kind="outlined"
               size="small"
               aria-label="Add domain"
-              @click="event = 'Add a domain.'"
+              @click="note = 'Add a domain.'"
             />
           </Tooltip>
         </template>
@@ -308,7 +308,7 @@
       role="status"
       class="text-body-sm text-(--text-muted)"
     >
-      {{ event }}
+      {{ note }}
     </p>
   </div>
 </template>
@@ -410,17 +410,17 @@
 
   const stagedCount = computed(() => Object.keys(staged).length)
 
-  const bind = (key, value) => {
+  const bind = (event, { key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     note.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
   }
-  const remove = (key) => {
+  const remove = (event, key) => {
     if (deployed[key]) staged[key] = ''
     else delete staged[key]
     note.value = `${targets[key].kind} staged for removal.`
   }
-  const create = (key) => {
+  const create = (event, key) => {
     note.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
 </script>

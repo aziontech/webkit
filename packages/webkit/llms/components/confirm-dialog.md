@@ -50,8 +50,8 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `confirm` | `void` | The confirm button was activated; not emitted while `disabled` or `loading`. |
-| `cancel` | `void` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
+| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled` or `loading`. |
+| `cancel` | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
 
 ## Slots
 

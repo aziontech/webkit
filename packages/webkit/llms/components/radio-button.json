@@ -34,13 +34,6 @@
  ],
  "props": [
   {
-   "name": "modelValue",
-   "type": "string",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Selected value for v-model."
-  },
-  {
    "name": "value",
    "type": "string",
    "default": "undefined",
@@ -67,15 +60,16 @@
    "default": "undefined",
    "required": "false",
    "doc": "id for the native input; links label to control."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:modelValue",
-   "payload": "string",
-   "notes": "v-model."
+   "name": "modelValue",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "assets": [],

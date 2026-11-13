@@ -3,7 +3,7 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 49f9c0490cd53e0cf25c424b57816410af54aab0e430a72951f8b67e12876c4f
 created: 2026-11-11

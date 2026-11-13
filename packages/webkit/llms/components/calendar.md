@@ -16,7 +16,7 @@
 
 ## Do
 
-- modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply="false"` when every edit should commit at once.
+- modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
 - Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode="single"`.
 - Bound the selectable days with `min` and `max` instead of validating after commit.
 - Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.
@@ -38,13 +38,11 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `Date \| null \| CalendarRange` | `null` | false | Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false). |
 | `mode` | `'single' \| 'range'` | `'range'` | false | Selection mode. Single picks one date; range picks a start and end date. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the trigger, day-cell hit-area, and typography. |
 | `min` | `Date \| undefined` | `undefined` | false | Earliest selectable date; earlier days render disabled. |
 | `max` | `Date \| undefined` | `undefined` | false | Latest selectable date; later days render disabled. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger, grid, and all controls, applying disabled tokens. |
-| `open` | `boolean \| undefined` | `undefined` | false | Controlled open state of the popover. Use with v-model:open; omit for uncontrolled. |
 | `placeholder` | `string` | `''` | false | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`). |
 | `presets` | `CalendarPresetItem[]` | `[]` | false | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showFields` | `boolean` | `true` | false | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
@@ -57,16 +55,16 @@
 | `showApply` | `boolean` | `true` | false | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. |
 | `period` | `boolean` | `false` | false | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
+| `modelValue` | `CalendarValue` | `null` | false | Two-way value (`v-model`). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `Date \| null \| CalendarRange` | v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear. |
-| `update:open` | `boolean` | v-model:open. Emitted when the popover opens or closes. |
 | `update:timezone` | `string` | v-model:timezone. Emitted when the timezone selection changes. |
 | `month-change` | `CalendarMonth` | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed). |
-| `apply` | `Date \| null \| CalendarRange` | Emitted when the draft selection is committed via Apply. |
+| `apply` | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
 
 ## Slots
 
@@ -85,6 +83,13 @@
 
 - `calendar-preset/calendar-preset.vue` — context-aware shortcut button; applies its `value` (a `Date` in single mode or a `{ start, end }` range) to the popover's draft selection through injected context and reflects a `data-selected` state when its value matches. Placed in the `presets` slot (the preset dropdown).
 - `calendar-clear/calendar-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
+
+## v-model
+
+| Model          | Type                            | Default     | Emits               | Notes                                                                                                                                                                                         |
+| -------------- | ------------------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
+| `v-model:open` | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts closed.                                              |
 
 ## States
 
@@ -151,30 +156,6 @@
 </template>
 ```
 
-### Open
-
-```vue
-<script setup>
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
-  import { ref } from 'vue'
-
-  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })
-</script>
-
-<template>
-  <div class="min-h-[640px] w-full max-w-[560px]">
-    <CalendarRoot
-      v-model="range"
-      mode="range"
-      :open="true"
-      show-time
-      show-timezone
-      clearable
-    />
-  </div>
-</template>
-```
-
 ### Sizes
 
 ```vue
@@ -203,5 +184,24 @@
       size="large"
     />
   </div>
+</template>
+```
+
+### Single
+
+```vue
+<script setup>
+  import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import { ref } from 'vue'
+
+  const date = ref(null)
+</script>
+
+<template>
+  <CalendarRoot
+    v-model="date"
+    mode="single"
+    placeholder="Select date"
+  />
 </template>
 ```

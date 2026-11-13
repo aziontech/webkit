@@ -48,7 +48,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `dismiss` | `index: number, item: FileTokenGroupItem` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
+| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
 
 ## States
 
@@ -157,7 +157,7 @@
     />
     <FileTokenGroup
       :items="items"
-      @dismiss="remove"
+      @dismiss="(_event, { index }) => remove(index)"
     />
   </div>
 </template>
@@ -222,7 +222,7 @@
       :items="items"
       alignment="horizontal"
       :limit="3"
-      @dismiss="remove"
+      @dismiss="(_event, { index }) => remove(index)"
     />
   </div>
 </template>

@@ -50,8 +50,8 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `approve` | `—` |  |
-| `deny` | `—` |  |
+| `approve` | `(event: MouseEvent)` |  |
+| `deny` | `(event: MouseEvent)` |  |
 
 ## Slots
 

@@ -16,7 +16,7 @@
   "number-input` — numeric durations instead of dates."
  ],
  "bestPractices": [
-  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
   "Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode=\"single\"`.",
   "Bound the selectable days with `min` and `max` instead of validating after commit.",
   "Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.",

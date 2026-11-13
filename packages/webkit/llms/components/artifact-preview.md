@@ -46,7 +46,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `open` | `—` |  |
+| `open` | `(event: MouseEvent)` |  |
 | `copy` | `string` |  |
 
 ## Slots

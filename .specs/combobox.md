@@ -3,7 +3,7 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 935b713c8ce524b633a78e60d586d1303196b36ff57edc6154b827f6068560ff
 created: 2026-11-11

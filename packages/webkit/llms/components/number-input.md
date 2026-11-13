@@ -29,7 +29,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `number` | `0` | false | v-model value (always numeric; cleared input falls back to `min ?? 0`). |
 | `placeholder` | `string` | `''` | false | Text shown when the input is empty. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
@@ -40,12 +39,12 @@
 | `max` | `number \| undefined` | `undefined` | false | Maximum allowed value; spinner stops at this bound. |
 | `step` | `number` | `1` | false | Increment used by the spinner buttons and arrow keys. |
 | `showButtons` | `boolean` | `true` | false | Renders the chevron-up/chevron-down spinner controls. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `number` | Emitted on every value change (typing or spinner). |
 | `change` | `number` | Emitted when the user commits the value (blur or Enter). |
 
 ## Slots
@@ -54,6 +53,12 @@
 | --- | --- | --- |
 | `prefix` | — | Content rendered before the input (e.g. `$`). |
 | `suffix` | — | Content rendered after the input, before the spinner buttons (e.g. `%`). |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                   |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | The value via `defineModel`, always numeric and clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`. |
 
 ## States
 

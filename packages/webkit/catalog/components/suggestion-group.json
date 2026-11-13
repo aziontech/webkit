@@ -1,5 +1,5 @@
 {
- "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.",
+ "purpose": "A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the click event and the item, and the owner either sends it or places it in the prompt input to edit.",
  "useWhen": [
   "The empty state of an assistant, to show what it can do (vertical, up to five).",
   "After a broad response, to narrow it (horizontal chips, up to five, most likely first).",

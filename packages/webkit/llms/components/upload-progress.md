@@ -47,9 +47,9 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `cancel` | `id?: string` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
-| `retry` | `id?: string` | Retry on one failed file (its `id`) or Retry failed (no `id`). |
-| `close` | `—` | Close was pressed; offered only once every file has finished. |
+| `cancel` | `(event: MouseEvent, id?: string)` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
+| `retry` | `(event: MouseEvent, id?: string)` | Retry on one failed file (its `id`) or Retry failed (no `id`). |
+| `close` | `(event: MouseEvent)` | Close was pressed; offered only once every file has finished. |
 
 ## Slots
 
@@ -186,7 +186,7 @@
     <UploadProgress
       :items="items"
       :floating="false"
-      @cancel="cancel"
+      @cancel="(_event, id) => cancel(id)"
     />
   </div>
 </template>

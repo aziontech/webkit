@@ -83,7 +83,7 @@
  "events": [
   {
    "name": "open",
-   "payload": "—",
+   "payload": "(event: MouseEvent)",
    "notes": ""
   },
   {

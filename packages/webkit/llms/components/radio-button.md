@@ -37,17 +37,17 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string` | `undefined` | false | Selected value for v-model. |
 | `value` | `string` | `undefined` | false | Option value for this radio instance. |
 | `name` | `string` | `undefined` | false | HTML name shared across a mutually exclusive group. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `inputId` | `string` | `undefined` | false | id for the native input; links label to control. |
+| `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `string` | v-model. |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                         |
+| --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `undefined` | `update:modelValue` | Selected value via `defineModel`; set to this radio's `value` when it is selected. Uncontrolled when unbound. |
 
 ## States
 

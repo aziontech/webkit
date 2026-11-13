@@ -37,16 +37,15 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `[unknown[], unknown[]]` | `() => [[], []]` | false | Bound pair of lists as `[sourceItems, targetItems]` (v-model). |
 | `dataKey` | `string` | `''` | false | Item field used as each row's render key (falls back to the index). Selection is always tracked by index. |
 | `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
 | `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
+| `modelValue` | `PickListValue` | `—` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:modelValue` | `[unknown[], unknown[]]` | v-model update with the new `[sourceItems, targetItems]` pair. |
 | `move` | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }` | Fired after items move between lists, with the moved items. |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
@@ -67,6 +66,12 @@
 - `pick-list-source/pick-list-source.vue` — The source listbox (the left/top list). Reads its items and selection from the injected context. Props: `title` (heading text / accessible name), `loading` (shows a spinner in place of options and locks its controls). Slots: `item` (`{ item, index, list }`) renders one option row; `title` overrides the heading content. Double-clicking an option moves it to the target (driven by the root via the injected context).
 - `pick-list-target/pick-list-target.vue` — The target listbox (the right/bottom list). Same anatomy, props, and slots as `pick-list-source`, bound to the target side of the pair; double-clicking an option moves it back to the source.
 - `pick-list-controls/pick-list-controls.vue` — The context-aware control column between the lists. Renders the four move buttons (move selected / move all, in each direction) as icon-only buttons; reads selection, item counts, loading, and disabled from the injected context and drives the moves. Takes no props. The arrows point left/right when the lists are side by side and rotate to up/down when they stack on narrow viewports.
+
+## v-model
+
+| Model     | Type                     | Default          | Emits               | Notes                                                                                                                                                                                          |
+| --------- | ------------------------ | ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `[unknown[], unknown[]]` | `() => [[], []]` | `update:modelValue` | Bound pair of lists as `[sourceItems, targetItems]`, two-way through `defineModel`. Each move writes the new pair back; without a bound `v-model` the component keeps the pair as local state. |
 
 ## States
 

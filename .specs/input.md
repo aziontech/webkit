@@ -3,7 +3,7 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 checksum: 3f1265c2f9c08c48f27f74b469d838fad6bdfaee0c80cf97ff0ceb91a868ba1f
 created: 2026-05-22
 last_updated: 2026-11-13

@@ -38,16 +38,16 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `boolean` | `false` | false | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant. |
 | `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
 | `focused` | `boolean` | `false` | false | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
+| `modelValue` | `boolean` | `false` | false | Two-way value (`v-model`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model`. |
+| Model     | Type      | Default | Emits               | Notes                                                                                                                                          |
+| --------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `boolean` | `false` | `update:modelValue` | Toggled-on state via `defineModel`. Mirrors the Figma checked/on variant. Emitted when the user toggles the switch. Uncontrolled when unbound. |
 
 ## States
 

@@ -95,12 +95,12 @@
   },
   {
    "name": "confirm",
-   "payload": "CollectionPreferencesValue",
+   "payload": "(event: MouseEvent, value: CollectionPreferencesValue)",
    "notes": "Same value, for a handler that is not a model."
   },
   {
    "name": "cancel",
-   "payload": "void",
+   "payload": "(event: MouseEvent)",
    "notes": "Cancel was activated; the draft is discarded."
   }
  ],

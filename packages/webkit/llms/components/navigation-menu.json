@@ -72,13 +72,6 @@
    "doc": "Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`)."
   },
   {
-   "name": "as",
-   "type": "string | object",
-   "default": "'nav'",
-   "required": "false",
-   "doc": "Polymorphic root element."
-  },
-  {
    "name": "modelValue",
    "type": "NavigationMenuValue | undefined",
    "default": "undefined",

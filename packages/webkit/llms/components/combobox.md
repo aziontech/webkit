@@ -63,7 +63,7 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `search` | `string` | The typed text, on each keystroke while the list is open (server filters). |
-| `create` | `string` | A value that matches no option was committed (`allowCustom`). |
+| `create` | `(event: MouseEvent \| KeyboardEvent \| FocusEvent, value: string)` | A value that matches no option was committed (`allowCustom`). |
 
 ## Slots
 

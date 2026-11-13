@@ -3,7 +3,7 @@ name: reasoning
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: ab27ea861ffb59d22614e3d58dea37fd8f7041f4ddf50af1f2f60f69ac93d81f
 created: 2026-11-11

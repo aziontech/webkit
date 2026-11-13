@@ -2242,12 +2242,12 @@
    "events": [
     {
      "name": "approve",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     },
     {
      "name": "deny",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -2367,7 +2367,7 @@
    "events": [
     {
      "name": "close",
-     "payload": "—",
+     "payload": "(event: MouseEvent | KeyboardEvent)",
      "notes": ""
     },
     {
@@ -2453,7 +2453,7 @@
    "events": [
     {
      "name": "open",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     },
     {
@@ -2544,7 +2544,7 @@
    "events": [
     {
      "name": "retry",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -2631,7 +2631,7 @@
    "events": [
     {
      "name": "retry",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -2751,7 +2751,7 @@
    "events": [
     {
      "name": "submit",
-     "payload": "{ reason: string; details: string }",
+     "payload": "(event: SubmitEvent, payload: { reason: string; details: string })",
      "notes": ""
     }
    ],
@@ -2850,7 +2850,7 @@
    "events": [
     {
      "name": "remove",
-     "payload": "string",
+     "payload": "(event: MouseEvent, id: string)",
      "notes": ""
     }
    ],
@@ -2944,12 +2944,12 @@
    "events": [
     {
      "name": "submit",
-     "payload": "(value: string, references: PromptInputReference[])",
+     "payload": "(event: MouseEvent | KeyboardEvent, payload: { value: string; references: PromptInputReference[] })",
      "notes": ""
     },
     {
      "name": "stop",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -3026,7 +3026,7 @@
     },
     {
      "name": "skip",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": ""
     }
    ],
@@ -3228,7 +3228,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "SuggestionItem",
+     "payload": "(event: MouseEvent, item: SuggestionItem)",
      "notes": ""
     }
    ],
@@ -6554,11 +6554,18 @@
      "doc": "Item root density (padding and gap)."
     },
     {
-     "name": "asChild",
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the whole row renders as an anchor link to this URL."
+    },
+    {
+     "name": "clickable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
+     "doc": "Renders the whole row as a button; bind the click handler on the Item. Ignored when href is set."
     }
    ],
    "slots": [
@@ -6596,11 +6603,18 @@
      "doc": "Item root density (padding and gap)."
     },
     {
-     "name": "asChild",
+     "name": "href",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "When set, the whole row renders as an anchor link to this URL."
+    },
+    {
+     "name": "clickable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor)."
+     "doc": "Renders the whole row as a button; bind the click handler on the Item. Ignored when href is set."
     }
    ],
    "slots": [
@@ -8170,12 +8184,12 @@
     },
     {
      "name": "filter-apply",
-     "payload": "filters: AppliedFilter[]",
+     "payload": "(event: Event, filters: AppliedFilter[])",
      "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
     },
     {
      "name": "filter-remove",
-     "payload": "filter: AppliedFilter",
+     "payload": "(event: Event, filter: AppliedFilter)",
      "notes": "One applied filter/chip was removed."
     },
     {
@@ -8571,12 +8585,12 @@
     },
     {
      "name": "filter-apply",
-     "payload": "filters: AppliedFilter[]",
+     "payload": "(event: Event, filters: AppliedFilter[])",
      "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
     },
     {
      "name": "filter-remove",
-     "payload": "filter: AppliedFilter",
+     "payload": "(event: Event, filter: AppliedFilter)",
      "notes": "One applied filter/chip was removed."
     },
     {
@@ -8912,8 +8926,8 @@
     },
     {
      "name": "submit",
-     "payload": "PropertyFilterSubmit",
-     "notes": "Enter with no active suggestion and a valid query. Query mode only."
+     "payload": "(event: KeyboardEvent, payload: PropertyFilterSubmit)",
+     "notes": "Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only."
     }
    ],
    "surface": "product",
@@ -8996,12 +9010,12 @@
     },
     {
      "name": "confirm",
-     "payload": "CollectionPreferencesValue",
+     "payload": "(event: MouseEvent, value: CollectionPreferencesValue)",
      "notes": "Same value, for a handler that is not a model."
     },
     {
      "name": "cancel",
-     "payload": "void",
+     "payload": "(event: MouseEvent)",
      "notes": "Cancel was activated; the draft is discarded."
     }
    ],
@@ -9327,6 +9341,9 @@
    "kind": "subcomponent",
    "parent": "pagination",
    "treeShakeableImport": "@aziontech/webkit/pagination-page-size",
+   "models": [
+    "modelValue"
+   ],
    "surface": "product"
   },
   "flow": {
@@ -9405,17 +9422,17 @@
    "events": [
     {
      "name": "bind",
-     "payload": "[key: string, value: string]",
-     "notes": "An existing option was picked in the bind control."
+     "payload": "(event: MouseEvent | KeyboardEvent, binding: { key: string; value: string })",
+     "notes": "An existing option was picked in the bind control; `key` is the node's key."
     },
     {
      "name": "remove",
-     "payload": "[key: string]",
+     "payload": "(event: MouseEvent, key: string)",
      "notes": "Remove was activated on a bound, removable node."
     },
     {
      "name": "create",
-     "payload": "[key: string]",
+     "payload": "(event: MouseEvent | KeyboardEvent, key: string)",
      "notes": "Create was picked in the bind control."
     }
    ],
@@ -9497,16 +9514,12 @@
     "@aziontech/webkit/pick-list-target",
     "@aziontech/webkit/pick-list-controls"
    ],
+   "models": [
+    "modelValue"
+   ],
    "category": "data",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "[unknown[], unknown[]]",
-     "default": "() => [[], []]",
-     "required": "false",
-     "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
-    },
     {
      "name": "dataKey",
      "type": "string",
@@ -9527,14 +9540,16 @@
      "default": "true",
      "required": "false",
      "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+    },
+    {
+     "name": "modelValue",
+     "type": "PickListValue",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "[unknown[], unknown[]]",
-     "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
-    },
     {
      "name": "move",
      "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
@@ -9563,16 +9578,12 @@
    "kind": "root",
    "rootOf": "pick-list",
    "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+   "models": [
+    "modelValue"
+   ],
    "category": "data",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "[unknown[], unknown[]]",
-     "default": "() => [[], []]",
-     "required": "false",
-     "doc": "Bound pair of lists as `[sourceItems, targetItems]` (v-model)."
-    },
     {
      "name": "dataKey",
      "type": "string",
@@ -9593,14 +9604,16 @@
      "default": "true",
      "required": "false",
      "doc": "When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move."
+    },
+    {
+     "name": "modelValue",
+     "type": "PickListValue",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "[unknown[], unknown[]]",
-     "notes": "v-model update with the new `[sourceItems, targetItems]` pair."
-    },
     {
      "name": "move",
      "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
@@ -11466,17 +11479,17 @@
    "events": [
     {
      "name": "cancel",
-     "payload": "id?: string",
+     "payload": "(event: MouseEvent, id?: string)",
      "notes": "Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer."
     },
     {
      "name": "retry",
-     "payload": "id?: string",
+     "payload": "(event: MouseEvent, id?: string)",
      "notes": "Retry on one failed file (its `id`) or Retry failed (no `id`)."
     },
     {
      "name": "close",
-     "payload": "—",
+     "payload": "(event: MouseEvent)",
      "notes": "Close was pressed; offered only once every file has finished."
     }
    ],
@@ -11664,16 +11677,13 @@
     "@aziontech/webkit/calendar-preset",
     "@aziontech/webkit/calendar-clear"
    ],
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "Date | null | CalendarRange",
-     "default": "null",
-     "required": "false",
-     "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
-    },
     {
      "name": "mode",
      "type": "'single' | 'range'",
@@ -11708,13 +11718,6 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
-    },
-    {
-     "name": "open",
-     "type": "boolean | undefined",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
     },
     {
      "name": "placeholder",
@@ -11799,19 +11802,23 @@
      "default": "false",
      "required": "false",
      "doc": "Renders the trigger as a split control with a separate chevron affordance."
+    },
+    {
+     "name": "modelValue",
+     "type": "CalendarValue",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "Date | null | CalendarRange",
-     "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
-    },
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "v-model:open. Emitted when the popover opens or closes."
-    },
     {
      "name": "update:timezone",
      "payload": "string",
@@ -11824,8 +11831,8 @@
     },
     {
      "name": "apply",
-     "payload": "Date | null | CalendarRange",
-     "notes": "Emitted when the draft selection is committed via Apply."
+     "payload": "(event: Event, value: Date | null | CalendarRange)",
+     "notes": "Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection."
     }
    ],
    "slots": [
@@ -11855,16 +11862,13 @@
    "kind": "root",
    "rootOf": "calendar",
    "treeShakeableImport": "@aziontech/webkit/calendar-root",
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "Date | null | CalendarRange",
-     "default": "null",
-     "required": "false",
-     "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
-    },
     {
      "name": "mode",
      "type": "'single' | 'range'",
@@ -11899,13 +11903,6 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
-    },
-    {
-     "name": "open",
-     "type": "boolean | undefined",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
     },
     {
      "name": "placeholder",
@@ -11990,19 +11987,23 @@
      "default": "false",
      "required": "false",
      "doc": "Renders the trigger as a split control with a separate chevron affordance."
+    },
+    {
+     "name": "modelValue",
+     "type": "CalendarValue",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "Date | null | CalendarRange",
-     "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
-    },
-    {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "v-model:open. Emitted when the popover opens or closes."
-    },
     {
      "name": "update:timezone",
      "payload": "string",
@@ -12015,8 +12016,8 @@
     },
     {
      "name": "apply",
-     "payload": "Date | null | CalendarRange",
-     "notes": "Emitted when the draft selection is committed via Apply."
+     "payload": "(event: Event, value: Date | null | CalendarRange)",
+     "notes": "Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection."
     }
    ],
    "slots": [
@@ -12060,16 +12061,12 @@
    "target": "./src/components/inputs/input/input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/input",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Two-way bound value of the field."
-    },
     {
      "name": "placeholder",
      "type": "string",
@@ -12146,13 +12143,13 @@
      "default": "false",
      "required": "false",
      "doc": "Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`)."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": "Emitted on native `input` event with the new value."
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -12296,16 +12293,12 @@
    "target": "./src/components/inputs/number-input/number-input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/number-input",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "v-model value (always numeric; cleared input falls back to `min ?? 0`)."
-    },
     {
      "name": "placeholder",
      "type": "string",
@@ -12375,14 +12368,16 @@
      "default": "true",
      "required": "false",
      "doc": "Renders the chevron-up/chevron-down spinner controls."
+    },
+    {
+     "name": "modelValue",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "number",
-     "notes": "Emitted on every value change (typing or spinner)."
-    },
     {
      "name": "change",
      "payload": "number",
@@ -12879,16 +12874,12 @@
    "target": "./src/components/inputs/password-input/password-input.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/password-input",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Two-way bound value of the field."
-    },
     {
      "name": "placeholder",
      "type": "string",
@@ -12951,13 +12942,13 @@
      "default": "false",
      "required": "false",
      "doc": "Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": "Emitted on native `input` event with the new value."
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "slots": [
@@ -13132,7 +13123,7 @@
    "events": [
     {
      "name": "dismiss",
-     "payload": "index: number, item: FileTokenGroupItem",
+     "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
      "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`."
     }
    ],
@@ -13326,16 +13317,12 @@
    "target": "./src/components/inputs/checkbox/checkbox.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/checkbox",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "TModel",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting."
-    },
     {
      "name": "value",
      "type": "unknown",
@@ -13391,13 +13378,13 @@
      "default": "0",
      "required": "false",
      "doc": "Forwarded to the inner `<input tabindex>`."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "TModel",
-     "notes": "Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode)."
+     "name": "modelValue",
+     "type": "TModel",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -13409,16 +13396,12 @@
    "target": "./src/components/inputs/radio-button/radio-button.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/radio-button",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "string",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Selected value for v-model."
-    },
     {
      "name": "value",
      "type": "string",
@@ -13446,13 +13429,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "id for the native input; links label to control."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": "v-model."
+     "name": "modelValue",
+     "type": "string | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -13464,16 +13447,12 @@
    "target": "./src/components/inputs/switch/switch.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/switch",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Toggled-on state. Bind with `v-model=\"value\"`. Mirrors the Figma checked/on variant."
-    },
     {
      "name": "kind",
      "type": "'default' | 'privacy'",
@@ -13494,13 +13473,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables interaction and applies the disabled tokens."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "boolean",
-     "notes": "Emitted when the user toggles the switch. Paired with `v-model`."
+     "name": "modelValue",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -13649,16 +13628,12 @@
    "target": "./src/components/inputs/textarea/textarea.vue",
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/textarea",
+   "models": [
+    "modelValue"
+   ],
    "category": "inputs",
    "structure": "monolithic",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Bound value (v-model)."
-    },
     {
      "name": "placeholder",
      "type": "string",
@@ -13707,13 +13682,13 @@
      "default": "false",
      "required": "false",
      "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
-    }
-   ],
-   "events": [
+    },
     {
-     "name": "update:modelValue",
-     "payload": "string",
-     "notes": "v-model update."
+     "name": "modelValue",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
     }
    ],
    "surface": "product",
@@ -13898,23 +13873,13 @@
     "@aziontech/webkit/multi-select-group",
     "@aziontech/webkit/multi-select-option"
    ],
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "TValue[]",
-     "default": "() => []",
-     "required": "false",
-     "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
-    },
-    {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
-    },
     {
      "name": "defaultOpen",
      "type": "boolean",
@@ -13970,18 +13935,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "TValue[]",
-     "notes": "Fires when an option is toggled; payload is the next selection array."
     },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires when the dropdown opens or closes."
+     "name": "modelValue",
+     "type": "TValue[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -14001,23 +13968,13 @@
    "kind": "root",
    "rootOf": "multi-select",
    "treeShakeableImport": "@aziontech/webkit/multi-select-root",
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "TValue[]",
-     "default": "() => []",
-     "required": "false",
-     "doc": "Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`."
-    },
-    {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
-    },
     {
      "name": "defaultOpen",
      "type": "boolean",
@@ -14073,18 +14030,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "TValue[]",
-     "notes": "Fires when an option is toggled; payload is the next selection array."
     },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires when the dropdown opens or closes."
+     "name": "modelValue",
+     "type": "TValue[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -14141,29 +14100,19 @@
     "@aziontech/webkit/select-group",
     "@aziontech/webkit/select-option"
    ],
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "TValue",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`."
-    },
     {
      "name": "multiple",
      "type": "boolean",
      "default": "false",
      "required": "false",
      "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
-    },
-    {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
     },
     {
      "name": "defaultOpen",
@@ -14227,18 +14176,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "TValue",
-     "notes": "Fires when an option is selected (single) or toggled (multi)."
     },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires when the dropdown opens or closes."
+     "name": "modelValue",
+     "type": "TValue",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -14258,29 +14209,19 @@
    "kind": "root",
    "rootOf": "select",
    "treeShakeableImport": "@aziontech/webkit/select-root",
+   "models": [
+    "modelValue",
+    "open"
+   ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "modelValue",
-     "type": "TValue",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`."
-    },
     {
      "name": "multiple",
      "type": "boolean",
      "default": "false",
      "required": "false",
      "doc": "When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array."
-    },
-    {
-     "name": "open",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Controlled open state for the dropdown. Use with `v-model:open`."
     },
     {
      "name": "defaultOpen",
@@ -14344,18 +14285,20 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:modelValue",
-     "payload": "TValue",
-     "notes": "Fires when an option is selected (single) or toggled (multi)."
     },
     {
-     "name": "update:open",
-     "payload": "boolean",
-     "notes": "Fires when the dropdown opens or closes."
+     "name": "modelValue",
+     "type": "TValue",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "slots": [
@@ -18477,13 +18420,6 @@
      "doc": "Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`)."
     },
     {
-     "name": "as",
-     "type": "string | object",
-     "default": "'nav'",
-     "required": "false",
-     "doc": "Polymorphic root element."
-    },
-    {
      "name": "modelValue",
      "type": "NavigationMenuValue | undefined",
      "default": "undefined",
@@ -18555,13 +18491,6 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name for the root navigation landmark. Empty uses the locale catalog (`Main`)."
-    },
-    {
-     "name": "as",
-     "type": "string | object",
-     "default": "'nav'",
-     "required": "false",
-     "doc": "Polymorphic root element."
     },
     {
      "name": "modelValue",
@@ -19033,12 +18962,12 @@
    "events": [
     {
      "name": "confirm",
-     "payload": "void",
+     "payload": "(event: MouseEvent)",
      "notes": "The confirm button was activated; not emitted while `disabled` or `loading`."
     },
     {
      "name": "cancel",
-     "payload": "void",
+     "payload": "(event: MouseEvent)",
      "notes": "The cancel button was activated; the dialog closes. Not emitted while `loading`."
     }
    ],
@@ -25538,7 +25467,7 @@
   },
   "use-focus-trap": {
    "import": "@aziontech/webkit/use-focus-trap",
-   "target": "./src/composables/use-focus-trap/index.js",
+   "target": "./src/composables/use-focus-trap/index.ts",
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-focus-trap"
   },
@@ -26261,12 +26190,12 @@
     },
     {
      "name": "add",
-     "payload": "{ index: number; groupIndex?: number }",
+     "payload": "(event: MouseEvent, detail: { index: number; groupIndex?: number })",
      "notes": "After a row is added; `groupIndex` only in grouped mode."
     },
     {
      "name": "remove",
-     "payload": "{ index: number; item: TItem; groupIndex?: number }",
+     "payload": "(event: MouseEvent | KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })",
      "notes": "After a row is removed."
     }
    ],
@@ -26274,12 +26203,12 @@
     {
      "name": "row",
      "scope": "{ item, index, groupIndex, errors, update, remove, removable, removeLabel }",
-     "notes": "Replaces the whole row; the column header is not drawn."
+     "notes": "Replaces the whole row; the column header is not drawn. `remove` takes the activating event (`@click=\"remove\"`)."
     },
     {
      "name": "row-actions",
      "scope": "{ item, index, groupIndex, remove, removable, removeLabel }",
-     "notes": "Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it)."
+     "notes": "Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). `remove` takes the activating event."
     },
     {
      "name": "empty",
@@ -26360,7 +26289,7 @@
    "events": [
     {
      "name": "click",
-     "payload": "{ id: string }",
+     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
      "notes": "An action or a menu option was chosen (from the bar or the overflow)."
     },
     {
@@ -26491,7 +26420,7 @@
     },
     {
      "name": "create",
-     "payload": "string",
+     "payload": "(event: MouseEvent | KeyboardEvent | FocusEvent, value: string)",
      "notes": "A value that matches no option was committed (`allowCustom`)."
     }
    ],

@@ -1,6 +1,6 @@
 # Suggestion Group
 
-> A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item, and the owner either sends it or places it in the prompt input to edit.
+> A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the click event and the item, and the owner either sends it or places it in the prompt input to edit.
 
 - Import: `import SuggestionGroup from '@aziontech/webkit/suggestion-group'`
 - Category: ai · Surface: product · Structure: monolithic
@@ -45,7 +45,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `SuggestionItem` |  |
+| `select` | `(event: MouseEvent, item: SuggestionItem)` |  |
 
 ## Sub-components
 
@@ -107,7 +107,7 @@ types `SuggestionItem`, `SuggestionGroupOrientation`._
     <SuggestionGroup
       :items="items"
       aria-label="Follow-up questions"
-      @select="(item) => (sent = item.label)"
+      @select="(event, item) => (sent = item.label)"
     />
     <p
       v-if="sent"

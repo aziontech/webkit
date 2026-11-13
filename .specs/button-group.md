@@ -3,7 +3,7 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: b7a3d4629c590cc8c8474b09effe9ec342416d22d82249ebe745625021b5b6b6
 created: 2026-11-11

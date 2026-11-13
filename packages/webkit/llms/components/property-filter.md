@@ -58,7 +58,7 @@
 | --- | --- | --- |
 | `update:query` | `PropertyFilterQuery` | A token was added or removed, the operation changed, or all cleared. Tokens mode only. |
 | `update:text` | `string` | The query string changed (typing, a suggestion, Escape clearing). Query mode only. |
-| `submit` | `PropertyFilterSubmit` | Enter with no active suggestion and a valid query. Query mode only. |
+| `submit` | `(event: KeyboardEvent, payload: PropertyFilterSubmit)` | Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only. |
 
 ## States
 
@@ -258,7 +258,7 @@
     () => events.filter((event) => matchesQuery(event, applied.value, properties)).length
   )
 
-  const apply = ({ query }) => {
+  const apply = (event, { query }) => {
     if (query) applied.value = query
   }
 </script>

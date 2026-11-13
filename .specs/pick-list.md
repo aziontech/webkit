@@ -3,7 +3,7 @@ name: pick-list
 category: data
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 checksum: 4d004fa3d92fdbf2ffa7efd5f6dc5a38d85571bbb11bd3622108ff2551f330f7
 created: 2026-06-25
 last_updated: 2026-11-13

@@ -44,7 +44,7 @@ A `Stepper` in an aside on the left, `v-model` bound to the current step and lab
 
 ### D. Where it runs — `Input`, `Item`, `Tag`, `Button` (required)
 
-A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `Item` rendered `as-child` on a native `button` with `aria-pressed` and `data-selected`; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
+A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -569,39 +569,33 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       <Item
                         v-for="option in visible"
                         :key="option.value"
-                        as-child
                         size="small"
+                        clickable
+                        :aria-pressed="choice === option.value"
+                        @click="choose(option)"
                       >
-                        <button
-                          type="button"
-                          class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                          :aria-pressed="choice === option.value"
-                          :data-selected="choice === option.value || null"
-                          @click="choose(option)"
-                        >
-                          <Item.Media>
-                            <i
-                              class="pi pi-shield text-body-md leading-none text-(--text-muted)"
-                              aria-hidden="true"
-                            />
-                          </Item.Media>
-                          <Item.Content>
-                            <Item.Title>{{ option.label }}</Item.Title>
-                          </Item.Content>
-                          <Item.Actions>
-                            <Tag
-                              v-if="!option.ready"
-                              label="IP filtering off"
-                              severity="warning"
-                              size="small"
-                            />
-                            <i
-                              v-if="choice === option.value"
-                              class="pi pi-check text-body-sm leading-none text-(--text-default)"
-                              aria-hidden="true"
-                            />
-                          </Item.Actions>
-                        </button>
+                        <Item.Media>
+                          <i
+                            class="pi pi-shield text-body-md leading-none text-(--text-muted)"
+                            aria-hidden="true"
+                          />
+                        </Item.Media>
+                        <Item.Content>
+                          <Item.Title>{{ option.label }}</Item.Title>
+                        </Item.Content>
+                        <Item.Actions>
+                          <Tag
+                            v-if="!option.ready"
+                            label="IP filtering off"
+                            severity="warning"
+                            size="small"
+                          />
+                          <i
+                            v-if="choice === option.value"
+                            class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                            aria-hidden="true"
+                          />
+                        </Item.Actions>
                       </Item>
 
                       <p

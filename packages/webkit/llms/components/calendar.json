@@ -29,20 +29,13 @@
   "number-input` — numeric durations instead of dates."
  ],
  "bestPractices": [
-  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
   "Bind a `{ start, end }` object in range mode and a `Date` or `null` with `mode=\"single\"`.",
   "Bound the selectable days with `min` and `max` instead of validating after commit.",
   "Pair `show-timezone` with `v-model:timezone`; the timezone changes display formatting only, not the `Date` values.",
   "Prefer the `presets` prop; use the `presets` slot with `Calendar.Preset` only when preset content needs custom markup."
  ],
  "props": [
-  {
-   "name": "modelValue",
-   "type": "Date | null | CalendarRange",
-   "default": "null",
-   "required": "false",
-   "doc": "Committed selection for v-model. A `Date` (or null) in single mode; a `{ start, end }` range in range mode. Only updated on Apply (or immediately when `showApply` is false)."
-  },
   {
    "name": "mode",
    "type": "'single' | 'range'",
@@ -77,13 +70,6 @@
    "default": "false",
    "required": "false",
    "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
-  },
-  {
-   "name": "open",
-   "type": "boolean | undefined",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state of the popover. Use with v-model:open; omit for uncontrolled."
   },
   {
    "name": "placeholder",
@@ -168,19 +154,23 @@
    "default": "false",
    "required": "false",
    "doc": "Renders the trigger as a split control with a separate chevron affordance."
+  },
+  {
+   "name": "modelValue",
+   "type": "CalendarValue",
+   "default": "null",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [
-  {
-   "name": "update:modelValue",
-   "payload": "Date | null | CalendarRange",
-   "notes": "v-model. The committed `Date` (single) or `{ start, end }` (range); empty value on clear."
-  },
-  {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": "v-model:open. Emitted when the popover opens or closes."
-  },
   {
    "name": "update:timezone",
    "payload": "string",
@@ -193,8 +183,8 @@
   },
   {
    "name": "apply",
-   "payload": "Date | null | CalendarRange",
-   "notes": "Emitted when the draft selection is committed via Apply."
+   "payload": "(event: Event, value: Date | null | CalendarRange)",
+   "notes": "Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection."
   }
  ],
  "slots": [
@@ -222,12 +212,12 @@
    "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
   },
   {
-   "name": "Open",
-   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"min-h-[640px] w-full max-w-[560px]\">\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      :open=\"true\"\n      show-time\n      show-timezone\n      clearable\n    />\n  </div>\n</template>"
-  },
-  {
    "name": "Sizes",
    "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref({ start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-start gap-4\">\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"small\"\n    />\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"medium\"\n    />\n    <CalendarRoot\n      v-model=\"range\"\n      mode=\"range\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Single",
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const date = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"date\"\n    mode=\"single\"\n    placeholder=\"Select date\"\n  />\n</template>"
   }
  ],
  "docs": "components/calendar.md"

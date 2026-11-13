@@ -99,12 +99,12 @@
  "events": [
   {
    "name": "confirm",
-   "payload": "void",
+   "payload": "(event: MouseEvent)",
    "notes": "The confirm button was activated; not emitted while `disabled` or `loading`."
   },
   {
    "name": "cancel",
-   "payload": "void",
+   "payload": "(event: MouseEvent)",
    "notes": "The cancel button was activated; the dialog closes. Not emitted while `loading`."
   }
  ],

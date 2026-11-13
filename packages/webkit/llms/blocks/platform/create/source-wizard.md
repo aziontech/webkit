@@ -44,7 +44,7 @@ A `Stepper` labelled with the create label. Steps reached earlier are `complete`
 
 ### D. Where it runs — `Input`, `Item`, `Button` (required)
 
-A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `Item` rendered `as-child` on a native `button` with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
+A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `clickable` `Item` (a native `button`) with `aria-pressed` (which fills the row) and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
 
 ### E. Inline create — `Field`, `Input`, `Button` (optional)
 
@@ -52,7 +52,7 @@ The Create Service row swaps the list for a `Field` with a Name `Input`, prefill
 
 ### F. Method card — `Card`, `Item` (required)
 
-A flush `Card` titled with the question, holding an `Item.List` of three small `Item`s rendered `as-child` on `button`s: an icon, the method as `Item.Title`, one or two sentences on what it does as `Item.Description`, and a chevron in `Item.Actions`. Clicking a method is the answer and moves on.
+A flush `Card` titled with the question, holding an `Item.List` of three small `clickable` `Item`s (native `button`s): an icon, the method as `Item.Title`, one or two sentences on what it does as `Item.Description`, and a chevron in `Item.Actions`. Clicking a method is the answer and moves on.
 
 ### G. Footer — `SaveBar`, `Button` (conditional)
 
@@ -492,33 +492,27 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <Item
                             v-for="option in visible"
                             :key="option.value"
-                            as-child
                             size="small"
+                            clickable
+                            :aria-pressed="service === option.value"
+                            @click="choose(option)"
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                              :aria-pressed="service === option.value"
-                              :data-selected="service === option.value || null"
-                              @click="choose(option)"
-                            >
-                              <Item.Media>
-                                <i
-                                  class="pi pi-server text-body-md leading-none text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ option.label }}</Item.Title>
-                              </Item.Content>
-                              <Item.Actions>
-                                <i
-                                  v-if="service === option.value"
-                                  class="pi pi-check text-body-sm leading-none text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Actions>
-                            </button>
+                            <Item.Media>
+                              <i
+                                class="pi pi-server text-body-md leading-none text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>{{ option.label }}</Item.Title>
+                            </Item.Content>
+                            <Item.Actions>
+                              <i
+                                v-if="service === option.value"
+                                class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                                aria-hidden="true"
+                              />
+                            </Item.Actions>
                           </Item>
 
                           <p
@@ -535,24 +529,19 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           </p>
 
                           <Item
-                            as-child
                             size="small"
+                            clickable
+                            @click="startCreating"
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start"
-                              @click="startCreating"
-                            >
-                              <Item.Media>
-                                <i
-                                  class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>Create Service</Item.Title>
-                              </Item.Content>
-                            </button>
+                            <Item.Media>
+                              <i
+                                class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>Create Service</Item.Title>
+                            </Item.Content>
                           </Item>
                         </div>
                       </div>
@@ -578,35 +567,30 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <Item
                             v-for="method in methods"
                             :key="method.id"
-                            as-child
                             size="small"
+                            clickable
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                >
-                                  <i
-                                    :class="method.icon"
-                                    class="text-body-md leading-none text-(--text-default)"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ method.title }}</Item.Title>
-                                <Item.Description>{{ method.description }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
+                            <Item.Media>
+                              <span
+                                class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              >
                                 <i
-                                  class="pi pi-chevron-right text-(--text-muted)"
+                                  :class="method.icon"
+                                  class="text-body-md leading-none text-(--text-default)"
                                   aria-hidden="true"
                                 />
-                              </Item.Actions>
-                            </button>
+                              </span>
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>{{ method.title }}</Item.Title>
+                              <Item.Description>{{ method.description }}</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <i
+                                class="pi pi-chevron-right text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Actions>
                           </Item>
                         </Item.List>
                       </template>

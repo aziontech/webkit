@@ -56,7 +56,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `click` | `{ id: string }` | An action or a menu option was chosen (from the bar or the overflow). |
+| `click` | `(event: MouseEvent \| KeyboardEvent, id: string)` | An action or a menu option was chosen (from the bar or the overflow). |
 | `toggle` | `{ id: string; pressed: boolean }` | A toggle was activated; `pressed` is the new state to store. |
 
 ## Sub-components
@@ -142,7 +142,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
     <ButtonGroup
       :items="resolved"
       aria-label="Editor actions"
-      @click="({ id }) => (last = id)"
+      @click="(_event, id) => (last = id)"
       @toggle="onToggle"
     />
     <p

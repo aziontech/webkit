@@ -48,8 +48,8 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `update:preferences` | `CollectionPreferencesValue` | Confirm was activated. |
-| `confirm` | `CollectionPreferencesValue` | Same value, for a handler that is not a model. |
-| `cancel` | `void` | Cancel was activated; the draft is discarded. |
+| `confirm` | `(event: MouseEvent, value: CollectionPreferencesValue)` | Same value, for a handler that is not a model. |
+| `cancel` | `(event: MouseEvent)` | Cancel was activated; the draft is discarded. |
 
 ## Slots
 
