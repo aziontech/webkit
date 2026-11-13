@@ -5,8 +5,6 @@
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
   import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
   import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context'
-  import { navigationMenuTransitionClasses } from './presets/animations'
-  import { navigationMenuPositionerLayoutClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
 
@@ -105,13 +103,10 @@
     resolvedAlign
   })
 
-  const positionerClasses = computed(() =>
-    cn(
-      navigationMenuTransitionClasses.positioner,
-      navigationMenuPositionerLayoutClasses,
-      attrs.class as string | undefined
-    )
-  )
+  const ROOT_CLASS =
+    'transition-[transform] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none ' +
+    'data-[instant]:transition-none data-[starting-style]:transition-none ' +
+    'group/positioner fixed z-50'
 
   const positionerHidden = computed(() => !root.menuPopupMounted.value)
 
@@ -136,7 +131,7 @@
   <div
     ref="positionerRef"
     :hidden="positionerHidden"
-    :class="positionerClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :style="positionerStyle"
     role="presentation"
     :data-testid="testId"

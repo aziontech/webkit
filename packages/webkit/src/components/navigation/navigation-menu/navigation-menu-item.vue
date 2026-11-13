@@ -7,13 +7,6 @@
     useNavigationMenuRoot
   } from './composables/use-navigation-menu-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
-  import {
-    navigationMenuEntryAnchorClasses,
-    navigationMenuEntryDescriptionClasses,
-    navigationMenuEntryIconClasses,
-    navigationMenuEntryTextClasses,
-    navigationMenuEntryTitleClasses
-  } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuItem', inheritAttrs: false })
 
@@ -67,13 +60,13 @@
     open
   })
 
-  const itemClasses = computed(() =>
-    isEntry.value ? undefined : cn(attrs.class as string | undefined)
-  )
-
-  const entryClasses = computed(() =>
-    cn(navigationMenuEntryAnchorClasses, attrs.class as string | undefined)
-  )
+  const ENTRY_CLASS =
+    'group flex min-h-14 w-full items-start gap-(--spacing-xs) ' +
+    'rounded-(--shape-button) border border-transparent px-(--spacing-md) py-(--spacing-sm) no-underline ' +
+    'text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none ' +
+    'hover:bg-(--bg-hover) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
 
   const onEntryClick = (event: MouseEvent) => {
     if (!props.closeOnClick) {
@@ -90,7 +83,7 @@
 <template>
   <li
     v-if="!isEntry"
-    :class="itemClasses"
+    :class="cn(attrs.class as string | undefined)"
     :data-testid="testId"
   >
     <slot />
@@ -101,7 +94,7 @@
   >
     <a
       :href="href"
-      :class="entryClasses"
+      :class="cn(ENTRY_CLASS, attrs.class as string | undefined)"
       :data-testid="`${testId}__link`"
       :data-active="active ? '' : undefined"
       :data-featured="featured ? '' : undefined"
@@ -110,15 +103,15 @@
     >
       <span
         v-if="$slots['icon']"
-        :class="navigationMenuEntryIconClasses"
+        class="mt-0.5 flex size-4 shrink-0 items-center justify-center text-(--text-default) [&_i]:text-body-md"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       >
         <slot name="icon" />
       </span>
-      <span :class="navigationMenuEntryTextClasses">
+      <span class="flex min-w-0 flex-col">
         <span
-          :class="navigationMenuEntryTitleClasses"
+          class="text-label-md text-(--text-default) group-hover:text-(--text-default) data-[featured]:text-(--text-link) data-[featured]:group-hover:text-(--text-link)"
           :data-featured="featured ? '' : undefined"
           :data-testid="`${testId}__title`"
         >
@@ -126,7 +119,7 @@
         </span>
         <span
           v-if="description"
-          :class="navigationMenuEntryDescriptionClasses"
+          class="text-body-sm text-(--text-muted)"
           :data-testid="`${testId}__description`"
         >
           {{ description }}

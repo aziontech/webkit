@@ -6,13 +6,6 @@
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight'
   import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
-  import {
-    navigationMenuGroupLabelClasses,
-    navigationMenuGroupLabelLinkClasses,
-    navigationMenuListGroupClasses,
-    navigationMenuListRootClasses,
-    navigationMenuListSelectorClasses
-  } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuList', inheritAttrs: false })
 
@@ -49,18 +42,7 @@
 
   const isLabelLink = computed(() => props.href !== '')
 
-  const labelClass = computed(() =>
-    cn(
-      navigationMenuGroupLabelClasses,
-      isLabelLink.value ? navigationMenuGroupLabelLinkClasses : ''
-    )
-  )
-
   const onLabelClick = (event: globalThis.MouseEvent) => {
-    if (!isLabelLink.value) {
-      return
-    }
-
     root.setValue(
       null,
       createChangeEventDetails('link-press', event, event.currentTarget as HTMLElement)
@@ -79,17 +61,11 @@
     })
   }
 
-  const listClasses = computed(() =>
-    cn(
-      isGroup.value
-        ? navigationMenuListGroupClasses
-        : [
-            navigationMenuListRootClasses,
-            root.menuOrientation.value === 'vertical' ? 'flex-col items-stretch' : ''
-          ],
-      attrs.class as string | undefined
-    )
-  )
+  const ROOT_CLASS = 'relative z-1 m-0 flex list-none items-center gap-(--spacing-xs) p-0'
+
+  const VERTICAL_CLASS = 'flex-col items-stretch'
+
+  const isVertical = computed(() => root.menuOrientation.value === 'vertical')
 </script>
 
 <template>
@@ -100,11 +76,11 @@
     :aria-labelledby="headingId"
     :data-testid="`${testId}__group`"
   >
-    <component
-      :is="isLabelLink ? 'a' : 'div'"
+    <a
+      v-if="isLabelLink"
       :id="headingId"
-      :href="isLabelLink ? href : undefined"
-      :class="labelClass"
+      :href="href"
+      class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted) cursor-pointer no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
       :data-testid="`${testId}__label`"
       @click="onLabelClick"
     >
@@ -115,9 +91,23 @@
         >{{ prefix }}</span
       >
       <span class="min-w-0 flex-1 truncate">{{ label }}</span>
-    </component>
+    </a>
+    <div
+      v-else
+      :id="headingId"
+      class="flex shrink-0 items-center border border-transparent border-b-(--border-default) mx-(--spacing-md) pb-(--spacing-xs) mb-(--spacing-xs) text-overline-xs text-(--text-muted)"
+      :data-testid="`${testId}__label`"
+    >
+      <span
+        v-if="prefix"
+        class="shrink-0"
+        aria-hidden="true"
+        >{{ prefix }}</span
+      >
+      <span class="min-w-0 flex-1 truncate">{{ label }}</span>
+    </div>
     <ul
-      :class="listClasses"
+      :class="cn('m-0 flex list-none flex-col p-0', attrs.class as string | undefined)"
       role="list"
       :data-testid="testId"
     >
@@ -133,12 +123,12 @@
   >
     <span
       aria-hidden="true"
-      :class="navigationMenuListSelectorClasses"
+      class="pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--webkit-nav-selector) transition-[left,top,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :style="selectorStyle"
       :data-testid="`${testId}__selector`"
     />
     <ul
-      :class="listClasses"
+      :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
       role="list"
       :data-testid="testId"
       :data-open="root.menuOpen.value ? '' : undefined"
@@ -148,7 +138,7 @@
   </div>
   <ul
     v-else
-    :class="listClasses"
+    :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
     role="list"
     :data-testid="testId"
     :data-open="root.menuOpen.value ? '' : undefined"

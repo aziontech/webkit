@@ -32,8 +32,6 @@
 
   const shouldMount = computed(() => props.keepMounted || root.menuPopupMounted.value)
 
-  const portalClasses = computed(() => cn(attrs.class as string | undefined))
-
   const portalLocale = usePortalLocale()
 </script>
 
@@ -43,7 +41,7 @@
     :to="teleportTarget"
   >
     <div
-      :class="portalClasses"
+      :class="cn(attrs.class as string | undefined)"
       :dir="portalLocale.dir"
       :lang="portalLocale.lang"
       :data-testid="testId"

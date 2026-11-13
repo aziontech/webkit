@@ -4,7 +4,6 @@
   import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
-  import { navigationMenuTransitionClasses } from './presets/animations'
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
@@ -18,9 +17,8 @@
   const root = useNavigationMenuRoot()
   const viewportTargetRef = ref<HTMLElement | null>(null)
 
-  const viewportClasses = computed(() =>
-    cn(navigationMenuTransitionClasses.viewport, attrs.class as string | undefined)
-  )
+  const ROOT_CLASS =
+    'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
 
   watch(
     viewportTargetRef,
@@ -33,7 +31,7 @@
 
 <template>
   <div
-    :class="viewportClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
   >
     <div

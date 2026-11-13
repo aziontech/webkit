@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
+  import { cn } from '../../../utils/cn'
   import { resolveHostElement } from './composables/resolve-host-element'
   import {
     useNavigationMenuRoot,
@@ -8,7 +9,6 @@
   } from './composables/use-navigation-menu-context'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
-  import { getNavigationMenuTriggerClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
@@ -60,9 +60,14 @@
     return props.nativeButton ? 'button' : 'div'
   })
 
-  const controlClasses = computed(() =>
-    getNavigationMenuTriggerClasses(isLink.value, attrs.class as string | undefined)
-  )
+  const ROOT_CLASS =
+    'relative z-1 inline-flex cursor-pointer items-center gap-(--spacing-xs) ' +
+    'rounded-(--shape-button) bg-transparent px-(--spacing-sm) py-(--spacing-xs) ' +
+    'no-underline transition-colors duration-moderate-02 ease-in-out motion-reduce:transition-none ' +
+    'text-label-md text-(--text-default) ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) ' +
+    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
+    'data-[popup-open]:text-(--text-default) data-[pressed]:text-(--text-default) data-[active]:text-(--text-default)'
 
   const resolveElement = () => resolveHostElement(controlRef.value)
 
@@ -183,7 +188,7 @@
     v-bind="passthroughAttrs"
     :href="isLink ? href : undefined"
     :type="!isLink && nativeButton ? 'button' : undefined"
-    :class="controlClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :aria-expanded="!isLink ? itemOpen : undefined"
     :aria-haspopup="!isLink ? true : undefined"

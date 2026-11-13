@@ -8,8 +8,7 @@
     useNavigationMenuRoot
   } from './composables/use-navigation-menu-context'
   import { useTransitionStatus } from './composables/use-transition-status'
-  import { navigationMenuTransitionClasses, waitForCloseTransition } from './presets/animations'
-  import { navigationMenuContentPaddingClasses } from './presets/styles'
+  import { waitForCloseTransition } from './presets/animations'
 
   defineOptions({ name: 'NavigationMenuContent', inheritAttrs: false })
 
@@ -39,13 +38,18 @@
 
   const viewportTarget = computed(() => root.viewportTargetEl.value)
 
-  const contentClasses = computed(() =>
-    cn(
-      navigationMenuTransitionClasses.content,
-      navigationMenuContentPaddingClasses,
-      attrs.class as string | undefined
-    )
-  )
+  const ROOT_CLASS =
+    'box-border transition-[opacity,translate] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none ' +
+    'data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:opacity-0 ' +
+    'data-[starting-style]:data-[activation-direction=left]:-translate-x-6 ' +
+    'data-[starting-style]:data-[activation-direction=right]:translate-x-6 ' +
+    'data-[starting-style]:data-[activation-direction=up]:-translate-y-6 ' +
+    'data-[starting-style]:data-[activation-direction=down]:translate-y-6 ' +
+    'data-[ending-style]:data-[activation-direction=left]:translate-x-6 ' +
+    'data-[ending-style]:data-[activation-direction=right]:-translate-x-6 ' +
+    'data-[ending-style]:data-[activation-direction=up]:translate-y-6 ' +
+    'data-[ending-style]:data-[activation-direction=down]:-translate-y-6 ' +
+    'p-(--spacing-md)'
 
   const isExiting = computed(() => !contentOpen.value && mounted.value)
 
@@ -126,7 +130,7 @@
   >
     <div
       ref="contentRef"
-      :class="contentClasses"
+      :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
       :style="contentStyle"
       :data-testid="testId"
       v-bind="contentDataAttrs"

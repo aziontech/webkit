@@ -4,12 +4,12 @@
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import { cn } from '../../../utils/cn'
   import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context'
   import {
     type NavigationMenuRootEmit,
     useNavigationMenuRootState
   } from './composables/use-navigation-menu-root'
-  import { getNavigationMenuRootClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenu', inheritAttrs: false })
 
@@ -49,6 +49,9 @@
   const { t } = useTranslate({ navigationMenu: en.navigationMenu })
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
 
+  const ROOT_CLASS =
+    'relative [--webkit-nav-selector:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'
+
   const internalValue = ref(props.defaultValue)
   const isControlled = computed(() => model.value !== undefined)
   const controlledValue = computed(() => (isControlled.value ? (model.value ?? null) : null))
@@ -71,15 +74,11 @@
   defineExpose({
     unmount: rootState.unmount
   })
-
-  const rootClasses = computed(() =>
-    getNavigationMenuRootClasses(attrs.class as string | undefined)
-  )
 </script>
 
 <template>
   <nav
-    :class="rootClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :aria-label="ariaLabel || t('navigationMenu.label')"
     :data-open="rootState.open.value ? '' : undefined"

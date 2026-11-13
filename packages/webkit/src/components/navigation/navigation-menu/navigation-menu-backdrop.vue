@@ -3,7 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
-  import { navigationMenuBackdropClasses } from './presets/styles'
 
   defineOptions({ name: 'NavigationMenuBackdrop', inheritAttrs: false })
 
@@ -14,9 +13,10 @@
 
   const root = useNavigationMenuRoot()
 
-  const backdropClasses = computed(() =>
-    cn(navigationMenuBackdropClasses, attrs.class as string | undefined)
-  )
+  const ROOT_CLASS =
+    'fixed inset-0 z-40 bg-[color-mix(in_srgb,var(--bg-canvas)_20%,transparent)] ' +
+    'transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none ' +
+    'data-[starting-style]:opacity-0 data-[starting-style]:transition-none data-[ending-style]:opacity-0'
 
   const backdropHidden = computed(() => !root.menuPopupMounted.value)
 
@@ -31,7 +31,7 @@
 <template>
   <div
     :hidden="backdropHidden"
-    :class="backdropClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     v-bind="backdropDataAttrs"
     aria-hidden="true"
