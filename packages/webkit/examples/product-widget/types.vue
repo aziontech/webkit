@@ -16,5 +16,17 @@
         kind="bare"
       />
     </div>
+    <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
+      <ProductWidget
+        name="edge-dns-record"
+        kind="window"
+      />
+    </div>
+    <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
+      <ProductWidget
+        name="edge-dns-record"
+        kind="bare"
+      />
+    </div>
   </div>
 </template>

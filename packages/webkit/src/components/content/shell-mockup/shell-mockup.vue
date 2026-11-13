@@ -209,12 +209,12 @@
   })
 
   function measure() {
-    const box = root.value?.getBoundingClientRect()
-    if (!box?.width) return
+    const host = root.value
+    if (!host?.offsetWidth) return
     const mobile = !(globalThis.matchMedia?.('(min-width: 768px)')?.matches ?? true)
     const width = mobile ? props.mobileWidth : props.width
-    const scale = box.width / width
-    frame.value = { width, height: box.height / scale, scale }
+    const scale = host.offsetWidth / width
+    frame.value = { width, height: host.offsetHeight / scale, scale }
   }
 
   function arm() {
