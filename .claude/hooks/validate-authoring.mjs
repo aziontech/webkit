@@ -10,6 +10,8 @@
 //   - @deprecated with no replacement/version                → name it (deprecation.md)
 //   - a prose comment anywhere under packages/               → API docs only (comments.md)
 //   - a literal UI string in a component template / prop default → locale catalog (webkit-strings.md)
+//   - a composable returning reactive()/a raw ref()/no return type, or leaking a listener,
+//     timer, frame or observer with no onScopeDispose                 (composables.md)
 //
 // Same discipline as validate-tokens.mjs: reconstruct the RESULTING file content, and only
 // block when a check's occurrence count GROWS past the baseline's.
@@ -24,6 +26,7 @@ import {
   scanBuiltInStrings,
   STRING_MESSAGES
 } from './_lib/built-in-strings.mjs'
+import { scanSignatures, SIGNATURE_MESSAGES } from './_lib/signature-checks.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'
@@ -114,6 +117,26 @@ async function main() {
       const added =
         after.filter((found) => found === id).length - before.filter((found) => found === id).length
       if (added > 0) violations.push({ id: `i18n:${id}`, message: STRING_MESSAGES[id], added })
+    }
+  }
+
+  if (inWebkitSrc) {
+    const before = scanSignatures(filePath, baseline)
+    const after = scanSignatures(filePath, result)
+    for (const id of Object.keys(SIGNATURE_MESSAGES)) {
+      const added =
+        after.filter((found) => found.id === id).length -
+        before.filter((found) => found.id === id).length
+      if (added > 0) {
+        const sites = after
+          .filter((found) => found.id === id)
+          .map((found) => `\n      line ${found.line}: ${found.message}`)
+        violations.push({
+          id: `signature:${id}`,
+          message: `${SIGNATURE_MESSAGES[id]}${sites.join('')}`,
+          added
+        })
+      }
     }
   }
 

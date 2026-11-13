@@ -1,5 +1,7 @@
 import accessibleName from './rules/accessible-name.js'
 import authoringStandards from './rules/authoring-standards.js'
+import composableReadonlyReturn from './rules/composable-readonly-return.js'
+import composableScopeCleanup from './rules/composable-scope-cleanup.js'
 import containerNeedsWidth from './rules/container-needs-width.js'
 import headerSearchTrigger from './rules/header-search-trigger.js'
 import menuNodeHref from './rules/menu-node-href.js'
@@ -47,7 +49,9 @@ const rules = {
   'accessible-name': accessibleName,
   'no-dropped-children': noDroppedChildren,
   'no-viewport-height-calc': noViewportHeightCalc,
-  'no-link-in-sentence': noLinkInSentence
+  'no-link-in-sentence': noLinkInSentence,
+  'composable-readonly-return': composableReadonlyReturn,
+  'composable-scope-cleanup': composableScopeCleanup
 }
 
 const FILES = [
@@ -103,7 +107,9 @@ const RECOMMENDED = {
   'accessible-name': 'error',
   'no-dropped-children': 'error',
   'no-viewport-height-calc': 'error',
-  'no-link-in-sentence': 'error'
+  'no-link-in-sentence': 'error',
+  'composable-readonly-return': 'error',
+  'composable-scope-cleanup': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])

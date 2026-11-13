@@ -6,6 +6,7 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
 import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
+import { scanSignatures } from './lib/signature-checks.mjs'
 import {
   EXAMPLE_DATA_DIRS,
   EXAMPLE_DATA_MESSAGES,
@@ -188,6 +189,11 @@ function currentViolations() {
     if (/\.(vue|ts|js)$/.test(rel)) {
       for (const id of scanFile(rel, content)) keys.push(`${rel}::${id}`)
     }
+    for (const found of scanSignatures(abs, content)) {
+      const key = `${rel}::signature:${found.id}`
+      keys.push(key)
+      DETAILS.set(key, `line ${found.line}: ${found.message}`)
+    }
     if (tokenChecksApply(rel)) {
       for (const id of scanTokens(content)) keys.push(`${rel}::token:${id}`)
     }
@@ -277,7 +283,12 @@ if (introduced.length) {
     console.error(`  ${file}`)
     if (id.startsWith('spec:')) {
       console.error(`    [spec] ${id.slice(5)}`)
-    } else if (id.startsWith('direction:') || id.startsWith('clock:') || id.startsWith('layout:')) {
+    } else if (
+      id.startsWith('direction:') ||
+      id.startsWith('clock:') ||
+      id.startsWith('layout:') ||
+      id.startsWith('signature:')
+    ) {
       console.error(`    [${id}] ${DETAILS.get(k) ?? id.slice(id.indexOf(':') + 1)}`)
     } else if (id.startsWith('example-data:')) {
       console.error(`    [${id}] ${EXAMPLE_DATA_MESSAGES[id.slice('example-data:'.length)]}`)

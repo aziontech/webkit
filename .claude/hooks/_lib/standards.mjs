@@ -204,7 +204,9 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' }
+      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'lint', by: 'composable-readonly-return' },
+      { surface: 'lint', by: 'composable-scope-cleanup' }
     ]
   },
   {
