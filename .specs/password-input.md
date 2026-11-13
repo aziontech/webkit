@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 21ddf99c3d79969db16a268720c860e1b6e64969f8faba8e08c606e860935702
+checksum: 382ca16c28002cede5cba743c74b71d74c2fbd4a9f736dc1b4a37a769f5bcf2b
 created: 2026-06-16
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Input Password — Component Spec
@@ -69,7 +69,6 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 
 | Prop           | Type                                            | Default              | Required | JSDoc                                                                                                                                                                                                 |
 | -------------- | ----------------------------------------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `string`                                        | `''`                 | false    | Two-way bound value of the field.                                                                                                                                                                     |
 | `placeholder`  | `string`                                        | `''`                 | false    | Placeholder shown when the field is empty.                                                                                                                                                            |
 | `maxLength`    | `number \| undefined`                           | `undefined`          | false    | Native `maxlength` — maximum number of characters allowed.                                                                                                                                            |
 | `disabled`     | `boolean`                                       | `false`              | false    | Disables interaction and applies disabled tokens. The toggle button inherits the disabled state.                                                                                                      |
@@ -80,11 +79,15 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
 | `monospace`    | `boolean`                                       | `false`              | false    | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`.                                |
 
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
+
 ## Events
 
-| Event               | Payload  | Notes                                               |
-| ------------------- | -------- | --------------------------------------------------- |
-| `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
+_none_
 
 ## Slots
 

@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 5405ffd7f915dfb05dae4ec3072c8a122916da825b555c02e34c629491b28ffe
+checksum: 3f1265c2f9c08c48f27f74b469d838fad6bdfaee0c80cf97ff0ceb91a868ba1f
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Input Text — Component Spec
@@ -70,7 +70,6 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 | Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                   |
 | -------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `string`                         | `''`        | false    | Two-way bound value of the field.                                                                                                                                                                                                                       |
 | `placeholder`  | `string`                         | `''`        | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                              |
 | `type`         | `'text' \| 'email' \| 'number'`  | `'text'`    | false    | Native input type. Restricted to single-line variants the field treats identically.                                                                                                                                                                     |
 | `maxLength`    | `number \| undefined`            | `undefined` | false    | Native `maxlength` — maximum number of characters allowed.                                                                                                                                                                                              |
@@ -83,11 +82,15 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                                                                       |
 | `monospace`    | `boolean`                        | `false`     | false    | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for CLI commands, IDs, tokens and hashes (`data-monospace`).                                                                                                          |
 
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
+
 ## Events
 
-| Event               | Payload  | Notes                                               |
-| ------------------- | -------- | --------------------------------------------------- |
-| `update:modelValue` | `string` | Emitted on native `input` event with the new value. |
+_none_
 
 ## Slots
 

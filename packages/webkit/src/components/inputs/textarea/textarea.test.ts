@@ -101,6 +101,38 @@ describe('Textarea', () => {
       expect(events[1]).toEqual(['second'])
     })
 
+    it('keeps its own value and filled state when no v-model is bound', async () => {
+      const { getByTestId, emitted } = render(Textarea)
+      const control = getByTestId('input-textarea') as HTMLTextAreaElement
+      expect(control.hasAttribute('data-filled')).toBe(false)
+      await fireEvent.update(control, 'notes')
+      await nextTick()
+      expect(control.value).toBe('notes')
+      expect(control.hasAttribute('data-filled')).toBe(true)
+      expect(emitted('update:modelValue')).toEqual([['notes']])
+    })
+
+    it('round-trips a controlled v-model in both directions', async () => {
+      const value = ref('first')
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Textarea, {
+            modelValue: value.value,
+            'onUpdate:modelValue': (next: string) => {
+              value.value = next
+            }
+          })
+      })
+      const { getByTestId } = render(Host)
+      const control = getByTestId('input-textarea') as HTMLTextAreaElement
+      expect(control.value).toBe('first')
+      await fireEvent.update(control, 'typed')
+      expect(value.value).toBe('typed')
+      value.value = 'from parent'
+      await nextTick()
+      expect(control.value).toBe('from parent')
+    })
+
     it('blocks user input while disabled by marking the control natively disabled', () => {
       // The component relies on the native `disabled` attribute to stop real user
       // typing (programmatic value dispatch bypasses that guard, so asserting a

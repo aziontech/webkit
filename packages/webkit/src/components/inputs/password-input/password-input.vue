@@ -14,8 +14,6 @@
   })
 
   interface Props {
-    /** Two-way bound value of the field. */
-    modelValue?: string
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Native maxlength — maximum number of characters allowed. */
@@ -37,7 +35,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: '',
     placeholder: '',
     maxLength: undefined,
     disabled: false,
@@ -49,9 +46,8 @@
     monospace: false
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: string]
-  }>()
+  /** Two-way bound value of the field. */
+  const model = defineModel<string>({ default: '' })
 
   defineSlots<{
     iconLeft(): unknown
@@ -98,7 +94,7 @@
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
-    emit('update:modelValue', target.value)
+    model.value = target.value
   }
 
   const toggleVisible = () => {
@@ -148,7 +144,7 @@
       :type="visible ? 'text' : 'password'"
       :id="controlId"
       :aria-describedby="describedBy"
-      :value="modelValue"
+      :value="model"
       :placeholder="placeholder"
       :maxlength="maxLength"
       :autocomplete="autocomplete"

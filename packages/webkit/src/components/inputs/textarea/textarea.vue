@@ -11,8 +11,6 @@
   type TextareaResize = 'vertical' | 'horizontal' | 'both' | 'none'
 
   interface Props {
-    /** Bound value (v-model). */
-    modelValue?: string
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Disables interaction and applies disabled tokens. */
@@ -30,7 +28,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: '',
     placeholder: '',
     disabled: false,
     readonly: false,
@@ -40,9 +37,8 @@
     monospace: false
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: string]
-  }>()
+  /** Bound value (v-model). */
+  const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
   const textareaRef = ref<globalThis.HTMLTextAreaElement | null>(null)
@@ -62,7 +58,7 @@
   })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
-  const isFilled = computed(() => props.modelValue.length > 0)
+  const isFilled = computed(() => (model.value ?? '').length > 0)
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }
@@ -73,7 +69,7 @@
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLTextAreaElement
-    emit('update:modelValue', target.value)
+    model.value = target.value
   }
 
   defineExpose({
@@ -90,7 +86,7 @@
     :id="controlId"
     :aria-describedby="describedBy"
     style="width: 100%"
-    :value="modelValue"
+    :value="model"
     :placeholder="placeholder"
     :disabled="isDisabled"
     :readonly="readonly"

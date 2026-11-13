@@ -13,8 +13,6 @@
   })
 
   interface Props {
-    /** Two-way bound value of the field. */
-    modelValue?: string
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Native input type. Restricted to plain-text variants the field treats identically. */
@@ -46,7 +44,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: '',
     placeholder: '',
     size: 'medium',
     disabled: false,
@@ -60,9 +57,8 @@
     spellcheck: undefined
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: string]
-  }>()
+  /** Two-way bound value of the field. */
+  const model = defineModel<string>({ default: '' })
 
   defineSlots<{
     iconLeft(): unknown
@@ -110,7 +106,7 @@
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
-    emit('update:modelValue', target.value)
+    model.value = target.value
   }
 
   const handleChromeMouseDown = (event: globalThis.MouseEvent) => {
@@ -151,7 +147,7 @@
     <input
       ref="inputRef"
       :type="type"
-      :value="modelValue"
+      :value="model"
       :placeholder="placeholder"
       :maxlength="maxLength"
       :autocomplete="autocomplete"

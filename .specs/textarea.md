@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 8f65a3799ef47f1b124101943dbd5759c91baa1b399d83d229c6f894d1dff394
+checksum: 6fb9328c5fd6af7619e17a74650f549882b79d9964588b438425a109b12e357a
 created: 2026-06-23
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Textarea — Component Spec
@@ -73,7 +73,6 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 
 | Prop          | Type                                             | Default      | Required | JSDoc                                                                                                                                                                                                                                                                |
 | ------------- | ------------------------------------------------ | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`  | `string`                                         | `''`         | false    | Bound value (v-model).                                                                                                                                                                                                                                               |
 | `placeholder` | `string`                                         | `''`         | false    | Placeholder shown when the field is empty.                                                                                                                                                                                                                           |
 | `disabled`    | `boolean`                                        | `false`      | false    | Disables interaction and applies disabled tokens.                                                                                                                                                                                                                    |
 | `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
@@ -82,11 +81,15 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior.                                                                                                                                                      |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
 
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                     |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The field value via `defineModel`; updates on every native `input` event. |
+
 ## Events
 
-| Event               | Payload  | Notes           |
-| ------------------- | -------- | --------------- |
-| `update:modelValue` | `string` | v-model update. |
+_none_
 
 ## Slots
 

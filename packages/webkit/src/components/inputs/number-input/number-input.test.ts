@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/number-input/default.vue'
 import Disabled from '../../../../examples/number-input/disabled.vue'
@@ -102,6 +103,43 @@ describe('NumberInput', () => {
 
       const events = emitted()['update:modelValue']
       expect(events[events.length - 1]).toEqual([0])
+    })
+  })
+
+  describe('uncontrolled and controlled v-model', () => {
+    it('keeps its own value across spinner clicks when no v-model is bound', async () => {
+      const { getByTestId, getByLabelText, emitted } = render(NumberInput, {
+        props: { step: 2 }
+      })
+      await fireEvent.click(getByLabelText('Increment'))
+      await fireEvent.click(getByLabelText('Increment'))
+      await nextTick()
+      expect(emitted()['update:modelValue']).toEqual([[2], [4]])
+      expect((getByTestId('number-input') as HTMLInputElement).value).toBe('4')
+    })
+
+    it('round-trips a controlled v-model, clamped on the way out', async () => {
+      const value = ref(3)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(NumberInput, {
+            modelValue: value.value,
+            max: 10,
+            'onUpdate:modelValue': (next: number) => {
+              value.value = next
+            }
+          })
+      })
+      const { getByTestId, getByLabelText } = render(Host)
+      const input = getByTestId('number-input') as HTMLInputElement
+      expect(input.value).toBe('3')
+      await fireEvent.click(getByLabelText('Increment'))
+      expect(value.value).toBe(4)
+      await fireEvent.update(input, '42')
+      expect(value.value).toBe(10)
+      value.value = 6
+      await nextTick()
+      expect(input.value).toBe('6')
     })
   })
 

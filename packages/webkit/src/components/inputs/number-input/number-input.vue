@@ -14,8 +14,6 @@
   })
 
   interface Props {
-    /** v-model value (always numeric; cleared input falls back to `min ?? 0`). */
-    modelValue?: number
     /** Text shown when the input is empty. */
     placeholder?: string
     /** Size token; affects height, padding, and typography. */
@@ -39,7 +37,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: 0,
     placeholder: '',
     size: 'medium',
     disabled: false,
@@ -53,9 +50,11 @@
   })
 
   const emit = defineEmits<{
-    'update:modelValue': [value: number]
     change: [value: number]
   }>()
+
+  /** v-model value (always numeric; cleared input falls back to `min ?? 0`). */
+  const model = defineModel<number>({ default: 0 })
 
   defineSlots<{
     prefix(): unknown
@@ -104,7 +103,7 @@
   }
 
   const handleInput = (event: Event) => {
-    emit('update:modelValue', readValue(event))
+    model.value = readValue(event)
   }
 
   const handleChange = (event: Event) => {
@@ -115,12 +114,12 @@
 
   const handleIncrement = () => {
     if (!canInteract.value) return
-    emit('update:modelValue', clamp(props.modelValue + props.step))
+    model.value = clamp(model.value + props.step)
   }
 
   const handleDecrement = () => {
     if (!canInteract.value) return
-    emit('update:modelValue', clamp(props.modelValue - props.step))
+    model.value = clamp(model.value - props.step)
   }
 </script>
 
@@ -155,7 +154,7 @@
       type="number"
       :id="controlId"
       :aria-describedby="describedBy"
-      :value="modelValue"
+      :value="model"
       :placeholder="placeholder"
       :disabled="isDisabled"
       :readonly="readonly"

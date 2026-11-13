@@ -78,6 +78,36 @@ describe('Input', () => {
       expect(events).toHaveLength(2)
       expect(events[1][0]).toBe('ab')
     })
+
+    it('keeps its own value when no v-model is bound', async () => {
+      const { getByTestId, emitted } = render(Input)
+      const input = getByTestId('input') as HTMLInputElement
+      await fireEvent.update(input, 'edge')
+      await nextTick()
+      expect(input.value).toBe('edge')
+      expect(emitted()['update:modelValue']).toEqual([['edge']])
+    })
+
+    it('round-trips a controlled v-model in both directions', async () => {
+      const value = ref('first')
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Input, {
+            modelValue: value.value,
+            'onUpdate:modelValue': (next: string) => {
+              value.value = next
+            }
+          })
+      })
+      const { getByTestId } = render(Host)
+      const input = getByTestId('input') as HTMLInputElement
+      expect(input.value).toBe('first')
+      await fireEvent.update(input, 'typed')
+      expect(value.value).toBe('typed')
+      value.value = 'from parent'
+      await nextTick()
+      expect(input.value).toBe('from parent')
+    })
   })
 
   describe('disabled', () => {

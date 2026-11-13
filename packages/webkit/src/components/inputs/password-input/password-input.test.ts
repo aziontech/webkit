@@ -87,6 +87,36 @@ describe('PasswordInput', () => {
     expect(emitted()['update:modelValue']).toEqual([['AbC123!@#']])
   })
 
+  it('keeps its own value when no v-model is bound', async () => {
+    const { getByTestId, emitted } = render(PasswordInput)
+    const input = getByTestId('password-input') as HTMLInputElement
+    await fireEvent.update(input, 'secret')
+    await nextTick()
+    expect(input.value).toBe('secret')
+    expect(emitted()['update:modelValue']).toEqual([['secret']])
+  })
+
+  it('round-trips a controlled v-model in both directions', async () => {
+    const value = ref('first')
+    const Host = defineComponent({
+      setup: () => () =>
+        h(PasswordInput, {
+          modelValue: value.value,
+          'onUpdate:modelValue': (next: string) => {
+            value.value = next
+          }
+        })
+    })
+    const { getByTestId } = render(Host)
+    const input = getByTestId('password-input') as HTMLInputElement
+    expect(input.value).toBe('first')
+    await fireEvent.update(input, 'typed')
+    expect(value.value).toBe('typed')
+    value.value = 'from parent'
+    await nextTick()
+    expect(input.value).toBe('from parent')
+  })
+
   // --- disabled suppresses interaction ---
 
   it('marks the input natively disabled so the field cannot be edited', () => {

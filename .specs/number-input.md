@@ -7,9 +7,9 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 00c8af6aee7930f34cabdbf317ca2b46ab4e894693c492fa8818b40cc9371f02
+checksum: 1fa3f7cfa8d65e281ed4d7d3e6cfd966a88bf53d1904b14d8199bff7ac398ef3
 created: 2026-06-22
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Input Number — Component Spec
@@ -59,32 +59,36 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 
 ## Props
 
-| Prop          | Type                             | Default     | Required | JSDoc                                                                   |
-| ------------- | -------------------------------- | ----------- | -------- | ----------------------------------------------------------------------- |
-| `modelValue`  | `number`                         | `0`         | false    | v-model value (always numeric; cleared input falls back to `min ?? 0`). |
-| `placeholder` | `string`                         | `''`        | false    | Text shown when the input is empty.                                     |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height, padding, and typography.                    |
-| `disabled`    | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                       |
-| `readonly`    | `boolean`                        | `false`     | false    | Marks the field as read-only; spinner buttons are inert.                |
-| `invalid`     | `boolean`                        | `false`     | false    | Applies the invalid border/ring tokens.                                 |
-| `required`    | `boolean`                        | `false`     | false    | Marks the field as required for assistive tech.                         |
-| `min`         | `number \| undefined`            | `undefined` | false    | Minimum allowed value; spinner stops at this bound.                     |
-| `max`         | `number \| undefined`            | `undefined` | false    | Maximum allowed value; spinner stops at this bound.                     |
-| `step`        | `number`                         | `1`         | false    | Increment used by the spinner buttons and arrow keys.                   |
-| `showButtons` | `boolean`                        | `true`      | false    | Renders the chevron-up/chevron-down spinner controls.                   |
+| Prop          | Type                             | Default     | Required | JSDoc                                                    |
+| ------------- | -------------------------------- | ----------- | -------- | -------------------------------------------------------- |
+| `placeholder` | `string`                         | `''`        | false    | Text shown when the input is empty.                      |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height, padding, and typography.     |
+| `disabled`    | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.        |
+| `readonly`    | `boolean`                        | `false`     | false    | Marks the field as read-only; spinner buttons are inert. |
+| `invalid`     | `boolean`                        | `false`     | false    | Applies the invalid border/ring tokens.                  |
+| `required`    | `boolean`                        | `false`     | false    | Marks the field as required for assistive tech.          |
+| `min`         | `number \| undefined`            | `undefined` | false    | Minimum allowed value; spinner stops at this bound.      |
+| `max`         | `number \| undefined`            | `undefined` | false    | Maximum allowed value; spinner stops at this bound.      |
+| `step`        | `number`                         | `1`         | false    | Increment used by the spinner buttons and arrow keys.    |
+| `showButtons` | `boolean`                        | `true`      | false    | Renders the chevron-up/chevron-down spinner controls.    |
+
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                   |
+| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | The value via `defineModel`, always numeric and clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`. |
 
 ## Events
 
-| Event               | Payload  | Notes                                                    |
-| ------------------- | -------- | -------------------------------------------------------- |
-| `update:modelValue` | `number` | Emitted on every value change (typing or spinner).       |
-| `change`            | `number` | Emitted when the user commits the value (blur or Enter). |
+| Event    | Payload  | Notes                                                    |
+| -------- | -------- | -------------------------------------------------------- |
+| `change` | `number` | Emitted when the user commits the value (blur or Enter). |
 
 ## Slots
 
 | Slot     | Scope | Notes                                                                    |
 | -------- | ----- | ------------------------------------------------------------------------ |
-| `prefix` | —     | Content rendered before the input (e.g. `$`).                           |
+| `prefix` | —     | Content rendered before the input (e.g. `$`).                            |
 | `suffix` | —     | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States
