@@ -12,6 +12,7 @@
   import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import ProductFirstUse from '../../components/home/ProductFirstUse.vue'
   import ArgumentListCell from '../../components/list/ArgumentListCell.vue'
   import ColumnsButton from '../../components/list/ColumnsButton.vue'
   import ConfirmDialog from '../../components/list/ConfirmDialog.vue'
@@ -27,6 +28,7 @@
   import { DATE_PRESETS, formatDateRange, matchDate } from '../../lib/behavior/filter-bar'
   import { useListFilters } from '../../lib/behavior/list-state'
   import { FIT_COLUMN, TAG_COLUMN_WIDE } from '../../lib/behavior/table-columns'
+  import { productFirstUse } from '../../lib/data/product-empty-states'
   import {
     purgeLayerOptions,
     PURGES,
@@ -34,11 +36,16 @@
     purgeTypeOptions
   } from '../../lib/data/real-time-purge'
   import { addCreatedResource, createdRowsFor } from '../../lib/state/created-resources'
+  import { useSampleMode } from '../../lib/state/sample-mode'
   import { tenancyRows } from '../../lib/state/tenancy-scope'
 
   const purges = ref([...createdRowsFor('real-time-purge'), ...PURGES])
 
   const scopedPurges = computed(() => tenancyRows(purges.value, 'real-time-purge', PURGES))
+
+  const { accountEmpty } = useSampleMode()
+  const firstUse = productFirstUse('real-time-purge')
+  const showFirstUse = computed(() => accountEmpty.value && scopedPurges.value.length === 0)
 
   const columns = [
     {
@@ -77,7 +84,7 @@
     },
     {
       id: 'author',
-      label: 'Last Editor',
+      label: 'Author',
       kind: 'options',
       options: authorOptions.value,
       match: (purge, values) => values.includes(purge.author)
@@ -101,9 +108,7 @@
     refresh
   } = useListFilters(filterFields, scopedPurges, { pageSize: 10 })
 
-  const filtering = computed(() =>
-    Object.values(filters.value).some((values) => values?.length)
-  )
+  const filtering = computed(() => Object.values(filters.value).some((values) => values?.length))
 
   const tableRef = ref(null)
 
@@ -163,11 +168,16 @@
     active="real-time-purge"
     :breadcrumb="[{ label: 'Real-Time Purge' }]"
   >
-    <main class="layout-column flex min-h-full flex-col">
+    <main
+      class="flex min-h-full flex-col"
+      :class="showFirstUse ? 'layout-column-focused' : 'layout-column'"
+    >
       <PageHeading
+        v-if="!showFirstUse"
         size="medium"
         title="Real-Time Purge"
         description="Evict cached content from every edge location. The history keeps the purges of the last 30 days."
+        :documentation="firstUse.learnMore.href"
       >
         <template #actions>
           <HeadingAction
@@ -179,7 +189,17 @@
         </template>
       </PageHeading>
 
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <div
+        v-if="showFirstUse"
+        class="my-auto flex w-full flex-col py-(--spacing-xl)"
+      >
+        <ProductFirstUse :product="firstUse" />
+      </div>
+
+      <section
+        v-else
+        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+      >
         <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
           <ControlsHeader v-if="scopedPurges.length">
             <FilterButton
@@ -312,7 +332,7 @@
                       @select="(event, action) => onRowAction(event, action, row)"
                     >
                       <Dropdown.Trigger>
-                        <Tooltip text="Actions">
+                        <Tooltip text="Row actions">
                           <IconButton
                             icon="pi pi-ellipsis-h"
                             kind="outlined"
@@ -349,7 +369,9 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      :title="filtering ? 'No purges match these filters' : 'No purges match this search'"
+                      :title="
+                        filtering ? 'No purges match these filters' : 'No purges match this search'
+                      "
                       :description="
                         filtering
                           ? 'Clear the filters to see the whole 30-day history.'

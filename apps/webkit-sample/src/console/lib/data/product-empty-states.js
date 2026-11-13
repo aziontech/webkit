@@ -698,6 +698,37 @@ export const productEmptyStates = [
       label: 'How Data Stream works on Azion',
       href: 'https://www.azion.com/en/documentation/products/observe/data-stream/'
     }
+  },
+  {
+    id: 'real-time-purge',
+    label: 'Real-Time Purge',
+    icon: 'ai ai-real-time-purge',
+    figure: 'cache-ttl',
+    headline: 'Run your first purge',
+    lead: 'Evict a URL, a cache key, or a wildcard expression from every edge location in seconds.',
+    unit: 'purge',
+    methods: [
+      {
+        id: 'create',
+        title: 'New purge',
+        description: 'Pick the type, the cache layer and the arguments to evict.',
+        action: 'Create',
+        primary: true,
+        icon: 'pi pi-plus',
+        route: { path: '/real-time-purge/new' }
+      },
+      {
+        id: 'api',
+        title: 'Via CLI or API',
+        description: 'Purge from your deploy pipeline right after a release goes out.',
+        command: 'azion purge --urls https://www.example.com/styles.css',
+        icon: 'ai ai-azion-cli'
+      }
+    ],
+    learnMore: {
+      label: 'How Real-Time Purge works on Azion',
+      href: 'https://www.azion.com/en/documentation/products/build/edge-application/real-time-purge/'
+    }
   }
 ]
 
