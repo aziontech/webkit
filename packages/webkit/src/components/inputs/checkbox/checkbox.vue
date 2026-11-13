@@ -10,8 +10,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting; update:modelValue sends the same type. */
-      modelValue?: TModel
       /** Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). */
       value?: unknown
       /** When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). */
@@ -30,7 +28,6 @@
       tabindex?: number
     }>(),
     {
-      modelValue: undefined,
       value: undefined,
       binary: false,
       indeterminate: false,
@@ -42,9 +39,8 @@
     }
   )
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: TModel]
-  }>()
+  /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting; update:modelValue sends the same type. */
+  const model = defineModel<TModel, string, TModel, TModel>({ default: undefined })
 
   const attrs = useAttrs()
 
@@ -75,14 +71,14 @@
 
   const isChecked = computed(() => {
     if (props.binary) {
-      return Boolean(props.modelValue)
+      return Boolean(model.value)
     }
 
-    if (Array.isArray(props.modelValue)) {
-      return props.modelValue.includes(props.value)
+    if (Array.isArray(model.value)) {
+      return model.value.includes(props.value)
     }
 
-    return props.modelValue === props.value
+    return model.value === props.value
   })
 
   const dataState = computed(() => {
@@ -96,11 +92,11 @@
     }
 
     if (props.binary) {
-      emit('update:modelValue', !props.modelValue as TModel)
+      model.value = !model.value as TModel
       return
     }
 
-    const current = Array.isArray(props.modelValue) ? [...props.modelValue] : []
+    const current = Array.isArray(model.value) ? [...model.value] : []
     const index = current.indexOf(props.value)
 
     if (index === -1) {
@@ -109,7 +105,7 @@
       current.splice(index, 1)
     }
 
-    emit('update:modelValue', current as TModel)
+    model.value = current as TModel
   }
 </script>
 

@@ -2,6 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/switch/default.vue'
 import Disabled from '../../../../examples/switch/disabled.vue'
@@ -128,6 +129,61 @@ describe('Switch', () => {
       await fireEvent.click(getByTestId('input-switch'))
 
       expect(emitted()['update:modelValue'][0]).toEqual([false])
+    })
+  })
+
+  describe('v-model', () => {
+    it('toggles its own state when unbound (uncontrolled)', async () => {
+      const { getByTestId, emitted } = render(Switch, {
+        attrs: { 'aria-label': 'Toggle setting' }
+      })
+      const root = getByTestId('input-switch')
+
+      expect(root.getAttribute('aria-checked')).toBe('false')
+      await fireEvent.click(root)
+      expect(root.getAttribute('aria-checked')).toBe('true')
+      await fireEvent.click(root)
+      expect(root.getAttribute('aria-checked')).toBe('false')
+      expect(emitted()['update:modelValue']).toEqual([[true], [false]])
+    })
+
+    it('round-trips the bound value with the parent (controlled)', async () => {
+      const on = ref(false)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Switch, {
+            'aria-label': 'Toggle setting',
+            modelValue: on.value,
+            'onUpdate:modelValue': (next: boolean) => {
+              on.value = next
+            }
+          })
+      })
+      const { getByTestId } = render(Host)
+      const root = getByTestId('input-switch')
+
+      await fireEvent.click(root)
+      expect(on.value).toBe(true)
+      expect(root.getAttribute('aria-checked')).toBe('true')
+
+      on.value = false
+      await nextTick()
+      expect(root.getAttribute('aria-checked')).toBe('false')
+    })
+
+    it('stays on the parent value when a controlled parent refuses the change', async () => {
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Switch, {
+            'aria-label': 'Toggle setting',
+            modelValue: false,
+            'onUpdate:modelValue': () => {}
+          })
+      })
+      const { getByTestId } = render(Host)
+
+      await fireEvent.click(getByTestId('input-switch'))
+      expect(getByTestId('input-switch').getAttribute('aria-checked')).toBe('false')
     })
   })
 

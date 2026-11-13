@@ -12,8 +12,6 @@
   export type SwitchType = 'default' | 'privacy'
 
   interface Props {
-    /** Toggled-on state. Bind with `v-model`. */
-    modelValue?: boolean
     /** Visual variant. Privacy renders a lock icon inside the handle. */
     kind?: SwitchType
     /** Forces the focused visual state regardless of keyboard focus. */
@@ -23,15 +21,13 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: false,
     kind: 'default',
     focused: false,
     disabled: false
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: boolean]
-  }>()
+  /** Toggled-on state. Bind with `v-model`. */
+  const model = defineModel<boolean>({ default: false })
 
   const attrs = useAttrs()
 
@@ -58,7 +54,7 @@
     return rest
   })
 
-  const isChecked = computed(() => props.modelValue === true)
+  const isChecked = computed(() => model.value === true)
 
   const buttonRef = ref<globalThis.HTMLButtonElement | null>(null)
 
@@ -73,7 +69,7 @@
 
   function handleToggle() {
     if (isDisabled.value) return
-    emit('update:modelValue', !isChecked.value)
+    model.value = !isChecked.value
   }
 
   function handleKeydown(event: globalThis.KeyboardEvent) {

@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/checkbox/default.vue'
 import Disabled from '../../../../examples/checkbox/disabled.vue'
@@ -75,6 +75,56 @@ describe('Checkbox', () => {
       await fireEvent.click(getByTestId('input-checkbox__input'))
 
       expect(emitted()['update:modelValue'][0]).toEqual([['b']])
+    })
+  })
+
+  describe('v-model', () => {
+    it('toggles its own checked state when unbound (uncontrolled)', async () => {
+      const { getByTestId, emitted } = render(Checkbox, { props: { binary: true } })
+      const root = getByTestId('input-checkbox')
+
+      expect(root.getAttribute('data-state')).toBe('unchecked')
+      await fireEvent.click(getByTestId('input-checkbox__input'))
+      expect(root.getAttribute('data-state')).toBe('checked')
+      await fireEvent.click(getByTestId('input-checkbox__input'))
+      expect(root.getAttribute('data-state')).toBe('unchecked')
+      expect(emitted()['update:modelValue']).toEqual([[true], [false]])
+    })
+
+    it('round-trips a bound array with the parent (controlled)', async () => {
+      const tags = ref<string[]>(['edge'])
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Checkbox, {
+            value: 'cache',
+            modelValue: tags.value,
+            'onUpdate:modelValue': (next: string[]) => {
+              tags.value = next
+            }
+          })
+      })
+      const { getByTestId } = render(Host)
+      const root = getByTestId('input-checkbox')
+
+      expect(root.getAttribute('data-state')).toBe('unchecked')
+      await fireEvent.click(getByTestId('input-checkbox__input'))
+      expect(tags.value).toEqual(['edge', 'cache'])
+      expect(root.getAttribute('data-state')).toBe('checked')
+
+      tags.value = ['edge']
+      await nextTick()
+      expect(root.getAttribute('data-state')).toBe('unchecked')
+    })
+
+    it('stays on the parent value when a controlled parent refuses the change', async () => {
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Checkbox, { binary: true, modelValue: false, 'onUpdate:modelValue': () => {} })
+      })
+      const { getByTestId } = render(Host)
+
+      await fireEvent.click(getByTestId('input-checkbox__input'))
+      expect(getByTestId('input-checkbox').getAttribute('data-state')).toBe('unchecked')
     })
   })
 

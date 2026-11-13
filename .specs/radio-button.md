@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: b3e4337fcc4f871d4329f912adbd16a17f3d0ccd42eb76915a683daa7779b81e
+checksum: b6e19632dface8834b68652ba2f4b4671b4c362ccf6961c5e0ce8e95e9c7bec1
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Radio Button — Component Spec
@@ -77,19 +77,22 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Props
 
-| Prop         | Type      | Default     | Required | JSDoc                                               |
-| ------------ | --------- | ----------- | -------- | --------------------------------------------------- |
-| `modelValue` | `string`  | `undefined` | false    | Selected value for v-model.                         |
-| `value`      | `string`  | `undefined` | false    | Option value for this radio instance.               |
-| `name`       | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
-| `disabled`   | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
-| `inputId`    | `string`  | `undefined` | false    | id for the native input; links label to control.    |
+| Prop       | Type      | Default     | Required | JSDoc                                               |
+| ---------- | --------- | ----------- | -------- | --------------------------------------------------- |
+| `value`    | `string`  | `undefined` | false    | Option value for this radio instance.               |
+| `name`     | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
+| `disabled` | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
+| `inputId`  | `string`  | `undefined` | false    | id for the native input; links label to control.    |
+
+## v-model
+
+| Model     | Type     | Default     | Emits               | Notes                                                                                                         |
+| --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `undefined` | `update:modelValue` | Selected value via `defineModel`; set to this radio's `value` when it is selected. Uncontrolled when unbound. |
 
 ## Events
 
-| Event               | Payload  | Notes    |
-| ------------------- | -------- | -------- |
-| `update:modelValue` | `string` | v-model. |
+_none_
 
 ## Slots
 

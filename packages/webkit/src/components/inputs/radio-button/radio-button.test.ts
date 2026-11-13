@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/radio-button/default.vue'
 import Disabled from '../../../../examples/radio-button/disabled.vue'
@@ -94,6 +95,45 @@ describe('RadioButton', () => {
 
     const events = emitted()['update:modelValue']
     expect(events[0]).toEqual(['option-x'])
+  })
+
+  it('checks itself when selected unbound (uncontrolled)', async () => {
+    const { getByTestId, emitted } = render(RadioButton, { props: { value: 'a' } })
+
+    expect(getByTestId('input-radio-button').getAttribute('data-checked')).toBeNull()
+    await fireEvent.change(getByTestId('input-radio-button__input'))
+    expect(getByTestId('input-radio-button').getAttribute('data-checked')).toBe('true')
+    expect(emitted()['update:modelValue']).toEqual([['a']])
+  })
+
+  it('round-trips a shared v-model across a group of radios (controlled)', async () => {
+    const choice = ref('a')
+    const Host = defineComponent({
+      setup: () => () =>
+        ['a', 'b'].map((value) =>
+          h(RadioButton, {
+            value,
+            name: 'group',
+            'data-testid': `radio-${value}`,
+            modelValue: choice.value,
+            'onUpdate:modelValue': (next: string | undefined) => {
+              if (next) choice.value = next
+            }
+          })
+        )
+    })
+    const { getByTestId } = render(Host)
+
+    expect(getByTestId('radio-a').getAttribute('data-checked')).toBe('true')
+    await fireEvent.change(getByTestId('radio-b__input'))
+    expect(choice.value).toBe('b')
+    expect(getByTestId('radio-a').getAttribute('data-checked')).toBeNull()
+    expect(getByTestId('radio-b').getAttribute('data-checked')).toBe('true')
+
+    choice.value = 'a'
+    await nextTick()
+    expect(getByTestId('radio-a').getAttribute('data-checked')).toBe('true')
+    expect(getByTestId('radio-b').getAttribute('data-checked')).toBeNull()
   })
 
   it('does NOT emit update:modelValue when disabled', async () => {

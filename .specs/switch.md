@@ -7,9 +7,9 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 9fc4fb5171fe6b6e07a7ee65ca7c61ff6801168a21074eea8069576aa8cc773a
+checksum: 6b941308b6ca639cc0a73c1f0bff613a07eaf21a400c13e8b7e71f2a6beaa533
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Switch — Component Spec
@@ -65,18 +65,21 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 ## Props
 
-| Prop         | Type                     | Default     | Required | JSDoc                                                                                              |
-| ------------ | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------- |
-| `modelValue` | `boolean`                | `false`     | false    | Toggled-on state. Bind with `v-model="value"`. Mirrors the Figma checked/on variant.               |
-| `kind`       | `'default' \| 'privacy'` | `'default'` | false    | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on).   |
-| `focused`    | `boolean`                | `false`     | false    | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
-| `disabled`   | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                              |
+| Prop       | Type                     | Default     | Required | JSDoc                                                                                              |
+| ---------- | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `kind`     | `'default' \| 'privacy'` | `'default'` | false    | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on).   |
+| `focused`  | `boolean`                | `false`     | false    | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
+| `disabled` | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                              |
+
+## v-model
+
+| Model     | Type      | Default | Emits               | Notes                                                                                                                                          |
+| --------- | --------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `boolean` | `false` | `update:modelValue` | Toggled-on state via `defineModel`. Mirrors the Figma checked/on variant. Emitted when the user toggles the switch. Uncontrolled when unbound. |
 
 ## Events
 
-| Event               | Payload   | Notes                                                            |
-| ------------------- | --------- | ---------------------------------------------------------------- |
-| `update:modelValue` | `boolean` | Emitted when the user toggles the switch. Paired with `v-model`. |
+_none_
 
 ## Slots
 

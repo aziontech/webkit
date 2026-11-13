@@ -11,8 +11,6 @@
   })
 
   interface Props {
-    /** Selected value for v-model. */
-    modelValue?: string
     /** Option value for this radio instance. */
     value?: string
     /** HTML name shared across a mutually exclusive group. */
@@ -24,16 +22,14 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: undefined,
     value: undefined,
     name: undefined,
     disabled: false,
     inputId: undefined
   })
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: string | undefined]
-  }>()
+  /** Selected value for v-model. */
+  const model = defineModel<string | undefined>()
 
   const attrs = useAttrs()
 
@@ -62,14 +58,14 @@
     return rest
   })
 
-  const isChecked = computed(() => props.modelValue === props.value)
+  const isChecked = computed(() => model.value === props.value)
 
   const handleChange = () => {
     if (isDisabled.value) {
       return
     }
 
-    emit('update:modelValue', props.value)
+    model.value = props.value
   }
 
   const sharedClasses = [

@@ -4,9 +4,9 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: b974947ef2d3a6f315156f44c8d793b7f08cca2735dc147f5b0f7989f59df77a
+checksum: edcfdc3007a5dd3d7aa5323f36fdf027cb7bab59dc20950d6ac1beaf79905938
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Checkbox — Component Spec
@@ -64,7 +64,6 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 | Prop            | Type      | Default     | Required | JSDoc                                                                                                                 |
 | --------------- | --------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`    | `TModel`  | `undefined` | false    | Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting.           |
 | `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array).            |
 | `binary`        | `boolean` | `false`     | false    | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing).                                       |
 | `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
@@ -76,11 +75,15 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 **Generic.** The component is generic over `TModel` (default `unknown`), the type of the bound `modelValue`: `v-model` on a `Ref<boolean>` (with `binary`) or a `Ref<string[]>` (with `value`) sends `update:modelValue` as that same type, so a handler needs no narrowing. Bind the shape the mode emits: a boolean in `binary` mode, an array otherwise.
 
+## v-model
+
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                |
+| --------- | -------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. Fires on activation with the next boolean (binary mode) or the next array (every other mode). Uncontrolled when unbound. |
+
 ## Events
 
-| Event               | Payload  | Notes                                                                                                |
-| ------------------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| `update:modelValue` | `TModel` | Fires on activation. Payload is the next boolean (binary mode) or the next array (every other mode). |
+_none_
 
 ## Slots
 
