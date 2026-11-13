@@ -1,0 +1,65 @@
+name: Visual bug
+description: Report a component or block that looks wrong (color, spacing, overflow, a missing focus ring) in the docs site or a product.
+title: 'visual: <component> <what looks wrong>'
+labels: ['visual-bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A visual bug is a component or a block that does not look the way it was designed. An
+        agent reproduces it on the docs site, fixes it, and attaches the before and after images
+        (the `visual-baseline-review` page) to the pull request for you to approve. To ask for a
+        new look on purpose, use **Change a component**.
+  - type: input
+    id: component
+    attributes:
+      label: Component or block
+      description: The name as the docs site shows it (e.g. `button`, `platform/auth/login`).
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Example or page URL
+      description: The docs page or example where you see it (`/components/<name>`, `/example?path=<name>/<file>`), or the product screen.
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      multiple: true
+      options:
+        - light
+        - dark
+    validations:
+      required: true
+  - type: input
+    id: viewport
+    attributes:
+      label: Viewport
+      description: Window width in pixels, and the browser when it matters.
+      placeholder: 390 px, Safari 19
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What it should look like. A Figma link helps.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual
+      description: What it looks like instead.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag the image here.
+    validations:
+      required: true

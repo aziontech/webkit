@@ -18,6 +18,14 @@ body:
       placeholder: date-picker
     validations:
       required: true
+  - type: input
+    id: figma
+    attributes:
+      label: Figma URL
+      description: The Figma frame of the design, if there is one. With a frame, the spec is drafted from the design (`/spec-create --figma`); without one, from the intent and the benchmarks.
+      placeholder: https://www.figma.com/design/<file>/<name>?node-id=<id>
+    validations:
+      required: false
   - type: textarea
     id: intent
     attributes:
@@ -67,6 +75,6 @@ body:
     id: notes
     attributes:
       label: Notes
-      description: Figma link, constraints, components it should reuse or replace.
+      description: Constraints, components it should reuse or replace. Put the Figma link in the Figma URL field.
     validations:
       required: false

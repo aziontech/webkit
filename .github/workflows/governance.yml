@@ -22,6 +22,7 @@ jobs:
       webkit: ${{ steps.filter.outputs.webkit }}
       tests: ${{ steps.filter.outputs.tests }}
       visual: ${{ steps.filter.outputs.visual }}
+      baselines: ${{ steps.filter.outputs.baselines }}
       canary: ${{ steps.filter.outputs.canary }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -44,6 +45,8 @@ jobs:
               - 'apps/demos/**'
               - 'apps/visual/**'
               - 'pnpm-lock.yaml'
+            baselines:
+              - 'apps/visual/baselines/**'
             canary:
               - 'packages/webkit/**'
               - 'lint-canaries/**'
@@ -460,8 +463,9 @@ jobs:
       - name: Run visual tests (shard ${{ matrix.shard }}/4)
         run: pnpm --filter @aziontech/webkit-visual exec playwright test --shard=${{ matrix.shard }}/4
 
-      - name: Upload the report on failure
-        if: failure()
+      - name: Upload the report on failure or when baselines change
+        id: report
+        if: ${{ failure() || needs.changes.outputs.baselines == 'true' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: visual-report-shard-${{ matrix.shard }}
@@ -470,6 +474,75 @@ jobs:
             apps/visual/test-results/
           retention-days: 7
           if-no-files-found: ignore
+
+      - name: Link the report in the job summary
+        if: failure()
+        env:
+          REPORT_URL: ${{ steps.report.outputs.artifact-url }}
+          SHARD: ${{ matrix.shard }}
+        run: |
+          {
+            echo "### Visual diffs, shard ${SHARD}/4"
+            echo ""
+            if [ -n "$REPORT_URL" ]; then
+              echo "Playwright report with the expected, actual and diff images: [visual-report-shard-${SHARD}](${REPORT_URL})."
+            else
+              echo "No report was uploaded; read the job log."
+            fi
+            echo "Download it, unzip, and run \`npx playwright show-report playwright-report\` (or open \`playwright-report/index.html\`)."
+            echo "An intended change: regenerate the baselines with the \`regen-baselines\` skill."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  visual-review:
+    name: Visual baseline review
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.baselines == 'true'
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Build the before/after page
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          REVIEW_DIR: ${{ runner.temp }}/review
+        run: |
+          base="$(git merge-base "$BASE_SHA" HEAD)"
+          mkdir -p "$RUNNER_TEMP/before"
+          git archive "$base" apps/visual/baselines | tar -x -C "$RUNNER_TEMP/before" || true
+          node apps/visual/scripts/baseline-review.mjs \
+            --before "$RUNNER_TEMP/before/apps/visual/baselines" \
+            --after apps/visual/baselines \
+            --out "$REVIEW_DIR" \
+            --title "Visual baselines changed by this pull request"
+
+      - name: Upload the review page
+        id: review
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: visual-baseline-review
+          path: ${{ runner.temp }}/review/
+          retention-days: 14
+
+      - name: Link the review page in the job summary
+        env:
+          REVIEW_URL: ${{ steps.review.outputs.artifact-url }}
+          REVIEW_DIR: ${{ runner.temp }}/review
+        run: |
+          {
+            echo "### Visual baselines changed by this pull request"
+            echo ""
+            echo "Review page (before and after, side by side): [visual-baseline-review](${REVIEW_URL}). Download it, unzip, and open \`index.html\`."
+            echo ""
+            cat "$REVIEW_DIR/summary.md"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   governance-check:
     name: Governance Gate

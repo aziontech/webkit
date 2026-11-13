@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Component lifecycle (add, change, deprecate, remove)
+    url: https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md#component-lifecycle
+    about: How each request form turns into a pull request, and what designers review.
   - name: How a component or block is added (AI flow)
     url: https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md#adding-a-component-or-block-ai-flow
     about: Every new component and block is built by agents from one of the request forms below.

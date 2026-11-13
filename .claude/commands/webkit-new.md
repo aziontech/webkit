@@ -28,7 +28,8 @@ same on the issue (`gh issue comment`), and do nothing else.
 ## Step 1 — Read the request
 
 1. `gh issue view <n> --json number,title,body,labels,url`. Parse the form fields: proposed
-   name, intent, benchmark links, where it is used, surface, acceptance criteria, notes.
+   name, Figma URL (optional), intent, benchmark links, where it is used, surface, acceptance
+   criteria, notes.
 2. Exit condition: every required field is present and the name is kebab-case. Otherwise stop
    and ask, on the issue, for the missing field.
 3. Create the branch with `/create-branch new component <name> #<n>`.
@@ -52,9 +53,10 @@ same on the issue (`gh issue comment`), and do nothing else.
 ## Step 3 — Spec (draft)
 
 1. Run `/spec-create <name> --category <category>` in **Mode B**, with the issue and the research
-   notes as the answers to every question (or Mode A when the issue links a Figma frame). The
-   `spec-author` sub-agent copies `.specs/_template.md`, so the spec carries `template: 2` and
-   must fill `## Internationalization`, `## Right-to-left`, `## Responsive` and `## Performance`.
+   notes as the answers to every question (or Mode A, `--figma <url>`, when the issue's Figma URL
+   field is filled). The `spec-author` sub-agent copies `.specs/_template.md`, so the spec
+   carries `template: 2` and must fill `## Internationalization`, `## Right-to-left`,
+   `## Responsive` and `## Performance`.
 2. Exit condition: `.specs/<name>.md` exists with `status: draft` and no `TBD`. An unanswerable
    section is `BLOCKED:` — stop and ask on the issue.
 

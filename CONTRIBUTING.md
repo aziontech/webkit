@@ -34,6 +34,113 @@ pnpm docs:dev      # components, blocks, foundations from the files
 pnpm demos:dev     # routed flows assembled from blocks
 ```
 
+## Component lifecycle
+
+Every WebKit component goes through the same four stages: **Add**, **Change**, **Deprecate** and
+**Remove**. Each stage has one path, and the machine gates make it the only path through CI. The
+spec at `.specs/<name>.md` is the contract at every stage: it changes first, and the code follows.
+
+### Add
+
+An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/webkit-new <issue>`
+→ spec as `draft` → review by a second agent (`spec-reviewer`), which flips it to `approved` with a
+checksum → build (component, test, examples) → machine gates → `ui-craft` review → usage check →
+PR. Each step stops the run on failure. The steps, owners and commands are in
+[Adding a component or block (AI flow)](#adding-a-component-or-block-ai-flow). When the PR is
+built, the spec moves to `implemented`.
+
+### Change
+
+An issue from **Change a component** (`.github/ISSUE_TEMPLATE/change-component.yml`), or
+**Visual bug** (`visual-bug.yml`) for a look that is wrong today. The change runs the same flow
+from step 2, with the existing spec:
+
+- **Non-breaking** (a new prop, event, slot, state or example; a fix). Edit the spec first, then
+  the code. Bump `spec_version` for any API addition, and move the spec to `template: 2`. The
+  spec stays `implemented`; recompute its `checksum` after the edit:
+  ```bash
+  node -e "import('./.claude/hooks/_lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
+  ```
+  The PR title is `feat(webkit): …` for an addition (minor) or `fix(webkit): …` for a fix (patch).
+- **Breaking** (a removed or renamed prop, event, slot, value or export; a changed default or
+  payload). Put `!` in the PR title (`feat(webkit)!: …`): merges are squashed, so the title is the
+  commit release-please reads, and it cuts a major. Ship a codemod entry in
+  `packages/webkit/src/cli/migrations/` (the `webkit migrate` map), or, when no codemod can do it,
+  a note in the migration guide (`packages/webkit/MIGRATION-v6.md` for the current major). Prefer a
+  deprecation cycle (below) to a direct break.
+
+### Deprecate
+
+Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md):
+
+1. Mark the part `@deprecated` in its JSDoc (a prop) or on `defineOptions` (a component), naming
+   the **replacement** and the **removal version**:
+   ```ts
+   /** @deprecated since 6.2 — use `kind` instead. Removed in 7.0. */
+   ```
+2. For a whole component, set `deprecated: true` and `replaced_by: <name>` in the spec frontmatter.
+   `catalog:build` carries the flag to `catalog.json`, the MCP steers agents off it, and the
+   `webkit/no-deprecated-component` lint flags consumers that still import it.
+3. Keep the part working, unchanged, for at least one major cycle. Marking is a `feat` or `fix`,
+   never a major.
+
+### Remove
+
+Only after one major cycle in the deprecated state. Removal is a major: `!` in the PR title and a
+`BREAKING CHANGE:` footer. Remove everything together in one PR: the spec, the `.vue` and its
+test, the examples, the `package.json#exports` entries (and `-root`), the `.size-limit.json`
+entry and the visual baselines; regenerate the catalog and the llms pages; ship the codemod entry
+or the migration note that moves consumers to the replacement.
+
+### What must ship with a component
+
+| Ships with the component                                                           | Checked by                                                                                                    |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Spec `.specs/<name>.md`, `approved` then `implemented`, checksum matching the body | `spec-integrity` (checksum and status, in CI), `spec-status` (no draft), `spec-template`, `complete` (status) |
+| The `.vue`, matching the spec 1-to-1                                               | hooks (`enforce-spec-exists`, `validate-spec-compliance`), `authoring`                                        |
+| `<name>.test.ts` next to the root `.vue`                                           | `test-gate`                                                                                                   |
+| Examples in `packages/webkit/examples/<name>/`, one per example the spec lists     | `complete`                                                                                                    |
+| `package.json#exports` entry, plus `<name>-root` for a compound                    | `complete`                                                                                                    |
+| `.size-limit.json` entry                                                           | `complete`; `size` measures it                                                                                |
+| Regenerated `catalog.json` and `catalog/`                                          | `catalog`                                                                                                     |
+| Regenerated `llms/`                                                                | `llms`                                                                                                        |
+| Visual baselines for the first example, light and dark                             | `complete`; the `visual` job compares them                                                                    |
+
+Two more gates hold the Change and Remove stages to their rules:
+
+- `api-diff` compares the public API with `main`. A breaking change fails without `!` in the PR
+  title and a migration (codemod entry or migration note); an API addition fails without a
+  `spec_version` bump.
+- The bundle budget only goes down. A PR that raises a limit in `.size-limit.json` needs a
+  `Budget-raise: <entry> <old> → <new>, <reason>` line in its body.
+
+### For designers
+
+You do not need to write code or run anything. You file an issue, and you review images.
+
+1. **File the right form** (GitHub, **New issue**):
+   - **New component**: a component that does not exist yet. Paste the Figma frame in the
+     **Figma URL** field when there is one; the spec is then drafted from the design.
+   - **Change a component**: a new option, state or look for an existing component. Say whether
+     current screens would change without being edited (breaking); "unsure" is fine.
+   - **Visual bug**: a component that does not look the way it was designed. Give the page, the
+     theme, the window width and a screenshot.
+2. **What happens next.** An agent picks up the issue, writes or updates the spec, builds the
+   change, runs every gate and opens a pull request that links the issue. If it cannot go on, it
+   asks its question on the issue.
+3. **Where to review.**
+   - The **Screenshots** section of the PR: light, dark, right to left, 320 px and 1920 px.
+   - The docs site of the branch: the component page and each example, in light and dark. Run
+     `pnpm docs:dev` on the branch, or ask on the PR for the pages you want to see; a hosted
+     preview per PR is not set up yet.
+   - The visual baselines. When the PR changes them, its checks include **Visual baseline
+     review**: open the job summary and download `visual-baseline-review`, a page with every
+     changed screenshot before and after, side by side. When a comparison fails, the summary of
+     the failed shard links the Playwright report with the expected, actual and diff images.
+4. **What approval means.** Approving the PR says the change matches the design in both themes and
+   at every width the screenshots cover, and that every changed screenshot is intended. Ask for
+   changes in a PR comment; the agent fixes them and pushes. Nobody edits the code by hand.
+
 ## Adding a component or block (AI flow)
 
 Every component and block made from now on is built by agents through one flow, from a request to
@@ -101,9 +208,7 @@ it is not in the PR pipeline: run it locally or through the **Usage check** work
 (`.github/workflows/usage-check.yml`, manual dispatch, `ANTHROPIC_API_KEY` secret). `--dry-run`
 only resolves the target and prints the plan.
 
-**Changing an existing component** uses the same flow from step 2 with its spec: bump
-`spec_version`, move it to `template: 2`, and add a codemod entry under
-`packages/webkit/src/cli/migrations/` for any breaking change.
+**Changing, deprecating or removing a component**: see [Component lifecycle](#component-lifecycle).
 
 ## The spec-driven pipeline
 
@@ -117,8 +222,9 @@ The spec template lives at [`.specs/_template.md`](./.specs/_template.md). The C
 
 ### Editing an existing component
 
-- Update the spec first; `status` must remain `approved` and the `checksum` will be recomputed by `spec-validate`.
-- Re-run `/component-verify <name>` and the relevant `pnpm webkit:*` gates.
+Spec first, then code; a shipped spec stays `implemented`. The steps, including the `checksum` and
+`spec_version` bump, are in [Component lifecycle, Change](#change). Then re-run
+`/component-verify <name>`.
 
 ### Legacy components
 

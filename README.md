@@ -10,6 +10,8 @@
 
 The shared front-end foundation for Azion products. Webkit ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
 
+Every component follows one [component lifecycle](./CONTRIBUTING.md#component-lifecycle) — Add, Change, Deprecate, Remove — spec first, enforced by CI gates.
+
 ## For AI agents: start here
 
 Pick the path by what you are about to do.
@@ -37,7 +39,8 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 ### I am creating or changing WebKit (contribute)
 
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
-2. Every component starts from a spec in `.specs/`, through `/component-create`.
+2. Follow the [component lifecycle](./CONTRIBUTING.md#component-lifecycle): Add, Change,
+   Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/webkit-new`.
 3. Every block in `packages/webkit/blocks/` is a pattern and every folder in
    `packages/webkit/examples/` documents a component. Changed one? Run
    `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled visual test follow
@@ -130,6 +133,15 @@ Run them locally with `pnpm docs:dev`, `pnpm demos:dev` and `pnpm icons:gallery:
 ## Changing WebKit (contribute)
 
 The path for people and agents who maintain the design system itself.
+
+Every component moves through one practice, the
+[component lifecycle](./CONTRIBUTING.md#component-lifecycle): **Add** (an issue, `/webkit-new`, a
+spec reviewed by a second agent, the build, the gates, the `ui-craft` review, the usage check, a
+PR), **Change** (spec first, then code; a breaking change carries `!` in the PR title and a
+migration), **Deprecate** (`@deprecated` naming the replacement and the removal version, kept for
+one major) and **Remove** (a major, with everything the component shipped removed together).
+Designers file the issue forms and review screenshots: see
+[For designers](./CONTRIBUTING.md#for-designers).
 
 ### What is in this repository
 
@@ -288,7 +300,7 @@ New components follow a **spec-driven pipeline**: spec → scaffold → verify. 
 4. Commit using Conventional Commits with a package scope (e.g. `feat(webkit): …`).
 5. Open a pull request.
 
-Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`.claude/rules/`](./.claude/rules/).
+Changing, deprecating or removing a component: [component lifecycle](./CONTRIBUTING.md#component-lifecycle). Full workflow, commit-scope table, and review checklist: [CONTRIBUTING.md](./CONTRIBUTING.md). Non-negotiable rules: [`.claude/rules/`](./.claude/rules/).
 
 ### Claude Code commands for contributors
 
