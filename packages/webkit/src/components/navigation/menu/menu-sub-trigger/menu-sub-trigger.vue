@@ -76,8 +76,7 @@
 
   const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))
 
-  const ROW_CLASS =
-    'relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xxs) pe-(--spacing-xxs)'
+  const ROW_CLASS = 'group/row relative flex h-8 w-full shrink-0 items-center'
 
   const CONTROL_CLASS =
     'group relative flex h-8 shrink-0 items-center gap-(--spacing-xs) ' +
@@ -85,12 +84,13 @@
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
     "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
-    'hover:before:opacity-100 active:after:opacity-100 ' +
+    'hover:before:opacity-100 group-hover/row:before:opacity-100 active:after:opacity-100 ' +
     'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
 
   const ARROW_CLASS =
+    'absolute! end-(--spacing-xxs) top-1/2 -translate-y-1/2 ' +
     'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]!'
 
   const ARROW_DISABLED_CLASS = 'bg-transparent!'
@@ -127,7 +127,13 @@
 
   const rowClass = computed(() => cn(ROW_CLASS, attrs.class as string | undefined))
 
-  const labelClass = computed(() => cn(CONTROL_CLASS, 'min-w-0 flex-1', contentColumnClass.value))
+  const labelClass = computed(() =>
+    cn(
+      CONTROL_CLASS,
+      'w-full min-w-0 pe-[calc(var(--spacing-xxs)*3+1.75rem)]',
+      contentColumnClass.value
+    )
+  )
 
   const register = () => {
     const target = hasReference.value
