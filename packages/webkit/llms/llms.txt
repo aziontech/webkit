@@ -323,6 +323,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [SectionGap](components/section-gap.md): The empty registration frame that divides two page sections.
 - [SectionModule](components/section-module.md): The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another.
 - [SectionTitle](components/section-title.md): The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the…
+- [SitePage](components/site-page.md): The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission?
 - [StickyStack](components/sticky-stack.md): A band that pins to the viewport and is read by scrolling through it: a stack of claims on one side, one piece of media on the other, and the scroll position — not a pointer — deciding which claim is open.
 - [TextureMaterial](components/texture-material.md): The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it.
 - [Ticker](components/ticker.md): An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses.

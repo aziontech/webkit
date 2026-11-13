@@ -334,6 +334,12 @@
     "limit": "4.25 KB"
   },
   {
+    "name": "site-page",
+    "path": "src/components/marketing/site-page/site-page.vue",
+    "limit": "2.5 KB",
+    "entryOnly": true
+  },
+  {
     "name": "section-container",
     "path": "src/components/marketing/section-container/section-container.vue",
     "limit": "1.5 KB"

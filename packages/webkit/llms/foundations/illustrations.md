@@ -6,7 +6,7 @@ Pass the name to `Illustration` (`name`) or to a section that shows one (`illust
 
 68 names. These are the only values the components accept. An unknown name renders a "PLACE DESIGN ASSET" placeholder and warns in the console. The MCP tool `list_assets({ kind: "illustrations" })` returns the same list (with a `query` to filter), and `catalog.json#assets.illustrations` points at it as data.
 
-Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureTiles](../components/feature-tiles.md), [FeatureWidgets](../components/feature-widgets.md), [HeroBand](../components/hero-band.md), [Illustration](../components/illustration.md), [MediaSplitBand](../components/media-split-band.md), [MediaSplitStack](../components/media-split-stack.md).
+Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureTiles](../components/feature-tiles.md), [FeatureWidgets](../components/feature-widgets.md), [HeroBand](../components/hero-band.md), [Illustration](../components/illustration.md), [MediaSplitBand](../components/media-split-band.md), [MediaSplitStack](../components/media-split-stack.md), [SitePage](../components/site-page.md).
 
 ## Usage
 

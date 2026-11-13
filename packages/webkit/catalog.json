@@ -25515,6 +25515,40 @@
    "examplesFile": "catalog/examples/section-container.json",
    "docsFile": "catalog/components/section-container.json"
   },
+  "site-page": {
+   "import": "@aziontech/webkit/site-page",
+   "target": "./src/components/marketing/site-page/site-page.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/site-page",
+   "category": "marketing",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "hero",
+     "type": "SitePageSection[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Opening sections, rendered full bleed above the column in order; each is `{ _id, props?, scenes?, gap?, submission? }`."
+    },
+    {
+     "name": "sections",
+     "type": "SitePageSection[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Column sections, rendered in order inside the site column with a hatched gap before each and after the last; each is `{ _id, props?, scenes?, gap?, submission? }`."
+    }
+   ],
+   "events": [
+    {
+     "name": "submit",
+     "payload": "(event: SubmitEvent, payload: SitePageSubmit)",
+     "notes": "A section's form passed its own validation (`hero-form`, `closing-call-to-action-newsletter`); the site sends it and feeds `loading` / `submitted` / `error` back through that entry's `props`."
+    }
+   ],
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/site-page.json",
+   "docsFile": "catalog/components/site-page.json"
+  },
   "media-tile": {
    "import": "@aziontech/webkit/media-tile",
    "target": "./src/components/marketing/media-tile/media-tile.vue",
@@ -26446,7 +26480,8 @@
     "hero-band",
     "illustration",
     "media-split-band",
-    "media-split-stack"
+    "media-split-stack",
+    "site-page"
    ],
    "count": 68,
    "file": "catalog/assets/illustrations.json"
@@ -26460,7 +26495,8 @@
     "architecture-tabs",
     "diagram",
     "media-split-band",
-    "media-split-stack"
+    "media-split-stack",
+    "site-page"
    ],
    "count": 28,
    "file": "catalog/assets/diagrams.json"
@@ -26490,6 +26526,7 @@
     "hero-with-opening",
     "quote-carousel",
     "quote-tabs",
+    "site-page",
     "template-gallery",
     "ticker"
    ],

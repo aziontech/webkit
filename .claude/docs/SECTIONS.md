@@ -26,7 +26,20 @@ Two names are the **same string**, on purpose:
 | component name, folder, spec (`.specs/use-cases.md`), testid `sections-use-cases` | `use-cases`              |
 | public path `@aziontech/webkit/use-cases`, import binding                         | `use-cases` → `UseCases` |
 
-The site imports the blocks it uses and binds each entry's `props` onto its block. Mapping `_id` to component is the site's own concern; the package ships no registry and no dispatcher.
+A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `SectionGap` before each band and one after the last, and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, owned by `shells/website`). A new section is added there in the same change, or the `site-page` test fails.
+
+```vue
+<script setup>
+  import SitePage from '@aziontech/webkit/site-page'
+  import page from './pages/sql-database.json'
+</script>
+
+<template>
+  <SitePage v-bind="page" />
+</template>
+```
+
+A page section stays importable on its own, for a page that composes one band by hand:
 
 ```vue
 <script setup>
@@ -38,10 +51,16 @@ The site imports the blocks it uses and binds each entry's `props` onto its bloc
 </template>
 ```
 
+Next to `props`, an entry may carry:
+
+- `scenes` — a section slot name mapped to `{ component, props? }`, a scene drawn in that slot (`hero-band` `top` / `bottom`, `console-panel` `scene`). `component` is a name in the scene registry, `src/assets/scene-registry.ts`, so the page stays plain JSON; a scene ported into the package becomes usable on every page by one entry there. The slot's own props (`console-panel`'s `tab`) win over `props`.
+- `gap` — `none`, `small` or `medium` (default) for the break before a column section.
+- `submission` — transport details of a form, handed back on `SitePage`'s `submit` (see below).
+
 ## What a section component is
 
 - **Props only.** The props are exactly the keys of `props` in the section's `examples/<name>/site-*.json` — nothing more, nothing less — so `v-bind="section.props"` is the whole API. No slots, and no events except a form's `submit` (below). Interaction the block needs (tabs, filters, load-more, copy-to-clipboard) is local state inside the component.
-- **Forms are the one exception: they emit `submit`, the site sends.** A section that collects data (a lead form, a newsletter sign-up) never posts, fetches or fakes a send. It renders the fields, validates them locally on submit only (the `webkit-form` pattern: a required field's label carries its Required tag from the first render, an empty required field takes the amber `required` state and a malformed value the red `invalid` state only after a failed submit, never both at once, and editing a field clears its message), and on a valid submit emits `submit: [event: SubmitEvent, values: Record<string, string>]` (event first — see [`event-payloads.md`](../rules/event-payloads.md)); the site posts to its endpoint. The outcome comes back as consumer-owned state props the block renders (see [`component-states.md`](../rules/component-states.md)): `loading` while the site sends (submit suppressed), `submitted` to show the success message, `error` to show the failure message; the messages themselves are props from the JSON. Transport details (`endpoint`, `hiddenFields`, `pageName`) are not component props: they sit in a `submission` key next to `props` in the section entry (`{ _id, props, submission }`), so `v-bind="section.props"` stays the whole API.
+- **Forms are the one exception: they emit `submit`, the site sends.** A section that collects data (a lead form, a newsletter sign-up) never posts, fetches or fakes a send. It renders the fields, validates them locally on submit only (the `webkit-form` pattern: a required field's label carries its Required tag from the first render, an empty required field takes the amber `required` state and a malformed value the red `invalid` state only after a failed submit, never both at once, and editing a field clears its message), and on a valid submit emits `submit: [event: SubmitEvent, values: Record<string, string>]` (event first — see [`event-payloads.md`](../rules/event-payloads.md)); the site posts to its endpoint. On a page rendered by `SitePage`, the renderer re-emits it as `submit: [event, { section, values }]`, `section` being the whole entry with its `submission`. The outcome comes back as consumer-owned state props the block renders (see [`component-states.md`](../rules/component-states.md)): `loading` while the site sends (submit suppressed), `submitted` to show the success message, `error` to show the failure message; the messages themselves are props from the JSON. Transport details (`endpoint`, `hiddenFields`, `pageName`) are not component props: they sit in a `submission` key next to `props` in the section entry (`{ _id, props, submission }`), so `v-bind="section.props"` stays the whole API.
 - **One landmark per band.** The root is a `<section>` named by the band's title (`aria-label`) only when no composed component already renders a named landmark for it; when `media-split`, `quote-tabs` or `big-numbers` owns the named region, the root is a plain `div`, so axe never sees two landmarks with one name.
 - **Monolithic.** A section composes existing webkit components (`SectionModule`, `FrameBox`, `CardGrid`, `Topic`, `Hero`, …) inside its own root; it has no sub-components of its own. The page owns the column (`SectionContainer` / `SectionGap`), so a section's root is the band at `SectionModule` level.
 - **Bulk data is typed.** Every nested shape is a named, exported type beside the component (`UseCasesItem`, `UseCasesAction`), one JSDoc line per field. Arrays default to `() => []`; an optional affordance object (`primaryAction`, `search`) defaults to `undefined` and is rendered under `v-if`; a configuration object the block cannot render without (`form`, `competitor`, `menus`) is `Required: true`.

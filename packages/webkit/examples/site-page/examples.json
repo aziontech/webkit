@@ -1,0 +1,11 @@
+{
+  "component": "site-page",
+  "title": "Components/Marketing/SitePage",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A short product page rendered from data: an opening `hero-band` in `hero`, then `use-cases`, `faq-section` and a `closing-call-to-action` in `sections`, each entry an `_id` naming the section and the `props` bound onto it. The column draws a hatched gap before each band and one after the last.",
+      "file": "default.vue"
+    }
+  ]
+}
