@@ -189,7 +189,7 @@
     line1: '',
     line2: ''
   }
-  const blankCard = { holder: '', country: undefined as string | undefined, number: '', expiry: '', code: '' }
+  const blankCard = { holder: '', country: undefined, number: '', expiry: '', code: '' }
 
   const plan = ref()
   const pendingPlanId = ref('')
