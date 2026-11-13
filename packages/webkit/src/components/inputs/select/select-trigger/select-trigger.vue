@@ -9,7 +9,7 @@
   })
 
   interface Props {
-    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+55`) that have none. */
+    /** Base direction of the shown value, isolated from the trigger's own direction. Omitted, it follows the value's first strong character (`<bdi>`); pass `ltr` for values such as dial codes (`+1`) that have none. */
     valueDir?: 'ltr' | 'rtl' | 'auto'
   }
 

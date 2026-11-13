@@ -103,7 +103,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
 export const CONSOLE_TRACE_LOGS: ConsoleTraceLog[] = [
   { at: 0, level: 'info', message: 'Invocation started · GET /img/hero-4k.jpg?format=avif' },
   { at: 4, level: 'debug', message: 'args { defaultFormat: "avif", quality: 80 }' },
-  { at: 16, level: 'info', message: 'Cache miss, fetching assets.storefront.com' },
+  { at: 16, level: 'info', message: 'Cache miss, fetching origin.example.com' },
   { at: 61, level: 'debug', message: 'TLS 1.3 established, cipher TLS_AES_128_GCM_SHA256' },
   { at: 202, level: 'info', message: 'Origin answered 200 · image/jpeg · 2.4 MB' },
   { at: 256, level: 'debug', message: 'Decoded 3840x2160, re-encoding to avif q80' },
@@ -122,7 +122,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
     severity: 'success',
     fields: [
       { label: 'Address', value: 'storefront-prod.azion.app' },
-      { label: 'Edge location', value: 'GRU · São Paulo' }
+      { label: 'Edge location', value: 'SFO · San Francisco' }
     ]
   },
   {
@@ -158,7 +158,7 @@ export const CONSOLE_TRACE_PATH: ConsoleTracePathNode[] = [
     severity: 'success',
     terminal: true,
     fields: [
-      { label: 'Origin', value: 'assets.storefront.com' },
+      { label: 'Origin', value: 'origin.example.com' },
       { label: 'Time at origin', value: '186 ms' }
     ]
   }

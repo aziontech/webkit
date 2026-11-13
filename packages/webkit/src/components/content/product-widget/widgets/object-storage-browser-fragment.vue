@@ -26,7 +26,7 @@
   const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
-  const BUCKET = 'edgeflow-site-assets'
+  const BUCKET = 'site-assets'
   const MODIFIED = '4 months ago'
   const AUTHORS = ['JA', 'SR', 'AM', 'CL']
 

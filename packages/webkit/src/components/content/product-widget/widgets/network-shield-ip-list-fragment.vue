@@ -49,8 +49,8 @@
     }
   ]
 
-  const ITEMS = ['10.0.0.1', '10.0.0.3', '10.0.0.4', '2001:db8::/32']
-  const ENTRY = '171.25.193.25 #comment'
+  const ITEMS = ['192.0.2.1', '192.0.2.3', '192.0.2.4', '2001:db8::/32']
+  const ENTRY = '198.51.100.25 #comment'
 
   interface Frame {
     anchor: number
@@ -223,7 +223,7 @@
             />
           </span>
           <HelperText
-            label="Enter one IP address or CIDR per line. Optionally, add an expiration date in UTC with --LT (format YYYY-MM-DDTHH:MM:SSZ), followed by a comment with #. The comment must always be the last item on the line, e.g., 192.168.0.1 --LT2027-01-01T00:00:00Z #comment. --LT is reserved and can't be used in comments. Duplicated entries are automatically removed."
+            label="Enter one IP address or CIDR per line. Optionally, add an expiration date in UTC with --LT (format YYYY-MM-DDTHH:MM:SSZ), followed by a comment with #. The comment must always be the last item on the line, e.g., 192.0.2.1 --LT2027-01-01T00:00:00Z #comment. --LT is reserved and can't be used in comments. Duplicated entries are automatically removed."
           />
         </div>
       </ShellMockupPart>

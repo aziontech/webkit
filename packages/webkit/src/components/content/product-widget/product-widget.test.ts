@@ -154,7 +154,7 @@ describe('ProductWidget', () => {
     const view = render(host({ name: 'data-stream-source' }))
     const frame = await frameOf(view)
 
-    expect(frame.textContent).toContain('Bianca')
+    expect(frame.textContent).toContain('Priya')
   })
 
   it('hides the collaborator cursor when cursor is off, and still draws the fragment', async () => {
@@ -162,7 +162,7 @@ describe('ProductWidget', () => {
     const frame = await frameOf(view)
 
     expect(frame.textContent).toContain('Data Source')
-    expect(frame.textContent).not.toContain('Bianca')
+    expect(frame.textContent).not.toContain('Priya')
   })
 
   it('warns in development when a plating prop is set on a fragment that ignores it', async () => {

@@ -52,7 +52,7 @@
       status: 'Live',
       severity: 'success',
       loading: false,
-      owner: 'Maria Costa',
+      owner: 'Jane Doe',
       time: '2 minutes ago'
     },
     {
@@ -61,7 +61,7 @@
       status: 'Live',
       severity: 'success',
       loading: false,
-      owner: 'Jonas Ribeiro',
+      owner: 'John Smith',
       time: '1 hour ago'
     },
     {
@@ -70,7 +70,7 @@
       status: 'Building',
       severity: 'info',
       loading: true,
-      owner: 'Alice Lemos',
+      owner: 'Alex Morgan',
       time: 'Just now'
     },
     {
@@ -79,7 +79,7 @@
       status: 'Live',
       severity: 'success',
       loading: false,
-      owner: 'Alice Lemos',
+      owner: 'Alex Morgan',
       time: 'Yesterday'
     },
     {
@@ -88,7 +88,7 @@
       status: 'Queued',
       severity: 'neutral',
       loading: false,
-      owner: 'Maria Costa',
+      owner: 'Jane Doe',
       time: 'Just now'
     },
     {
@@ -97,7 +97,7 @@
       status: 'Building',
       severity: 'info',
       loading: true,
-      owner: 'Maria Costa',
+      owner: 'Jane Doe',
       time: '12 minutes ago'
     },
     {
@@ -106,7 +106,7 @@
       status: 'Live',
       severity: 'success',
       loading: false,
-      owner: 'Jonas Ribeiro',
+      owner: 'John Smith',
       time: 'Yesterday'
     },
     {
@@ -115,7 +115,7 @@
       status: 'Live',
       severity: 'success',
       loading: false,
-      owner: 'Carla Nunes',
+      owner: 'Priya Patel',
       time: '2 days ago'
     }
   ]

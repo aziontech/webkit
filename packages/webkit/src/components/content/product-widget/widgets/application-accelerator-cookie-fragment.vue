@@ -198,7 +198,7 @@ product_id"
       </div>
 
       <MockupCursor
-        name="Ana"
+        name="Jane"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

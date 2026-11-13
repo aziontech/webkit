@@ -179,7 +179,7 @@
       </ShellMockupPart>
 
       <MockupCursor
-        name="Bianca"
+        name="Priya"
         :x="position.x"
         :y="position.y"
         :pressed="frame.press"

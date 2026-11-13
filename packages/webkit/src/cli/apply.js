@@ -58,7 +58,8 @@ function applyAddDep(projectDir, action) {
   } catch (err) {
     return { action, result: 'error', detail: err.message }
   }
-  const field = action.dev ? 'devDependencies' : 'dependencies'
+  const { dev } = action
+  const field = dev ? 'devDependencies' : 'dependencies'
   pkg[field] = pkg[field] || {}
   const current = pkg[field][action.dep]
   if (current && (current === action.version || current !== action.replace)) {
