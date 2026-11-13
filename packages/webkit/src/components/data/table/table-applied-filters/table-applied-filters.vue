@@ -86,20 +86,21 @@
       :key="filter.field + '|' + filter.operator + '|' + filter.value"
     >
       <slot
+        v-if="$slots['chip']"
         name="chip"
         :filter="filter"
         :remove="(event: MouseEvent) => onRemove(event, filter)"
+      />
+      <Chip
+        v-else
+        size="medium"
+        removable
+        clickable
+        @remove="(event) => onRemove(event, filter)"
+        @click="(event) => onEdit(event, filter)"
       >
-        <Chip
-          size="medium"
-          removable
-          clickable
-          @remove="(event) => onRemove(event, filter)"
-          @click="(event) => onEdit(event, filter)"
-        >
-          {{ labelOf(filter) }}
-        </Chip>
-      </slot>
+        {{ labelOf(filter) }}
+      </Chip>
     </template>
   </TransitionGroup>
 </template>
