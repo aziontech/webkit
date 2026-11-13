@@ -3,7 +3,6 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { cn } from '../../../utils/cn'
-  import { selectableBlockCardClasses } from '../presets/interactive-states'
 
   defineOptions({
     name: 'RadioCards',
@@ -55,7 +54,28 @@
   )
 
   const optionClasses = cn(
-    selectableBlockCardClasses,
+    'relative rounded-(--shape-button) border',
+    'bg-(--bg-surface) border-(--border-muted)',
+    'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
+    "before:bg-(--bg-hover) before:opacity-0 before:content-['']",
+    'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance',
+    'after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]',
+    "after:bg-(--bg-active) after:opacity-0 after:content-['']",
+    'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
+    'hover:before:opacity-100 active:after:opacity-100',
+    'motion-reduce:before:transition-none motion-reduce:after:transition-none',
+    'has-[:focus-visible]:outline-none',
+    'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color)',
+    'has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas)',
+    'focus-within:before:opacity-0',
+    'focus-visible:before:opacity-0',
+    'has-[:focus-visible]:before:opacity-0',
+    'disabled:before:hidden disabled:after:hidden',
+    'data-[disabled]:before:hidden data-[disabled]:after:hidden',
+    'has-[:disabled]:before:hidden has-[:disabled]:after:hidden',
+    'has-[[readonly]]:before:hidden has-[[readonly]]:after:hidden',
+    'disabled:cursor-not-allowed',
+    'data-[disabled]:cursor-not-allowed',
     'flex max-w-full shrink-0 cursor-pointer flex-col gap-(--spacing-xxs)',
     'px-(--spacing-sm) py-(--spacing-sm)',
     'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',

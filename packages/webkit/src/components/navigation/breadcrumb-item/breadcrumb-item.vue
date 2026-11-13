@@ -3,10 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
-  import {
-    focusVisibleRingClasses,
-    ghostLayerClasses
-  } from '../../inputs/presets/interactive-states'
 
   defineOptions({
     name: 'BreadcrumbItem',
@@ -43,6 +39,9 @@
 
   const attrs = useAttrs()
 
+  const ROOT_CLASS =
+    "group/breadcrumb-item relative flex min-h-6 min-w-0 items-center justify-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-(--text-muted) hover:text-(--text-default) aria-[current=page]:text-(--text-default) aria-[current=page]:hover:text-(--text-default) data-[current=true]:text-(--text-default) data-[current=true]:hover:text-(--text-default) data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) focus-visible:bg-(--bg-mask) focus-visible:border focus-visible:border-(--border-default)"
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb-item'
   )
@@ -71,23 +70,7 @@
     :is="current ? 'span' : 'a'"
     v-bind="passthroughAttrs"
     :href="current ? undefined : href"
-    :class="
-      cn(
-        [
-          'group/breadcrumb-item relative flex min-h-6 min-w-0 items-center justify-center',
-          'gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs)',
-          'text-label-md transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-          'text-(--text-muted) hover:text-(--text-default)',
-          'aria-[current=page]:text-(--text-default) aria-[current=page]:hover:text-(--text-default)',
-          'data-[current=true]:text-(--text-default) data-[current=true]:hover:text-(--text-default)',
-          'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)',
-          ...ghostLayerClasses,
-          ...focusVisibleRingClasses,
-          'focus-visible:bg-(--bg-mask) focus-visible:border focus-visible:border-(--border-default)'
-        ],
-        attrs.class as string | undefined
-      )
-    "
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :data-current="current ? 'true' : undefined"
     :data-disabled="disabled ? '' : undefined"

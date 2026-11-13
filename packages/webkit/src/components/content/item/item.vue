@@ -3,11 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import {
-    focusVisibleRingClasses,
-    ghostLayerClasses,
-    itemRowShellClasses
-  } from '../../inputs/presets/interactive-states'
-  import {
     ItemContainerInjectionKey,
     ItemInjectionKey,
     type ItemKind,
@@ -74,11 +69,26 @@
       'data-kind': kind.value,
       'data-size': props.size,
       class: cn(
-        itemRowShellClasses,
+        'group/item relative flex w-full flex-wrap items-center',
+        'rounded-(--shape-button) border border-transparent text-body-sm text-(--text-default)',
+        'data-[kind=outlined]:border-(--border-muted) data-[kind=outlined]:bg-(--bg-surface)',
+        'data-[kind=muted]:bg-(--bg-hover)',
+        '[&:not([data-kind=option])]:data-[size=medium]:gap-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=medium]:p-(--spacing-md)',
+        '[&:not([data-kind=option])]:data-[size=small]:gap-(--spacing-xs) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:px-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:py-(--spacing-sm)',
+        'data-[kind=option]:gap-(--spacing-sm) data-[kind=option]:px-(--spacing-sm) data-[kind=option]:py-(--spacing-xs) data-[kind=option]:aria-pressed:bg-(--bg-selected) data-[kind=option]:aria-selected:bg-(--bg-selected)',
         interactive.value && [
           'cursor-pointer text-start no-underline',
-          ...focusVisibleRingClasses,
-          ...ghostLayerClasses
+          'focus-visible:outline-none',
+          'focus-visible:ring-2 focus-visible:ring-(--ring-color)',
+          'focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)',
+          'before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]',
+          "before:bg-(--bg-hover) before:opacity-0 before:content-['']",
+          'before:transition-opacity before:duration-fast-02 before:ease-productive-entrance',
+          'after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit]',
+          "after:bg-(--bg-active) after:opacity-0 after:content-['']",
+          'after:transition-opacity after:duration-fast-02 after:ease-productive-entrance',
+          'hover:before:opacity-100 active:after:opacity-100',
+          'motion-reduce:before:transition-none motion-reduce:after:transition-none'
         ],
         attrs.class as string | undefined
       )
