@@ -130,7 +130,7 @@
           {{ link.label }}
           <template v-if="link.external">
             <i
-              class="pi pi-external-link text-(--text-muted)"
+              class="pi pi-external-link text-label-sm"
               aria-hidden="true"
             />
             <span class="sr-only">{{ ` ${t('siteFooter.newTab')}` }}</span>
