@@ -320,7 +320,7 @@
     }
   }
 
-  const selectValue = (value: Date | CalendarRange): void => {
+  const selectValue = (_event: Event, value: Date | CalendarRange): void => {
     const range = value instanceof Date ? { start: value, end: value } : value
     draftRange.value = { start: range.start, end: range.end }
   }
