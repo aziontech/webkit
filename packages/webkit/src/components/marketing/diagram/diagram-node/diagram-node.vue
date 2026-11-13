@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
   import Tag from '../../../content/tag/tag.vue'
   import FrameBox from '../../../layout/frame-box/frame-box.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
@@ -13,6 +15,12 @@
 
   defineProps<Props>()
 
+  const attrs = useAttrs()
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram__node'
+  )
+
   const markStyle = (url: string) => ({ maskImage: `url("${url}")` })
 </script>
 
@@ -22,6 +30,8 @@
     class="flex items-center @5xl:h-(--size-20)"
   >
     <span
+      v-bind="$attrs"
+      :data-testid="testId"
       :data-diagram-node="node.key"
       :data-lit="node.lit || null"
       class="relative inline-flex h-(--size-7) items-center gap-(--spacing-xxs) rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm whitespace-nowrap text-(--text-default) shadow-(--shadow-xs) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
@@ -44,6 +54,8 @@
       marks="all"
     >
       <span
+        v-bind="$attrs"
+        :data-testid="testId"
         :data-diagram-node="node.key"
         :data-lit="node.lit || null"
         class="flex size-(--size-14) items-center justify-center rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) text-(--text-muted) data-[lit]:border-(--primary) data-[lit]:text-(--text-default)"
@@ -58,6 +70,8 @@
 
   <div
     v-else-if="node.kind === 'app'"
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-diagram-node="node.key"
     class="flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) [mask-image:linear-gradient(to_bottom,black_60%,transparent)] @5xl:w-(--size-44)"
   >
@@ -80,6 +94,8 @@
 
   <div
     v-else-if="node.kind === 'item'"
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
     class="relative flex w-full max-w-(--size-72) items-center gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) shadow-(--shadow-xs) @5xl:w-(--size-72) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
@@ -122,6 +138,8 @@
 
   <div
     v-else
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-diagram-node="node.key"
     :data-lit="node.lit || null"
     class="relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) @5xl:w-(--size-60) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"

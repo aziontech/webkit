@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, provide, ref, watch } from 'vue'
+  import { computed, inject, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
 
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useDialogMotionState } from './composables/use-dialog-motion-state'
@@ -17,6 +17,11 @@
 
   const ctx = inject(DialogInjectionKey)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
+  const attrs = useAttrs()
+  const testId = computed(
+    () =>
+      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'overlay-dialog'}__portal`
+  )
   const { motionState } = useDialogMotionState(isOpen)
 
   const portalLocale = usePortalLocale()
@@ -56,6 +61,8 @@
     to="body"
   >
     <div
+      v-bind="$attrs"
+      :data-testid="testId"
       class="contents"
       :dir="portalLocale.dir"
       :lang="portalLocale.lang"

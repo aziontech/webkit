@@ -1,8 +1,14 @@
 <script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
   defineOptions({
     name: 'Spinner',
     inheritAttrs: false
   })
+
+  const attrs = useAttrs()
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'utils-spinner')
 </script>
 
 <template>
@@ -13,6 +19,7 @@
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
     v-bind="$attrs"
+    :data-testid="testId"
   >
     <circle
       cx="8"

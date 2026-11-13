@@ -6,6 +6,7 @@ import Default from '../../../../examples/empty-state/default.vue'
 import Sizes from '../../../../examples/empty-state/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import EmptyState from './empty-state.vue'
+import EmptyStateIllustration from './empty-state-illustration/empty-state-illustration.vue'
 
 describe('EmptyState', () => {
   it('renders the title and defaults the testid to feedback-empty-state', () => {
@@ -179,5 +180,17 @@ describe('EmptyState on devices', () => {
     const actions = view.getByTestId('feedback-empty-state__actions')
     expect(actions.contains(view.getByRole('button', { name: 'Add domain' }))).toBe(true)
     expect(actions.contains(view.getByRole('link', { name: 'Read the docs' }))).toBe(true)
+  })
+})
+
+describe('EmptyStateIllustration', () => {
+  it('defaults its testid under the empty-state root and lets a consumer override it', () => {
+    const { getByTestId, unmount } = render(EmptyStateIllustration)
+    expect(getByTestId('feedback-empty-state__illustration').tagName).toBe('IMG')
+    unmount()
+
+    const custom = render(EmptyStateIllustration, { attrs: { 'data-testid': 'custom-art' } })
+    expect(custom.getByTestId('custom-art').tagName).toBe('IMG')
+    expect(custom.queryByTestId('feedback-empty-state__illustration')).toBeNull()
   })
 })

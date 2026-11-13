@@ -494,3 +494,31 @@ describe('keyboard map (spec)', () => {
     })
   })
 })
+
+describe('DialogPortal data-testid', () => {
+  it('derives the portal testid from the root and lets a consumer override it', async () => {
+    const { unmount } = render(composed({ defaultOpen: true }))
+    await settle()
+    const portal = byTestId('overlay-dialog__portal')
+    expect(portal).not.toBeNull()
+    expect(portal!.contains(panel())).toBe(true)
+    unmount()
+    await settle()
+
+    render(
+      defineComponent({
+        components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+        template: `
+          <Dialog default-open>
+            <DialogPortal data-testid="custom-portal">
+              <DialogContent><DialogTitle>Title</DialogTitle></DialogContent>
+            </DialogPortal>
+          </Dialog>
+        `
+      })
+    )
+    await settle()
+    expect(byTestId('custom-portal')).not.toBeNull()
+    expect(byTestId('overlay-dialog__portal')).toBeNull()
+  })
+})

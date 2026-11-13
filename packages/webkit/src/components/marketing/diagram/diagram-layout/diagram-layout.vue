@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { computed, useAttrs } from 'vue'
+
   import FrameBox from '../../../layout/frame-box/frame-box.vue'
   import DiagramNode from '../diagram-node/diagram-node.vue'
   import type { DiagramLayoutItem, DiagramNode as DiagramNodeData } from '../types'
@@ -15,6 +17,12 @@
   }
 
   withDefaults(defineProps<Props>(), { tree: false })
+
+  const attrs = useAttrs()
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram__layout'
+  )
 </script>
 
 <template>
@@ -25,6 +33,8 @@
 
   <div
     v-else-if="'row' in item"
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
     :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
@@ -41,6 +51,8 @@
 
   <div
     v-else-if="'branches' in item"
+    v-bind="$attrs"
+    :data-testid="testId"
     data-stack="tree"
     class="ms-(--spacing-12) flex flex-col items-start gap-(--spacing-xl) self-stretch @5xl:ms-0 @5xl:self-auto"
   >
@@ -55,6 +67,8 @@
 
   <div
     v-else-if="'grid' in item"
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-columns="item.columns ?? 2"
     class="grid w-fit grid-cols-2 gap-(--spacing-xs) data-[columns=3]:grid-cols-3"
   >
@@ -69,6 +83,8 @@
 
   <div
     v-else-if="'group' in item"
+    v-bind="$attrs"
+    :data-testid="testId"
     :data-diagram-node="item.group"
     class="flex flex-col self-stretch @5xl:self-auto"
   >

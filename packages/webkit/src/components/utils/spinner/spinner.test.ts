@@ -13,6 +13,12 @@ describe('Spinner', () => {
     expect(svg).not.toBeNull()
   })
 
+  it('defaults the root data-testid to utils-spinner', () => {
+    const { getByTestId } = render(Spinner)
+
+    expect(getByTestId('utils-spinner').tagName.toLowerCase()).toBe('svg')
+  })
+
   it('marks the svg as decorative with aria-hidden', () => {
     const { container } = render(Spinner)
 

@@ -476,3 +476,31 @@ describe('keyboard map (spec)', () => {
     })
   })
 })
+
+describe('DrawerPortal data-testid', () => {
+  it('derives the portal testid from the root and lets a consumer override it', async () => {
+    const { unmount } = render(composed({ defaultOpen: true }))
+    await settle()
+    const portal = byTestId('overlay-drawer__portal')
+    expect(portal).not.toBeNull()
+    expect(portal!.contains(panel())).toBe(true)
+    unmount()
+    await settle()
+
+    render(
+      defineComponent({
+        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
+        template: `
+          <Drawer default-open>
+            <DrawerPortal data-testid="custom-portal">
+              <DrawerContent><DrawerTitle>Title</DrawerTitle></DrawerContent>
+            </DrawerPortal>
+          </Drawer>
+        `
+      })
+    )
+    await settle()
+    expect(byTestId('custom-portal')).not.toBeNull()
+    expect(byTestId('overlay-drawer__portal')).toBeNull()
+  })
+})
