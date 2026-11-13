@@ -1125,6 +1125,10 @@ export const consolePanel = {
   views: 'Console views'
 } as const
 
+export const runtimeApiCloud = {
+  label: 'Globals available in the Azion Runtime'
+} as const
+
 export const customerSpotlight = {
   list: 'Customer stories',
   story: 'Read story'
@@ -1316,6 +1320,7 @@ export const en = {
   paymentBrand,
   otpInput,
   consolePanel,
+  runtimeApiCloud,
   customerSpotlight,
   sectionCommand,
   searchTrigger,

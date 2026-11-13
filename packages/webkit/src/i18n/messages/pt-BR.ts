@@ -1026,6 +1026,9 @@ export const ptBR: Messages = {
   consolePanel: {
     views: 'Visões do console'
   },
+  runtimeApiCloud: {
+    label: 'Globais disponíveis no Azion Runtime'
+  },
   customerSpotlight: {
     list: 'Histórias de clientes',
     story: 'Ler a história'

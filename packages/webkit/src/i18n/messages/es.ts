@@ -1025,6 +1025,9 @@ export const es: Messages = {
   consolePanel: {
     views: 'Vistas de la consola'
   },
+  runtimeApiCloud: {
+    label: 'Globales disponibles en Azion Runtime'
+  },
   customerSpotlight: {
     list: 'Historias de clientes',
     story: 'Leer la historia'

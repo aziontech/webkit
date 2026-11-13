@@ -1778,6 +1778,14 @@
       "types": "./types/assets/logos/competitors/registry.d.ts",
       "default": "./src/assets/logos/competitors/registry.ts"
     },
+    "./assets/console-application-scene": {
+      "types": "./types/assets/scenes/console-application/console-application-scene.vue.d.ts",
+      "default": "./src/assets/scenes/console-application/console-application-scene.vue"
+    },
+    "./assets/console-trace-scene": {
+      "types": "./types/assets/scenes/console-trace/console-trace-scene.vue.d.ts",
+      "default": "./src/assets/scenes/console-trace/console-trace-scene.vue"
+    },
     "./assets/contabilizei-extended-color.svg": "./src/assets/logos/clients/contabilizei-extended-color.svg",
     "./assets/contabilizei-extended-mono.svg": "./src/assets/logos/clients/contabilizei-extended-mono.svg",
     "./assets/contabilizei-extended-reversed.svg": "./src/assets/logos/clients/contabilizei-extended-reversed.svg",
@@ -2011,6 +2019,14 @@
     "./assets/rocketchat-extended-color.svg": "./src/assets/logos/clients/rocketchat-extended-color.svg",
     "./assets/rocketchat-extended-mono.svg": "./src/assets/logos/clients/rocketchat-extended-mono.svg",
     "./assets/rocketchat-extended-reversed.svg": "./src/assets/logos/clients/rocketchat-extended-reversed.svg",
+    "./assets/runtime-api-cloud": {
+      "types": "./types/assets/scenes/runtime-api/runtime-api-cloud.vue.d.ts",
+      "default": "./src/assets/scenes/runtime-api/runtime-api-cloud.vue"
+    },
+    "./assets/runtime-api-scene": {
+      "types": "./types/assets/scenes/runtime-api/runtime-api-scene.vue.d.ts",
+      "default": "./src/assets/scenes/runtime-api/runtime-api-scene.vue"
+    },
     "./assets/saffe-extended-color.svg": "./src/assets/logos/clients/saffe-extended-color.svg",
     "./assets/saffe-extended-mono.svg": "./src/assets/logos/clients/saffe-extended-mono.svg",
     "./assets/saffe-extended-reversed.svg": "./src/assets/logos/clients/saffe-extended-reversed.svg",

@@ -19594,6 +19594,22 @@
    "treeShakeableImport": "@aziontech/webkit/assets/competitor-registry",
    "surface": "marketing"
   },
+  "assets/console-application-scene": {
+   "import": "@aziontech/webkit/assets/console-application-scene",
+   "target": "./src/assets/scenes/console-application/console-application-scene.vue",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/console-application-scene",
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/assets/console-application-scene.json"
+  },
+  "assets/console-trace-scene": {
+   "import": "@aziontech/webkit/assets/console-trace-scene",
+   "target": "./src/assets/scenes/console-trace/console-trace-scene.vue",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/console-trace-scene",
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/assets/console-trace-scene.json"
+  },
   "assets/contabilizei-extended-color.svg": {
    "import": "@aziontech/webkit/assets/contabilizei-extended-color.svg",
    "target": "./src/assets/logos/clients/contabilizei-extended-color.svg",
@@ -21222,6 +21238,21 @@
    "kind": "asset",
    "treeShakeableImport": "@aziontech/webkit/assets/rocketchat-extended-reversed.svg",
    "surface": "marketing"
+  },
+  "assets/runtime-api-cloud": {
+   "import": "@aziontech/webkit/assets/runtime-api-cloud",
+   "target": "./src/assets/scenes/runtime-api/runtime-api-cloud.vue",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/runtime-api-cloud",
+   "surface": "marketing"
+  },
+  "assets/runtime-api-scene": {
+   "import": "@aziontech/webkit/assets/runtime-api-scene",
+   "target": "./src/assets/scenes/runtime-api/runtime-api-scene.vue",
+   "kind": "asset",
+   "treeShakeableImport": "@aziontech/webkit/assets/runtime-api-scene",
+   "surface": "marketing",
+   "examplesFile": "catalog/examples/assets/runtime-api-scene.json"
   },
   "assets/saffe-extended-color.svg": {
    "import": "@aziontech/webkit/assets/saffe-extended-color.svg",

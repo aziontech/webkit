@@ -1,0 +1,9 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Azion Runtime's globals as a field of pills in the `HeroBand` `#bottom` slot: a few pills hand their highlight on, and the rows drift apart as the page scrolls.",
+   "sfc": "<script setup>\n  import RuntimeApiScene from '@aziontech/webkit/assets/runtime-api-scene'\n  import HeroBand from '@aziontech/webkit/hero-band'\n</script>\n\n<template>\n  <HeroBand\n    kind=\"centered-band\"\n    eyebrow=\"Functions\"\n    title=\"Run JavaScript on every request\"\n    description=\"The Web APIs you already know, in scope inside every Function.\"\n    :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n  >\n    <template #bottom>\n      <RuntimeApiScene class=\"max-w-(--container-2xl)\" />\n    </template>\n  </HeroBand>\n</template>"
+  }
+ ]
+}
