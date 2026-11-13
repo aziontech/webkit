@@ -1198,12 +1198,12 @@ export const resolveSummary = (entry, period, { empty = false } = {}) => {
         entry.base * bucketFactor(period, entry.unit),
         entry.spread ?? 0.3
       )
-  const value = empty ? 0 : aggregate(trend, entry.aggregation ?? 'sum')
+  const value = empty ? null : aggregate(trend, entry.aggregation ?? 'sum')
   return {
     ...entry,
     value,
     trend,
-    delta: variationOf(`summary:${entry.id}:${period}`),
+    delta: empty ? null : variationOf(`summary:${entry.id}:${period}`),
     format: rtmFormatter(entry.unit)
   }
 }
