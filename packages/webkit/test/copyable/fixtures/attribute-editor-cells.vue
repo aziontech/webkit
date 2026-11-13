@@ -33,7 +33,7 @@
     :definition="definition"
     :new-item="newVariable"
     :item-removable="(item) => !item.secret"
-    @remove="({ item }) => item.key.trim()"
+    @remove="(_event, { item }) => item.key.trim()"
   >
     <template #cell-key="{ value, update }">
       <input

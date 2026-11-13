@@ -53,7 +53,7 @@
   )
 
   /** Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to displayValue and update:modelValue. */
-  const model = defineModel<TValue>()
+  const model = defineModel<TValue>({ default: undefined as never })
 
   /** Controlled open state for the dropdown. Use with v-model:open; while unbound the dropdown is uncontrolled and seeded by defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
