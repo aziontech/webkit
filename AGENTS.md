@@ -45,5 +45,6 @@ fails the build when the two mix.
 
 3. A change to an existing component runs the same flow from step 2 with its spec; every new or
    changed component, example or block goes through the `ui-craft` review before its PR opens.
+   Add, Change, Deprecate and Remove: [component lifecycle](./CONTRIBUTING.md#component-lifecycle).
 4. What to regenerate when WebKit changes, and the AI flow in detail: [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 5. The plan: [`ROADMAP.md`](./ROADMAP.md).

@@ -10,6 +10,17 @@
 
 <!-- Breaking change (what + migration), new dependency, related issue. Write "None" when there is nothing. -->
 
+## Lifecycle
+
+<!-- Component PRs only (CONTRIBUTING.md#component-lifecycle). Other PRs delete this section. -->
+
+- Stage: <!-- add | change | deprecate | remove -->
+- [ ] Breaking change: `!` in the PR title (`feat(webkit)!: …`), which cuts a major
+- [ ] Migration provided: codemod entry in `packages/webkit/src/cli/migrations/` or a migration note (breaking change or removal)
+- [ ] API addition: `spec_version` bumped in `.specs/<name>.md`
+- [ ] Deprecation: `@deprecated` names the replacement and the removal version
+- [ ] Budget raise justified: a `Budget-raise` line in this body, in the format of CONTRIBUTING.md (only when a `.size-limit.json` limit goes up)
+
 <!--
   Component or block PRs (the AI flow: /webkit-new, /webkit-new-block) fill every section below;
   the orchestrator generates them. Other PRs delete everything from here down.
