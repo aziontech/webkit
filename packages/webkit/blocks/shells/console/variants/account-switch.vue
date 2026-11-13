@@ -191,7 +191,7 @@
     }
   ]
 
-  const account = { name: 'Ana Souza', email: 'ana.souza@example.com' }
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 
   const recents = [
     { id: 'azion-site', label: 'azion-site', icon: 'ai ai-edge-application', type: 'Application' },
@@ -237,7 +237,7 @@
     {
       id: '1001',
       clientId: '7f3a1',
-      name: 'Northwind Group',
+      name: 'Acme Inc.',
       type: 'organization',
       parentId: null
     },
@@ -246,7 +246,7 @@
     { id: '2202', clientId: '8a0c7', name: 'Storefront US', type: 'workspace', parentId: '1140' },
     { id: '1150', clientId: '7f3c4', name: 'Media', type: 'group', parentId: '1001' },
     { id: '2310', clientId: '8b114', name: 'Video platform', type: 'workspace', parentId: '1150' },
-    { id: '3001', clientId: '9c201', name: 'Contoso Labs', type: 'organization', parentId: null },
+    { id: '3001', clientId: '9c201', name: 'Acme Labs', type: 'organization', parentId: null },
     { id: '3105', clientId: '9c2e8', name: 'Research', type: 'workspace', parentId: '3001' }
   ]
 

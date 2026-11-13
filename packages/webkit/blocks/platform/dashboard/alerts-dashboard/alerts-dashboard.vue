@@ -260,7 +260,7 @@
   const entities: Entity[] = [
     {
       id: 'entity-01',
-      name: 'ana.ribeiro',
+      name: 'ava.wilson',
       type: 'User',
       score: 92,
       level: 'critical',
@@ -300,7 +300,7 @@
     },
     {
       id: 'entity-06',
-      name: 'lucia.alves',
+      name: 'lisa.martin',
       type: 'User',
       score: 41,
       level: 'low',
@@ -348,7 +348,7 @@
       level: 'critical',
       rank: 5,
       title: 'Data sent to a new destination',
-      entity: 'ana.ribeiro',
+      entity: 'ava.wilson',
       opened: 'Nov 10, 09:42',
       status: 'Open'
     },
@@ -357,7 +357,7 @@
       level: 'critical',
       rank: 5,
       title: 'Impossible travel',
-      entity: 'ana.ribeiro',
+      entity: 'ava.wilson',
       opened: 'Nov 10, 07:15',
       status: 'Investigating'
     },
@@ -420,7 +420,7 @@
       level: 'medium',
       rank: 3,
       title: 'Repeated failed sign-ins',
-      entity: 'lucia.alves',
+      entity: 'lisa.martin',
       opened: 'Nov 8, 14:09',
       status: 'Investigating'
     },
@@ -429,7 +429,7 @@
       level: 'low',
       rank: 2,
       title: 'Sign-in from a new device',
-      entity: 'lucia.alves',
+      entity: 'lisa.martin',
       opened: 'Nov 8, 09:36',
       status: 'Open'
     },

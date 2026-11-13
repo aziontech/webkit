@@ -133,7 +133,7 @@
     },
     ip_cidr: {
       label: 'List',
-      placeholder: '185.241.208.232\n194.26.192.64\n171.25.193.25 #comment',
+      placeholder: '192.0.2.10\n198.51.100.24\n203.0.113.7 #comment',
       helper:
         'One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed.'
     },

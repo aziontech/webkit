@@ -11,7 +11,7 @@
   import QrCode from '@aziontech/webkit/qr-code'
   import { nextTick, ref } from 'vue'
 
-  const account = 'ana.silva@example.com'
+  const account = 'grace.hall@example.com'
   const setupKey = 'JBSW Y3DP EHPK 3PXP'
   const otpauthUri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${setupKey.replaceAll(' ', '')}&issuer=Azion`
 
@@ -100,12 +100,14 @@
                     />
 
                     <Alert
+                      key="alert-1"
                       v-if="enabled"
                       severity="success"
                       size="small"
                       label="Multi-factor authentication is on. You will enter a code from the app each time you sign in."
                     />
                     <Alert
+                      key="alert-2"
                       v-else-if="unreachable"
                       severity="warning"
                       size="small"

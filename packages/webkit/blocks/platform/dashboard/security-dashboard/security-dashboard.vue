@@ -80,8 +80,8 @@
     { id: 'Scanner probes', name: 'Scanner probes', value: 1870 }
   ]
   const countries = [
-    { id: 'Brazil', name: 'Brazil', value: 14820 },
-    { id: 'United States', name: 'United States', value: 10640 },
+    { id: 'United States', name: 'United States', value: 14820 },
+    { id: 'Brazil', name: 'Brazil', value: 10640 },
     { id: 'Germany', name: 'Germany', value: 6130 },
     { id: 'Netherlands', name: 'Netherlands', value: 4270 },
     { id: 'India', name: 'India', value: 3480 },

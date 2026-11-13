@@ -110,7 +110,7 @@
         'Rate limit sign-in',
         'Allows 20 sign-in requests per minute from one address.',
         'request',
-        'Ana Ruiz',
+        'Emily Clark',
         '6 days ago'
       ),
       rule(

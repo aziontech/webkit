@@ -14,7 +14,7 @@
   const openSearch = () => layout?.openSearch()
 
   const DOMAIN_SHAPE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9-]+)*\.[a-z]{2,}$/i
-  const REGISTERED = ['example.com', 'example.org', 'example.net', 'acme.com']
+  const REGISTERED = ['example.com', 'example.org', 'example.net']
   const CHECK_MS = 900
 
   const domain = ref('')

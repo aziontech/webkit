@@ -224,7 +224,7 @@ export async function handleRequest(request, args = {}) {
   const runDetails = [
     { label: 'Started', value: 'Nov 10, 2026, 14:28' },
     { label: 'Duration', value: '412 ms' },
-    { label: 'Edge location', value: 'South America (São Paulo)' },
+    { label: 'Edge location', value: 'US East (Washington)' },
     { label: 'Memory', value: '38 MB of 128 MB' }
   ]
 

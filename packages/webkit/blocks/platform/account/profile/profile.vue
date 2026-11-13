@@ -19,14 +19,14 @@
     accountName: 'Acme',
     clientId: '9757a',
     companyName: '',
-    companyId: '',
+    taxId: '',
     billingEmails: 'name@example.com',
-    postalCode: '00000-000',
-    country: 'br',
-    state: 'rs',
-    city: 'poa',
-    address: 'n',
-    apartment: '',
+    postalCode: '94105',
+    country: 'us',
+    state: 'ca',
+    city: 'sf',
+    address: '100 Market Street',
+    apartment: 'Suite 400',
     allowSocialLogin: true,
     enforceMfa: false
   })
@@ -88,26 +88,30 @@
       label: 'Country',
       options: [
         { label: 'Brazil', value: 'br' },
-        { label: 'United States', value: 'us' },
-        { label: 'Portugal', value: 'pt' }
+        { label: 'Canada', value: 'ca' },
+        { label: 'Germany', value: 'de' },
+        { label: 'Japan', value: 'jp' },
+        { label: 'United Kingdom', value: 'gb' },
+        { label: 'United States', value: 'us' }
       ]
     },
     {
       key: 'state',
       label: 'State or region',
       options: [
-        { label: 'Rio Grande do Sul', value: 'rs' },
-        { label: 'São Paulo', value: 'sp' },
-        { label: 'Rio de Janeiro', value: 'rj' }
+        { label: 'California', value: 'ca' },
+        { label: 'New York', value: 'ny' },
+        { label: 'Texas', value: 'tx' },
+        { label: 'Washington', value: 'wa' }
       ]
     },
     {
       key: 'city',
       label: 'City',
       options: [
-        { label: 'Porto Alegre', value: 'poa' },
-        { label: 'São Paulo', value: 'sao' },
-        { label: 'Rio de Janeiro', value: 'rio' }
+        { label: 'Los Angeles', value: 'la' },
+        { label: 'San Diego', value: 'sd' },
+        { label: 'San Francisco', value: 'sf' }
       ]
     }
   ]
@@ -119,7 +123,7 @@
       connected: true,
       tag: 'Active',
       description:
-        'Connected as rafael.umann, with access to the acme and rafael-personal organizations.',
+        'Connected as jane-doe, with access to the acme and jane-doe-personal organizations.',
       action: 'Manage'
     },
     {
@@ -252,20 +256,18 @@
                           class="w-full"
                           aria-label="Company name"
                           autocomplete="organization"
-                          placeholder="Company S.A."
                           :disabled="saving"
                         />
                       </SettingRow>
                       <SettingRow
-                        title="Company ID"
-                        description="Personal or company ID number that identifies account ownership."
+                        title="Tax ID"
+                        description="The tax ID of the person or company that owns this account."
                       >
                         <Input
-                          v-model="form.companyId"
+                          v-model="form.taxId"
                           size="large"
                           class="w-full"
-                          aria-label="Company ID"
-                          placeholder="00.000.000/0001-00"
+                          aria-label="Tax ID"
                           :disabled="saving"
                         />
                       </SettingRow>

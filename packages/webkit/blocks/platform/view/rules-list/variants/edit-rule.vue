@@ -225,7 +225,7 @@
         'Redirect www',
         'Sends the www host to the apex domain.',
         'request',
-        'Ana Ruiz',
+        'Emily Clark',
         '12 days ago'
       ),
       rule(
@@ -259,7 +259,7 @@
         'Security headers',
         'Adds the security header set to successful responses.',
         'response',
-        'Ana Ruiz',
+        'Emily Clark',
         '9 days ago'
       ),
       rule(

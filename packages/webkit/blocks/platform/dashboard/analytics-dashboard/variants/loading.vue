@@ -152,7 +152,7 @@
     }
   ]
 
-  const countries: string[] = ['Brazil', 'United States', 'Germany', 'India', 'Mexico', 'Argentina']
+  const countries: string[] = ['United States', 'Brazil', 'Germany', 'India', 'Mexico', 'Argentina']
 
   const countryRequests: ChartSeries[] = [
     {

@@ -43,7 +43,7 @@
       name: 'ANWDC7RA',
       state: 'active',
       description: 'Reorder rules',
-      author: 'Bruno Germano',
+      author: 'Chris Taylor',
       createdAt: '2026-11-05T17:37:18.145Z',
       createdAgo: '21 hours ago'
     },
@@ -52,7 +52,7 @@
       name: 'APA7237R',
       state: 'ready',
       description: 'Add rule"Security headers"',
-      author: 'Gab Lisboa',
+      author: 'Riley Carter',
       createdAt: '2026-11-03T14:37:18.145Z',
       createdAgo: '3 days ago'
     },
@@ -61,7 +61,7 @@
       name: 'AQO0RYO8',
       state: 'ready',
       description: 'Bypass cache for /api/*',
-      author: 'Robson Junior',
+      author: 'Ethan Brooks',
       createdAt: '2026-11-02T14:37:18.145Z',
       createdAgo: '4 days ago'
     },
@@ -70,7 +70,7 @@
       name: 'AS1UHU4P',
       state: 'ready',
       description: 'Add rule"Redirect /blog to docs"',
-      author: 'Isaque Böck',
+      author: 'Jordan Kim',
       createdAt: '2026-11-01T14:37:18.145Z',
       createdAgo: '5 days ago'
     },
@@ -79,7 +79,7 @@
       name: 'ATFO7PL6',
       state: 'ready',
       description: 'Add function"image-resize"',
-      author: 'Rafael Garbinatto',
+      author: 'Taylor Reed',
       createdAt: '2026-10-31T14:37:18.145Z',
       createdAgo: '6 days ago'
     },
@@ -88,7 +88,7 @@
       name: 'AUTHXL1N',
       state: 'ready',
       description: 'Reorder rules',
-      author: 'Herbert Júlio',
+      author: 'John Smith',
       createdAt: '2026-10-30T14:37:18.145Z',
       createdAgo: '1 week ago'
     },
@@ -97,7 +97,7 @@
       name: 'AW7BNGI4',
       state: 'ready',
       description: 'Add rule"Security headers"',
-      author: 'Rafael Umman',
+      author: 'Sam Lee',
       createdAt: '2026-10-29T14:37:18.145Z',
       createdAgo: '1 week ago'
     },
@@ -106,7 +106,7 @@
       name: 'AXL5DBYL',
       state: 'ready',
       description: 'Bypass cache for /api/*',
-      author: 'Marcus Grando',
+      author: 'Priya Patel',
       createdAt: '2026-10-28T14:37:18.145Z',
       createdAgo: '1 week ago'
     },
@@ -115,7 +115,7 @@
       name: 'AYYZ37F2',
       state: 'ready',
       description: 'Add rule"Redirect /blog to docs"',
-      author: 'Bruno Germano',
+      author: 'Chris Taylor',
       createdAt: '2026-10-27T14:37:18.145Z',
       createdAgo: '1 week ago'
     },
@@ -124,7 +124,7 @@
       name: 'A1CST2VJ',
       state: 'ready',
       description: 'Add function"image-resize"',
-      author: 'Gab Lisboa',
+      author: 'Riley Carter',
       createdAt: '2026-10-26T14:37:18.145Z',
       createdAgo: '2 weeks ago'
     },
@@ -133,7 +133,7 @@
       name: 'A2QMIYC0',
       state: 'ready',
       description: 'Reorder rules',
-      author: 'Robson Junior',
+      author: 'Ethan Brooks',
       createdAt: '2026-10-24T14:37:18.145Z',
       createdAgo: '2 weeks ago'
     },
@@ -142,7 +142,7 @@
       name: 'A44G8TSH',
       state: 'ready',
       description: 'Add rule"Security headers"',
-      author: 'Isaque Böck',
+      author: 'Jordan Kim',
       createdAt: '2026-10-24T14:37:18.145Z',
       createdAgo: '2 weeks ago'
     },
@@ -151,7 +151,7 @@
       name: 'A5I9YP8Y',
       state: 'archived',
       description: 'Bypass cache for /api/*',
-      author: 'Rafael Garbinatto',
+      author: 'Taylor Reed',
       createdAt: '2026-10-22T14:37:18.145Z',
       createdAgo: '2 weeks ago'
     }

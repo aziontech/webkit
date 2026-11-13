@@ -233,7 +233,7 @@
       type: 'PDF',
       size: 2480000,
       source: 'inline',
-      submitter: 'ana.ribeiro',
+      submitter: 'ava.wilson',
       lastSeen: '2026-11-10 13:42'
     },
     {
@@ -257,7 +257,7 @@
       type: 'Office document',
       size: 184000,
       source: 'upload',
-      submitter: 'lucia.alves',
+      submitter: 'lisa.martin',
       lastSeen: '2026-11-10 12:57'
     },
     {

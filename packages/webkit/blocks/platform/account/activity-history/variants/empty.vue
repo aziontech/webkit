@@ -4,8 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import type { DateRangeUnit, DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -38,7 +38,7 @@
       id: 'evt-1048',
       event: 'Signed in',
       category: 'Sign-in',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(25 * MINUTE)
     },
@@ -46,7 +46,7 @@
       id: 'evt-1047',
       event: 'Revoked personal token “Nightly export”',
       category: 'Security',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(3 * HOUR)
     },
@@ -60,9 +60,9 @@
     },
     {
       id: 'evt-1045',
-      event: 'Changed the role of maria.costa@example.com to Admin',
+      event: 'Changed the role of henry.young@example.com to Admin',
       category: 'Users',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(1 * DAY + 2 * HOUR)
     },
@@ -70,7 +70,7 @@
       id: 'evt-1044',
       event: 'Turned on multi-factor authentication',
       category: 'Security',
-      user: 'maria.costa@example.com',
+      user: 'henry.young@example.com',
       ip: '192.0.2.61',
       at: ago(2 * DAY)
     },
@@ -78,7 +78,7 @@
       id: 'evt-1043',
       event: 'Updated the billing email',
       category: 'Billing',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(3 * DAY)
     },
@@ -94,7 +94,7 @@
       id: 'evt-1041',
       event: 'Invited lee.park@example.com to the team Developers',
       category: 'Users',
-      user: 'maria.costa@example.com',
+      user: 'henry.young@example.com',
       ip: '192.0.2.61',
       at: ago(6 * DAY)
     },
@@ -102,7 +102,7 @@
       id: 'evt-1040',
       event: 'Created personal token “Deploy pipeline”',
       category: 'Security',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(12 * DAY)
     },
@@ -110,7 +110,7 @@
       id: 'evt-1039',
       event: 'Changed the plan from Free to Pro',
       category: 'Billing',
-      user: 'ana.silva@example.com',
+      user: 'grace.hall@example.com',
       ip: '203.0.113.24',
       at: ago(21 * DAY)
     }

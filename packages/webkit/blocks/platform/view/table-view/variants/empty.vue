@@ -35,23 +35,23 @@
     lastModified: string
   }
 
-  const avatars = {
-    'Robson Junior': 'https://ca.slack-edge.com/TDVATDGUU-UDW2MSZAP-81cad567c9a1-512',
-    'Isaque Böck': 'https://ca.slack-edge.com/TDVATDGUU-U09745PDX6D-971b0e576ab1-512',
-    'Rafael Garbinatto': 'https://ca.slack-edge.com/TDVATDGUU-ULU0NHDSM-5c3d561a39e1-512',
-    'Herbert Júlio': 'https://ca.slack-edge.com/TDVATDGUU-U036GK4J347-399781903ba3-512',
-    'Rafael Umman': 'https://ca.slack-edge.com/TDVATDGUU-UDUPJUL1E-d70389018587-512',
-    'Marcus Grando': 'https://ca.slack-edge.com/TDVATDGUU-UDVG1K05Q-g75bb0e36e1c-512',
-    'Bruno Germano': 'https://ca.slack-edge.com/TDVATDGUU-U08HZ0M4P1D-16b5a8e0519a-512',
-    'Gab Lisboa': 'https://ca.slack-edge.com/TDVATDGUU-U0279S2BC12-d09077d857f7-512'
-  }
+  const owners = [
+    'Ethan Brooks',
+    'Jordan Kim',
+    'Taylor Reed',
+    'John Smith',
+    'Sam Lee',
+    'Priya Patel',
+    'Chris Taylor',
+    'Riley Carter'
+  ]
 
   const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
     {
       key: 'owner',
       label: 'Author',
-      options: Object.keys(avatars).map((owner) => ({ value: owner }))
+      options: owners.map((owner) => ({ value: owner }))
     },
     { key: 'status', label: 'Status', options: [{ value: 'Live' }, { value: 'Inactive' }] },
     { key: 'domain', label: 'Domain' }

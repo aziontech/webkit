@@ -163,12 +163,12 @@ describe('shells/console#AccountSwitch', () => {
       expect(dialog()?.textContent).toContain('Switch account')
       return dialog() as HTMLElement
     })
-    expect(panel.textContent).toContain('Northwind Group')
+    expect(panel.textContent).toContain('Acme Inc.')
     expect(buttonByText('Storefront EU', panel)).toHaveAttribute('aria-current', 'true')
     await expectNoA11yViolations(panel)
     await fireEvent.update(view.getByLabelText('Search accounts'), 'research')
     await waitFor(() => expect(panel.textContent).not.toContain('Storefront US'))
-    expect(panel.textContent).toContain('Contoso Labs')
+    expect(panel.textContent).toContain('Acme Labs')
     await fireEvent.click(buttonByText('Research', panel))
     await waitFor(() =>
       expect(view.getByRole('button', { name: /Account: Research/ })).toBeTruthy()

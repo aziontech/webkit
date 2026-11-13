@@ -447,15 +447,15 @@
             <div class="flex flex-col gap-(--spacing-xxs)">
               <span class="text-label-sm text-(--text-muted)">Created</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <Tooltip text="Rafael Garbinatto · October 29, 2026, 11:30:58 AM">
+                <Tooltip text="Taylor Reed · October 29, 2026, 11:30:58 AM">
                   <Avatar
-                    alt="Rafael Garbinatto"
-                    label="Rafael Garbinatto"
+                    alt="Taylor Reed"
+                    label="Taylor Reed"
                     size="small"
                     kind="square"
                   />
                 </Tooltip>
-                <span class="truncate text-body-sm text-(--text-default)"> Rafael Garbinatto </span>
+                <span class="truncate text-body-sm text-(--text-default)"> Taylor Reed </span>
                 <span class="shrink-0 text-body-sm text-(--text-muted)"> 1 week ago </span>
               </div>
             </div>

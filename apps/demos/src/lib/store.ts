@@ -14,12 +14,12 @@ export type Resource = {
 }
 
 export const OWNERS = [
-  'Ana Souza',
-  'Bruno Lima',
-  'Carla Mendes',
-  'Diego Rocha',
-  'Elisa Prado',
-  'Felipe Nunes'
+  'Amy Chen',
+  'Ben Carter',
+  'Chloe Park',
+  'David Kim',
+  'Ella Grant',
+  'Frank Miller'
 ]
 
 const REFERENCE = Date.UTC(2026, 10, 10, 12)

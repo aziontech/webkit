@@ -72,12 +72,12 @@
   const allIds = groups.flatMap(groupIds)
 
   const accountUsers = [
-    { email: 'ana.ribeiro@example.com', name: 'Ana Ribeiro' },
-    { email: 'bruno.costa@example.com', name: 'Bruno Costa' },
-    { email: 'carla.mendes@example.com', name: 'Carla Mendes' },
-    { email: 'diego.alves@example.com', name: 'Diego Alves' },
-    { email: 'elisa.prado@example.com', name: 'Elisa Prado' },
-    { email: 'felipe.souza@example.com', name: 'Felipe Souza' }
+    { email: 'ava.wilson@example.com', name: 'Ava Wilson' },
+    { email: 'brian.hughes@example.com', name: 'Brian Hughes' },
+    { email: 'chloe.park@example.com', name: 'Chloe Park' },
+    { email: 'dylan.ross@example.com', name: 'Dylan Ross' },
+    { email: 'ella.grant@example.com', name: 'Ella Grant' },
+    { email: 'finn.walsh@example.com', name: 'Finn Walsh' }
   ]
   const userByEmail = (email: string) => accountUsers.find((user) => user.email === email)
   const initials = (name: string): string =>
@@ -98,7 +98,7 @@
       'metrics.view',
       'logs.view'
     ],
-    members: ['ana.ribeiro@example.com', 'bruno.costa@example.com', 'carla.mendes@example.com']
+    members: ['ava.wilson@example.com', 'brian.hughes@example.com', 'chloe.park@example.com']
   }
 
   const form = reactive({ name: saved.name, description: saved.description, active: saved.active })

@@ -52,10 +52,10 @@
       value: 'enterprise',
       label: "I'm running production at scale",
       description: 'Optimize costs with usage or spend commitments',
-      ariaLabel: "I'm running production at scale. Enterprise plan, From $2.000/mo.",
+      ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
       name: 'Enterprise',
       severity: 'primary',
-      price: 'From $2.000/mo'
+      price: 'From $2,000/mo'
     }
   ]
   const upgrades = {
@@ -83,18 +83,18 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next charge', value: '$ 200' },
-            { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' }
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
           ],
-          total: { value: '$ 3.000', suffix: 'per year' }
+          total: { value: '$3,000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next charge', value: '$ 200' },
-            { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$ 2.200', suffix: 'per month' }
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
           ],
-          total: { value: '$ 2.200', suffix: 'per year' }
+          total: { value: '$2,200', suffix: 'per year' }
         }
       }
     },
@@ -124,18 +124,18 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next charge', value: '$ 2.000' },
-            { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' }
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' }
           ],
-          total: { value: '$ 24.000', suffix: 'per year' }
+          total: { value: '$24,000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next charge', value: '$ 2.000' },
-            { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$ 4.800', suffix: 'per month' }
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$4,800', suffix: 'per month' }
           ],
-          total: { value: '$ 19.200', suffix: 'per year' }
+          total: { value: '$19,200', suffix: 'per year' }
         }
       }
     }
@@ -156,29 +156,30 @@
   ]
   const countryOptions = [
     { value: 'Brazil', label: 'Brazil' },
-    { value: 'United States', label: 'United States' },
-    { value: 'Portugal', label: 'Portugal' },
-    { value: 'Argentina', label: 'Argentina' },
-    { value: 'Mexico', label: 'Mexico' }
+    { value: 'Canada', label: 'Canada' },
+    { value: 'Germany', label: 'Germany' },
+    { value: 'Japan', label: 'Japan' },
+    { value: 'United Kingdom', label: 'United Kingdom' },
+    { value: 'United States', label: 'United States' }
   ]
   const stateOptions = [
-    { value: 'São Paulo', label: 'São Paulo' },
-    { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
-    { value: 'Minas Gerais', label: 'Minas Gerais' },
-    { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
+    { value: 'California', label: 'California' },
+    { value: 'New York', label: 'New York' },
+    { value: 'Texas', label: 'Texas' },
+    { value: 'Washington', label: 'Washington' }
   ]
   const cityOptions = [
-    { value: 'São Paulo', label: 'São Paulo' },
-    { value: 'Campinas', label: 'Campinas' },
-    { value: 'Santos', label: 'Santos' }
+    { value: 'Los Angeles', label: 'Los Angeles' },
+    { value: 'San Diego', label: 'San Diego' },
+    { value: 'San Francisco', label: 'San Francisco' }
   ]
   const accountAddress = {
-    country: 'Brazil',
-    postalCode: '01310-100',
-    state: 'São Paulo',
-    city: 'São Paulo',
-    line1: 'Avenida Paulista, 1000',
-    line2: ''
+    country: 'United States',
+    postalCode: '94105',
+    state: 'California',
+    city: 'San Francisco',
+    line1: '100 Market Street',
+    line2: 'Suite 400'
   }
   const blankAddress = {
     country: undefined,
@@ -188,7 +189,7 @@
     line1: '',
     line2: ''
   }
-  const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
+  const blankCard = { holder: '', country: undefined as string | undefined, number: '', expiry: '', code: '' }
 
   const plan = ref()
   const pendingPlanId = ref('')
@@ -555,6 +556,7 @@
                                                   <Field.Label>Country or region</Field.Label>
                                                   <Select
                                                     v-model="card.country"
+                                                    placeholder="Select an option"
                                                     size="large"
                                                   >
                                                     <Select.Trigger />
@@ -707,7 +709,6 @@
                                                   v-model="address.postalCode"
                                                   name="postalCode"
                                                   size="large"
-                                                  placeholder="00000-000"
                                                   autocomplete="postal-code"
                                                 />
                                               </Field>

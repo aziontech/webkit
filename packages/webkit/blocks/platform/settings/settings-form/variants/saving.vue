@@ -12,9 +12,11 @@
   import { computed, nextTick, reactive, ref } from 'vue'
 
   const timezones = [
+    { label: '(UTC+00:00) UTC', value: 'utc' },
+    { label: '(UTC-08:00) Los Angeles', value: 'america-los_angeles' },
+    { label: '(UTC-05:00) New York', value: 'america-new_york' },
     { label: '(UTC-03:00) São Paulo', value: 'america-sao_paulo' },
-    { label: '(UTC+00:00) London', value: 'europe-london' },
-    { label: '(UTC-05:00) New York', value: 'america-new_york' }
+    { label: '(UTC+00:00) London', value: 'europe-london' }
   ]
   const languages = [
     { label: 'English', value: 'en' },
@@ -27,7 +29,7 @@
   const saved = ref({
     fullName: 'Alex Morgan',
     email: 'name@example.com',
-    timezone: 'america-sao_paulo',
+    timezone: 'utc',
     language: 'en',
     productUpdates: true
   })

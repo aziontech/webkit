@@ -70,7 +70,7 @@
       name: 'Local CLI',
       description: 'Development laptop',
       createdAt: daysFrom(-40),
-      createdBy: 'ana.silva@example.com',
+      createdBy: 'grace.hall@example.com',
       expiresAt: daysFrom(50),
       lastUsedAt: daysFrom(-0.1),
       revoked: false
@@ -80,7 +80,7 @@
       name: 'Deploy pipeline',
       description: 'CI job that publishes the storefront',
       createdAt: daysFrom(-85),
-      createdBy: 'ana.silva@example.com',
+      createdBy: 'grace.hall@example.com',
       expiresAt: daysFrom(5),
       lastUsedAt: daysFrom(-1),
       revoked: false
@@ -90,7 +90,7 @@
       name: 'Infrastructure as code',
       description: 'Provider for the staging stack',
       createdAt: daysFrom(-120),
-      createdBy: 'ana.silva@example.com',
+      createdBy: 'grace.hall@example.com',
       expiresAt: daysFrom(-30),
       lastUsedAt: daysFrom(-31),
       revoked: false
@@ -100,7 +100,7 @@
       name: 'Nightly export',
       description: 'Retired reporting script',
       createdAt: daysFrom(-200),
-      createdBy: 'ana.silva@example.com',
+      createdBy: 'grace.hall@example.com',
       expiresAt: daysFrom(160),
       lastUsedAt: null,
       revoked: true
@@ -217,7 +217,7 @@
           name,
           description: form.description.trim(),
           createdAt: new Date(),
-          createdBy: 'ana.silva@example.com',
+          createdBy: 'grace.hall@example.com',
           expiresAt: daysFrom(Number(form.expiresIn)),
           lastUsedAt: null,
           revoked: false

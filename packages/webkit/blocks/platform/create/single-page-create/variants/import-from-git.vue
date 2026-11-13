@@ -16,9 +16,9 @@
   import { computed, reactive, ref } from 'vue'
 
   const scopes = [
-    { label: 'gab-lisboa', value: 'gab-lisboa' },
+    { label: 'riley-carter', value: 'riley-carter' },
     { label: 'acme', value: 'acme' },
-    { label: 'rafael-personal', value: 'rafael-personal' }
+    { label: 'riley-personal', value: 'riley-personal' }
   ]
   const scopeLabel = (value: string) => scopes.find((option) => option.value === value)?.label ?? ''
 
@@ -58,7 +58,7 @@
       .join(', ')
 
   const form = reactive({
-    scope: 'gab-lisboa',
+    scope: 'riley-carter',
     repoName: 'nuxt-ecommerce',
     repoPrivate: true,
     accessToken: '',

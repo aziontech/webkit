@@ -1,31 +1,31 @@
 <script setup lang="ts">
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Checkbox from '@aziontech/webkit/checkbox'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
-  import RadioCards from '@aziontech/webkit/radio-cards'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Separator from '@aziontech/webkit/separator'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
+  import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
-  import Alert from '@aziontech/webkit/alert'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Progress from '@aziontech/webkit/progress'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import RadioCards from '@aziontech/webkit/radio-cards'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Separator from '@aziontech/webkit/separator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref, watch } from 'vue'
 
   type BillingPeriod = 'monthly' | 'yearly'
@@ -83,10 +83,10 @@
       value: 'enterprise',
       label: "I'm running production at scale",
       description: 'Optimize costs with usage or spend commitments',
-      ariaLabel: "I'm running production at scale. Enterprise plan, From $2.000/mo.",
+      ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
       name: 'Enterprise',
       severity: 'primary',
-      price: 'From $2.000/mo'
+      price: 'From $2,000/mo'
     }
   ]
   const upgrades: Partial<Record<string, PlanUpgrade>> = {
@@ -114,18 +114,18 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next charge', value: '$ 200' },
-            { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' }
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
           ],
-          total: { value: '$ 3.000', suffix: 'per year' }
+          total: { value: '$3,000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next charge', value: '$ 200' },
-            { label: 'Subtotal', value: '$ 3.000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$ 2.200', suffix: 'per month' }
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
           ],
-          total: { value: '$ 2.200', suffix: 'per year' }
+          total: { value: '$2,200', suffix: 'per year' }
         }
       }
     },
@@ -155,18 +155,18 @@
       charge: {
         monthly: {
           rows: [
-            { label: 'Next charge', value: '$ 2.000' },
-            { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' }
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' }
           ],
-          total: { value: '$ 24.000', suffix: 'per year' }
+          total: { value: '$24,000', suffix: 'per year' }
         },
         yearly: {
           rows: [
-            { label: 'Next charge', value: '$ 2.000' },
-            { label: 'Subtotal', value: '$ 24.000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$ 4.800', suffix: 'per month' }
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$4,800', suffix: 'per month' }
           ],
-          total: { value: '$ 19.200', suffix: 'per year' }
+          total: { value: '$19,200', suffix: 'per year' }
         }
       }
     }
@@ -187,29 +187,30 @@
   ]
   const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
-    { value: 'United States', label: 'United States' },
-    { value: 'Portugal', label: 'Portugal' },
-    { value: 'Argentina', label: 'Argentina' },
-    { value: 'Mexico', label: 'Mexico' }
+    { value: 'Canada', label: 'Canada' },
+    { value: 'Germany', label: 'Germany' },
+    { value: 'Japan', label: 'Japan' },
+    { value: 'United Kingdom', label: 'United Kingdom' },
+    { value: 'United States', label: 'United States' }
   ]
   const stateOptions: SelectOptionItem[] = [
-    { value: 'São Paulo', label: 'São Paulo' },
-    { value: 'Rio de Janeiro', label: 'Rio de Janeiro' },
-    { value: 'Minas Gerais', label: 'Minas Gerais' },
-    { value: 'Rio Grande do Sul', label: 'Rio Grande do Sul' }
+    { value: 'California', label: 'California' },
+    { value: 'New York', label: 'New York' },
+    { value: 'Texas', label: 'Texas' },
+    { value: 'Washington', label: 'Washington' }
   ]
   const cityOptions: SelectOptionItem[] = [
-    { value: 'São Paulo', label: 'São Paulo' },
-    { value: 'Campinas', label: 'Campinas' },
-    { value: 'Santos', label: 'Santos' }
+    { value: 'Los Angeles', label: 'Los Angeles' },
+    { value: 'San Diego', label: 'San Diego' },
+    { value: 'San Francisco', label: 'San Francisco' }
   ]
   const accountAddress: BillingAddress = {
-    country: 'Brazil',
-    postalCode: '01310-100',
-    state: 'São Paulo',
-    city: 'São Paulo',
-    line1: 'Avenida Paulista, 1000',
-    line2: ''
+    country: 'United States',
+    postalCode: '94105',
+    state: 'California',
+    city: 'San Francisco',
+    line1: '100 Market Street',
+    line2: 'Suite 400'
   }
   const blankAddress: BillingAddress = {
     country: undefined,
@@ -219,7 +220,13 @@
     line1: '',
     line2: ''
   }
-  const blankCard = { holder: '', country: 'Brazil', number: '', expiry: '', code: '' }
+  const blankCard = {
+    holder: '',
+    country: undefined as string | undefined,
+    number: '',
+    expiry: '',
+    code: ''
+  }
 
   const plan = ref<string>()
   const pendingPlanId = ref('')
@@ -581,6 +588,7 @@
                                                   <Field.Label>Country or region</Field.Label>
                                                   <Select
                                                     v-model="card.country"
+                                                    placeholder="Select an option"
                                                     size="large"
                                                   >
                                                     <Select.Trigger />
@@ -733,7 +741,6 @@
                                                   v-model="address.postalCode"
                                                   name="postalCode"
                                                   size="large"
-                                                  placeholder="00000-000"
                                                   autocomplete="postal-code"
                                                 />
                                               </Field>

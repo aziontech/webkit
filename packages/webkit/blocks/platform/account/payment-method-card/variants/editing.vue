@@ -1,19 +1,20 @@
 <script setup lang="ts">
-  import PaymentBrand from '@aziontech/webkit/payment-brand'
-  import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
-  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Alert from '@aziontech/webkit/alert'
+  import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import { nextTick, reactive, ref } from 'vue'
 
   const countryOptions: SelectOptionItem[] = [
     { value: 'Brazil', label: 'Brazil' },
-    { value: 'United States', label: 'United States' },
-    { value: 'Portugal', label: 'Portugal' },
-    { value: 'Argentina', label: 'Argentina' },
-    { value: 'Mexico', label: 'Mexico' }
+    { value: 'Canada', label: 'Canada' },
+    { value: 'Germany', label: 'Germany' },
+    { value: 'Japan', label: 'Japan' },
+    { value: 'United Kingdom', label: 'United Kingdom' },
+    { value: 'United States', label: 'United States' }
   ]
   const cardFieldIds: Record<string, string> = {
     holder: 'card-holder',
@@ -23,7 +24,13 @@
   }
   const editingCard = ref(true)
   const cardLast4 = ref('8888')
-  const blankCard = () => ({ holder: '', country: 'Brazil', number: '', expiry: '', code: '' })
+  const blankCard = () => ({
+    holder: '',
+    country: undefined as string | undefined,
+    number: '',
+    expiry: '',
+    code: ''
+  })
   const cardForm = reactive(blankCard())
   const cardErrors = reactive<Record<string, string>>({
     holder: '',
@@ -155,6 +162,7 @@
               <Field.Label for="card-country">Country or region</Field.Label>
               <Select
                 v-model="cardForm.country"
+                placeholder="Select an option"
                 size="large"
               >
                 <Select.Trigger id="card-country" />

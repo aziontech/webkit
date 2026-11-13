@@ -130,11 +130,11 @@
           <span class="text-label-sm text-(--text-muted)">Last modified</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm text-(--text-default)">
-              6 days ago by Robson Junior
+              6 days ago by Ethan Brooks
             </span>
             <Avatar
-              alt="Robson Junior"
-              label="Robson Junior"
+              alt="Ethan Brooks"
+              label="Ethan Brooks"
               size="small"
               kind="square"
               class="shrink-0"

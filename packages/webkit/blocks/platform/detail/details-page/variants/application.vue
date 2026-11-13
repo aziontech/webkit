@@ -32,7 +32,7 @@
 
   const APP = {
     name: 'storefront-app',
-    host: 'storefront-app-k3m9.example.app',
+    host: 'storefront-app-k3m9.azion.app',
     deployment: '4182093317',
     version: 'BX7Q2LMA'
   }

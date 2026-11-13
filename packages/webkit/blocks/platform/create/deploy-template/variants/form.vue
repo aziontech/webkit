@@ -22,7 +22,7 @@
   ]
 
   const scopes: SelectOptionItem[] = [
-    { label: 'gab-lisboa', value: 'gab-lisboa' },
+    { label: 'riley-carter', value: 'riley-carter' },
     { label: 'acme', value: 'acme' },
     { label: 'acme-templates', value: 'acme-templates' }
   ]
@@ -51,7 +51,7 @@
     }
   ]
 
-  const scope = ref('gab-lisboa')
+  const scope = ref('riley-carter')
   const repoName = ref('nuxt-ecommerce')
   const isPublic = ref(true)
   const values = reactive(Object.fromEntries(settings.map((field) => [field.name, ''])))
