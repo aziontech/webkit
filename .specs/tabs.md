@@ -3,13 +3,13 @@ name: tabs
 category: navigation
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
 checksum: 30490bd131d55f95f355d09d2ae575c5468ec6492fe71ee9e5db8a7ece839a8b
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Tab View — Component Spec

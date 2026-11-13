@@ -3,13 +3,13 @@ name: global-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
 checksum: f742220b9bc515a9ba0e667f41c3b2befdf197593c70a6a96c8269354e0854e1
 created: 2026-05-23
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Global Header — Component Spec

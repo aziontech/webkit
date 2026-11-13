@@ -3,13 +3,13 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
 checksum: a89876f15bb40a670e7620f616a3b6a0878f5598704f2b8c7788e5a6fe3c2597
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Navigation Menu — Component Spec

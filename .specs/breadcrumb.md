@@ -3,13 +3,13 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
 checksum: f00a3989e17a582b71aac128d005ec44563800807735001768a7e33b7abb27a5
 created: 2026-05-25
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # Breadcrumb — Component Spec
