@@ -2,8 +2,8 @@
   import Chart from '@aziontech/webkit/chart'
 
   const countries = [
-    'Brazil',
     'United States',
+    'United Kingdom',
     'Germany',
     'India',
     'Netherlands',

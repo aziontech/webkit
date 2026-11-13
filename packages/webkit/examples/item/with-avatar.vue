@@ -8,14 +8,13 @@
   <Item kind="outlined">
     <Item.Media>
       <Avatar
-        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
-        alt="Evil Rabbit"
-        label="ER"
+        alt="Sam Lee"
+        label="SL"
         size="medium"
       />
     </Item.Media>
     <Item.Content>
-      <Item.Title>Evil Rabbit</Item.Title>
+      <Item.Title>Sam Lee</Item.Title>
       <Item.Description>Last seen 5 months ago</Item.Description>
     </Item.Content>
     <Item.Actions>

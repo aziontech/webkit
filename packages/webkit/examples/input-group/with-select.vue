@@ -3,7 +3,7 @@
   import Select from '@aziontech/webkit/select'
   import { ref } from 'vue'
 
-  const currency = ref('BRL')
+  const currency = ref('USD')
 </script>
 
 <template>
@@ -11,13 +11,13 @@
     <Select
       aria-label="Currency"
       v-model="currency"
-      placeholder="BRL"
+      placeholder="USD"
     >
       <Select.Trigger />
       <Select.Content>
-        <Select.Option value="BRL">BRL</Select.Option>
         <Select.Option value="USD">USD</Select.Option>
         <Select.Option value="EUR">EUR</Select.Option>
+        <Select.Option value="GBP">GBP</Select.Option>
       </Select.Content>
     </Select>
     <input

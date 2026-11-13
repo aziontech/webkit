@@ -1,4 +1,5 @@
 <script setup>
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import Avatar from '@aziontech/webkit/avatar'
 </script>
 
@@ -6,7 +7,7 @@
   <div class="flex flex-wrap items-end gap-6">
     <div class="flex flex-col items-center gap-2">
       <Avatar
-        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=96&h=96&fit=crop&crop=face"
+        :src="placeholderImage"
         alt="Portrait of a user"
         size="large"
       />

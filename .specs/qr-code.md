@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 49cb7c9e625b35efecc243d33fb8b817580d0d17d5595fae9a827dfaba4fee26
+checksum: 43e4fed7a347be33ca38fd6a42777ef049e9bf126ae0aacee29ec1cc32bffb70
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -35,7 +35,7 @@ A QR code drawn as SVG from a string, with no image request and no dependency: W
 ## Best practices
 
 - Always give the code a typed alternative next to it: the setup key or the link as text.
-- Name the code after what it does (`QR code to add ana@example.com to an authenticator app`), not `QR code`.
+- Name the code after what it does (`QR code to add jane.doe@example.com to an authenticator app`), not `QR code`.
 - Keep the default `M` error correction; raise it only when the code is printed or shown small.
 
 ## Usage
@@ -47,8 +47,8 @@ A QR code drawn as SVG from a string, with no image request and no dependency: W
 
 <template>
   <QrCode
-    value="otpauth://totp/Azion:ana@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Azion"
-    label="QR code to add ana@example.com to an authenticator app"
+    value="otpauth://totp/Azion:jane.doe@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Azion"
+    label="QR code to add jane.doe@example.com to an authenticator app"
   />
 </template>
 ```

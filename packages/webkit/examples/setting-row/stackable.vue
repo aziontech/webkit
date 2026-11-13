@@ -5,7 +5,10 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import { reactive } from 'vue'
 
-  const form = reactive({ name: 'edgeflow-origin', address: 'https://origin.edgeflow.com/api/v2/' })
+  const form = reactive({
+    name: 'production-origin',
+    address: 'https://origin.example.com/api/v2/'
+  })
 </script>
 
 <template>

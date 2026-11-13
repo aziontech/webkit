@@ -18,7 +18,7 @@
       domains: ['shop.example.com', 'www.shop.example.com', 'm.shop.example.com'],
       tags: ['production', 'checkout', 'payments', 'europe'],
       updatedAt: new Date(NOW - 2 * HOUR),
-      updatedBy: 'maria.silva@example.com'
+      updatedBy: 'jane.doe@example.com'
     },
     {
       id: '1726511',
@@ -38,7 +38,7 @@
       domains: ['docs.example.com', 'help.example.com'],
       tags: [],
       updatedAt: new Date(NOW - 9 * 24 * HOUR),
-      updatedBy: 'ana.costa@example.com'
+      updatedBy: 'john.smith@example.com'
     }
   ]
 

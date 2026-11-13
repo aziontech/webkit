@@ -9,15 +9,14 @@
     <Item>
       <Item.Media>
         <Avatar
-          src="https://github.com/shadcn.png"
-          alt="shadcn"
-          label="S"
+          alt="Jane Doe"
+          label="JD"
           size="medium"
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>shadcn</Item.Title>
-        <Item.Description>shadcn@vercel.com</Item.Description>
+        <Item.Title>Jane Doe</Item.Title>
+        <Item.Description>jane.doe@example.com</Item.Description>
       </Item.Content>
       <Item.Actions>
         <Button
@@ -31,15 +30,14 @@
     <Item>
       <Item.Media>
         <Avatar
-          src="https://github.com/maxleiter.png"
-          alt="maxleiter"
-          label="M"
+          alt="John Smith"
+          label="JS"
           size="medium"
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>maxleiter</Item.Title>
-        <Item.Description>maxleiter@vercel.com</Item.Description>
+        <Item.Title>John Smith</Item.Title>
+        <Item.Description>john.smith@example.com</Item.Description>
       </Item.Content>
       <Item.Actions>
         <Button
@@ -53,15 +51,14 @@
     <Item>
       <Item.Media>
         <Avatar
-          src="https://github.com/evilrabbit.png"
-          alt="evilrabbit"
-          label="E"
+          alt="Priya Patel"
+          label="PP"
           size="medium"
         />
       </Item.Media>
       <Item.Content>
-        <Item.Title>evilrabbit</Item.Title>
-        <Item.Description>evilrabbit@vercel.com</Item.Description>
+        <Item.Title>Priya Patel</Item.Title>
+        <Item.Description>priya.patel@example.com</Item.Description>
       </Item.Content>
       <Item.Actions>
         <Button

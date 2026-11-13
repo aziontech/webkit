@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: e2be931bab861b85fd8bd41756eefe68e5f70cc9dc6dbd23bf1029859373bd99
+checksum: 68c6727d25f4e7e0456343a4454b548773cee757f457ee5c62dbad8b1d418bcf
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -51,7 +51,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
   import PhoneInput from '@aziontech/webkit/phone-input'
 
   const digits = ref('')
-  const country = ref('BR')
+  const country = ref('US')
   const phone = ref(null)
 </script>
 
@@ -98,7 +98,7 @@ Masks: `#` is a digit slot and every other character is a literal. Digits are al
 
 | Event          | Payload                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | -------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## Slots
 

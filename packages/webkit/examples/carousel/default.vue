@@ -40,7 +40,7 @@
     <Carousel.Item size="large">
       <Quote
         text="We block more than four million threats in six months without a single rule running on our own servers, and the security team reads one dashboard instead of five."
-        name="Renata Alves"
+        name="Jane Doe"
         job-title="Head of Information Security, Netshoes"
       />
     </Carousel.Item>

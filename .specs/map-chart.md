@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 82dc79102eaa061e353e76a1f7dae4ee4794f69bac57f2bc17a4ccd393f1f775
+checksum: 10868bdd3ad8d69f420e6fa64d7feec6b6b52113b039c3864fe558c817214961
 created: 2026-11-11
 last_updated: 2026-11-11
 ---
@@ -52,7 +52,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
     { id: 'US', value: 31600 },
     { id: 'DE', value: 18900 }
   ]
-  const points = [{ id: 'sao-paulo', name: 'São Paulo', lat: -23.55, lon: -46.63, value: 18400 }]
+  const points = [{ id: 'new-york', name: 'New York', lat: 40.71, lon: -74.01, value: 18400 }]
 </script>
 
 <template>

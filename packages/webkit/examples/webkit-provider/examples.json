@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers for Brazil.",
+      "summary": "Mounted with `locale=\"pt-BR\"`: Pagination and ConfirmDialog read their built-in labels in Portuguese and format numbers in the pt-BR style.",
       "file": "default.vue"
     },
     {

@@ -2,7 +2,7 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import QrCode from '@aziontech/webkit/qr-code'
 
-  const account = 'ana.silva@example.com'
+  const account = 'jane.doe@example.com'
   const secret = 'JBSWY3DPEHPK3PXP'
   const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`
 </script>

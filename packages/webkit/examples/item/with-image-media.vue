@@ -1,4 +1,5 @@
 <script setup>
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import Item from '@aziontech/webkit/item'
 </script>
 
@@ -6,7 +7,7 @@
   <Item kind="outlined">
     <Item.Media kind="image">
       <img
-        src="https://images.unsplash.com/photo-1650804068570-7fb2e3dbf888?w=64&h=64&fit=crop"
+        :src="placeholderImage"
         alt="Midnight City Lights"
         class="object-cover size-10 grayscale rounded-(--shape-card)"
       />

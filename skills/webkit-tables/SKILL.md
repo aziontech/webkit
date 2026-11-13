@@ -527,7 +527,7 @@ raw absolute date. Two shapes, both from the console:
 - **One column** where the screen has room for only one: `Table.CellTime` with `author`, which puts the
   author's avatar before the time.
 
-With `author`, the name is on the avatar's tooltip (an email reads as a name: `maria.silva@example.com` → `Maria Silva`); the absolute
+With `author`, the name is on the avatar's tooltip (an email reads as a name: `jane.doe@example.com` → `Jane Doe`); the absolute
 time is on the time's tooltip and in visually hidden text, so a screen reader hears both. Every
 mounted cell shares one minute clock, so "just now" turns into "1 minute ago" without a reload.
 Where the text must not depend on when it renders (an example, a test, a server render the browser

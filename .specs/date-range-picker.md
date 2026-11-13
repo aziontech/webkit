@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 97fd028d414d2210879d44aece022695af9337df6e2deb8794fa5cd03b0119d3
+checksum: 00dd0938be804af7f0cf369bded5b8026878d2a2f3e3268f3c363ccfb4378620
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -50,7 +50,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
   import { ref } from 'vue'
 
   const range = ref({ type: 'relative', amount: 15, unit: 'minute', key: 'last-15-minutes' })
-  const timeZone = ref('America/Sao_Paulo')
+  const timeZone = ref('UTC')
 </script>
 
 <template>

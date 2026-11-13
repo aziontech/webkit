@@ -3,7 +3,7 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: approved
-checksum: a292974f50335f54a4ae5c35ab4161dd0fdeb450d6a217135e2526316f363a77
+checksum: d46393437797022551374268eb68644c0fe81da2130ac7258b44bee45c64ae37
 spec_version: 1
 created: 2026-10-20
 last_updated: 2026-11-11
@@ -46,8 +46,8 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
   import DonutChart from '@aziontech/webkit/donut-chart'
 
   const series = [
-    { id: 'br', name: 'Brazil', values: [48200] },
-    { id: 'us', name: 'United States', values: [31600] },
+    { id: 'us', name: 'United States', values: [48200] },
+    { id: 'gb', name: 'United Kingdom', values: [31600] },
     { id: 'de', name: 'Germany', values: [18900] }
   ]
 </script>

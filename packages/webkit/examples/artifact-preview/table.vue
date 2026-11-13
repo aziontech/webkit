@@ -2,8 +2,8 @@
   import ArtifactPreview from '@aziontech/webkit/artifact-preview'
 
   const rows = [
-    { country: 'Brazil', requests: '1,204,330', hit: '92%' },
-    { country: 'United States', requests: '884,102', hit: '89%' },
+    { country: 'United States', requests: '1,204,330', hit: '92%' },
+    { country: 'United Kingdom', requests: '884,102', hit: '89%' },
     { country: 'Portugal', requests: '120,448', hit: '95%' }
   ]
 </script>

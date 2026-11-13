@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: a421be6ec99065514ac390d88578608a32713059e2e6d2eeff4776635bd27bfb
+checksum: e3dabe684f2924cd9880ad3b9e7804ff9e17d6ebdebc5628171a347267623a98
 created: 2026-07-01
 last_updated: 2026-11-10
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-10
 
 ## Purpose
 
-Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `R$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
+Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`. The root only orchestrates: it draws the outer border, the `focus-within` ring, and applies inline Tailwind child-selectors so the first child rounds only on the left, the last only on the right, and internal borders collapse between siblings. Everything else is a **child**: the middle input is a raw `<input>` in the root's `default` slot; sibling controls (`<Button>`, `<Select>`, `<Input>`, or an `<InputGroup.Addon>` for static text like `https://` / `.com` / `$`) are dropped in directly alongside it. This is a breaking change from v3: the `#left` and `#right` named slots are gone — their static-text role moves to `<InputGroup.Addon>`, and their interactive role is served by placing the real component (`Button`, `Select`) as a direct child. Consumers therefore never wrap `Button`/`Select` in an inner `<div>` — the root's child selectors do that job.
 
 ## When to use
 
@@ -56,7 +56,7 @@ Composition container that joins an input primitive with any number of adjacent 
   const domain = ref('')
   const url = ref('')
   const amount = ref('')
-  const currency = ref('BRL')
+  const currency = ref('USD')
 </script>
 
 <template>
@@ -89,7 +89,7 @@ Composition container that joins an input primitive with any number of adjacent 
   <InputGroup>
     <Select
       v-model="currency"
-      placeholder="BRL"
+      placeholder="USD"
     />
     <input
       v-model="amount"
@@ -142,7 +142,7 @@ Public members of the compound:
 | Member               | Attached name           | Standalone export                     | Purpose                                                                                                                                                                                                                                                                                                                  |
 | -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
-| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `R$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
 | `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`. Props: `modelValue` (`''`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group.
@@ -168,7 +168,7 @@ Root props:
 
 | Slot      | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                                                          |
 | --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `R$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
+| `default` | —     | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
 
 ## States
 
@@ -244,7 +244,7 @@ Root props:
 - WithAddonRight — middle input + `<InputGroup.Addon>.com</InputGroup.Addon>`.
 - BothAddons — addon + input + addon.
 - WithButton — middle input + trailing `<Button label="Search" />`.
-- WithSelect — leading `<Select placeholder="BRL" />` + middle input.
+- WithSelect — leading `<Select placeholder="USD" />` + middle input.
 - WithAll — addon + `<Select>` + input + `<Button>` (four children).
 - Invalid — `invalid=true` (danger border).
 - Required — `required=true` (warning border, always visible).

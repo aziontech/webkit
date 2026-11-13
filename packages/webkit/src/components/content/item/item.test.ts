@@ -230,7 +230,7 @@ describe('Item (composition)', () => {
     it('WithGroup story wraps rows in a role="list" and renders separators from context', () => {
       const { getByRole, getAllByText } = render(WithGroup)
       expect(getByRole('list')).toBeTruthy()
-      expect(getAllByText(/@vercel\.com/).length).toBe(3)
+      expect(getAllByText(/@example\.com/).length).toBe(3)
     })
   })
 

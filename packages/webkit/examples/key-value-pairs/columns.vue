@@ -25,7 +25,7 @@
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -52,7 +52,7 @@
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -79,7 +79,7 @@
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">South America (São Paulo)</KeyValuePairs.Item>
+      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
       <KeyValuePairs.Item label="Domain">
         <Link
           label="shop.example.com"
