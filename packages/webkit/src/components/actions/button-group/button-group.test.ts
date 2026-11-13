@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -49,8 +50,23 @@ describe('ButtonGroup', () => {
     await fireEvent.click(copy!)
     await fireEvent.click(disabled!)
     await fireEvent.click(wrap!)
-    expect(view.emitted('click')).toEqual([[{ id: 'copy' }]])
+    const clicks = view.emitted('click') as [Event, string][]
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(clicks[0]![1]).toBe('copy')
     expect(view.emitted('toggle')).toEqual([[{ id: 'wrap', pressed: false }]])
+  })
+
+  it('emits click with the keyboard event first when an action is activated with Enter', async () => {
+    const user = userEvent.setup()
+    const view = render(ButtonGroup, { props: { items, ariaLabel: 'Actions' } })
+    const [copy] = buttons(view.getByRole('toolbar'))
+    copy!.focus()
+    await user.keyboard('{Enter}')
+    const clicks = view.emitted('click') as [Event, string][]
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]![0]).toBeInstanceOf(Event)
+    expect(clicks[0]![1]).toBe('copy')
   })
 
   it('keeps one tab stop and moves with arrows, Home and End, skipping disabled items', async () => {
@@ -95,7 +111,10 @@ describe('ButtonGroup', () => {
     await fireEvent.click(download)
     await waitFor(() => expect(menuItems().length).toBe(2))
     await fireEvent.click(menuItems()[1]!)
-    expect(view.emitted('click')).toEqual([[{ id: 'zip' }]])
+    const clicks = view.emitted('click') as [Event, string][]
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(clicks[0]![1]).toBe('zip')
   })
 
   it('moves items past visibleCount into the More actions menu', async () => {

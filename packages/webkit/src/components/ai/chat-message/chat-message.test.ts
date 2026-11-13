@@ -86,6 +86,7 @@ describe('ChatMessage', () => {
     expect(getByTestId('ai-chat-message__error')).toHaveTextContent('Connection lost.')
     await userEvent.click(getByRole('button', { name: 'Try again' }))
     expect(emitted('retry')).toHaveLength(1)
+    expect(emitted('retry')![0]![0]).toBeInstanceOf(MouseEvent)
   })
 
   it('provides from and state to its parts, and Actions render only when complete', async () => {

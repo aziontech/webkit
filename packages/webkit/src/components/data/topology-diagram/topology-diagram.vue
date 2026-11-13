@@ -41,11 +41,14 @@
 
   const emit = defineEmits<{
     /** An existing option was picked in a node's bind control. */
-    bind: [key: string, value: string]
+    bind: [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      binding: { key: string; value: string }
+    ]
     /** The remove control of a bound node was activated. */
-    remove: [key: string]
+    remove: [event: globalThis.MouseEvent, key: string]
     /** Create was picked in a node's bind control. */
-    create: [key: string]
+    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, key: string]
   }>()
 
   defineSlots<{
@@ -195,9 +198,9 @@
                 :open="isOpen(node.key)"
                 :test-id="testId"
                 @toggle="toggle(node.key)"
-                @bind="(value) => emit('bind', node.key, value)"
-                @remove="emit('remove', node.key)"
-                @create="emit('create', node.key)"
+                @bind="(event, value) => emit('bind', event, { key: node.key, value })"
+                @remove="(event) => emit('remove', event, node.key)"
+                @create="(event) => emit('create', event, node.key)"
               >
                 <template
                   v-if="$slots['actions']"

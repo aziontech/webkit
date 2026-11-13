@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -149,7 +150,7 @@ describe('PropertyFilter', () => {
     const lastText = (emitted: Record<string, unknown[][]>) =>
       emitted['update:text']?.at(-1)?.[0] as string | undefined
     const lastSubmit = (emitted: Record<string, unknown[][]>) =>
-      emitted['submit']?.at(-1)?.[0] as { text: string; query: unknown } | undefined
+      emitted['submit']?.at(-1)?.[1] as { text: string; query: unknown } | undefined
     const queryProps = { properties, mode: 'query' as const }
     const optionText = () => options().map((o) => o.textContent)
 
@@ -239,6 +240,25 @@ describe('PropertyFilter', () => {
       expect(view.getByTestId('data-property-filter__error').textContent).toBe('Use between.')
     })
 
+    it('emits submit as (event, payload) when Enter is pressed in the field', async () => {
+      const view = render(PropertyFilter, { props: queryProps })
+      const input = view.getByRole('combobox') as HTMLInputElement
+      input.focus()
+      await userEvent.keyboard('status = Active')
+      await userEvent.keyboard('{Escape}')
+      await userEvent.keyboard('{Enter}')
+      const payload = view.emitted()['submit']?.at(-1) as unknown[]
+      expect(payload[0]).toBeInstanceOf(KeyboardEvent)
+      expect((payload[0] as KeyboardEvent).key).toBe('Enter')
+      expect(payload[1]).toEqual({
+        text: 'status = Active',
+        query: {
+          tokens: [{ propertyKey: 'status', operator: '=', value: 'Active' }],
+          operation: 'and'
+        }
+      })
+    })
+
     it('submits the text with its flat query', async () => {
       const view = render(PropertyFilter, { props: queryProps })
       const input = view.getByRole('combobox') as HTMLInputElement
@@ -255,6 +275,7 @@ describe('PropertyFilter', () => {
           operation: 'or'
         }
       })
+      expect(view.emitted()['submit']?.at(-1)?.[0]).toBeInstanceOf(KeyboardEvent)
       await fireEvent.update(input, 'status = Active AND requests > 1 OR edge')
       await fireEvent.keyDown(input, { key: 'Enter' })
       expect(lastSubmit(view.emitted())?.query).toBeNull()

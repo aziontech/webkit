@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: cfdacf3e742e6aba91b8ab7bebe7325a2433fc805ab2eb2ccab1be271c903419
+checksum: e761c689a0068e9c974ad12899aea4fa958ff0f060cfa3948f2ed9caa11bcb10
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ActionConfirmation — Component Spec
@@ -98,10 +98,10 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## Events
 
-| Event     | Payload | When                                                                           |
-| --------- | ------- | ------------------------------------------------------------------------------ |
-| `approve` | —       | Approve pressed while `pending`, not `loading`, and the phrase (if any) matches. |
-| `deny`    | —       | Deny pressed while `pending` and not `loading`.                                |
+| Event     | Payload               | When                                                                             |
+| --------- | --------------------- | -------------------------------------------------------------------------------- |
+| `approve` | `(event: MouseEvent)` | Approve pressed while `pending`, not `loading`, and the phrase (if any) matches. |
+| `deny`    | `(event: MouseEvent)` | Deny pressed while `pending` and not `loading`.                                  |
 
 ## Slots
 

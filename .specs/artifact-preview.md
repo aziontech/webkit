@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 9172118578c1d474a617dd1e009f1e7b1aa5a239839354ded307b8d4d989fc91
+checksum: ab5a5db5a0643f6fece55904a93f32f443683d283d068ec77a794466f7af6989
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ArtifactPreview — Component Spec
@@ -80,10 +80,10 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ## Events
 
-| Event  | Payload  | When                              |
-| ------ | -------- | --------------------------------- |
-| `open` | —        | Open pressed.                     |
-| `copy` | `string` | The content was copied.           |
+| Event  | Payload               | When                    |
+| ------ | --------------------- | ----------------------- |
+| `open` | `(event: MouseEvent)` | Open pressed.           |
+| `copy` | `string`              | The content was copied. |
 
 ## Slots
 

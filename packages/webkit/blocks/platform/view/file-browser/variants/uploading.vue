@@ -889,7 +889,7 @@
                 :items="picked"
                 :limit="5"
                 aria-label="Files to upload"
-                @dismiss="removePicked"
+                @dismiss="(_event, { index }) => removePicked(index)"
               />
             </div>
           </PanelContent>
@@ -918,8 +918,8 @@
       v-if="transfer.length"
       v-model:collapsed="transferCollapsed"
       :items="transfer"
-      @cancel="cancel"
-      @retry="retry"
+      @cancel="(_event, id) => cancel(id)"
+      @retry="(_event, id) => retry(id)"
       @close="closeTransfer"
     >
       <template #actions>

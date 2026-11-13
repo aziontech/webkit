@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -76,7 +77,44 @@ describe('CollectionPreferences', () => {
     await fireEvent.click(panel.getByRole('radio', { name: '25 items' }))
     await fireEvent.click(panel.getByRole('button', { name: 'Cancel' }))
     expect(view.emitted()['cancel']).toHaveLength(1)
+    expect(view.emitted()['cancel']?.[0]?.[0]).toBeInstanceOf(MouseEvent)
     expect(view.emitted()['update:preferences']).toBeUndefined()
+  })
+
+  it('emits confirm as (event, value) from a pointer click', async () => {
+    const view = render(CollectionPreferences, {
+      props: { open: true, columns, pageSizeOptions: [10, 25], preferences: { pageSize: 10 } }
+    })
+    await settle()
+    const panel = within(dialog())
+    await userEvent.click(panel.getByRole('radio', { name: '25 items' }))
+    await userEvent.click(panel.getByRole('button', { name: 'Confirm' }))
+    const payload = view.emitted()['confirm']?.[0] as unknown[]
+    expect(payload[0]).toBeInstanceOf(MouseEvent)
+    expect(payload[1]).toEqual(view.emitted()['update:preferences']?.[0]?.[0])
+    expect(payload[1]).toMatchObject({ pageSize: 25 })
+  })
+
+  it('emits confirm with the DOM event first from the keyboard', async () => {
+    const view = render(CollectionPreferences, {
+      props: { open: true, columns, pageSizeOptions: [10, 25], preferences: { pageSize: 10 } }
+    })
+    await settle()
+    within(dialog()).getByRole('button', { name: 'Confirm' }).focus()
+    await userEvent.keyboard('{Enter}')
+    const confirm = view.emitted()['confirm']?.[0] as unknown[]
+    expect(confirm[0]).toBeInstanceOf(Event)
+    expect(confirm[1]).toMatchObject({ pageSize: 10 })
+  })
+
+  it('emits cancel with the DOM event first from the keyboard', async () => {
+    const second = render(CollectionPreferences, {
+      props: { open: true, columns, preferences: { pageSize: 10 } }
+    })
+    await settle()
+    within(dialog()).getByRole('button', { name: 'Cancel' }).focus()
+    await userEvent.keyboard('{Enter}')
+    expect(second.emitted()['cancel']?.[0]?.[0]).toBeInstanceOf(Event)
   })
 
   it('keeps a locked column on and hides empty sections', async () => {

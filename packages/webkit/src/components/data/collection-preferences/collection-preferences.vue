@@ -85,8 +85,8 @@
 
   const emit = defineEmits<{
     'update:preferences': [value: CollectionPreferencesValue]
-    confirm: [value: CollectionPreferencesValue]
-    cancel: []
+    confirm: [event: MouseEvent, value: CollectionPreferencesValue]
+    cancel: [event: MouseEvent]
   }>()
 
   defineSlots<{
@@ -191,7 +191,7 @@
     if (value === 'comfortable' || value === 'compact') draftDensity.value = value
   }
 
-  const confirm = (): void => {
+  const confirm = (event: MouseEvent): void => {
     const value: CollectionPreferencesValue = {}
     if (shown('page-size')) value.pageSize = draftPageSize.value
     if (shown('columns')) value.columns = draftColumns.value.map((c) => ({ ...c }))
@@ -199,12 +199,12 @@
     if (shown('striped')) value.striped = draftStriped.value
     if (shown('density')) value.density = draftDensity.value
     emit('update:preferences', value)
-    emit('confirm', value)
+    emit('confirm', event, value)
     open.value = false
   }
 
-  const cancel = (): void => {
-    emit('cancel')
+  const cancel = (event: MouseEvent): void => {
+    emit('cancel', event)
     open.value = false
   }
 

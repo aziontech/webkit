@@ -12,7 +12,7 @@
   }>()
 
   const emit = defineEmits<{
-    remove: [reference: PromptInputReference]
+    remove: [event: MouseEvent, reference: PromptInputReference]
   }>()
 </script>
 
@@ -31,7 +31,7 @@
         size="small"
         removable
         :disabled="disabled"
-        @remove="emit('remove', reference)"
+        @remove="(event: MouseEvent) => emit('remove', event, reference)"
       />
     </li>
   </ul>

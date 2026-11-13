@@ -50,7 +50,7 @@
   ]
 
   const form = ref('line')
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -169,7 +169,7 @@
               severity="danger"
               label="Couldn't load matched requests over time. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -192,7 +192,7 @@
               severity="danger"
               label="Couldn't load the attention list. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -256,7 +256,7 @@
               severity="danger"
               label="Couldn't load blocked requests by attack category. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -318,7 +318,7 @@
               severity="danger"
               label="Couldn't load blocked requests by country. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -381,7 +381,7 @@
               severity="danger"
               label="Couldn't load top source IPs by blocked requests. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

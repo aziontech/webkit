@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
@@ -22,7 +23,7 @@ const Controlled = defineComponent({
     return () =>
       h(FileTokenGroup, {
         items: items.value,
-        onDismiss: (index: number) => {
+        onDismiss: (_event: MouseEvent, { index }: { index: number }) => {
           items.value = items.value.filter((_, position) => position !== index)
         }
       })
@@ -79,6 +80,24 @@ describe('FileTokenGroup', () => {
     await waitFor(() =>
       expect(document.activeElement?.getAttribute('aria-label')).toBe('Remove c.css')
     )
+  })
+
+  it('emits dismiss with the event first and the index and item, from pointer and keyboard', async () => {
+    const user = userEvent.setup()
+    const items = files()
+    const view = render(FileTokenGroup, { props: { items } })
+    await user.click(view.getByRole('button', { name: 'Remove b.png' }))
+    view.getByRole('button', { name: 'Remove c.css' }).focus()
+    await user.keyboard('{Enter}')
+    const dismissed = view.emitted('dismiss') as [
+      Event,
+      { index: number; item: FileTokenGroupItem }
+    ][]
+    expect(dismissed).toHaveLength(2)
+    expect(dismissed[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(dismissed[0]![1]).toEqual({ index: 1, item: items[1] })
+    expect(dismissed[1]![0]).toBeInstanceOf(Event)
+    expect(dismissed[1]![1]).toEqual({ index: 2, item: items[2] })
   })
 
   it('moves focus to the list when the last token is removed', async () => {

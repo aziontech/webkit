@@ -76,7 +76,27 @@ describe('Combobox', () => {
     await fireEvent.update(input, 'FEATURE_FLAG ')
     await fireEvent.keyDown(input, { key: 'Enter' })
     expect(lastValue(view.emitted())).toBe('FEATURE_FLAG')
-    expect(view.emitted()['create']?.[0]).toEqual(['FEATURE_FLAG'])
+    const created = view.emitted()['create'] as [Event, string][]
+    expect(created).toHaveLength(1)
+    expect(created[0]![0]).toBeInstanceOf(KeyboardEvent)
+    expect(created[0]![1]).toBe('FEATURE_FLAG')
+    view.unmount()
+  })
+
+  it('emits create with the click event first when the custom row is clicked', async () => {
+    const view = render(Combobox, { props: { options, ariaLabel: 'Variable' } })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'FEATURE_FLAG')
+    const custom = document.body.querySelector<HTMLElement>(
+      '[data-testid="input-combobox__option"][data-kind="custom"]'
+    )
+    expect(custom).toBeTruthy()
+    await fireEvent.click(custom!)
+    const created = view.emitted()['create'] as [Event, string][]
+    expect(created).toHaveLength(1)
+    expect(created[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(created[0]![1]).toBe('FEATURE_FLAG')
     view.unmount()
   })
 

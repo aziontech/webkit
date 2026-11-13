@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -91,6 +92,41 @@ describe('AttributeEditor', () => {
     expect(view.getByTestId('input-attribute-editor__status').textContent).toContain(
       'Item 1 removed.'
     )
+  })
+
+  it('emits add and remove with the DOM event first, from pointer and keyboard', async () => {
+    const user = userEvent.setup()
+    const items = [
+      { key: 'A', value: '1' },
+      { key: 'B', value: '2' }
+    ]
+    const view = render(AttributeEditor, { props: { items, definition } })
+    await user.click(view.getByTestId('input-attribute-editor__add'))
+    view.getByRole('button', { name: 'Remove item 2' }).focus()
+    await user.keyboard('{Enter}')
+    const adds = view.emitted('add') as [Event, { index: number }][]
+    expect(adds).toHaveLength(1)
+    expect(adds[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(adds[0]![1]).toEqual({ index: 2 })
+    const removes = view.emitted('remove') as [Event, { index: number; item: unknown }][]
+    expect(removes).toHaveLength(1)
+    expect(removes[0]![0]).toBeInstanceOf(Event)
+    expect(removes[0]![1]).toEqual({ index: 1, item: items[1] })
+  })
+
+  it('passes the event through the row slot remove', async () => {
+    const items = [{ key: 'A', value: '1' }]
+    const view = render(AttributeEditor, {
+      props: { items, definition },
+      slots: {
+        row: `<template #row="{ remove }"><button type="button" @click="remove">Drop</button></template>`
+      }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Drop' }))
+    const removes = view.emitted('remove') as [Event, { index: number; item: unknown }][]
+    expect(removes).toHaveLength(1)
+    expect(removes[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(removes[0]![1]).toEqual({ index: 0, item: items[0] })
   })
 
   it('moves focus to Add after the last row is removed', async () => {

@@ -15,7 +15,7 @@
     <SuggestionGroup
       :items="items"
       aria-label="Follow-up questions"
-      @select="(item) => (sent = item.label)"
+      @select="(event, item) => (sent = item.label)"
     />
     <p
       v-if="sent"

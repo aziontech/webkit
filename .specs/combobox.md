@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 97a549a417bb89be17c5363110954f23a6636fdd614fbd39aee16c06f135f081
+checksum: 935b713c8ce524b633a78e60d586d1303196b36ff57edc6154b827f6068560ff
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Combobox — Component Spec
@@ -113,7 +113,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | Event               | Payload  | Notes                                                                      |
 | ------------------- | -------- | -------------------------------------------------------------------------- |
 | `search`            | `string` | The typed text, on each keystroke while the list is open (server filters). |
-| `create`            | `string` | A value that matches no option was committed (`allowCustom`).              |
+| `create`            | `(event: MouseEvent \| KeyboardEvent \| FocusEvent, value: string)` | A value that matches no option was committed (`allowCustom`).              |
 
 ## Slots
 

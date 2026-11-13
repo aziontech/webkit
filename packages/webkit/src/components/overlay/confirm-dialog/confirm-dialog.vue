@@ -58,8 +58,8 @@
   const open = defineModel<boolean>('open', { default: false })
 
   const emit = defineEmits<{
-    confirm: []
-    cancel: []
+    confirm: [event: MouseEvent]
+    cancel: [event: MouseEvent]
   }>()
 
   defineSlots<{
@@ -86,15 +86,15 @@
     open.value = false
   }
 
-  const cancel = () => {
+  const cancel = (event: MouseEvent) => {
     if (props.loading) return
-    emit('cancel')
+    emit('cancel', event)
     close()
   }
 
-  const confirm = () => {
+  const confirm = (event: MouseEvent) => {
     if (props.disabled || props.loading) return
-    emit('confirm')
+    emit('confirm', event)
   }
 </script>
 

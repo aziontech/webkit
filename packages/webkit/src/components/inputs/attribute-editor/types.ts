@@ -41,7 +41,7 @@ export type AttributeEditorRowScope<TItem = AttributeEditorItem> = {
   groupIndex: number | undefined
   errors: AttributeEditorRowErrors
   update: (key: keyof TItem & string, value: unknown) => void
-  remove: () => void
+  remove: (event: MouseEvent | KeyboardEvent) => void
   removable: boolean
   removeLabel: string
 }
@@ -50,7 +50,7 @@ export type AttributeEditorRowActionsScope<TItem = AttributeEditorItem> = {
   item: TItem
   index: number
   groupIndex: number | undefined
-  remove: () => void
+  remove: (event: MouseEvent | KeyboardEvent) => void
   removable: boolean
   removeLabel: string
 }

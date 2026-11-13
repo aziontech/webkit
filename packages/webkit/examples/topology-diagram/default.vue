@@ -163,7 +163,7 @@
   ]
 
   const expanded = ref(['project'])
-  const event = ref('')
+  const note = ref('')
 </script>
 
 <template>
@@ -172,9 +172,9 @@
       <TopologyDiagram
         v-model:expanded="expanded"
         :levels="levels"
-        @bind="(key, value) => (event = `Bind ${value} to ${key}.`)"
-        @remove="(key) => (event = `Remove ${key}.`)"
-        @create="(key) => (event = `Create a new ${key}.`)"
+        @bind="(event, { key, value }) => (note = `Bind ${value} to ${key}.`)"
+        @remove="(event, key) => (note = `Remove ${key}.`)"
+        @create="(event, key) => (note = `Create a new ${key}.`)"
       >
         <template #actions="{ node }">
           <Tooltip
@@ -186,7 +186,7 @@
               kind="outlined"
               size="small"
               aria-label="Add domain"
-              @click="event = 'Add a domain.'"
+              @click="note = 'Add a domain.'"
             />
           </Tooltip>
         </template>
@@ -196,7 +196,7 @@
       role="status"
       class="text-body-sm text-(--text-muted)"
     >
-      {{ event }}
+      {{ note }}
     </p>
   </div>
 </template>

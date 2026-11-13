@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: e122a6b03bfa982cba91746ea9adfb6ea8453ff4f7341c4eaf735b12acb8f0ba
+checksum: b5aabf722dbd16b236b351b55c39dc517dacb2556c81eb2afcdc782f16fdf28a
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ArtifactCanvas — Component Spec
@@ -118,10 +118,10 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 ## Events
 
-| Event   | Payload         | When                                                                         |
-| ------- | --------------- | ---------------------------------------------------------------------------- |
-| `close` | —               | Close was pressed, or Escape inside the panel that no inner control handled. |
-| `copy`  | `value: string` | Copy put the text on the clipboard.                                          |
+| Event   | Payload                                 | When                                                                         |
+| ------- | --------------------------------------- | ---------------------------------------------------------------------------- |
+| `close` | `(event: MouseEvent \| KeyboardEvent)`   | Close was pressed, or Escape inside the panel that no inner control handled. |
+| `copy`  | `value: string`                         | Copy put the text on the clipboard.                                          |
 
 ## Slots
 

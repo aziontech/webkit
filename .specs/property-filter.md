@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: a997a3c698c439c521cc83632fc90bd103ae266082d5f9f50401cde666e113d0
+checksum: 09d20ec72b208f6554c021ad0c88a234e247964002bdb4d69d5fbe354971322e
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # PropertyFilter — Component Spec
@@ -76,7 +76,7 @@ Query mode:
     v-model:text="text"
     mode="query"
     :properties="properties"
-    @submit="({ query }) => query && (applied = query)"
+    @submit="(event, { query }) => query && (applied = query)"
   />
 </template>
 ```
@@ -107,7 +107,7 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 | -------------- | --------------------- | --------------------------------------------------------------------- |
 | `update:query` | `PropertyFilterQuery` | A token was added or removed, the operation changed, or all cleared. Tokens mode only. |
 | `update:text`  | `string`              | The query string changed (typing, a suggestion, Escape clearing). Query mode only. |
-| `submit`       | `PropertyFilterSubmit` | Enter with no active suggestion and a valid query. Query mode only.  |
+| `submit`       | `(event: KeyboardEvent, payload: PropertyFilterSubmit)` | Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only. |
 
 ## Slots
 

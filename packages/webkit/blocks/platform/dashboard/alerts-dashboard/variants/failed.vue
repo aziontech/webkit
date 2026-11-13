@@ -72,7 +72,7 @@
     percentage: (value: number) => `${value.toFixed(0)}%`
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -145,7 +145,7 @@
               severity="danger"
               label="Couldn't load alerts per day. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -157,7 +157,7 @@
                 severity="danger"
                 label="Couldn't load open alerts by severity. Check your connection and retry."
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </template>
           </Card>
@@ -175,7 +175,7 @@
               severity="danger"
               label="Couldn't load alerts by type. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -194,7 +194,7 @@
               severity="danger"
               label="Couldn't load highest risk. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -211,7 +211,7 @@
               severity="danger"
               label="Couldn't load open alerts. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

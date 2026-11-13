@@ -44,7 +44,7 @@
 
   const emit = defineEmits<{
     /** Close was pressed, or Escape inside the panel that no inner control handled. */
-    close: []
+    close: [event: MouseEvent | KeyboardEvent]
     /** Copy put the text on the clipboard; the payload is the copied text. */
     copy: [value: string]
   }>()
@@ -75,7 +75,7 @@
   function onKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Escape' || event.defaultPrevented) return
     event.preventDefault()
-    emit('close')
+    emit('close', event)
   }
 
   function focus(): void {
@@ -128,7 +128,7 @@
         size="small"
         :ariaLabel="t('artifactCanvas.close', { title })"
         :data-testid="`${testId}__close`"
-        @click="emit('close')"
+        @click="(event: MouseEvent) => emit('close', event)"
       />
     </header>
     <div

@@ -74,10 +74,13 @@
   const references = defineModel<PromptInputReference[]>('references', { default: () => [] })
 
   const emit = defineEmits<{
-    /** The reader submitted a prompt (Enter or the Submit control); the payload is the trimmed text and the references it carries. */
-    submit: [value: string, references: PromptInputReference[]]
+    /** The reader submitted a prompt (Enter or the Submit control); the payload holds the trimmed text and the references it carries. */
+    submit: [
+      event: MouseEvent | KeyboardEvent,
+      payload: { value: string; references: PromptInputReference[] }
+    ]
     /** The reader asked to stop the response being generated. */
-    stop: []
+    stop: [event: MouseEvent]
   }>()
 
   const slots = defineSlots<{
@@ -221,16 +224,15 @@
     readQuery()
   }
 
-  function submit(): void {
+  function submit(event: MouseEvent | KeyboardEvent): void {
     if (!canSubmit.value) return
     const text = model.value.trim()
-    emit(
-      'submit',
-      text,
-      references.value.filter((reference) =>
+    emit('submit', event, {
+      value: text,
+      references: references.value.filter((reference) =>
         text.includes(`${reference.trigger}${reference.label}`)
       )
-    )
+    })
   }
 
   function onKeydown(event: KeyboardEvent): void {
@@ -255,7 +257,7 @@
     }
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing || composing.value) return
     event.preventDefault()
-    submit()
+    submit(event)
   }
 
   function focus(): void {
@@ -297,7 +299,9 @@
           :label="t('promptInputMenu.references')"
           :disabled="disabled"
           :test-id="testId"
-          @remove="removeReference"
+          @remove="
+            (_event: MouseEvent, reference: PromptInputReference) => removeReference(reference)
+          "
         />
       </div>
       <ul
@@ -384,7 +388,7 @@
             :ariaLabel="t('promptInput.stop')"
             :disabled="disabled"
             :data-testid="`${testId}__stop`"
-            @click="emit('stop')"
+            @click="(event: MouseEvent) => emit('stop', event)"
           />
           <IconButton
             v-else

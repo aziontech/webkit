@@ -36,7 +36,7 @@
     <ButtonGroup
       :items="resolved"
       aria-label="Editor actions"
-      @click="({ id }) => (last = id)"
+      @click="(_event, id) => (last = id)"
       @toggle="onToggle"
     />
     <p

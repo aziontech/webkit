@@ -15,7 +15,7 @@ const versions = ['SELECT 1;', 'SELECT 2;', 'SELECT 3;']
 
 function harness(props: Record<string, unknown> = {}) {
   const version = ref(0)
-  const closes: number[] = []
+  const closes: Event[] = []
   const copies: string[] = []
   const canvas = ref<{ focus: () => void } | null>(null)
   const Host = defineComponent({
@@ -32,7 +32,7 @@ function harness(props: Record<string, unknown> = {}) {
           ...props,
           version: version.value,
           'onUpdate:version': (next: number) => (version.value = next),
-          onClose: () => closes.push(1),
+          onClose: (event: Event) => closes.push(event),
           onCopy: (value: string) => copies.push(value)
         },
         {
@@ -85,10 +85,12 @@ describe('ArtifactCanvas', () => {
     const view = harness()
     await userEvent.click(view.getByRole('button', { name: 'Close top-orders.sql' }))
     expect(view.closes).toHaveLength(1)
+    expect(view.closes[0]).toBeInstanceOf(MouseEvent)
     const content = view.getByRole('region', { name: 'top-orders.sql content' })
     content.focus()
     await userEvent.keyboard('{Escape}')
     expect(view.closes).toHaveLength(2)
+    expect(view.closes[1]).toBeInstanceOf(KeyboardEvent)
     const handled = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
     handled.preventDefault()
     content.dispatchEvent(handled)

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: df76eaaebdea103a1793e60a785d4ae2f34750488f21ac889d86b681b9902d27
+checksum: f3ff7ca12140a91a6a6feb8e58d39f5f7c9c0cc36385de932f13d9347aac520a
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # FileTokenGroup — Component Spec
@@ -57,7 +57,7 @@ The files a person picked for upload, shown as removable tokens before or while 
 <template>
   <FileTokenGroup
     :items="items"
-    @dismiss="(index) => items.splice(index, 1)"
+    @dismiss="(_event, { index }) => items.splice(index, 1)"
   />
 </template>
 ```
@@ -80,7 +80,7 @@ Types: `FileTokenGroupFile = { name: string; webkitRelativePath?: string; size?:
 
 | Event     | Payload                                   | Notes                                                                                      |
 | --------- | ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `dismiss` | `index: number, item: FileTokenGroupItem` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
+| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
 
 ## Slots
 

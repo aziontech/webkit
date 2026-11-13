@@ -92,7 +92,7 @@
   })
 
   const emit = defineEmits<{
-    click: [detail: { id: string }]
+    click: [event: MouseEvent | KeyboardEvent, id: string]
     toggle: [detail: { id: string; pressed: boolean }]
   }>()
 
@@ -154,27 +154,27 @@
   const iconOf = (item: ButtonGroupItem) =>
     isToggle(item) && item.pressed ? (item.pressedIcon ?? item.icon) : item.icon
 
-  const activate = (item: ButtonGroupItem) => {
+  const activate = (event: MouseEvent | KeyboardEvent, item: ButtonGroupItem) => {
     if (item.disabled || (!isToggle(item) && !isMenu(item) && item.loading)) return
     if (isToggle(item)) {
       emit('toggle', { id: item.id, pressed: !item.pressed })
       return
     }
-    emit('click', { id: item.id })
+    emit('click', event, item.id)
   }
 
-  const onMenuSelect = (_event: unknown, value: string | number) => {
-    emit('click', { id: String(value) })
+  const onMenuSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
+    emit('click', event, String(value))
   }
 
-  const onOverflowSelect = (_event: unknown, value: string | number) => {
+  const onOverflowSelect = (event: MouseEvent | KeyboardEvent, value: string | number) => {
     const id = String(value)
     const item = overflowItems.value.find((entry) => entry.id === id)
     if (item) {
-      activate(item)
+      activate(event, item)
       return
     }
-    emit('click', { id })
+    emit('click', event, id)
   }
 
   const controls = () =>
@@ -271,7 +271,7 @@
           :data-pressed="isToggle(item) && item.pressed ? '' : undefined"
           :data-testid="`${testId}__item`"
           class="data-[pressed]:bg-(--bg-selected) data-[pressed]:text-(--text-default) forced-colors:data-[pressed]:outline-2 forced-colors:data-[pressed]:outline-[Highlight]"
-          @click="activate(item)"
+          @click="activate($event, item)"
         />
       </Tooltip>
     </template>

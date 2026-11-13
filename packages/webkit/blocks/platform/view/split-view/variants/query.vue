@@ -544,7 +544,7 @@
     }
   ])
 
-  const applyQuery = ({ text, query }: PropertyFilterSubmit) => {
+  const applyQuery = (event: KeyboardEvent, { text, query }: PropertyFilterSubmit) => {
     if (!query) {
       queryNotice.value =
         'This query mixes AND and OR. Use one of them throughout, then press Enter again.'

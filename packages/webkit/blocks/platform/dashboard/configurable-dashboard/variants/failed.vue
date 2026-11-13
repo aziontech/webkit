@@ -101,7 +101,7 @@
     announcement.value = 'Layout reset to the default.'
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -175,7 +175,7 @@
                 severity="danger"
                 :label="`Couldn't load ${cards[card.id].title.toLowerCase()}. Check your connection and retry.`"
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </ChartCard.Content>
             <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />

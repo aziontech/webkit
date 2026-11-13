@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 82f2e37d96dfbca03ea08a9a2a0a58f3eb842b94f5a8688bb6d2d41af3ab342c
+checksum: 583320bf62842a86dd93f083d99da5ffd37fb794eb77045983f870e0ee13dfc2
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # UploadProgress — Component Spec
@@ -84,9 +84,9 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 
 | Event    | Payload       | Notes                                                                                 |
 | -------- | ------------- | ------------------------------------------------------------------------------------- |
-| `cancel` | `id?: string` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
-| `retry`  | `id?: string` | Retry on one failed file (its `id`) or Retry failed (no `id`).                        |
-| `close`  | —             | Close was pressed; offered only once every file has finished.                         |
+| `cancel` | `(event: MouseEvent, id?: string)` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
+| `retry`  | `(event: MouseEvent, id?: string)` | Retry on one failed file (its `id`) or Retry failed (no `id`).                        |
+| `close`  | `(event: MouseEvent)` | Close was pressed; offered only once every file has finished.                         |
 
 ## Slots
 

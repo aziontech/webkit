@@ -456,7 +456,7 @@ LIMIT 3;`
     templatesOpen.value = false
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -719,7 +719,7 @@ LIMIT 3;`
                 severity="danger"
                 :label="`Couldn't load the rows of ${selectedTable.name}. Check your connection and retry.`"
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </div>
           </div>

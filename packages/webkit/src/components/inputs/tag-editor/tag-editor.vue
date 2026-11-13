@@ -225,7 +225,7 @@
             size="medium"
             :ariaLabel="removeLabel"
             :data-testid="`${testId}__remove`"
-            @click="asTag(item).existing ? setRemoval(index, true) : remove()"
+            @click="(event) => (asTag(item).existing ? setRemoval(index, true) : remove(event))"
           />
         </Tooltip>
       </template>

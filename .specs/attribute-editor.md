@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: e89e2eef5d76793f9538cbb8ddcf6e629c7b47ac0b94161530f9966b713bb246
+checksum: 49f9c0490cd53e0cf25c424b57816410af54aab0e430a72951f8b67e12876c4f
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # AttributeEditor — Component Spec
@@ -109,15 +109,15 @@ Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem
 | --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `update:items`  | `TItem[]`                                                           | A row was added, removed or edited in list mode.             |
 | `update:groups` | `TItem[][]`                                                         | A row or group was added, removed or edited in grouped mode. |
-| `add`           | `{ index: number; groupIndex?: number }`                            | After a row is added; `groupIndex` only in grouped mode.     |
-| `remove`        | `{ index: number; item: TItem; groupIndex?: number }`               | After a row is removed.                                      |
+| `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })` | After a row is added; `groupIndex` only in grouped mode.     |
+| `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                      |
 
 ## Slots
 
 | Slot          | Scope                                                                         | Notes                                                                                                                       |
 | ------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }` | Replaces the whole row; the column header is not drawn.                                                                     |
-| `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                 | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). |
+| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }` | Replaces the whole row; the column header is not drawn. `remove` takes the activating event (`@click="remove"`).           |
+| `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                 | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). `remove` takes the activating event. |
 | `empty`       | —                                                                             | Replaces the empty text.                                                                                                    |
 | `actions`     | —                                                                             | Extra buttons after Add (for example Upload or Paste .env).                                                                 |
 | `info`        | —                                                                             | Extra help text under the buttons, after the limit text.                                                                    |

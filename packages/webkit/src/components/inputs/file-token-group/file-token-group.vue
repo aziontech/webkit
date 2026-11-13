@@ -57,7 +57,7 @@
 
   const emit = defineEmits<{
     /** The remove button of the token at `index` was pressed. The parent removes it from `items`. */
-    dismiss: [index: number, item: FileTokenGroupItem]
+    dismiss: [event: MouseEvent, payload: { index: number; item: FileTokenGroupItem }]
   }>()
 
   const attrs = useAttrs()
@@ -135,10 +135,10 @@
     else root.value?.focus()
   }
 
-  const onDismiss = (index: number): void => {
+  const onDismiss = (event: MouseEvent, index: number): void => {
     const item = props.items[index]
     if (!item) return
-    emit('dismiss', index, item)
+    emit('dismiss', event, { index, item })
     void focusAfterRemoval(index)
   }
 </script>
@@ -197,7 +197,7 @@
               :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
               :aria-describedby="item.error || item.warning ? messageId(index) : undefined"
               :data-testid="`${testId}__remove`"
-              @click="onDismiss(index)"
+              @click="onDismiss($event, index)"
             />
           </span>
         </div>

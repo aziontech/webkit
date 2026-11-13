@@ -68,7 +68,7 @@
     }
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -126,7 +126,7 @@
               severity="danger"
               label="Couldn't load verdicts. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -145,7 +145,7 @@
               severity="danger"
               label="Couldn't load sources. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -157,7 +157,7 @@
                 severity="danger"
                 label="Couldn't load held and flagged submissions. Check your connection and retry."
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </template>
           </Card>
@@ -177,7 +177,7 @@
               severity="danger"
               label="Couldn't load submissions. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

@@ -91,17 +91,17 @@
 
   const stagedCount = computed(() => Object.keys(staged).length)
 
-  const bind = (key, value) => {
+  const bind = (event, { key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     note.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
   }
-  const remove = (key) => {
+  const remove = (event, key) => {
     if (deployed[key]) staged[key] = ''
     else delete staged[key]
     note.value = `${targets[key].kind} staged for removal.`
   }
-  const create = (key) => {
+  const create = (event, key) => {
     note.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
 </script>

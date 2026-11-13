@@ -47,9 +47,9 @@
 
   const emit = defineEmits<{
     /** The reader authorized the action. */
-    approve: []
+    approve: [event: MouseEvent]
     /** The reader refused it; the assistant acknowledges in the conversation. */
-    deny: []
+    deny: [event: MouseEvent]
   }>()
 
   const slots = defineSlots<{
@@ -93,14 +93,14 @@
     }
   )
 
-  function approve(): void {
+  function approve(event: MouseEvent): void {
     if (props.loading || props.state !== 'pending' || !confirmed.value) return
-    emit('approve')
+    emit('approve', event)
   }
 
-  function deny(): void {
+  function deny(event: MouseEvent): void {
     if (props.loading || props.state !== 'pending') return
-    emit('deny')
+    emit('deny', event)
   }
 
   function focus(): void {

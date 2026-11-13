@@ -12,7 +12,8 @@ import PromptInput from './prompt-input.vue'
 
 function harness(props: Record<string, unknown> = {}, slots: Record<string, () => unknown> = {}) {
   const submitted: string[] = []
-  const stops: number[] = []
+  const submitEvents: Event[] = []
+  const stops: Event[] = []
   const value = ref((props.initial as string) ?? '')
   const Host = defineComponent({
     setup: () => () =>
@@ -22,13 +23,16 @@ function harness(props: Record<string, unknown> = {}, slots: Record<string, () =
           ...props,
           modelValue: value.value,
           'onUpdate:modelValue': (next: string) => (value.value = next),
-          onSubmit: (text: string) => submitted.push(text),
-          onStop: () => stops.push(1)
+          onSubmit: (event: Event, payload: { value: string }) => {
+            submitEvents.push(event)
+            submitted.push(payload.value)
+          },
+          onStop: (event: Event) => stops.push(event)
         },
         slots
       )
   })
-  return { ...render(Host), value, submitted, stops }
+  return { ...render(Host), value, submitted, submitEvents, stops }
 }
 
 describe('PromptInput', () => {
@@ -47,7 +51,7 @@ describe('PromptInput', () => {
   })
 
   it('submits the trimmed prompt on Enter and adds a line on Shift+Enter', async () => {
-    const { getByRole, value, submitted } = harness()
+    const { getByRole, value, submitted, submitEvents } = harness()
     const textarea = getByRole('textbox')
     await userEvent.click(textarea)
     await userEvent.keyboard('  first line{Shift>}{Enter}{/Shift}second  ')
@@ -55,16 +59,18 @@ describe('PromptInput', () => {
     expect(submitted).toEqual([])
     await userEvent.keyboard('{Enter}')
     expect(submitted).toEqual(['first line\nsecond'])
+    expect(submitEvents[0]).toBeInstanceOf(KeyboardEvent)
   })
 
   it('submits from the Submit button, which stays disabled while empty', async () => {
-    const { getByRole, submitted } = harness()
+    const { getByRole, submitted, submitEvents } = harness()
     const submit = getByRole('button', { name: 'Submit' })
     expect(submit).toBeDisabled()
     await userEvent.type(getByRole('textbox'), 'Purge one URL')
     expect(submit).not.toBeDisabled()
     await userEvent.click(submit)
     expect(submitted).toEqual(['Purge one URL'])
+    expect(submitEvents[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('does not submit during an IME composition', async () => {
@@ -93,6 +99,7 @@ describe('PromptInput', () => {
       expect(submitted).toEqual([])
       await userEvent.click(getByRole('button', { name: 'Stop generating' }))
       expect(stops).toHaveLength(1)
+      expect(stops[0]).toBeInstanceOf(MouseEvent)
     }
   )
 

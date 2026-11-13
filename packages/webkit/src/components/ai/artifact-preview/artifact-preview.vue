@@ -40,7 +40,7 @@
 
   const emit = defineEmits<{
     /** The reader asked to see the whole artifact. */
-    open: []
+    open: [event: MouseEvent]
     /** The content was copied; the payload is the copied text. */
     copy: [value: string]
   }>()
@@ -126,7 +126,7 @@
           icon="pi pi-external-link"
           icon-position="trailing"
           :data-testid="`${testId}__open`"
-          @click="emit('open')"
+          @click="(event: MouseEvent) => emit('open', event)"
         />
       </div>
     </header>

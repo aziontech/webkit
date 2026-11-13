@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: df2b8311c5a4cabf6fe9b8b4ee0dd116a25835ba83efeb42b3558dd5c967a1da
+checksum: ab27ea861ffb59d22614e3d58dea37fd8f7041f4ddf50af1f2f60f69ac93d81f
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # Reasoning — Component Spec
@@ -77,7 +77,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 | Event         | Payload   | When                                    |
 | ------------- | --------- | --------------------------------------- |
 | `update:open` | `boolean` | The trace was expanded or collapsed.    |
-| `skip`        | —         | Skip thinking pressed while streaming.  |
+| `skip`        | `(event: MouseEvent)` | Skip thinking pressed while streaming.  |
 
 ## Slots
 

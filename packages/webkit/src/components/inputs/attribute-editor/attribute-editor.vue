@@ -87,8 +87,11 @@
   const emit = defineEmits<{
     'update:items': [items: TItem[]]
     'update:groups': [groups: TItem[][]]
-    add: [detail: { index: number; groupIndex?: number }]
-    remove: [detail: { index: number; item: TItem; groupIndex?: number }]
+    add: [event: MouseEvent, detail: { index: number; groupIndex?: number }]
+    remove: [
+      event: MouseEvent | KeyboardEvent,
+      detail: { index: number; item: TItem; groupIndex?: number }
+    ]
   }>()
 
   const slots = defineSlots<
@@ -209,7 +212,7 @@
       ? `[data-row="${index}"]:not([data-group])`
       : `[data-group="${groupIndex}"][data-row="${index}"]`
 
-  const add = (groupIndex?: number) => {
+  const add = (event: MouseEvent, groupIndex?: number) => {
     const next = groupList.value.map((group) => [...group])
     const target = groupIndex ?? 0
     if (!next[target]) next[target] = []
@@ -217,20 +220,20 @@
     const index = next[target].length - 1
     commit(next)
     announcement.value = t('attributeEditor.added', { index: position(index, groupIndex) })
-    emit('add', groupIndex === undefined ? { index } : { index, groupIndex })
+    emit('add', event, groupIndex === undefined ? { index } : { index, groupIndex })
     focusRow(rowSelector(index, groupIndex))
   }
 
-  const addGroup = () => {
+  const addGroup = (event: MouseEvent) => {
     const next = [...groupList.value.map((group) => [...group]), [createItem()]]
     const groupIndex = next.length - 1
     commit(next)
     announcement.value = t('attributeEditor.added', { index: total.value + 1 })
-    emit('add', { index: 0, groupIndex })
+    emit('add', event, { index: 0, groupIndex })
     focusRow(rowSelector(0, groupIndex))
   }
 
-  const remove = (index: number, groupIndex?: number) => {
+  const remove = (event: MouseEvent | KeyboardEvent, index: number, groupIndex?: number) => {
     const target = groupIndex ?? 0
     const item = groupList.value[target]?.[index]
     if (!item || !removable(item)) return
@@ -248,7 +251,7 @@
     }
     commit(next)
     announcement.value = t('attributeEditor.removed', { index: spoken })
-    emit('remove', groupIndex === undefined ? { index, item } : { index, item, groupIndex })
+    emit('remove', event, groupIndex === undefined ? { index, item } : { index, item, groupIndex })
     if (focusIndex < 0 || (focusGroup !== undefined && focusGroup < 0)) {
       focusRow('[data-none]')
       return
@@ -377,7 +380,10 @@
                     (key: string, value: unknown) =>
                       update(index, grouped ? groupIndex : undefined, key, value)
                   "
-                  :remove="() => remove(index, grouped ? groupIndex : undefined)"
+                  :remove="
+                    (event: MouseEvent | KeyboardEvent) =>
+                      remove(event, index, grouped ? groupIndex : undefined)
+                  "
                   :removable="removable(item)"
                   :remove-label="removeLabel(position(index, grouped ? groupIndex : undefined))"
                 >
@@ -437,7 +443,10 @@
                         :item="item"
                         :index="index"
                         :group-index="grouped ? groupIndex : undefined"
-                        :remove="() => remove(index, grouped ? groupIndex : undefined)"
+                        :remove="
+                          (event: MouseEvent | KeyboardEvent) =>
+                            remove(event, index, grouped ? groupIndex : undefined)
+                        "
                         :removable="removable(item)"
                         :remove-label="
                           removeLabel(position(index, grouped ? groupIndex : undefined))
@@ -455,7 +464,7 @@
                               removeLabel(position(index, grouped ? groupIndex : undefined))
                             "
                             :data-testid="`${testId}__remove`"
-                            @click="remove(index, grouped ? groupIndex : undefined)"
+                            @click="remove($event, index, grouped ? groupIndex : undefined)"
                           />
                         </Tooltip>
                         <span
@@ -482,7 +491,7 @@
               size="small"
               :disabled="disabled || addDisabled || atLimit(group)"
               :data-testid="`${testId}__add`"
-              @click="add(groupIndex)"
+              @click="add($event, groupIndex)"
             />
             <span
               v-if="limit !== undefined"
@@ -506,7 +515,7 @@
           size="medium"
           :disabled="disabled || addDisabled || atLimit(items)"
           :data-testid="`${testId}__add`"
-          @click="add()"
+          @click="add($event)"
         />
         <Button
           v-else

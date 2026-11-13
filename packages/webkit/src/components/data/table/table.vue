@@ -214,8 +214,8 @@
     'row-click': [event: MouseEvent, row: TRow]
     'update:filters': [value: AppliedFilter[]]
     'update:state': [value: TableStateSnapshot]
-    'filter-apply': [filters: AppliedFilter[]]
-    'filter-remove': [filter: AppliedFilter]
+    'filter-apply': [event: Event, filters: AppliedFilter[]]
+    'filter-remove': [event: Event, filter: AppliedFilter]
     refresh: []
     export: [rows: TRow[]]
     'update:data': [value: TRow[]]
@@ -564,17 +564,17 @@
   const filterKey = (filter: AppliedFilter): string =>
     `${filter.field}|${filter.operator}|${JSON.stringify(filter.value)}`
 
-  const applyFilters = (next: AppliedFilter[]): void => {
+  const applyFilters = (event: Event, next: AppliedFilter[]): void => {
     internalFilters.value = next
     emit('update:filters', next)
-    emit('filter-apply', next)
+    emit('filter-apply', event, next)
   }
-  const removeFilter = (filter: AppliedFilter): void => {
+  const removeFilter = (event: Event, filter: AppliedFilter): void => {
     const key = filterKey(filter)
     const next = appliedFilters.value.filter((entry) => filterKey(entry) !== key)
     internalFilters.value = next
     emit('update:filters', next)
-    emit('filter-remove', filter)
+    emit('filter-remove', event, filter)
   }
   const clearFilters = (): void => {
     if (appliedFilters.value.length > 0) {

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 137d3c6ed27195b221e70856e38ec545369aff6239153579b26ad098d0c34daa
+checksum: 7916656ab00720094563e39adf0c23f5851ab7dbb4c42daead88c0192f0885c1
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # TopologyDiagram — Component Spec
@@ -64,7 +64,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
   <TopologyDiagram
     v-model:expanded="expanded"
     :levels="levels"
-    @bind="(key, value) => {}"
+    @bind="(event, { key, value }) => {}"
   >
     <template #actions="{ node }">
       <Tooltip
@@ -99,11 +99,11 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 ## Events
 
-| Event             | Payload                       | Notes                                               |
-| ----------------- | ----------------------------- | --------------------------------------------------- |
-| `bind`            | `[key: string, value: string]` | An existing option was picked in the bind control.  |
-| `remove`          | `[key: string]`               | Remove was activated on a bound, removable node.    |
-| `create`          | `[key: string]`               | Create was picked in the bind control.              |
+| Event    | Payload                                                                         | Notes                                                                       |
+| -------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `bind`   | `(event: MouseEvent \| KeyboardEvent, binding: { key: string; value: string })` | An existing option was picked in the bind control; `key` is the node's key. |
+| `remove` | `(event: MouseEvent, key: string)`                                              | Remove was activated on a bound, removable node.                            |
+| `create` | `(event: MouseEvent \| KeyboardEvent, key: string)`                             | Create was picked in the bind control.                                      |
 
 ## Slots
 

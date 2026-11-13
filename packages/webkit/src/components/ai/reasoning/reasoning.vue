@@ -36,7 +36,7 @@
     /** The reasoning was expanded or collapsed. */
     'update:open': [value: boolean]
     /** The reader asked for the response now; the owner stops the reasoning and sets `streaming` to false. */
-    skip: []
+    skip: [event: MouseEvent]
   }>()
 
   defineSlots<{
@@ -125,7 +125,7 @@
         kind="transparent"
         size="small"
         :data-testid="`${testId}__skip`"
-        @click="emit('skip')"
+        @click="(event: MouseEvent) => emit('skip', event)"
       />
     </div>
     <div

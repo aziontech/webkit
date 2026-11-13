@@ -42,8 +42,8 @@
     }
   ]
 
-  const send = (text, attached) => {
-    sent.value = { text, references: attached.map((item) => `${item.trigger}${item.label}`) }
+  const send = (event, { value, references: attached }) => {
+    sent.value = { text: value, references: attached.map((item) => `${item.trigger}${item.label}`) }
     prompt.value = ''
     references.value = []
   }

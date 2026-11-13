@@ -37,6 +37,15 @@ describe('ActionConfirmation', () => {
     await userEvent.click(getByRole('button', { name: 'Approve' }))
     expect(emitted('deny')).toHaveLength(1)
     expect(emitted('approve')).toHaveLength(1)
+    expect(emitted('deny')![0]![0]).toBeInstanceOf(MouseEvent)
+    expect(emitted('approve')![0]![0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('emits deny with the event from the keyboard', async () => {
+    const { getByRole, emitted } = render(ActionConfirmation, { props: base })
+    getByRole('button', { name: 'Deny' }).focus()
+    await userEvent.keyboard('{Enter}')
+    expect(emitted('deny')![0]![0]).toBeInstanceOf(Event)
   })
 
   it('uses the approve label and the danger kind', () => {

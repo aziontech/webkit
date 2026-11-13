@@ -102,10 +102,10 @@ export interface TableContext {
   filterFields: ComputedRef<FilterField[]>
   /** Committed structured filters (backs the `filters` model). */
   appliedFilters: ComputedRef<AppliedFilter[]>
-  /** Replace the committed filter set (Apply). */
-  applyFilters: (filters: AppliedFilter[]) => void
-  /** Remove one committed filter. */
-  removeFilter: (filter: AppliedFilter) => void
+  /** Replace the committed filter set (Apply); the DOM event that committed it comes first. */
+  applyFilters: (event: Event, filters: AppliedFilter[]) => void
+  /** Remove one committed filter; the DOM event that removed it comes first. */
+  removeFilter: (event: Event, filter: AppliedFilter) => void
   /** Clear structured filters and the global search text. */
   clearFilters: () => void
   /** Filter the user asked to edit; Table.Filter watches this to re-open pre-filled. */

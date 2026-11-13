@@ -48,11 +48,11 @@
 
   const emit = defineEmits<{
     /** Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. */
-    cancel: [id?: string]
+    cancel: [event: MouseEvent, id?: string]
     /** Retry on one failed file (its `id`) or Retry failed (no `id`). */
-    retry: [id?: string]
+    retry: [event: MouseEvent, id?: string]
     /** Close was pressed; offered only once every file has finished. */
-    close: []
+    close: [event: MouseEvent]
   }>()
 
   defineSlots<{
@@ -195,7 +195,7 @@
         size="small"
         :ariaLabel="t('uploadProgress.close')"
         :data-testid="`${testId}__close`"
-        @click="emit('close')"
+        @click="emit('close', $event)"
       />
     </div>
 
@@ -259,7 +259,7 @@
             size="small"
             :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
             :data-testid="`${testId}__cancel`"
-            @click="emit('cancel', item.id)"
+            @click="emit('cancel', $event, item.id)"
           />
           <IconButton
             key="icon-button-3"
@@ -269,7 +269,7 @@
             size="small"
             :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
             :data-testid="`${testId}__retry`"
-            @click="emit('retry', item.id)"
+            @click="emit('retry', $event, item.id)"
           />
           <i
             v-else-if="item.status === 'done'"
@@ -298,7 +298,7 @@
         kind="outlined"
         size="small"
         :data-testid="`${testId}__cancel-all`"
-        @click="emit('cancel')"
+        @click="emit('cancel', $event)"
       />
       <Button
         key="button-2"
@@ -308,7 +308,7 @@
         kind="outlined"
         size="small"
         :data-testid="`${testId}__retry-failed`"
-        @click="emit('retry')"
+        @click="emit('retry', $event)"
       />
       <slot
         v-if="state !== 'running'"

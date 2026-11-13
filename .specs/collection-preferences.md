@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: d3387adf67c65ddeca55c8c19aa8c45e5ceb7c5d2501afb4d7dbb899a6519cd2
+checksum: bc68e500c29feb7a6b34cc1b9a975e7c7f85a08c00428b91252046cf69fce574
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # CollectionPreferences — Component Spec
@@ -83,11 +83,11 @@ Types: `CollectionPreferencesValue = { pageSize?: number; columns?: { id: string
 
 ## Events
 
-| Event                 | Payload                      | Notes                                         |
-| --------------------- | ---------------------------- | --------------------------------------------- |
-| `update:preferences`  | `CollectionPreferencesValue` | Confirm was activated.                        |
-| `confirm`             | `CollectionPreferencesValue` | Same value, for a handler that is not a model. |
-| `cancel`              | `void`                       | Cancel was activated; the draft is discarded. |
+| Event                | Payload                                                | Notes                                          |
+| -------------------- | ------------------------------------------------------ | ---------------------------------------------- |
+| `update:preferences` | `CollectionPreferencesValue`                           | Confirm was activated.                         |
+| `confirm`            | `(event: MouseEvent, value: CollectionPreferencesValue)` | Same value, for a handler that is not a model. |
+| `cancel`             | `(event: MouseEvent)`                                  | Cancel was activated; the draft is discarded.  |
 
 ## Slots
 

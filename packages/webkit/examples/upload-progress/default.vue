@@ -61,7 +61,7 @@
     <UploadProgress
       :items="items"
       :floating="false"
-      @cancel="cancel"
+      @cancel="(_event, id) => cancel(id)"
     />
   </div>
 </template>

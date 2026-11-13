@@ -340,7 +340,7 @@
                 <SuggestionGroup
                   :items="supportPrompts"
                   orientation="vertical"
-                  @select="(item) => send(item.label)"
+                  @select="(_event, item) => send(item.label)"
                 />
               </div>
               <Conversation
@@ -408,7 +408,7 @@
                   <SuggestionGroup
                     :items="lastAnswer.answer.followUps"
                     aria-label="Follow-up questions"
-                    @select="(item) => send(item.label)"
+                    @select="(_event, item) => send(item.label)"
                   />
                 </div>
               </Conversation>
@@ -420,7 +420,7 @@
                 :state="state"
                 :max-rows="4"
                 placeholder="Ask about storefront"
-                @submit="send"
+                @submit="(_event, { value }) => send(value)"
                 @stop="stop"
               >
                 <template #hint

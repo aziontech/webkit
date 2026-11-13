@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { cleanup, fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { h } from 'vue'
@@ -51,10 +52,17 @@ describe('ConversationHistory', () => {
     expect(view.emitted('update:modelValue')![0]).toEqual(['e'])
   })
 
-  it('emits remove from a named Delete button', async () => {
+  it('emits remove with the event and the id from a named Delete button', async () => {
     const view = render(ConversationHistory, { props: { items, now, removable: true } })
-    await fireEvent.click(view.getByRole('button', { name: 'Delete Last month' }))
-    expect(view.emitted('remove')![0]).toEqual(['f'])
+    await userEvent.click(view.getByRole('button', { name: 'Delete Last month' }))
+    const [pointer, id] = view.emitted('remove')![0] as [Event, string]
+    expect(pointer).toBeInstanceOf(MouseEvent)
+    expect(id).toBe('f')
+    view.getByRole('button', { name: 'Delete Last week' }).focus()
+    await userEvent.keyboard('{Enter}')
+    const [keyboard, next] = view.emitted('remove')![1] as [Event, string]
+    expect(keyboard).toBeInstanceOf(Event)
+    expect(next).toBe('e')
   })
 
   it('shows loading and empty states', () => {

@@ -60,7 +60,7 @@
   }
 
   const onRemove = (event: MouseEvent, filter: AppliedFilter): void => {
-    ctx?.removeFilter(filter)
+    ctx?.removeFilter(event, filter)
     emit('remove', event, filter)
   }
   const onEdit = (event: MouseEvent | KeyboardEvent, filter: AppliedFilter): void => {

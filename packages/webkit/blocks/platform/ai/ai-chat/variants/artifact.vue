@@ -292,7 +292,7 @@
                 <SuggestionGroup
                   :items="followUps"
                   aria-label="Follow-up questions"
-                  @select="(item) => send(item.label)"
+                  @select="(_event, item) => send(item.label)"
                 />
               </div>
             </Conversation>
@@ -304,7 +304,7 @@
               :state="state"
               :max-length="4000"
               placeholder="Ask for a change to the query"
-              @submit="send"
+              @submit="(_event, { value }) => send(value)"
               @stop="stop"
             >
               <template #hint>

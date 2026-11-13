@@ -81,7 +81,7 @@
 
   const alerts: unknown[] = []
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -142,7 +142,7 @@
               severity="danger"
               label="Couldn't load latency. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -167,7 +167,7 @@
               severity="danger"
               label="Couldn't load error rate. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -204,7 +204,7 @@
           severity="danger"
           label="Couldn't load open alerts. Check your connection and retry."
           action-label="Retry"
-          @action="emit('retry')"
+          @action="(event) => emit('retry', event)"
         />
       </div>
     </aside>

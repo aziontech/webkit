@@ -28,13 +28,17 @@ describe('SuggestionGroup', () => {
     expect(getAllByRole('button')).toHaveLength(2)
   })
 
-  it('emits select with the item on click and on Enter', async () => {
+  it('emits select with the event and the item on click and on Enter', async () => {
     const { getAllByRole, emitted } = render(SuggestionGroup, { props: { items } })
     await userEvent.click(getAllByRole('button')[0] as HTMLElement)
-    expect(emitted('select')?.[0]).toEqual([items[0]])
+    const [pointer, first] = emitted('select')![0] as [Event, unknown]
+    expect(pointer).toBeInstanceOf(MouseEvent)
+    expect(first).toEqual(items[0])
     await userEvent.tab()
     await userEvent.keyboard('{Enter}')
-    expect(emitted('select')?.[1]).toEqual([items[1]])
+    const [keyboard, second] = emitted('select')![1] as [Event, unknown]
+    expect(keyboard).toBeInstanceOf(Event)
+    expect(second).toEqual(items[1])
   })
 
   it('emits nothing while disabled', async () => {

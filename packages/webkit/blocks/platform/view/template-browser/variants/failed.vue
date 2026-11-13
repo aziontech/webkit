@@ -12,7 +12,7 @@
     propertyFiltering: { properties: [{ key: 'title', label: 'Name' }] }
   })
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -45,7 +45,7 @@
           severity="danger"
           label="Couldn't load templates. Check your connection and retry."
           action-label="Retry"
-          @action="emit('retry')"
+          @action="(event) => emit('retry', event)"
         />
         <EmptyState
           size="medium"

@@ -58,7 +58,7 @@
     />
     <FileTokenGroup
       :items="items"
-      @dismiss="remove"
+      @dismiss="(_event, { index }) => remove(index)"
     />
   </div>
 </template>

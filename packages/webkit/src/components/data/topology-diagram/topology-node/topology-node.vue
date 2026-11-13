@@ -29,9 +29,9 @@
 
   const emit = defineEmits<{
     toggle: []
-    bind: [value: string]
-    remove: []
-    create: []
+    bind: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: string]
+    remove: [event: globalThis.MouseEvent]
+    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent]
   }>()
 
   defineSlots<{
@@ -59,9 +59,12 @@
   )
   const removeLabel = computed<string>(() => t('topologyDiagram.remove', { kind: props.node.kind }))
 
-  const onSelect = (_event: unknown, value: string | number): void => {
-    if (value === CREATE) emit('create')
-    else emit('bind', String(value))
+  const onSelect = (
+    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+    value: string | number
+  ): void => {
+    if (value === CREATE) emit('create', event)
+    else emit('bind', event, String(value))
   }
 </script>
 
@@ -190,7 +193,7 @@
               kind="outlined"
               size="small"
               :ariaLabel="removeLabel"
-              @click="emit('remove')"
+              @click="(event: globalThis.MouseEvent) => emit('remove', event)"
             />
           </Tooltip>
         </template>

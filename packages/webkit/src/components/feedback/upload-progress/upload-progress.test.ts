@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -35,7 +36,12 @@ describe('UploadProgress', () => {
     const view = render(UploadProgress, { props: { items: running(), floating: false } })
     await fireEvent.click(view.getByRole('button', { name: 'Cancel app.js' }))
     await fireEvent.click(view.getByRole('button', { name: 'Cancel all' }))
-    expect(view.emitted('cancel')).toEqual([['2'], []])
+    const cancels = view.emitted('cancel') as [Event, string?][]
+    expect(cancels).toHaveLength(2)
+    expect(cancels[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(cancels[0]![1]).toBe('2')
+    expect(cancels[1]![0]).toBeInstanceOf(MouseEvent)
+    expect(cancels[1]).toHaveLength(1)
   })
 
   it('turns into the outcome with retry and close when finished', async () => {
@@ -60,8 +66,26 @@ describe('UploadProgress', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Retry x.bin' }))
     await fireEvent.click(view.getByRole('button', { name: 'Retry failed' }))
     await fireEvent.click(view.getByRole('button', { name: 'Close' }))
-    expect(view.emitted('retry')).toEqual([['x'], []])
-    expect(view.emitted('close')).toHaveLength(1)
+    const retries = view.emitted('retry') as [Event, string?][]
+    expect(retries).toHaveLength(2)
+    expect(retries[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(retries[0]![1]).toBe('x')
+    expect(retries[1]![0]).toBeInstanceOf(MouseEvent)
+    expect(retries[1]).toHaveLength(1)
+    const closes = view.emitted('close') as [Event][]
+    expect(closes).toHaveLength(1)
+    expect(closes[0]![0]).toBeInstanceOf(MouseEvent)
+  })
+
+  it('emits cancel with the event first when activated from the keyboard', async () => {
+    const user = userEvent.setup()
+    const view = render(UploadProgress, { props: { items: running(), floating: false } })
+    view.getByRole('button', { name: 'Cancel app.js' }).focus()
+    await user.keyboard('{Enter}')
+    const cancels = view.emitted('cancel') as [Event, string?][]
+    expect(cancels).toHaveLength(1)
+    expect(cancels[0]![0]).toBeInstanceOf(Event)
+    expect(cancels[0]![1]).toBe('2')
   })
 
   it('collapses the list with the toggle', async () => {

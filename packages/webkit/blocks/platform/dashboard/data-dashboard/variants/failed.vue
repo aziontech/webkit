@@ -122,7 +122,7 @@
     { label: 'Bar', value: 'bar' }
   ]
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -225,7 +225,7 @@
               severity="danger"
               label="Couldn't load data transferred for this period. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -282,7 +282,7 @@
               severity="danger"
               label="Couldn't load data transferred by project. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -339,7 +339,7 @@
               severity="danger"
               label="Couldn't load usage by project. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

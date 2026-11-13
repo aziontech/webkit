@@ -37,7 +37,7 @@
     series: []
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -93,7 +93,7 @@
               severity="danger"
               label="Couldn't load overall score. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -110,7 +110,7 @@
               severity="danger"
               label="Couldn't load score per application. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -127,7 +127,7 @@
               severity="danger"
               label="Couldn't load score per location. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -144,7 +144,7 @@
               severity="danger"
               label="Couldn't load hourly score. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -156,7 +156,7 @@
             severity="danger"
             label="Couldn't load open incidents. Check your connection and retry."
             action-label="Retry"
-            @action="emit('retry')"
+            @action="(event) => emit('retry', event)"
           />
         </template>
       </Card>

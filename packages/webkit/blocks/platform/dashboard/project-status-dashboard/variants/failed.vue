@@ -102,7 +102,7 @@
   const project = ref('product-launch')
   const sprint = ref('sprint-6')
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -216,7 +216,7 @@
               severity="danger"
               label="Couldn't load completion. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -270,7 +270,7 @@
               severity="danger"
               label="Couldn't load sprint burndown. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -309,7 +309,7 @@
               severity="danger"
               label="Couldn't load milestones. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -354,7 +354,7 @@
               severity="danger"
               label="Couldn't load at-risk work. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -393,7 +393,7 @@
               severity="danger"
               label="Couldn't load owners. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

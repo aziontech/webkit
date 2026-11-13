@@ -43,7 +43,7 @@
     () => events.filter((event) => matchesQuery(event, applied.value, properties)).length
   )
 
-  const apply = ({ query }) => {
+  const apply = (event, { query }) => {
     if (query) applied.value = query
   }
 </script>

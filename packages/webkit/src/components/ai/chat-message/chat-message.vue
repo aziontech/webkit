@@ -46,7 +46,7 @@
 
   const emit = defineEmits<{
     /** The reader asked to generate the failed response again (Try again). */
-    retry: []
+    retry: [event: MouseEvent]
   }>()
 
   const slots = defineSlots<{
@@ -184,7 +184,7 @@
           size="small"
           icon="pi pi-refresh"
           :data-testid="`${testId}__retry`"
-          @click="emit('retry')"
+          @click="(event: MouseEvent) => emit('retry', event)"
         />
       </div>
       <div

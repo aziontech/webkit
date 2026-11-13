@@ -55,6 +55,7 @@ describe('Reasoning', () => {
     })
     await userEvent.click(getByRole('button', { name: 'Skip thinking' }))
     expect(emitted('skip')).toHaveLength(1)
+    expect(emitted('skip')![0]![0]).toBeInstanceOf(MouseEvent)
     await rerender({ streaming: false, skippable: true })
     expect(queryByRole('button', { name: 'Skip thinking' })).toBeNull()
   })

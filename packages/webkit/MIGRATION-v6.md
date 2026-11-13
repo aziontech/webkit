@@ -189,6 +189,63 @@ The screens (blocks) that were only these fragments are gone from the catalog:
 (`modelValue`), no longer `v-model:value`. The codemod rewrites the usual forms; check custom
 `:value` / `@update:value` wiring by hand.
 
+### Activation events pass the DOM event first
+
+Every event that fires because someone activated something (a click, a select, a remove, a submit)
+now passes the DOM event as its first argument, and the item it concerns second. The codemod does
+not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
+`@confirm="save()"`) keeps working; a handler that reads them needs the new signature.
+
+| Component               | Event               | v5 payload                       | v6 payload                                          |
+| ----------------------- | ------------------- | -------------------------------- | --------------------------------------------------- |
+| `SuggestionGroup`       | `select`            | `(item)`                         | `(event, item)`                                     |
+| `ConversationHistory`   | `remove`            | `(id)`                           | `(event, id)`                                       |
+| `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references })`                    |
+| `PromptInput`           | `stop`              | `()`                             | `(event)`                                           |
+| `ActionConfirmation`    | `approve`, `deny`   | `()`                             | `(event)`                                           |
+| `ArtifactCanvas`        | `close`             | `()`                             | `(event)` (a `KeyboardEvent` when Escape closes it) |
+| `ArtifactPreview`       | `open`              | `()`                             | `(event)`                                           |
+| `ChatMessage`           | `retry`             | `()`                             | `(event)`                                           |
+| `Reasoning`             | `skip`              | `()`                             | `(event)`                                           |
+| `FeedbackReasonDialog`  | `submit`            | `(payload)`                      | `(event, payload)`                                  |
+| `TopologyDiagram`       | `remove`            | `(key)`                          | `(event, key)`                                      |
+| `TopologyDiagram`       | `create`            | `(key)`                          | `(event, key)`                                      |
+| `TopologyDiagram`       | `bind`              | `(key, value)`                   | `(event, { key, value })`                           |
+| `Table`                 | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
+| `Table`                 | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
+| `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                  |
+| `Table.Filter`          | `clear`             | `()`                             | `(event)`                                           |
+| `CollectionPreferences` | `confirm`           | `(value)`                        | `(event, value)`                                    |
+| `CollectionPreferences` | `cancel`            | `()`                             | `(event)`                                           |
+| `PropertyFilter`        | `submit`            | `(payload)`                      | `(event, payload)`                                  |
+| `ButtonGroup`           | `click`             | `({ id })`                       | `(event, id)`                                       |
+| `UploadProgress`        | `cancel`, `retry`   | `(id?)`                          | `(event, id?)`                                      |
+| `UploadProgress`        | `close`             | `()`                             | `(event)`                                           |
+| `ConfirmDialog`         | `confirm`, `cancel` | `()`                             | `(event)`                                           |
+| `FileTokenGroup`        | `dismiss`           | `(index, item)`                  | `(event, { index, item })`                          |
+| `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                   |
+| `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
+| `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
+
+```vue
+<!-- v5 -->
+<SuggestionGroup :items="items" @select="(item) => send(item.label)" />
+<PromptInput v-model="draft" @submit="(value, references) => send(value, references)" />
+<FileTokenGroup :items="files" @dismiss="(index) => removeFile(index)" />
+<ButtonGroup :items="actions" @click="({ id }) => run(id)" />
+
+<!-- v6 -->
+<SuggestionGroup :items="items" @select="(event, item) => send(item.label)" />
+<PromptInput v-model="draft" @submit="(event, { value, references }) => send(value, references)" />
+<FileTokenGroup :items="files" @dismiss="(event, { index }) => removeFile(index)" />
+<ButtonGroup :items="actions" @click="(event, id) => run(id)" />
+```
+
+Two slot functions changed with them. The `Table.Filter` default slot's `apply`, `clear` and
+`remove` take the event first (`apply(event)`, `clear(event)`, `remove(event, filter)`), and the
+`AttributeEditor` `row` and `row-actions` slots pass `remove(event)`. Bind them to a click
+(`@click="remove"`) or pass the event on (`@click="(event) => apply(event)"`).
+
 ### Test ids
 
 Test ids follow the component name: `feedback-message` → `feedback-alert`, `layout-divider` →
@@ -299,6 +356,7 @@ split view or a card these change:
   `@5xl` and `Cards` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
   `platform/detail/details-page`) sit side by side from `@4xl` (1024 px), so a 1280 px console
   window stacks them.
+
 - **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
   every width, as before. Set `stackable` to render each row as a card of label / value lines
   when the table is narrower than `--container-lg` (552 px); the column headers stay for screen

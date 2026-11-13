@@ -98,7 +98,7 @@
   const period = ref('12m')
   const trendForm = ref('area')
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -202,7 +202,7 @@
               severity="danger"
               label="Couldn't load spend by category. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -237,7 +237,7 @@
               severity="danger"
               label="Couldn't load current split. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -274,7 +274,7 @@
               severity="danger"
               label="Couldn't load top contributors. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

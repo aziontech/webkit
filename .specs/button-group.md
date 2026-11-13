@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 5a31ef1e5ebf5f9cd4b47cecba2c523cbaa8270d8318907f1aaa1f0cae550cd1
+checksum: b7a3d4629c590cc8c8474b09effe9ec342416d22d82249ebe745625021b5b6b6
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # ButtonGroup — Component Spec
@@ -85,7 +85,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
   <ButtonGroup
     :items="items"
     aria-label="Editor actions"
-    @click="({ id }) => run(id)"
+    @click="(_event, id) => run(id)"
     @toggle="({ pressed }) => (wrap = pressed)"
   />
 </template>
@@ -112,7 +112,7 @@ Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted 
 
 | Event    | Payload                            | Notes                                                                 |
 | -------- | ---------------------------------- | --------------------------------------------------------------------- |
-| `click`  | `{ id: string }`                   | An action or a menu option was chosen (from the bar or the overflow). |
+| `click`  | `(event: MouseEvent \| KeyboardEvent, id: string)` | An action or a menu option was chosen (from the bar or the overflow). |
 | `toggle` | `{ id: string; pressed: boolean }` | A toggle was activated; `pressed` is the new state to store.          |
 
 ## Slots

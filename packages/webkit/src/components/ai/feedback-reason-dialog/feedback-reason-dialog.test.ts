@@ -24,7 +24,7 @@ const Harness = defineComponent({
         'onUpdate:open': (value: boolean) => (open.value = value),
         reasons: props.reasons,
         loading: props.loading,
-        onSubmit: (payload: FeedbackReasonPayload) => emit('sent', payload)
+        onSubmit: (event: Event, payload: FeedbackReasonPayload) => emit('sent', event, payload)
       })
   }
 })
@@ -81,7 +81,9 @@ describe('FeedbackReasonDialog', () => {
     const details = view.getByLabelText('Details (optional)')
     await userEvent.fill(details, '  It took a minute.  ')
     await fireEvent.click(view.getByRole('button', { name: 'Send feedback' }))
-    expect(view.emitted('sent')![0]).toEqual([{ reason: 'slow', details: 'It took a minute.' }])
+    const [event, payload] = view.emitted('sent')![0] as [Event, FeedbackReasonPayload]
+    expect(event).toBeInstanceOf(SubmitEvent)
+    expect(payload).toEqual({ reason: 'slow', details: 'It took a minute.' })
   })
 
   it('locks the form while loading', async () => {

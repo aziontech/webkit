@@ -95,7 +95,7 @@
 
   const requestsForm = ref('line')
   const statusForm = ref('line')
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -197,7 +197,7 @@
               severity="danger"
               label="Couldn't load requests over time. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -267,7 +267,7 @@
               severity="danger"
               label="Couldn't load status codes. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -324,7 +324,7 @@
               severity="danger"
               label="Couldn't load requests by country. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>
@@ -382,7 +382,7 @@
               severity="danger"
               label="Couldn't load top hosts. Check your connection and retry."
               action-label="Retry"
-              @action="emit('retry')"
+              @action="(event) => emit('retry', event)"
             />
           </ChartCard.Content>
         </ChartCard>

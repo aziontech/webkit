@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -1250,5 +1251,79 @@ describe('Table.Filter trigger count', () => {
   it('has no axe violations with the count shown', async () => {
     const { container } = render(AdvancedFilter)
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('Table filter events carry the DOM event first', () => {
+  const filterFields = [{ id: 'name', label: 'Name', type: 'text' as const }]
+  const applied = { field: 'name', operator: 'eq' as const, value: 'Charlie' }
+  const renderFiltered = () =>
+    render(Table, {
+      props: {
+        data: rows,
+        columns: [{ accessorKey: 'name', header: 'Name' }],
+        filterFields,
+        filters: [applied],
+        rowKey: 'id',
+        ariaLabel: 'People'
+      },
+      slots: {
+        toolbar: () => h(Table.Filter),
+        filters: () => h(Table.AppliedFilters)
+      }
+    })
+
+  it('emits filter-remove as (event, filter) from a pointer click on the chip', async () => {
+    const view = renderFiltered()
+    await userEvent.click(view.getByRole('button', { name: /^Remove/ }))
+    const payload = view.emitted()['filter-remove']?.[0] as unknown[]
+    expect(payload[0]).toBeInstanceOf(MouseEvent)
+    expect(payload[1]).toEqual(applied)
+  })
+
+  it('emits filter-remove as (event, filter) from the keyboard', async () => {
+    const view = renderFiltered()
+    view.getByRole('button', { name: /^Remove/ }).focus()
+    await userEvent.keyboard('{Enter}')
+    const payload = view.emitted()['filter-remove']?.[0] as unknown[]
+    expect(payload[0]).toBeInstanceOf(Event)
+    expect(payload[1]).toEqual(applied)
+  })
+
+  it('emits filter-apply as (event, filters) when the builder is applied', async () => {
+    const view = renderFiltered()
+    await userEvent.click(view.getByTestId('data-table__filter'))
+    const field = await waitFor(() => {
+      const node = document.body.querySelector<HTMLSelectElement>(
+        '[data-testid="data-table__filter__field"]'
+      )
+      expect(node).toBeTruthy()
+      return node as HTMLSelectElement
+    })
+    await userEvent.selectOptions(field, 'name')
+    const value = document.body.querySelector<HTMLInputElement>(
+      '[data-testid="data-table__filter__value"] input, input[data-testid="data-table__filter__value"]'
+    ) as HTMLInputElement
+    await userEvent.type(value, 'Alice')
+    const apply = within(document.body).getByRole('button', { name: /^Apply/ })
+    apply.focus()
+    await userEvent.keyboard('{Enter}')
+    const payload = view.emitted()['filter-apply']?.[0] as unknown[]
+    expect(payload[0]).toBeInstanceOf(Event)
+    expect(payload[1]).toEqual([applied, { field: 'name', operator: 'contains', value: 'Alice' }])
+  })
+
+  it('emits clear as (event) from a custom builder in Table.Filter on a pointer click', async () => {
+    const view = render(TableFilter, {
+      props: { fields: filterFields },
+      slots: {
+        default: ({ clear }: { clear: (event: Event) => void }) =>
+          h('button', { type: 'button', onClick: clear }, 'Clear all')
+      }
+    })
+    await userEvent.click(view.getByTestId('data-table__filter'))
+    await userEvent.click(await within(document.body).findByRole('button', { name: 'Clear all' }))
+    const clear = view.emitted()['clear']?.[0] as unknown[]
+    expect(clear[0]).toBeInstanceOf(MouseEvent)
   })
 })

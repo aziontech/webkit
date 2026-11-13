@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 1
 template: 2
-checksum: 158777050194b0c277666fac1feeb6c931b98400e20ddd10a2f423c760b08564
+checksum: 134629a4f5fab879fe6db827f3ee17ea4eda6a923a140aef1b2fbe87ee9e80e2
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ChatMessage — Component Spec
@@ -119,9 +119,9 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Events
 
-| Event   | Payload | When                                              |
-| ------- | ------- | ------------------------------------------------- |
-| `retry` | —       | The reader pressed Try again on a failed response. |
+| Event   | Payload               | When                                               |
+| ------- | --------------------- | -------------------------------------------------- |
+| `retry` | `(event: MouseEvent)` | The reader pressed Try again on a failed response. |
 
 ## Slots
 

@@ -282,7 +282,7 @@
         <SuggestionGroup
           :items="supportPrompts"
           orientation="vertical"
-          @select="(item) => send(item.label)"
+          @select="(_event, item) => send(item.label)"
         />
       </div>
       <Conversation
@@ -349,7 +349,7 @@
           <SuggestionGroup
             :items="lastAnswer.answer.followUps"
             aria-label="Follow-up questions"
-            @select="(item) => send(item.label)"
+            @select="(_event, item) => send(item.label)"
           />
         </div>
       </Conversation>
@@ -360,7 +360,7 @@
         v-model="prompt"
         :state="state"
         :max-length="4000"
-        @submit="send"
+        @submit="(_event, { value }) => send(value)"
         @stop="stop"
       >
         <template #hint>

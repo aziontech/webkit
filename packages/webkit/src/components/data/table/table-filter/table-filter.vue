@@ -38,8 +38,8 @@
   )
 
   const emit = defineEmits<{
-    apply: [filters: AppliedFilter[]]
-    clear: []
+    apply: [event: Event, filters: AppliedFilter[]]
+    clear: [event: Event]
   }>()
 
   defineSlots<{
@@ -47,9 +47,9 @@
     default(props: {
       fields: FilterField[]
       applied: AppliedFilter[]
-      apply: () => void
-      clear: () => void
-      remove: (filter: AppliedFilter) => void
+      apply: (event: Event) => void
+      clear: (event: Event) => void
+      remove: (event: Event, filter: AppliedFilter) => void
     }): unknown
     /** Replace the default trigger button. */
     trigger(props: { open: () => void; count: number }): unknown
@@ -175,7 +175,7 @@
     draftValue.value = ''
   })
 
-  const commit = (): void => {
+  const commit = (event: Event): void => {
     if (!draftField.value) return
     const next: AppliedFilter = {
       field: draftField.value,
@@ -186,17 +186,17 @@
     const list = editingKey.value
       ? current.map((filter) => (filterKey(filter) === editingKey.value ? next : filter))
       : [...current, next]
-    ctx?.applyFilters(list)
-    emit('apply', list)
+    ctx?.applyFilters(event, list)
+    emit('apply', event, list)
     resetDraft()
     close()
   }
-  const clearAll = (): void => {
+  const clearAll = (event: Event): void => {
     ctx?.clearFilters()
-    emit('clear')
+    emit('clear', event)
     resetDraft()
   }
-  const removeOne = (filter: AppliedFilter): void => ctx?.removeFilter(filter)
+  const removeOne = (event: Event, filter: AppliedFilter): void => ctx?.removeFilter(event, filter)
 
   watch(
     () => ctx?.editingFilter.value ?? null,

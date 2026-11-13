@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 4eb84c9ad7d6c1e3861d9b9a48ecd9dc839746b06bb4bd555c921809564eca32
+checksum: 7d6731c3e27b452cf929efd412e715fbe0247ea828dab73450badf998d3acf58
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # ConversationHistory — Component Spec
@@ -75,9 +75,9 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 
 ## Events
 
-| Event    | Payload  | When                                                                    |
-| -------- | -------- | ----------------------------------------------------------------------- |
-| `remove` | `string` | Delete pressed on a row (with `removable`); the owner removes the item. |
+| Event    | Payload                           | When                                                                                       |
+| -------- | --------------------------------- | ------------------------------------------------------------------------------------------ |
+| `remove` | `(event: MouseEvent, id: string)` | Delete pressed on a row (with `removable`); `id` is the row's item id. The owner removes it. |
 
 ## Slots
 

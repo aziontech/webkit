@@ -32,6 +32,8 @@
 
   type Section = { id: string; title: string; rows: Row[] }
 
+  type CommitEvent = MouseEvent | KeyboardEvent | FocusEvent
+
   defineOptions({
     name: 'Combobox',
     inheritAttrs: false
@@ -86,7 +88,7 @@
 
   const emit = defineEmits<{
     search: [text: string]
-    create: [value: string]
+    create: [event: MouseEvent | KeyboardEvent | FocusEvent, value: string]
   }>()
 
   defineSlots<{
@@ -249,19 +251,19 @@
     close()
   }
 
-  const commitCustom = (value: string) => {
+  const commitCustom = (event: CommitEvent, value: string) => {
     typing.value = false
     text.value = value
     if (value !== model.value) {
       setModel(value)
-      emit('create', value)
+      emit('create', event, value)
     }
     close()
   }
 
-  const commitRow = (row: Row) => {
+  const commitRow = (event: CommitEvent, row: Row) => {
     if (row.kind === 'option') commitOption(row.option)
-    else commitCustom(row.value)
+    else commitCustom(event, row.value)
   }
 
   const restore = () => {
@@ -269,7 +271,7 @@
     text.value = displayOf(model.value)
   }
 
-  const commitText = () => {
+  const commitText = (event: CommitEvent) => {
     if (!typing.value) return
     const value = text.value.trim()
     if (!value) {
@@ -280,7 +282,7 @@
     }
     const match = exactMatch(value)
     if (match) commitOption(match)
-    else if (props.allowCustom) commitCustom(value)
+    else if (props.allowCustom) commitCustom(event, value)
     else restore()
   }
 
@@ -319,8 +321,8 @@
     setOpen(true)
   }
 
-  const onBlur = () => {
-    commitText()
+  const onBlur = (event: FocusEvent) => {
+    commitText(event)
     close()
   }
 
@@ -354,12 +356,12 @@
       const row = active.value >= 0 && expanded.value ? rows.value[active.value] : undefined
       if (row) {
         event.preventDefault()
-        commitRow(row)
+        commitRow(event, row)
         return
       }
       if (typing.value) {
         event.preventDefault()
-        commitText()
+        commitText(event)
         close()
       }
       return
@@ -380,8 +382,8 @@
     }
     if (key === 'Tab') {
       const row = active.value >= 0 && expanded.value ? rows.value[active.value] : undefined
-      if (row) commitRow(row)
-      else commitText()
+      if (row) commitRow(event, row)
+      else commitText(event)
       close()
     }
   }
@@ -520,8 +522,8 @@
                 :data-kind="row.kind"
                 :data-testid="`${testId}__option`"
                 class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
-                @click="commitRow(row)"
-                @keydown.enter.prevent="commitRow(row)"
+                @click="commitRow($event, row)"
+                @keydown.enter.prevent="commitRow($event, row)"
                 @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"
               >
                 <template v-if="row.kind === 'option'">

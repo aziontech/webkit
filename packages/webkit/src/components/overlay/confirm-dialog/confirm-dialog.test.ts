@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -60,11 +61,29 @@ describe('ConfirmDialog', () => {
     await settle()
 
     await fireEvent.click(byTestId('overlay-confirm-dialog__confirm') as HTMLElement)
-    expect(emitted()['confirm']).toHaveLength(1)
+    const confirms = emitted()['confirm'] as [Event][]
+    expect(confirms).toHaveLength(1)
+    expect(confirms[0]![0]).toBeInstanceOf(MouseEvent)
 
     await fireEvent.click(byTestId('overlay-confirm-dialog__cancel') as HTMLElement)
-    expect(emitted()['cancel']).toHaveLength(1)
+    const cancels = emitted()['cancel'] as [Event][]
+    expect(cancels).toHaveLength(1)
+    expect(cancels[0]![0]).toBeInstanceOf(MouseEvent)
     expect(emitted()['update:open']).toContainEqual([false])
+  })
+
+  it('emits confirm with the event first when the confirm button is activated with Enter', async () => {
+    const user = userEvent.setup()
+    const { emitted } = render(ConfirmDialog, {
+      props: { open: true, title: 'Remove domain', confirmLabel: 'Remove' }
+    })
+    await settle()
+
+    ;(byTestId('overlay-confirm-dialog__confirm') as HTMLElement).focus()
+    await user.keyboard('{Enter}')
+    const confirms = emitted()['confirm'] as [Event][]
+    expect(confirms).toHaveLength(1)
+    expect(confirms[0]![0]).toBeInstanceOf(Event)
   })
 
   it.each([{ disabled: true }, { loading: true }])(

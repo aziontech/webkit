@@ -5,8 +5,8 @@
   const prompt = ref('')
   const last = ref('')
 
-  function send(text) {
-    last.value = text
+  function send(event, { value }) {
+    last.value = value
     prompt.value = ''
   }
 </script>

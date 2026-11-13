@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 0c2754a8a6d442a2a82755d2813cb2716dc989e0251526f1e5e660190d320827
+checksum: 94beacfad100e371a9fc03c5650b1de552187e00a16cd38c15678f4db3f8d613
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # PromptInput — Component Spec
@@ -59,7 +59,7 @@ submit it until the response ends or they press Stop.
 
   const prompt = ref('')
   const state = ref('ready')
-  function send(text) {
+  function send(event, { value, references }) {
     prompt.value = ''
     state.value = 'submitted'
   }
@@ -108,10 +108,10 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Events
 
-| Event    | Payload                                               | When                                                                                                                                                                                                                                 |
-| -------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `submit` | `(value: string, references: PromptInputReference[])` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `state` is `ready`. `value` is trimmed; `references` holds the references whose `<trigger><label>` is still in the text. |
-| `stop`   | —                                                     | Stop pressed while `submitted` or `streaming`.                                                                                                                                                                                       |
+| Event    | Payload                                                                                                   | When                                                                                                                                                                                                                                 |
+| -------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[] })` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `state` is `ready`. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text. |
+| `stop`   | `(event: MouseEvent)`                                                                                     | Stop pressed while `submitted` or `streaming`.                                                                                                                                                                                       |
 
 ## Slots
 

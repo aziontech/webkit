@@ -19,7 +19,7 @@
       :items="items"
       alignment="horizontal"
       :limit="3"
-      @dismiss="remove"
+      @dismiss="(_event, { index }) => remove(index)"
     />
   </div>
 </template>

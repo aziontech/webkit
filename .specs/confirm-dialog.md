@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: d2b4b832a370445e7e35f54280460696eb616c127408db7594aec59afe48df0f
+checksum: 1c3810db6c1c9c779e0d18836ec6dc8b3b67b59ec88c5d4554414d2d29b3184d
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ConfirmDialog — Component Spec
@@ -91,8 +91,8 @@ A small confirmation dialog: a title with a close button, one sentence of descri
 
 | Event     | Payload | Notes                                                                            |
 | --------- | ------- | -------------------------------------------------------------------------------- |
-| `confirm` | `void`  | The confirm button was activated; not emitted while `disabled` or `loading`.     |
-| `cancel`  | `void`  | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
+| `confirm` | `(event: MouseEvent)` | The confirm button was activated; not emitted while `disabled` or `loading`.     |
+| `cancel`  | `(event: MouseEvent)` | The cancel button was activated; the dialog closes. Not emitted while `loading`. |
 
 ## Slots
 

@@ -32,6 +32,7 @@ describe('ArtifactPreview', () => {
     const { getByRole, emitted } = render(ArtifactPreview, { props: { ...base, openable: true } })
     await userEvent.click(getByRole('button', { name: 'Open cache-rules.json' }))
     expect(emitted('open')).toHaveLength(1)
+    expect(emitted('open')![0]![0]).toBeInstanceOf(MouseEvent)
   })
 
   it('names Copy and Download with the title', () => {

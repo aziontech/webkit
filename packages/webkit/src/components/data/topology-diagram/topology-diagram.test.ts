@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
@@ -87,19 +88,34 @@ describe('TopologyDiagram', () => {
     expect(view.getByRole('button', { name: 'Change Policy' })).toBeTruthy()
   })
 
-  it('emits bind, create and remove with the node key', async () => {
+  it('emits bind, create and remove with the DOM event first and the node key', async () => {
     const view = render(TopologyDiagram, { props: { levels } })
     await fireEvent.click(view.getByRole('button', { name: 'Change Policy' }))
     await settle()
     await fireEvent.click(within(menu()).getByRole('menuitem', { name: /strict-waf/ }))
-    expect(view.emitted()['bind']?.[0]).toEqual(['policy', 'strict-waf'])
+    const bind = view.emitted()['bind']?.[0] as unknown[]
+    expect(bind[0]).toBeInstanceOf(MouseEvent)
+    expect(bind[1]).toEqual({ key: 'policy', value: 'strict-waf' })
     await fireEvent.click(view.getByRole('button', { name: 'Bind Error page' }))
     await settle()
     expect(within(menu()).getByText('No options yet.')).toBeTruthy()
     await fireEvent.click(within(menu()).getByRole('menuitem', { name: /Create Error page/ }))
-    expect(view.emitted()['create']?.[0]).toEqual(['page'])
-    await fireEvent.click(view.getByRole('button', { name: 'Remove Policy' }))
-    expect(view.emitted()['remove']?.[0]).toEqual(['policy'])
+    const create = view.emitted()['create']?.[0] as unknown[]
+    expect(create[0]).toBeInstanceOf(MouseEvent)
+    expect(create[1]).toBe('page')
+    await userEvent.click(view.getByRole('button', { name: 'Remove Policy' }))
+    const remove = view.emitted()['remove']?.[0] as unknown[]
+    expect(remove[0]).toBeInstanceOf(MouseEvent)
+    expect(remove[1]).toBe('policy')
+  })
+
+  it('emits remove with the DOM event first from the keyboard', async () => {
+    const view = render(TopologyDiagram, { props: { levels } })
+    view.getByRole('button', { name: 'Remove Policy' }).focus()
+    await userEvent.keyboard('{Enter}')
+    const remove = view.emitted()['remove']?.[0] as unknown[]
+    expect(remove[0]).toBeInstanceOf(Event)
+    expect(remove[1]).toBe('policy')
   })
 
   it('stages a bind in the binding example', async () => {

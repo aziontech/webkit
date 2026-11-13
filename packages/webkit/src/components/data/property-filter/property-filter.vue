@@ -94,7 +94,7 @@
   const emit = defineEmits<{
     'update:query': [query: PropertyFilterQuery]
     'update:text': [text: string]
-    submit: [payload: PropertyFilterSubmit]
+    submit: [event: KeyboardEvent, payload: PropertyFilterSubmit]
   }>()
 
   const attrs = useAttrs()
@@ -375,12 +375,12 @@
     }
   }
 
-  const submitQuery = (): void => {
+  const submitQuery = (event: KeyboardEvent): void => {
     touched.value = true
     if (queryError.value) return
     open.value = false
     active.value = -1
-    emit('submit', {
+    emit('submit', event, {
       text: queryText.value,
       query: queryText.value.trim()
         ? flatQuery(builtInParse.value)
@@ -430,7 +430,7 @@
       const picked =
         expanded.value && active.value >= 0 ? suggestions.value[active.value] : undefined
       if (picked) picked.apply()
-      else if (isQuery.value) submitQuery()
+      else if (isQuery.value) submitQuery(event)
       else commitTyped()
       return
     }

@@ -119,7 +119,7 @@
     () => periods.find((option) => option.value === period.value)?.comparison ?? ''
   )
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -231,7 +231,7 @@
             severity="danger"
             label="Couldn't load conversion funnel. Check your connection and retry."
             action-label="Retry"
-            @action="emit('retry')"
+            @action="(event) => emit('retry', event)"
           />
         </ChartCard.Content>
       </ChartCard>
@@ -268,7 +268,7 @@
             severity="danger"
             label="Couldn't load retention by cohort. Check your connection and retry."
             action-label="Retry"
-            @action="emit('retry')"
+            @action="(event) => emit('retry', event)"
           />
         </ChartCard.Content>
       </ChartCard>
@@ -305,7 +305,7 @@
             severity="danger"
             label="Couldn't load weekly cohorts. Check your connection and retry."
             action-label="Retry"
-            @action="emit('retry')"
+            @action="(event) => emit('retry', event)"
           />
         </ChartCard.Content>
       </ChartCard>

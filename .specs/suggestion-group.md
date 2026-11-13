@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 7003fc56e563d28da950cf3247b9e86f6d537cc6226cc050c6e3234745fb41bf
+checksum: 3df121db241e73bc3109ce6e6700b881bcda8d5296c0c724d6d8bd4e985ac246
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # SuggestionGroup — Component Spec
@@ -16,7 +16,7 @@ last_updated: 2026-11-11
 
 A group of prompts the reader can send without typing (Cloudscape support prompt group, AI Elements
 Suggestion): support prompts on an empty conversation, follow-up questions after a response, or the
-choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the item,
+choices of a clarifying question. Each prompt is a button; choosing one emits `select` with the click event and the item,
 and the owner either sends it or places it in the prompt input to edit.
 
 ## When to use
@@ -57,7 +57,7 @@ and the owner either sends it or places it in the prompt input to edit.
       { id: 'ttl', label: 'What TTL should my images use?' },
       { id: 'purge', label: 'How do I purge one URL?' }
     ]"
-    @select="(item) => send(item.label)"
+    @select="(event, item) => send(item.label)"
   />
 </template>
 ```
@@ -78,9 +78,9 @@ types `SuggestionItem`, `SuggestionGroupOrientation`._
 
 ## Events
 
-| Event    | Payload          | When                                       |
-| -------- | ---------------- | ------------------------------------------ |
-| `select` | `SuggestionItem` | A prompt was chosen (not while disabled).  |
+| Event    | Payload                                       | When                                                                     |
+| -------- | --------------------------------------------- | ------------------------------------------------------------------------ |
+| `select` | `(event: MouseEvent, item: SuggestionItem)`   | A prompt was chosen by pointer or keyboard (not while disabled).         |
 
 ## Slots
 

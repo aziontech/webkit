@@ -56,7 +56,7 @@
   const open = defineModel<boolean>('open', { default: false })
 
   const emit = defineEmits<{
-    submit: [payload: FeedbackReasonPayload]
+    submit: [event: SubmitEvent, payload: FeedbackReasonPayload]
   }>()
 
   const attrs = useAttrs()
@@ -90,7 +90,7 @@
     missing.value = false
   })
 
-  const send = async (): Promise<void> => {
+  const send = async (event: SubmitEvent): Promise<void> => {
     if (props.loading) return
     if (!reason.value) {
       missing.value = true
@@ -98,7 +98,7 @@
       globalThis.document?.getElementById(`${uid}-${options.value[0]?.value}`)?.focus()
       return
     }
-    emit('submit', { reason: reason.value, details: details.value.trim() })
+    emit('submit', event, { reason: reason.value, details: details.value.trim() })
   }
 </script>
 

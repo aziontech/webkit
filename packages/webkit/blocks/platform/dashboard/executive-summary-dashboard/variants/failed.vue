@@ -164,7 +164,7 @@
     cost: (value: number) => `${value.toFixed(4)}`
   }
 
-  const emit = defineEmits<{ retry: [] }>()
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -257,7 +257,7 @@
                 severity="danger"
                 :label="`Couldn't load ${trend.title.toLowerCase()}. Check your connection and retry.`"
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </ChartCard.Content>
           </ChartCard>
@@ -270,7 +270,7 @@
                 severity="danger"
                 :label="`Couldn't load ${quarter} goals. Check your connection and retry.`"
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </template>
           </Card>
@@ -281,7 +281,7 @@
                 severity="danger"
                 label="Couldn't load commentary. Check your connection and retry."
                 action-label="Retry"
-                @action="emit('retry')"
+                @action="(event) => emit('retry', event)"
               />
             </template>
           </Card>

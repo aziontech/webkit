@@ -44,7 +44,7 @@
   const model = defineModel<string | null>({ default: null })
 
   const emit = defineEmits<{
-    remove: [id: string]
+    remove: [event: MouseEvent, id: string]
   }>()
 
   const attrs = useAttrs()
@@ -169,7 +169,7 @@
               kind="transparent"
               size="small"
               :data-testid="`${testId}__remove`"
-              @click="emit('remove', item.id)"
+              @click="(event: MouseEvent) => emit('remove', event, item.id)"
             />
           </li>
         </ul>

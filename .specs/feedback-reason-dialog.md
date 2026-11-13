@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 522363446a87b6dbf58bdcc0c7e8a350ce56ac7c8da1435fa39ff828a62ad0e7
+checksum: 5d382e3391ce078535106008eecb7e250cd292003578ea11502a9fb061b1a79a
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # FeedbackReasonDialog — Component Spec
@@ -45,7 +45,7 @@ Asks why an assistant response was not helpful, right after the thumbs-down in `
   import { ref } from 'vue'
 
   const open = ref(false)
-  const send = ({ reason, details }) => {
+  const send = (event, { reason, details }) => {
     open.value = false
   }
 </script>
@@ -74,9 +74,9 @@ Asks why an assistant response was not helpful, right after the thumbs-down in `
 
 ## Events
 
-| Event    | Payload                               | When                                                                                                                                              |
-| -------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `submit` | `{ reason: string; details: string }` | Send feedback with a reason chosen. `details` is trimmed. Without a reason the group shows `Choose a reason.` and focus moves to the first radio. |
+| Event    | Payload                                                                    | When                                                                                                                                              |
+| -------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event: SubmitEvent, payload: { reason: string; details: string })`       | Send feedback with a reason chosen. `details` is trimmed. Without a reason the group shows `Choose a reason.` and focus moves to the first radio. |
 
 ## Slots
 
