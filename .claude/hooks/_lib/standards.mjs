@@ -55,9 +55,10 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'catalog-drift' },
+      { surface: 'ci', by: 'check-complete' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'scaffolder emits the compound + -root; catalog drift check + review confirm.'
+    note: 'scaffolder emits the compound + -root; check-complete fails a compound whose index.ts export has no ./<name>-root pointing at the root .vue (ratcheted by complete-baseline.json); catalog drift check + review confirm.'
   },
   {
     id: 'styling',
@@ -258,9 +259,11 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'ci', by: 'size-limit' },
+      { surface: 'ci', by: 'check-complete' },
+      { surface: 'ci', by: 'check-size-ratchet' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. Budgets only ratchet down; entries not yet budgeted stay gated by review.'
+    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. scripts/check-complete.mjs fails a root component with no budget entry (current debt in complete-baseline.json, which only shrinks); scripts/check-size-ratchet.mjs fails a PR that raises a limit against its merge base unless the PR body has a Budget-raise: line.'
   },
   {
     id: 'testing',
@@ -270,10 +273,11 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'enforce-test-exists' },
       { surface: 'write-time', by: 'validate-references' },
       { surface: 'ci', by: 'check-tests' },
+      { surface: 'ci', by: 'check-complete' },
       { surface: 'ci', by: 'vitest' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, the component mounted with its examples as fixtures, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate).'
+    note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, the component mounted with its examples as fixtures, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate). check-complete fails a component whose example group (the test fixtures) is missing or ships fewer examples than its spec lists, or whose first example has no visual baseline, ratcheted by complete-baseline.json.'
   },
   {
     id: 'comments',

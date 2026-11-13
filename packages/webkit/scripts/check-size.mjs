@@ -7,21 +7,13 @@ import { gzipSync } from 'node:zlib'
 import vuePlugin from '@vitejs/plugin-vue'
 import { build } from 'vite'
 
+import { limitToBytes } from './check-size-ratchet.mjs'
 import { exportTarget } from './lib/exports.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG = join(SCRIPT_DIR, '..')
 
 const entries = JSON.parse(readFileSync(join(PKG, '.size-limit.json'), 'utf-8'))
-
-function limitToBytes(limit) {
-  const m = String(limit)
-    .trim()
-    .match(/^([\d.]+)\s*(B|KB|MB)$/i)
-  if (!m) throw new Error(`unparseable limit "${limit}" — use "<n> B|KB|MB"`)
-  const mult = { B: 1, KB: 1024, MB: 1024 * 1024 }[m[2].toUpperCase()]
-  return Math.round(parseFloat(m[1]) * mult)
-}
 
 async function gzippedSize(entryPath, { entryOnly = false } = {}) {
   const result = await build({
@@ -67,7 +59,7 @@ const componentExports = Object.values(exportsMap).filter((entry) =>
   exportTarget(entry).startsWith('./src/components/')
 ).length
 console.log(
-  `\n${entries.length} budgeted entr${entries.length === 1 ? 'y' : 'ies'} of ${componentExports} component export paths — unbudgeted paths are gated by review (bundle-budget.md).`
+  `\n${entries.length} budgeted entr${entries.length === 1 ? 'y' : 'ies'} of ${componentExports} component export paths — a root component with no budget fails check-complete (bundle-budget.md).`
 )
 
 if (failures.length) {

@@ -167,6 +167,8 @@ pnpm governance             # lint + type-check + format:check + security:audit
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
+The `complete` gate (`pnpm --filter @aziontech/webkit run complete:check`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `size:ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
+
 ## Testing
 
 Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
