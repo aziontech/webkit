@@ -34,7 +34,6 @@ export const EXAMPLE_DATA_DIRS = [
   'packages/webkit/src',
   'packages/webkit/blocks',
   'packages/webkit/examples',
-  'apps/demos/src',
   'skills',
   'rules'
 ]

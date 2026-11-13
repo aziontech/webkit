@@ -34,7 +34,7 @@ Every value a reader sees in an example, a block, a demo, a component default, a
 
 ## Enforcement
 
-- **`example-data`** in [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) (the CI ratchet of the `toolkit` job and the `authoring` gate) scans `packages/webkit/src`, `blocks`, `examples`, `apps/demos/src`, `skills` and `rules` with [`example-data.js`](../../packages/webkit/src/eslint-plugin/example-data.js): `example-data:domain`, `example-data:regional-format` and `example-data:invented-brand`. Tests, translated catalogs and the phone country list are out of scope. Pinned both ways in [`example-data.test.mjs`](../../packages/webkit/test/eslint-plugin/example-data.test.mjs).
+- **`example-data`** in [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) (the CI ratchet of the `toolkit` job and the `authoring` gate) scans `packages/webkit/src`, `blocks`, `examples`, `skills` and `rules` (the demos app composes blocks and is held in review) with [`example-data.js`](../../packages/webkit/src/eslint-plugin/example-data.js): `example-data:domain`, `example-data:regional-format` and `example-data:invented-brand`. Tests, translated catalogs and the phone country list are out of scope. Pinned both ways in [`example-data.test.mjs`](../../packages/webkit/test/eslint-plugin/example-data.test.mjs).
 - Defaults, preselected options and personal names are not machine-checkable; reviewers hold them (`ui-craft`).
 
 ## Why this rule exists
