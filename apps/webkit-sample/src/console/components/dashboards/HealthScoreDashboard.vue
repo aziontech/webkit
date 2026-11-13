@@ -9,7 +9,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
   import Tracker from '@aziontech/webkit/tracker'
-  import { computed, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   import {
     formatScore,
@@ -32,19 +32,10 @@
     empty: false
   })
 
-  const activeIndex = ref<number | null>(null)
-
   const health = computed(() => resolveHealthScore(props.period, { empty: props.empty }))
   const phrase = computed(() => healthPhrase(props.period))
   const strip = computed(() => healthTimeline(props.period))
   const overall = computed(() => health.value.overall)
-
-  watch(
-    () => props.period,
-    () => {
-      activeIndex.value = null
-    }
-  )
 </script>
 
 <template>
@@ -105,7 +96,6 @@
               </p>
             </div>
             <Chart
-              v-model:active-index="activeIndex"
               :series="overall.series"
               :labels="health.labels"
               :min="0"

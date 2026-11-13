@@ -46,7 +46,6 @@
 
   const editing = ref(false)
   const layout = ref<LayoutCard[]>(loadCustomLayout() ?? defaultCustomLayout())
-  const activeIndex = ref<number | null>(null)
   const from = ref(-1)
   const announcement = ref('')
   const gridRef = ref<globalThis.HTMLElement | null>(null)
@@ -69,13 +68,6 @@
       else saveCustomLayout(next)
     },
     { deep: true }
-  )
-
-  watch(
-    () => props.period,
-    () => {
-      activeIndex.value = null
-    }
   )
 
   const sizeLabel = (card: LayoutCard) =>
@@ -191,7 +183,6 @@
         </ChartCard.Header>
         <ChartCard.Content>
           <MetricPlot
-            v-model:active-index="activeIndex"
             :report="reports[card.id]"
             :loading="loading"
             :refetching="refetching"

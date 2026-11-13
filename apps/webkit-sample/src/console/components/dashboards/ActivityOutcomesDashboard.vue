@@ -9,7 +9,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     ACTIVITY_COLUMNS,
@@ -48,7 +48,6 @@
   const outcome = ref(ANY_OUTCOME)
   const category = ref(ANY_CATEGORY)
   const destination = ref('')
-  const activeIndex = ref<number | null>(null)
 
   const blank = computed(() => props.loading || props.empty)
 
@@ -64,13 +63,6 @@
       category: category.value,
       destination: destination.value
     })
-  )
-
-  watch(
-    () => props.period,
-    () => {
-      activeIndex.value = null
-    }
   )
 </script>
 
@@ -147,7 +139,6 @@
         </ChartCard.Header>
         <ChartCard.Content>
           <Chart
-            v-model:active-index="activeIndex"
             :series="outcomes"
             :labels="labels"
             :format-value="formatCount"

@@ -79,7 +79,6 @@
 
   const loading = ref(true)
   const refetching = ref(false)
-  const activeIndex = ref(null)
   let timer = null
 
   const settle = (state, delay) => {
@@ -93,12 +92,10 @@
   settle(loading, 700)
 
   watch([() => route.query.dashboard, () => dashboard.value?.id], () => {
-    activeIndex.value = null
     settle(loading, 500)
   })
 
   watch(period, () => {
-    activeIndex.value = null
     settle(refetching, 600)
   })
 
@@ -213,7 +210,6 @@
               <MetricReportCard
                 v-for="report in panels"
                 :key="`${dashboard.id}:${report.id}`"
-                v-model:active-index="activeIndex"
                 :report="report"
                 :empty="accountEmpty"
                 :loading="loading"
@@ -250,7 +246,6 @@
               <MetricReportCard
                 v-for="highlight in highlights"
                 :key="highlight.report.id"
-                v-model:active-index="activeIndex"
                 :report="highlight.report"
                 :empty="accountEmpty"
                 :loading="loading"

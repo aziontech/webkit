@@ -11,7 +11,7 @@
   import TableRoot from '@aziontech/webkit/table-root'
   import { toast } from '@aziontech/webkit/toast'
   import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     FUNNEL_COHORT_COLUMNS,
@@ -41,7 +41,6 @@
   })
 
   const segment = ref(FUNNEL_DEFAULT_SEGMENT)
-  const activeIndex = ref<number | null>(null)
 
   const view = computed(() => resolveFunnel(props.period, segment.value, { empty: props.empty }))
   const filtered = computed(() => !props.empty && !segmentHasData(segment.value))
@@ -90,10 +89,6 @@
       FUNNEL_COHORT_COLUMNS.map((column) => ({ id: column.id, header: column.header })),
       view.value.cohorts
     )
-
-  watch([() => props.period, segment], () => {
-    activeIndex.value = null
-  })
 </script>
 
 <template>
@@ -278,7 +273,6 @@
         </ChartCard.Header>
         <ChartCard.Content>
           <Chart
-            v-model:active-index="activeIndex"
             :series="view.retention"
             :labels="FUNNEL_WEEK_LABELS"
             :max="100"

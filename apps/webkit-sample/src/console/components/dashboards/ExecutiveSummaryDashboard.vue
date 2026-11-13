@@ -14,7 +14,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import { downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
 
   import {
     resolveSummaryFigures,
@@ -43,7 +43,6 @@
   })
 
   const quarter = ref(SUMMARY_DEFAULT_QUARTER)
-  const activeIndex = ref<number | null>(null)
 
   const figures = computed(() => resolveSummaryFigures({ empty: props.empty }))
   const goals = computed(() => resolveSummaryGoals({ empty: props.empty }))
@@ -54,10 +53,6 @@
     SUMMARY_FORMATTERS[kind as keyof typeof SUMMARY_FORMATTERS](value)
 
   const goalShare = (current: number, target: number) => Math.round((current / target) * 100)
-
-  watch(quarter, () => {
-    activeIndex.value = null
-  })
 
   const exportSummary = () => {
     const fileName = `executive-summary-${quarter.value.toLowerCase().replace(' ', '-')}.csv`
@@ -161,7 +156,6 @@
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
-              v-model:active-index="activeIndex"
               :series="trend.series"
               :labels="SUMMARY_MONTHS"
               :min="trend.min"

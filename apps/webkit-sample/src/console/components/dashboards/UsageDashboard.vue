@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Hint from '@aziontech/webkit/hint'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
   import { usageFigures, usageReports } from '../../lib/data/dashboards/usage'
   import MetricReportCard from '../observability/MetricReportCard.vue'
@@ -19,8 +19,6 @@
     refetching: false,
     empty: false
   })
-
-  const activeIndex = ref<number | null>(null)
 
   const figures = computed(() => usageFigures(props.period, { empty: props.empty }))
   const reports = computed(() => usageReports(props.period, { empty: props.empty }))
@@ -57,7 +55,6 @@
       <MetricReportCard
         v-for="report in reports"
         :key="report.id"
-        v-model:active-index="activeIndex"
         :report="report"
         :empty="empty"
         :loading="loading"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Hint from '@aziontech/webkit/hint'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import { computed, ref, watch } from 'vue'
+  import { computed } from 'vue'
 
   import { trafficReports, trafficSummary } from '../../lib/data/dashboards/traffic'
   import MetricReportCard from '../observability/MetricReportCard.vue'
@@ -20,17 +20,8 @@
     empty: false
   })
 
-  const activeIndex = ref<number | null>(null)
-
   const figures = computed(() => trafficSummary(props.period, { empty: props.empty }))
   const reports = computed(() => trafficReports(props.period, { empty: props.empty }))
-
-  watch(
-    () => props.period,
-    () => {
-      activeIndex.value = null
-    }
-  )
 </script>
 
 <template>
@@ -64,7 +55,6 @@
       <MetricReportCard
         v-for="report in reports"
         :key="report.id"
-        v-model:active-index="activeIndex"
         :report="report"
         :empty="empty"
         :loading="loading"

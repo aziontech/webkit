@@ -8,7 +8,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag from '@aziontech/webkit/tag'
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
 
   import {
     resolveThreatFigures,
@@ -30,8 +30,6 @@
     refetching: false,
     empty: false
   })
-
-  const activeIndex = ref<number | null>(null)
 
   const figures = computed(() => resolveThreatFigures(props.period, { empty: props.empty }))
   const reports = computed(() => resolveThreatReports(props.period, { empty: props.empty }))
@@ -87,7 +85,6 @@
       class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
     >
       <MetricReportCard
-        v-model:active-index="activeIndex"
         :report="timeline"
         :empty="empty"
         :loading="loading"
