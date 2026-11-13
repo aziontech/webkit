@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 60c4128592778b759e9b3eb34e3cd6e512aab831285b499a310cc1594d7744b9
+checksum: 715c85772d334ed7db2d30887de70c812a93b20039d36486d4dbd013999b69ed
 created: 2026-06-25
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # MultiSelect — Component Spec
@@ -95,8 +95,6 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 | Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                     |
 | -------------- | -------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modelValue`   | `TValue[]`                       | `() => []`  | false    | Two-way bound selection. Always an array; each item is the `value` of a selected `<MultiSelectOption>`.                                                   |
-| `open`         | `boolean`                        | `undefined` | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                          |
 | `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                     |
 | `placeholder`  | `string`                         | `''`        | false    | Trigger placeholder shown when no option is selected.                                                                                                     |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                |
@@ -108,12 +106,16 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 **Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the type `MultiSelectSize`.
 
+## v-model
+
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
+| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
+
 ## Events
 
-| Event               | Payload    | Notes                                                                 |
-| ------------------- | ---------- | --------------------------------------------------------------------- |
-| `update:modelValue` | `TValue[]` | Fires when an option is toggled; payload is the next selection array. |
-| `update:open`       | `boolean`  | Fires when the dropdown opens or closes.                              |
+_none_
 
 ## Slots
 

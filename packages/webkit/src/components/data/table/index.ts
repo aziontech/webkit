@@ -76,8 +76,6 @@ export type {
   TableCellSlotProps,
   TableCellSlots,
   TableColumn,
-  TableDensity,
-  TableExportScope,
   TableExposed,
   TableHeaderSlotProps,
   TableHeaderSlots,
@@ -96,4 +94,3 @@ export type {
   TableHeadCellGrow,
   TableHeadCellKind
 } from './table-head-cell/table-head-cell.vue'
-export type { TableHeaderKind } from './table-header/table-header.vue'

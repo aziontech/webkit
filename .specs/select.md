@@ -7,7 +7,7 @@ spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 8526b38f2c399022637b6580bf2bf186f6ac0edf322c46e5ff7f909c6c5f6210
+checksum: bd9a5e93f2ec0d985c5fe2627a43590c77d8f593983313b354eb70e97cfde49e
 created: 2026-06-15
 last_updated: 2026-11-13
 ---
@@ -94,9 +94,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 | Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                              |
 | -------------- | -------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `modelValue`   | `TValue`                         | `undefined`  | false    | Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`.                                                                                     |
 | `multiple`     | `boolean`                        | `false`      | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
-| `open`         | `boolean`                        | `undefined`  | false    | Controlled open state for the dropdown. Use with `v-model:open`.                                                                                                                                                   |
 | `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
 | `placeholder`  | `string`                         | `undefined`  | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                         |
@@ -111,12 +109,16 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 **Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectKind`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Option` rows, so a list with disabled entries needs no local type.
 
+## v-model
+
+| Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                                                                           |
+| -------------- | --------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `TValue`  | `undefined` | `update:modelValue` | The selection via `defineModel`. Scalar in single mode; array in multi mode. Its type flows to `displayValue` and `update:modelValue`. Fires when an option is selected (single) or toggled (multi). Uncontrolled when unbound. |
+| `v-model:open` | `boolean` | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                                      |
+
 ## Events
 
-| Event               | Payload   | Notes                                                         |
-| ------------------- | --------- | ------------------------------------------------------------- |
-| `update:modelValue` | `TValue`  | Fires when an option is selected (single) or toggled (multi). |
-| `update:open`       | `boolean` | Fires when the dropdown opens or closes.                      |
+_none_
 
 ## Slots
 

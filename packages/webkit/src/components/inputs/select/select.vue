@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue extends SelectValue = SelectValue">
-  import { computed, provide, type Ref, ref, toRef, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, type Ref, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
@@ -17,12 +17,8 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to displayValue and update:modelValue. */
-      modelValue?: TValue
       /** When true, switches the component to multi-select. */
       multiple?: boolean
-      /** Controlled open state for the dropdown. */
-      open?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** Trigger placeholder shown when no option is selected. */
@@ -43,9 +39,7 @@
       displayValue?: (value: TValue) => string
     }>(),
     {
-      modelValue: undefined,
       multiple: false,
-      open: undefined,
       defaultOpen: false,
       placeholder: undefined,
       size: 'medium',
@@ -58,10 +52,11 @@
     }
   )
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: TValue]
-    'update:open': [value: boolean]
-  }>()
+  /** Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to displayValue and update:modelValue. */
+  const model = defineModel<TValue>()
+
+  /** Controlled open state for the dropdown. Use with v-model:open; while unbound the dropdown is uncontrolled and seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   defineSlots<{
     default(): unknown
@@ -90,31 +85,27 @@
     return rest
   })
 
-  const uncontrolledOpen = ref(props.defaultOpen)
-  const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
+  const openState = computed(() => openModel.value ?? props.defaultOpen)
 
   const setOpen = (value: boolean) => {
     if (isDisabled.value || props.readonly) return
-    if (props.open === undefined) {
-      uncontrolledOpen.value = value
-    }
-    emit('update:open', value)
+    openModel.value = value
   }
 
   watch(
     () => props.multiple,
     () => {
-      const current = props.modelValue
+      const current = model.value
       if (props.multiple && !Array.isArray(current) && current !== undefined) {
-        emit('update:modelValue', (current === '' ? [] : [current]) as TValue)
+        model.value = (current === '' ? [] : [current]) as TValue
       } else if (!props.multiple && Array.isArray(current)) {
-        emit('update:modelValue', current[0] as TValue)
+        model.value = current[0] as TValue
       }
     }
   )
 
   const isSelected = (value: unknown): boolean => {
-    const current = props.modelValue
+    const current = model.value
     if (Array.isArray(current)) return current.includes(value)
     return current === value
   }
@@ -122,25 +113,25 @@
   const toggleValue = (value: unknown) => {
     if (isDisabled.value || props.readonly) return
     if (props.multiple) {
-      const current = Array.isArray(props.modelValue) ? [...props.modelValue] : []
+      const current = Array.isArray(model.value) ? [...model.value] : []
       const index = current.indexOf(value)
       if (index === -1) current.push(value)
       else current.splice(index, 1)
-      emit('update:modelValue', current as TValue)
+      model.value = current as TValue
       return
     }
-    emit('update:modelValue', value as TValue)
+    model.value = value as TValue
     setOpen(false)
   }
 
   const filled = computed(() => {
-    const current = props.modelValue
+    const current = model.value
     if (Array.isArray(current)) return current.length > 0
     return current !== undefined && current !== '' && current !== null
   })
 
   const displayValueComputed = computed((): string => {
-    const current = props.modelValue
+    const current = model.value
     if (props.displayValue) return props.displayValue(current as TValue)
     if (Array.isArray(current)) return current.length === 0 ? '' : current.join(', ')
     if (current === undefined || current === null) return ''
@@ -152,7 +143,7 @@
     triggerRef: ref<globalThis.HTMLElement | null>(null),
     open: openState,
     setOpen,
-    modelValue: toRef(props, 'modelValue') as Ref<SelectValue>,
+    modelValue: model as Ref<SelectValue>,
     toggleValue,
     isSelected,
     multiple: computed(() => props.multiple),

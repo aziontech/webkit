@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue = unknown">
-  import { computed, provide, ref, shallowReactive, toRef, useAttrs, useId } from 'vue'
+  import { computed, provide, ref, shallowReactive, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
@@ -12,10 +12,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Two-way bound selection. Always an array; each item is the value of a selected option, typed as the bound array's items. */
-      modelValue?: TValue[]
-      /** Controlled open state for the dropdown. */
-      open?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** Trigger placeholder shown when no option is selected. */
@@ -34,8 +30,6 @@
       displayValue?: (value: TValue[]) => string
     }>(),
     {
-      modelValue: () => [],
-      open: undefined,
       defaultOpen: false,
       placeholder: '',
       size: 'medium',
@@ -47,10 +41,11 @@
     }
   )
 
-  const emit = defineEmits<{
-    'update:modelValue': [value: TValue[]]
-    'update:open': [value: boolean]
-  }>()
+  /** Two-way bound selection. Always an array; each item is the value of a selected option, typed as the bound array's items. */
+  const model = defineModel<TValue[]>({ default: () => [] })
+
+  /** Controlled open state for the dropdown. Use with v-model:open; while unbound the dropdown is uncontrolled and seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   defineSlots<{
     default(): unknown
@@ -81,18 +76,14 @@
     return rest
   })
 
-  const uncontrolledOpen = ref(props.defaultOpen)
-  const openState = computed(() => (props.open !== undefined ? props.open : uncontrolledOpen.value))
+  const openState = computed(() => openModel.value ?? props.defaultOpen)
 
   const setOpen = (value: boolean) => {
     if (isDisabled.value || props.readonly) return
-    if (props.open === undefined) {
-      uncontrolledOpen.value = value
-    }
-    emit('update:open', value)
+    openModel.value = value
   }
 
-  const currentArray = (): unknown[] => (Array.isArray(props.modelValue) ? props.modelValue : [])
+  const currentArray = (): unknown[] => (Array.isArray(model.value) ? model.value : [])
 
   const isSelected = (value: unknown): boolean => currentArray().indexOf(value) !== -1
 
@@ -102,7 +93,7 @@
     const index = next.indexOf(value)
     if (index === -1) next.push(value)
     else next.splice(index, 1)
-    emit('update:modelValue', next as TValue[])
+    model.value = next as TValue[]
   }
 
   const filled = computed(() => currentArray().length > 0)
@@ -126,7 +117,7 @@
     triggerRef: ref<globalThis.HTMLElement | null>(null),
     open: openState,
     setOpen,
-    modelValue: toRef(props, 'modelValue') as unknown as import('vue').Ref<unknown[]>,
+    modelValue: model as unknown as import('vue').Ref<unknown[]>,
     toggleValue,
     isSelected,
     size: computed(() => props.size),

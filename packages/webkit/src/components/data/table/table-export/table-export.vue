@@ -5,7 +5,7 @@
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import { type TableExportScope, TableInjectionKey } from '../injection-key'
+  import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableExport',
@@ -17,7 +17,7 @@
       /** Download filename; falls back to the table's `exportFilename`. */
       filename?: string
       /** Which rows to export. */
-      scope?: TableExportScope
+      scope?: 'page' | 'filtered' | 'all'
     }>(),
     {
       filename: '',

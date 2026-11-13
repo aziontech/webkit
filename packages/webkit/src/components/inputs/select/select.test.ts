@@ -771,3 +771,73 @@ describe('keyboard map (spec)', () => {
     expect(document.activeElement).toBe(trigger)
   })
 })
+
+describe('Select (defineModel)', () => {
+  const parts = () => [
+    h(SelectTrigger, { 'aria-label': 'Pick' }),
+    h(SelectContent, null, () =>
+      OPTIONS.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+    )
+  ]
+
+  it('keeps its own selection and open state when nothing is bound', async () => {
+    const { getByTestId, emitted } = render(Select, {
+      props: { defaultOpen: true },
+      slots: { default: parts }
+    })
+    expect(getByTestId('select').getAttribute('data-state')).toBe('open')
+
+    await fireEvent.click(getOptions()[1])
+    await nextTick()
+
+    expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-2')
+    expect(getByTestId('select').getAttribute('data-state')).toBe('closed')
+    expect(getByTestId('select').hasAttribute('data-filled')).toBe(true)
+    expect(emitted()['update:modelValue']).toEqual([['opt-2']])
+    expect(emitted()['update:open']).toEqual([[false]])
+  })
+
+  it('round-trips v-model and v-model:open with the parent', async () => {
+    const value = ref<string>('opt-1')
+    const open = ref(false)
+    const Parent = defineComponent({
+      setup: () => () =>
+        h(
+          Select,
+          {
+            modelValue: value.value,
+            'onUpdate:modelValue': (v: string) => (value.value = v),
+            open: open.value,
+            'onUpdate:open': (v: boolean) => (open.value = v)
+          },
+          parts
+        )
+    })
+    const { getByTestId } = render(Parent)
+    expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-1')
+
+    value.value = 'opt-3'
+    await nextTick()
+    expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-3')
+
+    open.value = true
+    await nextTick()
+    expect(getByTestId('select').getAttribute('data-state')).toBe('open')
+
+    await fireEvent.click(getOptions()[1])
+    await nextTick()
+    expect(value.value).toBe('opt-2')
+    expect(open.value).toBe(false)
+    expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('opt-2')
+  })
+
+  it('stays open while a bound parent refuses to close it', async () => {
+    const Parent = defineComponent({
+      setup: () => () => h(Select, { open: true, 'onUpdate:open': () => undefined }, parts)
+    })
+    const { getByTestId } = render(Parent)
+    await fireEvent.click(getByTestId('select-trigger'))
+    await nextTick()
+    expect(getByTestId('select').getAttribute('data-state')).toBe('open')
+  })
+})

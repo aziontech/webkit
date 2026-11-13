@@ -43,8 +43,6 @@
   })
 
   interface Props {
-    /** Committed selection for v-model. A Date (or null) in single mode; a range in range mode. Only updated on Apply (or immediately when showApply is false). */
-    modelValue?: CalendarValue
     /** Selection mode. Single picks one date; range picks a start and end date. */
     mode?: CalendarMode
     /** Size token; affects the trigger, day-cell hit-area, and typography. */
@@ -55,8 +53,6 @@
     max?: Date
     /** Disables the trigger, grid, and all controls, applying disabled tokens. */
     disabled?: boolean
-    /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
-    open?: boolean
     /** Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`). */
     placeholder?: string
     /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
@@ -84,13 +80,11 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    modelValue: null,
     mode: 'range',
     size: 'medium',
     min: undefined,
     max: undefined,
     disabled: false,
-    open: undefined,
     placeholder: '',
     presets: () => [],
     showFields: true,
@@ -106,12 +100,16 @@
   })
 
   const emit = defineEmits<{
-    'update:modelValue': [value: CalendarValue]
-    'update:open': [value: boolean]
     'update:timezone': [value: string]
     'month-change': [value: CalendarMonth]
     apply: [value: CalendarValue]
   }>()
+
+  /** Committed selection for v-model. A Date (or null) in single mode; a range in range mode. Only updated on Apply (or immediately when showApply is false). */
+  const model = defineModel<CalendarValue>({ default: null })
+
+  /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   defineSlots<{
     trigger(props: { open: boolean; value: CalendarValue; displayValue: string }): unknown
@@ -131,9 +129,8 @@
   const presetsTriggerRef = ref<globalThis.HTMLElement | null>(null)
   const presetsPanelRef = ref<globalThis.HTMLElement | null>(null)
 
-  const internalOpen = ref(false)
   const internalPresetsOpen = ref(false)
-  const isOpen = computed(() => (props.open !== undefined ? props.open : internalOpen.value))
+  const isOpen = computed(() => openModel.value ?? false)
   const isOpenRef = computed(() => isOpen.value)
 
   const setOpen = (value: boolean) => {
@@ -143,10 +140,7 @@
     if (value) {
       internalPresetsOpen.value = false
     }
-    if (props.open === undefined) {
-      internalOpen.value = value
-    }
-    emit('update:open', value)
+    openModel.value = value
   }
 
   const toggleOpen = () => setOpen(!isOpen.value)
@@ -197,13 +191,13 @@
     return emptyValue()
   }
 
-  const draft = ref<CalendarValue>(cloneValue(props.modelValue))
+  const draft = ref<CalendarValue>(cloneValue(model.value))
   const draftRef = computed(() => draft.value)
 
   const committedPeriodLabel = ref('')
 
   const resetDraft = () => {
-    draft.value = cloneValue(props.modelValue)
+    draft.value = cloneValue(model.value)
   }
 
   watch(isOpen, (open) => {
@@ -224,7 +218,7 @@
     if (props.showApply) {
       return
     }
-    emit('update:modelValue', cloneValue(draft.value))
+    model.value = cloneValue(draft.value)
     if (isComplete(draft.value)) {
       setOpen(false)
     }
@@ -268,7 +262,7 @@
     }
     if (props.period) {
       committedPeriodLabel.value = periodLabel ?? ''
-      emit('update:modelValue', cloneValue(draft.value))
+      model.value = cloneValue(draft.value)
       emit('apply', cloneValue(draft.value))
       setOpen(false)
       return
@@ -292,7 +286,7 @@
       draft.value = date ? new Date(date.getTime()) : null
     }
     committedPeriodLabel.value = label
-    emit('update:modelValue', cloneValue(draft.value))
+    model.value = cloneValue(draft.value)
     emit('apply', cloneValue(draft.value))
     setPresetsOpen(false)
   }
@@ -340,7 +334,7 @@
       return
     }
     committedPeriodLabel.value = ''
-    emit('update:modelValue', cloneValue(draft.value))
+    model.value = cloneValue(draft.value)
     emit('apply', cloneValue(draft.value))
     setOpen(false)
   }
@@ -350,12 +344,12 @@
       return
     }
     committedPeriodLabel.value = ''
-    emit('update:modelValue', emptyValue())
+    model.value = emptyValue()
     draft.value = emptyValue()
   }
 
   const displayValue = computed(() =>
-    formatValueLabel(props.modelValue, props.mode, timezoneValue.value, locale.value)
+    formatValueLabel(model.value, props.mode, timezoneValue.value, locale.value)
   )
   const hasCommitted = computed(() => displayValue.value !== '')
   const triggerIcon = computed(() => (props.period ? 'pi pi-clock' : 'pi pi-calendar'))
@@ -367,7 +361,7 @@
     () => props.period && committedPeriodLabel.value !== '' && hasCommitted.value
   )
   const windowLabel = computed(() =>
-    formatWindowLabel(props.modelValue, props.mode, timezoneValue.value, locale.value)
+    formatWindowLabel(model.value, props.mode, timezoneValue.value, locale.value)
   )
 
   const hasPresets = () => props.presets.length > 0 || Boolean(slots['presets'])
@@ -478,7 +472,7 @@
       <slot
         name="trigger"
         :open="isOpen"
-        :value="modelValue"
+        :value="model"
         :display-value="displayValue"
       >
         <span

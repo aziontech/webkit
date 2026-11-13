@@ -54,8 +54,6 @@
     type FilterValue,
     type TableCellSlots,
     type TableColumn,
-    type TableDensity,
-    type TableExportScope,
     type TableExposed,
     type TableHeaderSlots,
     TableInjectionKey,
@@ -66,7 +64,7 @@
   import TableCaption from './table-caption/table-caption.vue'
   import TableCell from './table-cell/table-cell.vue'
   import TableHeadCell from './table-head-cell/table-head-cell.vue'
-  import TableHeader, { type TableHeaderKind } from './table-header/table-header.vue'
+  import TableHeader from './table-header/table-header.vue'
   import TableRow from './table-row/table-row.vue'
 
   type RowRecord = Record<string, unknown>
@@ -102,7 +100,7 @@
       /** Data-driven mode: clicking a row toggles its selection (requires enableRowSelection). */
       selectOnRowClick?: boolean
       /** Header density: `compact` shrinks the column-header row's height and padding. */
-      headerKind?: TableHeaderKind
+      headerKind?: 'default' | 'compact'
       /** Render a Pagination in the footer. */
       paginated?: boolean
       /** Rows per page when paginated. */
@@ -148,7 +146,7 @@
       /** Data-driven mode: every other body row takes the raised surface. */
       striped?: boolean
       /** Row density: `compact` shrinks body rows and cell padding. */
-      density?: TableDensity
+      density?: 'comfortable' | 'compact'
       /** Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. */
       virtual?: boolean
       /** Row height (px) assumed in `virtual` mode until a row is measured. */
@@ -598,7 +596,7 @@
   const instance = getCurrentInstance()
   const hasExportListener = (): boolean =>
     Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.['onExport'])
-  const resolveExportRows = (scope: TableExportScope): RowRecord[] => {
+  const resolveExportRows = (scope: 'page' | 'filtered' | 'all'): RowRecord[] => {
     if (leanRows.value) return records()
     if (scope === 'all') return table.getCoreRowModel().rows.map((row) => row.original)
     if (scope === 'page') return rows.value.map((row) => row.original)
@@ -618,7 +616,7 @@
   }
   const exportCsv = (options?: {
     filename?: string
-    scope?: TableExportScope
+    scope?: 'page' | 'filtered' | 'all'
     rows?: RowRecord[]
   }): Promise<void> => {
     const scope = options?.scope ?? 'filtered'
@@ -1532,14 +1530,11 @@
     TableCellSlotProps,
     TableCellSlots,
     TableColumn,
-    TableDensity,
-    TableExportScope,
     TableExposed,
     TableHeaderSlotProps,
     TableHeaderSlots,
     TableToolbarSlotProps
   } from './injection-key'
-  export type { TableHeaderKind } from './table-header/table-header.vue'
 </script>
 
 <template>

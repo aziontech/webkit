@@ -635,3 +635,66 @@ describe('keyboard map (spec)', () => {
     expect(document.activeElement).toBe(trigger)
   })
 })
+
+describe('MultiSelect (defineModel)', () => {
+  const parts = () => [
+    h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
+    h(MultiSelectContent, null, () => [
+      h(MultiSelectOption, { value: 'a' }, () => 'Alpha'),
+      h(MultiSelectOption, { value: 'b' }, () => 'Beta')
+    ])
+  ]
+  const options = () => Array.from(document.body.querySelectorAll<HTMLElement>('[role="option"]'))
+
+  it('keeps its own selection and open state when nothing is bound', async () => {
+    const { getByTestId, emitted } = render(MultiSelect, {
+      props: { defaultOpen: true },
+      slots: { default: parts }
+    })
+    expect(getByTestId('input-multi-select').getAttribute('data-state')).toBe('open')
+
+    await fireEvent.click(options()[0])
+    await fireEvent.click(options()[1])
+    await nextTick()
+
+    expect(getByTestId('multi-select-trigger__value').textContent?.trim()).toBe('Alpha, Beta')
+    expect(emitted()['update:modelValue']).toEqual([[['a']], [['a', 'b']]])
+    expect(getByTestId('input-multi-select').getAttribute('data-state')).toBe('open')
+    cleanupTeleported()
+  })
+
+  it('round-trips v-model and v-model:open with the parent', async () => {
+    const value = ref<string[]>(['a'])
+    const open = ref(false)
+    const Parent = defineComponent({
+      setup: () => () =>
+        h(
+          MultiSelect,
+          {
+            modelValue: value.value,
+            'onUpdate:modelValue': (v: string[]) => (value.value = v),
+            open: open.value,
+            'onUpdate:open': (v: boolean) => (open.value = v)
+          },
+          parts
+        )
+    })
+    const { getByTestId } = render(Parent)
+    const root = getByTestId('input-multi-select')
+    expect(root.getAttribute('data-state')).toBe('closed')
+
+    await fireEvent.click(getByTestId('multi-select-trigger'))
+    await nextTick()
+    expect(open.value).toBe(true)
+    expect(root.getAttribute('data-state')).toBe('open')
+
+    await fireEvent.click(options()[1])
+    await nextTick()
+    expect(value.value).toEqual(['a', 'b'])
+
+    value.value = []
+    await nextTick()
+    expect(root.hasAttribute('data-filled')).toBe(false)
+    cleanupTeleported()
+  })
+})

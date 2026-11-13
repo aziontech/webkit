@@ -4,7 +4,6 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/calendar/default.vue'
-import Open from '../../../../examples/calendar/open.vue'
 import Single from '../../../../examples/calendar/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -227,7 +226,7 @@ describe('Calendar', () => {
     expect(findDayButton(popover, 12).getAttribute('data-band')).toBe('end')
     expect(emitted()['update:modelValue']).toBeUndefined()
 
-    await fireEvent.click(getByTestId('input-calendar__apply'))
+    await fireEvent.click(within(popover).getByTestId('input-calendar__apply'))
 
     const events = emitted()['update:modelValue']
     expect(events).toHaveLength(1)
@@ -768,13 +767,17 @@ describe('Calendar', () => {
     await expectNoA11yViolations(document.body)
   })
 
-  // Every other story renders the CLOSED trigger, so the popover internals had no
-  // visual coverage at all before this fixture existed. It is pinned open via the
-  // controlled `open` prop, which means the panel mounts without an interaction —
-  // asserted here so a fixture that silently stops opening fails a test rather than
-  // quietly shooting an empty canvas.
-  it('renders the Open story fixture with the popover already mounted and labelled', async () => {
-    render(Open)
+  it('mounts the popover without an interaction when open is pinned by the consumer', async () => {
+    render(Calendar, {
+      props: {
+        modelValue: { start: new Date(2026, 9, 8), end: new Date(2026, 9, 19) },
+        mode: 'range',
+        open: true,
+        showTime: true,
+        showTimezone: true,
+        clearable: true
+      }
+    })
 
     const popover = await waitFor(() => {
       const el = getPopover()
@@ -883,5 +886,67 @@ describe('Calendar slot presence', () => {
     shown.value = false
     await nextTick()
     expect(queryByTestId('input-calendar__presets-trigger')).toBeNull()
+  })
+})
+
+describe('Calendar (defineModel)', () => {
+  beforeEach(() => {
+    document.body
+      .querySelectorAll('[data-testid$="__popover"], [data-testid$="__presets-menu"]')
+      .forEach((el) => el.remove())
+  })
+
+  it('keeps the committed value and open state when nothing is bound', async () => {
+    const { getByTestId, emitted } = render(Calendar, {
+      props: { mode: 'single', showApply: false }
+    })
+    const trigger = getByTestId('input-calendar__trigger')
+    const placeholder = trigger.textContent
+
+    const popover = await openCalendar(getByTestId)
+    expect(getByTestId('input-calendar').getAttribute('data-state')).toBe('open')
+    await fireEvent.click(findDayButton(popover, 15))
+
+    await waitFor(() => expect(getPopover()).toBeNull())
+    expect(getByTestId('input-calendar').getAttribute('data-state')).toBe('closed')
+    expect(trigger.textContent).not.toBe(placeholder)
+    expect((emitted()['update:modelValue'][0][0] as Date).getDate()).toBe(15)
+    expect(emitted()['update:open']).toEqual([[true], [false]])
+  })
+
+  it('round-trips v-model and v-model:open with the parent', async () => {
+    const value = ref<Date | null>(OCT_8)
+    const open = ref(false)
+    const Parent = defineComponent({
+      setup: () => () =>
+        h(Calendar, {
+          mode: 'single',
+          modelValue: value.value,
+          'onUpdate:modelValue': (v: unknown) => (value.value = v as Date | null),
+          open: open.value,
+          'onUpdate:open': (v: boolean) => (open.value = v)
+        })
+    })
+    const { getByTestId } = render(Parent)
+
+    open.value = true
+    const popover = await waitFor(() => {
+      const el = getPopover()
+      expect(el).toBeTruthy()
+      return el as HTMLElement
+    })
+    await nextTick()
+
+    await fireEvent.click(findDayButton(popover, 20))
+    await fireEvent.click(within(popover).getByTestId('input-calendar__apply'))
+
+    await waitFor(() => expect(getPopover()).toBeNull())
+    expect(open.value).toBe(false)
+    expect(value.value?.getDate()).toBe(20)
+
+    const before = getByTestId('input-calendar__trigger').textContent
+    value.value = new Date(2026, 9, 3)
+    await nextTick()
+    expect(getByTestId('input-calendar__trigger').textContent).not.toBe(before)
   })
 })
