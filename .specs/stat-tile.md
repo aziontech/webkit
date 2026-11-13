@@ -2,11 +2,11 @@
 name: stat-tile
 category: chart
 structure: monolithic
-status: approved
+status: implemented
 checksum: a80a0d520a01d379aa5423c94f9e566eefeb211bcf165323b387c1b478d50e59
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 ---
 
 # StatTile — Component Spec

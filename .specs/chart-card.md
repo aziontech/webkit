@@ -2,11 +2,11 @@
 name: chart-card
 category: chart
 structure: composition
-status: approved
+status: implemented
 checksum: 4febf18f07d024257a09591985d85f66ab61e1835ea01cb0060219c15e7f6390
 spec_version: 1
 created: 2026-10-20
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # ChartCard — Component Spec
