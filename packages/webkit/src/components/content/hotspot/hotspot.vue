@@ -19,11 +19,14 @@
     inheritAttrs: false
   })
 
+  /** Side of the wrapped control the marker sits on. */
+  export type HotspotSide = 'start' | 'end'
+
   interface Props {
     /** Matches the `hotspotId` of a tutorial step; the marker shows while that step's tutorial runs. */
     hotspotId: string
     /** Which side of the wrapped control the marker sits on, in reading direction. */
-    side?: 'start' | 'end'
+    side?: HotspotSide
   }
 
   const props = withDefaults(defineProps<Props>(), {

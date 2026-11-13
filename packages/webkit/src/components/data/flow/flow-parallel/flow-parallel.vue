@@ -9,9 +9,12 @@
     inheritAttrs: false
   })
 
+  /** Horizontal alignment of the parallel branches. */
+  export type FlowParallelAlign = 'start' | 'end'
+
   defineProps<{
     /** Horizontal alignment of the parallel branches: `start` left-aligns, `end` right-aligns. */
-    align?: 'start' | 'end'
+    align?: FlowParallelAlign
   }>()
 
   defineSlots<{

@@ -14,6 +14,9 @@
   /** How a client mark is inked on its brand face: `monochrome` flattens it, `knockout` drops it to black, `as-is` keeps its colours. */
   export type ClientMosaicColumnsLogoTreatment = 'monochrome' | 'knockout' | 'as-is'
 
+  /** Ink of the link text on a brand face. */
+  export type ClientMosaicColumnsInk = 'dark' | 'light'
+
   /** The client's brand colours painting one face. */
   export type ClientMosaicColumnsBrand = {
     /** CSS colour painting the face. */
@@ -21,7 +24,7 @@
     /** CSS colour of the glow laid over the face. */
     glow: string
     /** `dark` when the face is light enough that the link text must be dark; otherwise light. */
-    ink?: 'dark' | 'light'
+    ink?: ClientMosaicColumnsInk
   }
 
   /** One featured success story, rendered as a column. */

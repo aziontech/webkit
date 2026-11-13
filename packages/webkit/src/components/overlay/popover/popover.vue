@@ -3,7 +3,7 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePlacement } from '../../../composables/use-placement'
-  import type { PopoverPlacement, PopoverPlacementInput } from './injection-key'
+  import type { PopoverPlacement, PopoverPlacementInput, PopoverWidth } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -27,7 +27,7 @@
       /** Prevents the trigger from opening the panel and applies disabled tokens. */
       disabled?: boolean
       /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
-      width?: 'small' | 'medium' | 'large'
+      width?: PopoverWidth
       /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
       dismissible?: boolean
     }>(),

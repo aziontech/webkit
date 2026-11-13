@@ -32,6 +32,9 @@
     title: string
   }
 
+  /** Button kind of an action. */
+  export type ConsolePanelActionKind = 'secondary' | 'outlined'
+
   /** A button under the headline. */
   export type ConsolePanelAction = {
     /** Visible label of the action. */
@@ -43,7 +46,7 @@
     /** Link target of the action. */
     target?: '_blank' | '_self'
     /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
-    kind?: 'secondary' | 'outlined'
+    kind?: ConsolePanelActionKind
   }
 
   interface Props {

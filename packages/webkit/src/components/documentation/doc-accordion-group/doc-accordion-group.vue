@@ -9,9 +9,12 @@
 
   defineOptions({ name: 'DocAccordionGroup', inheritAttrs: false })
 
+  /** Whether one or several entries can be open at once. */
+  export type DocAccordionGroupType = 'single' | 'multiple'
+
   interface Props {
     /** Whether one or several entries can be open at once. */
-    type?: 'single' | 'multiple'
+    type?: DocAccordionGroupType
   }
 
   const props = withDefaults(defineProps<Props>(), { type: 'single' })

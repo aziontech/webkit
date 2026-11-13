@@ -9,9 +9,12 @@
     inheritAttrs: false
   })
 
+  /** Which connector attaches to the anchor. */
+  export type FlowAnchorType = 'start' | 'end'
+
   const props = defineProps<{
     /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; omitted marks both. */
-    type?: 'start' | 'end'
+    type?: FlowAnchorType
   }>()
 
   defineSlots<{

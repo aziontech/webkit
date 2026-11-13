@@ -29,6 +29,9 @@
     inheritAttrs: false
   })
 
+  /** Horizontal alignment of a column. */
+  export type ListingBrowserColumnAlign = 'start' | 'end'
+
   /** One column of the listing. */
   export type ListingBrowserColumn = {
     /** Key of the row value the column shows. */
@@ -38,7 +41,7 @@
     /** Share of the free width the column takes. */
     grow?: 1 | 2 | 3
     /** Horizontal alignment of the column. */
-    align?: 'start' | 'end'
+    align?: ListingBrowserColumnAlign
   }
 
   /** One row of the listing, linked by its first column. */

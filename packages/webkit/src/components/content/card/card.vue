@@ -11,9 +11,16 @@
     inheritAttrs: false
   })
 
+  /** Layout of the card. */
+  export type CardKind = 'default' | 'integration'
+
+  /** Color of an integration badge. */
+  export type CardBadgeSeverity =
+    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
+
   export interface CardBadge {
     label: string
-    severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
+    severity?: CardBadgeSeverity
   }
 
   const props = withDefaults(
@@ -23,7 +30,7 @@
       /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
       padded?: boolean
       /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. */
-      kind?: 'default' | 'integration'
+      kind?: CardKind
       /** Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. */
       logo?: string
       /** Integration kind: who publishes the item, shown as "by {vendor}". */

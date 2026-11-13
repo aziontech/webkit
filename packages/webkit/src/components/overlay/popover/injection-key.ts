@@ -18,6 +18,9 @@ export type PopoverPlacement =
 /** Prop-level placement; `'auto'` lets the popover pick the best-fitting vertical corner at open time. */
 export type PopoverPlacementInput = PopoverPlacement | 'auto'
 
+/** Panel width preset. */
+export type PopoverWidth = 'small' | 'medium' | 'large'
+
 export interface PopoverContext {
   /** Stable test-id prefix derived from the root component. */
   testId: string
@@ -28,7 +31,7 @@ export interface PopoverContext {
   /** Resolved placement passed to the floating panel as data-placement. */
   placement: Ref<PopoverPlacement>
   /** Panel width preset (data-width); undefined = fluid default. */
-  width: Ref<'small' | 'medium' | 'large' | undefined>
+  width: Ref<PopoverWidth | undefined>
   /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */

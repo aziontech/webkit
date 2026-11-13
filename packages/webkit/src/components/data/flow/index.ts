@@ -17,4 +17,6 @@ const FlowRoot = Object.assign(Flow, {
 
 export default FlowRoot
 export { FlowAnchor, FlowNode, FlowParallel }
+export type { FlowAnchorType } from './flow-anchor/flow-anchor.vue'
+export type { FlowParallelAlign } from './flow-parallel/flow-parallel.vue'
 export type { FlowAlign } from './injection-key'

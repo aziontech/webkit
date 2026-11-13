@@ -27,6 +27,9 @@
     points?: string[]
   }
 
+  /** Button kind of an action. */
+  export type CapabilityGridActionKind = 'secondary' | 'outlined'
+
   /** A button under the section title. */
   export type CapabilityGridAction = {
     /** Visible label of the action. */
@@ -38,7 +41,7 @@
     /** Link target of the action. */
     target?: '_blank' | '_self'
     /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
-    kind?: 'secondary' | 'outlined'
+    kind?: CapabilityGridActionKind
   }
 
   interface Props {
