@@ -2,7 +2,7 @@
 name: board
 category: layout
 structure: composition
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 checksum: 6a05a776f49e1e7e6f38b8415fd1e9884bd247f6bb1a7dc6d8977c7f28310c5c

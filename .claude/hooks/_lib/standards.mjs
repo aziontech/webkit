@@ -11,10 +11,13 @@ export const STANDARDS = [
     kind: 'foundational',
     scope: 'webkit',
     enforce: [
+      { surface: 'write-time', by: 'enforce-spec-exists' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-references' },
-      { surface: 'ci', by: 'check-authoring' }
-    ]
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'ci', by: 'check-spec-integrity' }
+    ],
+    note: 'The spec is the contract: enforce-spec-exists blocks a component Write whose spec is missing, not approved, locked or edited after approval; check-spec-integrity runs the same _lib/spec-integrity engine over every .specs/*.md in CI (approved or beyond, a shipped component stays implemented, body checksum matches).'
   },
   {
     id: 'prop-vocabulary',

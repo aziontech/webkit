@@ -55,6 +55,11 @@ export const GATES = [
     steps: [['node', 'scripts/check-spec-status.mjs']]
   },
   {
+    id: 'spec-integrity',
+    label: 'Spec integrity (status, checksum)',
+    steps: [['node', 'scripts/check-spec-integrity.mjs']]
+  },
+  {
     id: 'spec-template',
     label: 'Spec template sections',
     steps: [['node', 'scripts/check-spec-template.mjs']]

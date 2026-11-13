@@ -2,7 +2,7 @@
 name: donut-chart
 category: chart
 structure: monolithic
-status: approved
+status: implemented
 checksum: d46393437797022551374268eb68644c0fe81da2130ac7258b44bee45c64ae37
 spec_version: 1
 created: 2026-10-20

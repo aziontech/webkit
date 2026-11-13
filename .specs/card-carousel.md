@@ -2,7 +2,7 @@
 name: card-carousel
 category: sections
 structure: monolithic
-status: approved
+status: implemented
 spec_version: 1
 template: 2
 checksum: 736d5d2d3f65c6f89832740fbff986a4ede2ba0527fd7c8e384b3df27dc5be19

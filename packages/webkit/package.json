@@ -38,6 +38,7 @@
     "doc-standards:update": "node scripts/check-authoring-docs.mjs --update",
     "test:gate": "node scripts/check-tests.mjs",
     "spec-status": "node scripts/check-spec-status.mjs",
+    "spec-integrity": "node scripts/check-spec-integrity.mjs",
     "spec-template:check": "node scripts/check-spec-template.mjs",
     "patterns:check": "node scripts/check-patterns.mjs",
     "examples:lint": "node scripts/check-examples-lint.mjs",

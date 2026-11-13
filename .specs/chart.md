@@ -2,7 +2,7 @@
 name: chart
 category: chart
 structure: composition
-status: approved
+status: implemented
 checksum: 7b22a47f0d24cd27c293c584a857b12e48612368fde5707ce73d416630311d53
 spec_version: 3
 template: 2

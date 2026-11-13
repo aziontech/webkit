@@ -1,21 +1,16 @@
 #!/usr/bin/env node
 // PreToolUse hook: blocks Write of a webkit-layer .vue when the matching spec
 // at .specs/<name>.md is missing, not approved, or its body checksum no longer
-// matches the frontmatter.checksum (tamper detection).
+// matches the frontmatter.checksum (tamper detection). The checks live in
+// _lib/spec-integrity.mjs, shared with packages/webkit/scripts/check-spec-integrity.mjs (CI).
 //
 // Bypassed for components on the legacy whitelist
 // (.claude/hooks/_lib/legacy-components.json).
 
 import { existsSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
-import {
-  bodyChecksum,
-  isLegacyComponent,
-  parseSpecFile,
-  resolveSpecForComponentPath,
-  templateSectionErrors,
-  validateFrontmatter
-} from './_lib/spec.mjs'
+import { isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
+import { checkSpecFile } from './_lib/spec-integrity.mjs'
 
 const ROOT = process.cwd()
 
@@ -48,7 +43,9 @@ async function main() {
   if (isLegacyComponent(info.category, info.name, ROOT)) process.exit(0)
 
   const fail = (lines) => {
-    process.stderr.write(`enforce-spec-exists: blocked Write to ${relative(ROOT, abs)}\n\n${lines.join('\n')}\n`)
+    process.stderr.write(
+      `enforce-spec-exists: blocked Write to ${relative(ROOT, abs)}\n\n${lines.join('\n')}\n`
+    )
     process.exit(2)
   }
 
@@ -61,50 +58,12 @@ async function main() {
     ])
   }
 
-  let parsed
-  try {
-    parsed = parseSpecFile(info.specPath)
-  } catch (e) {
-    fail([`Cannot read spec: ${e?.message ?? e}`])
-  }
-
-  const { frontmatter, body } = parsed
-  const fmErrors = validateFrontmatter(frontmatter)
-  if (fmErrors.length > 0) {
-    fail([`Spec frontmatter invalid:`, ...fmErrors.map((e) => `  - ${e}`)])
-  }
-
-  const templateErrors = templateSectionErrors(frontmatter, body)
-  if (templateErrors.length > 0) {
+  const errors = checkSpecFile(info.specPath, ROOT, { forWrite: true, shipped: false })
+  if (errors.length > 0) {
     fail([
-      `Spec does not follow the current template (.specs/_template.md):`,
-      ...templateErrors.map((e) => `  - ${e}`)
-    ])
-  }
-
-  if (!['approved', 'implemented'].includes(frontmatter.status)) {
-    fail([
-      `Spec status is "${frontmatter.status}". /component-create requires "approved" or "implemented".`,
-      ``,
-      `If you just drafted the spec, run /component-create ${info.name} — it will call`,
-      `spec-validator first, which flips draft → approved when the body satisfies every rule.`
-    ])
-  }
-
-  if (frontmatter.status === 'locked') {
-    fail([
-      `Spec is locked. Edits require bumping spec_version and re-running /spec-create.`
-    ])
-  }
-
-  const expected = bodyChecksum(body)
-  if (expected !== frontmatter.checksum) {
-    fail([
-      `Spec body was modified after approval (checksum mismatch).`,
-      `  expected: ${frontmatter.checksum}`,
-      `  actual:   ${expected}`,
-      ``,
-      `Re-run /component-verify ${info.name} or re-approve the spec.`
+      ...errors.flatMap((e, i) => (i ? ['', ...e.lines] : e.lines)),
+      '',
+      `Run /component-create ${info.name} (spec-validator runs first) or /component-verify ${info.name}.`
     ])
   }
 

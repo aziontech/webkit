@@ -266,6 +266,9 @@ jobs:
       - name: No spec in status draft (.specs/_template.md excepted)
         run: pnpm --filter @aziontech/webkit run spec-status
 
+      - name: Spec integrity — every spec approved or beyond, shipped components implemented, body checksum matches
+        run: pnpm --filter @aziontech/webkit run spec-integrity
+
       - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
         run: pnpm --filter @aziontech/webkit run spec-template:check
 

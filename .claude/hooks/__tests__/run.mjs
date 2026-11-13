@@ -28,6 +28,7 @@ import {
   TEMPLATE_2_SECTIONS
 } from '../_lib/spec.mjs'
 import { collectSpecViolations } from '../_lib/spec-compliance-checks.mjs'
+import { checkAllSpecs, checkSpecFile } from '../_lib/spec-integrity.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -496,9 +497,7 @@ group('lib: spec-compliance animations per part', () => {
       `${MOTION_DIR}/demo-panel-content/demo-panel-content.vue`,
       motionVue('animate-fade-in motion-reduce:animate-none')
     )
-    assertEqual(motionOf(root), [
-      'Animation classes in spec but missing in .vue: animate-fade-out'
-    ])
+    assertEqual(motionOf(root), ['Animation classes in spec but missing in .vue: animate-fade-out'])
     assertEqual(motionOf(trigger), [])
   })
   test('a part rendering an animation the spec does not list is flagged', () => {
@@ -674,6 +673,98 @@ group('hook: validate-references.mjs', () => {
   })
 })
 
+const INTEGRITY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-integrity-'))
+const INTEGRITY_BODY = '\n# Gadget\n\n## Purpose\n\nA gadget.\n'
+const integritySpec = (
+  status,
+  { checksum = bodyChecksum(INTEGRITY_BODY), body = INTEGRITY_BODY } = {}
+) =>
+  [
+    '---',
+    'name: gadget',
+    'category: content',
+    'structure: monolithic',
+    `status: ${status}`,
+    'spec_version: 1',
+    ...(checksum ? [`checksum: ${checksum}`] : []),
+    'created: 2026-01-01',
+    'last_updated: 2026-01-01',
+    '---',
+    body
+  ].join('\n')
+const writeIntegritySpec = (text) => {
+  mkdirSync(resolve(INTEGRITY_ROOT, '.specs'), { recursive: true })
+  writeFileSync(resolve(INTEGRITY_ROOT, '.specs/gadget.md'), text)
+  return resolve(INTEGRITY_ROOT, '.specs/gadget.md')
+}
+const GADGET_VUE = 'packages/webkit/src/components/content/gadget/gadget.vue'
+const kindsOf = (errors) => errors.map((e) => e.kind)
+
+group('lib: spec-integrity (shared by enforce-spec-exists and check-spec-integrity)', () => {
+  test('an implemented spec with a matching checksum passes', () => {
+    assertEqual(
+      kindsOf(checkSpecFile(writeIntegritySpec(integritySpec('implemented')), INTEGRITY_ROOT)),
+      []
+    )
+  })
+  test('a draft spec fails on status', () => {
+    const errors = checkSpecFile(
+      writeIntegritySpec(integritySpec('draft', { checksum: '' })),
+      INTEGRITY_ROOT
+    )
+    assertEqual(kindsOf(errors), ['status'])
+  })
+  test('an edited body fails on checksum', () => {
+    const path = writeIntegritySpec(
+      integritySpec('implemented', { body: `${INTEGRITY_BODY}\nEdited.\n` })
+    )
+    assertEqual(kindsOf(checkSpecFile(path, INTEGRITY_ROOT)), ['checksum'])
+  })
+  test('a locked spec passes in CI but blocks a component Write', () => {
+    const path = writeIntegritySpec(integritySpec('locked'))
+    assertEqual(kindsOf(checkSpecFile(path, INTEGRITY_ROOT)), [])
+    assertEqual(kindsOf(checkSpecFile(path, INTEGRITY_ROOT, { forWrite: true, shipped: false })), [
+      'locked'
+    ])
+  })
+  test('an approved spec passes until its component ships, then must be implemented', () => {
+    const path = writeIntegritySpec(integritySpec('approved'))
+    assertEqual(kindsOf(checkSpecFile(path, INTEGRITY_ROOT)), [])
+    mkdirSync(resolve(INTEGRITY_ROOT, dirname(GADGET_VUE)), { recursive: true })
+    assertEqual(kindsOf(checkSpecFile(path, INTEGRITY_ROOT)), ['shipped-status'])
+    assertEqual(
+      kindsOf(checkSpecFile(path, INTEGRITY_ROOT, { forWrite: true, shipped: false })),
+      []
+    )
+  })
+  test('checkAllSpecs skips _template.md and README.md', () => {
+    writeFileSync(resolve(INTEGRITY_ROOT, '.specs/_template.md'), 'status: draft\n')
+    writeFileSync(resolve(INTEGRITY_ROOT, '.specs/README.md'), '# Specs\n')
+    writeIntegritySpec(integritySpec('implemented'))
+    assertEqual(checkAllSpecs(INTEGRITY_ROOT), [])
+  })
+  test('the hook blocks a Write when the spec is draft (exit 2)', () => {
+    writeIntegritySpec(integritySpec('draft', { checksum: '' }))
+    const r = runHook(
+      '.claude/hooks/enforce-spec-exists.mjs',
+      { tool_name: 'Write', tool_input: { file_path: resolve(INTEGRITY_ROOT, GADGET_VUE) } },
+      INTEGRITY_ROOT
+    )
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('Spec status is "draft"'), 'stderr names the status')
+  })
+  test('the hook blocks a Write when the spec is locked (exit 2)', () => {
+    writeIntegritySpec(integritySpec('locked'))
+    const r = runHook(
+      '.claude/hooks/enforce-spec-exists.mjs',
+      { tool_name: 'Write', tool_input: { file_path: resolve(INTEGRITY_ROOT, GADGET_VUE) } },
+      INTEGRITY_ROOT
+    )
+    assertEqual(r.code, 2)
+    assertTrue(r.stderr.includes('Spec is locked'), 'stderr names the lock')
+  })
+})
+
 // ---- summary ----
 
 const failed = results.filter((r) => !r.ok)
@@ -682,4 +773,5 @@ process.stdout.write(
 )
 rmSync(LEGACY_ROOT, { recursive: true, force: true })
 rmSync(MOTION_ROOT, { recursive: true, force: true })
+rmSync(INTEGRITY_ROOT, { recursive: true, force: true })
 process.exit(failed.length === 0 ? 0 : 1)
