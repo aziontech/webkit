@@ -10,6 +10,7 @@ import noDroppedChildren from './rules/no-dropped-children.js'
 import noGapAfterClosingSection from './rules/no-gap-after-closing-section.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
+import noLinkInSentence from './rules/no-link-in-sentence.js'
 import noOutputInCommand from './rules/no-output-in-command.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
@@ -45,7 +46,8 @@ const rules = {
   'no-gap-after-closing-section': noGapAfterClosingSection,
   'accessible-name': accessibleName,
   'no-dropped-children': noDroppedChildren,
-  'no-viewport-height-calc': noViewportHeightCalc
+  'no-viewport-height-calc': noViewportHeightCalc,
+  'no-link-in-sentence': noLinkInSentence
 }
 
 const FILES = [
@@ -100,7 +102,8 @@ const RECOMMENDED = {
   'no-gap-after-closing-section': 'error',
   'accessible-name': 'error',
   'no-dropped-children': 'error',
-  'no-viewport-height-calc': 'error'
+  'no-viewport-height-calc': 'error',
+  'no-link-in-sentence': 'error'
 }
 
 export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
