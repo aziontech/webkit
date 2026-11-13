@@ -328,9 +328,10 @@ export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 Out of scope: data-fetching composables (`useQuery` wrappers, HTTP) are a consuming-app
 concern — the design system ships none and its composables never do I/O.
 
-**Enforced by:** `webkit/authoring-standards` (`reactive()` return, `.js` composable →
-error) · `validate-authoring` + the DS ratchet — cleanup/`toValue` are convention +
-review.
+**Enforced by:** `webkit/composable-readonly-return` (`reactive()` or raw `ref()` return, no
+return type → error) · `webkit/composable-scope-cleanup` (listener/timer/frame/observer with no
+`onScopeDispose` → error) · `webkit/authoring-standards` (`.js` composable → error) ·
+`validate-authoring` + the DS ratchet — `toValue` arguments are convention + review.
 
 ---
 
@@ -407,7 +408,8 @@ const attrs = useAttrs()
 ```
 
 **Enforced by:** `validate-tokens` (`class` in props) · `validate-references` (phantom
-`asChild`) — `defineExpose` minimality and polymorphism are review.
+`asChild`) · `webkit/no-polymorphic-as-prop` (`as`/`asChild` prop → error, also in
+`validate-authoring` + the DS ratchet) — `defineExpose` minimality is review.
 
 ---
 

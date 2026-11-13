@@ -2,9 +2,11 @@
 
 A composable (`useXxx`) is a public building block: imported, typed, and relied on across
 the app, so it follows one contract — a predictable surface, a predictable lifetime, and
-no surprises on destructure. The `webkit/authoring-standards` ESLint rule blocks the two
-mechanical violations (returning a `reactive()` object, authoring the file as `.js`); the
-rest of the contract is convention, enforced in review.
+no surprises on destructure. ESLint blocks the mechanical violations:
+`webkit/composable-readonly-return` (a `reactive()` or raw `ref()` returned, or no explicit
+return type), `webkit/composable-scope-cleanup` (a listener, timer, animation frame or
+observer with no `onScopeDispose` in the file) and `webkit/authoring-standards` (a `.js`
+composable). The rest of the contract is convention, enforced in review.
 
 ## Do
 
@@ -38,10 +40,12 @@ rest of the contract is convention, enforced in review.
 - Never author a composable as `.js` — consumers need the derivable return type. Blocked
   by lint.
 - Never expose mutable state outward, and never accept a `reactive` object as an
-  argument — `readonly()` out, `MaybeRefOrGetter` + `toValue()` in.
-- Never use `any` or omit the return type.
+  argument — `readonly()` out, `MaybeRefOrGetter` + `toValue()` in. A returned raw `ref()`
+  is blocked by lint; a ref holding a DOM element the caller binds with `ref="…"` is the
+  one exception.
+- Never use `any` or omit the return type. A missing return type is blocked by lint.
 - Never register a listener/timer/observer without `onScopeDispose` cleanup (or a VueUse
-  primitive that owns it).
+  primitive that owns it). Blocked by lint; `onUnmounted` alone does not count.
 - Never call a lifecycle composable after an `await` or outside `setup`.
 - Never roll your own id counter — use `useId()`.
 - Never `provide()` from anything other than a context composable invoked at a component

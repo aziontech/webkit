@@ -81,6 +81,7 @@ A component exposes an imperative method only when the DOM genuinely requires it
 ## Enforcement
 
 - **[`validate-references.mjs`](../hooks/validate-references.mjs)** blocks a phantom `asChild`/`Slot` import.
+- **`webkit/no-polymorphic-as-prop`** (ESLint, `error` in `recommended` and `strict`) blocks a `defineProps` that declares `as` or `asChild` (type literal, named interface or type alias, or runtime object). The same rule runs write-time in [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) and in the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) CI ratchet.
 - **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** blocks `class` in `defineProps`.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** enforces the `data-testid` root derivation and the props/events/exposed surface against the spec.
 - **`webkit/no-style-override`** (ESLint) guards consumer-side token overrides; `cn` is the only class-composition path.

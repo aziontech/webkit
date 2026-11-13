@@ -49,7 +49,7 @@ Moving a component from a manual `modelValue` prop + `update:modelValue` emit to
 
 ## Enforcement
 
-- The **`webkit/prefer-define-model`** ESLint rule (in [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) flags a `defineProps` that declares `modelValue` **and** a `defineEmits` that declares `update:modelValue` in the same `<script setup>` — the hand-rolled pattern `defineModel` replaces. `error` in `strict`, `warn` in `recommended`.
+- The **`webkit/prefer-define-model`** ESLint rule (in [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) flags a `defineProps` that declares `modelValue` **and** a `defineEmits` that declares `update:modelValue` in the same `<script setup>` — the hand-rolled pattern `defineModel` replaces. `error` in both `strict` and `recommended`.
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** already blocks off-vocabulary model names (`visible`, `isToggled`) via [`prop-vocabulary.md`](./prop-vocabulary.md).
 - The scaffolder emits `defineModel` for every two-way value in the spec.
 

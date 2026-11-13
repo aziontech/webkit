@@ -3,9 +3,10 @@
 A component renders **its own root element**: which element it is switches on a data prop,
 consumer attributes reach it via `inheritAttrs: false` + `v-bind="$attrs"`, and the
 imperative surface (`defineExpose`) stays minimal. No wrapper `<div>` that swallows attrs,
-no `as`/`asChild` polymorphism helper, no leaked internal state. This pattern is
-**convention + code review** in this project — no lint rule checks it mechanically. (Token
-discipline inside class strings is enforced separately by the stylelint config and the
+no `as`/`asChild` polymorphism helper, no leaked internal state. The
+`webkit/no-polymorphic-as-prop` ESLint rule blocks an `as` or `asChild` prop in
+`defineProps`; the rest of the pattern is convention + code review. (Token discipline
+inside class strings is enforced separately by the stylelint config and the
 `webkit/no-hardcoded-color` ESLint rule.)
 
 ## Do
@@ -22,6 +23,7 @@ discipline inside class strings is enforced separately by the stylelint config a
 ## Do not
 
 - Never switch the root with an `as`/`is` **string prop** — use a data prop like `href`.
+  Blocked by lint.
 - Never import or invent an `asChild`/`Slot` polymorphism helper — webkit does not ship one.
 - Never wrap the root in a `<div>` that eats `$attrs`.
 - Never declare `class` in `defineProps` — it flows through `useAttrs()` + `cn`.

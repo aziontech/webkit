@@ -95,8 +95,12 @@ A composable that wraps `useQuery`/`useMutation`, derives a `queryKey`, and talk
 
 ## Enforcement
 
-- **`validate-composable.mjs`** (PreToolUse on `Write|Edit|MultiEdit`, to be added) blocks a `use-*.{ts,js}` that returns a bare `reactive(...)`, that registers a listener/timer/observer with no `onScopeDispose` in the same file, or that uses `any`. Until it lands, the pattern is flagged by `echo-reporter`.
-- The **`webkit/composable-readonly-return`** and **`webkit/composable-scope-cleanup`** ESLint rules (to be added to [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/)) cover the same surface at lint time.
+Both rules apply to a `use-*.ts` / `use-*.js` file (tests excluded) and ship in the `recommended` and `strict` presets of [`eslint-plugin`](../../packages/webkit/src/eslint-plugin/) as `error`:
+
+- **`webkit/composable-readonly-return`** — an exported `useXxx` that returns `reactive(...)`, returns a `ref()` / `shallowRef()` declared in its body (bare, or as a property of the returned object) without `readonly()` / `computed`, or (in `.ts`) has no explicit return type. A ref that holds a DOM element (typed `*Element` / `ComponentPublicInstance`, or named `…El` / `…Element`) is exempt: the caller binds it with `ref="…"`, so it must stay writable.
+- **`webkit/composable-scope-cleanup`** — `addEventListener`, `setInterval`, `requestAnimationFrame`, `new ResizeObserver` / `IntersectionObserver` / `MutationObserver`, or a `setTimeout` whose id is stored, in a file with no `onScopeDispose` call. `onUnmounted` alone does not count; VueUse primitives (`useEventListener`, `useIntervalFn`, `useResizeObserver`, …) own their cleanup and are not flagged.
+- **[`validate-authoring.mjs`](../hooks/validate-authoring.mjs)** (PreToolUse on `Write|Edit|MultiEdit`) runs both rules on every write under `packages/webkit/src/` and blocks when a write adds a violation; **[`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)** runs them in the CI ratchet (`signature:*` keys). One engine, [`scripts/lib/signature-checks.mjs`](../../packages/webkit/scripts/lib/signature-checks.mjs), feeds both.
+- **`webkit/authoring-standards`** (same presets, same engine as the hook and ratchet) blocks a composable authored as `.js` and a `return reactive(...)`.
 - The scaffolder injects this rule whenever a component's spec declares a composable; a composable that diverges surfaces as `BLOCKED:` and stops the run.
 - New composables are `.ts` (never `.js`) so the return type is derivable by consumers — same reason the compound `index.ts` is `.ts` (see [`compound-api.md`](./compound-api.md)).
 
