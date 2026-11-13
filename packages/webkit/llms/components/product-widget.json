@@ -29,9 +29,9 @@
  ],
  "bestPractices": [
   "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",
-  "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. Fragments are drawn bare and float on the cell's surface, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`. The cell clips on both axes (`overflow-clip`, as a media split's media cell does): a fragment's collaborator cursor and shadows float onto the cell's padding, and at a large root font size (200% zoom) its mock text outgrows the drawing; clipping them at the cell's border keeps the page from scrolling sideways. Never frame a fragment with `overflow-x-visible`.",
+  "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. A bare fragment floats on the cell's surface and a framed one fades its window into it, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`. The cell clips on both axes (`overflow-clip`, as a media split's media cell does): a fragment's collaborator cursor and shadows float onto the cell's padding, and at a large root font size (200% zoom) its mock text outgrows the drawing; clipping them at the cell's border keeps the page from scrolling sideways. Never frame a fragment with `overflow-x-visible`.",
   "Leave `kind`, `chrome`, `width`, `tab` and `interval` unset unless the host needs a different value: unset keeps the widget's own.",
-  "Never expect a fragment to become a console window. `kind`, `chrome`, `width` and `fade` re-plate only the workload screens listed under Props; a fragment is drawn bare at its own design width and ignores them, and the root warns in development when one is set on a widget that does not read it. For a framed console window pick a workload screen; for a fragment, give its host cell the padding and surface (a media split's inset media cell does).",
+  "Leave a fragment's plating to the registry. Each fragment has its own default: a form or a list that reads as a console screen is framed in a console window titled with its module, and a fragment that draws its own card, terminal or code panel is bare, because a window around it would be a window in a window. Set `kind` only when the host needs the other plating, and `chrome` to drop the window's console bar. `width` and `fade` re-plate only the workload screens listed under Props; a fragment keeps its own design width and fade, and the root warns in development when a prop is set on a widget that does not read it.",
   "Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.",
   "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
  ],
@@ -62,14 +62,14 @@
    "type": "'window' | 'bare'",
    "default": "undefined",
    "required": "false",
-   "doc": "How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating."
+   "doc": "How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating."
   },
   {
    "name": "chrome",
    "type": "boolean",
    "default": "undefined",
    "required": "false",
-   "doc": "Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar."
+   "doc": "Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it."
   },
   {
    "name": "width",
@@ -125,7 +125,7 @@
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import ProductWidget from '@aziontech/webkit/product-widget'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full\">\n      <ProductWidget\n        name=\"workload-topology\"\n        kind=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full\">\n      <ProductWidget\n        name=\"workload-topology\"\n        kind=\"bare\"\n      />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ProductWidget from '@aziontech/webkit/product-widget'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full\">\n      <ProductWidget\n        name=\"workload-topology\"\n        kind=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full\">\n      <ProductWidget\n        name=\"workload-topology\"\n        kind=\"bare\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ProductWidget\n        name=\"edge-dns-record\"\n        kind=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ProductWidget\n        name=\"edge-dns-record\"\n        kind=\"bare\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Still fragment",

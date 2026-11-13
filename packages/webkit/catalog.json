@@ -6786,14 +6786,14 @@
      "type": "'window' | 'bare'",
      "default": "undefined",
      "required": "false",
-     "doc": "How a workload screen is plated (window or bare); fragments are always bare and ignore it, and unset keeps the widget's own plating."
+     "doc": "How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating."
     },
     {
      "name": "chrome",
      "type": "boolean",
      "default": "undefined",
      "required": "false",
-     "doc": "Draws the console bar on a workload screen; fragments have no bar and ignore it, and unset keeps the widget's own bar."
+     "doc": "Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it."
     },
     {
      "name": "width",
