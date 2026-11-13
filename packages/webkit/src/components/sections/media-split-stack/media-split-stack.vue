@@ -30,16 +30,22 @@
     title: string
     /** Supporting sentence under the headline. */
     description: string
-    /** URL of the picture shown in the media cell. */
-    image?: string
-    /** Alternative text of the picture; empty keeps it decorative. */
-    imageAlt?: string
-    /** Registry name of the illustration shown in the media cell, instead of `image`. */
+    /** Registry name of the illustration shown in the media cell. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationLabel?: string
     /** The outlined button and the link the whole band follows; `{ label, href }`. Omitted when absent. */
     action?: MediaSplitStackAction
+    /**
+     * URL of the picture shown in the media cell when the band has no `illustration`.
+     * @deprecated since 5.13 — use `illustration` instead. Removed in 6.0.
+     */
+    image?: string
+    /**
+     * Alternative text of the picture; empty keeps it decorative.
+     * @deprecated since 5.13 — use `illustrationLabel` with `illustration` instead. Removed in 6.0.
+     */
+    imageAlt?: string
   }
 
   interface Props {
@@ -49,7 +55,7 @@
     eyebrow?: string
     /** Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. */
     title?: string
-    /** The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. */
+    /** The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action?, image?, imageAlt? }` where `illustration` is a registry name, `action` `{ label, href }` the outlined button and the link the whole band follows, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. */
     bands?: MediaSplitStackBand[]
   }
 

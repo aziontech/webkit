@@ -23,12 +23,15 @@
     title: string
     /** One sentence continuing the caption after the lead. */
     description: string
-    /** URL of the picture shown above the caption. */
-    image?: string
-    /** Registry name of the illustration drawn fluid above the caption, instead of `image`. */
+    /** Registry name of the illustration drawn fluid above the caption. */
     illustration?: string
     /** Scale of the illustration inside its frame, around its centre. */
     scale?: number
+    /**
+     * URL of the picture shown above the caption when the tile has no `illustration`.
+     * @deprecated since 5.13 — use `illustration` instead. Removed in 6.0.
+     */
+    image?: string
   }
 
   interface Props {
@@ -42,7 +45,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale. */
+    /** The tiles rendered as frame cells, in order; each is `{ title, description, illustration?, scale?, image? }` where `illustration` is a registry name drawn fluid, `scale` its media scale, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. */
     tiles?: FeatureTilesTile[]
   }
 
@@ -115,7 +118,19 @@
               fluid
             >
               <template #media>
-                <Illustration :name="tile.illustration" />
+                <div
+                  v-if="kind === 'artwork'"
+                  class="aspect-170/128"
+                >
+                  <Illustration
+                    :name="tile.illustration"
+                    class="h-full!"
+                  />
+                </div>
+                <Illustration
+                  v-else
+                  :name="tile.illustration"
+                />
               </template>
             </MediaTile>
             <MediaTile

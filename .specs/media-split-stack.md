@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: ce7c487445a9511dbe73d8f7da51da01178e613c8527acc46bc2d64ed33501a8
+last_updated: 2026-11-13
+checksum: c025f0b784cad2c9550d6c4fa636608572b926150d0647daf1ac7b2183ca6454
 ---
 # MediaSplitStack — Component Spec
 
@@ -30,7 +30,8 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## Best practices
 
-- Give a band either `image` (a URL, with `imageAlt` when it says something) or `illustration` (a registry name, with `illustrationLabel`), not both; a band with neither renders without its media cell.
+- Give every band its art as `illustration`, a name of the illustration registry, with `illustrationLabel` when it says something; a band with neither `illustration` nor `image` renders without its media cell. A name the registry does not hold draws the placeholder scene and warns in the console.
+- Do not give a band `image` and `imageAlt` (a URL and its alternative text): they are deprecated since 5.13 and removed in 6.0, and still draw when a band has no `illustration`.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
 ## Usage
@@ -65,7 +66,7 @@ import MediaSplitStack from '@aziontech/webkit/media-split-stack'
 | `kind` | `MediaSplitStackKind` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. |
-| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, image?, imageAlt?, illustration?, illustrationLabel?, action? }` where `image` is a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
+| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, illustration?, illustrationLabel?, action?, image?, imageAlt? }` where `illustration` is a registry name, `action` `{ label, href }` the outlined button and the link the whole band follows, and `image` a picture URL, deprecated since 5.13 and removed in 6.0 in favour of `illustration`. |
 
 ## Events
 

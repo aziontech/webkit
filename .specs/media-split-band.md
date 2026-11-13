@@ -5,14 +5,14 @@ structure: monolithic
 status: implemented
 spec_version: 1
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: cc6dcef50d272a610e449d8a0a1f6e91b2a878539211884fe3171f358764a606
+last_updated: 2026-11-13
+checksum: 22695b007383ba75bed4d983531ca2e154c0d5e16db53a9cfe5bf2025f5f46d9
 ---
 # MediaSplitBand — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene, an image or an illustration; with one action the whole band links to it, with two the band stays unlinked.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration` and the webkit scene assets. The media is a scene or an illustration; with one action the whole band links to it, with two the band stays unlinked.
 
 ## When to use
 
@@ -30,9 +30,9 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## Best practices
 
-- Give the band exactly one media: `scene`, `image` or `illustration`; when several are set the first of that order wins.
+- Give the band exactly one media: `scene`, or `illustration`, a name of the illustration registry. A name the registry does not hold draws the placeholder scene and warns in the console.
+- Do not give the band `image` (a URL): it is deprecated since 5.13 and removed in 6.0. While it lasts, the order is `scene`, `image`, `illustration`, and the first one set wins.
 - Use `size="large"` for a band that carries only its headline and description.
-- Give an `image` its `width` and `height` so the page reserves its box before it loads.
 
 ## Usage
 
@@ -61,7 +61,7 @@ import MediaSplitBand from '@aziontech/webkit/media-split-band'
 | `description` | `string` | `''` | false | Paragraph under the headline. |
 | `size` | `MediaSplitBandSize` | `'medium'` | false | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. |
 | `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. |
-| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. |
+| `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. Deprecated since 5.13 and removed in 6.0 in favour of `illustration`. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
 | `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. |

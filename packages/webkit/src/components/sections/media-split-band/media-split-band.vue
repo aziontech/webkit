@@ -23,7 +23,10 @@
     component: MediaSplitBandSceneName
   }
 
-  /** A picture drawn in the media cell. */
+  /**
+   * A picture drawn in the media cell.
+   * @deprecated since 5.13 — use the `illustration` prop instead. Removed in 6.0.
+   */
   export type MediaSplitBandImage = {
     /** URL of the picture. */
     src: string
@@ -58,7 +61,10 @@
     size?: MediaSplitBandSize
     /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over `image` and `illustration`. */
     scene?: MediaSplitBandScene
-    /** Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. */
+    /**
+     * Picture drawn in the media cell when no scene is set; `{ src, alt?, width?, height? }`. Deprecated since 5.13 and removed in 6.0 in favour of `illustration`.
+     * @deprecated since 5.13 — use `illustration` instead. Removed in 6.0.
+     */
     image?: MediaSplitBandImage
     /** Registry name of the illustration drawn in the media cell when neither a scene nor an image is set. */
     illustration?: string

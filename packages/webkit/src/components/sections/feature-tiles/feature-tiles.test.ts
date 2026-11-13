@@ -156,6 +156,23 @@ describe('FeatureTiles', () => {
     })
   })
 
+  it('draws an artwork tile from the registry when it names an illustration', async () => {
+    const { findByTestId, getAllByTestId } = band({
+      tiles: [
+        {
+          illustration: 'azion-highlight',
+          image: '/illustrations/azion-highlight.svg',
+          title: 'Highlighted by Azion.',
+          description: 'The scene comes from the illustration registry.'
+        }
+      ]
+    })
+
+    const scene = await findByTestId('content-illustration')
+    expect(scene.getAttribute('data-placeholder')).toBeNull()
+    expect(getAllByTestId(TILE_TESTID)[0]?.querySelector('img')).toBeNull()
+  })
+
   it('renders an illustrated tile without an image', () => {
     const { container, getAllByTestId } = band({ kind: 'illustrated', tiles: illustratedTiles })
 
