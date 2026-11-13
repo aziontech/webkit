@@ -75,6 +75,12 @@ export const TOKEN_CHECKS = [
       'Malformed token shorthand — the style NEVER applies (Tailwind emits nothing for a space inside the parens; an inverted `[--(token)]` emits an invalid value the browser discards). Write `prop-(--token)` / `prop-(type:--token)` with no whitespace inside the parens, and `[--token:value]` to DECLARE a custom property (.claude/rules/styling.md).'
   },
   {
+    id: 'container-query-on-container',
+    regex: /(["'`])(?=[^"'`]*@container\/([\w-]+)(?![\w-]))[^"'`]*@[^\s"'`/]*\/\2:/g,
+    message:
+      'Container-query variant on the element that declares the container. A container query never matches its own container, so `@xl/name:` on the `@container/name` element NEVER applies. Put the variant on a child of the container (.claude/rules/styling.md).'
+  },
+  {
     id: 'class-in-defineprops',
     regex: /defineProps\s*[<(][^>)]*['"]?class['"]?\s*:/s,
     message:

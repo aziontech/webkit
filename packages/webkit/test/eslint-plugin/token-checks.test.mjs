@@ -180,6 +180,36 @@ test('dead-token-shorthand stays silent on every VALID token spelling', () => {
   }
 })
 
+test('container-query-on-container fires when an element queries its own container', () => {
+  for (const content of [
+    // The one that shipped: Trace declared its name column on the container itself.
+    'class="@container/trace flex [--trace-name:9rem] @xl/trace:[--trace-name:13rem]"',
+    'class="@xl/panel:grid-cols-2 @container/panel grid"',
+    "cn('@container/card p-(--spacing-sm) @max-md/card:hidden', attrs.class)",
+    'class="@container/bar @min-[47rem]/bar:flex"'
+  ]) {
+    assert.ok(
+      ids(content).includes('container-query-on-container'),
+      `expected container-query-on-container for: ${content}`
+    )
+  }
+})
+
+test('container-query-on-container stays silent when the query sits on a child', () => {
+  for (const content of [
+    '<div class="@container/trace flex"><div class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem]"></div></div>',
+    // Unnamed container queries a parent; a different named container is fine.
+    'class="@container @xl:flex"',
+    'class="@container/inner @xl/outer:flex"',
+    'class="@container/trace-name @xl/trace:flex"'
+  ]) {
+    assert.ok(
+      !ids(content).includes('container-query-on-container'),
+      `expected container-query-on-container silent for: ${content}`
+    )
+  }
+})
+
 test('tokenChecksApply scopes enforcement to component sources', () => {
   assert.ok(tokenChecksApply('packages/webkit/src/components/actions/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))

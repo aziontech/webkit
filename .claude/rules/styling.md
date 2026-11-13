@@ -233,6 +233,22 @@ Two consequences worth internalizing:
 
 The **`dead-token-shorthand`** token-check blocks both spellings at write time and in the CI ratchet. It scans raw file text, so a comment that *quotes* a malformed class trips it too — describe such a class in prose instead of spelling it out.
 
+## A container query never matches its own container
+
+`@container/name` makes an element a query container; `@xl/name:` asks about the nearest ancestor container called `name`. The element that declares the container is not its own ancestor, so a variant on it never matches, and it fails silently: the base value applies at every width.
+
+```html
+<!-- ❌ the variable is 9rem at every width -->
+<div class="@container/trace [--trace-name:9rem] @xl/trace:[--trace-name:13rem]"></div>
+
+<!-- ✅ the container on the parent, the query on the children that use it -->
+<div class="@container/trace">
+  <div class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem]"></div>
+</div>
+```
+
+Shipped in `Trace` (its name column stayed at 9rem in every panel) until 2026-11-13. The **`container-query-on-container`** token check blocks it at write time and in the CI ratchet.
+
 ## A zero length carries no unit
 
 A zero is the one value that is identical in every unit, so the unit is pure noise — and it makes the same zero read three different ways across the codebase (`0px` here, `0rem` there, `0em` in a token). **Write `0`.**
@@ -362,6 +378,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 - `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
+- **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **Zero-unit** is gated on four surfaces, so no authoring path escapes it: the `zero-with-unit` check in the shared token-checks engine (write-time hook **and** the `check-authoring` CI ratchet, over component sources); `length-zero-no-unit` in [`.stylelintrc.json`](../../.stylelintrc.json) for authored CSS/SCSS/Vue `<style>` — set to plain `true` so the preset's `ignore: ['custom-properties']` does **not** apply, since a design system is authored almost entirely as custom properties; the same rule in the shipped [`stylelint-config.js`](../../packages/webkit/src/stylelint-config.js) so consumers inherit it; and a build-time assertion in the theme's `build:tokens`, which is the only gate that sees token values (they are authored in JS and compiled, so no linter reads them). A `length-zero-no-unit` canary fixture keeps the stylelint side from being relaxed.
 - **The `rem`-in-math-function carve-out** is gated by the two engines we own — the `zero-unit-in-calc` token check and the same assertion in `build:tokens`. Stylelint's `length-zero-no-unit` deliberately skips math functions (a unit is required there), so it accepts `calc(100% - 0px)`; the token check is what makes that `0rem`.
