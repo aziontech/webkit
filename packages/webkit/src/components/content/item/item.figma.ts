@@ -15,7 +15,7 @@ const size = instance.getEnum('size', {
   medium: 'medium',
   small: 'small'
 })
-const asChild = instance.getEnum('asChild', {
+const clickable = instance.getEnum('asChild', {
   false: false,
   true: true
 })
@@ -31,7 +31,7 @@ const hasDescription = descriptionNode.type === 'TEXT'
 const description = hasDescription ? descriptionNode.textContent : ''
 
 export default {
-  example: figma.code`<Item${kind === 'default' ? '' : figma.code` kind="${kind}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${asChild ? figma.code` as-child` : ''}>${
+  example: figma.code`<Item${kind === 'default' ? '' : figma.code` kind="${kind}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${clickable ? figma.code` clickable` : ''}>${
     showLeft
       ? figma.code`
   <Item.Media kind="icon">

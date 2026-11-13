@@ -362,33 +362,29 @@
                           <Item
                             v-for="option in visible"
                             :key="option.value"
-                            as-child
                             size="small"
+                            clickable
+                            class="data-[selected]:bg-(--bg-selected)"
+                            :aria-pressed="service === option.value"
+                            :data-selected="service === option.value || null"
+                            @click="choose(option)"
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                              :aria-pressed="service === option.value"
-                              :data-selected="service === option.value || null"
-                              @click="choose(option)"
-                            >
-                              <Item.Media>
-                                <i
-                                  class="pi pi-server text-body-md leading-none text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ option.label }}</Item.Title>
-                              </Item.Content>
-                              <Item.Actions>
-                                <i
-                                  v-if="service === option.value"
-                                  class="pi pi-check text-body-sm leading-none text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Actions>
-                            </button>
+                            <Item.Media>
+                              <i
+                                class="pi pi-server text-body-md leading-none text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>{{ option.label }}</Item.Title>
+                            </Item.Content>
+                            <Item.Actions>
+                              <i
+                                v-if="service === option.value"
+                                class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                                aria-hidden="true"
+                              />
+                            </Item.Actions>
                           </Item>
 
                           <p
@@ -405,24 +401,19 @@
                           </p>
 
                           <Item
-                            as-child
                             size="small"
+                            clickable
+                            @click="startCreating"
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start"
-                              @click="startCreating"
-                            >
-                              <Item.Media>
-                                <i
-                                  class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>Create Service</Item.Title>
-                              </Item.Content>
-                            </button>
+                            <Item.Media>
+                              <i
+                                class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>Create Service</Item.Title>
+                            </Item.Content>
                           </Item>
                         </div>
                       </div>
@@ -448,35 +439,30 @@
                           <Item
                             v-for="method in methods"
                             :key="method.id"
-                            as-child
                             size="small"
+                            clickable
                           >
-                            <button
-                              type="button"
-                              class="w-full text-start"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                >
-                                  <i
-                                    :class="method.icon"
-                                    class="text-body-md leading-none text-(--text-default)"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ method.title }}</Item.Title>
-                                <Item.Description>{{ method.description }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
+                            <Item.Media>
+                              <span
+                                class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              >
                                 <i
-                                  class="pi pi-chevron-right text-(--text-muted)"
+                                  :class="method.icon"
+                                  class="text-body-md leading-none text-(--text-default)"
                                   aria-hidden="true"
                                 />
-                              </Item.Actions>
-                            </button>
+                              </span>
+                            </Item.Media>
+                            <Item.Content>
+                              <Item.Title>{{ method.title }}</Item.Title>
+                              <Item.Description>{{ method.description }}</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <i
+                                class="pi pi-chevron-right text-(--text-muted)"
+                                aria-hidden="true"
+                              />
+                            </Item.Actions>
                           </Item>
                         </Item.List>
                       </template>

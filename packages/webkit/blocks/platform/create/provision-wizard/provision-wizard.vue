@@ -902,38 +902,34 @@
                                 <Item
                                   v-for="option in projectPicker.visible"
                                   :key="option.value"
-                                  as-child
                                   size="small"
+                                  clickable
+                                  class="data-[selected]:bg-(--bg-selected)"
+                                  :data-selected="option.value === projectPicker.chosen || null"
+                                  :aria-pressed="option.value === projectPicker.chosen"
+                                  @click="projectPicker.chosen = option.value"
                                 >
-                                  <button
-                                    type="button"
-                                    class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                                    :data-selected="option.value === projectPicker.chosen || null"
-                                    :aria-pressed="option.value === projectPicker.chosen"
-                                    @click="projectPicker.chosen = option.value"
-                                  >
-                                    <Item.Media>
-                                      <span
-                                        class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                      >
-                                        <i
-                                          class="pi pi-box text-body-md leading-none text-(--text-default)"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </Item.Media>
-                                    <Item.Content>
-                                      <Item.Title>{{ option.label }}</Item.Title>
-                                      <Item.Description>{{ option.description }}</Item.Description>
-                                    </Item.Content>
-                                    <Item.Actions>
+                                  <Item.Media>
+                                    <span
+                                      class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                    >
                                       <i
-                                        v-if="option.value === projectPicker.chosen"
-                                        class="pi pi-check shrink-0 text-(--text-default)"
+                                        class="pi pi-box text-body-md leading-none text-(--text-default)"
                                         aria-hidden="true"
                                       />
-                                    </Item.Actions>
-                                  </button>
+                                    </span>
+                                  </Item.Media>
+                                  <Item.Content>
+                                    <Item.Title>{{ option.label }}</Item.Title>
+                                    <Item.Description>{{ option.description }}</Item.Description>
+                                  </Item.Content>
+                                  <Item.Actions>
+                                    <i
+                                      v-if="option.value === projectPicker.chosen"
+                                      class="pi pi-check shrink-0 text-(--text-default)"
+                                      aria-hidden="true"
+                                    />
+                                  </Item.Actions>
                                 </Item>
 
                                 <template v-if="projectPicker.loading">
@@ -1501,42 +1497,38 @@
                                     <Item
                                       v-for="option in deploymentPicker.visible"
                                       :key="option.value"
-                                      as-child
                                       size="small"
+                                      clickable
+                                      class="data-[selected]:bg-(--bg-selected)"
+                                      :data-selected="
+                                        option.value === deploymentPicker.chosen || null
+                                      "
+                                      :aria-pressed="option.value === deploymentPicker.chosen"
+                                      @click="deploymentPicker.chosen = option.value"
                                     >
-                                      <button
-                                        type="button"
-                                        class="w-full text-start data-[selected]:bg-(--bg-selected)"
-                                        :data-selected="
-                                          option.value === deploymentPicker.chosen || null
-                                        "
-                                        :aria-pressed="option.value === deploymentPicker.chosen"
-                                        @click="deploymentPicker.chosen = option.value"
-                                      >
-                                        <Item.Media>
-                                          <span
-                                            class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                          >
-                                            <i
-                                              class="pi pi-cloud-upload text-body-md leading-none text-(--text-default)"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        </Item.Media>
-                                        <Item.Content>
-                                          <Item.Title>{{ option.label }}</Item.Title>
-                                          <Item.Description>{{
-                                            option.description
-                                          }}</Item.Description>
-                                        </Item.Content>
-                                        <Item.Actions>
+                                      <Item.Media>
+                                        <span
+                                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                        >
                                           <i
-                                            v-if="option.value === deploymentPicker.chosen"
-                                            class="pi pi-check shrink-0 text-(--text-default)"
+                                            class="pi pi-cloud-upload text-body-md leading-none text-(--text-default)"
                                             aria-hidden="true"
                                           />
-                                        </Item.Actions>
-                                      </button>
+                                        </span>
+                                      </Item.Media>
+                                      <Item.Content>
+                                        <Item.Title>{{ option.label }}</Item.Title>
+                                        <Item.Description>{{
+                                          option.description
+                                        }}</Item.Description>
+                                      </Item.Content>
+                                      <Item.Actions>
+                                        <i
+                                          v-if="option.value === deploymentPicker.chosen"
+                                          class="pi pi-check shrink-0 text-(--text-default)"
+                                          aria-hidden="true"
+                                        />
+                                      </Item.Actions>
                                     </Item>
 
                                     <template v-if="deploymentPicker.loading">

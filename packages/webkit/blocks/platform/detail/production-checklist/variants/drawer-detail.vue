@@ -88,38 +88,34 @@
         <Item
           v-for="step in steps"
           :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
-          as-child
           size="small"
+          clickable
+          :data-done="step.done || null"
+          @click="open = true"
+          class="rounded-none transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
         >
-          <button
-            type="button"
-            :data-done="step.done || null"
-            @click="open = true"
-            class="w-full rounded-none text-start transition-colors duration-fast-02 ease-productive-entrance data-done:bg-(--primary-mask) motion-reduce:transition-none"
-          >
-            <Item.Media>
-              <i
-                :class="step.icon"
-                class="text-body-sm leading-none text-(--text-muted) group-data-done/item:text-(--primary)"
-                aria-hidden="true"
-              />
-            </Item.Media>
+          <Item.Media>
+            <i
+              :class="step.icon"
+              class="text-body-sm leading-none text-(--text-muted) group-data-done/item:text-(--primary)"
+              aria-hidden="true"
+            />
+          </Item.Media>
 
-            <Item.Content>
-              <Item.Title>
-                {{ step.title }}
-              </Item.Title>
-            </Item.Content>
+          <Item.Content>
+            <Item.Title>
+              {{ step.title }}
+            </Item.Title>
+          </Item.Content>
 
-            <Item.Actions>
-              <i
-                v-if="step.done"
-                class="pi pi-check text-body-sm leading-none text-(--primary)"
-                aria-hidden="true"
-              />
-              <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
-            </Item.Actions>
-          </button>
+          <Item.Actions>
+            <i
+              v-if="step.done"
+              class="pi pi-check text-body-sm leading-none text-(--primary)"
+              aria-hidden="true"
+            />
+            <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
+          </Item.Actions>
         </Item>
       </div>
     </template>

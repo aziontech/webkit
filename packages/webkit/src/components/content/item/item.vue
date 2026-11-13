@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, provide, useAttrs, useSlots } from 'vue'
+  import { computed, inject, provide, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import {
@@ -14,7 +14,6 @@
     ItemListMemberInjectionKey,
     type ItemSize
   } from './injection-key'
-  import { mergeAsChildSlot } from './merge-as-child'
 
   defineOptions({
     name: 'Item',
@@ -28,14 +27,17 @@
     kind?: ItemKind
     /** Item root density (padding and gap). */
     size?: ItemSize
-    /** Merge the row layout/kind/size classes onto the single default-slot child instead of rendering a wrapper. */
-    asChild?: boolean
+    /** When set, the whole row renders as an anchor link to this URL. */
+    href?: string
+    /** Renders the whole row as a button; bind the click handler on the Item. Ignored when href is set. */
+    clickable?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
     size: 'medium',
-    asChild: false
+    href: '',
+    clickable: false
   })
 
   defineSlots<{
@@ -43,7 +45,6 @@
   }>()
 
   const attrs = useAttrs()
-  const slots = useSlots()
   const container = inject(ItemContainerInjectionKey, null)
   const isListMember = inject(ItemListMemberInjectionKey, false)
 
@@ -51,21 +52,34 @@
 
   const kind = computed<ItemKind>(() => container?.forceKind ?? props.kind)
 
+  const isLink = computed(() => props.href.length > 0)
+  const interactive = computed(() => isLink.value || props.clickable)
+  const rootTag = computed(() => {
+    if (isLink.value) return 'a'
+    return props.clickable ? 'button' : 'div'
+  })
+
   const rootBindings = computed(() => {
     const rest = { ...attrs }
 
     delete rest.class
 
     return {
-      role: isListMember && !props.asChild ? 'listitem' : undefined,
+      role: isListMember && !interactive.value ? 'listitem' : undefined,
+      type: rootTag.value === 'button' ? 'button' : undefined,
       ...rest,
+      href: isLink.value ? props.href : undefined,
       'data-slot': 'item',
       'data-testid': testId.value,
       'data-kind': kind.value,
       'data-size': props.size,
       class: cn(
         itemRowShellClasses,
-        props.asChild && [...focusVisibleRingClasses, ...ghostLayerClasses],
+        interactive.value && [
+          'cursor-pointer text-start no-underline',
+          ...focusVisibleRingClasses,
+          ...ghostLayerClasses
+        ],
         attrs.class as string | undefined
       )
     }
@@ -77,23 +91,26 @@
     size: props.size
   })
   provide(ItemListMemberInjectionKey, false)
-
-  const ItemAsChild = () => mergeAsChildSlot(rootBindings.value, slots['default'])
 </script>
 
 <template>
   <div
-    v-if="asChild && isListMember"
+    v-if="interactive && isListMember"
     role="listitem"
     data-slot="item-listitem"
   >
-    <ItemAsChild />
+    <component
+      :is="rootTag"
+      v-bind="rootBindings"
+    >
+      <slot />
+    </component>
   </div>
-  <ItemAsChild v-else-if="asChild" />
-  <div
+  <component
+    :is="rootTag"
     v-else
     v-bind="rootBindings"
   >
     <slot />
-  </div>
+  </component>
 </template>

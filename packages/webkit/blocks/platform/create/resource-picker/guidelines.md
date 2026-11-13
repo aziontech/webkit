@@ -35,7 +35,7 @@ A large `Input` with a search icon, placeholder and matching `aria-label`, shown
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
-`Item.List` of small `Item`s rendered `as-child` on a `button`, one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `data-selected` and `aria-pressed`. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
+`Item.List` of small `clickable` `Item`s (native `button`s), one per resource: an icon in `Item.Media`, name in `Item.Title`, a secondary fact in `Item.Description`, and a check in `Item.Actions` on the chosen row. The chosen row takes `data-selected` and `aria-pressed`. While a batch loads, `Skeleton` rows in the same shape follow the visible ones, `aria-hidden`, with staggered widths. A value chosen beyond the first batch is revealed on open, never hidden behind Load more.
 
 ### F. Load more — `Button` (optional)
 

@@ -38,9 +38,9 @@
       "file": "with-image-media.vue"
     },
     {
-      "name": "WithAsChild",
-      "summary": "With asChild, layout classes merge onto the anchor, which becomes the single focusable element of the row and draws the focus-visible ring. Tab to a row to see it.",
-      "file": "with-as-child.vue"
+      "name": "WithLink",
+      "summary": "With href, the whole row renders as an anchor: the single focusable element of the row, with row-level hover and the focus-visible ring. Tab to a row to see it.",
+      "file": "with-link.vue"
     },
     {
       "name": "WithGroup",
@@ -53,9 +53,9 @@
       "file": "with-list.vue"
     },
     {
-      "name": "WithListAsChild",
-      "summary": "asChild rows inside an ItemList: each whole row is an anchor (data-kind forced to default by the list), separated by full-width dividers, with row-level hover and a focus-visible ring on Tab.",
-      "file": "with-list-as-child.vue"
+      "name": "WithListLinks",
+      "summary": "Link rows inside an ItemList: each whole row is an anchor set by href (data-kind forced to default by the list), separated by full-width dividers, with row-level hover and a focus-visible ring on Tab.",
+      "file": "with-list-links.vue"
     },
     {
       "name": "Inline",
@@ -64,7 +64,7 @@
     },
     {
       "name": "Option",
-      "summary": "`kind=\"option\"` rows under a search field: the 38 px chooser row of a create flow (a workload, a host). Each row is an `as-child` button; the pressed one fills with the selected surface and shows a check. The kind sets its own density, so `size` does not change it.",
+      "summary": "`kind=\"option\"` rows under a search field: the 38 px chooser row of a create flow (a workload, a host). Each row is a `clickable` Item, so the row is a native button; the pressed one fills with the selected surface and shows a check. The kind sets its own density, so `size` does not change it.",
       "file": "option.vue"
     }
   ]

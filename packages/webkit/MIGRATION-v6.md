@@ -247,6 +247,35 @@ Two slot functions changed with them. The `Table.Filter` default slot's `apply`,
 `AttributeEditor` `row` and `row-actions` slots pass `remove(event)`. Bind them to a click
 (`@click="remove"`) or pass the event on (`@click="(event) => apply(event)"`).
 
+### `Item` drops `asChild`: set `href` or `clickable`
+
+`Item` no longer merges its row onto a slotted child. It renders its own root: an anchor when
+`href` is set, a native button when `clickable` is set, a `div` otherwise. Move the child's
+attributes and listeners onto the `Item` and drop the wrapper element. The codemod does not
+rewrite this, because the replacement depends on whether the child was a link or a button.
+
+```vue
+<!-- v5 -->
+<Item as-child>
+  <a href="https://example.com/docs">
+    <Item.Content><Item.Title>Docs</Item.Title></Item.Content>
+  </a>
+</Item>
+<Item as-child kind="option">
+  <button type="button" :aria-pressed="picked" @click="pick">
+    <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
+  </button>
+</Item>
+
+<!-- v6 -->
+<Item href="https://example.com/docs">
+  <Item.Content><Item.Title>Docs</Item.Title></Item.Content>
+</Item>
+<Item clickable kind="option" :aria-pressed="picked" @click="pick">
+  <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
+</Item>
+```
+
 ### Test ids
 
 Test ids follow the component name: `feedback-message` → `feedback-alert`, `layout-divider` →

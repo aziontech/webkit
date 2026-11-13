@@ -32,7 +32,7 @@ A `Stepper` labelled with the create label. Steps reached earlier are `complete`
 
 ### D. Where it runs — `Input`, `Item`, `Button` (required)
 
-A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `Item` rendered `as-child` on a native `button` with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
+A centred chooser: an icon, the create label as `h1`, one line of instruction, a large search `Input` and up to six service rows, each a small `clickable` `Item` (a native `button`) with `aria-pressed`, `data-selected` and a check on the chosen one. A chosen service past the first six stays visible. Picking a row answers the step and advances. A count line says how many more match, a no-match line replaces the rows, an inline Create Service row starts a new one, and a transparent small `Button` continues without a service. Enter in the search picks the first match, or starts creating one when nothing matches.
 
 ### E. Inline create — `Field`, `Input`, `Button` (optional)
 
@@ -40,7 +40,7 @@ The Create Service row swaps the list for a `Field` with a Name `Input`, prefill
 
 ### F. Method card — `Card`, `Item` (required)
 
-A flush `Card` titled with the question, holding an `Item.List` of three small `Item`s rendered `as-child` on `button`s: an icon, the method as `Item.Title`, one or two sentences on what it does as `Item.Description`, and a chevron in `Item.Actions`. Clicking a method is the answer and moves on.
+A flush `Card` titled with the question, holding an `Item.List` of three small `clickable` `Item`s (native `button`s): an icon, the method as `Item.Title`, one or two sentences on what it does as `Item.Description`, and a chevron in `Item.Actions`. Clicking a method is the answer and moves on.
 
 ### G. Footer — `SaveBar`, `Button` (conditional)
 

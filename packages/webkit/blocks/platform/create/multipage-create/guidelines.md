@@ -32,7 +32,7 @@ A `Stepper` in an aside on the left, `v-model` bound to the current step and lab
 
 ### D. Where it runs — `Input`, `Item`, `Tag`, `Button` (required)
 
-A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `Item` rendered `as-child` on a native `button` with `aria-pressed` and `data-selected`; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
+A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed` and `data-selected`; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 

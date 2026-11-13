@@ -25,30 +25,25 @@
         v-for="name in visible"
         :key="name"
         kind="option"
-        as-child
+        clickable
+        :aria-pressed="selected === name"
+        @click="selected = name"
       >
-        <button
-          type="button"
-          class="w-full text-start"
-          :aria-pressed="selected === name"
-          @click="selected = name"
-        >
-          <Item.Media>
-            <i
-              class="ai ai-workloads text-body-md leading-none text-(--text-muted)"
-              aria-hidden="true"
-            />
-          </Item.Media>
-          <Item.Content>
-            <Item.Title>{{ name }}</Item.Title>
-          </Item.Content>
-          <Item.Actions v-if="selected === name">
-            <i
-              class="pi pi-check text-body-sm leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </Item.Actions>
-        </button>
+        <Item.Media>
+          <i
+            class="ai ai-workloads text-body-md leading-none text-(--text-muted)"
+            aria-hidden="true"
+          />
+        </Item.Media>
+        <Item.Content>
+          <Item.Title>{{ name }}</Item.Title>
+        </Item.Content>
+        <Item.Actions v-if="selected === name">
+          <i
+            class="pi pi-check text-body-sm leading-none text-(--text-default)"
+            aria-hidden="true"
+          />
+        </Item.Actions>
       </Item>
     </div>
   </div>

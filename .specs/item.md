@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-05-24
 last_updated: 2026-11-12
-checksum: b6991f3fe5e0f36f18f102d0b303c6d331afffb2270210525ac6f9aa5817a7f7
+checksum: b4ac6a2919eb8b200bfb7c3786cbec374404cd0bc3b75d421b1f32410110dc29
 ---
 
 # Item — Component Spec
@@ -19,8 +19,8 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.
 - A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.
-- A whole row that is one link or button — set `as-child` and pass a single `a` / `button` as the item's child.
-- A compact option in a chooser list (a workload, a host, an application picked under a search field): `kind="option"` with `as-child` on a `button`. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the button is `aria-pressed="true"` or `aria-selected="true"`.
+- A whole row that is one link or button — set `href` and the row renders as an anchor, or set `clickable` and bind `@click` and it renders as a native button.
+- A compact option in a chooser list (a workload, a host, an application picked under a search field): `kind="option"` with `clickable`, so the row is a native button. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the row is `aria-pressed="true"` or `aria-selected="true"`.
 
 ## When NOT to use
 
@@ -40,7 +40,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded="false"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.
 - `Item.List` draws its own dividers — do not add `Item.Separator` inside it.
-- With `as-child`, pass exactly one child element; the row's hover, active and focus ring move onto it, so do not also put buttons inside that row.
+- With `href` or `clickable` the whole row is one focusable control with the row's hover, active and focus ring, so do not also put buttons or links inside that row.
 - Set `Item.Media` `kind="icon"` for a glyph and `kind="image"` for a picture; the frame sizes and clips the content.
 - Use `size="small"` for dense lists; `medium` is the default.
 - For the rows of a picker under a search field use `kind="option"` (not `size="small"` plus your own padding): it sets its own density and the selected fill from `aria-pressed` / `aria-selected`, so `size` does not change it. Keep option rows in a plain column, not in `Item.List` or `Item.Group`, which force their own kind.
@@ -117,11 +117,12 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## Props
 
-| Prop      | Type                                             | Default     | Required | JSDoc                                                                                                                                     |
-| --------- | ------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`    | `'default' \| 'outlined' \| 'muted' \| 'inline' \| 'option'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected. |
-| `size`    | `'small' \| 'medium'`                            | `'medium'`  | false    | Item root density (padding and gap).                                                                                                      |
-| `asChild` | `boolean`                                        | `false`     | false    | Merge row layout and interactive-state classes onto the single default-slot child (e.g. anchor).                                          |
+| Prop        | Type                                                         | Default     | Required | JSDoc                                                                                                                                                                                                                                                     |
+| ----------- | ------------------------------------------------------------ | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`      | `'default' \| 'outlined' \| 'muted' \| 'inline' \| 'option'` | `'default'` | false    | Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected. |
+| `size`      | `'small' \| 'medium'`                                        | `'medium'`  | false    | Item root density (padding and gap).                                                                                                                                                                                                                      |
+| `href`      | `string`                                                     | `''`        | false    | When set, the whole row renders as an anchor link to this URL.                                                                                                                                                                                            |
+| `clickable` | `boolean`                                                    | `false`     | false    | Renders the whole row as a button; bind the click handler on the Item. Ignored when href is set.                                                                                                                                                          |
 
 > `ItemMedia` carries its own `kind` prop (`'default' | 'icon' | 'image'`, default `'default'`) — see the Sub-components section. It is not a root `Item` prop.
 
@@ -137,8 +138,8 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## States
 
-- Visual states on Item shell: `default` only, **except with `asChild`**, where the merged child (the whole-row link/button) gains row-level `hover`, `active`, and `focus-visible`
-- Without `asChild`, slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
+- Visual states on Item shell: `default` only, **except with `href` or `clickable`**, where the root is the whole-row anchor or button and gains row-level `hover`, `active`, and `focus-visible`
+- Without `href` or `clickable`, the root is a `div` and slotted controls (`Button`, `a`, etc.) own hover, active, and `focus-visible`
 - `data-kind` on Item root: `default` | `outlined` | `muted` | `inline` | `option` (an Item inside `ItemGroup` is forced to `inline`; inside `ItemList` to `default`)
 - `kind="option"`: `--spacing-xs` block padding, `--spacing-sm` inline padding and gap whatever the `size`, `Item.Title` at `text-body-md`, and `var(--bg-selected)` on the row while it carries `aria-pressed="true"` or `aria-selected="true"`
 - `data-size` on Item root: `small` | `medium`
@@ -146,31 +147,31 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## Motion & Animations
 
-- With `asChild`, the merged row uses the shared interactive ghost-layer hover/active treatment (opacity transition on `::before`/`::after`, motion-reduce safe). No component-local keyframes; sourced from the `interactive-states` preset.
-- Without `asChild`, the shell is static.
+- With `href` or `clickable`, the row uses the shared interactive ghost-layer hover/active treatment (opacity transition on `::before`/`::after`, motion-reduce safe). No component-local keyframes; sourced from the `interactive-states` preset.
+- Without `href` or `clickable`, the shell is static.
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)       |
-| ---------------------- | ----------------------- |
-| title typography       | `.text-body-sm`         |
-| title (option kind)    | `.text-body-md`         |
+| Region                 | Token (DESIGN.md)                                     |
+| ---------------------- | ----------------------------------------------------- |
+| title typography       | `.text-body-sm`                                       |
+| title (option kind)    | `.text-body-md`                                       |
 | option padding         | `var(--spacing-xs)` block, `var(--spacing-sm)` inline |
-| option selected        | `var(--bg-selected)`    |
-| description typography | `.text-body-sm`         |
-| surface (default)      | `var(--bg-surface)`     |
-| surface (muted kind)   | `var(--bg-mask)`        |
-| text                   | `var(--text-default)`   |
-| text muted             | `var(--text-muted)`     |
-| border                 | `var(--border-default)` |
-| spacing gap (medium)   | `var(--spacing-4)`      |
-| spacing gap (small)    | `var(--spacing-2)`      |
-| padding (medium)       | `var(--spacing-4)`      |
-| padding (small)        | `var(--spacing-3)`      |
-| ItemGroup row gap      | `var(--spacing-lg)`     |
-| ItemList divider       | `var(--border-muted)`   |
-| shape                  | `var(--shape-elements)` |
-| ring                   | `var(--ring-color)`     |
+| option selected        | `var(--bg-selected)`                                  |
+| description typography | `.text-body-sm`                                       |
+| surface (default)      | `var(--bg-surface)`                                   |
+| surface (muted kind)   | `var(--bg-mask)`                                      |
+| text                   | `var(--text-default)`                                 |
+| text muted             | `var(--text-muted)`                                   |
+| border                 | `var(--border-default)`                               |
+| spacing gap (medium)   | `var(--spacing-4)`                                    |
+| spacing gap (small)    | `var(--spacing-2)`                                    |
+| padding (medium)       | `var(--spacing-4)`                                    |
+| padding (small)        | `var(--spacing-3)`                                    |
+| ItemGroup row gap      | `var(--spacing-lg)`                                   |
+| ItemList divider       | `var(--border-muted)`                                 |
+| shape                  | `var(--shape-elements)`                               |
+| ring                   | `var(--ring-color)`                                   |
 
 ## Theme gaps
 
@@ -180,9 +181,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `asChild`, where the merged focusable child (e.g. an anchor) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`) and hover/active feedback.
-- Keyboard map: slotted links and buttons supply Tab order; use `asChild` to merge layout onto a single focusable child when the whole row is a link.
-- ARIA: `ItemGroup` and `ItemList` use `role="list"` and tell their direct Items, through context, that they are list members; the consumer wires nothing. A member Item renders `role="listitem"` on its root. A member Item with `asChild` renders a `role="listitem"` wrapper (`data-slot="item-listitem"`) around the merged child, so a link row stays a link. An Item outside a list, or nested inside another Item, gets no list role. `ItemSeparator` uses `role="separator"`, and `role="none"` when it sits directly inside a list, where a separator is not an allowed child.
+- Visible focus: on slotted links and buttons. The Item shell draws no focus ring on its own, except with `href` or `clickable`, where the row itself (an anchor or a native button) receives the `focus-visible` ring (`focus-visible:ring-2 focus-visible:ring-(--ring-color)`) and hover/active feedback.
+- Keyboard map: slotted links and buttons supply Tab order; with `href` the row is one link (`Enter` follows it), with `clickable` one native button (`Enter` and `Space` activate it).
+- ARIA: `ItemGroup` and `ItemList` use `role="list"` and tell their direct Items, through context, that they are list members; the consumer wires nothing. A member Item renders `role="listitem"` on its root. A member Item with `href` or `clickable` renders a `role="listitem"` wrapper (`data-slot="item-listitem"`) around its anchor or button root, so a link row stays a link. An Item outside a list, or nested inside another Item, gets no list role. `ItemSeparator` uses `role="separator"`, and `role="none"` when it sits directly inside a list, where a separator is not an allowed child.
 - Contrast ≥4.5:1 for title and description text.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px on slotted actions (owned by children).
@@ -198,9 +199,9 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - WithImageMedia — `ItemMedia` with `kind="image"` and a thumbnail image.
 - WithGroup — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
 - WithList — `ItemList` inside a `Card` (`padded=false`); rows separated by full-width dividers.
-- WithListAsChild — `ItemList` of `asChild` anchor rows inside a `Card`; whole-row links with dividers, row-level hover, and focus-visible ring.
+- WithListLinks — `ItemList` of `href` rows inside a `Card`; whole-row links with dividers, row-level hover, and focus-visible ring.
 - Inline — `kind="inline"` items in an `ItemGroup`, placed directly on the page (no card, no outer padding).
-- WithAsChild — `asChild` on `Item` wrapping an anchor; row layout merges onto the link; focus stays on the anchor.
+- WithLink — `href` on `Item`; the row renders as an anchor and draws the focus ring itself.
 - Option — `kind="option"` rows under a search field, one pressed; justified because `option` is a `kind` value.
 
 ## Constraints — DO NOT

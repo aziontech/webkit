@@ -180,29 +180,56 @@ describe('Item (composition)', () => {
     })
   })
 
-  describe('asChild — merges root bindings onto the single slotted child (merge-as-child.js)', () => {
-    it('renders no wrapper div and merges data-slot/data-kind/data-size onto the child', () => {
+  describe('href and clickable — the row renders its own interactive root', () => {
+    it('renders an anchor root carrying href, data-slot, data-kind and data-size', () => {
       const { getByTestId } = render(Item, {
-        props: { asChild: true, kind: 'outlined', size: 'small' },
-        slots: { default: '<a href="#" data-testid="link">Docs</a>' }
+        props: { href: 'https://example.com/docs', kind: 'outlined', size: 'small' },
+        slots: { default: 'Docs' }
       })
-      const link = getByTestId('link')
-      expect(link.tagName).toBe('A')
-      expect(link.getAttribute('data-slot')).toBe('item')
-      expect(link.getAttribute('data-kind')).toBe('outlined')
-      expect(link.getAttribute('data-size')).toBe('small')
-      expect(link.getAttribute('href')).toBe('#')
+      const root = getByTestId('content-item')
+      expect(root.tagName).toBe('A')
+      expect(root.getAttribute('href')).toBe('https://example.com/docs')
+      expect(root.getAttribute('data-slot')).toBe('item')
+      expect(root.getAttribute('data-kind')).toBe('outlined')
+      expect(root.getAttribute('data-size')).toBe('small')
+      expect(root.hasAttribute('type')).toBe(false)
     })
 
-    it('does not emit a separate content-item wrapper element in asChild mode', () => {
-      const { container, getByTestId } = render(Item, {
-        props: { asChild: true },
-        slots: { default: '<a href="#" data-testid="link">Docs</a>' }
+    it('renders a button root with type=button when clickable and fires the bound click', async () => {
+      let clicks = 0
+      const { getByTestId } = render(Item, {
+        props: { clickable: true },
+        attrs: { onClick: () => (clicks += 1) },
+        slots: { default: 'Pick' }
       })
-      const slotted = container.querySelectorAll('[data-slot="item"]')
-      expect(slotted.length).toBe(1)
-      expect(slotted[0]).toBe(getByTestId('link'))
-      expect((slotted[0] as HTMLElement).tagName).toBe('A')
+      const root = getByTestId('content-item')
+      expect(root.tagName).toBe('BUTTON')
+      expect(root.getAttribute('type')).toBe('button')
+      expect(root.hasAttribute('href')).toBe(false)
+      await fireEvent.click(root)
+      expect(clicks).toBe(1)
+    })
+
+    it('prefers the anchor when both href and clickable are set', () => {
+      const { getByTestId } = render(Item, {
+        props: { href: '#one', clickable: true },
+        slots: { default: 'One' }
+      })
+      expect(getByTestId('content-item').tagName).toBe('A')
+    })
+
+    it('renders a div root by default', () => {
+      const { getByTestId } = render(Item, { slots: { default: 'Row' } })
+      const root = getByTestId('content-item')
+      expect(root.tagName).toBe('DIV')
+      expect(root.hasAttribute('href')).toBe(false)
+    })
+
+    it('has no a11y violations as a link row and as a button row', async () => {
+      const link = render(Item, { props: { href: '#one' }, slots: { default: 'One' } })
+      await expectNoA11yViolations(link.container)
+      const button = render(Item, { props: { clickable: true }, slots: { default: 'Two' } })
+      await expectNoA11yViolations(button.container)
     })
   })
 
@@ -297,13 +324,13 @@ describe('Item (composition)', () => {
       })
     })
 
-    it('wraps an asChild row of Item.List in a listitem and keeps the link a link', () => {
+    it('wraps a link row of Item.List in a listitem and keeps the link a link', () => {
       const Tree = {
         components: { Item, ItemList: Item.List },
         template: `
           <ItemList>
-            <Item as-child><a href="#one">One</a></Item>
-            <Item as-child><a href="#two">Two</a></Item>
+            <Item href="#one">One</Item>
+            <Item href="#two">Two</Item>
           </ItemList>
         `
       }
