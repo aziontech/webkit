@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-13
 scope: general
 enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -688,7 +688,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 
 ```vue
 <script setup lang="ts">
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import type { MenuNode } from '@aziontech/webkit/menu'
   import Menu from '@aziontech/webkit/menu-root'
   import { computed } from 'vue'
