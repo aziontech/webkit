@@ -2,7 +2,7 @@
  "name": "breadcrumb",
  "binding": "Breadcrumb",
  "import": "@aziontech/webkit/breadcrumb",
- "treeShakeableImport": "@aziontech/webkit/breadcrumb",
+ "treeShakeableImport": "@aziontech/webkit/breadcrumb-root",
  "category": "navigation",
  "surface": "product",
  "structure": "composition",

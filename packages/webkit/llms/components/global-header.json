@@ -2,7 +2,7 @@
  "name": "global-header",
  "binding": "GlobalHeader",
  "import": "@aziontech/webkit/global-header",
- "treeShakeableImport": "@aziontech/webkit/global-header",
+ "treeShakeableImport": "@aziontech/webkit/global-header-root",
  "category": "layout",
  "surface": "product",
  "structure": "composition",

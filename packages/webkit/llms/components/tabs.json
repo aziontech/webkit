@@ -2,7 +2,7 @@
  "name": "tabs",
  "binding": "Tabs",
  "import": "@aziontech/webkit/tabs",
- "treeShakeableImport": "@aziontech/webkit/tabs",
+ "treeShakeableImport": "@aziontech/webkit/tabs-root",
  "category": "navigation",
  "surface": "product",
  "structure": "composition",

@@ -2,7 +2,8 @@
 
 > Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).
 
-- Import: `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
+- Import: `import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'`
+- Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
 - Category: navigation · Surface: product · Structure: composition
 - API as JSON: [breadcrumb.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb.json)
 
