@@ -3,13 +3,13 @@ name: phone-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: e2be931bab861b85fd8bd41756eefe68e5f70cc9dc6dbd23bf1029859373bd99
+checksum: 80f9c94ab0e3143ad6715b0d2cccfc993a0c5096d8dff1a078dd0abbc7de5d96
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-13
 ---
 
 # PhoneInput — Component Spec
@@ -39,7 +39,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
 - `v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.
 - Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
-- `v-model:country` defaults to `'BR'`; seed it with the user's country when you know it.
+- `v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
 - `searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
 ## Usage
@@ -51,7 +51,7 @@ International phone-number control: an `InputGroup` with a searchable dial-code 
   import PhoneInput from '@aziontech/webkit/phone-input'
 
   const digits = ref('')
-  const country = ref('BR')
+  const country = ref('US')
   const phone = ref(null)
 </script>
 
@@ -89,16 +89,16 @@ Masks: `#` is a digit slot and every other character is a literal. Digits are al
 
 ## v-model
 
-| Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                |
-| ----------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'11999999999'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
-| `v-model:country` | `string` | `'BR'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'BR'`, `'US'`, `'GB'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.                             |
+| Model             | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                               |
+| ----------------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`         | `string` | `''`    | `update:modelValue` | National number as **digits only**, without dial code and without mask characters (e.g. `'4155550100'`). Updates on input when the digits change, and when a country switch truncates digits beyond the new country's capacity. Via `defineModel`, so the field also works unbound. |
+| `v-model:country` | `string` | `'US'`  | `update:country`    | ISO 3166-1 alpha-2 code of the selected country (e.g. `'US'`, `'GB'`, `'BR'`). Drives the dial code shown in the `Select` and the masks applied to the input. Via `defineModel`, so picking a country works even when the consumer binds only `v-model`.                            |
 
 ## Events
 
-| Event          | Payload                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| -------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+5511999999999'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| Event          | Payload                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## Slots
 

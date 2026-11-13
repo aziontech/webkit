@@ -70,9 +70,9 @@ describe('PhoneInput', () => {
       expect(input.getAttribute('autocomplete')).toBe('tel-national')
     })
 
-    it("falls back to the selected country's mask as placeholder (BR default)", () => {
+    it("falls back to the selected country's mask as placeholder (US default)", () => {
       const { getByRole } = render(PhoneInput, {})
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
     })
 
     it('prefers an explicit placeholder over the mask', () => {
@@ -143,21 +143,21 @@ describe('PhoneInput', () => {
       const { getByRole, emitted } = render(PhoneInput, {})
       const input = getByRole('textbox') as HTMLInputElement
 
-      await fireEvent.update(input, '(11) 9abc')
+      await fireEvent.update(input, '(415) 5abc')
 
       const events = emitted()['update:modelValue'] as string[][]
       expect(events).toHaveLength(1)
-      expect(events[0]).toEqual(['119'])
-      expect(input.value).toBe('(11) 9')
+      expect(events[0]).toEqual(['4155'])
+      expect(input.value).toBe('(415) 5')
     })
 
     it("truncates typed digits to the mask's capacity", async () => {
       const { getByRole, emitted } = render(PhoneInput, {})
 
-      await fireEvent.update(getByRole('textbox'), '119999999990000')
+      await fireEvent.update(getByRole('textbox'), '41555501000000')
 
       const events = emitted()['update:modelValue'] as string[][]
-      expect(events[0]).toEqual(['11999999999'])
+      expect(events[0]).toEqual(['4155550100'])
     })
 
     it('clears non-digit input without emitting an unchanged value', async () => {
@@ -171,7 +171,7 @@ describe('PhoneInput', () => {
     })
 
     it('switches a BR number from the landline to the mobile mask as it grows', async () => {
-      const { getByRole } = render(Default)
+      const { getByRole } = render(PhoneInput, { props: { country: 'BR' } })
       const input = getByRole('textbox') as HTMLInputElement
 
       await fireEvent.update(input, '1199998888')
@@ -192,7 +192,7 @@ describe('PhoneInput', () => {
 
     it("shows the selected country's dial code in the trigger", () => {
       const { getByTestId } = render(PhoneInput, {})
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+55')
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
     })
 
     it('keeps the number and the dial codes left-to-right on an RTL page', async () => {
@@ -266,9 +266,9 @@ describe('PhoneInput', () => {
       const { getByTestId, getByRole } = render(Default)
 
       await fireEvent.click(getByTestId('select-trigger'))
-      await fireEvent.click(getOptions()[1]) // US
+      await fireEvent.click(getOptions()[0]) // BR
 
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
 
     it('disables the trigger and keeps the dropdown closed when disabled', async () => {
@@ -301,7 +301,7 @@ describe('PhoneInput', () => {
       const { emitted } = render(PhoneInput, {})
 
       expect(emitted()['update:phone']).toEqual([
-        [{ country: 'BR', dialCode: '+55', digits: '', number: '', complete: false }]
+        [{ country: 'US', dialCode: '+1', digits: '', number: '', complete: false }]
       ])
     })
 
@@ -320,7 +320,7 @@ describe('PhoneInput', () => {
     })
 
     it('accepts both BR lengths as complete and rejects anything in between', async () => {
-      const { getByRole, emitted } = render(PhoneInput, {})
+      const { getByRole, emitted } = render(PhoneInput, { props: { country: 'BR' } })
       const input = getByRole('textbox')
 
       await fireEvent.update(input, '119999888')
@@ -335,7 +335,7 @@ describe('PhoneInput', () => {
 
     it('reports the new country after a pick', async () => {
       const { getByTestId, emitted } = render(PhoneInput, {
-        props: { modelValue: '11999999999' }
+        props: { modelValue: '11999999999', country: 'BR' }
       })
 
       await fireEvent.click(getByTestId('select-trigger'))
@@ -356,10 +356,10 @@ describe('PhoneInput', () => {
       const { getByTestId, getByRole } = render(PhoneInput, {})
 
       await fireEvent.click(getByTestId('select-trigger'))
-      await fireEvent.click(getOptions()[1])
+      await fireEvent.click(getOptions()[0])
 
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+1')
-      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(999) 999-9999')
+      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('+55')
+      expect(getByRole('textbox').getAttribute('placeholder')).toBe('(99) 99999-9999')
     })
   })
 
@@ -492,7 +492,7 @@ describe('PhoneInput', () => {
 
     it('does not emit update:modelValue when readonly and the user tries to type', async () => {
       const { getByRole, emitted } = render(PhoneInput, {
-        props: { modelValue: '11999999999', readonly: true }
+        props: { modelValue: '4155550100', readonly: true }
       })
       const input = getByRole('textbox') as HTMLInputElement
 
@@ -500,7 +500,7 @@ describe('PhoneInput', () => {
       await userEvent.type(input, '123')
 
       expect(emitted()['update:modelValue']).toBeUndefined()
-      expect(input.value).toBe('(11) 99999-9999')
+      expect(input.value).toBe('(415) 555-0100')
     })
   })
 
@@ -576,10 +576,10 @@ describe('PhoneInput', () => {
 
       expect(getByTestId('phone-input')).toBeTruthy()
       expect(getByTestId('select-trigger').getAttribute('role')).toBe('combobox')
-      expect(input.getAttribute('placeholder')).toBe('(99) 99999-9999')
+      expect(input.getAttribute('placeholder')).toBe('(999) 999-9999')
 
-      await fireEvent.update(input, '11999999999')
-      expect(input.value).toBe('(11) 99999-9999')
+      await fireEvent.update(input, '4155550100')
+      expect(input.value).toBe('(415) 555-0100')
     })
   })
 })

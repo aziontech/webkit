@@ -37,7 +37,7 @@
   export interface PhoneNumber {
     /** ISO 3166-1 alpha-2 code of the selected country. */
     country: string
-    /** Dial code of the selected country, such as +55. */
+    /** Dial code of the selected country, such as +1. */
     dialCode: string
     /** National number as digits only. */
     digits: string
@@ -88,7 +88,7 @@
   }>()
 
   const model = defineModel<string>({ default: '' })
-  const country = defineModel<string>('country', { default: 'BR' })
+  const country = defineModel<string>('country', { default: 'US' })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ phoneInput: en.phoneInput })
