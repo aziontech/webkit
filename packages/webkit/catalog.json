@@ -18128,6 +18128,9 @@
    "kind": "root",
    "rootOf": "tabs",
    "treeShakeableImport": "@aziontech/webkit/tabs-root",
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
@@ -18512,6 +18515,9 @@
    "kind": "root",
    "rootOf": "navigation-menu",
    "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
+   "models": [
+    "modelValue"
+   ],
    "category": "navigation",
    "structure": "composition",
    "props": [
