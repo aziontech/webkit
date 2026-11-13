@@ -1,6 +1,6 @@
 <script setup>
   import AppLayout from '@aziontech/webkit/app-layout'
-  import Breadcrumb from '@aziontech/webkit/breadcrumb'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import GlobalHeader from '@aziontech/webkit/global-header'
