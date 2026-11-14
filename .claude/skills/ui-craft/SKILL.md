@@ -2,7 +2,7 @@
 name: ui-craft
 description: Contributor review gate for WebKit itself — required on every new or changed component, example and block before its PR opens. Umbrella for UI taste and PRO UX on @aziontech/webkit. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
 status: active
-last_updated: 2026-11-10
+last_updated: 2026-11-14
 scope: webkit
 enforced_by: [review]
 ---
@@ -100,6 +100,10 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
     dozen copies of the same link turned into four glyphs, four icon sizes, two underline states and
     a tooltip on two of twelve. The tell is a `<template>` you could paste into another file
     unchanged; extract it instead. Details in `/webkit-tables`.
+11. **One navigation per level** — the rail, `PageTabs`, and at most one local navigation (the
+    `platform/detail/sectioned-resource` block, only past 7 sibling pages). A destination appears
+    once per screen, the rail never routes into a resource, and every level's active row agrees with
+    the route. Details in `/webkit-navigation` (rule `webkit-navigation-levels`).
 
 > Accessibility is enforced by the shipped `accessibility` rule and verified at runtime by
 > `/webkit-ui-verify` (axe on the rendered screen).
@@ -119,7 +123,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | Where a failure goes: the field, a section Alert, a toast, the auth card                                                                  | `/webkit-errors`            |
 | Structure  | Data tables: data-driven `<Table :data :columns>`, toolbar, internal scroll, cell recipes — and the cross-resource link every screen uses | `/webkit-tables`            |
 | Structure  | The index page around the table: one band, search vs filters, the chip filter bar                                                         | `/webkit-lists`             |
-| Structure  | The two console shells; one GlobalHeader; user always visible                                                                             | `/webkit-navigation`        |
+| Structure  | The two console shells; one GlobalHeader; user always visible; one navigation per level                                                   | `/webkit-navigation`        |
 | Structure  | Every string: punctuation, sentence case, label vs message, one word per concept                                                          | `/webkit-microcopy`         |
 | Layout     | The page container system: measure, boundary, rhythm, the site frame                                                                      | `/webkit-layout`            |
 | Foundation | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm                                                                | `/webkit-baseline-ui`       |
