@@ -3,11 +3,11 @@ name: payment-brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 52a360ec7d0feb85e685161d7d78b3af07a24b4ef1d22d72c50a00bf61f2f110
+checksum: 26848bc9e6ae0bbf3514bba5fc8e8209d940be38092bdea8301e9e0593594829
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # PaymentBrand — Component Spec
@@ -59,7 +59,8 @@ The card-brand plate shown beside a payment card: a small bordered plate with th
 | ------------ | --------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `brand`      | `string`              | `''`        | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
 | `size`       | `'small' \| 'medium'` | `'medium'`  | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                                                                   |
-| `label`      | `string`              | `undefined` | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
+| `ariaLabel`  | `string`              | `''`        | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
+| `label`      | `string`              | `''`        | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                                                                                           |
 | `decorative` | `boolean`             | `false`     | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                                                                 |
 
 ## Events
@@ -100,7 +101,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root is `role="img"` named by `label` or the brand's name; with `decorative` it is `aria-hidden="true"` and has no role.
+- The root is `role="img"` named by `ariaLabel` (the consumer writes `aria-label`; the deprecated `label` still works) or the brand's name; with `decorative` it is `aria-hidden="true"` and has no role.
 - The SVG inside is `aria-hidden` and not focusable; the plate takes no focus.
 - Contrast: the mark is `--text-default` on `--bg-surface` (above 4.5:1 in both themes); forced colors draw it in `CanvasText` because it uses `currentColor`.
 
@@ -108,7 +109,7 @@ _none_
 
 | Key                    | English source | Override prop |
 | ---------------------- | -------------- | ------------- |
-| `paymentBrand.unknown` | `Card`         | `label`       |
+| `paymentBrand.unknown` | `Card`         | `ariaLabel`   |
 
 - Brand names (`Visa`, `Mastercard`, `American Express`, `Diners Club`, `JCB`, `Discover`, `Elo`, `Hipercard`, `UnionPay`) are trademarks and are not translated.
 

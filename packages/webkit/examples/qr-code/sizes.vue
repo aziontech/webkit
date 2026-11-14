@@ -9,7 +9,7 @@
       :key="size"
       value="https://www.azion.com/en/documentation/"
       :size="size"
-      :label="`QR code, ${size}, to the Azion documentation`"
+      :aria-label="`QR code, ${size}, to the Azion documentation`"
     />
   </div>
 </template>

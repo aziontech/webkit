@@ -59,6 +59,17 @@ describe('OverflowCount', () => {
     expect(rowClicks).toBe(0)
   })
 
+  it('stops only the trigger click, not a click on the wrapper', async () => {
+    let rowClicks = 0
+    const Host = defineComponent({
+      render: () =>
+        h('div', { onClick: () => (rowClicks += 1) }, [h(OverflowCount, { items: ['a', 'b'] })])
+    })
+    render(Host)
+    await fireEvent.click(byTestId('content-overflow-count')!)
+    expect(rowClicks).toBe(1)
+  })
+
   it('searches past 7 items, pages by 10 and quotes a query with no match', async () => {
     render(OverflowCount, { props: { items: tags, noun: { one: 'tag', other: 'tags' } } })
     await fireEvent.click(trigger().querySelector('button') ?? trigger())

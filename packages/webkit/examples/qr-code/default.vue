@@ -11,7 +11,7 @@
   <div class="flex flex-col items-start gap-(--spacing-md)">
     <QrCode
       :value="uri"
-      :label="`QR code to add ${account} to an authenticator app`"
+      :aria-label="`QR code to add ${account} to an authenticator app`"
     />
     <div class="flex flex-col gap-(--spacing-xxs)">
       <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>

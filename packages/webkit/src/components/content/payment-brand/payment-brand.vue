@@ -23,24 +23,28 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. */
-      brand?: string
-      /** Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. */
-      size?: PaymentBrandSize
-      /** Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. */
-      label?: string
-      /** Hide the plate from assistive technology when the text next to it already names the brand. */
-      decorative?: boolean
-    }>(),
-    {
-      brand: '',
-      size: 'medium',
-      label: undefined,
-      decorative: false
-    }
-  )
+  interface Props {
+    /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. */
+    brand?: string
+    /** Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. */
+    size?: PaymentBrandSize
+    /** Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. */
+    ariaLabel?: string
+    /**
+     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
+     */
+    label?: string
+    /** Hide the plate from assistive technology when the text next to it already names the brand. */
+    decorative?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    brand: '',
+    size: 'medium',
+    ariaLabel: '',
+    label: '',
+    decorative: false
+  })
 
   const NAMES: Record<Exclude<PaymentBrandId, 'unknown'>, string> = {
     visa: 'Visa',
@@ -91,6 +95,7 @@
   const glyph = computed<'mark' | 'generic'>(() => (DRAWN.has(id.value) ? 'mark' : 'generic'))
 
   const name = computed<string>(() => {
+    if (props.ariaLabel) return props.ariaLabel
     if (props.label) return props.label
     if (id.value === 'unknown') return t('paymentBrand.unknown')
     return NAMES[id.value]
