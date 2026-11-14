@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
@@ -30,7 +31,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   interface ColumnType {
     value: string
@@ -234,70 +235,18 @@
     clearCsv()
   })
 
-  const addColumnRow = async () => {
-    createForm.columns.push(newColumn())
-    await nextTick()
-    globalThis.document
-      ?.querySelector<HTMLElement>(`[data-column-key="${createForm.columns.at(-1)?.key}"] input`)
-      ?.focus()
-  }
-  const removeColumnRow = (index: number) => {
-    if (createForm.columns.length > 1) createForm.columns.splice(index, 1)
-  }
-  const columnMove = ref('')
-  const columnLabel = (column: DraftColumn, index: number) =>
-    column.name.trim() || `column ${index + 1}`
-  const placeColumn = async (from: number, target: number, verb: string) => {
-    if (target < 0 || target >= createForm.columns.length || target === from) return
-    const [moved] = createForm.columns.splice(from, 1)
-    createForm.columns.splice(target, 0, moved)
-    columnMove.value = `${verb} ${columnLabel(moved, target)} to position ${target + 1} of ${createForm.columns.length}.`
-    await nextTick()
-    globalThis.document
-      ?.querySelector<HTMLElement>(`[data-column-key="${moved.key}"] [data-grip]`)
-      ?.focus()
-  }
-  const moveColumnRow = (index: number, step: number) => placeColumn(index, index + step, 'Moved')
-
-  const dragKey = ref<string | null>(null)
-  const overKey = ref<string | null>(null)
-  const indexOfKey = (key: string | null) =>
-    createForm.columns.findIndex((column) => column.key === key)
-  const dropSide = (key: string) => {
-    if (!dragKey.value || overKey.value !== key || dragKey.value === key) return null
-    return indexOfKey(dragKey.value) < indexOfKey(key) ? 'after' : 'before'
-  }
-  const onGripDown = (event: PointerEvent, key: string) => {
-    if (event.button !== 0 || createSubmitting.value) return
-    const grip = event.currentTarget as HTMLElement
-    if (event.isTrusted) grip.setPointerCapture?.(event.pointerId)
-    event.preventDefault()
-    grip.focus({ preventScroll: true })
-    dragKey.value = key
-    overKey.value = key
-  }
-  const onGripMove = (event: PointerEvent) => {
-    if (!dragKey.value) return
-    const rows = Array.from(globalThis.document?.querySelectorAll('[data-column-key]') ?? [])
-    const hit = rows.find((row) => {
-      const box = row.getBoundingClientRect()
-      return event.clientY >= box.top && event.clientY <= box.bottom
+  const columnDefinition = [
+    { key: 'name', label: 'Name', required: true },
+    { key: 'type', label: 'Type' },
+    { key: 'defaultValue', label: 'Default' },
+    { key: 'primaryKey', label: 'Primary' }
+  ]
+  const columnErrors = computed(() =>
+    createForm.columns.map((column) => {
+      const message = columnError(column)
+      return message ? { name: message } : undefined
     })
-    if (hit) overKey.value = hit.getAttribute('data-column-key')
-  }
-  const onGripUp = () => {
-    const from = indexOfKey(dragKey.value)
-    const target = indexOfKey(overKey.value)
-    dragKey.value = null
-    overKey.value = null
-    if (from >= 0 && target >= 0) placeColumn(from, target, 'Dropped')
-  }
-  const onGripCancel = () => {
-    if (!dragKey.value) return
-    dragKey.value = null
-    overKey.value = null
-    columnMove.value = 'Reorder cancelled.'
-  }
+  )
 
   const csvInput = ref<HTMLInputElement | null>(null)
   const csvFile = ref<CsvFile | null>(null)
@@ -412,12 +361,21 @@
   })
   const referenceColumns = (relation: DraftRelation) =>
     tables.value.find((item) => item.name === relation.table)?.columns ?? []
-  const addRelation = () => createForm.relations.push(newRelation())
-  const removeRelation = (index: number) => createForm.relations.splice(index, 1)
-  const relationError = (relation: DraftRelation) =>
-    createSubmitted.value && (!relation.column || !relation.table || !relation.references)
-      ? 'Choose the column, the table and the column it references.'
-      : ''
+  const relationDefinition = [
+    { key: 'column', label: 'Column', required: true },
+    { key: 'table', label: 'References table', required: true },
+    { key: 'references', label: 'References column', required: true },
+    { key: 'onDelete', label: 'On delete' }
+  ]
+  const relationErrors = computed(() =>
+    createForm.relations.map((relation) => {
+      if (!createSubmitted.value) return undefined
+      const missing = (['column', 'table', 'references'] as const).find((key) => !relation[key])
+      return missing
+        ? { [missing]: 'Choose the column, the table and the column it references.' }
+        : undefined
+    })
+  )
   const relationsInvalid = computed(() =>
     createForm.relations.some(
       (relation) => !relation.column || !relation.table || !relation.references
@@ -919,142 +877,90 @@
                         target="_blank"
                       />
                     </div>
-                    <ul
+                    <AttributeEditor
+                      v-model:items="createForm.columns"
+                      :definition="columnDefinition"
+                      :errors="columnErrors"
+                      :new-item="newColumn"
+                      :min-items="1"
+                      :disabled="createSubmitting"
+                      reorderable
+                      size="large"
+                      add-button-label="Add column"
+                      remove-button-label="Remove column"
                       aria-label="Columns"
-                      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
                     >
-                      <li
-                        v-for="(column, index) in createForm.columns"
-                        :key="column.key"
-                        :data-column-key="column.key"
-                        :data-dragging="dragKey === column.key || null"
-                        :data-drop="dropSide(column.key) || null"
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance data-dragging:opacity-60 data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-[drop=after]:shadow-[0_2px_0_var(--accent)] data-[drop=before]:shadow-[0_-2px_0_var(--accent)] motion-reduce:transition-none"
-                      >
-                        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                          <button
-                            type="button"
-                            data-grip
-                            :aria-label="`Reorder ${column.name || 'column ' + (index + 1)}, position ${index + 1} of ${createForm.columns.length}. Drag, or use the up and down arrow keys.`"
-                            aria-keyshortcuts="ArrowUp ArrowDown"
-                            class="inline-flex size-8 shrink-0 cursor-grab touch-none active:cursor-grabbing items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                            @keydown.up.prevent="moveColumnRow(index, -1)"
-                            @keydown.down.prevent="moveColumnRow(index, 1)"
-                            @keydown.esc="onGripCancel"
-                            @pointerdown="onGripDown($event, column.key)"
-                            @pointermove="onGripMove"
-                            @pointerup="onGripUp"
-                            @pointercancel="onGripCancel"
-                          >
-                            <i
-                              class="pi pi-bars"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <div class="min-w-0 flex-[1.4_1_8rem]">
-                            <Input
-                              v-model="column.name"
-                              size="large"
-                              class="w-full"
-                              placeholder="column_name"
-                              :aria-label="`Name of column ${index + 1}`"
-                              :invalid="!!columnError(column)"
-                            />
-                          </div>
-                          <div class="min-w-0 flex-[1_1_9rem]">
-                            <Select
-                              v-model="column.type"
-                              size="large"
-                              class="w-full"
-                            >
-                              <Select.Trigger :aria-label="`Type of column ${index + 1}`">
-                                <template #iconLeft>
-                                  <span
-                                    class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
-                                    aria-hidden="true"
-                                    >{{ glyphOf(column.type) }}</span
-                                  >
-                                </template>
-                              </Select.Trigger>
-                              <Select.Content>
-                                <template #search>
-                                  <Input
-                                    v-model="typeQuery"
-                                    size="medium"
-                                    class="w-full"
-                                    placeholder="Search types"
-                                    aria-label="Search types"
-                                    @keydown.stop
-                                  />
-                                </template>
-                                <Select.Group label="Data types">
-                                  <Select.Option
-                                    v-for="type in filteredTypes"
-                                    :key="type.value"
-                                    :value="type.value"
-                                  >
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                      <span class="font-code text-label-code-sm">{{
-                                        type.value
-                                      }}</span>
-                                      <span class="truncate text-body-xs text-(--text-muted)">{{
-                                        type.description
-                                      }}</span>
-                                    </span>
-                                  </Select.Option>
-                                </Select.Group>
-                              </Select.Content>
-                            </Select>
-                          </div>
-                          <div class="min-w-0 flex-[1_1_7rem]">
-                            <Input
-                              v-model="column.defaultValue"
-                              size="large"
-                              class="w-full"
-                              placeholder="NULL"
-                              :aria-label="`Default value of column ${index + 1}`"
-                            />
-                          </div>
-                          <div class="shrink-0">
-                            <Field orientation="horizontal">
-                              <Checkbox
-                                v-model="column.primaryKey"
-                                binary
-                              />
-                              <Field.Label>Primary</Field.Label>
-                            </Field>
-                          </div>
-                          <Tooltip text="Remove column">
-                            <IconButton
-                              icon="pi pi-times"
-                              kind="outlined"
-                              size="large"
-                              :aria-label="`Remove ${column.name || 'column ' + (index + 1)}`"
-                              :disabled="createForm.columns.length <= 1"
-                              @click="removeColumnRow(index)"
-                            />
-                          </Tooltip>
-                        </div>
-                        <HelperText
-                          v-if="columnError(column)"
-                          kind="invalid"
-                          :label="columnError(column)"
+                      <template #cell-name="{ index, invalid }">
+                        <Input
+                          v-model="createForm.columns[index].name"
+                          size="large"
+                          class="w-full"
+                          placeholder="column_name"
+                          :invalid="invalid"
                         />
-                      </li>
-                    </ul>
+                      </template>
+                      <template #cell-type="{ index }">
+                        <Select
+                          v-model="createForm.columns[index].type"
+                          size="large"
+                          class="w-full"
+                        >
+                          <Select.Trigger>
+                            <template #iconLeft>
+                              <span
+                                class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+                                aria-hidden="true"
+                                >{{ glyphOf(createForm.columns[index].type) }}</span
+                              >
+                            </template>
+                          </Select.Trigger>
+                          <Select.Content>
+                            <template #search>
+                              <Input
+                                v-model="typeQuery"
+                                size="medium"
+                                class="w-full"
+                                placeholder="Search types"
+                                aria-label="Search types"
+                                @keydown.stop
+                              />
+                            </template>
+                            <Select.Group label="Data types">
+                              <Select.Option
+                                v-for="type in filteredTypes"
+                                :key="type.value"
+                                :value="type.value"
+                              >
+                                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                  <span class="font-code text-label-code-sm">{{ type.value }}</span>
+                                  <span class="truncate text-body-xs text-(--text-muted)">{{
+                                    type.description
+                                  }}</span>
+                                </span>
+                              </Select.Option>
+                            </Select.Group>
+                          </Select.Content>
+                        </Select>
+                      </template>
+                      <template #cell-defaultValue="{ index }">
+                        <Input
+                          v-model="createForm.columns[index].defaultValue"
+                          size="large"
+                          class="w-full"
+                          placeholder="NULL"
+                        />
+                      </template>
+                      <template #cell-primaryKey="{ index }">
+                        <Checkbox
+                          v-model="createForm.columns[index].primaryKey"
+                          binary
+                        />
+                      </template>
+                    </AttributeEditor>
                     <HelperText
                       v-if="columnsError"
                       kind="invalid"
                       :label="columnsError"
-                    />
-                    <Button
-                      type="button"
-                      label="Add column"
-                      kind="outlined"
-                      size="medium"
-                      icon="pi pi-plus"
-                      class="w-full"
-                      @click="addColumnRow"
                     />
                   </div>
                 </SettingsSection>
@@ -1064,136 +970,98 @@
                   hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
                 >
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <ul
-                      v-if="createForm.relations.length"
+                    <AttributeEditor
+                      v-model:items="createForm.relations"
+                      :definition="relationDefinition"
+                      :errors="relationErrors"
+                      :new-item="newRelation"
+                      :disabled="createSubmitting"
+                      size="large"
+                      add-button-label="Add foreign key"
+                      remove-button-label="Remove foreign key"
+                      empty="No foreign keys."
                       aria-label="Foreign keys"
-                      class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
                     >
-                      <li
-                        v-for="(relation, index) in createForm.relations"
-                        :key="relation.key"
-                        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-xs)"
-                      >
-                        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                          <div class="min-w-0 flex-[1_1_8rem]">
-                            <Select
-                              v-model="relation.column"
-                              size="large"
-                              class="w-full"
-                              placeholder="Column"
+                      <template #cell-column="{ index, invalid }">
+                        <Select
+                          v-model="createForm.relations[index].column"
+                          size="large"
+                          class="w-full"
+                          placeholder="Column"
+                          :invalid="invalid"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="column in namedColumns"
+                              :key="column.key"
+                              :value="column.name.trim()"
+                              >{{ column.name.trim() }}</Select.Option
                             >
-                              <Select.Trigger :aria-label="`Column of foreign key ${index + 1}`" />
-                              <Select.Content>
-                                <Select.Option
-                                  v-for="column in namedColumns"
-                                  :key="column.key"
-                                  :value="column.name.trim()"
-                                  >{{ column.name.trim() }}</Select.Option
-                                >
-                              </Select.Content>
-                            </Select>
-                          </div>
-                          <span
-                            class="shrink-0 text-body-sm text-(--text-muted)"
-                            aria-hidden="true"
-                            >references</span
-                          >
-                          <div class="min-w-0 flex-[1_1_8rem]">
-                            <Select
-                              v-model="relation.table"
-                              size="large"
-                              class="w-full"
-                              placeholder="Table"
-                              @update:model-value="relation.references = ''"
+                          </Select.Content>
+                        </Select>
+                      </template>
+                      <template #cell-table="{ index, invalid }">
+                        <Select
+                          v-model="createForm.relations[index].table"
+                          size="large"
+                          class="w-full"
+                          placeholder="Table"
+                          :invalid="invalid"
+                          @update:model-value="createForm.relations[index].references = ''"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="item in tables"
+                              :key="item.name"
+                              :value="item.name"
+                              >{{ item.name }}</Select.Option
                             >
-                              <Select.Trigger
-                                :aria-label="`Referenced table of foreign key ${index + 1}`"
-                              />
-                              <Select.Content>
-                                <Select.Option
-                                  v-for="item in tables"
-                                  :key="item.name"
-                                  :value="item.name"
-                                  >{{ item.name }}</Select.Option
-                                >
-                              </Select.Content>
-                            </Select>
-                          </div>
-                          <div class="min-w-0 flex-[1_1_8rem]">
-                            <Select
-                              v-model="relation.references"
-                              size="large"
-                              class="w-full"
-                              placeholder="Column"
-                              :disabled="!relation.table"
+                          </Select.Content>
+                        </Select>
+                      </template>
+                      <template #cell-references="{ item, index, invalid }">
+                        <Select
+                          v-model="createForm.relations[index].references"
+                          size="large"
+                          class="w-full"
+                          placeholder="Column"
+                          :invalid="invalid"
+                          :disabled="!item.table"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="column in referenceColumns(item)"
+                              :key="column.name"
+                              :value="column.name"
+                              >{{ column.name }}</Select.Option
                             >
-                              <Select.Trigger
-                                :aria-label="`Referenced column of foreign key ${index + 1}`"
-                              />
-                              <Select.Content>
-                                <Select.Option
-                                  v-for="column in referenceColumns(relation)"
-                                  :key="column.name"
-                                  :value="column.name"
-                                  >{{ column.name }}</Select.Option
-                                >
-                              </Select.Content>
-                            </Select>
-                          </div>
-                          <div class="min-w-0 flex-[1_1_7rem]">
-                            <Select
-                              v-model="relation.onDelete"
-                              size="large"
-                              class="w-full"
+                          </Select.Content>
+                        </Select>
+                      </template>
+                      <template #cell-onDelete="{ index }">
+                        <Select
+                          v-model="createForm.relations[index].onDelete"
+                          size="large"
+                          class="w-full"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in ON_DELETE"
+                              :key="option.value"
+                              :value="option.value"
+                              >{{ option.label }}</Select.Option
                             >
-                              <Select.Trigger :aria-label="`On delete, foreign key ${index + 1}`" />
-                              <Select.Content>
-                                <Select.Group label="On delete">
-                                  <Select.Option
-                                    v-for="option in ON_DELETE"
-                                    :key="option.value"
-                                    :value="option.value"
-                                    >{{ option.label }}</Select.Option
-                                  >
-                                </Select.Group>
-                              </Select.Content>
-                            </Select>
-                          </div>
-                          <Tooltip text="Remove foreign key">
-                            <IconButton
-                              icon="pi pi-times"
-                              kind="outlined"
-                              size="large"
-                              :aria-label="`Remove foreign key ${index + 1}`"
-                              @click="removeRelation(index)"
-                            />
-                          </Tooltip>
-                        </div>
-                        <HelperText
-                          v-if="relationError(relation)"
-                          kind="invalid"
-                          :label="relationError(relation)"
-                        />
-                      </li>
-                    </ul>
-                    <Button
-                      type="button"
-                      label="Add foreign key"
-                      kind="outlined"
-                      size="medium"
-                      icon="pi pi-plus"
-                      class="w-full"
-                      @click="addRelation"
-                    />
+                          </Select.Content>
+                        </Select>
+                      </template>
+                    </AttributeEditor>
                   </div>
                 </SettingsSection>
               </fieldset>
-              <p
-                role="status"
-                class="sr-only"
-              >
-                {{ columnMove }}
-              </p>
             </PanelContent>
 
             <PanelFooter>

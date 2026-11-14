@@ -267,14 +267,9 @@
                               href="https://example.com/contact-sales"
                               target="_blank"
                               rel="noopener noreferrer"
-                              class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                              class="text-link"
+                              >Contact sales</a
                             >
-                              Contact sales
-                              <i
-                                class="pi pi-external-link shrink-0 text-body-sm leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
                           </template>
                           <Tooltip text="Contact sales to activate this module.">
                             <Switch
@@ -367,7 +362,7 @@
                 published. Traffic to its domains stops. Check the
                 <a
                   href="https://example.com/docs/projects/delete"
-                  class="text-(--text-link) underline underline-offset-2 hover:text-(--text-link-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  class="text-link"
                   >Help Center</a
                 >
                 for more details.
@@ -379,7 +374,7 @@
                 >
                   To confirm, type
                   <code
-                    class="rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) font-mono text-body-sm text-(--text-default)"
+                    class="rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) text-label-code-sm text-(--text-default)"
                     >{{ record.name }}</code
                   >
                   <CopyButton

@@ -52,7 +52,7 @@ When the form has no fields, the right pane shows an `EmptyState` with one sente
 
 ### G. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
 
-A flush `Card` with one small `Item` per field: a reorder grip, the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings.
+A flush `Card` with one small `Item` per field: a Move up and a Move down `IconButton` (transparent, small, disabled at the ends of the list), the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings. A move keeps focus on the button that moved the field (or its sibling once the field reaches an end) and is announced in a polite live region ("quality moved to position 1 of 2.").
 
 ### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
 
@@ -62,9 +62,9 @@ Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Requ
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
-### J. Save bar — `SaveBar`, `Button` (required)
+### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
 
 ## Do
 
@@ -104,7 +104,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 
 - Both editors have an `aria-label` that names the document, e.g. "Source code", "Argument form schema, as JSON".
 - The split is labeled "Argument form", its panes "Schema" and "Fields", and the handle "Resize the schema".
-- Field grips are focusable buttons named "Reorder" plus the field name, and move the field with the arrow keys.
+- Each field has native Move up and Move down buttons named with the field ("Move quality up"); moves are announced in a polite live region.
 - The expand button sets `aria-expanded` and `aria-controls` and names the field it opens.
 - Every icon-only control has an `aria-label` that matches its `Tooltip`; decorative icons carry `aria-hidden="true"`.
 - The save bar's motion respects reduced motion.
@@ -118,6 +118,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Saving: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
 

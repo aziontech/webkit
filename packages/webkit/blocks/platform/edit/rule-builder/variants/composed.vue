@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -12,7 +13,6 @@
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -23,7 +23,6 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   type ArgumentInput = { field: string; placeholder: string; label: string }
@@ -345,11 +344,6 @@
     ]
   }
 
-  const GRIP_CLASS =
-    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
-  const dragRowClass =
-    "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
-
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
   const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
   const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
@@ -439,6 +433,7 @@
       if (!isOpen) return
       Object.assign(form, formFor(rule))
       submitted.value = false
+      saveError.value = ''
     },
     { immediate: true }
   )
@@ -447,9 +442,10 @@
     behaviorsFor(form.phase).map(({ value, label }) => ({ value, label }))
   )
   const variablesForPhase = computed(() => variablesFor(form.phase))
-  const behaviorRows = computed(() =>
-    form.behaviors.map((behavior) => ({ behavior, argument: behaviorArgument(behavior.type) }))
-  )
+  const behaviorColumns = [
+    { key: 'type', label: 'Behavior', required: true },
+    { key: 'argument', label: 'Argument' }
+  ]
 
   const behaviorQuery = reactive<Record<string, string>>({})
   const behaviorMatches = (id: string) => {
@@ -471,10 +467,9 @@
   }
   const argumentMissing = (behavior: RuleBehavior, field: string) =>
     submitted.value && !String(behavior[field] ?? '').trim()
-  const canAddBehavior = computed(() => {
-    if (form.behaviors.length >= 10) return false
-    return !isTerminalBehavior(form.behaviors[form.behaviors.length - 1]?.type)
-  })
+  const lastBehaviorEnds = computed(() =>
+    isTerminalBehavior(form.behaviors[form.behaviors.length - 1]?.type)
+  )
 
   watch(
     () => form.phase,
@@ -494,56 +489,6 @@
     }
   )
 
-  const move = <T,>(list: T[], index: number, direction: number) => {
-    const target = index + direction
-    if (target < 0 || target >= list.length) return
-    const [moved] = list.splice(index, 1)
-    list.splice(target, 0, moved)
-  }
-  const addBehavior = () => form.behaviors.push(newBehavior())
-  const removeBehavior = (index: number) => {
-    if (form.behaviors.length <= 1) return
-    form.behaviors.splice(index, 1)
-  }
-  const moveBehavior = (index: number, direction: number) => move(form.behaviors, index, direction)
-
-  const dnd = reactive<{ scope: string | null; from: number; over: number }>({
-    scope: null,
-    from: -1,
-    over: -1
-  })
-  const isDragging = (scope: string, index: number) => dnd.scope === scope && dnd.from === index
-  const isDropTarget = (scope: string, index: number) =>
-    dnd.scope === scope && dnd.over === index && dnd.from !== index
-  const onDragStart = (scope: string, index: number, event: DragEvent) => {
-    dnd.scope = scope
-    dnd.from = index
-    if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/plain', String(index))
-      const row = (event.currentTarget as HTMLElement | null)?.closest?.('[data-drag-row]')
-      if (row) event.dataTransfer.setDragImage(row, 12, 12)
-    }
-  }
-  const onDragEnter = (scope: string, index: number) => {
-    if (dnd.scope === scope) dnd.over = index
-  }
-  const onDragEnd = () => {
-    dnd.scope = null
-    dnd.from = -1
-    dnd.over = -1
-  }
-  const reorder = <T,>(list: T[], from: number, to: number) => {
-    if (from < 0 || to < 0 || from === to || from >= list.length || to >= list.length) return
-    const [moved] = list.splice(from, 1)
-    list.splice(to, 0, moved)
-  }
-  const dropOnBehavior = (index: number) => {
-    if (dnd.scope !== 'behavior') return
-    reorder(form.behaviors, dnd.from, index)
-    onDragEnd()
-  }
-
   const behaviorFilled = (behavior: RuleBehavior) => {
     const argument = behaviorArgument(behavior.type)
     if (!argument) return true
@@ -556,7 +501,12 @@
     form.behaviors.length > 0 &&
     form.behaviors.every(behaviorFilled)
   const formEl = ref<HTMLFormElement | null>(null)
-  const submit = () => {
+  const saveError = ref('')
+  const saveRequest = () =>
+    new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
+    })
+  const submit = async () => {
     submitted.value = true
     if (submitting.value) return
     if (!isValid()) {
@@ -570,10 +520,14 @@
       return
     }
     submitting.value = true
-    setTimeout(() => {
-      submitting.value = false
-      open.value = false
-    }, 900)
+    saveError.value = ''
+    const saved = await saveRequest()
+    submitting.value = false
+    if (!saved) {
+      saveError.value = 'Rule not saved. You are offline; check your connection and save again.'
+      return
+    }
+    open.value = false
   }
 </script>
 
@@ -612,6 +566,16 @@
           </PanelHeader>
 
           <PanelContent>
+            <div
+              v-if="saveError"
+              class="mb-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="saveError"
+                data-testid="rule-builder-save-error"
+              />
+            </div>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -787,202 +751,146 @@
                           <span class="h-px flex-1 bg-(--border-default)" />
                         </div>
 
-                        <div class="relative flex flex-col gap-(--spacing-sm)">
-                          <div
-                            v-for="({ behavior, argument }, bIdx) in behaviorRows"
-                            :key="behavior.id"
-                            data-drag-row
-                            :data-dragging="isDragging('behavior', bIdx) || null"
-                            :data-drop="isDropTarget('behavior', bIdx) || null"
-                            :class="[
-                              'grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]',
-                              dragRowClass
-                            ]"
-                            @dragenter.prevent="onDragEnter('behavior', bIdx)"
-                            @dragover.prevent
-                            @drop="dropOnBehavior(bIdx)"
-                          >
-                            <div class="w-full min-w-0">
-                              <Select
-                                :model-value="behavior.type"
+                        <AttributeEditor
+                          v-model:items="form.behaviors"
+                          :definition="behaviorColumns"
+                          :new-item="newBehavior"
+                          :limit="10"
+                          :min-items="1"
+                          :add-disabled="lastBehaviorEnds"
+                          :disabled="submitting"
+                          reorderable
+                          size="large"
+                          add-button-label="Add behavior"
+                          remove-button-label="Remove behavior"
+                          aria-label="Behaviors"
+                        >
+                          <template #cell-type="{ item, index }">
+                            <Select
+                              :model-value="item.type"
+                              size="large"
+                              class="w-full"
+                              :disabled="submitting"
+                              :display-value="behaviorLabel"
+                              @update:model-value="setBehaviorType(index, $event)"
+                              @update:open="onBehaviorPanel(item.id, $event)"
+                            >
+                              <Select.Trigger />
+                              <Select.Content>
+                                <template #search>
+                                  <Input
+                                    v-model="behaviorQuery[item.id]"
+                                    size="medium"
+                                    class="w-full"
+                                    placeholder="Search behaviors"
+                                    aria-label="Search behaviors"
+                                    @keydown.stop
+                                  >
+                                    <template #iconLeft>
+                                      <i
+                                        class="pi pi-search"
+                                        aria-hidden="true"
+                                      />
+                                    </template>
+                                  </Input>
+                                </template>
+                                <Select.Option
+                                  v-for="option in behaviorMatches(item.id)"
+                                  :key="option.value"
+                                  :value="option.value"
+                                >
+                                  {{ option.label }}
+                                </Select.Option>
+                                <p
+                                  v-if="!behaviorMatches(item.id).length"
+                                  class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                                >
+                                  No behavior matches “{{ behaviorQuery[item.id] }}”.
+                                </p>
+                              </Select.Content>
+                            </Select>
+                          </template>
+                          <template #cell-argument="{ item, index }">
+                            <template
+                              v-for="argument in [behaviorArgument(item.type)]"
+                              :key="item.type"
+                            >
+                              <Input
+                                key="input-1"
+                                v-if="argument?.kind === 'text'"
+                                v-model="form.behaviors[index][argument.field]"
                                 size="large"
                                 class="w-full"
+                                :aria-label="argument.label"
+                                :placeholder="argument.placeholder"
                                 :disabled="submitting"
-                                :display-value="behaviorLabel"
-                                @update:model-value="setBehaviorType(bIdx, $event)"
-                                @update:open="onBehaviorPanel(behavior.id, $event)"
+                                :required="argumentMissing(item, argument.field)"
+                              />
+                              <div
+                                v-else-if="argument?.kind === 'select'"
+                                class="flex w-full flex-col gap-(--spacing-xxs)"
                               >
-                                <Select.Trigger aria-label="Behavior" />
-                                <Select.Content>
-                                  <template #search>
-                                    <Input
-                                      v-model="behaviorQuery[behavior.id]"
-                                      size="medium"
-                                      class="w-full"
-                                      placeholder="Search behaviors"
-                                      aria-label="Search behaviors"
-                                      @keydown.stop
-                                    >
-                                      <template #iconLeft>
-                                        <i
-                                          class="pi pi-search"
-                                          aria-hidden="true"
-                                        />
-                                      </template>
-                                    </Input>
-                                  </template>
-                                  <Select.Option
-                                    v-for="option in behaviorMatches(behavior.id)"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </Select.Option>
-                                  <p
-                                    v-if="!behaviorMatches(behavior.id).length"
-                                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                                  >
-                                    No behavior matches “{{ behaviorQuery[behavior.id] }}”.
-                                  </p>
-                                </Select.Content>
-                              </Select>
-                            </div>
-
-                            <div class="min-w-0">
-                              <template v-if="argument?.kind === 'text'">
-                                <Input
-                                  v-model="behavior[argument.field]"
+                                <Select
+                                  v-model="form.behaviors[index][argument.field]"
                                   size="large"
                                   class="w-full"
-                                  :aria-label="argument.label"
-                                  :placeholder="argument.placeholder"
                                   :disabled="submitting"
-                                  :required="argumentMissing(behavior, argument.field)"
-                                />
-                              </template>
-
-                              <template v-else-if="argument?.kind === 'select'">
-                                <div class="flex flex-col gap-(--spacing-xxs)">
-                                  <Select
-                                    v-model="behavior[argument.field]"
-                                    size="large"
-                                    class="w-full"
-                                    :disabled="submitting"
-                                    :placeholder="`Select a ${argument.label.toLowerCase()}`"
-                                    :required="argumentMissing(behavior, argument.field)"
-                                    :display-value="
-                                      (value) => optionLabelIn(argument.source, value)
-                                    "
-                                  >
-                                    <Select.Trigger :aria-label="argument.label" />
-                                    <Select.Content>
-                                      <Select.Option
-                                        v-for="option in optionsFor(argument.source)"
-                                        :key="option.value"
-                                        :value="option.value"
-                                      >
-                                        {{ option.label }}
-                                      </Select.Option>
-                                    </Select.Content>
-                                  </Select>
-                                  <HelperText
-                                    v-if="behaviorArgumentNote(argument.source, form.phase)"
-                                  >
-                                    {{ behaviorArgumentNote(argument.source, form.phase) }}
-                                  </HelperText>
-                                </div>
-                              </template>
-
-                              <template v-else-if="argument?.kind === 'group'">
-                                <div class="flex flex-col gap-(--spacing-xs)">
-                                  <Input
-                                    v-for="part in argument.fields"
-                                    :key="part.field"
-                                    v-model="behavior[part.field]"
-                                    size="large"
-                                    class="w-full"
-                                    :aria-label="part.label"
-                                    :placeholder="part.placeholder"
-                                    :disabled="submitting"
-                                    :required="argumentMissing(behavior, part.field)"
-                                  />
-                                </div>
-                              </template>
-                            </div>
-
-                            <div class="flex items-center gap-(--spacing-xxs)">
-                              <span
-                                v-if="form.behaviors.length > 1"
-                                role="button"
-                                tabindex="0"
-                                aria-label="Drag to reorder behavior, or use arrow keys"
-                                draggable="true"
-                                :class="[GRIP_CLASS, 'size-10']"
-                                @dragstart="onDragStart('behavior', bIdx, $event)"
-                                @dragend="onDragEnd"
-                                @keydown.up.prevent="moveBehavior(bIdx, -1)"
-                                @keydown.down.prevent="moveBehavior(bIdx, 1)"
+                                  :placeholder="`Select a ${argument.label.toLowerCase()}`"
+                                  :required="argumentMissing(item, argument.field)"
+                                  :display-value="(value) => optionLabelIn(argument.source, value)"
+                                >
+                                  <Select.Trigger :aria-label="argument.label" />
+                                  <Select.Content>
+                                    <Select.Option
+                                      v-for="option in optionsFor(argument.source)"
+                                      :key="option.value"
+                                      :value="option.value"
+                                    >
+                                      {{ option.label }}
+                                    </Select.Option>
+                                  </Select.Content>
+                                </Select>
+                                <HelperText
+                                  v-if="behaviorArgumentNote(argument.source, form.phase)"
+                                >
+                                  {{ behaviorArgumentNote(argument.source, form.phase) }}
+                                </HelperText>
+                              </div>
+                              <div
+                                v-else-if="argument?.kind === 'group'"
+                                class="flex w-full flex-col gap-(--spacing-xs)"
                               >
-                                <i
-                                  class="pi pi-bars"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                              <Tooltip text="Move behavior up">
-                                <IconButton
-                                  icon="pi pi-chevron-up"
-                                  kind="outlined"
+                                <Input
+                                  v-for="part in argument.fields"
+                                  :key="part.field"
+                                  v-model="form.behaviors[index][part.field]"
                                   size="large"
-                                  aria-label="Move behavior up"
-                                  :disabled="submitting || bIdx === 0"
-                                  @click="moveBehavior(bIdx, -1)"
+                                  class="w-full"
+                                  :aria-label="part.label"
+                                  :placeholder="part.placeholder"
+                                  :disabled="submitting"
+                                  :required="argumentMissing(item, part.field)"
                                 />
-                              </Tooltip>
-                              <Tooltip text="Move behavior down">
-                                <IconButton
-                                  icon="pi pi-chevron-down"
-                                  kind="outlined"
-                                  size="large"
-                                  aria-label="Move behavior down"
-                                  :disabled="submitting || bIdx === form.behaviors.length - 1"
-                                  @click="moveBehavior(bIdx, 1)"
-                                />
-                              </Tooltip>
-                              <Tooltip text="Remove behavior">
-                                <IconButton
-                                  icon="pi pi-trash"
-                                  kind="outlined"
-                                  size="large"
-                                  aria-label="Remove behavior"
-                                  :disabled="submitting || form.behaviors.length <= 1"
-                                  @click="removeBehavior(bIdx)"
-                                />
-                              </Tooltip>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-                          <Button
-                            type="button"
-                            label="Add behavior"
-                            kind="outlined"
-                            size="medium"
-                            icon="pi pi-plus-circle"
-                            :disabled="submitting || !canAddBehavior"
-                            @click="addBehavior"
-                          />
-                          <span
-                            v-if="!canAddBehavior"
-                            class="text-body-sm text-(--text-muted)"
+                              </div>
+                              <Input
+                                key="input-2"
+                                v-else
+                                model-value=""
+                                size="large"
+                                class="w-full"
+                                placeholder="No argument"
+                                disabled
+                              />
+                            </template>
+                          </template>
+                          <template
+                            v-if="lastBehaviorEnds"
+                            #info
                           >
-                            {{
-                              form.behaviors.length >= 10
-                                ? 'A rule holds up to 10 behaviors.'
-                                : `${behaviorLabel(form.behaviors[form.behaviors.length - 1].type)} ends the rule. Nothing after it runs.`
-                            }}
-                          </span>
-                        </div>
+                            {{ behaviorLabel(form.behaviors[form.behaviors.length - 1].type) }} ends
+                            the rule. Nothing after it runs.
+                          </template>
+                        </AttributeEditor>
                       </div>
                     </div>
                   </template>
@@ -1015,8 +923,7 @@
           </PanelContent>
 
           <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Save"
                 kind="primary"

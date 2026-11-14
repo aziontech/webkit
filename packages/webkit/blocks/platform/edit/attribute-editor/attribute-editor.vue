@@ -20,6 +20,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -33,6 +34,7 @@
   import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
@@ -88,7 +90,7 @@
     {
       id: 'v-002',
       key: 'PAYMENT_SECRET_KEY',
-      value: 'sk_live_51H8sX2eZv...',
+      value: 'sk_example_4f8a2c9e',
       secret: true,
       scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
       lastEditor: 'Jordan Kim',
@@ -127,7 +129,7 @@
     }
   ]
 
-  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'myemail']
+  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'Jane Doe']
   const properties = [
     { key: 'key', label: 'Key' },
     { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },
@@ -203,7 +205,12 @@
   const touched = (
     variable: Omit<VariableSeed, 'lastEditor' | 'lastEditorAvatar' | 'lastModified'>
   ) =>
-    withType({ ...variable, lastEditor: 'myemail', lastEditorAvatar: '', lastModified: 'just now' })
+    withType({
+      ...variable,
+      lastEditor: 'Jane Doe',
+      lastEditorAvatar: '',
+      lastModified: 'just now'
+    })
 
   const onCreated = (created: VariableDraft[]) => {
     variables.value = [
@@ -246,8 +253,10 @@
   )
   const confirmDelete = () => {
     if (!canDelete.value) return
+    const key = pending.value?.key
     variables.value = variables.value.filter((variable) => variable.id !== pending.value?.id)
     deleteOpen.value = false
+    toast.success(`${key} deleted.`)
   }
 
   const onRowAction = (value: DropdownMenuOptionValue, row: Variable) => {
@@ -264,6 +273,7 @@
         copy,
         ...variables.value.slice(index + 1)
       ]
+      toast.success(`${row.key} cloned as ${copy.key}.`)
       return
     }
     if (value === 'delete') {
@@ -280,8 +290,6 @@
     { label: 'Form', value: 'Form' },
     { label: 'JSON', value: 'JSON' }
   ]
-  const fieldClass =
-    'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   const formId = useId()
   const fieldId = (entry: Entry, part: string) => `${formId}-${part}-${entry.id}`
@@ -300,6 +308,7 @@
 
   const drawerOpen = ref(false)
   const submitting = ref(false)
+  const saveError = ref('')
   const submitted = ref(false)
   const entries = ref([createEntry()])
   const view = ref('Form')
@@ -566,9 +575,14 @@
     submitted.value = false
     Object.assign(scopes, current ? scopesFor(current.scope) : createScopes())
     submitting.value = false
+    saveError.value = ''
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
+  const saveRequest = () =>
+    new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
+    })
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -587,7 +601,14 @@
       return
     }
     submitting.value = true
-    await new Promise((resolve) => setTimeout(resolve, 900))
+    saveError.value = ''
+    const saved = await saveRequest()
+    if (!saved) {
+      submitting.value = false
+      saveError.value =
+        'Variables not saved. You are offline; check your connection and save again.'
+      return
+    }
     const scope = scopePayload()
     const created = filledEntries.value.map((entry) => ({
       key: entry.key.trim(),
@@ -595,8 +616,15 @@
       secret: entry.secret,
       scope
     }))
-    if (editing.value) onUpdated(editing.value.id, created)
-    else onCreated(created)
+    if (editing.value) {
+      onUpdated(editing.value.id, created)
+      toast.success(`${created[0].key} updated.`)
+    } else {
+      onCreated(created)
+      toast.success(
+        created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
+      )
+    }
     editing.value = null
     submitting.value = false
     drawerOpen.value = false
@@ -879,6 +907,16 @@
             </PanelHeader>
 
             <PanelContent>
+              <div
+                v-if="saveError"
+                class="mb-(--spacing-md)"
+              >
+                <Alert
+                  severity="danger"
+                  :label="saveError"
+                  data-testid="variables-save-error"
+                />
+              </div>
               <fieldset
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
                 :disabled="submitting"
@@ -943,26 +981,19 @@
                                     >
                                   </span>
                                 </InputGroupAddon>
-                                <input
+                                <InputGroupInput
                                   :id="fieldId(entries[index], 'key')"
-                                  :value="entries[index].key"
+                                  :model-value="entries[index].key"
                                   placeholder="MY_VARIABLE"
                                   autocomplete="off"
                                   spellcheck="false"
-                                  :aria-invalid="!!keyError(entries[index]) || undefined"
+                                  :invalid="!!keyError(entries[index])"
                                   :aria-describedby="
                                     keyError(entries[index])
                                       ? messageId(entries[index], 'key')
                                       : undefined
                                   "
-                                  :class="fieldClass"
-                                  class="text-label-code-sm"
-                                  @input="
-                                    setKey(
-                                      entries[index],
-                                      ($event.target as HTMLInputElement).value
-                                    )
-                                  "
+                                  @update:model-value="(value) => setKey(entries[index], value)"
                                   @paste="pasteIntoKey($event, index)"
                                 />
                                 <Tooltip
@@ -992,7 +1023,7 @@
                                     >
                                   </span>
                                 </InputGroupAddon>
-                                <input
+                                <InputGroupInput
                                   :id="fieldId(entries[index], 'value')"
                                   v-model="entries[index].value"
                                   :type="
@@ -1005,14 +1036,12 @@
                                   "
                                   autocomplete="off"
                                   spellcheck="false"
-                                  :aria-invalid="!!valueError(entries[index]) || undefined"
+                                  :invalid="!!valueError(entries[index])"
                                   :aria-describedby="
                                     valueError(entries[index])
                                       ? messageId(entries[index], 'value')
                                       : undefined
                                   "
-                                  :class="fieldClass"
-                                  class="text-label-sm"
                                 />
                                 <Tooltip
                                   v-if="entries[index].secret"
@@ -1053,13 +1082,14 @@
 
                           <HelperText
                             v-if="keyError(entries[index])"
+                            key="key-error"
                             :id="messageId(entries[index], 'key')"
                             :kind="keyError(entries[index])?.kind"
                             :label="keyError(entries[index])?.message"
                           />
                           <HelperText
-                            key="helper-text-2"
                             v-if="valueError(entries[index])"
+                            key="value-error"
                             :id="messageId(entries[index], 'value')"
                             :kind="valueError(entries[index])?.kind"
                             :label="valueError(entries[index])?.message"

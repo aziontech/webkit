@@ -32,7 +32,7 @@ One `form` with a disabled-while-saving `fieldset` and a visually hidden legend.
 
 ### D. Locked settings — `Tooltip`, `Switch` (optional)
 
-A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and a link in the description to where it can be changed, e.g. Contact sales.
+A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and an in-sentence link in the description to where it can be changed, e.g. Contact sales: a plain anchor with the `text-link` class that opens in a new tab, never a hand-styled anchor or a `Link`, which is for standalone navigation.
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
@@ -60,7 +60,7 @@ When the record was saved by someone else after the form opened, a warning `Aler
 
 ### K. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
 
-The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link, then "To confirm, type" the name in a code chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
+The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `platform/delete/delete-with-confirmation`.
 
 ## Do
 

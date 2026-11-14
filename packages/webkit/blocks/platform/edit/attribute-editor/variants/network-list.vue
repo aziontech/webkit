@@ -185,10 +185,16 @@
       ? `Line ${numbers[0]} is`
       : `Lines ${numbers.slice(0, -1).join(', ')} and ${numbers[numbers.length - 1]} are`
 
+  const keptRows = () => rows.value.filter((entry) => entry.value.trim() || entry.note.trim())
+  const pasteOverflow = computed(() =>
+    Math.max(0, pasteReport.value.lines.length - (LIMIT - keptRows().length))
+  )
+
   const applyPaste = async () => {
-    const { lines, invalid } = pasteReport.value
-    const kept = rows.value.filter((entry) => entry.value.trim() || entry.note.trim())
-    rows.value = [...kept, ...lines].slice(0, LIMIT)
+    const { invalid } = pasteReport.value
+    const kept = keptRows()
+    const lines = pasteReport.value.lines.slice(0, Math.max(0, LIMIT - kept.length))
+    rows.value = [...kept, ...lines]
     status.value = `${lines.length} ${lines.length === 1 ? 'entry' : 'entries'} added from the pasted list.${
       invalid.length ? ` ${invalid.length} ${invalid.length === 1 ? 'needs' : 'need'} a fix.` : ''
     }`
@@ -379,6 +385,12 @@
                           v-if="pasteReport.duplicates.length"
                           key="duplicates"
                           :label="`${lineList(pasteReport.duplicates)} already in the list and will be skipped.`"
+                        />
+                        <HelperText
+                          v-if="pasteOverflow"
+                          key="overflow"
+                          kind="invalid"
+                          :label="`A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`"
                         />
                       </div>
                       <div class="flex flex-wrap items-center gap-(--spacing-xs)">

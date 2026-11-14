@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
@@ -22,6 +23,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId } from 'vue'
@@ -187,11 +189,22 @@ export async function handleRequest(request) {
     fields.value.splice(index + 1, 0, copy)
     open(copy.id)
   }
+  const moveStatus = ref('')
+  const fieldName = (field: SchemaField) => field.key || 'this field'
   const move = (index: number, direction: number) => {
     const to = index + direction
     if (to < 0 || to >= fields.value.length) return
     const [moved] = fields.value.splice(index, 1)
     fields.value.splice(to, 0, moved)
+    moveStatus.value = `${fieldName(moved)} moved to position ${to + 1} of ${fields.value.length}.`
+    nextTick(() => {
+      const same = document.getElementById(`${formId}-${direction < 0 ? 'up' : 'down'}-${moved.id}`)
+      const other = document.getElementById(
+        `${formId}-${direction < 0 ? 'down' : 'up'}-${moved.id}`
+      )
+      const target = same instanceof HTMLButtonElement && !same.disabled ? same : other
+      target?.focus()
+    })
   }
   const removeForm = () => {
     form.schema = cleanSchema
@@ -221,8 +234,17 @@ export async function handleRequest(request) {
     const saved: { form: typeof form; fields: SchemaField[] } = JSON.parse(baseline.value)
     Object.assign(form, saved.form)
     fields.value = saved.fields
+    saveError.value = ''
   }
-  const save = () => {
+  const saving = ref(false)
+  const saveError = ref('')
+  const saveRequest = () =>
+    new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
+    })
+  const save = async () => {
+    if (saving.value) return
+    saveError.value = ''
     nameError.value = form.name.trim() ? '' : 'This field is required.'
     codeError.value = form.code.trim() ? '' : 'This field is required.'
     if (codeError.value) {
@@ -235,7 +257,15 @@ export async function handleRequest(request) {
       nextTick(() => document.getElementById(target)?.focus())
       return
     }
+    saving.value = true
+    const saved = await saveRequest()
+    saving.value = false
+    if (!saved) {
+      saveError.value = 'Not saved. You are offline; check your connection and save again.'
+      return
+    }
     baseline.value = snapshot()
+    toast.success(`${form.name} saved.`)
   }
 </script>
 
@@ -254,12 +284,18 @@ export async function handleRequest(request) {
       />
     </PageTabs>
     <section
-      class="flex min-h-0 flex-1 flex-col"
-      :class="activeTab === 'code' ? 'overflow-hidden' : 'overflow-auto'"
+      :data-tab="activeTab"
+      class="flex min-h-0 flex-1 flex-col overflow-auto data-[tab=code]:overflow-hidden"
     >
       <div class="flex min-h-0 flex-1 flex-col">
         <fieldset class="m-0 flex min-h-0 min-w-0 flex-1 flex-col border-0 p-0">
           <legend class="sr-only">{{ form.name }} settings</legend>
+          <p
+            class="sr-only"
+            aria-live="polite"
+          >
+            {{ moveStatus }}
+          </p>
           <div
             v-show="activeTab === 'code'"
             class="flex min-h-0 flex-1 flex-col"
@@ -290,6 +326,7 @@ export async function handleRequest(request) {
                     <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                       <div class="flex min-h-0 flex-1 flex-col">
                         <CodeEditor
+                          :readonly="saving"
                           id="service-source-code"
                           v-model="form.code"
                           language="javascript"
@@ -331,6 +368,7 @@ export async function handleRequest(request) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-plus"
+                          :disabled="saving"
                           @click="addField"
                         />
                         <Button
@@ -338,6 +376,7 @@ export async function handleRequest(request) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-times"
+                          :disabled="saving"
                           @click="removeForm"
                         />
                       </div>
@@ -359,6 +398,7 @@ export async function handleRequest(request) {
                             <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                               <div class="flex min-h-0 flex-1 flex-col">
                                 <CodeEditor
+                                  :readonly="saving"
                                   v-model="form.schema"
                                   language="json"
                                   path="args.json"
@@ -407,8 +447,9 @@ export async function handleRequest(request) {
                             v-else
                             class="min-h-0 flex-1 overflow-auto p-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--save-bar-inset,0rem))]"
                           >
-                            <div
-                              class="layout-column-form mx-auto flex min-w-0 flex-col gap-(--spacing-sm)"
+                            <fieldset
+                              class="layout-column-form m-0 flex min-w-0 flex-col gap-(--spacing-sm) border-0 p-0"
+                              :disabled="saving"
                             >
                               <Card :padded="false">
                                 <template #content>
@@ -426,17 +467,27 @@ export async function handleRequest(request) {
                                             class="flex w-full min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md)"
                                           >
                                             <div
-                                              class="inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:cursor-default cursor-grab active:cursor-grabbing motion-reduce:transition-none"
-                                              role="button"
-                                              tabindex="0"
-                                              :aria-disabled="fields.length < 2 || undefined"
-                                              :aria-label="'Reorder ' + (field.key || 'this field')"
-                                              @keydown.up.prevent="move(index, -1)"
-                                              @keydown.down.prevent="move(index, 1)"
+                                              class="flex shrink-0 items-center"
+                                              role="group"
+                                              :aria-label="'Order of ' + fieldName(field)"
                                             >
-                                              <i
-                                                class="pi pi-bars text-label-sm"
-                                                aria-hidden="true"
+                                              <IconButton
+                                                :id="`${formId}-up-${field.id}`"
+                                                icon="pi pi-arrow-up"
+                                                kind="transparent"
+                                                size="small"
+                                                :disabled="index === 0"
+                                                :aria-label="'Move ' + fieldName(field) + ' up'"
+                                                @click="move(index, -1)"
+                                              />
+                                              <IconButton
+                                                :id="`${formId}-down-${field.id}`"
+                                                icon="pi pi-arrow-down"
+                                                kind="transparent"
+                                                size="small"
+                                                :disabled="index === fields.length - 1"
+                                                :aria-label="'Move ' + fieldName(field) + ' down'"
+                                                @click="move(index, 1)"
                                               />
                                             </div>
                                             <Item.Content>
@@ -445,8 +496,8 @@ export async function handleRequest(request) {
                                               >
                                                 <Item.Title>
                                                   <span
-                                                    class="truncate font-code text-label-code-sm"
-                                                    :class="field.key ? '' : 'text-(--text-muted)'"
+                                                    :data-empty="!field.key || null"
+                                                    class="truncate font-code text-label-code-sm data-empty:text-(--text-muted)"
                                                   >
                                                     {{ field.key || 'Unnamed field' }}
                                                   </span>
@@ -459,13 +510,14 @@ export async function handleRequest(request) {
                                             <Item.Actions class="shrink-0">
                                               <Tag
                                                 v-if="field.required"
+                                                key="required"
                                                 label="Required"
                                                 severity="info"
                                                 size="small"
                                               />
                                               <Tag
-                                                key="tag-2"
                                                 v-if="keyError(field)"
+                                                key="needs-name"
                                                 label="Needs a name"
                                                 severity="warning"
                                                 size="small"
@@ -513,12 +565,8 @@ export async function handleRequest(request) {
                                           </div>
                                           <div
                                             :id="formId + '-body-' + field.id"
-                                            class="grid transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                                            :class="
-                                              isExpanded(field.id)
-                                                ? 'grid-rows-[1fr]'
-                                                : 'grid-rows-[0fr]'
-                                            "
+                                            :data-expanded="isExpanded(field.id) || null"
+                                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance data-expanded:grid-rows-[1fr] motion-reduce:transition-none"
                                           >
                                             <div class="overflow-hidden">
                                               <div
@@ -849,7 +897,7 @@ export async function handleRequest(request) {
                                   </Item.List>
                                 </template>
                               </Card>
-                            </div>
+                            </fieldset>
                           </div>
                         </ResizablePane>
                       </ResizableRoot>
@@ -863,7 +911,10 @@ export async function handleRequest(request) {
             v-show="activeTab === 'settings'"
             class="layout-column-form layout-boundary flex min-w-0 flex-col"
           >
-            <section class="layout-section-start flex min-w-0 flex-col">
+            <fieldset
+              class="layout-section-start m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="saving"
+            >
               <SettingsSection title="General">
                 <Card :padded="false">
                   <template #content>
@@ -993,7 +1044,7 @@ export async function handleRequest(request) {
                   </template>
                 </Card>
               </SettingsSection>
-            </section>
+            </fieldset>
           </div>
         </fieldset>
       </div>
@@ -1004,7 +1055,18 @@ export async function handleRequest(request) {
       leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <SaveBar v-if="dirty">
+      <SaveBar v-if="dirty || saving">
+        <template
+          v-if="saveError"
+          #leading
+        >
+          <Alert
+            severity="danger"
+            size="small"
+            :label="saveError"
+            data-testid="code-editor-save-error"
+          />
+        </template>
         You have unsaved changes.
 
         <template #actions>
@@ -1013,12 +1075,14 @@ export async function handleRequest(request) {
             label="Discard"
             kind="outlined"
             size="medium"
+            :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
             kind="primary"
             size="medium"
+            :loading="saving"
             @click="save"
           />
         </template>
