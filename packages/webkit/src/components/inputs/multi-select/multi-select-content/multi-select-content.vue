@@ -17,6 +17,15 @@
     throw new Error('MultiSelectContent must be used inside MultiSelect.')
   }
 
+  defineSlots<{
+    /** The options (MultiSelectOption). */
+    default(): unknown
+    /** Pinned above the list, for a search field. */
+    search(): unknown
+    /** Pinned below the list, for an action such as Clear. */
+    footer(): unknown
+  }>()
+
   const attrs = useAttrs()
 
   const testId = computed(
@@ -45,6 +54,16 @@
       if (event.shiftKey) event.preventDefault()
       ctx.setOpen(false)
       ctx.triggerRef.value?.focus()
+      return
+    }
+    if (
+      event.key.length === 1 &&
+      event.key !== ' ' &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      if (typeahead(event.key)) event.preventDefault()
       return
     }
     if (
@@ -79,6 +98,35 @@
     else if (key === 'Home') nextIndex = 0
     else if (key === 'End') nextIndex = options.length - 1
     options[nextIndex]?.focus()
+  }
+
+  let typed = ''
+  let typedAt = 0
+
+  const typeahead = (key: string): boolean => {
+    const el = root.value
+    if (!el) return false
+    if (
+      el.contains(document.activeElement) &&
+      document.activeElement?.matches('input:not([type="checkbox"]), textarea')
+    )
+      return false
+    lazy.value?.revealAll()
+    const now = Date.now()
+    typed = now - typedAt > 500 ? key : typed + key
+    typedAt = now
+    const options = Array.from(
+      el.querySelectorAll<HTMLElement>('[role="option"]:not([data-disabled])')
+    )
+    const query = typed.toLocaleLowerCase()
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const start = active ? options.indexOf(active) + (typed.length === 1 ? 1 : 0) : 0
+    const ordered = [...options.slice(start), ...options.slice(0, start)]
+    const match = ordered.find((option) =>
+      (option.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
+    )
+    match?.focus()
+    return Boolean(match)
   }
 
   const onDocumentPointerDown = (event: globalThis.PointerEvent) => {

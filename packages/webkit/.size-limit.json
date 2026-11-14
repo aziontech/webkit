@@ -1174,18 +1174,18 @@
   {
     "name": "phone-input",
     "path": "src/components/inputs/phone-input/phone-input.vue",
-    "limit": "26.6 KB",
+    "limit": "27.15 KB",
     "entryOnly": true
   },
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "20.1 KB"
+    "limit": "20.6 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "21.1 KB"
+    "limit": "21.55 KB"
   },
   {
     "name": "code-block",
@@ -1979,7 +1979,7 @@
   {
     "name": "multi-select-content",
     "path": "src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
-    "limit": "18.75 KB"
+    "limit": "17.55 KB"
   },
   {
     "name": "multi-select-group",
@@ -2004,7 +2004,7 @@
   {
     "name": "select-content",
     "path": "src/components/inputs/select/select-content/select-content.vue",
-    "limit": "18.75 KB"
+    "limit": "17.6 KB"
   },
   {
     "name": "select-group",

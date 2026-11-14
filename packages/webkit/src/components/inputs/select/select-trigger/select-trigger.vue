@@ -15,6 +15,13 @@
 
   const props = defineProps<Props>()
 
+  defineSlots<{
+    /** Leading adornment before the value (an icon, a flag). */
+    prefix(): unknown
+    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
+    iconLeft(): unknown
+  }>()
+
   const ctx = inject(selectContextKey)
   if (!ctx) {
     throw new Error('SelectTrigger must be used inside <Select>.')
@@ -61,7 +68,7 @@
     :aria-labelledby="(attrs['aria-labelledby'] as string | undefined) ?? ctx.ariaLabelledby.value"
     type="button"
     role="combobox"
-    :aria-haspopup="ctx.multiple.value ? 'listbox' : 'listbox'"
+    aria-haspopup="listbox"
     :aria-expanded="ctx.open.value"
     :aria-controls="ctx.contentId"
     :aria-invalid="ctx.invalid.value || undefined"
@@ -82,7 +89,7 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <slot name="iconLeft" />
+    <slot name="prefix"><slot name="iconLeft" /></slot>
     <span
       class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"

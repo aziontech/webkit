@@ -12,7 +12,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    label: undefined
+    label: ''
   })
 
   defineSlots<{
@@ -30,7 +30,7 @@
   <div
     v-bind="$attrs"
     role="group"
-    :aria-label="label"
+    :aria-label="label || undefined"
     :data-testid="testId"
     :class="attrs.class"
     class="flex flex-col items-stretch [&:not(:first-child)]:mt-(--spacing-sm)"

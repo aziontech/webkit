@@ -260,7 +260,7 @@ describe('Select (compound / overlay)', () => {
     // v-model round-trip: the trigger label now shows the selected value
     const valueSpan = getByTestId('input-select-trigger__value')
     expect(valueSpan.getAttribute('data-filled')).toBe('true')
-    expect(valueSpan.textContent?.trim()).toBe('opt-2')
+    expect(valueSpan.textContent?.trim()).toBe('Option 2')
     // single-select closes on pick
     expect(getContent()).toBeNull()
     // root reflects filled
@@ -294,7 +294,9 @@ describe('Select (compound / overlay)', () => {
     expect(options[1].getAttribute('aria-selected')).toBe('false')
 
     // trigger displays the joined multi selection
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-1, opt-3')
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe(
+      'Option 1, Option 3'
+    )
   })
 
   it('multiple mode: clicking a selected option again de-selects it', async () => {
@@ -308,7 +310,7 @@ describe('Select (compound / overlay)', () => {
   it('selects an option via keyboard Enter and Space on the option element', async () => {
     const enter = render(Host, { props: { startOpen: true } })
     await fireEvent.keyDown(getOptions()[0], { key: 'Enter' })
-    expect(enter.getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-1')
+    expect(enter.getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 1')
     enter.unmount()
     document.body
       .querySelectorAll('[data-testid="input-select-content"]')
@@ -316,7 +318,7 @@ describe('Select (compound / overlay)', () => {
 
     const space = render(Host, { props: { startOpen: true } })
     await fireEvent.keyDown(getOptions()[1], { key: ' ' })
-    expect(space.getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-2')
+    expect(space.getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 2')
   })
 
   // ---- Emitted events on real user actions ----------------------------------
@@ -741,7 +743,7 @@ describe('keyboard map (spec)', () => {
       await userEvent.keyboard(key)
       await settle()
       expect(getContent()).toBeNull()
-      expect(trigger.textContent).toContain('opt-2')
+      expect(trigger.textContent).toContain('Option 2')
       expect(document.activeElement).toBe(trigger)
     }
   )
@@ -798,7 +800,7 @@ describe('Select (defineModel)', () => {
     await fireEvent.click(getOptions()[1])
     await nextTick()
 
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-2')
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 2')
     expect(getByTestId('input-select').getAttribute('data-state')).toBe('closed')
     expect(getByTestId('input-select').hasAttribute('data-filled')).toBe(true)
     expect(emitted()['update:modelValue']).toEqual([['opt-2']])
@@ -822,11 +824,12 @@ describe('Select (defineModel)', () => {
         )
     })
     const { getByTestId } = render(Parent)
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-1')
+    await nextTick()
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 1')
 
     value.value = 'opt-3'
     await nextTick()
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-3')
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 3')
 
     open.value = true
     await nextTick()
@@ -836,7 +839,7 @@ describe('Select (defineModel)', () => {
     await nextTick()
     expect(value.value).toBe('opt-2')
     expect(open.value).toBe(false)
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('opt-2')
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 2')
   })
 
   it('stays open while a bound parent refuses to close it', async () => {
@@ -847,5 +850,52 @@ describe('Select (defineModel)', () => {
     await fireEvent.click(getByTestId('input-select-trigger'))
     await nextTick()
     expect(getByTestId('input-select').getAttribute('data-state')).toBe('open')
+  })
+})
+
+describe('Select labels, typeahead and slots', () => {
+  it('shows the option label of a preselected value before the panel first opens', async () => {
+    const { getByTestId } = render(Host, { props: { initial: 'opt-2' } })
+    await nextTick()
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Option 2')
+    expect(document.querySelector('[data-testid="input-select-content__labels"]')).toBeNull()
+  })
+
+  it('keeps a consumer displayValue over the option label', async () => {
+    const { getByTestId } = render({
+      components: { Select, SelectTrigger, SelectContent, SelectOption },
+      template: `<Select model-value="opt-1" :display-value="(v) => 'Picked ' + v">
+        <SelectTrigger aria-label="Pick" />
+        <SelectContent><SelectOption value="opt-1">Option 1</SelectOption></SelectContent>
+      </Select>`
+    })
+    await nextTick()
+    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('Picked opt-1')
+  })
+
+  it('moves focus to the option whose label starts with the typed characters', async () => {
+    render(Host, { props: { startOpen: true } })
+    await nextTick()
+    await nextTick()
+    const options = getOptions()
+    options[0]!.focus()
+    await fireEvent.keyDown(options[0]!, { key: 'o' })
+    expect(document.activeElement).toBe(options[1])
+    await fireEvent.keyDown(options[1]!, { key: 'x' })
+    expect(document.activeElement).toBe(options[1])
+  })
+
+  it('renders the prefix slot, and the deprecated iconLeft slot as its fallback', () => {
+    const view = render({
+      components: { Select, SelectTrigger },
+      template: `<Select><SelectTrigger aria-label="Pick"><template #prefix><i data-testid="p" /></template></SelectTrigger></Select>`
+    })
+    expect(view.getByTestId('p')).toBeTruthy()
+    view.unmount()
+    const legacy = render({
+      components: { Select, SelectTrigger },
+      template: `<Select><SelectTrigger aria-label="Pick"><template #iconLeft><i data-testid="l" /></template></SelectTrigger></Select>`
+    })
+    expect(legacy.getByTestId('l')).toBeTruthy()
   })
 })

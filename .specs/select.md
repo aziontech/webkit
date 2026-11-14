@@ -3,20 +3,20 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: bd9a5e93f2ec0d985c5fe2627a43590c77d8f593983313b354eb70e97cfde49e
+checksum: 2c4bcf9b2d67c5cbe894996d1a097ec27d7043c5f604f758c3a7f4ca4baf5234
 created: 2026-06-15
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Select — Component Spec
 
 ## Purpose
 
-Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Each option carries a radio indicator in single mode or a checkbox indicator in multi mode, optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
+Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`pi pi-check`) in both modes (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
@@ -45,7 +45,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
 - Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
-- With `multiple`, `modelValue` becomes an array; for a field that is always multi-pick prefer `multi-select`.
+- `multiple` is deprecated: use `multi-select` for several values (Checkbox rows, labels, its own search). Until 7.0 `multiple` keeps working and `modelValue` becomes an array.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 - A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
 - Keep `kind="transparent"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`.
@@ -85,27 +85,28 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ## Sub-components
 
-- `select-trigger/select-trigger.vue` — Bordered trigger field with optional left icon slot, selected-value label, and chevron-down. Mirrors `Input` size/state visuals. The selected value renders inside a `<bdi>`, so its own direction is isolated from the trigger's: an English value on a right-to-left page, or an Arabic value on a left-to-right one, keeps its character order while the label still aligns to the inline start. Prop `valueDir?: 'ltr' | 'rtl' | 'auto'` (default `undefined`, i.e. the `<bdi>` follows the value's first strong character) sets the `<bdi>`'s `dir`; pass `ltr` for values with no strong character whose order matters, such as dial codes (`PhoneInput` passes it, so `+1` never reads `1+`).
-- `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `#search` and `#footer` slots and scrolls its option list when content exceeds `max-h-[320px]`.
+- `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`; the deprecated `#iconLeft` is its fallback until 7.0), selected-value label, and chevron-down. Mirrors `Input` size/state visuals. The selected value renders inside a `<bdi>`, so its own direction is isolated from the trigger's: an English value on a right-to-left page, or an Arabic value on a left-to-right one, keeps its character order while the label still aligns to the inline start. Prop `valueDir?: 'ltr' | 'rtl' | 'auto'` (default `undefined`, i.e. the `<bdi>` follows the value's first strong character) sets the `<bdi>`'s `dir`; pass `ltr` for values with no strong character whose order matters, such as dial codes (`PhoneInput` passes it, so `+1` never reads `1+`).
+- `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`.
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a mode-aware indicator (radio in single mode, checkbox in multi mode), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (PrimeIcons, default `''`), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders the options once in a `hidden` container (`<testId>__labels`) to collect them.
+- `select-group/select-group.vue` `label` defaults to `''` (no heading, no `aria-label`).
 
 ## Props
 
 | Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                              |
 | -------------- | -------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `multiple`     | `boolean`                        | `false`      | false    | When true, switches the component to multi-select; options render checkbox indicators and `modelValue` is an array.                                                                                                |
+| `multiple`     | `boolean`                        | `false`      | false    | `@deprecated since 6.0 — use multi-select. Removed in 7.0.` Switches to multi-select; `modelValue` becomes an array. |
 | `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled.                                                                                                                                                                              |
-| `placeholder`  | `string`                         | `undefined`  | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
+| `placeholder`  | `string`                         | `''`         | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                              |
 | `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                         |
 | `kind`         | `'outlined' \| 'transparent'`    | `'outlined'` | false    | Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb.      |
 | `disabled`     | `boolean`                        | `false`      | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                |
 | `readonly`     | `boolean`                        | `false`      | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                          |
 | `required`     | `boolean`                        | `false`      | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component. |
 | `invalid`      | `boolean`                        | `false`      | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                   |
-| `displayValue` | `(value: TValue) => string`      | `undefined`  | false    | Custom formatter used by the trigger to render the selected label(s); receives the current `modelValue`, typed as the bound model.                                                                                 |
+| `displayValue` | `(value: TValue) => string`      | `undefined`  | false    | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels. |
 
-**Generic.** The root is generic over `TValue extends SelectValue` (`string | number | unknown[] | undefined`, the default), inferred from the bound `modelValue`: with a `string` model, `displayValue` takes `(value: string) => string` and `update:modelValue` sends a `string`, so a handler needs no narrowing. With `multiple`, bind an array (`string[]`) and both follow it.
+**Generic.** Props stay an inline literal in `defineProps` because the root is generic (a named `interface Props` fails declaration emit, TS4025). The root is generic over `TValue extends SelectValue` (`string | number | unknown[] | undefined`, the default), inferred from the bound `modelValue`: with a `string` model, `displayValue` takes `(value: string) => string` and `update:modelValue` sends a `string`, so a handler needs no narrowing. With `multiple`, bind an array (`string[]`) and both follow it.
 
 **Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectKind`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Option` rows, so a list with disabled entries needs no local type.
 
@@ -192,7 +193,7 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
-- Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
+- Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; typing a printable character moves focus to the next enabled option whose label starts with the typed text (characters typed within 500 ms add up; ignored while the search field has focus); `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
@@ -205,8 +206,8 @@ _none_
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
 - Transparent — justification: the `kind="transparent"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
-- Single — justification: documents the radio-style indicator and scalar `modelValue` shape (the default mode); pairs with `Multiple` to make the two modes browseable in one click.
-- Multiple — justification: documents the checkbox-style indicator and array `modelValue` shape that the `multiple` prop unlocks.
+- Single — justification: documents the trailing check and scalar `modelValue` shape (the default mode); pairs with `Multiple` to make the two modes browseable in one click.
+- Multiple — justification: documents the array `modelValue` shape that the deprecated `multiple` prop unlocks, until 7.0.
 - WithGroups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
 - WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<SelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
 - WithOptionExtras — justification: documents the `icon`, `#left`, and `#tag` slots on `<SelectOption>` in one composite frame.

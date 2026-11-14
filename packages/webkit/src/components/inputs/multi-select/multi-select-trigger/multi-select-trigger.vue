@@ -13,6 +13,13 @@
     throw new Error('MultiSelectTrigger must be used inside MultiSelect.')
   }
 
+  defineSlots<{
+    /** Leading adornment before the value (an icon). */
+    prefix(): unknown
+    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
+    iconLeft(): unknown
+  }>()
+
   const attrs = useAttrs()
 
   const testId = computed(
@@ -74,7 +81,7 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <slot name="iconLeft" />
+    <slot name="prefix"><slot name="iconLeft" /></slot>
     <span
       class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
