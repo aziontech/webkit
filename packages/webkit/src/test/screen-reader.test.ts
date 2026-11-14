@@ -196,12 +196,6 @@ describe('screen-reader smoke · form blocks', () => {
     await settle()
     expect(await commands.ariaSnapshot('form')).toMatchInlineSnapshot(`
       "- form "Create Service":
-        - complementary "Scenario simulation":
-          - paragraph: "Simulation: the other user"
-          - text: "Deleted server-side: web-origin-prod"
-          - paragraph: "You are User 1: the service below is filled in and already linked to an origin, four sections down. Have User 2 delete that origin through the API. Nothing will tell you, your copy of the list goes stale. Then press Save, and watch the form take you to the one section that needs you."
-          - button "User 2 deletes the linked origin" [disabled]
-          - button "Reset scenario"
         - group "Create service":
           - text: Create service
           - heading "General" [level=2]

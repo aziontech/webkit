@@ -21,7 +21,6 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { nextTick, onMounted, reactive, ref } from 'vue'
 
@@ -88,7 +87,6 @@
   )
   const submitting = ref(false)
   const reloadingOrigins = ref(false)
-  const deletedByOtherUser = ref('web-origin-prod')
 
   const originLabel = (value: string) =>
     origins.value.find((origin) => origin.value === value)?.label ?? ''
@@ -97,28 +95,6 @@
     (values ?? [])
       .map((value) => httpPortOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')
-
-  const simulateDelete = () => {
-    const target =
-      origins.value.find((origin) => origin.value === form.originId) ?? origins.value[0]
-    if (!target) return
-    serverOrigins.value = serverOrigins.value.filter((value) => value !== target.value)
-    deletedByOtherUser.value = target.label
-  }
-
-  const resetScenario = () => {
-    serverOrigins.value = catalog.map((origin) => origin.value)
-    origins.value = [...catalog]
-    deletedByOtherUser.value = ''
-    form.name = 'checkout-web'
-    form.originId = 'origin-web-prod'
-    form.hostHeader = '${host}'
-    originError.value = ''
-    errors.name = ''
-    errors.httpPorts = ''
-    errors.originId = ''
-    errors.hostHeader = ''
-  }
 
   const reloadOrigins = () => {
     if (reloadingOrigins.value) return
@@ -272,47 +248,6 @@
         @submit.prevent="submit"
       >
         <div class="layout-column-form layout-boundary flex flex-1 flex-col">
-          <aside
-            aria-label="Scenario simulation"
-            class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
-          >
-            <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <p class="m-0 text-overline-sm text-(--text-muted)">Simulation: the other user</p>
-              <Tag
-                :label="
-                  deletedByOtherUser
-                    ? `Deleted server-side: ${deletedByOtherUser}`
-                    : 'Server in sync'
-                "
-                :severity="deletedByOtherUser ? 'danger' : 'success'"
-                size="medium"
-              />
-            </div>
-            <p class="m-0 text-body-sm text-(--text-muted)">
-              You are User 1: the service below is filled in and already linked to an origin, four
-              sections down. Have User 2 delete that origin through the API. Nothing will tell you,
-              your copy of the list goes stale. Then press Save, and watch the form take you to the
-              one section that needs you.
-            </p>
-            <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-              <Button
-                label="User 2 deletes the linked origin"
-                kind="outlined"
-                size="medium"
-                icon="pi pi-trash"
-                :disabled="!!deletedByOtherUser || submitting"
-                @click="simulateDelete"
-              />
-              <Button
-                label="Reset scenario"
-                kind="transparent"
-                size="medium"
-                :disabled="submitting"
-                @click="resetScenario"
-              />
-            </div>
-          </aside>
-
           <fieldset
             class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"

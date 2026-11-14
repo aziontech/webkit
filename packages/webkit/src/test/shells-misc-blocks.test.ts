@@ -16,7 +16,9 @@ import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
 import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
 import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
 import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
+import AsyncSubmit from '../../blocks/platform/states/async-submit/async-submit.vue'
 import FirstUse from '../../blocks/platform/states/first-use/first-use.vue'
+import FormError from '../../blocks/platform/states/form-error/form-error.vue'
 import ProjectIntake from '../../blocks/platform/states/project-intake/project-intake.vue'
 import Initializing from '../../blocks/platform/states/project-intake/variants/initializing.vue'
 import UploadFailed from '../../blocks/platform/states/project-intake/variants/upload-failed.vue'
@@ -282,5 +284,24 @@ describe('platform/states/first-use', () => {
       '/agent-setup'
     )
     expect((view.getByLabelText('Via CLI command') as HTMLInputElement).value).toBe('azion deploy')
+  })
+})
+
+describe('platform/states async-submit and form-error', () => {
+  it('async-submit: no simulation panel, and Deploy starts the run', async () => {
+    const view = render(AsyncSubmit)
+    expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
+    expect(view.getByRole('heading', { level: 1, name: 'Deploy web-app' })).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Deploy' }))
+    await waitFor(() => expect(view.container.textContent).toContain('Deploying'))
+    view.unmount()
+  })
+
+  it('form-error: Save surfaces the rejection the server already holds', async () => {
+    const view = render(FormError)
+    expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
+    expect(view.getByRole('link', { name: 'Services' })).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Save' }))
+    await waitFor(() => expect(view.container.textContent).toContain('no longer exists'))
   })
 })
