@@ -119,6 +119,7 @@ rewrites the prop renames, the rest are listed here so you can move at your own 
 | `chart-card-content` | `flush`                       | `:padded="false"`                              |
 | `chart-legend`       | `totals`                      | `total` (the name `Chart.Tooltip` uses)        |
 | `code-block`         | `showLineNumbers`             | `lineNumbers`                                  |
+| `doc-card-group`     | type `DocCardGroupCols`       | type `DocCardGroupColumns`                     |
 | `flow-anchor`        | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
 | `log-view`           | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
 | `log-view`           | line `type: 'warning'`        | line `level: 'warn'`                           |
@@ -135,11 +136,7 @@ codemod leaves `headerKind` for you. `flush`, `warningsOnly`, `type: 'warning'` 
 (`kind` on topology nodes, `severity` on tracker items) are data or inverted booleans; move them by
 hand.
 
-## 4. Manual changes
-
-### Deprecated in 6.0, removed in 7.0
-
-These still work in 6.x and are marked `@deprecated` in the types and the catalog:
+These also keep working in 6.x and are marked `@deprecated` in the types:
 
 - `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`).
   The flat `primary-label` / `primary-href` / `secondary-label` / `secondary-href` become
@@ -149,6 +146,22 @@ These still work in 6.x and are marked `@deprecated` in the types and the catalo
   `conversation-history` and `response-branches` `label`, `doc-card-group` `cols`, `doc-heading` `id`,
   `overline` `showCursor`, `payment-brand` and `qr-code` `label`. The new name wins when both are set;
   the codemod writes the new name.
+
+`Illustration` keeps eight retired scene names as aliases of the renamed scenes; `name` resolves
+them through 6.x and they are removed in 7.0:
+
+| Deprecated `name`                                       | Use instead                    |
+| ------------------------------------------------------- | ------------------------------ |
+| `build-databases-from-code`                             | `sql-sdk-code-cards`           |
+| `distributed-sql-for-resilient-global-reads`            | `globe-with-sql-nodes`         |
+| `enable-owasp-protection-with-customizable-rules`       | `waf-threat-families-panel`    |
+| `reputation-intelligence-for-enhanced-protection`       | `reputation-rings-hub`         |
+| `saas-platforms`                                        | `azion-to-commerce-tiles`      |
+| `stay-in-control`                                       | `traffic-and-cost-bar-chart`   |
+| `stream-security-events-for-investigation-and-response` | `data-stream-destinations-map` |
+| `white-gloves-when-it-matters`                          | `chat-and-headset-tiles`       |
+
+## 4. Manual changes
 
 ### `@aziontech/theme` is a peer dependency
 
@@ -714,7 +727,7 @@ defaults`); comments are now left alone.
 
 The console does not build after the run, as expected: the `MANUAL` list is the migration plan.
 
-## 6. Unchanged
+## 6. Other changes
 
 ### Tools that read `catalog.json` directly
 
@@ -793,7 +806,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
   `CollectionPreferences`; `platform/view/card-view` is new. Copy them again through the MCP
   (`get_pattern`) to pick the change up.
 
-## 5. Unchanged
+## 7. Unchanged
 
 Theme tokens (apart from the sans stack and the container variants above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
 (`@aziontech/webkit/<name>`) are the same. The AI bundle (`skills/`, `rules/`) is updated by

@@ -106,7 +106,7 @@
     "MessageSeverity": "AlertSeverity",
     "MessageSize": "AlertSize",
     "PaginatorContext": "PaginationContext",
-    "ProgressBarShape": "ProgressShape",
+    "ProgressBarShape": "ProgressKind",
     "ProgressBarSize": "ProgressSize",
     "ResizablePanelContext": "ResizableContext",
     "ResizablePanelOrientation": "ResizableOrientation",
