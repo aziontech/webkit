@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
   import { FlowInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -10,12 +9,25 @@
   })
 
   /** Which connector attaches to the anchor. */
-  export type FlowAnchorType = 'start' | 'end'
+  export type FlowAnchorSide = 'start' | 'end'
+  /** Which connector attaches to the anchor. @deprecated since 6.0 — use `FlowAnchorSide`. Removed in 7.0. */
+  export type FlowAnchorType = FlowAnchorSide
 
-  const props = defineProps<{
-    /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; omitted marks both. */
-    type?: FlowAnchorType
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; empty marks both. */
+      side?: FlowAnchorSide
+      /**
+       * Which connector attaches here.
+       * @deprecated since 6.0 — use `side`. Removed in 7.0.
+       */
+      type?: FlowAnchorType
+    }>(),
+    {
+      side: undefined,
+      type: undefined
+    }
+  )
 
   defineSlots<{
     default(): unknown
@@ -25,30 +37,32 @@
   const ctx = inject(FlowInjectionKey)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__anchor`
+    () =>
+      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId.value ?? 'data-flow'}__anchor`
   )
 
   const PORT_CLASS =
     'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:start-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:end-0 data-[flow-port=start]:translate-x-full rtl:data-[flow-port=end]:translate-x-full rtl:data-[flow-port=start]:-translate-x-full group-data-[disabled]:border-dashed'
 
-  const rootClass = computed(() => cn('relative block', attrs.class as string | undefined))
+  const port = computed<FlowAnchorSide | undefined>(() => props.side ?? props.type)
 </script>
 
 <template>
   <div
-    :data-flow-anchor="props.type ?? 'both'"
+    :data-flow-anchor="port ?? 'both'"
     :data-testid="testId"
-    :class="rootClass"
+    class="relative block"
+    :class="attrs.class"
   >
     <span
-      v-if="props.type !== 'start'"
+      v-if="port !== 'start'"
       aria-hidden="true"
       data-flow-port="end"
       :class="PORT_CLASS"
     />
     <slot />
     <span
-      v-if="props.type !== 'end'"
+      v-if="port !== 'end'"
       aria-hidden="true"
       data-flow-port="start"
       :class="PORT_CLASS"

@@ -33,7 +33,8 @@
   const ctx = inject(FlowInjectionKey)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'data-flow'}__node`
+    () =>
+      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId.value ?? 'data-flow'}__node`
   )
 
   const ROOT_CLASS =

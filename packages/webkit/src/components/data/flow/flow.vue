@@ -42,8 +42,8 @@
   useResizeObserver(containerRef, measureOverflow)
 
   provide(FlowInjectionKey, {
-    testId: testId.value,
-    align: props.align
+    testId,
+    align: computed(() => props.align)
   })
 
   const outerClass = computed(() =>

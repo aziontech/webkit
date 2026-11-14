@@ -3,13 +3,13 @@ name: flow
 category: data
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: a7eb77797efa2b6f18d91184212732b0d3032c5385a6f094f7c16ec32827ee33
+checksum: a153ac8ed0e08af2ccfaf455c60f3ae448509bb6f393062d422101e02001733b
 created: 2026-06-25
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Flow — Component Spec
@@ -87,8 +87,8 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 ## Sub-components
 
 - `flow-node/flow-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). `terminal` ends the node's branch: it still receives an incoming connector but originates none, so the chain continues through its siblings while the branch stops there — the shape a **leaf** needs (an attached resource that hangs off the chain rather than passing it on). A terminal node therefore renders no outgoing port. Content via the `default` slot.
-- `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. `type="end"` is the incoming endpoint, `type="start"` the outgoing origin; omitted marks both. Content via the `default` slot.
-- `flow-parallel/flow-parallel.vue` — Container whose direct `flow-node` children are laid out as parallel branches stacked vertically; the `flow` root draws the fan-out/fan-in junction connectors. `align` controls the horizontal alignment of the branches.
+- `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. Prop `side?: 'start' | 'end'` (default `undefined`): `side="end"` is the incoming endpoint, `side="start"` the outgoing origin; omitted marks both. Prop `type?: 'start' | 'end'` (default `undefined`) is the same under its old name, **@deprecated since 6.0 — use `side`. Removed in 7.0.** (`type` is kept for native pass-through), read when `side` is unset; the exported `FlowAnchorType` is deprecated for `FlowAnchorSide` the same way. Content via the `default` slot. Its class merges with the consumer's through Vue's own class merge (no `cn`).
+- `flow-parallel/flow-parallel.vue` — Container whose direct `flow-node` children are laid out as parallel branches stacked vertically; the `flow` root draws the fan-out/fan-in junction connectors. `align?: 'start' | 'end'` (default `'start'`) controls the horizontal alignment of the branches. Its class merges with the consumer's through Vue's own class merge (no `cn`).
 
 <!-- Resulting layout (composition):
 
@@ -134,7 +134,8 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - `data-disabled` mirrors the `disabled` prop on `flow-node`
 - `data-styled` is present on `flow-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow` and `flow-parallel`
-- `data-flow-anchor` mirrors the `type` prop on `flow-anchor` (`start` / `end` / `both`)
+- `data-flow-anchor` mirrors the `side` prop (else the deprecated `type`) on `flow-anchor` (`start` / `end` / `both`)
+- The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
 - `data-flow-port` marks a connector port and selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-node`, and on the attaching edge(s) of a `flow-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
 - Port appearance follows the enclosing node: solid border by default, `border-dashed` under `data-disabled`
 - `data-flow-terminal` mirrors the `terminal` prop on `flow-node`. The composable drops that branch's exit, so no connector is drawn leaving it; the root additionally hides any outgoing port inside it (including one rendered by a nested `flow-anchor`)

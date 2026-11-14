@@ -1754,27 +1754,27 @@
   {
     "name": "flow",
     "path": "src/components/data/flow/index.ts",
-    "limit": "15.75 KB"
+    "limit": "14.5 KB"
   },
   {
     "name": "flow-root",
     "path": "src/components/data/flow/flow.vue",
-    "limit": "14.75 KB"
+    "limit": "13.5 KB"
   },
   {
     "name": "flow-node",
     "path": "src/components/data/flow/flow-node/flow-node.vue",
-    "limit": "12.15 KB"
+    "limit": "11.25 KB"
   },
   {
     "name": "flow-parallel",
     "path": "src/components/data/flow/flow-parallel/flow-parallel.vue",
-    "limit": "11.65 KB"
+    "limit": "0.75 KB"
   },
   {
     "name": "flow-anchor",
     "path": "src/components/data/flow/flow-anchor/flow-anchor.vue",
-    "limit": "11.85 KB"
+    "limit": "1 KB"
   },
   {
     "name": "pick-list",
