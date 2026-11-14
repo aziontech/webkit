@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
@@ -246,6 +247,103 @@ describe('ListingBrowser', () => {
 
     await Promise.resolve()
     expect(tableRoles(getByTestId)).toHaveLength(rows.length)
+  })
+
+  it('toggles the folded filters from the filter button', async () => {
+    const { getByTestId } = band()
+
+    const button = getByTestId(`${TESTID}__filter-button`)
+    const panel = getByTestId(`${TESTID}__filters`)
+    expect(button.getAttribute('aria-controls')).toBe(panel.id)
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(panel.hasAttribute('data-expanded')).toBe(false)
+
+    await fireEvent.click(button)
+    expect(button.getAttribute('aria-expanded')).toBe('true')
+    expect(panel.hasAttribute('data-expanded')).toBe(true)
+  })
+
+  it('lists each applied facet as a removable chip and counts it on the filter button', async () => {
+    const { getByRole, getByTestId, queryByTestId } = band()
+
+    expect(queryByTestId(`${TESTID}__applied`)).toBeNull()
+    expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Filters')
+
+    await pick(getByRole('combobox', { name: 'Department' }), 'Security')
+
+    const applied = getByTestId(`${TESTID}__applied`)
+    expect(applied.textContent).toContain('Department: Security')
+    expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Filters (1)')
+
+    await fireEvent.click(within(applied).getByRole('button'))
+    expect(queryByTestId(`${TESTID}__applied`)).toBeNull()
+    expect(tableRoles(getByTestId)).toHaveLength(rows.length)
+  })
+
+  it('takes the filter button label from filterLabel', () => {
+    const { getByTestId } = band({ filterLabel: 'Refine' })
+
+    expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Refine')
+  })
+
+  it('searches the options only of a select with more than seven', async () => {
+    const long = {
+      key: 'location',
+      label: 'Location',
+      allLabel: 'All locations',
+      options: [
+        'Austin',
+        'Boston',
+        'Chicago',
+        'Denver',
+        'Miami',
+        'Porto Alegre',
+        'São Paulo',
+        'Seattle'
+      ].map((value) => ({ value, label: value }))
+    }
+    const { getByRole } = band({ facets: [facets[0], long] })
+
+    await fireEvent.click(getByRole('combobox', { name: 'Department' }))
+    expect(document.body.querySelector('input[aria-label="Search department"]')).toBeNull()
+    document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+
+    await fireEvent.click(getByRole('combobox', { name: 'Location' }))
+    expect(document.body.querySelector('input[aria-label="Search location"]')).not.toBeNull()
+  })
+
+  it('draws a row mark in the table and the phone list', () => {
+    const { getAllByAltText } = band({
+      rows: [{ ...rows[0], mark: { name: 'Acme', logo: '/logos/acme.svg' } }, rows[1], rows[2]]
+    })
+
+    const marks = getAllByAltText('Acme')
+    expect(marks).toHaveLength(2)
+    marks.forEach((mark) => expect(mark.getAttribute('src')).toBe('/logos/acme.svg'))
+  })
+
+  it('follows the row link when a table row is clicked outside it', async () => {
+    const user = userEvent.setup()
+    const { getByTestId } = band()
+
+    const table = tableOf(getByTestId)
+    const link = table.getByRole('link', { name: 'GRC Analyst' })
+    const clicks: MouseEvent[] = []
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+      clicks.push(event)
+    })
+
+    await user.click(table.getByTitle('Compliance · Porto Alegre'))
+    expect(clicks).toHaveLength(1)
+  })
+
+  it('gives each metadata cell its full value as a tooltip', () => {
+    const { getByTestId } = band()
+
+    const cells = tableOf(getByTestId).getAllByTitle('Hybrid · Full-time')
+    expect(cells).toHaveLength(2)
+    cells.forEach((cell) => expect(cell.textContent).toBe('Hybrid · Full-time'))
   })
 
   it('renders no toolbar without search, facets or sorts', () => {

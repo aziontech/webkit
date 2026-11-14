@@ -591,6 +591,13 @@ export const ptBR: Messages = {
   link: {
     label: 'Saiba mais'
   },
+  listingBrowser: {
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    search: 'Buscar',
+    searchFacet: 'Buscar {facet}',
+    noMatch: 'Nenhum resultado encontrado.'
+  },
   logView: {
     searchPlaceholder: 'Buscar nos logs',
     search: 'Buscar logs',

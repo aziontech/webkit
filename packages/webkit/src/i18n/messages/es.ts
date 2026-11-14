@@ -591,6 +591,13 @@ export const es: Messages = {
   link: {
     label: 'Más información'
   },
+  listingBrowser: {
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    search: 'Buscar',
+    searchFacet: 'Buscar {facet}',
+    noMatch: 'No se encontraron resultados.'
+  },
   logView: {
     searchPlaceholder: 'Buscar en los registros',
     search: 'Buscar registros',

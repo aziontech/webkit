@@ -537,6 +537,14 @@ export const link = {
   label: 'Learn more'
 } as const
 
+export const listingBrowser = {
+  filters: 'Filters',
+  filtersApplied: '{label} ({count})',
+  search: 'Search',
+  searchFacet: 'Search {facet}',
+  noMatch: 'No results found.'
+} as const
+
 export const logView = {
   searchPlaceholder: 'Find in logs',
   search: 'Search logs',
@@ -1272,6 +1280,7 @@ export const en = {
   kbd,
   label,
   link,
+  listingBrowser,
   logoWall,
   logView,
   mapChart,

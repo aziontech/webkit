@@ -678,7 +678,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "69.25 KB"
+    "limit": "73 KB"
   },
   {
     "name": "platform-directory",
