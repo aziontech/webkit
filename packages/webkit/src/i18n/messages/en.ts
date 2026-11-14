@@ -806,7 +806,10 @@ export const stepper = {
 export const storyLibrary = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.'
+  empty: 'No results found.',
+  filters: 'Filters',
+  filtersApplied: '{label} ({count})',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const table = {

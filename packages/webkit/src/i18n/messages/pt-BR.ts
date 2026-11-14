@@ -835,7 +835,10 @@ export const ptBR: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado.'
+    empty: 'Nenhum resultado encontrado.',
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    newTab: '(abre em uma nova aba)'
   },
   table: {
     selectAll: 'Selecionar todas as linhas',

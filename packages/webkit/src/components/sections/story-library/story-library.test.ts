@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render, screen } from '@testing-library/vue'
+import { render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -169,13 +169,129 @@ describe('StoryLibrary', () => {
   })
 
   it('renders the load-more button when moreLabel is set', () => {
-    const first = band()
+    const first = band({ pageSize: 2 })
 
     expect(first.getByRole('button', { name: 'Load more' })).toBeInTheDocument()
     first.unmount()
 
     const { queryByRole } = band({ moreLabel: '' })
     expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('lists one page and reveals the next with the load-more button', async () => {
+    const { getByRole, queryByRole } = band({ pageSize: 2 })
+
+    expect(cardNames(getByRole)).toEqual(['Read story: GPA', 'Read story: Axur'])
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(cardNames(getByRole)).toHaveLength(items.length)
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('returns to the first page when the filters change', async () => {
+    const { getByRole } = band({ pageSize: 1 })
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(cardNames(getByRole)).toHaveLength(2)
+
+    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'a')
+    expect(cardNames(getByRole)).toHaveLength(1)
+  })
+
+  it('lists every match and no button without a more label', () => {
+    const { getByRole, queryByRole } = band({ moreLabel: '', pageSize: 1 })
+
+    expect(cardNames(getByRole)).toHaveLength(items.length)
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('clears one facet from its all option', async () => {
+    const { getByRole } = band()
+
+    await pick('Industry', 'Tech')
+    expect(cardNames(getByRole)).toEqual(['Read story: Axur'])
+
+    await pick('Industry', 'All industries')
+    expect(cardNames(getByRole)).toHaveLength(items.length)
+  })
+
+  it('toggles the folded filters from the filter button', async () => {
+    const { getByTestId } = band()
+
+    const button = getByTestId(`${TESTID}__filter-button`)
+    const panel = getByTestId(`${TESTID}__filters`)
+    expect(button.getAttribute('aria-controls')).toBe(panel.id)
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+
+    await userEvent.click(button)
+    expect(button.getAttribute('aria-expanded')).toBe('true')
+    expect(panel.hasAttribute('data-expanded')).toBe(true)
+  })
+
+  it('lists each applied facet as a removable chip and counts it on the filter button', async () => {
+    const { getByRole, getByTestId, queryByTestId } = band({ filterLabel: 'Refine' })
+
+    expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Refine')
+
+    await pick('Industry', 'Tech')
+    const applied = getByTestId(`${TESTID}__applied`)
+    expect(applied.textContent).toContain('Industry: Tech')
+    expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Refine (1)')
+
+    await userEvent.click(within(applied).getByRole('button'))
+    expect(queryByTestId(`${TESTID}__applied`)).toBeNull()
+    expect(cardNames(getByRole)).toHaveLength(items.length)
+  })
+
+  it('searches the options only of a select with more than seven', async () => {
+    const long = {
+      key: 'product',
+      label: 'Product',
+      allLabel: 'All products',
+      options: [
+        'Cache',
+        'DNS',
+        'Firewall',
+        'Functions',
+        'Observe',
+        'Routing',
+        'SQL',
+        'Storage'
+      ].map((value) => ({ value, label: value }))
+    }
+    band({ facets: [facets[0], long] })
+
+    await userEvent.click(screen.getByRole('combobox', { name: 'Industry' }))
+    expect(screen.queryByRole('textbox', { name: 'Search industry' })).toBeNull()
+    await userEvent.keyboard('{Escape}')
+
+    await userEvent.click(screen.getByRole('combobox', { name: 'Product' }))
+    expect(await screen.findByRole('textbox', { name: 'Search product' })).toBeInTheDocument()
+  })
+
+  it('seeds a facet from the URL query only when seedFromQuery is set', async () => {
+    const before = window.location.href
+    window.history.replaceState(null, '', '?industry=Media')
+    try {
+      const off = band()
+      await Promise.resolve()
+      expect(cardNames(off.getByRole)).toHaveLength(items.length)
+      off.unmount()
+
+      const { getByRole } = band({ seedFromQuery: true })
+      await waitFor(() => expect(cardNames(getByRole)).toEqual(['Read story: Exame']))
+    } finally {
+      window.history.replaceState(null, '', before)
+    }
+  })
+
+  it('opens an external story in a new tab and says so in its name', () => {
+    const { getByRole } = band({ items: [{ ...items[0], external: true }, items[1]] })
+
+    const link = getByRole('link', { name: 'Read story: GPA (opens in a new tab)' })
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(link.getAttribute('rel')).toBe('noopener')
+    expect(getByRole('link', { name: 'Read story: Axur' }).hasAttribute('target')).toBe(false)
   })
 
   it('omits the toolbar when there is no search and no facet', () => {

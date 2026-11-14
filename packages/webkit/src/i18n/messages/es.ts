@@ -835,7 +835,10 @@ export const es: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.'
+    empty: 'No se encontraron resultados.',
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    newTab: '(se abre en una pestaña nueva)'
   },
   table: {
     selectAll: 'Seleccionar todas las filas',

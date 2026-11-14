@@ -512,7 +512,7 @@
   {
     "name": "story-library",
     "path": "src/components/sections/story-library/story-library.vue",
-    "limit": "28.2 KB"
+    "limit": "33 KB"
   },
   {
     "name": "hero-band",
