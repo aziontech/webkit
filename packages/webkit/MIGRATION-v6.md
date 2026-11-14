@@ -80,11 +80,14 @@ component.
 | `media-tabs`      | `autoPlay`         | `autoplay`           |
 | `media-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
 | `navigation-menu` | `value`            | `modelValue`         |
+| `popover`         | `width`            | `size`               |
+| `progress`        | `shape`            | `kind`               |
 | `quote-tabs`      | `autoPlay`         | `autoplay`           |
 | `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
 | `severity-tag`    | `level`            | `severity`           |
 | `shell-mockup`    | `still="true"`     | `animated="false"`   |
 | `shell-mockup`    | `still="false"`    | `animated="true"`    |
+| `skeleton`        | `kind="shape"`     | `kind="rectangle"`   |
 | `table`           | `border`           | `bordered`           |
 | `tabs`            | `value`            | `modelValue`         |
 | `theme-switcher`  | `value`            | `modelValue`         |
@@ -278,6 +281,27 @@ rewrite this, because the replacement depends on whether the child was a link or
   <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
 </Item>
 ```
+
+### Deprecated overlay and feedback names (removed in 7.0)
+
+The old names still work in v6 and are marked `@deprecated`; move to the new ones when you touch the
+code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` `kind="shape"`
+(section 3); the rest need a hand edit, because a mechanical rename would invert or retype a value.
+
+| Component         | Deprecated                     | Use instead                                                            |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| `toast-item`      | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too              |
+| `toast`           | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name                        |
+| `upload-progress` | `v-model:collapsed`            | `v-model:expanded`, inverted (`collapsed = true` → `expanded = false`) |
+| `tooltip`         | `@show`, `@hide`               | `@update:open`                                                         |
+| `popover`         | `PopoverWidth`                 | `PopoverSize`                                                          |
+| `progress`        | `ProgressShape`                | `ProgressKind`                                                         |
+
+Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; `StatusIndicator` is
+no longer a `role="status"` live region (announce a change you need heard through a toast);
+`Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of
+384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
+(handlers that take no argument keep working).
 
 ### Test ids
 

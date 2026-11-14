@@ -32,12 +32,15 @@
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
     }
   },
+  "popover": { "width": "size" },
+  "progress": { "shape": "kind" },
   "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
   "severity-tag": { "level": "severity" },
   "shell-mockup": { "still": { "to": "animated", "values": { "true": "false", "false": "true" } } },
   "shell-mockup-root": {
     "still": { "to": "animated", "values": { "true": "false", "false": "true" } }
   },
+  "skeleton": { "kind": { "to": "kind", "values": { "shape": "rectangle" } } },
   "table": { "border": "bordered" },
   "table-root": { "border": "bordered" },
   "tabs": { "value": "modelValue" },
