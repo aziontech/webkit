@@ -36,9 +36,32 @@ describe('Button', () => {
       expect(getByTestId('save-button').tagName).toBe('BUTTON')
     })
 
-    it('renders kind="transparent" with no surface fill', () => {
-      const { getByRole } = render(Button, { props: { label: 'Skip', kind: 'transparent' } })
-      expect(getByRole('button', { name: 'Skip' }).className).toContain('bg-transparent')
+    it.each(['primary', 'secondary', 'outlined', 'transparent', 'danger', 'link'] as const)(
+      'reflects kind=%s on data-kind',
+      (kind) => {
+        const { getByRole } = render(Button, { props: { label: 'Skip', kind } })
+        expect(getByRole('button', { name: 'Skip' }).getAttribute('data-kind')).toBe(kind)
+      }
+    )
+
+    it.each(['small', 'medium', 'large'] as const)('reflects size=%s on data-size', (size) => {
+      const { getByRole } = render(Button, { props: { label: 'Skip', size } })
+      expect(getByRole('button', { name: 'Skip' }).getAttribute('data-size')).toBe(size)
+    })
+
+    it('marks a loading or disabled button inactive', () => {
+      const loading = render(Button, { props: { label: 'Save', loading: true } })
+      const node = loading.getByRole('button', { name: 'Save' })
+      expect(node.hasAttribute('data-loading')).toBe(true)
+      expect(node.hasAttribute('data-inactive')).toBe(true)
+      loading.unmount()
+      const idle = render(Button, { props: { label: 'Save' } })
+      expect(idle.getByRole('button', { name: 'Save' }).hasAttribute('data-inactive')).toBe(false)
+    })
+
+    it('lands a consumer class on the root', () => {
+      const { getByRole } = render(Button, { props: { label: 'Save' }, attrs: { class: 'w-full' } })
+      expect(getByRole('button', { name: 'Save' }).classList.contains('w-full')).toBe(true)
     })
   })
 
