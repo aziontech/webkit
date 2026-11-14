@@ -6,6 +6,7 @@
   import { useRoute } from 'vue-router'
 
   import FoundationDemo from '../components/FoundationDemo.vue'
+  import IconsView from '../components/IconsView.vue'
   import RawHtml from '../components/RawHtml.vue'
   import TokensView from '../components/TokensView.vue'
   import { cached, index, keys } from '../lib/data'
@@ -63,6 +64,7 @@
       v-if="page.tokens"
       :kind="page.tokens"
     />
+    <IconsView v-if="page.view === 'icons'" />
     <section
       v-if="doc"
       class="flex max-w-4xl flex-col gap-(--spacing-sm)"

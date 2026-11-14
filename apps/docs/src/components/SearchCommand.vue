@@ -26,6 +26,18 @@
       }))
     },
     {
+      heading: t.value.assets,
+      items: [
+        { to: '/assets#brand', title: t.value.brand, hint: t.value.brandLead },
+        {
+          to: '/assets#illustrations',
+          title: t.value.illustrations,
+          hint: t.value.illustrationsLead
+        },
+        { to: '/assets#line-figures', title: t.value.lineFigures, hint: t.value.lineFiguresLead }
+      ]
+    },
+    {
       heading: t.value.components,
       items: index.components.map((item) => ({
         to: `/components/${item.name}`,

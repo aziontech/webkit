@@ -90,6 +90,10 @@ export async function preloadComponent(name: string) {
   )
 }
 
+export function exampleLoader(dir: string, file: string): (() => Promise<Component>) | undefined {
+  return exampleComponents[`${EXAMPLES}${dir}/${file}`]
+}
+
 export async function preloadExample(dir: string, example: string) {
   const file = `${example}.vue`
   await remember(keys.example(dir, file), exampleComponents[`${EXAMPLES}${dir}/${file}`])

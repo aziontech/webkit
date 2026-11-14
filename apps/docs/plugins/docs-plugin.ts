@@ -5,6 +5,7 @@ import type { Plugin, ResolvedConfig } from 'vite'
 
 import { FOUNDATION_SLUGS } from '../src/lib/foundations.ts'
 import {
+  buildAssets,
   buildComponent,
   buildIndex,
   buildTokens,
@@ -13,10 +14,12 @@ import {
   renderGuidelinesFile,
   renderMarkdownFile
 } from './content.ts'
-import { CATALOG, LLMS, readCatalog, THEME } from './paths.ts'
+import { CATALOG, LLMS, readCatalog, THEME, WEBKIT } from './paths.ts'
 
 const INDEX = 'virtual:docs-index'
 const TOKENS = 'virtual:docs-tokens'
+const ASSETS = 'virtual:docs-assets'
+const ASSET_LLMS = ['illustrations', 'line-figures', 'brand-marks']
 const LOADERS = 'virtual:docs-component-loaders'
 const COMPONENT = 'virtual:docs-component:'
 const HIGHLIGHT = '\0docs-highlight:'
@@ -50,7 +53,13 @@ export function docsPlugin(): Plugin {
       config = resolved
     },
     async resolveId(id, importer) {
-      if (id === INDEX || id === TOKENS || id === LOADERS || id.startsWith(COMPONENT)) {
+      if (
+        id === INDEX ||
+        id === TOKENS ||
+        id === ASSETS ||
+        id === LOADERS ||
+        id.startsWith(COMPONENT)
+      ) {
         return `\0${id}`
       }
       const query = id.match(/\?(highlight|markdown|guidelines)$/)
@@ -68,11 +77,15 @@ export function docsPlugin(): Plugin {
     async load(id) {
       if (id === `\0${INDEX}`) {
         this.addWatchFile(CATALOG)
-        return `export default ${JSON.stringify(buildIndex(undefined, FOUNDATION_SLUGS))}`
+        return `export default ${JSON.stringify(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS]))}`
       }
       if (id === `\0${TOKENS}`) {
         this.addWatchFile(join(THEME, 'dist/v4/globals.css'))
         return `export default ${JSON.stringify(buildTokens())}`
+      }
+      if (id === `\0${ASSETS}`) {
+        this.addWatchFile(join(WEBKIT, 'catalog/assets/icons.json'))
+        return `export default ${JSON.stringify(buildAssets())}`
       }
       if (id === `\0${LOADERS}`) {
         this.addWatchFile(CATALOG)

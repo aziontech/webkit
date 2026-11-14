@@ -11,6 +11,7 @@ import {
   LLMS,
   readBlocks,
   readCatalog,
+  REPO,
   SPECS,
   THEME,
   walk,
@@ -120,6 +121,7 @@ export type ComponentIndexItem = {
   import: string
   exampleDir: string | null
   exampleCount: number
+  firstExample: string | null
   llms: string | null
 }
 
@@ -166,6 +168,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
       exampleCount: examples?.data.examples.length ?? 0,
+      firstExample: examples?.data.examples[0]?.file ?? null,
       llms: llmsFile(llms, 'components', name)
     }
   })
@@ -284,7 +287,56 @@ export async function renderGuidelinesFile(
   }
 }
 
-type TokenGroup = { id: string; vars: { name: string; value: string; dark?: string }[] }
+type TokenUsage = { job: string; usedBy: string }
+type TokenGroup = {
+  id: string
+  vars: { name: string; value: string; dark?: string; usage?: TokenUsage }[]
+}
+
+function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[] {
+  const file = join(REPO, 'rules/webkit-tokens.md')
+  if (!existsSync(file)) return []
+  const source = readFileSync(file, 'utf8')
+  const start = source.indexOf('## Which color token does which job')
+  if (start === -1) return []
+  const rows = source
+    .slice(start)
+    .split('\n')
+    .filter((line) => line.startsWith('|') && !/^\|\s*-/.test(line))
+    .slice(1)
+  return rows.map((line) => {
+    const [job, tokens, usedBy] = line
+      .split('|')
+      .slice(1, -1)
+      .map((cell) => cell.trim())
+    const names = [...tokens.matchAll(/`([^`]+)`/g)].map((match) => match[1])
+    const bases = names.filter((name) => name.startsWith('--'))
+    const suffixes = names.filter((name) => !name.startsWith('--'))
+    const exact = new Set(bases.filter((name) => !name.endsWith('*')))
+    const prefixes = bases.filter((name) => name.endsWith('*')).map((name) => name.slice(0, -1))
+    for (const suffix of suffixes) {
+      if (/\bwith\b/.test(tokens)) for (const base of bases) exact.add(base + suffix)
+      else if (bases[0]) exact.add(bases[0].replace(/-[\w]+$/, suffix))
+    }
+    return {
+      match: (name: string) =>
+        exact.has(name) || prefixes.some((prefix) => name.startsWith(prefix)),
+      usage: { job, usedBy }
+    }
+  })
+}
+
+function responsiveSpacing(): Record<string, Record<string, string>> {
+  const file = join(THEME, 'src/tokens/semantic/spacings.data.js')
+  if (!existsSync(file)) return {}
+  const out: Record<string, Record<string, string>> = {}
+  for (const match of readFileSync(file, 'utf8').matchAll(/'(spacing-[\w-]+)':\s*\{([^}]*)\}/g)) {
+    out[`--${match[1]}`] = Object.fromEntries(
+      [...match[2].matchAll(/(\w+):\s*'([^']+)'/g)].map((pair) => [pair[1], pair[2]])
+    )
+  }
+  return out
+}
 
 function cssBlocks(css: string, selectorPrefix: string): string[] {
   const out: string[] = []
@@ -304,9 +356,23 @@ function cssBlocks(css: string, selectorPrefix: string): string[] {
   return out
 }
 
+function topLevel(block: string): string {
+  let depth = 0
+  let out = ''
+  for (const char of block) {
+    if (char === '{') depth++
+    if (depth === 0) out += char
+    if (char === '}') {
+      depth--
+      if (depth === 0) out = out.replace(/[^;{}]*$/, '')
+    }
+  }
+  return out
+}
+
 function declarations(block: string): Map<string, string> {
   const out = new Map<string, string>()
-  for (const match of block.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
+  for (const match of topLevel(block).matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g))
     out.set(match[1], match[2].trim())
   return out
 }
@@ -346,21 +412,28 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
     'code',
     'illustration'
   ]
+  const usage = tokenUsage()
   const semantic: TokenGroup[] = semanticPrefixes
     .map((prefix) => ({
       id: prefix,
-      vars: pick(light, (name) => name.startsWith(`--${prefix}`), true).filter(
-        (token) => !/^--text-[\w-]+--/.test(token.name)
-      )
+      vars: pick(light, (name) => name.startsWith(`--${prefix}`), true)
+        .filter((token) => /^(#|rgb|hsl|oklch|color-mix|transparent|var\()/i.test(token.value))
+        .filter((token) => !(token.dark === undefined && /^(var|color-mix)\(/.test(token.value)))
+        .map((token) => {
+          const found = usage.find((entry) => entry.match(token.name))
+          return found ? { ...token, usage: found.usage } : token
+        })
     }))
     .filter((group) => group.vars.length)
+  const responsive = responsiveSpacing()
   const primitiveColors = pick(theme, (name) => name.startsWith('--color-'))
   const paletteGroups = new Map<string, { name: string; value: string }[]>()
   for (const token of primitiveColors) {
     const family = token.name.replace(/^--color-/, '').replace(/-\d+$/, '')
     paletteGroups.set(family, [...(paletteGroups.get(family) ?? []), token])
   }
-  const prefixed = (prefix: string, source = theme) =>
+  const global = new Map([...theme, ...light])
+  const prefixed = (prefix: string, source = global) =>
     pick(source, (name) => name.startsWith(prefix))
   const uniq = <T extends { name: string }>(list: T[]) => [
     ...new Map(list.map((token) => [token.name, token])).values()
@@ -371,7 +444,9 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
     spacing: uniq([
       ...prefixed('--spacing'),
       ...pick(light, (name) => name.startsWith('--spacing'))
-    ]),
+    ]).map((token) =>
+      responsive[token.name] ? { ...token, responsive: responsive[token.name] } : token
+    ),
     radius: uniq([...prefixed('--radius'), ...pick(light, (name) => name.startsWith('--shape'))]),
     shadows: uniq([
       ...prefixed('--shadow'),
@@ -398,5 +473,23 @@ export function buildTokens(catalog: Catalog = readCatalog()) {
       ...prefixed('--container'),
       ...pick(light, (name) => name.startsWith('--layout'))
     ])
+  }
+}
+
+function assetItems<T>(name: string): T[] {
+  const file = join(WEBKIT, 'catalog/assets', `${name}.json`)
+  if (!existsSync(file)) return []
+  return (JSON.parse(readFileSync(file, 'utf8')) as { items: T[] }).items
+}
+
+export function buildAssets() {
+  return {
+    icons: assetItems<{ name: string; class: string; set: string; keywords: string[] }>(
+      'icons'
+    ).map((icon) => ({ ...icon, keywords: icon.keywords.join(' ') })),
+    illustrations: assetItems<{ name: string; canvas?: string }>('illustrations').map(
+      (item) => item.name
+    ),
+    lineFigures: assetItems<{ name: string; label: string }>('lineFigures')
   }
 }
