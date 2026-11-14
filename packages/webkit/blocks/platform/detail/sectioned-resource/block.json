@@ -1,0 +1,50 @@
+{
+  "id": "platform/detail/sectioned-resource",
+  "name": "SectionedResource",
+  "title": "Templates/Platform/Detail/SectionedResource",
+  "surface": "product",
+  "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with a No matching `EmptyState` inside the table. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "local navigation",
+    "in-page navigation",
+    "section navigation",
+    "sub navigation",
+    "third level navigation",
+    "level 3 navigation",
+    "sectioned resource",
+    "resource sections",
+    "tab with many pages",
+    "many sibling pages",
+    "grouped sub pages",
+    "policy sections",
+    "side menu in page",
+    "navigation levels",
+    "navegação local",
+    "navegação de terceiro nível",
+    "submenu da página",
+    "seções do recurso",
+    "navegación local",
+    "secciones del recurso"
+  ],
+  "skills": ["webkit-navigation", "webkit-layout", "webkit-tables"],
+  "primary": {
+    "name": "Default",
+    "file": "sectioned-resource.vue"
+  },
+  "variants": [
+    {
+      "name": "Narrow",
+      "summary": "The same Private access tab in a narrow page, below `@3xl` of the tab body: the local navigation folds into a medium `Select` labelled Private access, its 16 options in the same 4 groups, with Server groups current; the list takes the full width under it.",
+      "file": "variants/narrow.vue"
+    },
+    {
+      "name": "FewSiblings",
+      "summary": "The Network security tab with 6 sibling pages: no local navigation. A medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings.",
+      "file": "variants/few-siblings.vue"
+    }
+  ]
+}
