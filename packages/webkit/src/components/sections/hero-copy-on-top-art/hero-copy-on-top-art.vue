@@ -64,6 +64,8 @@
     secondaryAction?: HeroCopyOnTopArtAction
     /** The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. */
     levels?: HeroCopyOnTopArtLevel[]
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -73,7 +75,8 @@
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
-    levels: () => []
+    levels: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -104,7 +107,9 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <Hero
       v-if="title"

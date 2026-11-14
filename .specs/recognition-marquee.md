@@ -3,10 +3,11 @@ name: recognition-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-11
-checksum: ffa6f9f79d9eb57ea91a791bec3a182df2de5865d553867f4f0da31f240b46e7
+last_updated: 2026-11-14
+checksum: 621ee55c1674dd5c41dac4b843423886680a07312cb1d0d65f5cb9ad5d952374
+template: 2
 ---
 
 # RecognitionMarquee — Component Spec
@@ -76,6 +77,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 | `ariaLabel` | `string`                   | `''`    | false    | Accessible name of the scrolling region.                                                                                                                                                    |
 | `duration`  | `number`                   | `0`     | false    | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item.                                                                                                               |
 | `items`     | `RecognitionMarqueeItem[]` | `[]`    | false    | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
+| `anchor`    | `string`                   | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                              |
 
 ## Events
 
@@ -106,6 +108,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 | card width            | `var(--container-md)`   |
 | focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
+| anchor scroll offset  | `var(--spacing-xxl)`    |
 
 ## Theme gaps
 
@@ -122,12 +125,31 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Responsive
+
+- Container queries: none: the strip is a fixed-height row that loops horizontally.
+- Narrow (below `sm`): each card is 85 % of the viewport wide, capped at `--container-md`.
+- Touch: the strip is one focusable region; hover pauses the loop on a pointer device and focus pauses it on any device.
+- Reflow: the strip clips inside its frame, so the page never scrolls horizontally at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 19 KB gzip, the `.size-limit.json` entry `recognition-marquee`.
+- Runtime budget: one CSS animation on the compositor; no script runs per frame.
+- Heavy parts: none; images decode asynchronously.
 
 ## Examples
 

@@ -3,11 +3,13 @@ name: stats-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 05cd29616b542f496bb5086abe492a99de8d4325498adcef77fd6d69a59c1f93
+last_updated: 2026-11-14
+checksum: cb21cd1fdab35e7e46205aaf93c8ae73022ce6e2d2a8a179429530998c0ca9ae
+template: 2
 ---
+
 # StatsBand — Component Spec
 
 ## Purpose
@@ -37,7 +39,7 @@ The proof-by-numbers band of a marketing page: a framed row of big figures, each
 
 ```vue
 <script setup>
-import StatsBand from '@aziontech/webkit/stats-band'
+  import StatsBand from '@aziontech/webkit/stats-band'
 </script>
 
 <template>
@@ -53,9 +55,10 @@ import StatsBand from '@aziontech/webkit/stats-band'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `StatsBandItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| Prop     | Type              | Default | Required | JSDoc                                                                                                                                                                                                      |
+| -------- | ----------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`  | `StatsBandItem[]` | `[]`    | false    | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `anchor` | `string`          | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                             |
 
 ## Events
 
@@ -76,15 +79,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
+| anchor scroll offset  | `var(--spacing-xxl)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -94,6 +98,32 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `big-numbers`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the figure row follows the direction as `big-numbers` lays it out.
+- Icons: none.
+- Keyboard: nothing is interactive.
+- User data: none.
+
+## Responsive
+
+- Container queries: none of its own; `big-numbers` owns how the figures wrap.
+- Narrow (below `md`): the figures stack as `big-numbers` stacks them; the frame rules stay full width.
+- Touch: nothing is interactive.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 5 KB gzip, the `.size-limit.json` entry `stats-band`.
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 

@@ -3,11 +3,13 @@ name: investor-marks
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 50db1e5655d468949916be91463aea3453ffd09fb625650d23af3e98c2e662b6
+last_updated: 2026-11-14
+checksum: 8a8a637df1e575d34945b10e27cd5d1a440bbf50a43bfe91d5420e81a4f7cdf7
+template: 2
 ---
+
 # InvestorMarks — Component Spec
 
 ## Purpose
@@ -35,7 +37,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 ```vue
 <script setup>
-import InvestorMarks from '@aziontech/webkit/investor-marks'
+  import InvestorMarks from '@aziontech/webkit/investor-marks'
 </script>
 
 <template>
@@ -44,8 +46,18 @@ import InvestorMarks from '@aziontech/webkit/investor-marks'
     title="Backed by visionary investors"
     link-label="Visit website"
     :items="[
-      { name: 'monashees+', logo: '/logos/monashees-reversed.svg', logoLight: '/logos/monashees-mono.svg', href: 'https://www.monashees.com' },
-      { name: 'Qualcomm Ventures', logo: '/logos/qualcomm-reversed.svg', logoLight: '/logos/qualcomm-mono.svg', href: 'https://www.qualcommventures.com' }
+      {
+        name: 'monashees+',
+        logo: '/logos/monashees-reversed.svg',
+        logoLight: '/logos/monashees-mono.svg',
+        href: 'https://www.monashees.com'
+      },
+      {
+        name: 'Qualcomm Ventures',
+        logo: '/logos/qualcomm-reversed.svg',
+        logoLight: '/logos/qualcomm-mono.svg',
+        href: 'https://www.qualcommventures.com'
+      }
     ]"
   />
 </template>
@@ -53,12 +65,13 @@ import InvestorMarks from '@aziontech/webkit/investor-marks'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
-| `linkLabel` | `string` | `''` | false | Line revealed under a mark on hover, and the start of each link's accessible name. |
-| `items` | `InvestorMarksItem[]` | `[]` | false | The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. |
+| Prop        | Type                  | Default | Required | JSDoc                                                                                                                                                      |
+| ----------- | --------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`   | `string`              | `''`    | false    | Overline above the section title.                                                                                                                          |
+| `title`     | `string`              | `''`    | false    | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty.                                           |
+| `linkLabel` | `string`              | `''`    | false    | Line revealed under a mark on hover, and the start of each link's accessible name.                                                                         |
+| `items`     | `InvestorMarksItem[]` | `[]`    | false    | The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. |
+| `anchor`    | `string`              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                             |
 
 ## Events
 
@@ -75,31 +88,32 @@ import InvestorMarks from '@aziontech/webkit/investor-marks'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover / focus fill on a cell | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog) | `motion-reduce:before:transition-none` |
-| hover / focus lift of the mark | `transition-[translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover / focus reveal of the link line | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                               | Animation / Transition                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| hover / focus fill on a cell          | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
+| hover / focus lift of the mark        | `transition-[translate] duration-moderate-01 ease-productive-entrance`                  | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| hover / focus reveal of the link line | `transition-[opacity,translate] duration-moderate-01 ease-productive-entrance`          | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (link line) | `.text-overline-md` |
-| link line text | `var(--text-default)` |
-| cell hover fill | `var(--bg-hover)` |
-| focus ring | `var(--ring-color)` |
-| cell inset | `var(--spacing-xl)` |
-| link line offset | `var(--spacing-md)` |
-| mark lift | `var(--spacing-sm)` |
-| link line gap | `var(--spacing-xxs)` |
-| frame rules and marks | `var(--border-default)` |
+| Region                 | Token (DESIGN.md)       |
+| ---------------------- | ----------------------- |
+| typography (link line) | `.text-overline-md`     |
+| link line text         | `var(--text-default)`   |
+| cell hover fill        | `var(--bg-hover)`       |
+| focus ring             | `var(--ring-color)`     |
+| cell inset             | `var(--spacing-xl)`     |
+| link line offset       | `var(--spacing-md)`     |
+| mark lift              | `var(--spacing-sm)`     |
+| link line gap          | `var(--spacing-xxs)`    |
+| frame rules and marks  | `var(--border-default)` |
+| anchor scroll offset   | `var(--spacing-xxl)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -109,6 +123,34 @@ import InvestorMarks from '@aziontech/webkit/investor-marks'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): link line `var(--text-default)` on `var(--bg-hover)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` on every transition above.
 - Touch target ≥40×40 px — each link is a full 12rem-tall cell.
+
+## Internationalization
+
+| Key                    | English source       | Override prop |
+| ---------------------- | -------------------- | ------------- |
+| `investorMarks.newTab` | (opens in a new tab) | —             |
+
+- Formatting: none; the revealed link line is the `linkLabel` prop.
+
+## Right-to-left
+
+- Layout: logical utilities only; the two-column grid mirrors under `dir="rtl"`.
+- Icons: the arrow-up-right glyph and the investor marks are not mirrored.
+- Keyboard: no arrow-key handling; `Tab` order follows the grid.
+- User data: investor names render as given.
+
+## Responsive
+
+- Container queries: none of its own; `bento-grid` lays the cells in two columns.
+- Narrow (below `md`): the cells keep two columns and the marks scale down to their `max-w-48` box.
+- Touch: each link is a full 12rem-tall cell; the hover reveal also shows on focus, and the link works without it.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 5 KB gzip, the `.size-limit.json` entry `investor-marks`.
+- Runtime budget: none: static.
+- Heavy parts: none; marks are plain images.
 
 ## Examples
 

@@ -38,6 +38,8 @@
     duration?: number
     /** The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. */
     items?: RecognitionMarqueeItem[]
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -45,7 +47,8 @@
     title: '',
     ariaLabel: '',
     duration: 0,
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -62,8 +65,10 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="items.length > 0"

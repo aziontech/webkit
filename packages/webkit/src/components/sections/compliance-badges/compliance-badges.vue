@@ -42,6 +42,8 @@
     certifications?: ComplianceBadgesCertification[]
     /** The closing "see more" cell; `{ label, href }`. Omitted when absent. */
     primaryAction?: ComplianceBadgesAction
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   withDefaults(defineProps<Props>(), {
@@ -50,7 +52,8 @@
     description: '',
     ariaLabel: '',
     certifications: () => [],
-    primaryAction: undefined
+    primaryAction: undefined,
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -63,7 +66,9 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="title.length > 0"

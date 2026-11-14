@@ -3,10 +3,11 @@ name: photo-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-11
-checksum: fa530d27e1466bab1fb5bd3913e57eb4f2ed3bfa80de41c9e6fe43e004e1de06
+last_updated: 2026-11-14
+checksum: 7d0b97c7cdc996c1eba0a3c8d451cb0df3a5f65ab11b336c9d5fee37b93c1472
+template: 2
 ---
 
 # PhotoMarquee — Component Spec
@@ -63,6 +64,7 @@ The office band of the careers page: a horizontal section title over a framed st
 | `ariaLabel`        | `string`                       | `''`       | false    | Accessible name of the scrolling region.                                                                           |
 | `duration`         | `number`                       | `0`        | false    | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo.                                        |
 | `photos`           | `PhotoMarqueePhoto[]`          | `[]`       | false    | The photographs, in order; each is `{ src, alt, width, height }`.                                                  |
+| `anchor`           | `string`                       | `''`       | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                     |
 
 ## Events
 
@@ -91,6 +93,7 @@ The office band of the careers page: a horizontal section title over a framed st
 | photo gap             | `var(--spacing-md)`     |
 | focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
+| anchor scroll offset  | `var(--spacing-xxl)`    |
 
 ## Theme gaps
 
@@ -107,12 +110,31 @@ The office band of the careers page: a horizontal section title over a framed st
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.
 - Touch target ≥40×40 px — not applicable beyond the focusable region.
 
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed, so photos flow in reading order; `motion-reduce` stops it in both.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Responsive
+
+- Container queries: none: the strip is a fixed-height row that loops horizontally.
+- Narrow (below `sm`): photos are 20rem tall instead of 28rem.
+- Touch: the strip is one focusable region; hover pauses the loop on a pointer device and focus pauses it on any device.
+- Reflow: the strip clips inside its frame, so the page never scrolls horizontally at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 5 KB gzip, the `.size-limit.json` entry `photo-marquee`.
+- Runtime budget: one CSS animation on the compositor; no script runs per frame.
+- Heavy parts: none; images decode asynchronously.
 
 ## Examples
 

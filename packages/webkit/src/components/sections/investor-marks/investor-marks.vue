@@ -33,13 +33,16 @@
     linkLabel?: string
     /** The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. */
     items?: InvestorMarksItem[]
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     eyebrow: '',
     title: '',
     linkLabel: '',
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -56,8 +59,10 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasItems"

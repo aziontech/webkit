@@ -38,6 +38,8 @@
     duration?: number
     /** The photographs, in order; each is `{ src, alt, width, height }`. */
     photos?: PhotoMarqueePhoto[]
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -46,7 +48,8 @@
     descriptionWidth: 'narrow',
     ariaLabel: '',
     duration: 0,
-    photos: () => []
+    photos: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -65,8 +68,10 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasPhotos"

@@ -3,11 +3,13 @@ name: hero-copy-on-top-art
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: c546895a2a23f73aa9f51a14d882509bd3f05619a05e63ee217afcf930a5d79f
+last_updated: 2026-11-14
+checksum: a38623486175e431895100a78a8ed7c4a486c3153d912d15b8f76dc3afcf3b3d
+template: 2
 ---
+
 # HeroCopyOnTopArt — Component Spec
 
 ## Purpose
@@ -37,7 +39,7 @@ The opening band of a product page whose copy sits centered on top of a topology
 
 ```vue
 <script setup>
-import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
+  import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 </script>
 
 <template>
@@ -47,8 +49,29 @@ import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
     description="Create a workload and it is live in every Azion data center."
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :levels="[
-      { nodes: [{ eyebrow: 'Domain', icon: 'ai ai-domains', title: 'shop.example.com', label: 'Public', severity: 'info' }] },
-      { nodes: [{ eyebrow: 'Workload', icon: 'ai ai-workloads', title: 'shop-prod', label: 'Live', severity: 'success', lit: true }] }
+      {
+        nodes: [
+          {
+            eyebrow: 'Domain',
+            icon: 'ai ai-domains',
+            title: 'shop.example.com',
+            label: 'Public',
+            severity: 'info'
+          }
+        ]
+      },
+      {
+        nodes: [
+          {
+            eyebrow: 'Workload',
+            icon: 'ai ai-workloads',
+            title: 'shop-prod',
+            label: 'Live',
+            severity: 'success',
+            lit: true
+          }
+        ]
+      }
     ]"
   />
 </template>
@@ -56,15 +79,16 @@ import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
-| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `levels` | `HeroCopyOnTopArtLevel[]` | `[]` | false | The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. |
+| Prop              | Type                      | Default     | Required | JSDoc                                                                                                                                                                                                                                    |
+| ----------------- | ------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`         | `string`                  | `''`        | false    | Short overline above the headline.                                                                                                                                                                                                       |
+| `highlight`       | `string`                  | `''`        | false    | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`.                                                                                                                                          |
+| `title`           | `string`                  | `''`        | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                                                                                                                           |
+| `description`     | `string`                  | `''`        | false    | Sentence under the headline.                                                                                                                                                                                                             |
+| `primaryAction`   | `HeroCopyOnTopArtAction`  | `undefined` | false    | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                              |
+| `secondaryAction` | `HeroCopyOnTopArtAction`  | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                     |
+| `levels`          | `HeroCopyOnTopArtLevel[]` | `[]`        | false    | The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. |
+| `anchor`          | `string`                  | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                           |
 
 ## Events
 
@@ -83,27 +107,28 @@ import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| scene enters | `animate-content-enter` with a 120ms delay | semantic | `motion-reduce:animate-none` |
-| card hover / focus | `transition-colors duration-moderate-01 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger            | Animation / Transition                                            | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------ | ----------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| scene enters       | `animate-content-enter` with a 120ms delay                        | semantic                                          | `motion-reduce:animate-none`    |
+| card hover / focus | `transition-colors duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card fill | `var(--bg-surface)` |
-| card border | `var(--border-default)`, hover `var(--border-strong)`, lit `var(--primary)` |
-| card shape | `var(--shape-card)` |
-| card eyebrow and icon | `var(--text-muted)` |
-| card title | `var(--text-default)` |
-| lit glow | `var(--accent)`, `var(--primary)` |
+| Region                | Token (DESIGN.md)                                                           |
+| --------------------- | --------------------------------------------------------------------------- |
+| card fill             | `var(--bg-surface)`                                                         |
+| card border           | `var(--border-default)`, hover `var(--border-strong)`, lit `var(--primary)` |
+| card shape            | `var(--shape-card)`                                                         |
+| card eyebrow and icon | `var(--text-muted)`                                                         |
+| card title            | `var(--text-default)`                                                       |
+| lit glow              | `var(--accent)`, `var(--primary)`                                           |
+| anchor scroll offset  | `var(--spacing-xxl)`                                                        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -113,6 +138,32 @@ import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `hero-title`, `button` and `tag`; card text uses `--text-default` and `--text-muted`.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every motion-bearing class.
 - Touch target ≥40×40 px — the large buttons meet it.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the topology columns run in reading order and the edge mask is symmetric.
+- Icons: card icons and the action trailing glyphs follow `button` and `tag`; no icon is mirrored by the band.
+- Keyboard: no arrow-key handling; `Tab` moves through the actions.
+- User data: none.
+
+## Responsive
+
+- Container queries: the scene reads its own container: below `@4xl` the scene keeps a fixed 40rem width and the edges fade out (`@max-2xl` mask); from `@4xl` it takes `--container-3xl`.
+- Narrow (≤ 640 px): the headline and actions stack centred; the scene is clipped at the edges, never scrolled.
+- Touch: the large buttons meet 40 px; the cards are not interactive.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the scene is decorative and clipped.
+
+## Performance
+
+- Bundle budget: 23 KB gzip, the `.size-limit.json` entry `hero-copy-on-top-art` (entry chunk only).
+- Runtime budget: none: static after the entrance animation.
+- Heavy parts: none.
 
 ## Examples
 
