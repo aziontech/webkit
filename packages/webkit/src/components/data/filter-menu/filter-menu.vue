@@ -43,25 +43,29 @@
     label?: string
     /** Size token of the trigger button. */
     size?: FilterMenuSize
+    /** Disables the trigger: the menu does not open. */
+    disabled?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     fields: () => [],
     label: '',
-    size: 'medium'
+    size: 'medium',
+    disabled: false
   })
 
   /** Applied values per field id; clearing a field deletes its key. */
   const model = defineModel<FilterMenuModel>({ default: () => ({}) })
+  /** Whether the menu is open. Supports v-model:open. */
+  const open = defineModel<boolean>('open', { default: false })
 
   const Calendar = defineAsyncComponent(() => import('../../inputs/calendar/calendar.vue'))
 
   const attrs = useAttrs()
   const { t, dir, locale, optionsOf, summaryText } = useFilterMenuLabels()
-  const { request } = useFilterMenuChannel(() => props.fields)
+  const { request } = useFilterMenuChannel(() => props.fields, { listen: true })
   const { region, height: regionHeight, animateHeight } = useAnimatedHeight()
 
-  const open = ref<boolean>(false)
   const activeId = ref<string | null>(null)
   const customId = ref<string | null>(null)
   const calendarOpen = ref<boolean>(false)
@@ -103,8 +107,15 @@
   const fieldRows = computed<FilterMenuField[]>(() =>
     props.fields.filter((field) => matches(field.label))
   )
-  const optionRows = computed<FilterMenuOption[]>(() =>
+  const MAX_OPTION_ROWS = 100
+  const matchingOptions = computed<FilterMenuOption[]>(() =>
     activeField.value ? optionsOf(activeField.value).filter((option) => matches(option.label)) : []
+  )
+  const optionRows = computed<FilterMenuOption[]>(() =>
+    matchingOptions.value.slice(0, MAX_OPTION_ROWS)
+  )
+  const hiddenOptions = computed<number>(
+    () => matchingOptions.value.length - optionRows.value.length
   )
   const empty = computed<boolean>(() =>
     activeField.value ? optionRows.value.length === 0 : fieldRows.value.length === 0
@@ -271,6 +282,7 @@
     v-bind="$attrs"
     v-model:open="open"
     :data-testid="testId"
+    :disabled="disabled"
     placement="bottom-start"
     :dismissible="!calendarOpen"
     class="shrink-0"
@@ -281,6 +293,7 @@
         :aria-label="triggerName"
         kind="outlined"
         :size="size"
+        :disabled="disabled"
         icon="pi pi-filter"
       />
       <Transition
@@ -444,6 +457,14 @@
                       />
                     </button>
                   </div>
+
+                  <p
+                    v-if="activeField && hiddenOptions > 0"
+                    :data-testid="`${testId}__more-values`"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
+                  >
+                    {{ t('filterMenu.moreValues', { count: hiddenOptions }) }}
+                  </p>
 
                   <p
                     v-if="empty"

@@ -1427,7 +1427,7 @@
   {
     "name": "filter-menu-chips",
     "path": "src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
-    "limit": "19.9 KB",
+    "limit": "20 KB",
     "entryOnly": true
   },
   {

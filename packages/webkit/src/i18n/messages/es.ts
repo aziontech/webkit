@@ -556,6 +556,10 @@ export const es: Messages = {
     rangeSince: 'Desde {date}',
     rangeUntil: 'Hasta {date}',
     more: '+{count}',
+    moreValues: {
+      one: '{count} valor más. Escribe para acotar la lista.',
+      other: '{count} valores más. Escribe para acotar la lista.'
+    },
     applied: 'Filtros aplicados'
   },
   uploadProgress: {

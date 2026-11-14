@@ -556,6 +556,10 @@ export const ptBR: Messages = {
     rangeSince: 'Desde {date}',
     rangeUntil: 'Até {date}',
     more: '+{count}',
+    moreValues: {
+      one: 'Mais {count} valor. Digite para filtrar a lista.',
+      other: 'Mais {count} valores. Digite para filtrar a lista.'
+    },
     applied: 'Filtros aplicados'
   },
   uploadProgress: {

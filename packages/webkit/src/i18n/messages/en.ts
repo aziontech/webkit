@@ -495,6 +495,10 @@ export const filterMenu = {
   rangeSince: 'Since {date}',
   rangeUntil: 'Until {date}',
   more: '+{count}',
+  moreValues: {
+    one: '{count} more value. Type to narrow the list.',
+    other: '{count} more values. Type to narrow the list.'
+  },
   applied: 'Applied filters'
 } as const
 
