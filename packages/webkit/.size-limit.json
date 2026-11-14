@@ -2452,6 +2452,26 @@
     "limit": "11.6 KB"
   },
   {
+    "name": "hover-card",
+    "path": "src/components/overlay/hover-card/index.ts",
+    "limit": "5.05 KB"
+  },
+  {
+    "name": "hover-card-root",
+    "path": "src/components/overlay/hover-card/hover-card.vue",
+    "limit": "3.9 KB"
+  },
+  {
+    "name": "hover-card-trigger",
+    "path": "src/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue",
+    "limit": "1.05 KB"
+  },
+  {
+    "name": "hover-card-content",
+    "path": "src/components/overlay/hover-card/hover-card-content/hover-card-content.vue",
+    "limit": "1.2 KB"
+  },
+  {
     "name": "popover",
     "path": "src/components/overlay/popover/index.ts",
     "limit": "10.35 KB"

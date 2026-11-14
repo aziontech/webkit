@@ -1739,6 +1739,22 @@
       "types": "./types/components/overlay/panel/panel-header.vue.d.ts",
       "default": "./src/components/overlay/panel/panel-header.vue"
     },
+    "./hover-card": {
+      "types": "./types/components/overlay/hover-card/index.d.ts",
+      "default": "./src/components/overlay/hover-card/index.ts"
+    },
+    "./hover-card-root": {
+      "types": "./types/components/overlay/hover-card/hover-card.vue.d.ts",
+      "default": "./src/components/overlay/hover-card/hover-card.vue"
+    },
+    "./hover-card-trigger": {
+      "types": "./types/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue.d.ts",
+      "default": "./src/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue"
+    },
+    "./hover-card-content": {
+      "types": "./types/components/overlay/hover-card/hover-card-content/hover-card-content.vue.d.ts",
+      "default": "./src/components/overlay/hover-card/hover-card-content/hover-card-content.vue"
+    },
     "./popover": {
       "types": "./types/components/overlay/popover/index.d.ts",
       "default": "./src/components/overlay/popover/index.ts"
