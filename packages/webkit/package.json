@@ -1615,6 +1615,10 @@
       "types": "./types/components/overlay/command/command-separator/command-separator.vue.d.ts",
       "default": "./src/components/overlay/command/command-separator/command-separator.vue"
     },
+    "./command-page": {
+      "types": "./types/components/overlay/command/command-page/command-page.vue.d.ts",
+      "default": "./src/components/overlay/command/command-page/command-page.vue"
+    },
     "./dialog": {
       "types": "./types/components/overlay/dialog/index.d.ts",
       "default": "./src/components/overlay/dialog/index.ts"

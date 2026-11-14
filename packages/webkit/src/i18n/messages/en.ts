@@ -238,6 +238,7 @@ export const combobox = {
 } as const
 
 export const command = {
+  back: 'Back from {page}',
   empty: 'No results found.',
   placeholder: 'Search everything',
   title: 'Command menu'

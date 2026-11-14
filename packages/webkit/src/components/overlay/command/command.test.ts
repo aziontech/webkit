@@ -12,6 +12,8 @@ import CommandGroup from './command-group/command-group.vue'
 import CommandInput from './command-input/command-input.vue'
 import CommandItem from './command-item/command-item.vue'
 import CommandList from './command-list/command-list.vue'
+import { matchCommand } from './command-match'
+import CommandPage from './command-page/command-page.vue'
 import CommandSeparator from './command-separator/command-separator.vue'
 
 // The panel + backdrop are Teleported to <body> by the wrapped Dialog, so they
@@ -600,5 +602,226 @@ describe('Command at scale', () => {
     await fireEvent.keyDown(input, { key: 'Home' })
     await fireEvent.keyDown(input, { key: 'Enter' })
     expect(onSelect).toHaveBeenCalledWith(expect.anything(), 'early')
+  })
+})
+
+describe('ranked search', () => {
+  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+  const activeText = () =>
+    document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
+
+  const ranked = (onSelect?: (...args: unknown[]) => void) =>
+    defineComponent({
+      components: {
+        Command,
+        CommandInput,
+        CommandList,
+        CommandGroup,
+        CommandItem,
+        CommandSeparator
+      },
+      setup: () => ({ open: ref(true), onSelect }),
+      template: `
+        <Command v-model:open="open" shortcut="" @select="onSelect">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup heading="Navigation">
+              <CommandItem value="usage">Go to Usage</CommandItem>
+              <CommandItem value="prefs" :keywords="['team']">Go to Preferences</CommandItem>
+            </CommandGroup>
+            <CommandSeparator />
+            <CommandGroup heading="Settings">
+              <CommandItem value="domains">Settings Domains</CommandItem>
+              <CommandItem value="deploy">Deploy Project</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+    })
+
+  it('ranks prefix over word over substring over abbreviation, and rejects scattered letters', () => {
+    const prefix = matchCommand('set', 'Settings Domains').score
+    const word = matchCommand('set', 'Go to Settings').score
+    const inner = matchCommand('set', 'Reset').score
+    const abbreviation = matchCommand('dpl', 'Deploy Project').score
+    expect(prefix).toBeGreaterThan(word)
+    expect(word).toBeGreaterThan(inner)
+    expect(inner).toBeGreaterThan(abbreviation)
+    expect(abbreviation).toBeGreaterThan(0)
+    expect(matchCommand('xyz', 'Deploy Project').score).toBe(0)
+    expect(matchCommand('osj', 'Go to Settings Project').score).toBe(0)
+    expect(matchCommand('team', 'Invite', ['team']).score).toBeGreaterThan(0)
+  })
+
+  it('keyboard order follows the rank: the best group and item lead', async () => {
+    const onSelect = vi.fn()
+    render(ranked(onSelect))
+    await settle()
+    input().focus()
+    await fireEvent.update(input(), 'set')
+    await settle()
+
+    const groups = document.body.querySelectorAll('[role="group"]')
+    expect(byTestId('overlay-command__list')).toHaveAttribute('data-ranked')
+    expect(groups[1]).toHaveAttribute('data-leading')
+    expect((groups[0] as HTMLElement).style.display).toBe('none')
+    const rows = [...groups[1].querySelectorAll('[role="option"]')] as HTMLElement[]
+    expect(Number(rows[0].style.order)).toBeLessThan(Number(rows[1].style.order))
+    expect(byTestId('overlay-command__separator')!.style.display).toBe('none')
+    expect(activeText()).toBe('Settings Domains')
+
+    await userEvent.keyboard('{Enter}')
+    expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'domains')
+  })
+
+  it('matches keywords that are not in the label', async () => {
+    render(ranked())
+    await settle()
+    await fireEvent.update(input(), 'team')
+    await settle()
+    const prefs = screen.getByText('Go to Preferences').closest('[role="option"]') as HTMLElement
+    const usage = screen.getByText('Go to Usage').closest('[role="option"]') as HTMLElement
+    expect(prefs.style.display).not.toBe('none')
+    expect(usage.style.display).toBe('none')
+  })
+
+  it('emphasizes the matched characters of a plain label and keeps its accessible name', async () => {
+    render(ranked())
+    await settle()
+    await fireEvent.update(input(), 'dpl')
+    await settle()
+    const row = [...document.body.querySelectorAll('[role="option"]')].find(
+      (node) => node.textContent?.trim() === 'Deploy Project'
+    ) as HTMLElement
+    const marks = [...row.querySelectorAll('mark')].map((node) => node.textContent)
+    expect(marks.join('')).toBe('dpl'.replace('d', 'D'))
+    await fireEvent.update(input(), '')
+    await settle()
+    expect(row.querySelector('mark')).toBeNull()
+  })
+
+  it('stays fast with 1k items in 10 groups', async () => {
+    const groups = Array.from({ length: 10 }, (_, g) => ({
+      id: `g${g}`,
+      heading: `Group ${g}`,
+      items: Array.from({ length: 100 }, (_, i) => ({
+        value: `g${g}-i${i}`,
+        label: `Resource ${g * 100 + i} production`
+      }))
+    }))
+    const Big = defineComponent({
+      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+      setup: () => ({ open: ref(true), groups }),
+      template: `
+        <Command v-model:open="open" shortcut="">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup v-for="group in groups" :key="group.id" :heading="group.heading">
+              <CommandItem v-for="item in group.items" :key="item.value" :value="item.value">{{ item.label }}</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+    })
+    render(Big)
+    await settle()
+    const t0 = performance.now()
+    await fireEvent.update(input(), 'rs 99')
+    await settle()
+    const elapsed = performance.now() - t0
+    const visible = [...document.body.querySelectorAll('[role="option"]')].filter(
+      (node) => (node as HTMLElement).style.display !== 'none'
+    )
+    expect(visible.length).toBeGreaterThan(0)
+    expect(visible.length).toBeLessThan(1000)
+    expect(elapsed).toBeLessThan(1000)
+  })
+})
+
+describe('nested pages', () => {
+  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+  const visibleTexts = () =>
+    [...document.body.querySelectorAll('[role="option"]')]
+      .filter((node) => (node as HTMLElement).style.display !== 'none')
+      .map((node) => node.textContent?.trim())
+
+  const paged = (onSelect?: (...args: unknown[]) => void, initialPage = '') =>
+    defineComponent({
+      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem, CommandPage },
+      setup: () => ({ open: ref(true), page: ref(initialPage), onSelect }),
+      template: `
+        <div>
+          <span data-testid="page-value">{{ page }}</span>
+          <Command v-model:open="open" v-model:page="page" shortcut="" @select="onSelect">
+            <CommandInput placeholder="Search" />
+            <CommandList>
+              <CommandGroup heading="Projects">
+                <CommandItem value="switch" page="projects">Switch Project</CommandItem>
+                <CommandItem value="new">Create Project</CommandItem>
+              </CommandGroup>
+              <CommandPage name="projects" heading="Switch project">
+                <CommandItem value="acme-store">acme-store</CommandItem>
+                <CommandItem value="docs-site">docs-site</CommandItem>
+              </CommandPage>
+            </CommandList>
+          </Command>
+        </div>
+      `
+    })
+
+  it('an item with page opens the page without selecting, and shows a named back control', async () => {
+    const onSelect = vi.fn()
+    const view = render(paged(onSelect))
+    await settle()
+    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
+    expect(byTestId('overlay-command__item__page')).not.toBeNull()
+
+    input().focus()
+    await userEvent.keyboard('{ArrowDown}{Enter}')
+    await settle()
+    expect(onSelect).not.toHaveBeenCalled()
+    expect(view.getByTestId('page-value').textContent).toBe('projects')
+    expect(visibleTexts()).toEqual(['acme-store', 'docs-site'])
+    const back = byTestId('overlay-command__input__back')!
+    expect(back).toHaveAccessibleName('Back from Switch project')
+    expect(byTestId('overlay-command__input')).toHaveAttribute('data-page', 'projects')
+
+    await userEvent.keyboard('{Enter}')
+    expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'acme-store')
+  })
+
+  it('Backspace in an empty field and the back control return to the previous page', async () => {
+    const view = render(paged())
+    await settle()
+    input().focus()
+    await userEvent.keyboard('{ArrowDown}{Enter}')
+    await settle()
+    await userEvent.keyboard('{Backspace}')
+    await settle()
+    expect(view.getByTestId('page-value').textContent).toBe('')
+    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
+
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(view.getByTestId('page-value').textContent).toBe('projects')
+    await userEvent.click(byTestId('overlay-command__input__back')!)
+    await settle()
+    expect(view.getByTestId('page-value').textContent).toBe('')
+  })
+
+  it('Escape on a nested page goes back instead of closing', async () => {
+    render(paged(undefined, 'projects'))
+    await settle()
+    input().focus()
+    await userEvent.keyboard('{Escape}')
+    await settle()
+    expect(panel()).not.toBeNull()
+    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
+  })
+
+  it('has no WCAG violations on a nested page', async () => {
+    render(paged(undefined, 'projects'))
+    await settle()
+    await expectNoA11yViolations(panel()!)
   })
 })

@@ -1,8 +1,27 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs, useId } from 'vue'
+  import {
+    Comment,
+    computed,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    Text,
+    toRef,
+    useAttrs,
+    useId,
+    useSlots,
+    type VNode
+  } from 'vue'
 
   import Kbd, { type KbdKeyName } from '../../../content/kbd/kbd.vue'
-  import { CommandGroupIdKey, type CommandItemValue, useCommandMenuContext } from '../injection-key'
+  import { matchCommand, splitByRanges } from '../command-match'
+  import {
+    CommandGroupIdKey,
+    type CommandItemValue,
+    CommandPageKey,
+    useCommandMenuContext
+  } from '../injection-key'
 
   defineOptions({
     name: 'CommandItem',
@@ -21,11 +40,17 @@
       value: CommandItemValue
       /** Disables interaction; the item is skipped by roving navigation and never activates. */
       disabled?: boolean
+      /** Extra search terms matched as substrings of the query; never shown. */
+      keywords?: string[]
+      /** Name of a Command.Page this item opens instead of selecting. */
+      page?: string
       /** A `'+'`-delimited shortcut hint (e.g. `'meta+d'`) rendered on the right via `Kbd`. Display only. */
       shortcut?: string
     }>(),
     {
       disabled: false,
+      keywords: () => [],
+      page: '',
       shortcut: ''
     }
   )
@@ -33,6 +58,8 @@
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
   const groupId = inject(CommandGroupIdKey, null)
+  const itemPage = inject(CommandPageKey, '')
+  const slots = useSlots()
 
   const itemId = useId()
   const rootRef = ref<HTMLElement | null>(null)
@@ -43,11 +70,31 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__item`
   )
 
-  const haystack = computed(() => `${String(props.value)} ${itemText.value}`.toLowerCase())
-  const isVisible = computed(() => {
-    const q = ctx.query.value.trim().toLowerCase()
-    return !q || haystack.value.includes(q)
-  })
+  const match = computed(() =>
+    matchCommand(ctx.query.value, itemText.value, [String(props.value), ...props.keywords])
+  )
+
+  const isVisible = computed(() => ctx.page.value === itemPage && match.value.score > 0)
+
+  const order = computed(() => (ctx.ranking.value ? Math.round((1 - match.value.score) * 1000) : 0))
+
+  function plainLabel(nodes: VNode[]): string | null {
+    let text = ''
+    for (const node of nodes) {
+      if (node.type === Comment) continue
+      if (node.type !== Text || typeof node.children !== 'string') return null
+      text += node.children
+    }
+    return text.trim()
+  }
+
+  function labelParts() {
+    if (!ctx.ranking.value) return null
+    const label = plainLabel(slots['default']?.() ?? [])
+    if (!label) return null
+    const { ranges } = matchCommand(ctx.query.value, label)
+    return ranges.length ? splitByRanges(label, ranges) : null
+  }
 
   const active = computed(() => ctx.activeValue.value === props.value)
 
@@ -60,7 +107,11 @@
     tab: 'tab',
     backspace: 'backspace',
     delete: 'delete',
-    del: 'delete'
+    del: 'delete',
+    up: 'arrow-up',
+    down: 'arrow-down',
+    left: 'arrow-left',
+    right: 'arrow-right'
   }
   const shortcutHint = computed(() => {
     const tokens = props.shortcut
@@ -84,7 +135,8 @@
 
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
-    ctx.select(event, props.value)
+    if (props.page) ctx.pushPage(props.page)
+    else ctx.select(event, props.value)
   }
 
   const disabledRef = toRef(props, 'disabled')
@@ -98,6 +150,7 @@
       groupId,
       disabled: disabledRef,
       isVisible,
+      order,
       el: rootRef,
       activate
     })
@@ -121,6 +174,7 @@
     :data-testid="testId"
     :data-active="active || undefined"
     :data-disabled="disabled || undefined"
+    :style="ctx.ranking.value ? { order } : undefined"
     class="flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="!disabled && activate($event)"
     @keydown.enter.prevent="!disabled && activate($event)"
@@ -139,7 +193,26 @@
       ref="labelRef"
       class="flex-1 truncate text-start"
     >
-      <slot />
+      <template
+        v-for="parts in [labelParts()]"
+        :key="'label'"
+      >
+        <template v-if="parts">
+          <template
+            v-for="(part, index) in parts"
+            :key="index"
+          >
+            <mark
+              v-if="part.match"
+              :data-testid="`${testId}__match`"
+              class="bg-transparent font-semibold text-inherit"
+              >{{ part.text }}</mark
+            >
+            <template v-else>{{ part.text }}</template>
+          </template>
+        </template>
+        <slot v-else />
+      </template>
     </span>
 
     <Kbd
@@ -158,5 +231,11 @@
     >
       <slot name="suffix" />
     </span>
+    <i
+      v-else-if="page"
+      :data-testid="`${testId}__page`"
+      class="pi pi-chevron-right shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
+      aria-hidden="true"
+    />
   </div>
 </template>

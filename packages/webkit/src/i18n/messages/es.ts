@@ -303,6 +303,7 @@ export const es: Messages = {
     }
   },
   command: {
+    back: 'Volver de {page}',
     empty: 'No se encontraron resultados.',
     placeholder: 'Buscar en todo',
     title: 'Menú de comandos'

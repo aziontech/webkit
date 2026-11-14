@@ -2264,7 +2264,7 @@
   {
     "name": "command",
     "path": "src/components/overlay/command/index.ts",
-    "limit": "24.65 KB"
+    "limit": "25.2 KB"
   },
   {
     "name": "command-root",
@@ -2274,7 +2274,7 @@
   {
     "name": "command-input",
     "path": "src/components/overlay/command/command-input/command-input.vue",
-    "limit": "4.2 KB"
+    "limit": "4.6 KB"
   },
   {
     "name": "command-list",
@@ -2289,7 +2289,7 @@
   {
     "name": "command-item",
     "path": "src/components/overlay/command/command-item/command-item.vue",
-    "limit": "3.3 KB"
+    "limit": "4.6 KB"
   },
   {
     "name": "command-empty",
@@ -2299,7 +2299,12 @@
   {
     "name": "command-separator",
     "path": "src/components/overlay/command/command-separator/command-separator.vue",
-    "limit": "0.55 KB"
+    "limit": "0.6 KB"
+  },
+  {
+    "name": "command-page",
+    "path": "src/components/overlay/command/command-page/command-page.vue",
+    "limit": "0.7 KB"
   },
   {
     "name": "dialog",

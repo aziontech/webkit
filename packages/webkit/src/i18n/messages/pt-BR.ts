@@ -303,6 +303,7 @@ export const ptBR: Messages = {
     }
   },
   command: {
+    back: 'Voltar de {page}',
     empty: 'Nenhum resultado encontrado.',
     placeholder: 'Buscar em tudo',
     title: 'Menu de comandos'
