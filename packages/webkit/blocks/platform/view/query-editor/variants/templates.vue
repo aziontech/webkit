@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -13,11 +14,12 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -94,22 +96,22 @@
         {
           __k: 'row-1',
           id: 1,
-          name: 'Ada Lovelace',
-          email: 'ada@example.com',
+          name: 'Jane Doe',
+          email: 'jane.doe@example.com',
           created_at: '2026-07-21 08:15:00'
         },
         {
           __k: 'row-2',
           id: 2,
-          name: 'Alan Turing',
-          email: 'alan@example.com',
+          name: 'John Smith',
+          email: 'john.smith@example.com',
           created_at: '2026-07-21 08:15:01'
         },
         {
           __k: 'row-3',
           id: 3,
-          name: 'Grace Hopper',
-          email: 'grace@example.com',
+          name: 'Alex Morgan',
+          email: 'alex.morgan@example.com',
           created_at: null
         }
       ]
@@ -190,9 +192,7 @@
   const rowFilter = ref('')
   const filterPlaceholder = computed(() => {
     const names = (selectedTable.value?.columns ?? []).map((column) => column.name)
-    return names.length
-      ? `Filter by ${names.slice(0, 3).join(', ')} or ask AI`
-      : 'Filter rows or ask AI'
+    return names.length ? `Filter by ${names.slice(0, 3).join(', ')}` : 'Filter rows'
   })
   const tableRows = computed(() => selectedTable.value?.rows ?? [])
   const filteredRows = computed(() => {
@@ -269,7 +269,7 @@
   const oneLine = (sql: string) => sql.replace(/\s+/g, ' ').trim()
 
   const running = ref(false)
-  const templatesOpen = ref(false)
+  const templatesOpen = ref(true)
   const selectResult: QueryResult = {
     type: 'rows',
     columns: ['id', 'name', 'email', 'created_at'],
@@ -277,22 +277,22 @@
       {
         __k: 1,
         id: 1,
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
         created_at: '2026-07-21 08:15:00'
       },
       {
         __k: 2,
         id: 2,
-        name: 'Alan Turing',
-        email: 'alan@example.com',
+        name: 'John Smith',
+        email: 'john.smith@example.com',
         created_at: '2026-07-21 08:15:01'
       },
       {
         __k: 3,
         id: 3,
-        name: 'Grace Hopper',
-        email: 'grace@example.com',
+        name: 'Alex Morgan',
+        email: 'alex.morgan@example.com',
         created_at: '2026-07-21 08:15:02'
       }
     ]
@@ -354,6 +354,14 @@
     'PRAGMA'
   ]
 
+  const resultStatus = computed(() => {
+    if (running.value) return 'Running the query.'
+    if (!results.value) return ''
+    if (results.value.type !== 'rows') return results.value.text
+    const count = results.value.rows.length
+    return `${count} ${count === 1 ? 'row' : 'rows'} returned.`
+  })
+
   const runQuery = () => {
     const sql = editorSql.value.trim()
     if (!sql || running.value) return
@@ -402,9 +410,9 @@
       description: 'Insert sample customer records into the customers table',
       icon: 'pi pi-plus-circle',
       sql: `INSERT INTO customers (name, email) VALUES
-  ('Ada Lovelace', 'ada@example.com'),
-  ('Alan Turing', 'alan@example.com'),
-  ('Grace Hopper', 'grace@example.com');`
+  ('Jane Doe', 'jane.doe@example.com'),
+  ('John Smith', 'john.smith@example.com'),
+  ('Alex Morgan', 'alex.morgan@example.com');`
     },
     {
       id: 'select-all',
@@ -568,12 +576,21 @@ LIMIT 3;`
             >
               No tables created yet
             </p>
-            <p
+            <EmptyState
               v-else-if="!filteredTables.length"
-              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+              size="small"
+              icon="pi pi-search"
+              :title="`No tables match “${tableSearch}”`"
             >
-              No tables match "{{ tableSearch }}".
-            </p>
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  kind="outlined"
+                  size="small"
+                  @click="tableSearch = ''"
+                />
+              </template>
+            </EmptyState>
             <div
               v-else
               class="flex flex-col gap-(--spacing-xxs)"
@@ -583,26 +600,27 @@ LIMIT 3;`
                 :key="table.id"
                 class="group flex items-center gap-(--spacing-xxs)"
               >
-                <button
-                  type="button"
-                  :data-selected="selectedTable && selectedTable.id === table.id ? true : null"
-                  class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
+                <Item
+                  clickable
+                  kind="option"
+                  :aria-pressed="selectedTable?.id === table.id"
+                  class="min-w-0 flex-1 flex-nowrap"
                   @click="selectTable(table.id)"
                 >
                   <i
                     class="pi pi-table shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <span class="min-w-0 truncate">{{ table.name }}</span>
-                </button>
+                  <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
+                </Item>
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Table actions">
+                    <Tooltip :text="`Actions for ${table.name}`">
                       <IconButton
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        aria-label="Table actions"
+                        :aria-label="`Actions for ${table.name}`"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -630,52 +648,26 @@ LIMIT 3;`
           v-if="!selectedTable"
           class="flex flex-1 items-center justify-center p-(--spacing-md)"
         >
-          <Card class="w-full max-w-(--container-2xl)">
-            <template #content>
-              <div
-                class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
-              >
-                <EmptyState
+          <EmptyState
+            bordered
+            size="medium"
+            icon="pi pi-table"
+            title="No tables yet"
+            description="Create your first table to store your data."
+            class="w-full max-w-(--container-2xl)"
+          >
+            <template #actions>
+              <div class="w-full md:w-fit">
+                <Button
+                  label="Create Table"
+                  icon="pi pi-plus"
+                  kind="secondary"
                   size="medium"
-                  title="No tables yet"
-                  description="Create your first table to store your data."
                   class="w-full"
-                >
-                  <template #icon>
-                    <span class="relative flex size-10 items-center justify-center">
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-xl) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                      />
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                      />
-                      <span
-                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                      >
-                        <i
-                          class="pi pi-table text-body-md leading-none text-(--text-default)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </span>
-                  </template>
-                  <template #actions>
-                    <div class="w-full md:w-fit">
-                      <Button
-                        label="Create Table"
-                        icon="pi pi-plus"
-                        kind="secondary"
-                        size="medium"
-                        class="w-full"
-                      />
-                    </div>
-                  </template>
-                </EmptyState>
+                />
               </div>
             </template>
-          </Card>
+          </EmptyState>
         </div>
 
         <div
@@ -785,50 +777,65 @@ LIMIT 3;`
                   #[`cell-${column.name}`]="{ value }"
                 >
                   <span
-                    class="truncate font-code text-label-code-sm"
-                    :class="isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'"
+                    :data-null="isNull(value) || null"
+                    class="truncate font-code text-label-code-sm text-(--text-default) data-null:italic data-null:text-(--text-muted)"
                     >{{ displayCell(value) }}</span
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip text="Delete row">
+                  <Tooltip :text="`Delete row ${row.id ?? row.__k}`">
                     <IconButton
                       icon="pi pi-trash"
                       kind="transparent"
                       size="small"
-                      aria-label="Delete row"
+                      :aria-label="`Delete row ${row.id ?? row.__k}`"
                       @click="deleteRow(row)"
                     />
                   </Tooltip>
                 </template>
                 <template #empty>
-                  <div
+                  <EmptyState
+                    key="empty-state-1"
                     v-if="!tableRows.length"
-                    class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
+                    size="small"
+                    icon="pi pi-table"
+                    title="This table is empty"
+                    description="Insert a row, import a CSV file or drop one here."
                   >
-                    <p class="text-body-sm text-(--text-default)">This table is empty</p>
-                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-                      <Button
-                        label="Insert row"
-                        kind="secondary"
-                        size="medium"
-                        icon="pi pi-plus"
-                      />
-                      <Button
-                        label="Import data from CSV"
-                        kind="outlined"
-                        size="medium"
-                        icon="pi pi-upload"
-                      />
-                    </div>
-                    <p class="text-body-xs text-(--text-muted)">or drag and drop a CSV file here</p>
-                  </div>
-                  <p
+                    <template #actions>
+                      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+                        <Button
+                          label="Insert row"
+                          kind="secondary"
+                          size="medium"
+                          icon="pi pi-plus"
+                        />
+                        <Button
+                          label="Import data from CSV"
+                          kind="outlined"
+                          size="medium"
+                          icon="pi pi-upload"
+                        />
+                      </div>
+                    </template>
+                  </EmptyState>
+                  <EmptyState
+                    key="empty-state-2"
                     v-else
-                    class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
+                    size="small"
+                    icon="pi pi-search"
+                    :title="`No rows match “${rowFilter}”`"
+                    description="Change the filter to see the rows."
                   >
-                    No rows match "{{ rowFilter }}".
-                  </p>
+                    <template #actions>
+                      <Button
+                        label="Clear filter"
+                        kind="outlined"
+                        size="small"
+                        @click="rowFilter = ''"
+                      />
+                    </template>
+                  </EmptyState>
                 </template>
               </TableRoot>
             </div>
@@ -926,14 +933,17 @@ LIMIT 3;`
                 :key="item.id"
                 class="flex items-center gap-(--spacing-xxs)"
               >
-                <button
-                  type="button"
-                  class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                <Item
+                  clickable
+                  kind="option"
+                  class="min-w-0 flex-1 flex-nowrap"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
                 >
-                  {{ oneLine(item.sql) }}
-                </button>
+                  <span class="min-w-0 truncate font-code text-label-code-sm">{{
+                    oneLine(item.sql)
+                  }}</span>
+                </Item>
                 <DropdownMenu
                   placement="bottom-end"
                   @select="
@@ -944,12 +954,12 @@ LIMIT 3;`
                   "
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Query actions">
+                    <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        aria-label="Query actions"
+                        :aria-label="`Actions for ${oneLine(item.sql)}`"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -1053,7 +1063,7 @@ LIMIT 3;`
                 :options="resultViewOptions"
                 aria-label="Result view"
               />
-              <Tooltip text="Refresh">
+              <Tooltip text="Refresh results">
                 <IconButton
                   icon="pi pi-refresh"
                   kind="outlined"
@@ -1063,7 +1073,7 @@ LIMIT 3;`
                   @click="runQuery"
                 />
               </Tooltip>
-              <Tooltip text="Download">
+              <Tooltip text="Download results">
                 <IconButton
                   icon="pi pi-download"
                   kind="outlined"
@@ -1072,7 +1082,7 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Tooltip text="Columns">
+              <Tooltip text="Toggle columns">
                 <IconButton
                   icon="pi pi-table"
                   kind="outlined"
@@ -1081,28 +1091,44 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Button
-                label="Insert"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus"
-                :disabled="true"
-              />
             </div>
           </div>
 
           <div class="min-h-(--container-3xs)">
+            <p
+              role="status"
+              class="sr-only"
+            >
+              {{ resultStatus }}
+            </p>
+            <div
+              v-if="running"
+              class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
+              aria-busy="true"
+            >
+              <Skeleton
+                v-for="line in 4"
+                :key="line"
+                height="2rem"
+              />
+            </div>
             <TableRoot
-              v-if="resultRows.length && resultView === 'table'"
+              v-else-if="resultRows.length && resultView === 'table'"
               :data="filteredResultRows"
               :columns="resultColumns"
               row-key="__k"
+              paginated
+              :page-size="50"
+              :rows-per-page-options="[10, 25, 50, 100]"
               :bordered="false"
             />
-            <pre
+            <CodeBlock
               v-else-if="resultRows.length && resultView === 'json'"
-              class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
-              >{{ resultJson }}</pre>
+              :code="resultJson"
+              language="json"
+              copy-aria-label="Copy the results as JSON"
+              :bordered="false"
+            />
             <div
               v-else-if="results && (results.type === 'message' || results.type === 'error')"
               class="p-(--spacing-md)"
@@ -1121,15 +1147,6 @@ LIMIT 3;`
                 description="Execute a query to see the results here."
               />
             </div>
-          </div>
-
-          <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
-            <PaginationRoot
-              :total="filteredResultRows.length"
-              :page-size="50"
-              :page-size-options="[10, 25, 50, 100]"
-              aria-label="Results pagination"
-            />
           </div>
         </div>
       </div>
@@ -1174,31 +1191,43 @@ LIMIT 3;`
                 v-if="filteredTemplates.length"
                 class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
               >
-                <button
+                <Item
                   v-for="template in filteredTemplates"
                   :key="template.id"
-                  type="button"
-                  class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-start transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                  kind="outlined"
+                  clickable
                   @click="chooseTemplate(template)"
                 >
-                  <span class="flex items-center gap-(--spacing-xs)">
+                  <Item.Media>
                     <i
                       :class="template.icon"
                       class="text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
-                  </span>
-                  <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
-                </button>
+                  </Item.Media>
+                  <Item.Content>
+                    <Item.Title>{{ template.title }}</Item.Title>
+                    <Item.Description>{{ template.description }}</Item.Description>
+                  </Item.Content>
+                </Item>
               </div>
 
-              <p
+              <EmptyState
                 v-else
-                class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                size="small"
+                icon="pi pi-search"
+                :title="`No templates match “${templateQuery}”`"
+                description="Try another name or statement."
               >
-                No templates match "{{ templateQuery }}".
-              </p>
+                <template #actions>
+                  <Button
+                    label="Clear search"
+                    kind="outlined"
+                    size="small"
+                    @click="templateQuery = ''"
+                  />
+                </template>
+              </EmptyState>
             </div>
           </PanelContent>
         </DrawerContent>

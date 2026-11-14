@@ -1,6 +1,8 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import QueryEditor from '../../blocks/platform/view/query-editor/query-editor.vue'
+import QueryEditorQuery from '../../blocks/platform/view/query-editor/variants/query.vue'
 import TableView from '../../blocks/platform/view/table-view/table-view.vue'
 import TableViewFailed from '../../blocks/platform/view/table-view/variants/failed.vue'
 import TableViewLoading from '../../blocks/platform/view/table-view/variants/loading.vue'
@@ -42,5 +44,32 @@ describe('platform/view/table-view block', () => {
     expect(view.container.querySelector('[role=table], [role=grid], table')).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)
+  })
+})
+
+describe('platform/view/query-editor block', () => {
+  it('marks the open table as pressed and NULL cells with data-null', () => {
+    const view = render(QueryEditor)
+    const options = Array.from(
+      view.container.querySelectorAll<HTMLElement>('[data-slot="item"][aria-pressed]')
+    ).map((item) => [item.textContent?.trim(), item.getAttribute('aria-pressed')])
+    expect(options).toEqual([
+      ['customers', 'true'],
+      ['orders', 'false'],
+      expect.arrayContaining(['false'])
+    ])
+    expect(view.container.querySelector('[data-null]')?.textContent?.trim()).toBe('NULL')
+    expect(view.container.querySelector('[aria-label="Actions for customers"]')).not.toBeNull()
+  })
+
+  it('pages the result rows, announces them and drops the dead Insert from Results', async () => {
+    const view = render(QueryEditorQuery)
+    await waitFor(() =>
+      expect(
+        view.getAllByRole('status').some((el) => el.textContent?.trim() === '3 rows returned.')
+      ).toBe(true)
+    )
+    expect(view.queryByRole('button', { name: 'Insert' })).toBeNull()
+    expect(view.queryByRole('navigation', { name: 'Results pagination' })).toBeNull()
   })
 })

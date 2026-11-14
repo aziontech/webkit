@@ -59,7 +59,7 @@ describe('platform/view/query-editor Import data from CSV', () => {
     )
     expect(document.body.textContent).toContain('3 rows with errors were skipped.')
     const rows = document.querySelector('[aria-label="Rows of subscribers"]')!
-    expect(rows.textContent).toContain('ada@example.com')
+    expect(rows.textContent).toContain('jane.doe@example.com')
     expect(rows.textContent).not.toContain('ops@example.com')
   })
 })
