@@ -3,11 +3,11 @@ name: board
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 6a05a776f49e1e7e6f38b8415fd1e9884bd247f6bb1a7dc6d8977c7f28310c5c
+checksum: c2335ba72be2d84496ce08584dd4444cef6d7f4d399e3856abae46084a47ec73
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Board — Component Spec
@@ -162,6 +162,11 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 | ------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
 | `item-move`   | `{ id: string; from: number; to: number }`                  | An item moved, by drop or by the keyboard; zero-based.     |
 | `item-resize` | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
+
+Both are **notifications next to `v-model:layout`**, not activation events: the model already
+carries the new layout, and these say which item changed and how, for an undo toast, an analytics
+ping or a save of one row. They are outcomes of a drag or a key, so they carry no DOM event
+(`.claude/rules/emits.md`); bind the model for state and these only when you need the delta.
 
 ## Slots
 

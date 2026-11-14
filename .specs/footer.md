@@ -3,13 +3,13 @@ name: footer
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: db1b8c9dfe84b350cbd64d4577b03ac282a4f9cbd86130cb508412a6643a1ffd
+checksum: 1ba94d793febc2b3cf824ab34ec1c397a84d0c460618e8098f2494bb12cd2fd7
 created: 2026-08-10
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Footer — Component Spec
@@ -49,6 +49,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 - `global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
+- `site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
 - `frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
 
 ## Best practices

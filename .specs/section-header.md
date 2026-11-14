@@ -3,10 +3,10 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 6d8685b5901c29471296b095a4130002aaca34c6cb2f741a18e63b8c489302f8
-spec_version: 1
+checksum: 183320cd4c3e8f41759c7fee364a76ec9d22b200818ca76f4448a0155fe64627
+spec_version: 2
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # SectionHeader — Component Spec
@@ -28,7 +28,8 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 ## Related
 
 - `page-header` — the page's h1.
-- `settings-section` — the settings band with a Hint, a gutter copy-link and an optional disclosure.
+- `settings-section` — the settings band with a Hint, a gutter copy-link and an optional disclosure; use it, not this, for a band of `SettingRow`s.
+- `section-title` — the marketing section heading (centred, left or horizontal); use it on site pages, this one in the console.
 - `copy-button` — the copy-link affordance it renders.
 
 ## Best practices
