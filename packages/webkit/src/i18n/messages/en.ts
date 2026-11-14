@@ -1164,6 +1164,7 @@ export const consoleLayout = {
   home: 'Azion home',
   openNavigation: 'Open navigation',
   accountMenu: 'Account menu',
+  accountMenuFor: '{initials}, account menu',
   searchPlaceholder: 'Search pages and commands',
   searchEmpty: 'No page or command matches your search.',
   pages: 'Pages'
