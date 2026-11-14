@@ -61,6 +61,11 @@
       "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
     },
+    "table-10k-virtual-select-all": {
+      "mount": 120,
+      "update": 60,
+      "update_is": "select every matching row of 10k virtual rows under useCollection"
+    },
     "conversation-history-5k": {
       "mount": 680,
       "update": 100,

@@ -307,7 +307,7 @@ function codeBlockCase(): Case {
   }
 }
 
-function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case {
+function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter' | 'select-all'): Case {
   const statuses = ['Live', 'Inactive', 'Pending']
   const items = Array.from({ length: n }, (_, i) => ({
     id: String(i),
@@ -345,6 +345,7 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
     mount: () => Host,
     update: () => {
       if (change === 'sort') collection?.setSorting([{ id: 'requests', desc: true }])
+      else if (change === 'select-all') collection?.selectAllMatching()
       else collection?.setFilteringText('resource-0001')
     }
   }
@@ -1021,6 +1022,12 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('Table with 10k virtual rows under useCollection: select every matching row', async () => {
+    check(
+      'table-10k-virtual-select-all',
+      await measure(() => tableCase(10_000, true, 'select-all'))
+    )
   })
   it('DropdownMenu x1k closed instances: mount and global events', async () => {
     check('dropdown-menu-1k', await measure(dropdownMenuCase))
