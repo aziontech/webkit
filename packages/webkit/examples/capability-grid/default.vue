@@ -26,6 +26,6 @@
     title="Everything an application needs, in one place"
     description="Compute, storage and security that deploy together."
     :items="items"
-    :actions="[{ label: 'Explore the platform', href: '/platform', trailing: true }]"
+    :primary-action="{ label: 'Explore the platform', href: '/platform', trailing: true }"
   />
 </template>

@@ -76,7 +76,11 @@
     tabsAriaLabel?: string
     /** Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. */
     crop?: number
-    /** Buttons under the headline; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. */
+    /** First button under the headline, secondary; shown only with a label and a link. */
+    primaryAction?: ConsolePanelAction
+    /** Second button under the headline, outlined; shown only with a label and a link. */
+    secondaryAction?: ConsolePanelAction
+    /** @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. */
     actions?: ConsolePanelAction[]
   }
 
@@ -94,6 +98,8 @@
     tabs: () => [],
     tabsAriaLabel: '',
     crop: 0,
+    primaryAction: undefined,
+    secondaryAction: undefined,
     actions: () => []
   })
 
@@ -113,6 +119,23 @@
 
   const options = computed(() => props.tabs.map((tab) => ({ value: tab.value, label: tab.title })))
 
+  const shown = (action: ConsolePanelAction | undefined): action is ConsolePanelAction =>
+    Boolean(action?.label && action.href)
+
+  const buttons = computed<ConsolePanelAction[]>(() => {
+    if (props.primaryAction || props.secondaryAction)
+      return [
+        shown(props.primaryAction) ? { ...props.primaryAction, kind: 'secondary' as const } : null,
+        shown(props.secondaryAction)
+          ? { ...props.secondaryAction, kind: 'outlined' as const }
+          : null
+      ].filter((action): action is ConsolePanelAction => action !== null)
+    return props.actions.map((action, index) => ({
+      ...action,
+      kind: action.kind ?? (index === 0 ? 'secondary' : 'outlined')
+    }))
+  })
+
   const SCENE_ASPECT = 1.9
 
   const cropStyle = computed(() => {
@@ -130,6 +153,7 @@
   <section
     v-bind="$attrs"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
     :data-kind="kind"
     :aria-label="title || undefined"
@@ -152,16 +176,16 @@
           :description="description"
         >
           <template
-            v-if="tabs.length || actions.length"
+            v-if="tabs.length || buttons.length"
             #actions
           >
             <Button
-              v-for="(action, index) in actions"
+              v-for="action in buttons"
               :key="action.label"
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="action.kind ?? (index === 0 ? 'secondary' : 'outlined')"
+              :kind="action.kind"
               size="large"
               :icon="action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"

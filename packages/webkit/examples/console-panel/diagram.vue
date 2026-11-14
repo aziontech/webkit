@@ -7,7 +7,7 @@
   <ConsolePanel
     kind="diagram"
     title="Requests take the shortest path"
-    :actions="[{ label: 'See the network', href: '/network', trailing: true }]"
+    :primary-action="{ label: 'See the network', href: '/network', trailing: true }"
   >
     <template #scene>
       <Illustration
