@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -89,17 +89,18 @@ describe('account/tokens', () => {
       expect(dialog()).not.toBeNull()
       return dialog() as HTMLElement
     })
-    await fireEvent.click(buttonByText('Create', drawer))
+    expect(within(drawer).getByRole('heading', { name: 'Create Personal Token' })).toBeTruthy()
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() => expect(drawer.textContent).toContain('This field is required.'))
     await userEvent.type(view.getByLabelText(/^Name/), 'Local CLI')
-    await fireEvent.click(buttonByText('Create', drawer))
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() =>
       expect(drawer.textContent).toContain('A token with this name already exists.')
     )
     const name = view.getByLabelText(/^Name/) as HTMLInputElement
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
-    await fireEvent.click(buttonByText('Create', drawer))
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     const reveal = await waitFor(
       () => {
         const node = Array.from(document.querySelectorAll('[role="dialog"]')).find((item) =>
@@ -114,6 +115,7 @@ describe('account/tokens', () => {
     expect(secret.value).toMatch(/^pat_[0-9a-f]{48}$/)
     expect(secret).toHaveAttribute('type', 'password')
     expect(secret).toHaveAttribute('readonly')
+    expect(reveal.querySelectorAll('[role="status"]').length).toBe(0)
     await expectNoA11yViolations(reveal)
     await fireEvent.click(buttonByText('I copied the token', reveal))
     await waitFor(() => expect(document.body.textContent).not.toContain('Copy your new token'))

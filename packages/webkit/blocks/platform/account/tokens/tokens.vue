@@ -519,13 +519,13 @@
         <DrawerContent>
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create personal token"
+            aria-label="Create Personal Token"
             novalidate
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create personal token</DrawerTitle>
+                <DrawerTitle>Create Personal Token</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
                   The token acts as you, with your permissions, until it expires or you revoke it.
                 </p>
@@ -538,7 +538,7 @@
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
                 :disabled="submitting"
               >
-                <legend class="sr-only">Create personal token</legend>
+                <legend class="sr-only">Create Personal Token</legend>
                 <SettingsSection
                   title="General"
                   hint="How you will recognise the token in this list."
@@ -618,7 +618,7 @@
                   @click="createOpen = false"
                 />
                 <Button
-                  label="Create"
+                  label="Create Personal Token"
                   kind="primary"
                   size="medium"
                   type="submit"
@@ -674,10 +674,11 @@
                   />
                 </div>
                 <p
+                  v-if="copied"
                   class="text-body-xs text-(--text-muted)"
-                  role="status"
+                  aria-hidden="true"
                 >
-                  {{ copied ? 'Copied to the clipboard.' : '' }}
+                  Copied to the clipboard.
                 </p>
               </Field>
             </div>
