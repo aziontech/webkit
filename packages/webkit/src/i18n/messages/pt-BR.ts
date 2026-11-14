@@ -118,7 +118,16 @@ export const ptBR: Messages = {
     removed: 'Item {index} removido.',
     group: 'Grupo {index}',
     and: 'e',
-    or: 'ou'
+    or: 'ou',
+    reorder: 'Reordenar item {index}',
+    reorderHint: 'Arraste ou pressione Seta para cima ou Seta para baixo para mover.',
+    moveUp: 'Mover item {index} para cima',
+    moveDown: 'Mover item {index} para baixo',
+    moved: 'Item {from} movido para a posição {to}.',
+    reorderGroup: 'Reordenar grupo {index}',
+    moveGroupUp: 'Mover grupo {index} para cima',
+    moveGroupDown: 'Mover grupo {index} para baixo',
+    groupMoved: 'Grupo {from} movido para a posição {to}.'
   },
   avatar: {
     fallbackLabel: 'Avatar do usuário',

@@ -6,6 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import CustomCells from '../../../../examples/attribute-editor/custom-cells.vue'
 import Default from '../../../../examples/attribute-editor/default.vue'
 import Grouped from '../../../../examples/attribute-editor/grouped.vue'
+import Reorderable from '../../../../examples/attribute-editor/reorderable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import AttributeEditor, { type AttributeEditorItem } from './attribute-editor.vue'
 
@@ -29,7 +30,7 @@ const Harness = (initial: AttributeEditorItem[], extra: Record<string, unknown> 
     }
   })
 
-const GroupedHarness = (initial: AttributeEditorItem[][]) =>
+const GroupedHarness = (initial: AttributeEditorItem[][], extra: Record<string, unknown> = {}) =>
   defineComponent({
     setup() {
       const groups = ref(initial)
@@ -38,7 +39,8 @@ const GroupedHarness = (initial: AttributeEditorItem[][]) =>
           groups: groups.value,
           'onUpdate:groups': (next: AttributeEditorItem[][]) => (groups.value = next),
           definition,
-          ariaLabel: 'Criteria'
+          ariaLabel: 'Criteria',
+          ...extra
         })
     }
   })
@@ -199,6 +201,141 @@ describe('AttributeEditor', () => {
     expect(view.getAllByTestId('input-attribute-editor__row')).toHaveLength(4)
   })
 
+  const keys = (view: ReturnType<typeof render>) =>
+    view.getAllByLabelText('Key').map((input) => (input as HTMLInputElement).value)
+
+  const threeRows = () => [
+    { key: 'A', value: '1' },
+    { key: 'B', value: '2' },
+    { key: 'C', value: '3' }
+  ]
+
+  it('draws no reorder controls unless reorderable, nor with a single row', () => {
+    expect(
+      render(Harness(threeRows())).queryAllByTestId('input-attribute-editor__grip')
+    ).toHaveLength(0)
+    const single = render(Harness([{ key: 'A', value: '1' }], { reorderable: true }))
+    expect(single.queryAllByTestId('input-attribute-editor__grip')).toHaveLength(0)
+  })
+
+  it('moves a row with Move up and Move down, announces it and keeps focus on the row', async () => {
+    const view = render(Harness(threeRows(), { reorderable: true }))
+    expect(
+      (view.getByRole('button', { name: 'Move item 1 up' }) as HTMLButtonElement).disabled
+    ).toBe(true)
+    expect(
+      (view.getByRole('button', { name: 'Move item 3 down' }) as HTMLButtonElement).disabled
+    ).toBe(true)
+    const down = view.getByRole('button', { name: 'Move item 1 down' })
+    down.focus()
+    await fireEvent.click(down)
+    expect(keys(view)).toEqual(['B', 'A', 'C'])
+    expect(view.getByTestId('input-attribute-editor__status').textContent).toContain(
+      'Item 1 moved to position 2.'
+    )
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('button', { name: 'Move item 2 down' }))
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Move item 2 up' }))
+    expect(keys(view)).toEqual(['A', 'B', 'C'])
+  })
+
+  it('emits the new order through update:items', async () => {
+    const items = threeRows()
+    const view = render(AttributeEditor, { props: { items, definition, reorderable: true } })
+    await fireEvent.click(view.getByRole('button', { name: 'Move item 3 up' }))
+    const updates = view.emitted('update:items') as [AttributeEditorItem[]][]
+    expect(updates[0]![0]).toEqual([items[0], items[2], items[1]])
+  })
+
+  it('moves a row with the arrow keys on its grip, described by the hint', async () => {
+    const user = userEvent.setup()
+    const view = render(Harness(threeRows(), { reorderable: true }))
+    const grip = view.getByRole('button', { name: 'Reorder item 1' })
+    const hint = document.getElementById(grip.getAttribute('aria-describedby') ?? '')
+    expect(hint?.textContent).toContain('Drag, or press Arrow Up or Arrow Down to move.')
+    grip.focus()
+    await user.keyboard('{ArrowDown}')
+    expect(keys(view)).toEqual(['B', 'A', 'C'])
+    await user.keyboard('{ArrowDown}')
+    expect(keys(view)).toEqual(['B', 'C', 'A'])
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('button', { name: 'Reorder item 3' }))
+    )
+  })
+
+  it('moves a row with Alt+Arrow from any of its controls and keeps focus in the control', async () => {
+    const user = userEvent.setup()
+    const view = render(Harness(threeRows(), { reorderable: true }))
+    const input = view.getAllByLabelText('Value')[2] as HTMLInputElement
+    input.focus()
+    await user.keyboard('{Alt>}{ArrowUp}{/Alt}')
+    expect(keys(view)).toEqual(['A', 'C', 'B'])
+    await waitFor(() => expect(document.activeElement).toBe(input))
+    await user.keyboard('{ArrowUp}')
+    expect(keys(view)).toEqual(['A', 'C', 'B'])
+  })
+
+  it('moves a row by dragging its grip onto another row', async () => {
+    const view = render(Harness(threeRows(), { reorderable: true }))
+    const rows = view.getAllByTestId('input-attribute-editor__row')
+    await fireEvent.pointerDown(view.getByRole('button', { name: 'Reorder item 1' }))
+    await fireEvent.dragStart(rows[0] as HTMLElement)
+    expect(rows[0]!.hasAttribute('data-dragging')).toBe(true)
+    const target = rows[2] as HTMLElement
+    const box = target.getBoundingClientRect()
+    await fireEvent.dragOver(target, { clientY: box.bottom - 1 })
+    expect(target.getAttribute('data-drop')).toBe('after')
+    await fireEvent.drop(target, { clientY: box.bottom - 1 })
+    expect(keys(view)).toEqual(['B', 'C', 'A'])
+    expect(
+      view.getAllByTestId('input-attribute-editor__row')[2]!.hasAttribute('data-dragging')
+    ).toBe(false)
+  })
+
+  it('does not start a drag without the grip', async () => {
+    const view = render(Harness(threeRows(), { reorderable: true }))
+    const rows = view.getAllByTestId('input-attribute-editor__row')
+    await fireEvent.dragStart(rows[0] as HTMLElement)
+    expect(rows[0]!.hasAttribute('data-dragging')).toBe(false)
+  })
+
+  it('disables every reorder control when disabled', () => {
+    const view = render(Harness(threeRows(), { reorderable: true, disabled: true }))
+    for (const name of ['Reorder item 2', 'Move item 2 up', 'Move item 2 down'])
+      expect((view.getByRole('button', { name }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  it('reorders rows inside a group and whole groups in grouped mode', async () => {
+    const user = userEvent.setup()
+    const view = render(
+      GroupedHarness(
+        [
+          [
+            { key: 'a', value: '1' },
+            { key: 'b', value: '2' }
+          ],
+          [{ key: 'c', value: '3' }]
+        ],
+        { reorderable: true }
+      )
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Move item 2 up' }))
+    expect(keys(view)).toEqual(['b', 'a', 'c'])
+    const groupDown = view.getByRole('button', { name: 'Move group 1 down' })
+    groupDown.focus()
+    await fireEvent.click(groupDown)
+    expect(keys(view)).toEqual(['c', 'b', 'a'])
+    expect(view.getByTestId('input-attribute-editor__status').textContent).toContain(
+      'Group 1 moved to position 2.'
+    )
+    await waitFor(() =>
+      expect(document.activeElement).toBe(view.getByRole('button', { name: 'Reorder group 2' }))
+    )
+    await user.keyboard('{ArrowUp}')
+    expect(keys(view)).toEqual(['b', 'a', 'c'])
+  })
+
   it('lays out under dir="rtl" without errors', async () => {
     const view = render(Harness([{ key: 'A', value: '1' }]), {
       container: document.body.appendChild(
@@ -212,7 +349,8 @@ describe('AttributeEditor', () => {
   it.each([
     ['Default', Default],
     ['Grouped', Grouped],
-    ['CustomCells', CustomCells]
+    ['CustomCells', CustomCells],
+    ['Reorderable', Reorderable]
   ])('renders the %s example with no axe violations', async (_name, Example) => {
     const { container } = render(Example)
     await expectNoA11yViolations(container)

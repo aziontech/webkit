@@ -1291,7 +1291,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
-    "limit": "14.3 KB"
+    "limit": "16.5 KB"
   },
   {
     "name": "code-editor",
@@ -1311,12 +1311,12 @@
   {
     "name": "tag-editor",
     "path": "src/components/inputs/tag-editor/tag-editor.vue",
-    "limit": "16 KB"
+    "limit": "18.25 KB"
   },
   {
     "name": "schema-form",
     "path": "src/components/inputs/schema-form/schema-form.vue",
-    "limit": "50.25 KB"
+    "limit": "52.5 KB"
   },
   {
     "name": "use-unsaved-changes",

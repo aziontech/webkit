@@ -3,31 +3,32 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 49f9c0490cd53e0cf25c424b57816410af54aab0e430a72951f8b67e12876c4f
+checksum: 8e4e94d4ab0ad8a2edf9b2f0a9e96914594f00f29f19796b4e3990184d447750
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # AttributeEditor — Component Spec
 
 ## Purpose
 
-An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. It edits an array and validates nothing itself: the consumer passes `errors`.
+An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. With `reorderable`, rows (and groups) carry a grip and Move up / Move down buttons, so the order itself is part of the value, as in rule criteria evaluated top to bottom. It edits an array and validates nothing itself: the consumer passes `errors`.
 
 ## When to use
 
 - Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.
 - Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).
 - A bulk form where each row has the same two to four fields and a row-level error can occur.
+- An ordered list of rows where the order matters (criteria evaluated top to bottom, header precedence): turn on `reorderable`.
 
 ## When NOT to use
 
 - Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.
 - A fixed set of named settings on one resource → use `field` controls in a form.
 - Many records the user browses, filters and acts on → use `table` with row actions.
-- An ordered list of actions with drag and drop and per-type arguments → compose it by hand as in the `platform/edit/rule-builder` block.
+- An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block.
 
 ## Related
 
@@ -47,6 +48,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
 - Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.
 - Name the editor (`ariaLabel`) after what the rows are: "Environment variables", "Request headers".
+- Turn on `reorderable` only when the order changes behavior; an unordered list (environment variables) stays without grips.
 
 ## Usage
 
@@ -79,49 +81,50 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 ## Props
 
-| Prop                | Type                                     | Default     | Required | JSDoc                                                                                                        |
-| ------------------- | ---------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| `items`             | `TItem[]`                                | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                   |
-| `groups`            | `TItem[][]`                              | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.   |
-| `definition`        | `AttributeEditorColumn[]`                | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                                   |
-| `errors`            | `AttributeEditorErrors`                  | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.                  |
-| `addButtonLabel`    | `string`                                 | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                      |
-| `removeButtonLabel` | `string`                                 | `''`        | false    | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog.             |
-| `addGroupLabel`     | `string`                                 | `''`        | false    | Label of the Add group button in grouped mode. Empty uses the locale catalog.                                |
-| `empty`             | `string`                                 | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                            |
-| `limit`             | `number`                                 | `undefined` | false    | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
-| `groupLimit`        | `number`                                 | `undefined` | false    | Most groups allowed in grouped mode.                                                                         |
-| `minItems`          | `number`                                 | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                              |
-| `newItem`           | `() => TItem`                            | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                 |
-| `itemRemovable`     | `(item: TItem) => boolean`               | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                              |
-| `size`              | `'small' \| 'medium' \| 'large'`         | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                              |
-| `disabled`          | `boolean`                                | `false`     | false    | Disables every control, Add and Remove.                                                                      |
-| `addDisabled`       | `boolean`                                | `false`     | false    | Disables Add only, for example until the last row is filled in.                                              |
-| `ariaLabel`         | `string`                                 | `''`        | false    | Accessible name of the list of rows.                                                                         |
+| Prop                | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                   |
+| ------------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`             | `TItem[]`                        | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                                                                                                                                                                                                              |
+| `groups`            | `TItem[][]`                      | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.                                                                                                                                                                                              |
+| `definition`        | `AttributeEditorColumn[]`        | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                                                                                                                                                                                                                              |
+| `errors`            | `AttributeEditorErrors`          | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.                                                                                                                                                                                                             |
+| `addButtonLabel`    | `string`                         | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                                                                                                                                                                                                                 |
+| `removeButtonLabel` | `string`                         | `''`        | false    | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog.                                                                                                                                                                                                        |
+| `addGroupLabel`     | `string`                         | `''`        | false    | Label of the Add group button in grouped mode. Empty uses the locale catalog.                                                                                                                                                                                                                           |
+| `empty`             | `string`                         | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                                                                                                                                                                                                                       |
+| `limit`             | `number`                         | `undefined` | false    | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced.                                                                                                                                                                                            |
+| `groupLimit`        | `number`                         | `undefined` | false    | Most groups allowed in grouped mode.                                                                                                                                                                                                                                                                    |
+| `minItems`          | `number`                         | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                                                                                                                                                                                                                         |
+| `newItem`           | `() => TItem`                    | `undefined` | false    | Builds a new row. Unset creates an item with an empty string per column key.                                                                                                                                                                                                                            |
+| `itemRemovable`     | `(item: TItem) => boolean`       | `undefined` | false    | Hides Remove on the rows it returns false for. Unset makes every row removable.                                                                                                                                                                                                                         |
+| `size`              | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size of the default controls and the Remove button, on the 28 / 32 / 40 rhythm.                                                                                                                                                                                                                         |
+| `disabled`          | `boolean`                        | `false`     | false    | Disables every control, Add and Remove.                                                                                                                                                                                                                                                                 |
+| `addDisabled`       | `boolean`                        | `false`     | false    | Disables Add only, for example until the last row is filled in.                                                                                                                                                                                                                                         |
+| `reorderable`       | `boolean`                        | `false`     | false    | Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model. |
+| `ariaLabel`         | `string`                         | `''`        | false    | Accessible name of the list of rows.                                                                                                                                                                                                                                                                    |
 
 The component is generic over the row: `TItem extends object`, inferred from `items`, `groups`, `newItem` or `itemRemovable` (default `AttributeEditorItem`), so every slot receives `item` typed as the consumer's own interface and a `cell-<key>` slot whose key is a field of the row receives `value` typed as that field; `update` accepts whatever the slotted control emits (`unknown`), so `@update:model-value="update"` works with any WebKit control. `definition` keys stay `string`, so a column list written as a plain array type-checks.
 
-Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`); `AttributeEditorRowActionsScope<TItem>`.
+Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`; its `move(event, offset)` moves the row by `offset` positions inside its group when `reorderable` is on); `AttributeEditorRowActionsScope<TItem>`.
 
 ## Events
 
-| Event           | Payload                                                             | Notes                                                        |
-| --------------- | ------------------------------------------------------------------- | ------------------------------------------------------------ |
-| `update:items`  | `TItem[]`                                                           | A row was added, removed or edited in list mode.             |
-| `update:groups` | `TItem[][]`                                                         | A row or group was added, removed or edited in grouped mode. |
-| `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })` | After a row is added; `groupIndex` only in grouped mode.     |
-| `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                      |
+| Event           | Payload                                                                                             | Notes                                                               |
+| --------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `update:items`  | `TItem[]`                                                                                           | A row was added, removed, edited or moved in list mode.             |
+| `update:groups` | `TItem[][]`                                                                                         | A row or group was added, removed, edited or moved in grouped mode. |
+| `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode.            |
+| `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                             |
 
 ## Slots
 
-| Slot          | Scope                                                                         | Notes                                                                                                                       |
-| ------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel }` | Replaces the whole row; the column header is not drawn. `remove` takes the activating event (`@click="remove"`).           |
-| `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                 | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). `remove` takes the activating event. |
-| `empty`       | —                                                                             | Replaces the empty text.                                                                                                    |
-| `actions`     | —                                                                             | Extra buttons after Add (for example Upload or Paste .env).                                                                 |
-| `info`        | —                                                                             | Extra help text under the buttons, after the limit text.                                                                    |
-| `limit`       | `{ count, limit, left }`                                                      | Replaces the limit text in list mode (for example "You can add 3 more tags.").                                              |
+| Slot          | Scope                                                                               | Notes                                                                                                                                                                                                    |
+| ------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `row`         | `{ item, index, groupIndex, errors, update, remove, removable, removeLabel, move }` | Replaces the whole row; the column header and the reorder controls are not drawn. `remove` takes the activating event (`@click="remove"`); `move(event, offset)` moves the row when `reorderable` is on. |
+| `row-actions` | `{ item, index, groupIndex, remove, removable, removeLabel }`                       | Replaces the Remove button at the end of a default row (for example Remove / Undo that marks a row instead of deleting it). `remove` takes the activating event.                                         |
+| `empty`       | —                                                                                   | Replaces the empty text.                                                                                                                                                                                 |
+| `actions`     | —                                                                                   | Extra buttons after Add (for example Upload or Paste .env).                                                                                                                                              |
+| `info`        | —                                                                                   | Extra help text under the buttons, after the limit text.                                                                                                                                                 |
+| `limit`       | `{ count, limit, left }`                                                            | Replaces the limit text in list mode (for example "You can add 3 more tags.").                                                                                                                           |
 
 Dynamic slot `cell-<key>` (scope `AttributeEditorCellScope<TItem, TItem[key]>`: `{ item, index, groupIndex, value, update, invalid }`, `value` typed from the row field): replaces the default `Input` of one column; the control sits inside the cell's `Field`.
 
@@ -130,6 +133,7 @@ Dynamic slot `cell-<key>` (scope `AttributeEditorCellScope<TItem, TItem[key]>`: 
 - Visual states: `default`, `empty`, `at limit` (Add disabled), `invalid` (per cell), `disabled`
 - `data-size` mirrors `size`; `data-disabled` mirrors `disabled`; `data-mode` is `list` or `grouped`
 - Each row carries `data-row` with its index (and `data-group` in grouped mode)
+- With `reorderable`: the row or group being dragged carries `data-dragging` (dimmed, dashed `var(--accent)` outline) and the one under the pointer carries `data-drop` (`before` or `after`, a 2 px `var(--accent)` line on that edge); Move up is disabled on the first row of a group and Move down on the last; every reorder control is disabled with `disabled`
 
 ## Motion & Animations
 
@@ -139,13 +143,15 @@ Rows appear and leave without animation; the controls keep their own transitions
 
 ## Tokens
 
-| Region                        | Token (DESIGN.md)                                               |
-| ----------------------------- | --------------------------------------------------------------- |
-| column header                 | `.text-label-sm`, `var(--text-default)`                         |
-| empty text, limit text, joins | `.text-body-sm`, `var(--text-muted)`                            |
-| row separator when stacked    | `var(--border-muted)`                                           |
-| group surface                 | `var(--bg-surface)`, `var(--border-muted)`, `var(--shape-card)` |
-| gaps                          | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`   |
+| Region                        | Token (DESIGN.md)                                                   |
+| ----------------------------- | ------------------------------------------------------------------- |
+| column header                 | `.text-label-sm`, `var(--text-default)`                             |
+| empty text, limit text, joins | `.text-body-sm`, `var(--text-muted)`                                |
+| row separator when stacked    | `var(--border-muted)`                                               |
+| drag outline, drop line       | `var(--accent)`                                                     |
+| grip glyph                    | `var(--text-muted)`, hover `var(--text-default)`, `var(--bg-hover)` |
+| group surface                 | `var(--bg-surface)`, `var(--border-muted)`, `var(--shape-card)`     |
+| gaps                          | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`       |
 
 ## Theme gaps
 
@@ -156,54 +162,64 @@ Rows appear and leave without animation; the controls keep their own transitions
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: every control and button keeps its own ring.
-- Keyboard map: Tab moves through the cells of a row, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add.
-- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); groups are `group`s named "Group n"; a polite `status` region announces "Item n added" and "Item n removed".
+- Keyboard map: Tab moves through the cells of a row, its reorder controls, its Remove, then the next row; Add moves focus to the first control of the new row; Remove moves focus to the same position in the next row, else the previous row, else Add. With `reorderable`: Arrow Up / Arrow Down on a grip, or Alt+Arrow Up / Alt+Arrow Down on any control of a row, move the row one position inside its group (on a group's grip, the group); focus follows the moved row (the same control, or its grip when that control is now disabled). Drag and drop is a pointer shortcut only; every move is reachable by keyboard and by the buttons.
+- ARIA: the rows are a `list` named by `ariaLabel`; each cell is a `Field` whose label is programmatically tied to its control (visually hidden on wide containers, where one header row shows the labels and is `aria-hidden`); an error is a `FieldError` referenced by `aria-describedby` and sets `aria-invalid`; each Remove is named "Remove item n" (or `removeButtonLabel` n); each grip is a button named "Reorder item n" ("Reorder group n") and described by the hint "Drag, or press Arrow Up or Arrow Down to move."; Move up / Move down are named "Move item n up" / "Move item n down" ("Move group n up" / "down"); groups are `group`s named "Group n"; a polite `status` region announces "Item n added", "Item n removed" and "Item n moved to position m." ("Group n moved to position m.").
 - Contrast ≥4.5:1 from the semantic text tokens, including the disabled state.
 - Touch target: Remove follows `size` (40 px at `large`); the stacked layout keeps it at the row's end.
 
 ## Internationalization
 
-| Key                            | English source                               | Override prop       |
-| ------------------------------ | -------------------------------------------- | ------------------- |
-| `attributeEditor.add`          | Add new item                                 | `addButtonLabel`    |
-| `attributeEditor.remove`       | Remove item                                  | `removeButtonLabel` |
-| `attributeEditor.rowAction`    | {label} {index}                              | —                   |
-| `attributeEditor.addGroup`     | Add OR group                                 | `addGroupLabel`     |
-| `attributeEditor.empty`        | No items yet.                                | `empty`             |
-| `attributeEditor.remaining`    | You can add {count} more item(s) (plural)    | —                   |
-| `attributeEditor.limitReached` | You have reached the limit of {limit} items. | —                   |
-| `attributeEditor.added`        | Item {index} added.                          | —                   |
-| `attributeEditor.removed`      | Item {index} removed.                        | —                   |
-| `attributeEditor.group`        | Group {index}                                | —                   |
-| `attributeEditor.and` / `or`   | and / or                                     | —                   |
+| Key                             | English source                                 | Override prop       |
+| ------------------------------- | ---------------------------------------------- | ------------------- |
+| `attributeEditor.add`           | Add new item                                   | `addButtonLabel`    |
+| `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
+| `attributeEditor.rowAction`     | {label} {index}                                | —                   |
+| `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
+| `attributeEditor.empty`         | No items yet.                                  | `empty`             |
+| `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
+| `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
+| `attributeEditor.added`         | Item {index} added.                            | —                   |
+| `attributeEditor.removed`       | Item {index} removed.                          | —                   |
+| `attributeEditor.group`         | Group {index}                                  | —                   |
+| `attributeEditor.and` / `or`    | and / or                                       | —                   |
+| `attributeEditor.reorder`       | Reorder item {index}                           | —                   |
+| `attributeEditor.reorderHint`   | Drag, or press Arrow Up or Arrow Down to move. | —                   |
+| `attributeEditor.moveUp`        | Move item {index} up                           | —                   |
+| `attributeEditor.moveDown`      | Move item {index} down                         | —                   |
+| `attributeEditor.moved`         | Item {from} moved to position {to}.            | —                   |
+| `attributeEditor.reorderGroup`  | Reorder group {index}                          | —                   |
+| `attributeEditor.moveGroupUp`   | Move group {index} up                          | —                   |
+| `attributeEditor.moveGroupDown` | Move group {index} down                        | —                   |
+| `attributeEditor.groupMoved`    | Group {from} moved to position {to}.           | —                   |
 
 - Formatting: the rows left go through the plural rules of the active locale.
 
 ## Right-to-left
 
 - Layout: logical utilities only; the Remove column sits at the inline end.
-- Icons: the trash and plus glyphs are not mirrored.
-- Keyboard: no arrow-key handling of its own.
+- Icons: the trash, plus, grip and chevron glyphs are not mirrored (up and down do not flip).
+- Keyboard: only Arrow Up / Arrow Down move rows (vertical, the same in both directions); no left or right handling.
 - User data: values stay in their controls, which set no direction of their own.
 
 ## Responsive
 
 - Container queries: `@container/attribute-editor` on the root; at `@md` (472 px) the cells sit in one grid row under a shared header, below it every cell stacks with its own visible label and rows are divided by a line.
 - Narrow (≤ 640 px or a narrow container): stacked cells, Remove at the end of the row.
-- Touch: buttons follow `size`; nothing depends on hover (the Remove tooltip repeats its accessible name).
+- Touch: buttons follow `size`; nothing depends on hover (the Remove and Move tooltips repeat their accessible names). Dragging needs a pointer; on touch the Move up / Move down buttons reorder.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance
 
 - Bundle budget: see `.size-limit.json` entry `attribute-editor` (it carries `input`, `field`, `button`, `icon-button`, `tooltip` and `separator`).
 - Runtime budget: 100 rows render and update under one frame per keystroke (one row re-renders per edit).
-- Heavy parts: none.
+- Heavy parts: none. Reordering uses the native drag and drop events; no drag-drop runtime.
 
 ## Examples
 
 - Default — key and value rows with an error and a limit.
 - Grouped — rule criteria as AND groups joined by OR; justified because the grouped mode is a distinct anatomy.
 - CustomCells — a `Select` and a `Switch` in place of the default inputs through `cell-<key>`; justified because replacing a control is the main extension point.
+- Reorderable — request headers whose order matters, moved with the grip, the buttons or Alt+Arrow keys; justified because `reorderable` adds controls and keyboard behavior the other examples do not show.
 
 ## Constraints — DO NOT
 

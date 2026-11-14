@@ -118,7 +118,16 @@ export const es: Messages = {
     removed: 'Elemento {index} quitado.',
     group: 'Grupo {index}',
     and: 'y',
-    or: 'o'
+    or: 'o',
+    reorder: 'Reordenar elemento {index}',
+    reorderHint: 'Arrastra o presiona Flecha arriba o Flecha abajo para mover.',
+    moveUp: 'Mover elemento {index} hacia arriba',
+    moveDown: 'Mover elemento {index} hacia abajo',
+    moved: 'Elemento {from} movido a la posición {to}.',
+    reorderGroup: 'Reordenar grupo {index}',
+    moveGroupUp: 'Mover grupo {index} hacia arriba',
+    moveGroupDown: 'Mover grupo {index} hacia abajo',
+    groupMoved: 'Grupo {from} movido a la posición {to}.'
   },
   avatar: {
     fallbackLabel: 'Avatar del usuario',

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
-  import { computed, nextTick, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, toRaw, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -60,6 +60,8 @@
       disabled?: boolean
       /** Disables Add only, for example until the last row is filled in. */
       addDisabled?: boolean
+      /** Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model. */
+      reorderable?: boolean
       /** Accessible name of the list of rows. */
       ariaLabel?: string
     }>(),
@@ -80,6 +82,7 @@
       size: 'medium',
       disabled: false,
       addDisabled: false,
+      reorderable: false,
       ariaLabel: ''
     }
   )
@@ -124,15 +127,24 @@
 
   const rowKeys = new WeakMap<object, string>()
   let nextKey = 0
-  const rowKey = (item: TItem) => {
-    let key = rowKeys.get(item)
+  const keyOf = (target: object, prefix: string) => {
+    const raw = toRaw(target)
+    let key = rowKeys.get(raw)
     if (!key) {
       nextKey += 1
-      key = `${baseId}-row-${nextKey}`
-      rowKeys.set(item, key)
+      key = `${baseId}-${prefix}-${nextKey}`
+      rowKeys.set(raw, key)
     }
     return key
   }
+  const rowKey = (item: TItem) => keyOf(item, 'row')
+  const groupKey = (group: TItem[]) => keyOf(group, 'group')
+  const cloneGroups = () =>
+    groupList.value.map((group) => {
+      const copy = [...group]
+      rowKeys.set(copy, groupKey(group))
+      return copy
+    })
 
   const addLabel = computed(() => props.addButtonLabel || t('attributeEditor.add'))
   const groupAddLabel = computed(() => props.addGroupLabel || t('attributeEditor.addGroup'))
@@ -213,7 +225,7 @@
       : `[data-group="${groupIndex}"][data-row="${index}"]`
 
   const add = (event: MouseEvent, groupIndex?: number) => {
-    const next = groupList.value.map((group) => [...group])
+    const next = cloneGroups()
     const target = groupIndex ?? 0
     if (!next[target]) next[target] = []
     next[target].push(createItem())
@@ -225,7 +237,7 @@
   }
 
   const addGroup = (event: MouseEvent) => {
-    const next = [...groupList.value.map((group) => [...group]), [createItem()]]
+    const next = [...cloneGroups(), [createItem()]]
     const groupIndex = next.length - 1
     commit(next)
     announcement.value = t('attributeEditor.added', { index: total.value + 1 })
@@ -238,7 +250,7 @@
     const item = groupList.value[target]?.[index]
     if (!item || !removable(item)) return
     const spoken = position(index, groupIndex)
-    let next = groupList.value.map((group) => [...group])
+    let next = cloneGroups()
     next[target].splice(index, 1)
     let focusGroup = groupIndex
     let focusIndex = index
@@ -265,10 +277,167 @@
     if (!current) return
     const changed = { ...current, [key]: value } as TItem
     rowKeys.set(changed, rowKey(current))
-    const next = groupList.value.map((group) => [...group])
+    const next = cloneGroups()
     next[target][index] = changed
     commit(next)
   }
+
+  type DragScope = 'row' | 'group'
+  const drag = ref<{ scope: DragScope; index: number; groupIndex: number | undefined } | null>(null)
+  const drop = ref<{
+    index: number
+    groupIndex: number | undefined
+    edge: 'before' | 'after'
+  } | null>(null)
+  const armed = ref('')
+  const hintId = `${baseId}-reorder-hint`
+
+  const rowReorderShown = (group: TItem[]) => props.reorderable && !slots.row && group.length > 1
+  const groupReorderShown = computed(
+    () => props.reorderable && grouped.value && groupList.value.length > 1
+  )
+  const actionCount = (group: TItem[]) => (rowReorderShown(group) ? 4 : 1)
+
+  const restoreFocus = async (active: Element | null, fallback: string) => {
+    await nextTick()
+    if (
+      active instanceof HTMLElement &&
+      active.isConnected &&
+      rootRef.value?.contains(active) &&
+      !active.matches(':disabled')
+    ) {
+      if (document.activeElement !== active) active.focus()
+      return
+    }
+    rootRef.value?.querySelector<HTMLElement>(fallback)?.focus()
+  }
+
+  const moveRow = (index: number, groupIndex: number | undefined, to: number) => {
+    if (!props.reorderable || props.disabled) return
+    const target = groupIndex ?? 0
+    const group = groupList.value[target]
+    if (!group || to < 0 || to >= group.length || to === index) return
+    const active = document.activeElement
+    const next = cloneGroups()
+    const [moved] = next[target].splice(index, 1)
+    next[target].splice(to, 0, moved)
+    commit(next)
+    announcement.value = t('attributeEditor.moved', {
+      from: position(index, groupIndex),
+      to: position(to, groupIndex)
+    })
+    restoreFocus(active, `${rowSelector(to, groupIndex)} [data-reorder=grip]`)
+  }
+
+  const moveGroup = (groupIndex: number, to: number) => {
+    if (!props.reorderable || props.disabled || !grouped.value) return
+    if (to < 0 || to >= groupList.value.length || to === groupIndex) return
+    const active = document.activeElement
+    const next = cloneGroups()
+    const [moved] = next.splice(groupIndex, 1)
+    next.splice(to, 0, moved)
+    commit(next)
+    announcement.value = t('attributeEditor.groupMoved', { from: groupIndex + 1, to: to + 1 })
+    restoreFocus(active, `[data-group-index="${to}"] [data-reorder=group-grip]`)
+  }
+
+  const offsetOf = (event: KeyboardEvent) =>
+    event.key === 'ArrowUp' ? -1 : event.key === 'ArrowDown' ? 1 : 0
+
+  const onGripKeydown = (event: KeyboardEvent, index: number, groupIndex: number | undefined) => {
+    const offset = offsetOf(event)
+    if (!offset) return
+    event.preventDefault()
+    event.stopPropagation()
+    moveRow(index, groupIndex, index + offset)
+  }
+
+  const onGroupGripKeydown = (event: KeyboardEvent, groupIndex: number) => {
+    const offset = offsetOf(event)
+    if (!offset) return
+    event.preventDefault()
+    event.stopPropagation()
+    moveGroup(groupIndex, groupIndex + offset)
+  }
+
+  const onRowKeydown = (event: KeyboardEvent, index: number, groupIndex: number | undefined) => {
+    if (!props.reorderable || !event.altKey || event.defaultPrevented) return
+    const offset = offsetOf(event)
+    if (!offset) return
+    event.preventDefault()
+    moveRow(index, groupIndex, index + offset)
+  }
+
+  const disarm = () => {
+    armed.value = ''
+  }
+
+  const onDragStart = (
+    event: DragEvent,
+    scope: DragScope,
+    key: string,
+    index: number,
+    groupIndex: number | undefined
+  ) => {
+    if (event.target !== event.currentTarget || armed.value !== key || props.disabled) return
+    drag.value = { scope, index, groupIndex }
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.setData('text/plain', String(index))
+    }
+  }
+
+  const sameList = (scope: DragScope, groupIndex: number | undefined) =>
+    drag.value !== null &&
+    drag.value.scope === scope &&
+    (scope === 'group' || drag.value.groupIndex === groupIndex)
+
+  const onDragOver = (
+    event: DragEvent,
+    scope: DragScope,
+    index: number,
+    groupIndex: number | undefined
+  ) => {
+    if (!sameList(scope, groupIndex)) return
+    event.preventDefault()
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+    const edge = event.clientY > rect.top + rect.height / 2 ? 'after' : 'before'
+    drop.value = { index, groupIndex: scope === 'group' ? undefined : groupIndex, edge }
+  }
+
+  const onDragEnd = () => {
+    drag.value = null
+    drop.value = null
+    disarm()
+  }
+
+  const onDrop = (
+    event: DragEvent,
+    scope: DragScope,
+    index: number,
+    groupIndex: number | undefined
+  ) => {
+    if (!sameList(scope, groupIndex) || !drag.value || !drop.value) return
+    event.preventDefault()
+    const from = drag.value.index
+    let to = drop.value.index + (drop.value.edge === 'after' ? 1 : 0)
+    if (from < to) to -= 1
+    onDragEnd()
+    if (scope === 'group') moveGroup(from, to)
+    else moveRow(from, groupIndex, to)
+  }
+
+  const dragging = (scope: DragScope, index: number, groupIndex: number | undefined) =>
+    sameList(scope, groupIndex) && drag.value?.index === index ? '' : undefined
+
+  const dropEdge = (scope: DragScope, index: number, groupIndex: number | undefined) =>
+    sameList(scope, groupIndex) &&
+    drop.value?.index === index &&
+    (scope === 'group' || drop.value.groupIndex === groupIndex) &&
+    drag.value?.index !== index
+      ? drop.value.edge
+      : undefined
 </script>
 
 <script lang="ts">
@@ -312,7 +481,7 @@
     >
       <template
         v-for="(group, groupIndex) in groupList"
-        :key="grouped ? `group-${groupIndex}` : 'list'"
+        :key="grouped ? groupKey(group) : 'list'"
       >
         <li
           v-if="grouped && groupIndex > 0"
@@ -323,10 +492,69 @@
         </li>
         <component
           :is="grouped ? 'li' : 'div'"
-          class="flex min-w-0 flex-col gap-(--spacing-sm) data-[grouped]:rounded-(--shape-card) data-[grouped]:border data-[grouped]:border-(--border-muted) data-[grouped]:bg-(--bg-surface) data-[grouped]:p-(--spacing-md)"
+          class="relative flex min-w-0 flex-col gap-(--spacing-sm) data-[grouped]:rounded-(--shape-card) data-[grouped]:border data-[grouped]:border-(--border-muted) data-[grouped]:bg-(--bg-surface) data-[grouped]:p-(--spacing-md) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xs) data-[drop=after]:before:-bottom-(--spacing-xs)"
           :data-grouped="grouped || null"
+          :data-group-index="grouped ? groupIndex : undefined"
+          :data-dragging="grouped ? dragging('group', groupIndex, undefined) : undefined"
+          :data-drop="grouped ? dropEdge('group', groupIndex, undefined) : undefined"
+          :draggable="grouped && armed === groupKey(group) ? 'true' : undefined"
           :data-testid="grouped ? `${testId}__group` : undefined"
+          @dragstart="
+            grouped && onDragStart($event, 'group', groupKey(group), groupIndex, undefined)
+          "
+          @dragover="grouped && onDragOver($event, 'group', groupIndex, undefined)"
+          @drop="grouped && onDrop($event, 'group', groupIndex, undefined)"
+          @dragend="onDragEnd"
         >
+          <div
+            v-if="groupReorderShown"
+            class="flex items-center gap-(--spacing-xxs)"
+            :data-testid="`${testId}__group-reorder`"
+          >
+            <button
+              type="button"
+              data-reorder="group-grip"
+              class="inline-flex size-7 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent"
+              :aria-label="t('attributeEditor.reorderGroup', { index: groupIndex + 1 })"
+              :aria-describedby="hintId"
+              :disabled="disabled"
+              :data-testid="`${testId}__group-grip`"
+              @pointerdown="armed = groupKey(group)"
+              @pointerup="disarm"
+              @pointercancel="disarm"
+              @keydown="onGroupGripKeydown($event, groupIndex)"
+            >
+              <i
+                class="pi pi-bars"
+                aria-hidden="true"
+              />
+            </button>
+            <span class="flex-1" />
+            <Tooltip :text="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
+              <IconButton
+                icon="pi pi-chevron-up"
+                kind="outlined"
+                size="small"
+                data-reorder="group-up"
+                :ariaLabel="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })"
+                :disabled="disabled || groupIndex === 0"
+                :data-testid="`${testId}__group-move-up`"
+                @click="moveGroup(groupIndex, groupIndex - 1)"
+              />
+            </Tooltip>
+            <Tooltip :text="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
+              <IconButton
+                icon="pi pi-chevron-down"
+                kind="outlined"
+                size="small"
+                data-reorder="group-down"
+                :ariaLabel="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })"
+                :disabled="disabled || groupIndex === groupList.length - 1"
+                :data-testid="`${testId}__group-move-down`"
+                @click="moveGroup(groupIndex, groupIndex + 1)"
+              />
+            </Tooltip>
+          </div>
           <div
             :role="grouped ? 'group' : undefined"
             :aria-label="
@@ -346,9 +574,13 @@
                 class="min-w-0 truncate"
                 >{{ column.label }}</span
               >
-              <span
-                class="group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
-              />
+              <span class="flex justify-end gap-(--spacing-xxs)">
+                <span
+                  v-for="slot in actionCount(group)"
+                  :key="slot"
+                  class="group-data-[size=small]/attribute-editor:w-7 group-data-[size=medium]/attribute-editor:w-8 group-data-[size=large]/attribute-editor:w-10"
+                />
+              </span>
             </div>
 
             <ul
@@ -358,11 +590,21 @@
               <li
                 v-for="(item, index) in group"
                 :key="rowKey(item)"
-                class="flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 @md/attribute-editor:border-t-0 @md/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0"
+                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 @md/attribute-editor:border-t-0 @md/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xxs) data-[drop=after]:before:-bottom-(--spacing-xxs)"
                 :data-row="index"
                 :data-group="grouped ? groupIndex : undefined"
                 :data-joined="grouped && index > 0 ? '' : undefined"
+                :data-dragging="dragging('row', index, grouped ? groupIndex : undefined)"
+                :data-drop="dropEdge('row', index, grouped ? groupIndex : undefined)"
+                :draggable="armed === rowKey(item) ? 'true' : undefined"
                 :data-testid="`${testId}__row`"
+                @keydown="onRowKeydown($event, index, grouped ? groupIndex : undefined)"
+                @dragstart="
+                  onDragStart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
+                "
+                @dragover="onDragOver($event, 'row', index, grouped ? groupIndex : undefined)"
+                @drop="onDrop($event, 'row', index, grouped ? groupIndex : undefined)"
+                @dragend="onDragEnd"
               >
                 <span
                   v-if="grouped && index > 0"
@@ -386,6 +628,10 @@
                   "
                   :removable="removable(item)"
                   :remove-label="removeLabel(position(index, grouped ? groupIndex : undefined))"
+                  :move="
+                    (_event: MouseEvent | KeyboardEvent, offset: number) =>
+                      moveRow(index, grouped ? groupIndex : undefined, index + offset)
+                  "
                 >
                   <div
                     class="flex min-w-0 flex-col gap-(--spacing-sm) @md/attribute-editor:grid @md/attribute-editor:grid-cols-[repeat(var(--attribute-editor-columns),minmax(0,1fr))_auto] @md/attribute-editor:items-start"
@@ -437,7 +683,75 @@
                         }}</FieldError
                       >
                     </Field>
-                    <div class="flex justify-end">
+                    <div class="flex justify-end gap-(--spacing-xxs)">
+                      <template v-if="rowReorderShown(group)">
+                        <button
+                          type="button"
+                          data-reorder="grip"
+                          class="inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-transparent group-data-[size=small]/attribute-editor:size-7 group-data-[size=medium]/attribute-editor:size-8 group-data-[size=large]/attribute-editor:size-10"
+                          :aria-label="
+                            t('attributeEditor.reorder', {
+                              index: position(index, grouped ? groupIndex : undefined)
+                            })
+                          "
+                          :aria-describedby="hintId"
+                          :disabled="disabled"
+                          :data-testid="`${testId}__grip`"
+                          @pointerdown="armed = rowKey(item)"
+                          @pointerup="disarm"
+                          @pointercancel="disarm"
+                          @keydown="onGripKeydown($event, index, grouped ? groupIndex : undefined)"
+                        >
+                          <i
+                            class="pi pi-bars"
+                            aria-hidden="true"
+                          />
+                        </button>
+                        <Tooltip
+                          :text="
+                            t('attributeEditor.moveUp', {
+                              index: position(index, grouped ? groupIndex : undefined)
+                            })
+                          "
+                        >
+                          <IconButton
+                            icon="pi pi-chevron-up"
+                            kind="outlined"
+                            :size="size"
+                            data-reorder="up"
+                            :ariaLabel="
+                              t('attributeEditor.moveUp', {
+                                index: position(index, grouped ? groupIndex : undefined)
+                              })
+                            "
+                            :disabled="disabled || index === 0"
+                            :data-testid="`${testId}__move-up`"
+                            @click="moveRow(index, grouped ? groupIndex : undefined, index - 1)"
+                          />
+                        </Tooltip>
+                        <Tooltip
+                          :text="
+                            t('attributeEditor.moveDown', {
+                              index: position(index, grouped ? groupIndex : undefined)
+                            })
+                          "
+                        >
+                          <IconButton
+                            icon="pi pi-chevron-down"
+                            kind="outlined"
+                            :size="size"
+                            data-reorder="down"
+                            :ariaLabel="
+                              t('attributeEditor.moveDown', {
+                                index: position(index, grouped ? groupIndex : undefined)
+                              })
+                            "
+                            :disabled="disabled || index === group.length - 1"
+                            :data-testid="`${testId}__move-down`"
+                            @click="moveRow(index, grouped ? groupIndex : undefined, index + 1)"
+                          />
+                        </Tooltip>
+                      </template>
                       <slot
                         name="row-actions"
                         :item="item"
@@ -555,5 +869,11 @@
     >
       {{ announcement }}
     </div>
+    <span
+      v-if="reorderable"
+      :id="hintId"
+      class="sr-only"
+      >{{ t('attributeEditor.reorderHint') }}</span
+    >
   </div>
 </template>
