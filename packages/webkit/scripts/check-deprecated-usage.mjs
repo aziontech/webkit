@@ -420,5 +420,7 @@ if (invoked) {
     )
     process.exit(1)
   }
-  console.log('No deprecated WebKit names used in blocks, examples, src, skills, rules or adapters.')
+  console.log(
+    'No deprecated WebKit names used in blocks, examples, src, skills, rules or adapters.'
+  )
 }
