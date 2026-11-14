@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 308060948382c7f25b2b16c7a184141c3ca5fed97266935b7176b600eb88d160
+checksum: a7046484668a52ed3d69a6d4328b250e72e9c3556448f6363883b91ac99baab3
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -43,7 +43,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
-- Put an account switcher in `header-start`, page-level flash messages in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
+- Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-start` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
@@ -177,6 +177,7 @@ packages/webkit/src/components/layout/console-layout/
 | `default`       | —                                               | The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main.                                        |
 | `actions`       | `{ compact: boolean, toggleTools: () => void }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
 | `header-start`  | `{ compact: boolean }`                          | Content at the start of the header, before the breadcrumbs (an account or organization switcher).                                                                                   |
+| `sidebar-header` | `{ compact: boolean }`                        | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-start`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
 | `breadcrumbs`   | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact.                                |
 | `notifications` | —                                               | Flash messages (`Alert`) above the page, kept in view while the page scrolls.                                                                                                       |
 | `tools`         | —                                               | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`.                                                                                |
@@ -191,6 +192,7 @@ packages/webkit/src/components/layout/console-layout/
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
 - Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it. On mount, when the rail (or the compact drawer) is rendered and whenever the active row changes, the rail's own scroller scrolls the minimum needed to bring the row into view, honouring the scroller's `scroll-padding` (the `ScrollArea` fade), with an instant jump (no smooth scroll); the page never scrolls.
+- Rail header: the `sidebar-header` region sits under the wordmark with `--spacing-md` padding; it collapses with CSS (`:empty`) when the slot renders only a false `v-if`, so the server render and the client agree.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
 ## Motion & Animations
@@ -221,7 +223,7 @@ packages/webkit/src/components/layout/console-layout/
 ## Accessibility (WCAG 2.1 AA)
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `GlobalHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
-- Keyboard map: `Tab` runs rail → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `Menu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
+- Keyboard map: `Tab` runs rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `Menu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -246,6 +248,7 @@ packages/webkit/src/components/layout/console-layout/
 ## Right-to-left
 
 - Layout: logical utilities only; the rail sits at the inline start and `AppLayout` mirrors the drawer side.
+- `sidebar-header` spans the rail's inline size with symmetric `--spacing-md` padding, so it needs no mirroring.
 - Icons: the breadcrumb separator and `Menu.Back` mirror through their own components; the brand and avatar are not mirrored.
 - Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
 - User data: labels render with `dir="auto"` inside `Menu`, `Breadcrumb` and `Command`.
@@ -254,12 +257,13 @@ packages/webkit/src/components/layout/console-layout/
 
 - Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
 - Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-start` and the actions fit; the brand stays in the navigation drawer.
+- Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
 
 ## Performance
 
-- Bundle budget: 66 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 65.0 KB measured, up from 64.3 KB for the page trail; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumbs` (0.42 KB measured).
+- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumbs` (0.42 KB measured).
 - Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves, and one post-flush watcher on it and on the rail element scrolls the row into view (one layout read per change); the page trail is a short list of registrations.
 - Development warning: in development only, one `MutationObserver` on the `<main>` and a scan of its `Menu` links against the navigation tree; it is removed from production builds (0.02 KB measured in the root budget for the `<main>` ref).
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
@@ -278,8 +282,9 @@ packages/webkit/src/components/layout/console-layout/
 - Navigation expanded — `v-model:navigation-expanded` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
 - Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumbs`, ending on an environment `Select` (`kind="transparent"`, `size="small"`).
 - Fill page — a workspace page body whose root carries `data-layout-fill`: the main stops scrolling and the body's own panes scroll.
+- Sidebar header — an account switcher in `sidebar-header` under the wordmark, moved to `header-start` while compact.
 
-The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it. The fourth is justified: a page-owned trail with a control crumb is the sub-component's whole reason to exist. The fifth is justified: the fill mode only shows with a body that pins its own panes.
+The second example is justified: opening the layout's palette from a page body is the integration the page needs and the only way to show the composable. The third is justified: the rail's bound state is behaviour no other example shows, and the palette command is how the console offered it. The fourth is justified: a page-owned trail with a control crumb is the sub-component's whole reason to exist. The fifth is justified: the fill mode only shows with a body that pins its own panes. The sixth is justified: the rail header region only shows with content in it, and the switcher's move to the header while compact is the pattern the slot exists for.
 
 ## Constraints — DO NOT
 

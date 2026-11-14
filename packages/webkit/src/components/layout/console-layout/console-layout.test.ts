@@ -8,6 +8,7 @@ import { renderToString, type SSRContext } from 'vue/server-renderer'
 import FillPageExample from '../../../../examples/console-layout/fill-page.vue'
 import NavigationExpandedExample from '../../../../examples/console-layout/navigation-expanded.vue'
 import PageBreadcrumbsExample from '../../../../examples/console-layout/page-breadcrumbs.vue'
+import SidebarHeaderExample from '../../../../examples/console-layout/sidebar-header.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
 import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
@@ -422,6 +423,52 @@ describe('ConsoleLayout', () => {
     expect(header.getByRole('button', { name: 'Switch account' })).toBeTruthy()
     expect(header.getByText('Composed trail')).toBeTruthy()
     expect(header.queryByText('Ignored')).toBeNull()
+  })
+
+  it('renders the sidebar-header slot in the rail under the wordmark, not compact', () => {
+    const { getByTestId } = mount(
+      {},
+      {},
+      {
+        'sidebar-header': ({ compact }: { compact: boolean }) =>
+          h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
+      }
+    )
+    const region = getByTestId('layout-console-layout__sidebar-header')
+    const rail = within(getByTestId('layout-console-layout__navigation'))
+
+    expect(rail.getByRole('button', { name: 'Rail switcher' })).toBeTruthy()
+    expect(region.contains(rail.getByRole('button', { name: 'Rail switcher' }))).toBe(true)
+    expect(
+      rail.getByRole('link', { name: 'Azion home' }).compareDocumentPosition(region) &
+        Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy()
+  })
+
+  it('renders no sidebar-header region without the slot', () => {
+    const { queryByTestId } = mount()
+
+    expect(queryByTestId('layout-console-layout__sidebar-header')).toBeNull()
+  })
+
+  it('passes compact to the sidebar-header slot in the compact drawer', async () => {
+    const user = userEvent.setup()
+    const { getByRole, findByRole } = mount(
+      {},
+      { width: 480 },
+      {
+        'sidebar-header': ({ compact }: { compact: boolean }) =>
+          h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
+      }
+    )
+    await waitFor(() =>
+      expect(
+        within(getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+      ).toBeTruthy()
+    )
+    await user.click(within(getByRole('banner')).getByRole('button', { name: 'Open navigation' }))
+
+    expect(await findByRole('button', { name: 'Compact switcher' })).toBeTruthy()
   })
 
   it('shows flash notifications and toggles the tools region from an action', async () => {
@@ -904,6 +951,35 @@ describe('ConsoleLayout — fill page', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(FillPageExample)
+    await expectNoA11yViolations(container)
+  })
+})
+
+describe('ConsoleLayout — sidebar header example', () => {
+  const wide = () =>
+    render(
+      defineComponent({
+        render: () => h('div', { style: { width: '1200px' } }, [h(SidebarHeaderExample)])
+      })
+    )
+
+  it('puts the switcher in the rail and leaves the header start empty on a wide layout', () => {
+    const { getByTestId } = wide()
+
+    expect(
+      within(getByTestId('layout-console-layout__sidebar-header')).getByRole('button', {
+        name: 'Account: Acme Inc.. Switch account'
+      })
+    ).toBeTruthy()
+    expect(
+      within(getByTestId('layout-console-layout__header')).queryByRole('button', {
+        name: /Switch account/
+      })
+    ).toBeNull()
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = wide()
     await expectNoA11yViolations(container)
   })
 })

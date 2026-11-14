@@ -26,6 +26,11 @@
       "name": "FillPage",
       "summary": "A workspace page body whose root carries `data-layout-fill`: the layout's main becomes a fixed-height region under the header that does not scroll, the body fills it, and its own panes scroll.",
       "file": "fill-page.vue"
+    },
+    {
+      "name": "SidebarHeader",
+      "summary": "An account switcher in the `sidebar-header` slot: full width in the rail under the wordmark, with the organization's generated mark and name; while the layout is compact the slot renders nothing and the same switcher, mark and chevron only, moves to `header-start`.",
+      "file": "sidebar-header.vue"
     }
   ]
 }
