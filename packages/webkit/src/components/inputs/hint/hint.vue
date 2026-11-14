@@ -37,9 +37,14 @@
       type="button"
       :data-testid="`${testId}__trigger`"
       :aria-label="text"
-      class="inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+      class="relative inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
       @click.prevent
     >
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
+      />
       <i
         class="pi pi-info-circle text-body-xs"
         aria-hidden="true"

@@ -161,10 +161,15 @@
           :disabled="disabled"
           :aria-label="removeLabel"
           :data-testid="`${testId}__remove`"
-          class="inline-flex shrink-0 items-center justify-center rounded-full text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:pointer-events-none disabled:text-(--text-disabled) data-[size=medium]:size-6 data-[size=small]:size-4"
+          class="relative inline-flex shrink-0 items-center justify-center rounded-full text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:pointer-events-none disabled:text-(--text-disabled) data-[size=medium]:size-6 data-[size=small]:size-4"
           :data-size="size"
           @click.stop="onRemove"
         >
+          <span
+            aria-hidden="true"
+            data-slot="touch-target"
+            class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
+          />
           <i
             class="pi pi-times flex shrink-0 items-center size-[14px] data-[size=small]:size-[10px]"
             :data-size="size"

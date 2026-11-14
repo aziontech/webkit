@@ -127,3 +127,11 @@ describe('Hint', () => {
     expect(getByTestId('input-hint__trigger')).toHaveAttribute('aria-label', TEXT)
   })
 })
+
+describe('Hint touch target', () => {
+  it('extends the trigger hit area with a touch-target span', () => {
+    const { getByTestId } = render(Hint, { props: { text: 'Shown on hover' } })
+    const target = getByTestId('input-hint__trigger').querySelector('[data-slot="touch-target"]')
+    expect(target?.getAttribute('aria-hidden')).toBe('true')
+  })
+})
