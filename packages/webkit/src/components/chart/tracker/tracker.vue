@@ -170,7 +170,7 @@
       v-else-if="hasError"
       role="alert"
       :data-testid="`${testId}__error`"
-      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-contrast)"
+      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-contrast) forced-color-adjust-none"
     >
       <i
         class="pi pi-exclamation-triangle shrink-0"

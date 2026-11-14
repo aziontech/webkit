@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-14
-checksum: 8a1046ba682387818328fc04dda34f08e39fd18b0d70b84b8efd9152bfc083df
+checksum: d3365e93629e2175af1711df7b4bea24b65949b2c69ceeb408ed4b796e8c2c40
 ---
 
 # Tracker — Component Spec
@@ -69,7 +69,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 | ----------- | --------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; status?: ChartStatus; label: string }`. No status renders a neutral no-data block. The item field `severity` is the same under its old name, **@deprecated since 6.0 — use `status`. Removed in 7.0.** (it is typed `ChartStatus`), read when `status` is unset. |
 | `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                                                                                                                                                                                                  |
-| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens) in place of the blocks.                                                                                                                                                                                                                      |
+| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                                                                                                                                                                                             |
 | `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                                                                                                                                                                                                     |
 
 ## v-model
