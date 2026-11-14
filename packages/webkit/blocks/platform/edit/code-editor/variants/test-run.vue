@@ -469,10 +469,7 @@ export async function handleRequest(request, args = {}) {
       class="flex min-h-0 flex-1 flex-col overflow-auto data-[tab=code]:overflow-hidden"
     >
       <div class="flex min-h-0 flex-1 flex-col">
-        <fieldset
-          class="m-0 flex min-h-0 min-w-0 flex-1 flex-col border-0 p-0"
-          :disabled="saving"
-        >
+        <fieldset class="m-0 flex min-h-0 min-w-0 flex-1 flex-col border-0 p-0">
           <legend class="sr-only">{{ form.name }} settings</legend>
           <p
             class="sr-only"
@@ -527,6 +524,7 @@ export async function handleRequest(request, args = {}) {
                           <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                             <div class="flex min-h-0 flex-1 flex-col">
                               <CodeEditor
+                                :readonly="saving"
                                 id="service-source-code"
                                 v-model="form.code"
                                 language="javascript"
@@ -673,6 +671,7 @@ export async function handleRequest(request, args = {}) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-plus"
+                          :disabled="saving"
                           @click="addField"
                         />
                         <Button
@@ -680,6 +679,7 @@ export async function handleRequest(request, args = {}) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-times"
+                          :disabled="saving"
                           @click="removeForm"
                         />
                       </div>
@@ -701,6 +701,7 @@ export async function handleRequest(request, args = {}) {
                             <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                               <div class="flex min-h-0 flex-1 flex-col">
                                 <CodeEditor
+                                  :readonly="saving"
                                   v-model="form.schema"
                                   language="json"
                                   path="args.json"
@@ -749,8 +750,9 @@ export async function handleRequest(request, args = {}) {
                             v-else
                             class="min-h-0 flex-1 overflow-auto p-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--save-bar-inset,0rem))]"
                           >
-                            <div
-                              class="layout-column-form flex min-w-0 flex-col gap-(--spacing-sm)"
+                            <fieldset
+                              class="layout-column-form m-0 flex min-w-0 flex-col gap-(--spacing-sm) border-0 p-0"
+                              :disabled="saving"
                             >
                               <Card :padded="false">
                                 <template #content>
@@ -1198,7 +1200,7 @@ export async function handleRequest(request, args = {}) {
                                   </Item.List>
                                 </template>
                               </Card>
-                            </div>
+                            </fieldset>
                           </div>
                         </ResizablePane>
                       </ResizableRoot>
@@ -1212,7 +1214,10 @@ export async function handleRequest(request, args = {}) {
             v-show="activeTab === 'settings'"
             class="layout-column-form layout-boundary flex min-w-0 flex-col"
           >
-            <section class="layout-section-start flex min-w-0 flex-col">
+            <fieldset
+              class="layout-section-start m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="saving"
+            >
               <SettingsSection title="General">
                 <Card :padded="false">
                   <template #content>
@@ -1342,7 +1347,7 @@ export async function handleRequest(request, args = {}) {
                   </template>
                 </Card>
               </SettingsSection>
-            </section>
+            </fieldset>
           </div>
         </fieldset>
       </div>

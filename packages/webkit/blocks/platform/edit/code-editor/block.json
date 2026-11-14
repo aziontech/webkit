@@ -65,7 +65,7 @@
     },
     {
       "name": "Saving",
-      "summary": "The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, and Discard and every field are disabled until the request ends.",
+      "summary": "The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.",
       "file": "variants/saving.vue"
     }
   ]

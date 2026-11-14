@@ -64,7 +64,7 @@ The form column with four `SettingsSection`s: General (Name, required on Save), 
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state and Discard and every field are disabled; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
 
 ## Do
 
@@ -118,7 +118,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
-- Saving: a change to the Code document is being saved; Save shows its loading state and Discard and the fields are disabled.
+- Saving: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
 
