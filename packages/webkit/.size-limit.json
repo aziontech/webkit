@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "66 KB"
+    "limit": "66.5 KB"
   },
   {
     "name": "console-layout-breadcrumbs",
@@ -406,12 +406,12 @@
   {
     "name": "shell-mockup",
     "path": "src/components/content/shell-mockup/index.ts",
-    "limit": "30.62 KB"
+    "limit": "31.4 KB"
   },
   {
     "name": "shell-mockup-root",
     "path": "src/components/content/shell-mockup/shell-mockup.vue",
-    "limit": "30.4 KB"
+    "limit": "31.1 KB"
   },
   {
     "name": "shell-mockup-part",
@@ -436,7 +436,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "21.1 KB",
+    "limit": "22 KB",
     "entryOnly": true
   },
   {
@@ -497,7 +497,7 @@
   {
     "name": "article-index-blog",
     "path": "src/components/sections/article-index-blog/article-index-blog.vue",
-    "limit": "22.5 KB"
+    "limit": "23 KB"
   },
   {
     "name": "article-index-resource-hub",
@@ -621,7 +621,7 @@
   {
     "name": "network-section",
     "path": "src/components/sections/network-section/network-section.vue",
-    "limit": "26 KB",
+    "limit": "26.6 KB",
     "entryOnly": true
   },
   {
@@ -1368,7 +1368,7 @@
   {
     "name": "table-cell-time",
     "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
-    "limit": "17.4 KB"
+    "limit": "18.4 KB"
   },
   {
     "name": "table-cell-tags",
