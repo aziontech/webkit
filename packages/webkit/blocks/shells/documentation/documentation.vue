@@ -10,7 +10,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { ref } from 'vue'
 
   const sections = [
@@ -82,7 +83,7 @@
     }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('dark')
+  const { mode: theme } = useColorMode()
 
   const columns = [
     {

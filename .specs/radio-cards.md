@@ -3,8 +3,8 @@ name: radio-cards
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: e7740edc79f39616d967ffb7e2b9798d0c029171f158fdea1ac70cbce895a203
+spec_version: 3
+checksum: d745cece9e5d898e91edc9a1dd21ed8c69f325ba8777cec7db2fa0ac42a42ac3
 created: 2026-05-23
 last_updated: 2026-11-14
 ---
@@ -79,17 +79,18 @@ Horizontal grid of selectable cards for mutually exclusive choices (plans, roles
 
 ## Props
 
-| Prop         | Type               | Default     | Required | JSDoc                                                                              |
-| ------------ | ------------------ | ----------- | -------- | ---------------------------------------------------------------------------------- |
-| `items`      | `TItem[]`          | `undefined` | true     | Options rendered as selectable cards; each entry must include `value` and `label`. |
-| `disabled`   | `boolean`          | `false`     | false    | Disables all options and applies disabled tokens.                                  |
+| Prop       | Type      | Default     | Required | JSDoc                                                                                                                                                                                                            |
+| ---------- | --------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`    | `TItem[]` | `undefined` | true     | Options rendered as selectable cards; each entry must include `value` and `label`.                                                                                                                               |
+| `disabled` | `boolean` | `false`     | false    | Disables all options and applies disabled tokens.                                                                                                                                                                |
+| `name`     | `string`  | `''`        | false    | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; a required `Field` adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out. |
 
 **Generic.** The component is generic over `TItem extends RadioCardsItem` (default `RadioCardsItem`, `{ value: string | number; label: string; icon?: string; description?: string; ariaLabel?: string; disabled?: boolean }`), inferred from `items`: an item that carries extra fields (a price, a plan id) reaches the `default` and `tag` slots as its own type, so `item.price` needs no cast, and `v-model` carries the items' `value` type (`'free' | 'pro'` for a list typed that way). Props stay an inline literal in `defineProps` because the component is generic (a named `interface Props` fails declaration emit, TS4025). `RadioCardsItem` is exported by `@aziontech/webkit/radio-cards`.
 
 ## v-model
 
-| Model     | Type                          | Default     | Emits               | Notes                                                                                                                           |
-| --------- | ----------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type                          | Default     | Emits               | Notes                                                                                                        |
+| --------- | ----------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `v-model` | `TItem['value'] \| undefined` | `undefined` | `update:modelValue` | Selected item value via `defineModel`. Unbound, the group keeps its own selection, so it works uncontrolled. |
 
 ## Events

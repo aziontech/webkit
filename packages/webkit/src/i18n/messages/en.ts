@@ -948,7 +948,8 @@ export const tableFilter = {
 } as const
 
 export const tableHeadCell = {
-  resize: 'Resize column'
+  resize: 'Resize column',
+  sortBy: 'Sort by'
 } as const
 
 export const tableRefreshButton = {

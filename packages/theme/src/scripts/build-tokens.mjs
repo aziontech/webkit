@@ -8,7 +8,12 @@ import { animate, curve, duration } from '../tokens/primitives/animations/animat
 import { animateExtras, keyframes } from '../tokens/primitives/animations/keyframes.js';
 import { breakpoints } from '../tokens/primitives/breakpoints.js';
 import { compilePrimitivesVars } from './compile-primitives.js';
-import { compileThemeCss, compileThemeVars } from './compile-theme.js';
+import {
+  compileThemeCss,
+  compileThemeVars,
+  LIGHT_SELECTOR,
+  SYSTEM_SELECTOR,
+} from './compile-theme.js';
 import { codeData } from '../tokens/semantic/code.data.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
 import { layoutsData, layoutsUtilities } from '../tokens/semantic/layouts.data.js';
@@ -197,6 +202,11 @@ const emitBaseLayer = () =>
     '    -moz-osx-font-smoothing: grayscale;',
     '  }',
     '',
+    '  body {',
+    '    background-color: var(--bg-canvas);',
+    '    color: var(--text-default);',
+    '  }',
+    '',
     '  button:not(:disabled),',
     '  [role="button"]:not([aria-disabled="true"]),',
     '  summary {',
@@ -252,7 +262,20 @@ const emitKeyframes = () => {
   return blocks.join('\n\n');
 };
 
-const V4_SELECTOR = ':root, [data-theme=light], .azion.azion-light';
+const V4_SELECTOR = LIGHT_SELECTOR;
+
+const DARK_VARIANT = [
+  '@custom-variant dark {',
+  '  &:where([data-theme=dark], [data-theme=dark] *, .dark, .dark *, .azion-dark, .azion-dark *) {',
+  '    @slot;',
+  '  }',
+  '  @media (prefers-color-scheme: dark) {',
+  `    &:where(${SYSTEM_SELECTOR}, ${SYSTEM_SELECTOR} *) {`,
+  '      @slot;',
+  '    }',
+  '  }',
+  '}',
+].join('\n');
 
 const emitCssV4 = () => {
   const m = buildFlatModel();
@@ -319,6 +342,8 @@ const emitCssV4 = () => {
     ' * `packages/theme/dist/v4/`; walking up three levels reaches `packages/`).',
     ' */',
     '@source "../../../webkit/src";',
+    '',
+    DARK_VARIANT,
     '',
     '@theme {',
     formatVars(themeVars, '  '),

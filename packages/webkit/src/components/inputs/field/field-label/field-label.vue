@@ -15,6 +15,7 @@
     /** Short explanation appended as a Hint glyph that reveals it on hover or focus. Empty renders no glyph. */
     hint?: string
   }
+  export type FieldLabelProps = Props
 
   withDefaults(defineProps<Props>(), {
     hint: ''

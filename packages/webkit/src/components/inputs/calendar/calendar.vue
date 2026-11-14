@@ -77,6 +77,7 @@
     /** Renders the trigger as a split control with a separate chevron affordance. */
     split?: boolean
   }
+  export type CalendarProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     mode: 'range',

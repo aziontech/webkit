@@ -17,6 +17,7 @@
     /** Disables this single option; does not affect the parent multi-select. */
     disabled?: boolean
   }
+  export type MultiSelectOptionProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     icon: '',

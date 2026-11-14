@@ -70,13 +70,21 @@ const resolveRef = (ref, surfacesResolved, semanticResolved = {}) => {
   return null
 }
 
-const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticResolved) => {
+const isAliasRef = (ref) => ref.startsWith('theme.') && !ref.startsWith('theme.surfaces.')
+
+const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticResolved, aliases) => {
   const result = {}
   Object.entries(group).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
     const resolved = resolveRef(value.__ref, surfacesResolved, semanticResolved)
-    if (resolved != null) result[`--${key}`] = String(resolved)
-    else unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
+    if (resolved == null) {
+      unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
+      return
+    }
+    result[`--${key}`] = String(resolved)
+    if (aliases && isAliasRef(value.__ref)) {
+      aliases[`--${key}`] = `var(--${value.__ref.split('.').pop()})`
+    }
   })
   return result
 }
@@ -91,13 +99,21 @@ const compileVariant = (variant, unresolved) => {
   })
 
   const vars = {}
+  const aliases = {}
   Object.entries(surfacesResolved).forEach(([k, v]) => {
     vars[`--${k}`] = v
   })
 
   const semanticResolved = {}
   Object.entries(semanticGroups).forEach(([name, group]) => {
-    const resolved = resolveGroup(group[variant], surfacesResolved, variant, unresolved)
+    const resolved = resolveGroup(
+      group[variant],
+      surfacesResolved,
+      variant,
+      unresolved,
+      semanticResolved,
+      aliases
+    )
     Object.assign(vars, resolved)
     Object.entries(resolved).forEach(([key, value]) => {
       semanticResolved[`${name}.${key.slice(2)}`] = value
@@ -106,29 +122,61 @@ const compileVariant = (variant, unresolved) => {
 
   Object.assign(
     vars,
-    resolveGroup(illustration[variant], surfacesResolved, variant, unresolved, semanticResolved),
-    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved),
-    resolveGroup(severity[variant], surfacesResolved, variant, unresolved, semanticResolved)
+    resolveGroup(
+      illustration[variant],
+      surfacesResolved,
+      variant,
+      unresolved,
+      semanticResolved,
+      aliases
+    ),
+    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved, aliases),
+    resolveGroup(
+      severity[variant],
+      surfacesResolved,
+      variant,
+      unresolved,
+      semanticResolved,
+      aliases
+    )
   )
-  return vars
+  return { vars, aliases }
+}
+
+const compileAll = () => {
+  const unresolved = []
+  const compiled = Object.fromEntries(VARIANTS.map((v) => [v, compileVariant(v, unresolved)]))
+  assertResolvedRefs('semantic theme tokens', unresolved)
+  return compiled
 }
 
 export const compileThemeVars = () => {
-  const unresolved = []
-  const vars = Object.fromEntries(VARIANTS.map((v) => [v, compileVariant(v, unresolved)]))
-  assertResolvedRefs('semantic theme tokens', unresolved)
-  return vars
+  const compiled = compileAll()
+  return Object.fromEntries(VARIANTS.map((v) => [v, compiled[v].vars]))
 }
 
+export const compileThemeCssVars = () => {
+  const compiled = compileAll()
+  return Object.fromEntries(
+    VARIANTS.map((v) => [v, { ...compiled[v].vars, ...compiled[v].aliases }])
+  )
+}
+
+const fmt = (vars, indent = '  ') =>
+  Object.entries(vars)
+    .map(([k, v]) => `${indent}${k}: ${v};`)
+    .join('\n')
+
+export const LIGHT_SELECTOR = ':root, [data-theme=light], .azion.azion-light'
+export const DARK_SELECTOR = '[data-theme=dark], .dark, .azion.azion-dark'
+export const SYSTEM_SELECTOR = '[data-theme=system]'
+
 export const compileThemeCss = () => {
-  const { light, dark } = compileThemeVars()
-  const fmt = (vars) =>
-    Object.entries(vars)
-      .map(([k, v]) => `  ${k}: ${v};`)
-      .join('\n')
+  const { light, dark } = compileThemeCssVars()
   return [
-    `:root, [data-theme=light], .azion.azion-light {\n${fmt(light)}\n}`,
-    `[data-theme=dark], .dark, .azion.azion-dark {\n${fmt(dark)}\n}`
+    `${LIGHT_SELECTOR} {\n  color-scheme: light;\n${fmt(light)}\n}`,
+    `${DARK_SELECTOR} {\n  color-scheme: dark;\n${fmt(dark)}\n}`,
+    `@media (prefers-color-scheme: dark) {\n  ${SYSTEM_SELECTOR} {\n    color-scheme: dark;\n${fmt(dark, '    ')}\n  }\n}`
   ].join('\n\n')
 }
 

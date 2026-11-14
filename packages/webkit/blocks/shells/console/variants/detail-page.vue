@@ -12,8 +12,9 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { computed, ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -186,7 +187,7 @@
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('system')
+  const { mode: theme } = useColorMode()
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'

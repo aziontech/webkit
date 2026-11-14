@@ -23,8 +23,8 @@
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
-  import { ref } from 'vue'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
   type Workflow = 'Terminal' | 'IDE' | 'Extension'
 
@@ -184,7 +184,7 @@
     }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('system')
+  const { mode: theme } = useColorMode()
 
   const crumbs = [{ label: 'Dev tools', href: '/docs/dev-tools' }, { label: 'Agent setup' }]
 

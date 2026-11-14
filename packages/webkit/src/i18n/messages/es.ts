@@ -963,7 +963,8 @@ export const es: Messages = {
     between: 'entre'
   },
   tableHeadCell: {
-    resize: 'Redimensionar columna'
+    resize: 'Redimensionar columna',
+    sortBy: 'Ordenar por'
   },
   tableRefreshButton: {
     label: 'Actualizar'

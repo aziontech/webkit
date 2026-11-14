@@ -49,6 +49,7 @@
     /** Accessible name of the list. Empty uses the locale catalog (`Files`). */
     ariaLabel?: string
   }
+  export type FileTokenGroupProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],

@@ -116,6 +116,33 @@ describe('Field', () => {
     expect(getByRole('alert').textContent).toContain('Taken.')
   })
 
+  it('joins a consumer aria-describedby with the field description and error', async () => {
+    const { getByRole, getByTestId } = mount(
+      '<Field><FieldLabel>Slug</FieldLabel><Input aria-describedby="slug-hint" /><FieldDescription>Lowercase.</FieldDescription><FieldError>Taken.</FieldError></Field>'
+    )
+    await nextTick()
+    expect(getByRole('textbox').getAttribute('aria-describedby')?.split(' ')).toEqual([
+      'slug-hint',
+      getByTestId('input-field-description').id,
+      getByTestId('input-field-error').id
+    ])
+  })
+
+  it('marks the control invalid while a Field.Error is mounted', async () => {
+    const error = ref(true)
+    const { getByRole, getByTestId } = mount(
+      '<Field><FieldLabel>Slug</FieldLabel><Input /><FieldError v-if="error">Taken.</FieldError></Field>',
+      () => ({ error })
+    )
+    await nextTick()
+    expect(getByRole('textbox').getAttribute('aria-invalid')).toBe('true')
+    expect(getByTestId('input-field').hasAttribute('data-invalid')).toBe(true)
+    error.value = false
+    await nextTick()
+    await nextTick()
+    expect(getByRole('textbox').getAttribute('aria-invalid')).not.toBe('true')
+  })
+
   it('drops a description id once the description unmounts', async () => {
     const show = ref(true)
     const { getByRole } = mount(

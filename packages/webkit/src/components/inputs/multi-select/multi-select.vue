@@ -3,6 +3,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+  import { FormValue } from '../../../utils/form-value'
   import { fieldContextKey } from '../field/injection-key'
   import { multiSelectContextKey, type MultiSelectSize } from './injection-key'
 
@@ -29,6 +30,8 @@
       invalid?: boolean
       /** Custom formatter for the trigger label; receives the current modelValue array. */
       displayValue?: (value: TValue[]) => string
+      /** Form field name: renders one hidden input per selected value, so a native form submits them; required then blocks an empty submit. */
+      name?: string
     }>(),
     {
       defaultOpen: false,
@@ -38,7 +41,8 @@
       readonly: false,
       required: false,
       invalid: false,
-      displayValue: undefined
+      displayValue: undefined,
+      name: ''
     }
   )
 
@@ -158,5 +162,11 @@
     class="relative inline-block w-full"
   >
     <slot />
+    <FormValue
+      :name="name"
+      :value="model as unknown[]"
+      :required="isRequired"
+      :disabled="isDisabled"
+    />
   </div>
 </template>

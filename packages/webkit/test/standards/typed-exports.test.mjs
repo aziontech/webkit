@@ -5,8 +5,12 @@ import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 import { exportsProblems } from '../../scripts/build-exports.mjs'
-import { allExportsModule, sourceFilesInProgram } from '../../scripts/check-consumer-types.mjs'
-import { exportTarget, typedEntry, typesFor } from '../../scripts/lib/exports.mjs'
+import {
+  allExportsModule,
+  APP_VUE,
+  sourceFilesInProgram
+} from '../../scripts/check-consumer-types.mjs'
+import { exportTarget, typedEntry, typesFor, typesVersionsFor } from '../../scripts/lib/exports.mjs'
 import { findAncestor, isPnpmCommand, packerToOutlive } from '../../scripts/pack-files.mjs'
 
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
@@ -44,6 +48,28 @@ test('package.json#exports is typed, and every target exists', () => {
   assert.deepEqual(exportsProblems(read('packages/webkit/package.json'), PKG), [])
 })
 
+test('typesVersions mirrors every typed export for node10 resolution', () => {
+  const pkg = read('packages/webkit/package.json')
+  assert.deepEqual(pkg.typesVersions, typesVersionsFor(pkg.exports))
+  assert.deepEqual(pkg.typesVersions['*'].button, [
+    './types/components/actions/button/button.vue.d.ts'
+  ])
+  assert.equal(pkg.typesVersions['*']['catalog.json'], undefined)
+  const stale = { ...pkg, typesVersions: { '*': {} } }
+  assert.ok(exportsProblems(stale, PKG).includes('typesVersions: out of date with exports'))
+})
+
+test('components export their props as <Name>Props and the consumer smoke app uses them', () => {
+  const button = readFileSync(resolve(PKG, 'src/components/actions/button/button.vue'), 'utf8')
+  assert.match(button, /export type ButtonProps = Props/)
+  assert.match(button, /export type ButtonKind = /)
+  assert.match(
+    APP_VUE,
+    /import Button, \{ type ButtonKind, type ButtonProps \} from '@aziontech\/webkit\/button'/
+  )
+  assert.match(APP_VUE, /const saveProps: ButtonProps = /)
+})
+
 test('exportsProblems flags an untyped entry and a missing target', () => {
   const problems = exportsProblems(
     {
@@ -54,7 +80,7 @@ test('exportsProblems flags an untyped entry and a missing target', () => {
     },
     PKG
   )
-  assert.equal(problems.length, 2)
+  assert.equal(problems.length, 3)
   assert.match(problems[0], /^\.\/button: expected/)
   assert.match(problems[1], /\.\/ghost: \.\/src\/ghost\.vue does not exist/)
 })

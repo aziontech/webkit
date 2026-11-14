@@ -10,6 +10,7 @@
     /** Heading text rendered above the grouped options. */
     label?: string
   }
+  export type MultiSelectGroupProps = Props
 
   withDefaults(defineProps<Props>(), {
     label: ''

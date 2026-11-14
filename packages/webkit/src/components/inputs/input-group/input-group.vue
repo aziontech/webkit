@@ -18,6 +18,7 @@
     /** Renders the disabled visual, sets aria-disabled on the root and disables the field controls inside (InputGroup.Input, Input, Select and the other controls that read the Field context). A Button or IconButton inside needs its own disabled. */
     disabled?: boolean
   }
+  export type InputGroupProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     size: 'medium',

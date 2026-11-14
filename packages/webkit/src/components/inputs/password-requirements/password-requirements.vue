@@ -20,6 +20,7 @@
     /** Password every rule is evaluated against; pass the PasswordInput value. */
     value?: string
   }
+  export type PasswordRequirementsProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     requirements: () => DEFAULT_PASSWORD_REQUIREMENTS,

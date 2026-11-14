@@ -69,6 +69,7 @@
     /** Marks the field invalid (`aria-invalid`, danger border). */
     invalid?: boolean
   }
+  export type ComboboxProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     options: () => [],
@@ -87,6 +88,9 @@
   })
 
   const model = defineModel<string>({ default: '' })
+
+  /** Whether the list is open; bind v-model:open to open or close it from outside. */
+  const open = defineModel<boolean>('open', { default: false })
 
   const emit = defineEmits<{
     search: [text: string]
@@ -120,7 +124,6 @@
 
   const anchorRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
-  const open = ref(false)
   const typing = ref(false)
   const active = ref(-1)
   const anchorWidth = ref(0)

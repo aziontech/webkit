@@ -54,7 +54,7 @@ describe('RadioButton', () => {
 
     expect(root.getAttribute('data-checked')).toBeNull()
     expect(input.checked).toBe(false)
-    expect(input.getAttribute('aria-checked')).toBe('false')
+    expect(input.hasAttribute('aria-checked')).toBe(false)
     expect(queryByTestId('input-radio-button__indicator')).toBeNull()
   })
 
@@ -68,7 +68,7 @@ describe('RadioButton', () => {
 
     expect(root.hasAttribute('data-checked')).toBe(true)
     expect(input.checked).toBe(true)
-    expect(input.getAttribute('aria-checked')).toBe('true')
+    expect(input.hasAttribute('aria-checked')).toBe(false)
 
     const indicator = getByTestId('input-radio-button__indicator')
     expect(indicator.getAttribute('aria-hidden')).toBe('true')

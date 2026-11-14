@@ -121,6 +121,11 @@
     "limit": "6 KB"
   },
   {
+    "name": "use-color-mode",
+    "path": "src/composables/use-color-mode/index.ts",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "frame-box",
     "path": "src/components/layout/frame-box/frame-box.vue",
     "limit": "2.5 KB"
@@ -1185,7 +1190,7 @@
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "21.95 KB"
+    "limit": "22.4 KB"
   },
   {
     "name": "multi-select",
@@ -1922,6 +1927,11 @@
     "limit": "4.95 KB"
   },
   {
+    "name": "radio-group-root",
+    "path": "src/components/inputs/radio-group/radio-group.vue",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "radio-cards",
     "path": "src/components/inputs/radio-cards/radio-cards.vue",
     "limit": "2.95 KB"
@@ -1979,7 +1989,7 @@
   {
     "name": "multi-select-root",
     "path": "src/components/inputs/multi-select/multi-select.vue",
-    "limit": "1.6 KB"
+    "limit": "2.05 KB"
   },
   {
     "name": "multi-select-trigger",
@@ -2004,7 +2014,7 @@
   {
     "name": "select-root",
     "path": "src/components/inputs/select/select.vue",
-    "limit": "1.75 KB"
+    "limit": "2.3 KB"
   },
   {
     "name": "select-trigger",

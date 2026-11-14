@@ -40,6 +40,27 @@ describe('Combobox', () => {
     view.unmount()
   })
 
+  it('emits update:open and follows a bound v-model:open', async () => {
+    const open = ref(false)
+    const view = render(
+      defineComponent({
+        components: { Combobox },
+        setup: () => ({ open, options }),
+        template: '<Combobox v-model:open="open" :options="options" aria-label="Variable" />'
+      })
+    )
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    expect(open.value).toBe(true)
+    open.value = false
+    await nextTick()
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+    open.value = true
+    await nextTick()
+    expect(input.getAttribute('aria-expanded')).toBe('true')
+    view.unmount()
+  })
+
   it('filters by value and label, accent and case insensitive, and announces the count', async () => {
     const view = render(Combobox, { props: { options, ariaLabel: 'Variable' } })
     const input = view.getByRole('combobox')

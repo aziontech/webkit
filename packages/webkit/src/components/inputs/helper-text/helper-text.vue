@@ -14,6 +14,7 @@
     /** Visual variant; `disabled` also prepends a pi pi-lock icon. */
     kind?: HelperTextKind
   }
+  export type HelperTextProps = Props
 
   withDefaults(defineProps<Props>(), {
     label: '',

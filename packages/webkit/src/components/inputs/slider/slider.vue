@@ -28,6 +28,7 @@
     /** Text appended verbatim to the reference labels and to the announced value. */
     unit?: string
   }
+  export type SliderProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     min: 0,

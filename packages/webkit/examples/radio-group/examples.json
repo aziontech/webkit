@@ -1,0 +1,26 @@
+{
+  "component": "radio-group",
+  "title": "Components/Primitives/Inputs/RadioGroup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A stacked group bound with `v-model`: one tab stop, the arrow keys move the selection, and the disabled option is skipped.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Horizontal",
+      "summary": "`orientation=\"horizontal\"` lays three short options in a row that wraps in a narrow container.",
+      "file": "horizontal.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` on the group disables every option and keeps the selection visible.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "InField",
+      "summary": "Inside `Field.Set` the legend names the group, the description describes it, and `required` on the group makes a native form refuse an empty submit; the value posts under `name`.",
+      "file": "in-field.vue"
+    }
+  ]
+}

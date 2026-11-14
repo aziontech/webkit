@@ -27,9 +27,12 @@ export function useFieldControl(options: UseFieldControlOptions = {}): UseFieldC
   return {
     field,
     controlId: computed(() => toValue(options.id) || field?.controlId || undefined),
-    describedBy: computed(
-      () => toValue(options.describedBy) || field?.describedBy.value || undefined
-    ),
+    describedBy: computed(() => {
+      const ids = `${toValue(options.describedBy) ?? ''} ${field?.describedBy.value ?? ''}`
+        .split(/\s+/)
+        .filter(Boolean)
+      return [...new Set(ids)].join(' ') || undefined
+    }),
     labelledBy: computed(() => toValue(options.labelledBy) || field?.labelledBy.value || undefined),
     invalid: computed(() => Boolean(toValue(options.invalid)) || Boolean(field?.invalid.value)),
     disabled: computed(() => Boolean(toValue(options.disabled)) || Boolean(field?.disabled.value)),

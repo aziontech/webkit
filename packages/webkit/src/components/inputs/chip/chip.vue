@@ -29,6 +29,7 @@
     /** Suppresses activation, toggling and removal. */
     disabled?: boolean
   }
+  export type ChipProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',

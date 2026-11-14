@@ -3,6 +3,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { FormValue } from '../../../utils/form-value'
 
   defineOptions({
     name: 'RadioCards',
@@ -15,9 +16,12 @@
       items: TItem[]
       /** Disables all options and applies disabled tokens. */
       disabled?: boolean
+      /** Form field name: a hidden input carries the selected value, so a native form submits it; a required Field then blocks an empty submit. */
+      name?: string
     }>(),
     {
-      disabled: false
+      disabled: false,
+      name: ''
     }
   )
 
@@ -137,7 +141,7 @@
     v-bind="$attrs"
     :id="field.controlId.value"
     role="radiogroup"
-    class="flex flex-wrap items-stretch gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+    class="relative flex flex-wrap items-stretch gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
     :aria-labelledby="field.labelledBy.value"
     :aria-describedby="field.describedBy.value"
     :aria-invalid="field.invalid.value || undefined"
@@ -207,5 +211,11 @@
         </div>
       </slot>
     </div>
+    <FormValue
+      :name="name"
+      :value="model"
+      :required="field.required.value"
+      :disabled="groupDisabled"
+    />
   </div>
 </template>
