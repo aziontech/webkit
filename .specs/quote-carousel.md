@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13136-296065
   node_id: 13136:296065
-checksum: 906064601e76f6ac4a1ee9019e956bc30b6d695317e9bb0b9c68a2b03cd2242b
+checksum: b19938c942841756b331489884cecd9857cd4b48dab0eec3f7de6ac381d01d99
 created: 2026-09-24
 last_updated: 2026-11-14
 ---
@@ -93,7 +93,7 @@ The cards sit edge to edge with no gutter — each draws its own hairline and th
 
 | Prop        | Type                  | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                  |
 | ----------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`     | `QuoteCarouselItem[]` | `[]`    | false    | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness, the URL of the company's logo (wins over `mark`) with its alternative text, and the registry name of the company's mark. The same `logo` / `mark` pair as `quote` and `quote-tabs`. |
+| `items`     | `QuoteCarouselItem[]` | `[]`    | false    | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness, the URL of the company's logo (wins over `mark`) with its alternative text, and the registry name of the company's mark. The same `logo` / `mark` pair as `quote-tabs` items. |
 | `ariaLabel` | `string`              | `''`    | false    | Accessible name for the scrollable row of testimonials, announced before its contents.                                                                                                                                                                                                                                                                                                 |
 
 ## Events
