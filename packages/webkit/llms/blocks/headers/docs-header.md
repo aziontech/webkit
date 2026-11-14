@@ -28,7 +28,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Middle`, the actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Start`, an empty `GlobalHeader.Center`, the actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger and GitHub — `IconButton` (required)
 
@@ -117,7 +117,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
 <template>
   <div class="@container w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Azion documentation">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
           <div class="shrink-0 lg:hidden">
             <IconButton
@@ -159,9 +159,9 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
             </NavigationMenu>
           </div>
         </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <SearchTrigger
           collapsible
           label="Search docs"
@@ -183,7 +183,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
           class="shrink-0"
           href="/home"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <Command v-model:open="searchOpen">
       <Command.Input placeholder="Search docs" />

@@ -29,7 +29,7 @@ The top bar of the focused creation shell: create, edit and deploy flows that ru
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Left`, the avatar in `GlobalHeader.Right`; `GlobalHeader.Middle` stays empty. Exactly one header per page.
+Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Start`, the avatar in `GlobalHeader.End`; `GlobalHeader.Center` stays empty. Exactly one header per page.
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 
@@ -115,7 +115,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
 <template>
   <div class="w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <Tooltip
           text="Back to Resources"
           placement="bottom"
@@ -141,9 +141,9 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -165,44 +165,44 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
               </div>
             </template>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="settings"
               label="Account settings"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-cog"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="docs"
               label="Docs"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-book"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
-            <DropdownMenu.Option
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
               value="logout"
               label="Log out"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-sign-out"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
   </div>
 </template>

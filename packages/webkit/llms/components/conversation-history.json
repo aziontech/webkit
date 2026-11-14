@@ -16,7 +16,7 @@
  ],
  "avoidWhen": [
   "Messages of the open conversation → `Conversation`.",
-  "Navigation between product areas → `SidebarNav` or `NavigationMenu`.",
+  "Navigation between product areas → `Sidebar` or `NavigationMenu`.",
   "A searchable table of records → `TableRoot`."
  ],
  "related": [
@@ -63,13 +63,6 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
-  },
-  {
-   "name": "label",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty."
   },
   {
    "name": "modelValue",

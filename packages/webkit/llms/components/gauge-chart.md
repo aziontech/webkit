@@ -23,7 +23,7 @@
 
 - A number with a change against a period and a trend → use `stat-tile`.
 - A value over time → use `chart` (line or area).
-- Progress of a task toward done → use `progress-bar`.
+- Progress of a task toward done → use `progress`.
 - Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

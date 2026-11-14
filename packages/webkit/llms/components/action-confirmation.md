@@ -136,7 +136,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
             language: 'bash'
           }
         ]"
-        :show-line-numbers="false"
+        :line-numbers="false"
       />
     </ActionConfirmation>
   </div>

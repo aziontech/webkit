@@ -377,7 +377,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                   value="logout"
                   label="Log Out"
                 >
-                  <template #right
+                  <template #trailing
                     ><i
                       class="pi pi-sign-out"
                       aria-hidden="true"

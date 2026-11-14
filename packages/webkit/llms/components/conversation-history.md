@@ -20,7 +20,7 @@
 ## Don’t
 
 - Messages of the open conversation → `Conversation`.
-- Navigation between product areas → `SidebarNav` or `NavigationMenu`.
+- Navigation between product areas → `Sidebar` or `NavigationMenu`.
 - A searchable table of records → `TableRoot`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -38,7 +38,6 @@
 | `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
-| `label` | `string` | `''` | false | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty. |
 | `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Events
@@ -49,9 +48,9 @@
 
 ## v-model
 
-| Model     | Type       | Default | Emits  | Notes               |
-| --------- | ---------- | ------- | ------ | ------------------- |
-| `v-model` | `string \\ | null`   | `null` | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+| Model     | Type             | Default | Emits               | Notes                                                          |
+| --------- | ---------------- | ------- | ------------------- | -------------------------------------------------------------- |
+| `v-model` | `string \| null` | `null`  | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
 
 ## States
 

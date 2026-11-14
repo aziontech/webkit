@@ -42,6 +42,8 @@
 | `autofocus` | `boolean` | `false` | false | Moves focus to the switch once, when it mounts. |
 | `focused` | `boolean` | `false` | false | @deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
+| `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
+| `name` | `string` | `''` | false | Form field name. Set, a hidden input inside the button submits `on` under this name while the switch is on and nothing while it is off, as a native checkbox does; `disabled` leaves it out. |
 | `modelValue` | `boolean` | `false` | false | Two-way value (`v-model`). |
 
 ## v-model
@@ -57,6 +59,7 @@
 - `data-focused` mirrors the deprecated `focused` prop and applies the same ring tokens as `:focus-visible`
 - `data-kind` mirrors the `kind` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
 - Touch: an invisible `::after` extends the hit area of the 36 × 20 px track to 24 px tall, and to 44 × 44 px on a coarse pointer.
 

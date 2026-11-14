@@ -7,7 +7,7 @@
  "avoidWhen": [
   "A count or a very short label attached to another element → use `badge`.",
   "A category or status chip with an optional icon → use `tag`.",
-  "A page or section notice with copy and actions → use `message`.",
+  "A page or section notice with copy and actions → use `alert`.",
   "Measurable progress → use `progress`."
  ],
  "related": [

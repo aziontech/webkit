@@ -1,8 +1,9 @@
 # Drawer
 
-> Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/drawer/`.
+> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.
 
-- Import: `import Drawer from '@aziontech/webkit/drawer'`
+- Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
+- Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
 - Category: overlay · Surface: product · Structure: composition
 - API as JSON: [drawer.json](https://github.com/aziontech/webkit/blob/main/.specs/drawer.json)
 
@@ -33,7 +34,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `dismissible` | `boolean` | `true` | false | When true, overlay click and Escape close the drawer. |
+| `closable` | `boolean` | `undefined` | false | Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `side` | `DrawerSide` | `'right'` | false | Edge the drawer panel slides from. |
 | `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -56,6 +58,7 @@
 
 ## Sub-components
 
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
 - `drawer-close.vue` — Public sub-component `drawer-close`.
 - `drawer-content.vue` — Public sub-component `drawer-content`.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
@@ -98,16 +101,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -120,25 +113,25 @@
     side="right"
     size="medium"
   >
-    <DrawerTrigger>
+    <Drawer.Trigger>
       <Button
         label="Open drawer"
         kind="primary"
       />
-    </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <PanelHeader class="w-full">
-          <DrawerTitle>Drawer Title</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <DrawerDescription>
+    </Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header class="w-full">
+          <Drawer.Title>Drawer Title</Drawer.Title>
+          <Drawer.Close />
+        </Drawer.Header>
+        <Drawer.Body>
+          <Drawer.Description>
             Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
-          </DrawerDescription>
-        </PanelContent>
-        <PanelFooter>
+          </Drawer.Description>
+        </Drawer.Body>
+        <Drawer.Footer>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
               label="Cancel"
@@ -150,9 +143,9 @@
               kind="primary"
             />
           </div>
-        </PanelFooter>
-      </DrawerContent>
-    </DrawerPortal>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer.Portal>
   </Drawer>
 </template>
 ```

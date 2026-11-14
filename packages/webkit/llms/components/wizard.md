@@ -50,13 +50,12 @@
 | `loading` | `boolean` | `false` | false | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create edge application. |
 | `modelValue` | `number \| undefined` | `undefined` | false | Two-way value (`v-model`). |
-| `activeStep` | `number` | `0` | false | Two-way value (`v-model:activeStep`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `next` | `(event: MouseEvent, step: number)` | Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back. |
+| `next` | `(event: MouseEvent, step: number)` | Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only go back. |
 | `submit` | `(event: MouseEvent)` | Fired when the primary action is activated on the last step. The wizard changes no state. The consumer starts the request and binds `loading`. Not fired while `loading`. |
 | `cancel` | `(event: MouseEvent)` | Fired when Cancel is activated. The wizard changes no state, and the consumer decides where to go. Not fired while `loading`. |
 
@@ -95,7 +94,7 @@ The root composes, and does not re-implement:
   - `disabled` = `true` for every step after the active one, and for every step while `loading`.
 
   An `optional` step shows the word `Optional` in the `Stepper.Step` default slot. The rail's `v-model`
-  is the active index as a string, and a rail activation writes `Number(value)` back to `activeStep`.
+  is the active index as a string, and a rail activation writes `Number(value)` back to the `v-model` index.
 
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
@@ -148,17 +147,16 @@ folder only):
 
 ## v-model
 
-| Model                | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| -------------------- | --------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`            | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. Kept in sync with `activeStep`. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
-| `v-model:activeStep` | `number`              | `0`         | `update:activeStep` | `@deprecated since 6.0 — use v-model. Removed in 7.0.` Same index as `v-model`, kept in sync with it; two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting.                                                                                                                               |
+| Model     | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
 
 ## States
 
 - Visual states: `default`, `loading`. Interactive states (`hover`, `focus-visible`, `active`,
   `disabled`) belong to the composed `Button` and `Stepper.Step`, not to the wizard's own elements.
 - `data-loading` on the root mirrors `loading`.
-- `data-active-step` on the root mirrors the clamped `activeStep`.
+- `data-active-step` on the root mirrors the clamped `v-model` index.
 - `data-active` on `Wizard.Step` is present only on the step on screen.
 - `data-optional` on `Wizard.Step` mirrors `optional`.
 - Rail step statuses come from `Stepper.Step`. Every step before the active one is `complete`, the
@@ -169,9 +167,9 @@ State matrix:
 
 | State        | Trigger                               | Renders                                                                                                                                                                                                                                                                                                                                        |
 | ------------ | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| first step   | `activeStep === 0`                    | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                                                                                                                                                                                            |
-| middle step  | `0 < activeStep < N − 1`              | Cancel, Previous and Next.                                                                                                                                                                                                                                                                                                                     |
-| last step    | `activeStep === N − 1`                | The primary action reads `submitLabel` and emits `submit`.                                                                                                                                                                                                                                                                                     |
+| first step   | `modelValue === 0`                    | Previous is not rendered. The footer shows Cancel at the start and Next at the end.                                                                                                                                                                                                                                                            |
+| middle step  | `0 < modelValue < N − 1`              | Cancel, Previous and Next.                                                                                                                                                                                                                                                                                                                     |
+| last step    | `modelValue === N − 1`                | The primary action reads `submitLabel` and emits `submit`.                                                                                                                                                                                                                                                                                     |
 | single step  | `N === 1`                             | Previous is not rendered, and the primary action is the submit action from the start.                                                                                                                                                                                                                                                          |
 | loading      | `loading`                             | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                                                                                                                                                                                     |
 | next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                                                                                                                                                                                          |
@@ -182,7 +180,7 @@ side and the content column (`min-w-0 flex-1`) beside it. The content column sta
 then the footer. The footer is a row with Cancel at the start and Previous + Next grouped at the end,
 separated from the content by a top border.
 
-- Server render and hydration: steps register from their own setup, after the root has rendered, so until mount the root does not use the step count. The step shown, `data-active-step` and Previous follow the requested `activeStep` (clamped at 0), and the primary action reads Next; on mount the index is clamped to the registered steps and the last step reads the submit label. The server HTML and the first client render therefore match.
+- Server render and hydration: steps register from their own setup, after the root has rendered, so until mount the root does not use the step count. The step shown, `data-active-step` and Previous follow the requested `v-model` index (clamped at 0), and the primary action reads Next; on mount the index is clamped to the registered steps and the last step reads the submit label. The server HTML and the first client render therefore match.
 
 ## Accessibility
 

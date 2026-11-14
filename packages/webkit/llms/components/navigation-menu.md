@@ -1,6 +1,6 @@
 # Navigation Menu
 
-> Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.
+> The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus). The items share one hover-intent timing, one keyboard model and one animated popup that resizes and slides between panels, inside a `navigation` landmark.
 
 - Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
@@ -29,7 +29,7 @@
 ## Don’t
 
 - It is the persistent vertical navigation of an app → use `sidebar` with `menu`.
-- It is a list of actions or options opened from a button → use `dropdown`.
+- It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
 - It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

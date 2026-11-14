@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), [ConsoleLayout](../../components/console-layout.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), [ConsoleLayout](../../components/console-layout.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -144,9 +144,9 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -318,7 +318,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('system')
+  const { mode: theme } = useColorMode()
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
@@ -424,28 +424,28 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
             <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
           </div>
         </template>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="settings"
           label="Account settings"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-cog"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
-        <DropdownMenu.Option
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
           value="personal-tokens"
           label="Personal tokens"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-key"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div
@@ -459,28 +459,28 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         </div>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="docs"
           label="Docs"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-book"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
-        <DropdownMenu.Option
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
           value="logout"
           label="Log out"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-sign-out"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">

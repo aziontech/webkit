@@ -42,7 +42,7 @@
 | `readonly` | `boolean` | `false` | false | Marks the internal input read-only; dial-code Select is also disabled while readonly. |
 | `required` | `boolean` | `false` | false | Applies the required border on the InputGroup and sets required on the input. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border on the InputGroup and sets aria-invalid on the input. |
-| `name` | `string` | `''` | false | HTML name for the internal input (form + vee-validate integration). |
+| `name` | `string` | `''` | false | Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). |
 | `searchEmptyLabel` | `string` | `''` | false | Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |

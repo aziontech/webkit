@@ -2,7 +2,7 @@
  "name": "panel",
  "binding": "Panel",
  "import": "@aziontech/webkit/panel",
- "treeShakeableImport": "@aziontech/webkit/panel",
+ "treeShakeableImport": "@aziontech/webkit/panel-root",
  "category": "overlay",
  "surface": "product",
  "structure": "composition",
@@ -12,7 +12,7 @@
   "@aziontech/webkit/panel-footer",
   "@aziontech/webkit/panel-header"
  ],
- "purpose": "Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/panel/`.",
+ "purpose": "The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.",
  "setup": null,
  "useWhen": [
   "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title and close control, `PanelContent` for the body that scrolls, `PanelFooter` for the actions.",

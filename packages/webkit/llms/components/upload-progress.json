@@ -73,13 +73,6 @@
    "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:expanded`)."
-  },
-  {
-   "name": "collapsed",
-   "type": "boolean",
-   "default": "undefined as never",
-   "required": "false",
-   "doc": "Two-way value (`v-model:collapsed`)."
   }
  ],
  "events": [

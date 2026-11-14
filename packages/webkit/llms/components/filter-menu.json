@@ -67,6 +67,13 @@
    "doc": "Disables the trigger: the menu does not open."
   },
   {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
    "name": "modelValue",
    "type": "FilterMenuModel",
    "default": "—",
@@ -76,7 +83,7 @@
   {
    "name": "open",
    "type": "boolean",
-   "default": "false",
+   "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
   }

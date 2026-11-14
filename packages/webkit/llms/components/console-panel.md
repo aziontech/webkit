@@ -32,7 +32,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'console' \ \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
+| `kind` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
 | `titleKind` | `SectionTitleKind` | `'centered'` | false | Layout of the headline block. |
 | `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
 | `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
@@ -47,13 +47,12 @@
 | `crop` | `number` | `0` | false | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. |
 | `primaryAction` | `ConsolePanelAction` | `undefined` | false | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `ConsolePanelAction` | `undefined` | false | Second button under the headline, `outlined`; same shape. Shown only with a label and a link. |
-| `actions` | `ConsolePanelAction[]` | `[]` | false | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `scene` | { tab: string \ | undefined }` \| The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
+| `scene` | { tab: string | undefined }` \| The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
 
 ## States
 

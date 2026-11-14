@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Shared visual utility used by other components. Lives at `packages/webkit/src/components/utils/spinner/`.",
+ "purpose": "A small rotating mark that says work is in progress, for a row, a log line or a custom control that has no loading state of its own. It is decorative by default; with an `aria-label` it becomes a `status` region that announces the work, and it stops rotating under reduced motion.",
  "setup": null,
  "useWhen": [
   "An inline busy mark inside a row, log line or custom control that has no loading state of its own.",

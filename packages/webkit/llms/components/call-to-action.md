@@ -35,7 +35,7 @@
 
 - To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or time-bound announcement → use `message`.
+- For a dismissible or time-bound announcement → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
 - For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

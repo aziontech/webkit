@@ -671,7 +671,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <ChartCard.Title>{{ trend.title }}</ChartCard.Title>
                 <Hint :text="trend.description" />
               </span>
-              <ChartCard.Controls>
+              <ChartCard.Action>
                 <Tag
                   v-if="trend.change && !loading"
                   :label="trend.change.label"
@@ -679,7 +679,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   :icon="trend.change.icon"
                   size="small"
                 />
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <Chart

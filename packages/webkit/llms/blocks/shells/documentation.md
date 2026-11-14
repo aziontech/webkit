@@ -1,11 +1,11 @@
 # Documentation (`shells/documentation`)
 
-> The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCta` in its `aside` slot, and the `Footer` (`kind="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.
+> The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind="content"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.
 
 - Surface: docs
 - Source: `blocks/shells/documentation/documentation.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/documentation")`
-- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAccordionGroup](../../components/doc-accordion-group.md), [DocAccordionItem](../../components/doc-accordion-item.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCodeGroup](../../components/doc-code-group.md), [DocCta](../../components/doc-cta.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocMarkdown](../../components/doc-markdown.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [DocTab](../../components/doc-tab.md), [DocTabs](../../components/doc-tabs.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [IconButton](../../components/icon-button.md), `ItemList`, [Logo](../../components/logo.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md)
+- Components: `claudeMark`, `codexMark`, `copilotMark`, `cursorMark`, `geminiMark`, `opencodeMark`, [Brand](../../components/brand.md), [Button](../../components/button.md), [CodeBlock](../../components/code-block.md), [CopyPromptButton](../../components/copy-prompt-button.md), [Diagram](../../components/diagram.md), [DocAccordionGroup](../../components/doc-accordion-group.md), [DocAccordionItem](../../components/doc-accordion-item.md), [DocAgentCard](../../components/doc-agent-card.md), [DocCallToAction](../../components/doc-call-to-action.md), [DocCallout](../../components/doc-callout.md), [DocCard](../../components/doc-card.md), [DocCardGroup](../../components/doc-card-group.md), [DocCodeGroup](../../components/doc-code-group.md), [DocFrame](../../components/doc-frame.md), [DocHeading](../../components/doc-heading.md), [DocHero](../../components/doc-hero.md), [DocItem](../../components/doc-item.md), [DocLayout](../../components/doc-layout.md), [DocMarkdown](../../components/doc-markdown.md), [DocPageHeader](../../components/doc-page-header.md), [DocPagination](../../components/doc-pagination.md), [DocPrompt](../../components/doc-prompt.md), [DocProse](../../components/doc-prose.md), [DocStep](../../components/doc-step.md), [DocSteps](../../components/doc-steps.md), [DocTab](../../components/doc-tab.md), [DocTabs](../../components/doc-tabs.md), [Footer](../../components/footer.md), [FrameBox](../../components/frame-box.md), [IconButton](../../components/icon-button.md), `ItemList`, [Logo](../../components/logo.md), [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), `use-color-mode`
 - Skills: `webkit-layout`, `webkit-navigation`
 
 ## Asked as
@@ -40,7 +40,7 @@ In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the fo
 
 In the `navigation-footer` slot, labelled `Theme`; the layout shows it at the foot of the rail and of the drawer.
 
-### E. Call to action — `DocCta` (optional)
+### E. Call to action — `DocCallToAction` (optional)
 
 In the `aside` slot, under the outline: "Ready to build?" with a primary and a secondary link.
 
@@ -113,7 +113,7 @@ In the footer's language slot, trigger labelled `Language`.
 
 ## States
 
-- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCta` from `xl`, the full footer under the article.
+- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCallToAction` from `xl`, the full footer under the article.
 - Article: a tutorial page from the `Doc*` parts, pager in both directions, outline with an indented level 3 entry.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
 - AgentSetup: an index page; the picker tabs filter the agent cards, the comparison table scrolls inside its frame on a narrow page, the outline indents its three level 3 entries.
@@ -129,8 +129,8 @@ In the footer's language slot, trigger labelled `Language`.
 ## Variants
 
 - `Default` — primary (the code below)
-- `Article` — A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCta under it.
-- `Reference` — A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCta under it.
+- `Article` — A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCallToAction under it.
+- `Reference` — A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCallToAction under it.
 - `Landing` — The documentation home inside DocLayout, with the navigation rail and no outline rail: a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward.
 - `AgentSetup` — The index of agent setup pages inside DocLayout: a DocTabs picker that filters the coding-agent DocCards by workflow, a comparison Table with check marks and Tags, a legend DocCallout, and Workflow, Key concepts and Common tradeoffs DocCard grids; the outline tracks its h2 and h3 sections.
 - `AgentGuide` — One agent's setup page inside DocLayout: a masthead with the agent mark, fact Tags and links, Quick start DocSteps with DocCodeGroup commands and DocMarkdown bodies, the MCP tools Table, CLI and CLAUDE.md code, agent-friendly DocItem rows, DocPrompts, tip callouts, FAQ and Troubleshooting DocAccordionGroups and the Other agents grid.
@@ -143,7 +143,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
 <script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import DocCta from '@aziontech/webkit/doc-cta'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
@@ -152,7 +152,8 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
   import IconButton from '@aziontech/webkit/icon-button'
   import Select from '@aziontech/webkit/select'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { ref } from 'vue'
 
   const sections = [
@@ -224,7 +225,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
     }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('dark')
+  const { mode: theme } = useColorMode()
 
   const columns = [
     {
@@ -302,13 +303,13 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
       />
       <DocProse>
         <DocHeading
-          id="prerequisites"
+          anchor="prerequisites"
           :level="2"
           >Prerequisites</DocHeading
         >
         <p>An Azion account and an application that already answers on its Azion domain.</p>
         <DocHeading
-          id="create-the-function"
+          anchor="create-the-function"
           :level="2"
           >Create the function</DocHeading
         >
@@ -317,7 +318,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
           it.
         </p>
         <DocHeading
-          id="instantiate-the-function"
+          anchor="instantiate-the-function"
           :level="2"
           >Instantiate it in your application</DocHeading
         >
@@ -326,13 +327,13 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
           created.
         </p>
         <DocHeading
-          id="verify-the-response"
+          anchor="verify-the-response"
           :level="2"
           >Verify the response</DocHeading
         >
         <p>Request the domain and read the header the function sets.</p>
         <DocHeading
-          id="next-steps"
+          anchor="next-steps"
           :level="2"
           >Next steps</DocHeading
         >
@@ -367,15 +368,13 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>
@@ -432,7 +431,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
                 placeholder="Language"
               >
                 <Select.Trigger aria-label="Language">
-                  <template #iconLeft>
+                  <template #prefix>
                     <i
                       class="pi pi-globe text-(--text-muted)"
                       aria-hidden="true"

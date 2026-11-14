@@ -15,7 +15,7 @@
  ],
  "avoidWhen": [
   "To show the prompt text itself → use `DocPrompt`.",
-  "As a generic two-column banner → use `DocCard`, `DocCta` or a marketing `Banner`.",
+  "As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `Banner`.",
   "On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead."
  ],
  "related": [

@@ -215,7 +215,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
         >
           <CodeBlock
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
-            :show-line-numbers="false"
+            :line-numbers="false"
           />
         </ActionConfirmation>
         <ToolCall

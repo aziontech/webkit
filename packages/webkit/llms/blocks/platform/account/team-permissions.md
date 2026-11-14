@@ -519,17 +519,17 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="edit"
                       label="Edit"
                     />
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="duplicate"
                       label="Duplicate"
                     />
                   </DropdownMenu.Group>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="delete"
                       label="Delete"
                     />

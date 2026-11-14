@@ -584,7 +584,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 <CardPricing
                   aligned
                   class="w-full"
-                  :plan-title="plan.name"
+                  :title="plan.name"
                   :value="plan.value"
                   :prefix="plan.prefix"
                   :suffix="plan.suffix"
@@ -892,7 +892,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                       <Field orientation="horizontal">
                         <Checkbox
                           v-model="address.useAccountInformation"
-                          binary
                           name="useAccountInformation"
                         />
                         <Field.Content>

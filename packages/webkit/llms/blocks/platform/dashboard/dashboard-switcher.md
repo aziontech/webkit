@@ -1109,7 +1109,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :display-value="viewLabel"
             >
               <Select.Trigger aria-label="Dashboard">
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-chart-bar text-(--text-muted)"
                     aria-hidden="true"
@@ -1244,7 +1244,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip :total="active.chart.series.length > 1" />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
             </ChartCard.Content>
           </ChartCard>

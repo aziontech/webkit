@@ -95,8 +95,9 @@
   - `ArrowLeft` — on an expanded parent, collapse it (focus stays); otherwise focus the parent node; on a top-level collapsed parent or leaf, nothing.
   - `Home` / `End` — focus the first / last visible node.
   - `Enter` / `Space` — activate the node: select it when `selectable`, then emit `item-click`; nothing on a disabled node. `Space` does not scroll the page.
-  - `Tab` / `Shift+Tab` — leave the tree from the tab stop, passing through the focused row's `actions` controls (their natural tab order).
-  - Arrow keys, `*` and type-ahead are not handled inside the `actions` region; `*` (expand siblings) and type-ahead are not part of v1.
+  - `Tab` / `Shift+Tab` — leave the tree from the tab stop, passing through the tab-stop row's `actions` controls (their natural tab order). The `actions` controls of every other row are parked at `tabindex="-1"` (their own `tabindex` is restored when their row becomes the tab stop), so the tree is one tab stop plus the current row's controls.
+  - Type-ahead — a printable character focuses the next visible node whose label starts with it; characters typed within 500 ms add up to a prefix. Tests: `tree.test.ts` › moves focus to the next visible node whose label starts with the typed text.
+  - Arrow keys, `*` and type-ahead are not handled inside the `actions` region; `*` (expand siblings) is not part of v1.
 - Chevron: a `<button type="button" tabindex="-1" aria-hidden="true">` that toggles the parent on click (pointer affordance; keyboard expansion is ArrowRight / ArrowLeft on the treeitem). It never receives focus and is not announced.
 - Visible focus: the ring is drawn on the focused node's own row, not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.

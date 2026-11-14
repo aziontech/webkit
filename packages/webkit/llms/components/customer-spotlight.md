@@ -35,8 +35,6 @@
 | `items` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list; empty uses the built-in "Customer stories". |
 | `linkLabel` | `string` | `''` | false | Label revealed under the description while the card is open; empty uses the built-in "Read story". |
-| `cards` | `CustomerSpotlightCard[]` | `[]` | false | @deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty. |
-| `storyLabel` | `string` | `''` | false | @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## States

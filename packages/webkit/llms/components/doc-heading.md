@@ -34,7 +34,6 @@
 | --- | --- | --- | --- | --- |
 | `level` | `1 \| 2 \| 3 \| 4` | `2` | false | Heading level; drives the tag and the prose type scale. |
 | `anchor` | `string` | `''` | false | In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
-| `id` | `string` | `''` | false | @deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty. |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
 
 ## Slots

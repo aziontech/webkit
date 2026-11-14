@@ -1,6 +1,6 @@
 # Icon Button
 
-> Interactive control for user actions. Lives at `packages/webkit/src/components/actions/icon-button/`.
+> A square control that triggers an action with a glyph and no visible text: close, refresh, delete, more. It shares the variants, sizes and loading state of `Button`, takes its accessible name from `aria-label`, can swap between two icons in place, and renders as an anchor when `href` is set.
 
 - Import: `import IconButton from '@aziontech/webkit/icon-button'`
 - Category: actions · Surface: product · Structure: monolithic

@@ -1,0 +1,20 @@
+{
+ "purpose": "A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.",
+ "useWhen": [
+  "A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.",
+  "The content is too large or persistent for a centered modal."
+ ],
+ "avoidWhen": [
+  "It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.",
+  "It is a small overlay anchored to a trigger → use a popover / `dropdown`."
+ ],
+ "related": [
+  "dialog` — centered, blocking modal for focused tasks/confirmations.",
+  "sidebar` — persistent (non-overlay) side navigation."
+ ],
+ "bestPractices": [
+  "Pick the edge (side) intentionally and keep it consistent across the app.",
+  "Trap focus while open and provide an obvious close affordance.",
+  "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
+ ]
+}

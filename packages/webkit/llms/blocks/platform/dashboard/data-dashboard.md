@@ -674,7 +674,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 text="Data delivered by every project in the selected period, drawn over the same span of the previous period."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -722,18 +722,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -755,7 +755,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Chart.Line v-else />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -766,7 +766,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Data transferred by project</ChartCard.Title>
               <Hint text="The projects that delivered the most data in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -800,18 +800,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -839,7 +839,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Usage by project</ChartCard.Title>
               <Hint text="Requests and data transferred per project in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -873,18 +873,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -896,7 +896,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     placeholder="Search projects"
                     aria-label="Search projects"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -914,8 +914,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 enable-sorting
                 paginated
                 :page-size="5"
-                :rows-per-page-options="[5, 10, 25]"
-                header-kind="compact"
+                :page-size-options="[5, 10, 25]"
+                density="compact"
                 bordered
                 :loading="loading"
               >
@@ -991,7 +991,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <Chart.Line v-else />
                   <Chart.Crosshair />
                   <Chart.Tooltip />
-                  <Chart.Legend totals />
+                  <Chart.Legend total />
                 </Chart>
               </template>
               <Chart
@@ -1019,7 +1019,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 enable-sorting
                 paginated
                 :page-size="10"
-                header-kind="compact"
+                density="compact"
                 bordered
               >
                 <template #empty>

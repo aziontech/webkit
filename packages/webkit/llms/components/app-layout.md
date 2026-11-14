@@ -203,7 +203,7 @@ Unbound, each one keeps its own local state.
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left>
+            <GlobalHeader.Start>
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
@@ -214,9 +214,9 @@ Unbound, each one keeps its own local state.
                   @click="openNavigation"
                 />
               </div>
-            </GlobalHeader.Left>
-            <GlobalHeader.Middle />
-            <GlobalHeader.Right>
+            </GlobalHeader.Start>
+            <GlobalHeader.Center />
+            <GlobalHeader.End>
               <SearchTrigger
                 collapsible
                 @open="searchOpen = true"
@@ -229,7 +229,7 @@ Unbound, each one keeps its own local state.
                 :aria-pressed="toolsOpen"
                 @click="toggleTools"
               />
-            </GlobalHeader.Right>
+            </GlobalHeader.End>
           </GlobalHeader>
           <Command v-model:open="searchOpen">
             <Command.Input placeholder="Search the console" />
@@ -333,9 +333,9 @@ Unbound, each one keeps its own local state.
     <AppLayout>
       <template #header>
         <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left />
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right />
+          <GlobalHeader.Start />
+          <GlobalHeader.Center />
+          <GlobalHeader.End />
         </GlobalHeader>
       </template>
 

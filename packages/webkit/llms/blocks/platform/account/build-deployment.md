@@ -845,7 +845,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           aria-label="Search services or Deployment Settings"
                           class="w-full"
                         >
-                          <template #iconLeft>
+                          <template #prefix>
                             <i
                               class="pi pi-search"
                               aria-hidden="true"
@@ -1085,17 +1085,17 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         @select="(_event, value) => onAction(value, row)"
                       >
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="edit"
                             label="Edit"
                           />
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="clone"
                             label="Clone"
                           />
                         </DropdownMenu.Group>
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="delete"
                             label="Delete"
                           />
@@ -1257,7 +1257,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           v-model="draft.bindingPolicy"
                           :value="policy.value"
                           name="deployment-settings-binding"
-                          :input-id="`deployment-settings-binding-${policy.value}`"
+                          :id="`deployment-settings-binding-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
@@ -1281,7 +1281,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           v-model="draft.deploymentPolicy"
                           :value="policy.value"
                           name="deployment-settings-policy"
-                          :input-id="`deployment-settings-policy-${policy.value}`"
+                          :id="`deployment-settings-policy-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{

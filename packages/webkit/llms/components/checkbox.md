@@ -43,6 +43,7 @@
 | `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
+| `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
 | `inputId` | `string` | `''` | false | @deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
 | `tabindex` | `number` | `0` | false | @deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0. |
@@ -50,8 +51,8 @@
 
 ## v-model
 
-| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                |
-| --------- | -------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                                           |
+| --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset (or `binary`); with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
 
 ## States
@@ -61,6 +62,7 @@
 - `data-checked` mirrors `isChecked` (legacy; kept for backwards compatibility with existing `data-[checked]:` styling)
 - `data-indeterminate` mirrors the `indeterminate` prop
 - `data-disabled` mirrors the `disabled` prop
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - `data-readonly` mirrors the `readonly` prop
 - Touch: the native input that receives the click extends past the 18 px box to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn box does not change.
 
@@ -88,7 +90,7 @@
 <template>
   <Checkbox
     v-model="checked"
-    input-id="webkit-checkbox"
+    id="webkit-checkbox"
     aria-label="Toggle option"
   />
 </template>
@@ -108,7 +110,7 @@
   <Checkbox
     v-model="checked"
     indeterminate
-    input-id="webkit-checkbox-indeterminate"
+    id="webkit-checkbox-indeterminate"
     aria-label="Toggle option"
   />
 </template>
@@ -130,13 +132,13 @@
     <Checkbox
       v-model="checked"
       disabled
-      input-id="webkit-checkbox-disabled-on"
+      id="webkit-checkbox-disabled-on"
       aria-label="Disabled checked"
     />
     <Checkbox
       v-model="unchecked"
       disabled
-      input-id="webkit-checkbox-disabled-off"
+      id="webkit-checkbox-disabled-off"
       aria-label="Disabled unchecked"
     />
   </div>

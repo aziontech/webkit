@@ -17,7 +17,7 @@
  "avoidWhen": [
   "A count or a very short label attached to another element → use `badge`.",
   "A category or status chip with an optional icon → use `tag`.",
-  "A page or section notice with copy and actions → use `message`.",
+  "A page or section notice with copy and actions → use `alert`.",
   "Measurable progress → use `progress`."
  ],
  "related": [
@@ -35,10 +35,10 @@
  "props": [
   {
    "name": "severity",
-   "type": "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'",
+   "type": "Severity | 'alt'` (`'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'alt'`)",
    "default": "'success'",
    "required": "false",
-   "doc": "Severity token driving the status dot color."
+   "doc": "Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`)."
   },
   {
    "name": "loading",

@@ -345,7 +345,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               placeholder="Search projects"
               aria-label="Search projects"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -402,7 +402,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="shape"
+                      kind="rectangle"
                       width="2rem"
                       height="2rem"
                     />

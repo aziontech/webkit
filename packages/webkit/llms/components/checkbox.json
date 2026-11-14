@@ -70,6 +70,13 @@
    "doc": "Marks the field read-only; value is visible but cannot change via interaction."
   },
   {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
+  },
+  {
    "name": "inputId",
    "type": "string",
    "default": "''",
@@ -105,15 +112,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    input-id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
   },
   {
    "name": "Indeterminate",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    indeterminate\n    input-id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    indeterminate\n    id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      disabled\n      input-id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      disabled\n      input-id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      disabled\n      id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      disabled\n      id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/checkbox.md"

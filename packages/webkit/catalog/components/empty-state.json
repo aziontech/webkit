@@ -6,7 +6,7 @@
  ],
  "avoidWhen": [
   "The data is still loading → use `skeleton`.",
-  "An inline warning or error about content that is present → use `message`.",
+  "An inline warning or error about content that is present → use `alert`.",
   "The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default."
  ],
  "related": [

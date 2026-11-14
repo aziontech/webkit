@@ -7,7 +7,7 @@
  "avoidWhen": [
   "A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.",
   "The field name or required marker above the input → use `label`.",
-  "Feedback about a whole form or page rather than one field → use `message`."
+  "Feedback about a whole form or page rather than one field → use `alert`."
  ],
  "related": [
   "label` — sits above the input; HelperText sits below it.",

@@ -28,7 +28,7 @@
 
 - For a measured figure rather than a statement → use `big-numbers`.
 - For an inline aside or callout inside documentation → use `doc-callout`.
-- For a dismissible or status message → use `message`.
+- For a dismissible or status message → use `alert`.
 - For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

@@ -814,7 +814,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   )
 
   const shownColumns = ref(['host', 'status', 'remoteAddress'])
-  const fieldsCollapsed = ref(false)
+  const fieldsOpen = ref(true)
   const fieldSearch = ref('')
 
   const matchesFieldSearch = (field: EventField) => {
@@ -991,10 +991,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     }
   })
 
-  const documentPaneCollapsed = computed({
-    get: () => !isWide.value || documentCollapsed.value,
-    set: (collapsed) => {
-      if (collapsed) closeDocument()
+  const documentPaneExpanded = computed({
+    get: () => isWide.value && !documentCollapsed.value,
+    set: (expanded) => {
+      if (!expanded) closeDocument()
     }
   })
 
@@ -1007,7 +1007,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 
   const documentMaxWidth = computed(() => {
     if (explorerWidth.value === 0) return Infinity
-    const fieldsUsed = showFieldsPanel.value && !fieldsCollapsed.value ? fieldsWidth.value : 0
+    const fieldsUsed = showFieldsPanel.value && fieldsOpen.value ? fieldsWidth.value : 0
     return Math.max(documentMinWidth, explorerWidth.value - fieldsUsed - logMinWidth)
   })
 
@@ -1146,7 +1146,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
               aria-label="Search events"
               class="w-full"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -1211,7 +1211,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
               class="contents [--sidebar-width:var(--container-2xs)]"
             >
               <Sidebar
-                v-model:collapsed="fieldsCollapsed"
+                v-model:open="fieldsOpen"
                 v-model:width="fieldsWidth"
                 resizable
                 collapsible
@@ -1229,7 +1229,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                       placeholder="Search fields"
                       aria-label="Search fields"
                     >
-                      <template #iconLeft>
+                      <template #prefix>
                         <i
                           class="pi pi-search"
                           aria-hidden="true"
@@ -1258,9 +1258,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                         :disabled="field.locked"
                       >
                         <Checkbox
-                          binary
                           :model-value="true"
-                          :input-id="`event-field-${field.id}`"
+                          :id="`event-field-${field.id}`"
                           @update:model-value="toggleColumn(field.id)"
                         />
                         <Field.Label>
@@ -1378,9 +1377,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                             <div class="min-w-0 flex-1">
                               <Field orientation="horizontal">
                                 <Checkbox
-                                  binary
                                   :model-value="false"
-                                  :input-id="`event-field-${field.id}`"
+                                  :id="`event-field-${field.id}`"
                                   @update:model-value="toggleColumn(field.id)"
                                 />
                                 <Field.Label>
@@ -1568,7 +1566,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                     paginated
                     :page-size="25"
                     :bordered="false"
-                    header-kind="compact"
+                    density="compact"
                     max-height="100%"
                     class="w-full"
                     :loading="loading"
@@ -1665,19 +1663,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
           </div>
         </Resizable.Pane>
         <Resizable.Handle
-          v-if="!documentPaneCollapsed"
+          v-if="documentPaneExpanded"
           aria-label="Resize the event panel"
         />
         <Resizable.Pane
           v-model:basis="documentWidth"
-          v-model:collapsed="documentPaneCollapsed"
+          v-model:expanded="documentPaneExpanded"
           collapsible
           :min="320"
           :max="512"
           aria-label="Event document"
         >
           <aside
-            :inert="documentPaneCollapsed"
+            :inert="!documentPaneExpanded"
             aria-labelledby="event-document-title"
             class="flex h-full min-h-0 min-w-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
           >
@@ -1753,7 +1751,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                       <CodeBlock
                         :tabs="documentTabs"
                         :bordered="false"
-                        show-line-numbers
+                        line-numbers
                         copy-aria-label="Copy the event document as JSON"
                         class="w-full"
                       />
@@ -1831,7 +1829,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                   <CodeBlock
                     :tabs="documentTabs"
                     :bordered="false"
-                    show-line-numbers
+                    line-numbers
                     copy-aria-label="Copy the event document as JSON"
                     class="w-full"
                   />

@@ -144,7 +144,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Creation Center"
@@ -164,9 +164,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -178,7 +178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main

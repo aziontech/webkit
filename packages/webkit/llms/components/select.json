@@ -24,7 +24,7 @@
   "A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.",
   "The field is always multi-pick → use `multi-select`.",
   "Two to five options that fit on screen → use horizontal `field`s with a `radio-button`, or `radio-cards` for cards.",
-  "The list triggers actions or navigation instead of holding a value → use `dropdown`."
+  "The list triggers actions or navigation instead of holding a value → use `dropdown-menu`."
  ],
  "related": [
   "field` — label, this select, and description/error, with the wiring done.",
@@ -111,6 +111,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does."
   },
   {
    "name": "modelValue",

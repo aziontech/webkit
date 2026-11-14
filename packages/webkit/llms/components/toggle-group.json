@@ -80,6 +80,13 @@
    "doc": "Disables every option of the group."
   },
   {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
+  },
+  {
    "name": "modelValue",
    "type": "TValue | undefined",
    "default": "undefined",

@@ -406,7 +406,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       :value="progress"
       :max="100"
       size="small"
-      shape="flat"
+      kind="flat"
       class="w-full"
       aria-label="Deployment progress"
     />

@@ -325,7 +325,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <Tooltip
           text="Back to Services"
           placement="bottom"
@@ -351,9 +351,9 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -375,44 +375,44 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
               </div>
             </template>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="settings"
               label="Account settings"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-cog"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="docs"
               label="Docs"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-book"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
-            <DropdownMenu.Option
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
               value="logout"
               label="Log out"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-sign-out"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
@@ -485,7 +485,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                                 v-model="form.protocolUsage"
                                 :value="option.value"
                                 name="protocolUsage"
-                                :input-id="`ev-protocolUsage-${option.value}`"
+                                :id="`ev-protocolUsage-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>{{ option.label }}</Field.Title>
@@ -658,7 +658,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <Skeleton
                             v-if="reloadingOrigins"
-                            kind="shape"
+                            kind="rectangle"
                             width="100%"
                             height="var(--size-10)"
                             aria-label="Loading origins"

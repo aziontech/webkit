@@ -2,7 +2,7 @@
  "name": "dialog",
  "binding": "Dialog",
  "import": "@aziontech/webkit/dialog",
- "treeShakeableImport": "@aziontech/webkit/dialog",
+ "treeShakeableImport": "@aziontech/webkit/dialog-root",
  "category": "overlay",
  "surface": "product",
  "structure": "composition",
@@ -44,11 +44,18 @@
    "doc": "Initial open state when uncontrolled."
   },
   {
+   "name": "closable",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+  },
+  {
    "name": "dismissible",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "When true, overlay click and Escape close the dialog."
+   "doc": "Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`."
   },
   {
    "name": "size",
@@ -78,7 +85,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Dialog from '@aziontech/webkit/dialog'\n  import DialogClose from '@aziontech/webkit/dialog-close'\n  import DialogContent from '@aziontech/webkit/dialog-content'\n  import DialogDescription from '@aziontech/webkit/dialog-description'\n  import DialogOverlay from '@aziontech/webkit/dialog-overlay'\n  import DialogPortal from '@aziontech/webkit/dialog-portal'\n  import DialogTitle from '@aziontech/webkit/dialog-title'\n  import DialogTrigger from '@aziontech/webkit/dialog-trigger'\n  import PanelContent from '@aziontech/webkit/panel-content'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Dialog\n    v-model:open=\"open\"\n    dismissible\n    size=\"medium\"\n  >\n    <DialogTrigger>\n      <Button\n        label=\"Open dialog\"\n        kind=\"primary\"\n      />\n    </DialogTrigger>\n    <DialogPortal>\n      <DialogOverlay />\n      <DialogContent>\n        <PanelHeader class=\"w-full\">\n          <DialogTitle>Dialog Title</DialogTitle>\n          <DialogClose />\n        </PanelHeader>\n        <PanelContent>\n          <DialogDescription>\n            Modal content. Uses the shared Panel header, body, and footer regions.\n          </DialogDescription>\n        </PanelContent>\n        <PanelFooter>\n          <div class=\"flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end\">\n            <Button\n              label=\"Cancel\"\n              kind=\"outlined\"\n              @click=\"open = false\"\n            />\n            <Button\n              label=\"Save\"\n              kind=\"primary\"\n            />\n          </div>\n        </PanelFooter>\n      </DialogContent>\n    </DialogPortal>\n  </Dialog>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Dialog from '@aziontech/webkit/dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Dialog\n    v-model:open=\"open\"\n    dismissible\n    size=\"medium\"\n  >\n    <Dialog.Trigger>\n      <Button\n        label=\"Open dialog\"\n        kind=\"primary\"\n      />\n    </Dialog.Trigger>\n    <Dialog.Portal>\n      <Dialog.Overlay />\n      <Dialog.Content>\n        <Dialog.Header class=\"w-full\">\n          <Dialog.Title>Dialog Title</Dialog.Title>\n          <Dialog.Close />\n        </Dialog.Header>\n        <Dialog.Body>\n          <Dialog.Description>\n            Modal content. Uses the shared Panel header, body, and footer regions.\n          </Dialog.Description>\n        </Dialog.Body>\n        <Dialog.Footer>\n          <div class=\"flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end\">\n            <Button\n              label=\"Cancel\"\n              kind=\"outlined\"\n              @click=\"open = false\"\n            />\n            <Button\n              label=\"Save\"\n              kind=\"primary\"\n            />\n          </div>\n        </Dialog.Footer>\n      </Dialog.Content>\n    </Dialog.Portal>\n  </Dialog>\n</template>"
   },
   {
    "name": "Sizes",

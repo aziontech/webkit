@@ -462,8 +462,8 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -471,7 +471,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
           icon="pi pi-book"
           href="/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">

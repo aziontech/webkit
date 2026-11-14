@@ -41,6 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
+| `name` | `string` | `''` | false | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; a required `Field` adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out. |
 | `modelValue` | `TItem['value']` | `undefined as never` | false | Two-way value (`v-model`). |
 
 ## Slots
@@ -52,8 +53,8 @@
 
 ## v-model
 
-| Model     | Type                          | Default     | Emits               | Notes                                                                                                                           |
-| --------- | ----------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type                          | Default     | Emits               | Notes                                                                                                        |
+| --------- | ----------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
 | `v-model` | `TItem['value'] \| undefined` | `undefined` | `update:modelValue` | Selected item value via `defineModel`. Unbound, the group keeps its own selection, so it works uncontrolled. |
 
 ## States

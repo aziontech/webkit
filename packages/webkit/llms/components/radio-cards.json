@@ -50,6 +50,13 @@
    "doc": "Disables all options and applies disabled tokens."
   },
   {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; a required `Field` adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out."
+  },
+  {
    "name": "modelValue",
    "type": "TItem['value']",
    "default": "undefined as never",

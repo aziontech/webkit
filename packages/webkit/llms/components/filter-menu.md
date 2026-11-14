@@ -45,8 +45,9 @@
 | `label` | `string` | `''` | false | Text of the trigger button. Empty uses the locale catalog (`Filter`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger button. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger: the menu does not open. |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `modelValue` | `FilterMenuModel` | `—` | false | Two-way value (`v-model`). |
-| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Sub-component imports
 
@@ -109,10 +110,10 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## v-model
 
-| Model          | Type              | Default | Emits               | Notes                                                                                                                                                                 |
-| -------------- | ----------------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `FilterMenuModel` | `{}`    | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key.                                             |
-| `v-model:open` | `boolean`         | `false` | `update:open`       | Whether the menu is open, via `defineModel('open')`: the trigger, outside click, `Esc`, a chip and the exposed `open()` update it. Unbound, the menu keeps it itself. |
+| Model          | Type              | Default     | Emits               | Notes                                                                                                                                                                                             |
+| -------------- | ----------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `FilterMenuModel` | `{}`        | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key.                                                                         |
+| `v-model:open` | `boolean`         | `undefined` | `update:open`       | Whether the menu is open, via `defineModel('open')`: the trigger, outside click, `Esc`, a chip and the exposed `open()` update it. Unbound, the menu keeps it itself and starts at `defaultOpen`. |
 
 ## States
 

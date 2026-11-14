@@ -47,13 +47,6 @@
    "doc": "Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis."
   },
   {
-   "name": "alignment",
-   "type": "'vertical' | 'horizontal'",
-   "default": "'vertical'",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use orientation. Removed in 7.0.` Read when `orientation` is left vertical."
-  },
-  {
    "name": "limit",
    "type": "number",
    "default": "0",
@@ -94,11 +87,6 @@
    "name": "remove",
    "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
    "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor."
-  },
-  {
-   "name": "dismiss",
-   "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
-   "notes": "@deprecated since 6.0 — listen to remove. Removed in 7.0.` Fires right after `remove` with the same payload."
   }
  ],
  "slots": [],

@@ -596,7 +596,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     key="dropdown-menu.group-1"
                     v-if="!row.revoked && row.status !== 'Expired'"
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="revoke"
                       label="Revoke"
                     />
@@ -605,7 +605,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     key="dropdown-menu.group-2"
                     v-else
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="delete"
                       label="Delete"
                     />

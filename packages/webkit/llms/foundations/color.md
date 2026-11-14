@@ -50,6 +50,28 @@ function toggleTheme() {
 }
 ```
 
+To follow the operating system, set `data-theme="system"`: the dark values apply while the OS prefers
+dark, in CSS alone. Each theme sets `color-scheme`, so native scrollbars and form controls match, and
+Tailwind's `dark:` variant follows the same three hooks. For a settings control, let
+`useColorMode()` store the choice (`system`, `light` or `dark`) and bind it to `ThemeSwitcher`; inline
+`colorModeScript` in the document head so the stored choice applies before the first paint:
+
+```vue
+<script setup lang="ts">
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+
+  const { mode } = useColorMode()
+</script>
+
+<template>
+  <ThemeSwitcher
+    v-model="mode"
+    aria-label="Theme"
+  />
+</template>
+```
+
 ## The core rule — style through the role, never the value
 
 A token carries the role; its value is the theme's job. Reference the role and both themes are handled
@@ -169,8 +191,8 @@ production; the two-theme screenshot is what catches it first.
 
 - Style through **semantic tokens** only — no hex, `rgb()`/`hsl()`, or Tailwind palette color
   (`bg-white`, `text-zinc-900`, `border-slate-200`) anywhere on the screen.
-- Dark is `data-theme="dark"` on `<html>` (or a `.dark` ancestor); light is the default `:root`. Don't
-  ship a second stylesheet or a JS color map for dark.
+- Dark is `data-theme="dark"` on `<html>` (or a `.dark` ancestor), `data-theme="system"` follows the
+  OS, and light is the default `:root`. Don't ship a second stylesheet or a JS color map for dark.
 - Depth in dark comes from **lighter surface tokens** (`--bg-surface-raised` / `--bg-surface-overlay`),
   not a heavier shadow.
 - No `dark:` override for a role a token already covers; reserve `dark:` for the property no token

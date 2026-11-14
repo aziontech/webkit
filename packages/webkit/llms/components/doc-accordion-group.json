@@ -32,7 +32,7 @@
  "props": [
   {
    "name": "type",
-   "type": "'single' \\ | 'multiple'",
+   "type": "'single' | 'multiple'",
    "default": "'single'",
    "required": "false",
    "doc": "Whether one or several entries can be open at once."

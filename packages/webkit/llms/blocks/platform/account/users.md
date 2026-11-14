@@ -653,11 +653,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   @select="(_event, value) => onAction(value, row)"
                 >
                   <DropdownMenu.Group key="profile">
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="view"
                       label="View profile"
                     />
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       v-if="!row.owner"
                       value="role"
                       label="Edit role"
@@ -667,7 +667,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     v-if="row.status === 'Invited'"
                     key="invitation"
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="resend"
                       label="Resend invitation"
                     />
@@ -676,7 +676,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     v-if="!row.owner"
                     key="remove"
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="remove"
                       :label="
                         row.status === 'Invited' ? 'Cancel invitation' : 'Remove from account'

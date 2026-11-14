@@ -22,7 +22,7 @@
 ## Don’t
 
 - Navigation or filters → `tabs`, `toggle-group`, `property-filter`.
-- Choices that are a form value → `radio-group` / `radio-cards`.
+- Choices that are a form value → `radio-button` / `radio-cards`.
 - More than five options → let the reader type; the prompt input stays available.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

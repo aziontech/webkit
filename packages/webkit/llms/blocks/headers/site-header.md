@@ -26,7 +26,7 @@ The sticky top bar of the marketing site. A visitor is deciding whether to try A
 
 ### A. Bar — `GlobalHeader` (required)
 
-`kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Left`, navigation in `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
+`kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Start`, navigation in `GlobalHeader.Center`, actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger — `IconButton` (required)
 
@@ -113,7 +113,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
         kind="site"
         aria-label="Azion"
       >
-        <GlobalHeader.Left>
+        <GlobalHeader.Start>
           <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
             <div class="shrink-0 xl:hidden">
               <IconButton
@@ -136,9 +136,9 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
               </a>
             </GlobalHeader.Brand>
           </div>
-        </GlobalHeader.Left>
+        </GlobalHeader.Start>
 
-        <GlobalHeader.Middle>
+        <GlobalHeader.Center>
           <div class="hidden w-full min-w-0 items-center justify-start xl:flex">
             <div class="min-w-0">
               <NavigationMenu
@@ -168,9 +168,9 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
               </NavigationMenu>
             </div>
           </div>
-        </GlobalHeader.Middle>
+        </GlobalHeader.Center>
 
-        <GlobalHeader.Right>
+        <GlobalHeader.End>
           <SearchTrigger
             collapsible
             @open="searchOpen = true"
@@ -196,7 +196,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
             class="shrink-0"
             href="#"
           />
-        </GlobalHeader.Right>
+        </GlobalHeader.End>
       </GlobalHeader>
       <Command v-model:open="searchOpen">
         <Command.Input placeholder="Search azion.com" />

@@ -662,7 +662,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Matched requests over time</ChartCard.Title>
               <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -707,17 +707,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -738,7 +738,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Chart.Line v-else />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -748,13 +748,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Needs attention</ChartCard.Title>
               <Hint text="Settings and traffic on your services that ask for a decision." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 :label="`${attention.length} open`"
                 severity="secondary"
                 size="small"
               />
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Item.List>
@@ -785,7 +785,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                       :label="entry.action.label"
                       :href="entry.action.href"
                       size="small"
-                      :show-icon="false"
                     />
                   </span>
                 </Item.Content>
@@ -801,7 +800,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 text="Blocked requests, broken down by the attack category of the rule they matched."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -840,17 +839,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
@@ -867,7 +866,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Blocked requests by country</ChartCard.Title>
               <Hint text="Blocked requests, broken down by the country they came from." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -906,17 +905,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
@@ -933,7 +932,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
               <Hint text="The addresses blocked most often, with their network and main attack." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -973,17 +972,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -995,7 +994,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     placeholder="Search addresses, networks or attacks"
                     aria-label="Search addresses, networks or attacks"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -1012,8 +1011,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 enable-sorting
                 paginated
                 :page-size="5"
-                :rows-per-page-options="[5, 10, 25]"
-                header-kind="compact"
+                :page-size-options="[5, 10, 25]"
+                density="compact"
                 bordered
               >
                 <template #empty>
@@ -1077,7 +1076,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <Chart.Line v-else />
                   <Chart.Crosshair />
                   <Chart.Tooltip />
-                  <Chart.Legend totals />
+                  <Chart.Legend total />
                 </Chart>
               </template>
               <BarList
@@ -1095,7 +1094,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 enable-sorting
                 paginated
                 :page-size="10"
-                header-kind="compact"
+                density="compact"
                 bordered
               >
                 <template #empty>

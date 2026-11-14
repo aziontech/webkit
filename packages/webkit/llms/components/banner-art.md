@@ -34,12 +34,11 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `kind` | `BannerArtKind` | `'map'` | false | Which backdrop to draw: `globe`, `map` or `network`. |
-| `art` | `BannerArtKind \| ''` | `''` | false | @deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop. |
 | `animated` | `boolean` | `true` | false | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
 
 ## States
 
-- `data-kind` mirrors the backdrop drawn; `data-art` carries the same value for one major, deprecated with `art`.
+- `data-kind` mirrors the backdrop drawn.
 
 ## Accessibility
 

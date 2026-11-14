@@ -3107,9 +3107,6 @@
       "doc-code-group": [
         "./types/components/documentation/doc-code-group/doc-code-group.vue.d.ts"
       ],
-      "doc-cta": [
-        "./types/components/documentation/doc-cta/doc-cta.vue.d.ts"
-      ],
       "doc-heading": [
         "./types/components/documentation/doc-heading/doc-heading.vue.d.ts"
       ],
@@ -3636,6 +3633,9 @@
         "./types/components/overlay/command/command-separator/command-separator.vue.d.ts"
       ],
       "dialog": [
+        "./types/components/overlay/dialog/index.d.ts"
+      ],
+      "dialog-root": [
         "./types/components/overlay/dialog/dialog.vue.d.ts"
       ],
       "dialog-close": [
@@ -3663,6 +3663,9 @@
         "./types/components/overlay/confirm-dialog/confirm-dialog.vue.d.ts"
       ],
       "drawer": [
+        "./types/components/overlay/drawer/index.d.ts"
+      ],
+      "drawer-root": [
         "./types/components/overlay/drawer/drawer.vue.d.ts"
       ],
       "drawer-close": [
@@ -3687,6 +3690,9 @@
         "./types/components/overlay/drawer/drawer-trigger.vue.d.ts"
       ],
       "panel": [
+        "./types/components/overlay/panel/index.d.ts"
+      ],
+      "panel-root": [
         "./types/components/overlay/panel/panel.vue.d.ts"
       ],
       "panel-content": [

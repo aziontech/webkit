@@ -21,7 +21,7 @@
 
 - A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.
 - The field name or required marker above the input → use `label`.
-- Feedback about a whole form or page rather than one field → use `message`.
+- Feedback about a whole form or page rather than one field → use `alert`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

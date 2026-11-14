@@ -39,7 +39,6 @@
 | `columns` | `CapabilityGridColumns` | `3` | false | Capabilities per row from the large breakpoint up. |
 | `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outlined`; same shape. Shown only with a label and a link. |
-| `actions` | `CapabilityGridAction[]` | `[]` | false | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `titleKind` | `SectionTitleKind` | `'centered'` | false | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
 

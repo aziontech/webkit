@@ -6,7 +6,7 @@
  ],
  "avoidWhen": [
   "Messages of the open conversation → `Conversation`.",
-  "Navigation between product areas → `SidebarNav` or `NavigationMenu`.",
+  "Navigation between product areas → `Sidebar` or `NavigationMenu`.",
   "A searchable table of records → `TableRoot`."
  ],
  "related": [

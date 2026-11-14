@@ -688,7 +688,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                           value="edit"
                           label="Edit"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-pencil"
                               aria-hidden="true"
@@ -700,7 +700,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                           value="delete"
                           label="Delete"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-trash"
                               aria-hidden="true"

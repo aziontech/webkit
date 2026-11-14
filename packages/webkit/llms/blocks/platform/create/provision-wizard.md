@@ -880,7 +880,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Services"
@@ -900,9 +900,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -914,7 +914,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <div class="flex min-h-0 flex-1">
@@ -1044,7 +1044,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 placeholder="Search projects"
                                 aria-label="Search projects"
                               >
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="pi pi-search"
                                     aria-hidden="true"
@@ -1101,7 +1101,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   >
                                     <Item.Media>
                                       <Skeleton
-                                        kind="shape"
+                                        kind="rectangle"
                                         width="2rem"
                                         height="2rem"
                                       />
@@ -1418,7 +1418,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   size="large"
                                   placeholder="my-first-app"
                                 >
-                                  <template #iconRight>
+                                  <template #suffix>
                                     <span
                                       class="whitespace-nowrap text-label-sm text-(--text-muted)"
                                       aria-hidden="true"
@@ -1637,7 +1637,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     placeholder="Search deployments"
                                     aria-label="Search deployments"
                                   >
-                                    <template #iconLeft>
+                                    <template #prefix>
                                       <i
                                         class="pi pi-search"
                                         aria-hidden="true"
@@ -1696,7 +1696,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       >
                                         <Item.Media>
                                           <Skeleton
-                                            kind="shape"
+                                            kind="rectangle"
                                             width="2rem"
                                             height="2rem"
                                           />

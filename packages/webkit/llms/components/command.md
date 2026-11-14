@@ -21,7 +21,7 @@
 
 ## Don’t
 
-- A small menu anchored to a trigger button → use `dropdown`.
+- A small menu anchored to a trigger button → use `dropdown-menu`.
 - Picking a value for a form field → use `select` / `multi-select`.
 - A confirmation or content modal without search/list semantics → use `dialog` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

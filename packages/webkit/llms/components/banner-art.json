@@ -37,13 +37,6 @@
    "doc": "Which backdrop to draw: `globe`, `map` or `network`."
   },
   {
-   "name": "art",
-   "type": "BannerArtKind | ''",
-   "default": "''",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop."
-  },
-  {
    "name": "animated",
    "type": "boolean",
    "default": "true",

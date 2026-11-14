@@ -36,10 +36,10 @@
   },
   {
    "name": "severity",
-   "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'",
+   "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral' | 'default'",
    "default": "'primary'",
    "required": "false",
-   "doc": "Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface."
+   "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). `default` is the same look under its old name, deprecated since 6.0 — use `neutral`. Removed in 7.0."
   },
   {
    "name": "size",
@@ -66,7 +66,7 @@
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      severity=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"default\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      severity=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

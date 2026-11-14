@@ -38,7 +38,6 @@
 | --- | --- | --- | --- | --- |
 | `items` | `FileTokenGroupItem[]` | `[]` | false | The files, in order; each with its optional upload state, error and warning. |
 | `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis. |
-| `alignment` | `'vertical' \| 'horizontal'` | `'vertical'` | false | @deprecated since 6.0 — use orientation. Removed in 7.0.` Read when `orientation` is left vertical. |
 | `limit` | `number` | `0` | false | Shows this many tokens and a Show more toggle for the rest. 0 shows them all. |
 | `showFileSize` | `boolean` | `true` | false | Shows the size beside the name, formatted for the locale. |
 | `showFileLastModified` | `boolean` | `false` | false | Shows the last-modified date, formatted for the locale. |
@@ -50,11 +49,10 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `remove` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor. |
-| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | @deprecated since 6.0 — listen to remove. Removed in 7.0.` Fires right after `remove` with the same payload. |
 
 ## States
 
-- Root `data-orientation` (and the deprecated mirror `data-alignment`): `vertical` | `horizontal`; `data-readonly` when read-only.
+- Root `data-orientation`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
 - A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.

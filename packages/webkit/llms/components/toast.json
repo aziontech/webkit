@@ -22,7 +22,7 @@
   "A short notice that is not tied to one place on the page and can disappear on its own."
  ],
  "avoidWhen": [
-  "The message must stay visible next to the content it concerns → use `message`.",
+  "The message must stay visible next to the content it concerns → use `alert`.",
   "The user must decide something before continuing → use `dialog`.",
   "Validation feedback for a single field → use `helper-text`."
  ],

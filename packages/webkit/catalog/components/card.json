@@ -1,5 +1,5 @@
 {
- "purpose": "Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/card/`.",
+ "purpose": "A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind=\"integration\"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.",
  "useWhen": [
   "Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.",
   "Host a divided list edge to edge: set `:padded=\"false\"` and put an `Item` list in the body.",

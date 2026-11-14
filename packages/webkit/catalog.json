@@ -2065,7 +2065,7 @@
   "docs": "The documentation site: doc page chrome, callouts, steps, on-this-page."
  },
  "aliases": {
-  "alert-dialog": "dialog",
+  "alert-dialog": "confirm-dialog",
   "bordered-box": "frame-box",
   "box-grid-selection": "radio-cards",
   "breadcrumbs": "breadcrumb",
@@ -2076,9 +2076,11 @@
   "config-provider": "webkit-provider",
   "data-table": "table",
   "datatable": "table",
+  "date-picker": "calendar",
   "divider": "separator",
   "dropdown": "dropdown-menu",
   "input-number": "number-input",
+  "input-otp": "otp-input",
   "input-password": "password-input",
   "input-text": "input",
   "keyboard": "kbd",
@@ -2097,7 +2099,8 @@
   "steps": "stepper",
   "tab-view": "tabs",
   "text-field": "input",
-  "tiles": "radio-cards"
+  "tiles": "radio-cards",
+  "toggle": "toggle-group"
  },
  "imports": {
   "catalog.json": {
@@ -2751,9 +2754,16 @@
      "doc": "Dialog title. Empty uses the locale catalog (`What went wrong?`)."
     },
     {
-     "name": "open",
+     "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -2848,13 +2858,6 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty."
     },
     {
      "name": "modelValue",
@@ -3080,13 +3083,6 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the pager group. Empty uses the locale catalog (`Response versions`)."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty."
     },
     {
      "name": "disabled",
@@ -3328,9 +3324,9 @@
     {
      "name": "label",
      "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "Visible label text. Use `IconButton` for icon-only controls."
+     "default": "''",
+     "required": "false",
+     "doc": "Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls."
     },
     {
      "name": "kind",
@@ -3411,6 +3407,11 @@
     }
    ],
    "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The visible label, as shadcn and Radix take children; falls back to `label`. Plain text keeps the button's typography."
+    },
     {
      "name": "prefix",
      "scope": "—",
@@ -3798,6 +3799,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables every option of the group."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out."
     },
     {
      "name": "modelValue",
@@ -5539,7 +5547,7 @@
      "type": "TrackerItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "One block per period, oldest first; each item is `{ id?: string; status?: ChartStatus; label: string }`. No status renders a neutral no-data block. The item field `severity` is the same under its old name, **@deprecated since 6.0 — use `status`. Removed in 7.0.** (it is typed `ChartStatus`), read when `status` is unset."
+     "doc": "One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block."
     },
     {
      "name": "loading",
@@ -5591,10 +5599,10 @@
     },
     {
      "name": "severity",
-     "type": "'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent' | 'contrast' | 'highlight'",
+     "type": "Severity | 'primary' | 'secondary' | 'accent' | 'contrast' | 'highlight'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`."
+     "doc": "Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `secondary` (bordered canvas, the same look as `neutral`), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
     },
     {
      "name": "size",
@@ -5756,10 +5764,10 @@
     },
     {
      "name": "severity",
-     "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'",
+     "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral' | 'default'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface."
+     "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). `default` is the same look under its old name, deprecated since 6.0 — use `neutral`. Removed in 7.0."
     },
     {
      "name": "size",
@@ -7606,13 +7614,6 @@
      "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
     },
     {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0."
-    },
-    {
      "name": "decorative",
      "type": "boolean",
      "default": "false",
@@ -7645,13 +7646,6 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0."
     },
     {
      "name": "errorCorrection",
@@ -9446,9 +9440,16 @@
      "doc": "Disables the trigger."
     },
     {
-     "name": "open",
+     "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     },
@@ -10646,7 +10647,7 @@
     {
      "name": "aside",
      "scope": "—",
-     "notes": "Content under the outline in the end rail (a `DocCta`)."
+     "notes": "Content under the outline in the end rail (a `DocCallToAction`)."
     },
     {
      "name": "footer",
@@ -11238,7 +11239,7 @@
    "props": [
     {
      "name": "type",
-     "type": "'single' \\ | 'multiple'",
+     "type": "'single' | 'multiple'",
      "default": "'single'",
      "required": "false",
      "doc": "Whether one or several entries can be open at once."
@@ -11330,68 +11331,6 @@
    "examplesFile": "catalog/examples/doc-code-group.json",
    "docsFile": "catalog/components/doc-code-group.json"
   },
-  "doc-cta": {
-   "import": "@aziontech/webkit/doc-cta",
-   "target": "./src/components/documentation/doc-cta/doc-cta.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-cta",
-   "category": "documentation",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The offer's headline; names the complementary landmark."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Fallback copy when the default slot is empty."
-    },
-    {
-     "name": "primaryLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The primary action's label; empty renders no primary action."
-    },
-    {
-     "name": "primaryHref",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Where the primary action goes."
-    },
-    {
-     "name": "secondaryLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The secondary action's label; empty renders no secondary action."
-    },
-    {
-     "name": "secondaryHref",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Where the secondary action goes."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The offer's copy, set as the headline's subtitle."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-cta.json",
-   "docsFile": "catalog/components/doc-cta.json"
-  },
   "doc-heading": {
    "import": "@aziontech/webkit/doc-heading",
    "target": "./src/components/documentation/doc-heading/doc-heading.vue",
@@ -11413,13 +11352,6 @@
      "default": "''",
      "required": "false",
      "doc": "In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link."
-    },
-    {
-     "name": "id",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty."
     },
     {
      "name": "label",
@@ -11720,10 +11652,10 @@
    "props": [
     {
      "name": "severity",
-     "type": "'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'",
+     "type": "Severity | 'alt'` (`'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'alt'`)",
      "default": "'success'",
      "required": "false",
-     "doc": "Severity token driving the status dot color."
+     "doc": "Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`)."
     },
     {
      "name": "loading",
@@ -11992,8 +11924,7 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/upload-progress",
    "models": [
-    "expanded",
-    "collapsed"
+    "expanded"
    ],
    "category": "feedback",
    "structure": "monolithic",
@@ -12039,13 +11970,6 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:expanded`)."
-    },
-    {
-     "name": "collapsed",
-     "type": "boolean",
-     "default": "undefined as never",
-     "required": "false",
-     "doc": "Two-way value (`v-model:collapsed`)."
     }
    ],
    "events": [
@@ -12138,7 +12062,8 @@
    "treeShakeableImport": "@aziontech/webkit/date-range-picker",
    "models": [
     "modelValue",
-    "timeZone"
+    "timeZone",
+    "open"
    ],
    "category": "inputs",
    "structure": "monolithic",
@@ -12221,6 +12146,20 @@
      "doc": "Disables the trigger and the step buttons."
     },
     {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
      "default": "'medium'",
@@ -12240,6 +12179,13 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:timeZone`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "surface": "product",
@@ -12299,6 +12245,20 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
     },
     {
      "name": "placeholder",
@@ -12516,6 +12476,20 @@
      "default": "false",
      "required": "false",
      "doc": "Disables the trigger, grid, and all controls, applying disabled tokens."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
     },
     {
      "name": "placeholder",
@@ -13306,7 +13280,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "HTML name for the internal input (form + vee-validate integration)."
+     "doc": "Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country."
     },
     {
      "name": "searchPlaceholder",
@@ -13755,13 +13729,6 @@
      "doc": "Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis."
     },
     {
-     "name": "alignment",
-     "type": "'vertical' | 'horizontal'",
-     "default": "'vertical'",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use orientation. Removed in 7.0.` Read when `orientation` is left vertical."
-    },
-    {
      "name": "limit",
      "type": "number",
      "default": "0",
@@ -13802,11 +13769,6 @@
      "name": "remove",
      "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
      "notes": "The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor."
-    },
-    {
-     "name": "dismiss",
-     "payload": "(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })",
-     "notes": "@deprecated since 6.0 — listen to remove. Removed in 7.0.` Fires right after `remove` with the same payload."
     }
    ],
    "surface": "product",
@@ -13858,6 +13820,13 @@
      "doc": "Disables the trigger: the menu does not open."
     },
     {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
      "name": "modelValue",
      "type": "FilterMenuModel",
      "default": "—",
@@ -13867,7 +13836,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "false",
+     "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -13918,6 +13887,13 @@
      "doc": "Disables the trigger: the menu does not open."
     },
     {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
      "name": "modelValue",
      "type": "FilterMenuModel",
      "default": "—",
@@ -13927,7 +13903,7 @@
     {
      "name": "open",
      "type": "boolean",
-     "default": "false",
+     "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
     }
@@ -13983,6 +13959,148 @@
    "examplesFile": "catalog/examples/password-requirements.json",
    "docsFile": "catalog/components/password-requirements.json"
   },
+  "radio-group": {
+   "import": "@aziontech/webkit/radio-group",
+   "target": "./src/components/inputs/radio-group/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/radio-group-root",
+   "subcomponents": [
+    "@aziontech/webkit/radio-group-item"
+   ],
+   "models": [
+    "modelValue"
+   ],
+   "category": "inputs",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group."
+    },
+    {
+     "name": "orientation",
+     "type": "'vertical' | 'horizontal'",
+     "default": "'vertical'",
+     "required": "false",
+     "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every option and applies the disabled tokens."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the group invalid: sets `aria-invalid` on the group and on every radio."
+    },
+    {
+     "name": "modelValue",
+     "type": "string | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `RadioGroup.Item`s."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/radio-group.json",
+   "docsFile": "catalog/components/radio-group.json"
+  },
+  "radio-group-item": {
+   "import": "@aziontech/webkit/radio-group-item",
+   "target": "./src/components/inputs/radio-group/radio-group-item/radio-group-item.vue",
+   "kind": "subcomponent",
+   "parent": "radio-group",
+   "treeShakeableImport": "@aziontech/webkit/radio-group-item",
+   "surface": "product"
+  },
+  "radio-group-root": {
+   "import": "@aziontech/webkit/radio-group-root",
+   "target": "./src/components/inputs/radio-group/radio-group.vue",
+   "kind": "root",
+   "rootOf": "radio-group",
+   "treeShakeableImport": "@aziontech/webkit/radio-group-root",
+   "models": [
+    "modelValue"
+   ],
+   "category": "inputs",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group."
+    },
+    {
+     "name": "orientation",
+     "type": "'vertical' | 'horizontal'",
+     "default": "'vertical'",
+     "required": "false",
+     "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Disables every option and applies the disabled tokens."
+    },
+    {
+     "name": "required",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the group invalid: sets `aria-invalid` on the group and on every radio."
+    },
+    {
+     "name": "modelValue",
+     "type": "string | undefined",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The `RadioGroup.Item`s."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/radio-group-root.json"
+  },
   "radio-cards": {
    "import": "@aziontech/webkit/radio-cards",
    "target": "./src/components/inputs/radio-cards/radio-cards.vue",
@@ -14007,6 +14125,13 @@
      "default": "false",
      "required": "false",
      "doc": "Disables all options and applies disabled tokens."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; a required `Field` adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out."
     },
     {
      "name": "modelValue",
@@ -14170,6 +14295,13 @@
      "doc": "Marks the field read-only; value is visible but cannot change via interaction."
     },
     {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
      "name": "inputId",
      "type": "string",
      "default": "''",
@@ -14235,11 +14367,18 @@
      "doc": "Disables interaction and applies disabled tokens."
     },
     {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
      "name": "inputId",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id."
+     "doc": "@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set."
     },
     {
      "name": "modelValue",
@@ -14291,6 +14430,20 @@
      "default": "false",
      "required": "false",
      "doc": "Disables interaction and applies the disabled tokens."
+    },
+    {
+     "name": "invalid",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, a hidden input inside the button submits `on` under this name while the switch is on and nothing while it is off, as a native checkbox does; `disabled` leaves it out."
     },
     {
      "name": "modelValue",
@@ -14559,6 +14712,13 @@
      "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
     },
     {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
      "name": "open",
      "type": "boolean",
      "default": "undefined as never",
@@ -14626,6 +14786,13 @@
      "default": "false",
      "required": "false",
      "doc": "Prevents the trigger from opening the panel and applies disabled tokens."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
     },
     {
      "name": "open",
@@ -14762,6 +14929,13 @@
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
     },
     {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
+    },
+    {
      "name": "modelValue",
      "type": "TValue[]",
      "default": "() => []",
@@ -14855,6 +15029,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
     },
     {
      "name": "modelValue",
@@ -15003,6 +15184,13 @@
      "doc": "Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels."
     },
     {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does."
+    },
+    {
      "name": "modelValue",
      "type": "TValue",
      "default": "undefined as never",
@@ -15110,6 +15298,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels."
+    },
+    {
+     "name": "name",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does."
     },
     {
      "name": "modelValue",
@@ -15604,8 +15799,7 @@
    "models": [
     "searchOpen",
     "toolsOpen",
-    "navigationOpen",
-    "navigationExpanded"
+    "navigationOpen"
    ],
    "category": "layout",
    "structure": "composition",
@@ -15686,13 +15880,6 @@
      "default": "true",
      "required": "false",
      "doc": "Two-way value (`v-model:navigationOpen`)."
-    },
-    {
-     "name": "navigationExpanded",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Two-way value (`v-model:navigationExpanded`)."
     }
    ],
    "events": [
@@ -15772,8 +15959,7 @@
    "models": [
     "searchOpen",
     "toolsOpen",
-    "navigationOpen",
-    "navigationExpanded"
+    "navigationOpen"
    ],
    "category": "layout",
    "structure": "composition",
@@ -15854,13 +16040,6 @@
      "default": "true",
      "required": "false",
      "doc": "Two-way value (`v-model:navigationOpen`)."
-    },
-    {
-     "name": "navigationExpanded",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Two-way value (`v-model:navigationExpanded`)."
     }
    ],
    "events": [
@@ -17733,13 +17912,6 @@
      "doc": "Which backdrop to draw: `globe`, `map` or `network`."
     },
     {
-     "name": "art",
-     "type": "BannerArtKind | ''",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop."
-    },
-    {
      "name": "animated",
      "type": "boolean",
      "default": "true",
@@ -19078,6 +19250,13 @@
      "doc": "Initial active tab when uncontrolled."
     },
     {
+     "name": "activationMode",
+     "type": "'automatic' | 'manual'",
+     "default": "'automatic'",
+     "required": "false",
+     "doc": "automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
+    },
+    {
      "name": "modelValue",
      "type": "TabsValue | null | undefined",
      "default": "undefined",
@@ -19114,6 +19293,13 @@
      "default": "null",
      "required": "false",
      "doc": "Initial active tab when uncontrolled."
+    },
+    {
+     "name": "activationMode",
+     "type": "'automatic' | 'manual'",
+     "default": "'automatic'",
+     "required": "false",
+     "doc": "automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render)."
     },
     {
      "name": "modelValue",
@@ -19271,8 +19457,7 @@
     "@aziontech/webkit/wizard-step"
    ],
    "models": [
-    "modelValue",
-    "activeStep"
+    "modelValue"
    ],
    "category": "navigation",
    "structure": "composition",
@@ -19304,20 +19489,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
-    },
-    {
-     "name": "activeStep",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "Two-way value (`v-model:activeStep`)."
     }
    ],
    "events": [
     {
      "name": "next",
      "payload": "(event: MouseEvent, step: number)",
-     "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back."
+     "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only go back."
     },
     {
      "name": "submit",
@@ -19348,8 +19526,7 @@
    "rootOf": "wizard",
    "treeShakeableImport": "@aziontech/webkit/wizard-root",
    "models": [
-    "modelValue",
-    "activeStep"
+    "modelValue"
    ],
    "category": "navigation",
    "structure": "composition",
@@ -19381,20 +19558,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
-    },
-    {
-     "name": "activeStep",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "Two-way value (`v-model:activeStep`)."
     }
    ],
    "events": [
     {
      "name": "next",
      "payload": "(event: MouseEvent, step: number)",
-     "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back."
+     "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only go back."
     },
     {
      "name": "submit",
@@ -19823,10 +19993,10 @@
   },
   "dialog": {
    "import": "@aziontech/webkit/dialog",
-   "target": "./src/components/overlay/dialog/dialog.vue",
+   "target": "./src/components/overlay/dialog/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/dialog",
+   "treeShakeableImport": "@aziontech/webkit/dialog-root",
    "subcomponents": [
     "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
@@ -19850,11 +20020,18 @@
      "doc": "Initial open state when uncontrolled."
     },
     {
+     "name": "closable",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+    },
+    {
      "name": "dismissible",
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "When true, overlay click and Escape close the dialog."
+     "doc": "Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`."
     },
     {
      "name": "size",
@@ -19881,6 +20058,64 @@
    "surface": "product",
    "examplesFile": "catalog/examples/dialog.json",
    "docsFile": "catalog/components/dialog.json"
+  },
+  "dialog-root": {
+   "import": "@aziontech/webkit/dialog-root",
+   "target": "./src/components/overlay/dialog/dialog.vue",
+   "kind": "root",
+   "rootOf": "dialog",
+   "treeShakeableImport": "@aziontech/webkit/dialog-root",
+   "models": [
+    "open"
+   ],
+   "category": "overlay",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled."
+    },
+    {
+     "name": "closable",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+    },
+    {
+     "name": "dismissible",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`."
+    },
+    {
+     "name": "size",
+     "type": "DialogSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Panel max-width preset passed to the inner Panel."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "—"
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/dialog-root.json"
   },
   "dialog-close": {
    "import": "@aziontech/webkit/dialog-close",
@@ -19996,7 +20231,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows a spinner on the confirm button while the action runs; Cancel, the close button, `Esc` and the overlay stop closing the dialog until it clears."
+     "doc": "Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears."
     },
     {
      "name": "disabled",
@@ -20055,10 +20290,10 @@
   },
   "drawer": {
    "import": "@aziontech/webkit/drawer",
-   "target": "./src/components/overlay/drawer/drawer.vue",
+   "target": "./src/components/overlay/drawer/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/drawer",
+   "treeShakeableImport": "@aziontech/webkit/drawer-root",
    "subcomponents": [
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
@@ -20082,11 +20317,18 @@
      "doc": "Initial open state when uncontrolled."
     },
     {
+     "name": "closable",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+    },
+    {
      "name": "dismissible",
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "When true, overlay click and Escape close the drawer."
+     "doc": "Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`."
     },
     {
      "name": "side",
@@ -20120,6 +20362,71 @@
    "surface": "product",
    "examplesFile": "catalog/examples/drawer.json",
    "docsFile": "catalog/components/drawer.json"
+  },
+  "drawer-root": {
+   "import": "@aziontech/webkit/drawer-root",
+   "target": "./src/components/overlay/drawer/drawer.vue",
+   "kind": "root",
+   "rootOf": "drawer",
+   "treeShakeableImport": "@aziontech/webkit/drawer-root",
+   "models": [
+    "open"
+   ],
+   "category": "overlay",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled."
+    },
+    {
+     "name": "closable",
+     "type": "boolean",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+    },
+    {
+     "name": "dismissible",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`."
+    },
+    {
+     "name": "side",
+     "type": "DrawerSide",
+     "default": "'right'",
+     "required": "false",
+     "doc": "Edge the drawer panel slides from."
+    },
+    {
+     "name": "size",
+     "type": "DrawerSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "—"
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/drawer-root.json"
   },
   "drawer-close": {
    "import": "@aziontech/webkit/drawer-close",
@@ -20179,10 +20486,10 @@
   },
   "panel": {
    "import": "@aziontech/webkit/panel",
-   "target": "./src/components/overlay/panel/panel.vue",
+   "target": "./src/components/overlay/panel/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/panel",
+   "treeShakeableImport": "@aziontech/webkit/panel-root",
    "subcomponents": [
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
@@ -20216,6 +20523,40 @@
    "surface": "product",
    "examplesFile": "catalog/examples/panel.json",
    "docsFile": "catalog/components/panel.json"
+  },
+  "panel-root": {
+   "import": "@aziontech/webkit/panel-root",
+   "target": "./src/components/overlay/panel/panel.vue",
+   "kind": "root",
+   "rootOf": "panel",
+   "treeShakeableImport": "@aziontech/webkit/panel-root",
+   "category": "overlay",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "size",
+     "type": "PanelSize",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Max width of the panel shell."
+    },
+    {
+     "name": "sizeAtMd",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "When true, the `size` max-width applies from `md` up only (dialog mobile bottom sheet)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "—"
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/panel-root.json"
   },
   "panel-content": {
    "import": "@aziontech/webkit/panel-content",
@@ -25122,13 +25463,6 @@
      "doc": "Second button under the section title, `outlined`; same shape. Shown only with a label and a link."
     },
     {
-     "name": "actions",
-     "type": "CapabilityGridAction[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined."
-    },
-    {
      "name": "anchor",
      "type": "string",
      "default": "''",
@@ -25157,7 +25491,7 @@
    "props": [
     {
      "name": "kind",
-     "type": "'console' \\ | 'diagram'",
+     "type": "'console' | 'diagram'",
      "default": "'console'",
      "required": "false",
      "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
@@ -25259,19 +25593,12 @@
      "default": "undefined",
      "required": "false",
      "doc": "Second button under the headline, `outlined`; same shape. Shown only with a label and a link."
-    },
-    {
-     "name": "actions",
-     "type": "ConsolePanelAction[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined."
     }
    ],
    "slots": [
     {
      "name": "scene",
-     "scope": "{ tab: string \\",
+     "scope": "{ tab: string",
      "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
     }
    ],
@@ -25307,20 +25634,6 @@
      "default": "''",
      "required": "false",
      "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
-    },
-    {
-     "name": "cards",
-     "type": "CustomerSpotlightCard[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty."
-    },
-    {
-     "name": "storyLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty."
     },
     {
      "name": "anchor",
@@ -27353,6 +27666,12 @@
    "kind": "composable",
    "treeShakeableImport": "@aziontech/webkit/use-collection"
   },
+  "use-color-mode": {
+   "import": "@aziontech/webkit/use-color-mode",
+   "target": "./src/composables/use-color-mode/index.ts",
+   "kind": "composable",
+   "treeShakeableImport": "@aziontech/webkit/use-color-mode"
+  },
   "vite": {
    "import": "@aziontech/webkit/vite",
    "target": "./src/vite/index.js",
@@ -28155,7 +28474,8 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/combobox",
    "models": [
-    "modelValue"
+    "modelValue",
+    "open"
    ],
    "category": "inputs",
    "structure": "monolithic",
@@ -28217,11 +28537,11 @@
      "doc": "Shows a spinner and the loading row while options are fetched."
     },
     {
-     "name": "emptyText",
+     "name": "emptyTitle",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Text of the list when nothing matches. Empty uses the locale catalog."
+     "doc": "Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states."
     },
     {
      "name": "disabled",
@@ -28252,11 +28572,25 @@
      "doc": "Marks the field invalid (`aria-invalid`, danger border)."
     },
     {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+    },
+    {
      "name": "modelValue",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
@@ -36468,7 +36802,8 @@
     "Tag",
     "ThemeSwitcher",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-color-mode"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -36504,7 +36839,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-color-mode"
    ],
    "primary": "ListPage",
    "guidelinesSummary": "The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: the navigation rail (wordmark, grouped navigation with drill-in levels, the account at its foot), one global header (breadcrumbs, search, the app's actions, the avatar) and the ⌘K palette. All of that is one component, `ConsoleLayout`: this block is the app's `App.vue` — compose it once around `RouterView` and every console page is only the body rendered through its default slot. The body here is a stand-in for `platform/view/table-view`.",
@@ -36529,7 +36865,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCta` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -36594,11 +36930,11 @@
     "DocAccordionGroup",
     "DocAccordionItem",
     "DocAgentCard",
+    "DocCallToAction",
     "DocCallout",
     "DocCard",
     "DocCardGroup",
     "DocCodeGroup",
-    "DocCta",
     "DocFrame",
     "DocHeading",
     "DocHero",
@@ -36622,7 +36958,8 @@
     "StatusIndicator",
     "Table",
     "Tag",
-    "ThemeSwitcher"
+    "ThemeSwitcher",
+    "use-color-mode"
    ],
    "imports": [
     "@aziontech/webkit/assets/claude-symbol-color.svg",
@@ -36639,11 +36976,11 @@
     "@aziontech/webkit/doc-accordion-group",
     "@aziontech/webkit/doc-accordion-item",
     "@aziontech/webkit/doc-agent-card",
+    "@aziontech/webkit/doc-call-to-action",
     "@aziontech/webkit/doc-callout",
     "@aziontech/webkit/doc-card",
     "@aziontech/webkit/doc-card-group",
     "@aziontech/webkit/doc-code-group",
-    "@aziontech/webkit/doc-cta",
     "@aziontech/webkit/doc-frame",
     "@aziontech/webkit/doc-heading",
     "@aziontech/webkit/doc-hero",
@@ -36667,7 +37004,8 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/theme-switcher"
+    "@aziontech/webkit/theme-switcher",
+    "@aziontech/webkit/use-color-mode"
    ],
    "primary": "Default",
    "guidelinesSummary": "The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close. It is `DocLayout`, composed once in the app around `RouterView`: the layout owns the docs header, the navigation rail, the \"On this page\" rail, the search palette and the footer, and the document itself scrolls with the header and both rails sticky. Every docs page is only its article.",

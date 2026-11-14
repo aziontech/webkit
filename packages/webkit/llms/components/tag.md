@@ -15,7 +15,7 @@
 ## Do
 
 - Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `secondary` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer; `secondary` is the same look), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
 - Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
@@ -35,7 +35,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
+| `severity` | `Severity \| 'primary' \| 'secondary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `secondary` (bordered canvas, the same look as `neutral`), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
 | `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
@@ -97,6 +97,10 @@
 
 <template>
   <div class="flex flex-wrap items-center gap-4">
+    <Tag
+      label="Label"
+      severity="neutral"
+    />
     <Tag
       label="Label"
       severity="primary"

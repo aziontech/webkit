@@ -16,7 +16,7 @@
  ],
  "avoidWhen": [
   "For several lines or output — use `CodeBlock` or `CliTerminal`.",
-  "For an editable field — use `InputText`."
+  "For an editable field — use `Input`."
  ],
  "related": [
   "CopyButton`, `InputGroup` — the parts.",

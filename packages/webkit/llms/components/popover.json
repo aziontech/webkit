@@ -24,7 +24,7 @@
  ],
  "avoidWhen": [
   "A short, non-interactive hint on hover or focus → use `tooltip`.",
-  "A list of actions or options to pick from → use `dropdown`.",
+  "A list of actions or options to pick from → use `dropdown-menu`.",
   "Choosing a form value from a list → use `select`.",
   "A blocking task that must be completed or cancelled first → use `dialog`.",
   "A long form or a secondary workflow → use `drawer`."

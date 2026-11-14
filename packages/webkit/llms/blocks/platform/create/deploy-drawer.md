@@ -45,7 +45,7 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
-`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `DropdownMenu`: the summary and a search `Input` in its top slot, one `DropdownMenu.Option` per version (the author `Avatar` on the left, the name with an Active `Tag`, the age on the right, the picked one `selected`), and a transparent Load more `Button` in its bottom slot. The menu gives the rows their roles, arrow-key movement, hover and focus, so the block never re-types them. Disable Change version when there is nothing to change to.
+`Card :padded="false"` with one small inline `Item` per resource, split by `Separator`s. Each row shows a small `Tag` reading Ready, or a warning tag when no version is ready, and the picked version. Change version, an outlined small `Button`, opens a `DropdownMenu`: the summary and a search `Input` in its top slot, one `DropdownMenu.Item` per version (the author `Avatar` on the left, the name with an Active `Tag`, the age on the right, the picked one `selected`), and a transparent Load more `Button` in its bottom slot. The menu gives the rows their roles, arrow-key movement, hover and focus, so the block never re-types them. Disable Change version when there is nothing to change to.
 
 ### E. Dependencies — `Accordion`, `Item`, `Tag`, `DropdownMenu` (required)
 
@@ -815,7 +815,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   placeholder="Search versions"
                                   aria-label="Search versions"
                                 >
-                                  <template #iconLeft>
+                                  <template #prefix>
                                     <i
                                       class="pi pi-search"
                                       aria-hidden="true"
@@ -825,7 +825,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               </div>
                             </template>
                             <DropdownMenu.Group>
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 v-for="entry in row.versions"
                                 :key="entry.id"
                                 :value="entry.id"
@@ -833,7 +833,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 :selected="entry.id === versionOf(row).id"
                                 :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                               >
-                                <template #left>
+                                <template #leading>
                                   <Avatar
                                     :alt="entry.author"
                                     :label="entry.author"
@@ -851,12 +851,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     class="shrink-0"
                                   />
                                 </span>
-                                <template #right>
+                                <template #trailing>
                                   <span class="text-body-xs text-(--text-muted)">{{
                                     entry.createdAgo
                                   }}</span>
                                 </template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                             <template
                               v-if="row.total > row.versions.length"
@@ -967,7 +967,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                               placeholder="Search versions"
                                               aria-label="Search versions"
                                             >
-                                              <template #iconLeft>
+                                              <template #prefix>
                                                 <i
                                                   class="pi pi-search"
                                                   aria-hidden="true"
@@ -977,7 +977,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                           </div>
                                         </template>
                                         <DropdownMenu.Group>
-                                          <DropdownMenu.Option
+                                          <DropdownMenu.Item
                                             v-for="entry in dependency.versions"
                                             :key="entry.id"
                                             :value="entry.id"
@@ -985,7 +985,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                             :selected="entry.id === versionOf(dependency).id"
                                             :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                                           >
-                                            <template #left>
+                                            <template #leading>
                                               <Avatar
                                                 :alt="entry.author"
                                                 :label="entry.author"
@@ -1005,12 +1005,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                                 class="shrink-0"
                                               />
                                             </span>
-                                            <template #right>
+                                            <template #trailing>
                                               <span class="text-body-xs text-(--text-muted)">{{
                                                 entry.createdAgo
                                               }}</span>
                                             </template>
-                                          </DropdownMenu.Option>
+                                          </DropdownMenu.Item>
                                         </DropdownMenu.Group>
                                         <template
                                           v-if="dependency.total > dependency.versions.length"
@@ -1121,7 +1121,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               <Popover
                                 v-if="domainGroup.total > 1"
                                 placement="bottom-start"
-                                width="small"
+                                size="small"
                               >
                                 <Popover.Trigger
                                   :aria-label="`${domainGroup.total - 1} more domains`"
@@ -1147,7 +1147,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       placeholder="Search domains"
                                       aria-label="Search domains"
                                     >
-                                      <template #iconLeft>
+                                      <template #prefix>
                                         <i
                                           class="pi pi-search"
                                           aria-hidden="true"
@@ -1215,19 +1215,19 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               :key="group.key"
                               :label="group.label"
                             >
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 v-for="entry in group.projects"
                                 :key="entry.id"
                                 :value="entry.id"
                                 :label="entry.name"
                                 :selected="entry.id === project.id"
                               >
-                                <template #right>
+                                <template #trailing>
                                   <span class="truncate text-body-xs text-(--text-muted)">
                                     {{ entry.detail }}
                                   </span>
                                 </template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                           </DropdownMenu>
                         </Item.Actions>
@@ -1354,7 +1354,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 <Popover
                                   v-if="domainGroup.total > 1"
                                   placement="bottom-start"
-                                  width="small"
+                                  size="small"
                                 >
                                   <Popover.Trigger
                                     :aria-label="`${domainGroup.total - 1} more domains`"
@@ -1380,7 +1380,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                         placeholder="Search domains"
                                         aria-label="Search domains"
                                       >
-                                        <template #iconLeft>
+                                        <template #prefix>
                                           <i
                                             class="pi pi-search"
                                             aria-hidden="true"

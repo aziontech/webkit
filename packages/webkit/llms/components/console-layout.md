@@ -60,7 +60,6 @@
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
 | `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
 | `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
-| `navigationExpanded` | `boolean` | `true` | false | Two-way value (`v-model:navigationExpanded`). |
 
 ## Events
 
@@ -114,7 +113,6 @@ packages/webkit/src/components/layout/console-layout/
 | `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
 | `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
 | `v-model:navigation-open`     | `boolean` | `true`  | `update:navigationOpen`     | Whether the navigation rail is shown on wide layouts; `false` collapses it (the Sidebar's `open`). It has no effect while compact, where the rail is a drawer. Same name as `AppLayout`'s `navigationOpen`. |
-| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | **@deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0.** Same state and polarity; both are emitted on every change, and a host that binds only this one still drives the rail. |
 
 ## States
 
@@ -294,11 +292,11 @@ packages/webkit/src/components/layout/console-layout/
 
     <template #account-menu>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="settings"
           label="Account settings"
         />
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="logout"
           label="Log out"
         />

@@ -34,7 +34,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `type` | `'single' \ \| 'multiple'` | `'single'` | false | Whether one or several entries can be open at once. |
+| `type` | `'single' \| 'multiple'` | `'single'` | false | Whether one or several entries can be open at once. |
 
 ## Slots
 

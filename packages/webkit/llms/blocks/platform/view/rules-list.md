@@ -568,7 +568,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
               class="w-full"
               :disabled="loading"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"

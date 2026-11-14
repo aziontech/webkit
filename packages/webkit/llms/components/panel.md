@@ -1,8 +1,9 @@
 # Panel
 
-> Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/panel/`.
+> The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.
 
-- Import: `import Panel from '@aziontech/webkit/panel'`
+- Import: `import PanelRoot from '@aziontech/webkit/panel-root'`
+- Compound import (dot notation, not tree-shakeable): `import Panel from '@aziontech/webkit/panel'`
 - Category: overlay · Surface: product · Structure: composition
 - API as JSON: [panel.json](https://github.com/aziontech/webkit/blob/main/.specs/panel.json)
 
@@ -53,6 +54,7 @@
 
 ## Sub-components
 
+- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Content` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
 - `panel-content.vue` — Public sub-component `panel-content`.
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`.

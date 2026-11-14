@@ -30,7 +30,7 @@
  "props": [
   {
    "name": "kind",
-   "type": "'console' \\ | 'diagram'",
+   "type": "'console' | 'diagram'",
    "default": "'console'",
    "required": "false",
    "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
@@ -132,20 +132,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "Second button under the headline, `outlined`; same shape. Shown only with a label and a link."
-  },
-  {
-   "name": "actions",
-   "type": "ConsolePanelAction[]",
-   "default": "[]",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined."
   }
  ],
  "events": [],
  "slots": [
   {
    "name": "scene",
-   "scope": "{ tab: string \\",
+   "scope": "{ tab: string",
    "notes": "undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs)."
   }
  ],

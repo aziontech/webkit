@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom=\"false\"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyText` is the empty-list text prop; AttributeEditor's `empty` names the same idea and the next vocabulary pass should align them on `emptyText`.",
+ "purpose": "A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom=\"false\"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyTitle` is the empty-list text prop, the name `table` and `select` use; AttributeEditor's `empty` names the same idea.",
  "setup": null,
  "useWhen": [
   "A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.",
@@ -17,7 +17,7 @@
   "Suggestions grouped by origin (Recent, Suggested, System) in one field."
  ],
  "avoidWhen": [
-  "The value must be one of a short fixed list → use `select` (or `radio-group` for 2–5 visible choices).",
+  "The value must be one of a short fixed list → use `select` (or `radio-cards` / `radio-button` for 2–5 visible choices).",
   "Several values at once → use `multi-select`.",
   "Searching and running commands or jumping to a page → use `command`.",
   "Filtering a collection by properties → use `property-filter`.",
@@ -96,11 +96,11 @@
    "doc": "Shows a spinner and the loading row while options are fetched."
   },
   {
-   "name": "emptyText",
+   "name": "emptyTitle",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Text of the list when nothing matches. Empty uses the locale catalog."
+   "doc": "Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states."
   },
   {
    "name": "disabled",
@@ -131,11 +131,25 @@
    "doc": "Marks the field invalid (`aria-invalid`, danger border)."
   },
   {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
    "name": "modelValue",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [

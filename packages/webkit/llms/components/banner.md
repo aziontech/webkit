@@ -24,7 +24,7 @@
 
 - For the closing ask at the end of a page or section → use `call-to-action`, a single-column panel.
 - For the page's leading statement → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or status-bearing notice inside the product → use `message`.
+- For a dismissible or status-bearing notice inside the product → use `alert`.
 - For a feature tile in a grid → use `topic` in a `card-grid`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

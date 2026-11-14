@@ -65,7 +65,7 @@
 
 ## Sub-components
 
-The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
+The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
 - `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required`, and a `Hint` glyph when `hint` is set. When it wraps a `Field` it becomes a selectable card (border, padding, hover, focus ring, selected tokens when the control inside is `data-checked`).
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
@@ -73,7 +73,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
 - `field-description/field-description.vue` — guidance line rendered through `HelperText`; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message rendered through `HelperText kind="invalid"` with `role="alert"`; registers its id with the Field.
+- `field-error/field-error.vue` — validation message rendered through `HelperText kind="invalid"` with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.
@@ -93,7 +93,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 - Visual states: `default`, `disabled`, `invalid`, `required`
 - `data-orientation`: `vertical` | `horizontal` | `responsive`
-- `data-invalid`, `data-disabled`, `data-required` mirror the props on the root
+- `data-invalid`, `data-disabled`, `data-required` mirror the props on the root; `data-invalid` is also set while a `Field.Error` is mounted
 - `data-slot` identifies every part (`field`, `field-label`, `field-description`, `field-error`, `field-group`, `field-set`, `field-legend`, `field-content`, `field-title`, `field-separator`)
 - Responsive: `orientation="responsive"` queries the nearest container (`@md:`), not only `Field.Group`: inside a Card, a drawer or dialog body (`@container/panel`), a settings section or a `Field.Group` it stacks the label above the control in a narrow box and puts them side by side from `@md`. With no container ancestor it stays vertical.
 
@@ -101,7 +101,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 - Visible focus: the control keeps its own ring; a choice card shows `has-[:focus-visible]:ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` around the whole card.
 - Keyboard map: the Field adds no keys; `Tab` reaches the control, and clicking `Field.Label` focuses or toggles it.
-- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid`; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the Required marker's `*` is `aria-hidden` and the word "(Required)" is read.
+- ARIA: root `role="group"`; `Field.Label` `for` → control `id`; control `aria-describedby` → every mounted `Field.Description` and `Field.Error` id; control `aria-invalid` when the Field is `invalid` or a `Field.Error` is mounted; `required` / `aria-required` when it is `required`; `Field.Error` `role="alert"`; `Field.Set` is a native `fieldset` named by its `legend`; the Required marker's `*` is `aria-hidden` and the word "(Required)" is read.
 - Contrast ≥4.5:1 for label, description and error text in every tone, including disabled.
 - `motion-reduce:transition-none` on the choice card transition.
 - Touch target: the whole choice card is the target; a horizontal Field's label extends the control's target.
@@ -181,7 +181,6 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
     <Field orientation="horizontal">
       <Checkbox
         v-model="terms"
-        binary
         name="terms"
       />
       <Field.Content>

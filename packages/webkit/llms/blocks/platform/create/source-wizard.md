@@ -56,7 +56,7 @@ A flush `Card` titled with the question, holding an `Item.List` of three small `
 
 ### G. Git source — `Card`, `EmptyState`, `Select`, `Skeleton`, `Alert` (required for Import from Git)
 
-Before an account is connected, a `Card` titled "Repository" holds a bordered `EmptyState` with a secondary large Connect `Button` that spins with `:loading` while it authorizes; a failed authorization adds a small danger `Alert` under the button, which retries. Once connected, the card turns flush: a toolbar row with an account `Select` (a GitHub glyph in `#iconLeft`, the accounts, and an Add account option that adds one and switches to it) beside a large search `Input`, then a capped, scrolling `Item.List` of the five most recently updated repositories (a transparent Load more adds five at a time), each a small `clickable` `Item` with its framework mark, its name and when it was updated, a chevron, and a check plus `aria-pressed` on the chosen one. While repositories load, five `Skeleton` rows in the row shape replace the list, `aria-hidden` under an `aria-busy` list. A failed load replaces the rows with a danger `Alert` and Retry; an account with no repositories shows a small `EmptyState` with Start from a template; a search with no match shows a small `EmptyState` with Clear search; a visually hidden `role="status"` line reports the count. Picking a repository answers the step and opens Create and deploy with the name prefilled.
+Before an account is connected, a `Card` titled "Repository" holds a bordered `EmptyState` with a secondary large Connect `Button` that spins with `:loading` while it authorizes; a failed authorization adds a small danger `Alert` under the button, which retries. Once connected, the card turns flush: a toolbar row with an account `Select` (a GitHub glyph in `#prefix`, the accounts, and an Add account option that adds one and switches to it) beside a large search `Input`, then a capped, scrolling `Item.List` of the five most recently updated repositories (a transparent Load more adds five at a time), each a small `clickable` `Item` with its framework mark, its name and when it was updated, a chevron, and a check plus `aria-pressed` on the chosen one. While repositories load, five `Skeleton` rows in the row shape replace the list, `aria-hidden` under an `aria-busy` list. A failed load replaces the rows with a danger `Alert` and Retry; an account with no repositories shows a small `EmptyState` with Start from a template; a search with no match shows a small `EmptyState` with Clear search; a visually hidden `role="status"` line reports the count. Picking a repository answers the step and opens Create and deploy with the name prefilled.
 
 ### H. Template source — `PropertyFilter`, `Tag` (required for Start from a template)
 
@@ -1065,7 +1065,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Projects"
@@ -1085,9 +1085,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -1099,7 +1099,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <div class="flex min-h-0 flex-1">
@@ -1399,7 +1399,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               @update:model-value="selectAccount"
                             >
                               <Select.Trigger aria-label="Git account">
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
                                     aria-hidden="true"
@@ -1432,7 +1432,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             aria-label="Search repositories"
                             autocomplete="off"
                           >
-                            <template #iconLeft>
+                            <template #prefix>
                               <i
                                 class="pi pi-search"
                                 aria-hidden="true"
@@ -1466,7 +1466,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             >
                               <Item.Media>
                                 <Skeleton
-                                  kind="shape"
+                                  kind="rectangle"
                                   width="2rem"
                                   height="2rem"
                                 />
@@ -1754,7 +1754,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 id="repository-account"
                                 aria-label="Account"
                               >
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
                                     aria-hidden="true"
@@ -1827,7 +1827,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               aria-label="Search repositories"
                               autocomplete="off"
                             >
-                              <template #iconLeft>
+                              <template #prefix>
                                 <i
                                   class="pi pi-search"
                                   aria-hidden="true"
@@ -1870,7 +1870,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             >
                               <Item.Media>
                                 <Skeleton
-                                  kind="shape"
+                                  kind="rectangle"
                                   width="2rem"
                                   height="2rem"
                                 />

@@ -42,7 +42,6 @@
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
 | `expanded` | `boolean` | `undefined as never` | false | Two-way value (`v-model:expanded`). |
-| `collapsed` | `boolean` | `undefined as never` | false | Two-way value (`v-model:collapsed`). |
 
 ## Events
 
@@ -62,8 +61,7 @@
 
 | Model               | Type      | Default | Emits              | Notes                                                     |
 | ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While neither model is bound the card starts expanded. Takes precedence over `collapsed` when both are bound. |
-| `v-model:collapsed` | `boolean` | `undefined` (resolves to `false`) | `update:collapsed` | **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** Kept working: it is read when `expanded` is unbound, and the toggle emits both `update:expanded` and `update:collapsed`. |
+| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts expanded. |
 
 ## States
 

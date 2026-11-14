@@ -2,7 +2,7 @@
  "name": "drawer",
  "binding": "Drawer",
  "import": "@aziontech/webkit/drawer",
- "treeShakeableImport": "@aziontech/webkit/drawer",
+ "treeShakeableImport": "@aziontech/webkit/drawer-root",
  "category": "overlay",
  "surface": "product",
  "structure": "composition",
@@ -16,7 +16,7 @@
   "@aziontech/webkit/drawer-title",
   "@aziontech/webkit/drawer-trigger"
  ],
- "purpose": "Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/drawer/`.",
+ "purpose": "A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.",
  "setup": null,
  "useWhen": [
   "A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.",
@@ -44,11 +44,18 @@
    "doc": "Initial open state when uncontrolled."
   },
   {
+   "name": "closable",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+  },
+  {
    "name": "dismissible",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "When true, overlay click and Escape close the drawer."
+   "doc": "Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`."
   },
   {
    "name": "side",
@@ -85,7 +92,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Drawer from '@aziontech/webkit/drawer'\n  import DrawerClose from '@aziontech/webkit/drawer-close'\n  import DrawerContent from '@aziontech/webkit/drawer-content'\n  import DrawerDescription from '@aziontech/webkit/drawer-description'\n  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'\n  import DrawerPortal from '@aziontech/webkit/drawer-portal'\n  import DrawerTitle from '@aziontech/webkit/drawer-title'\n  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'\n  import PanelContent from '@aziontech/webkit/panel-content'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Drawer\n    v-model:open=\"open\"\n    dismissible\n    side=\"right\"\n    size=\"medium\"\n  >\n    <DrawerTrigger>\n      <Button\n        label=\"Open drawer\"\n        kind=\"primary\"\n      />\n    </DrawerTrigger>\n    <DrawerPortal>\n      <DrawerOverlay />\n      <DrawerContent>\n        <PanelHeader class=\"w-full\">\n          <DrawerTitle>Drawer Title</DrawerTitle>\n          <DrawerClose />\n        </PanelHeader>\n        <PanelContent>\n          <DrawerDescription>\n            Side panel content. Uses the same Panel header, body, and footer regions as Dialog.\n          </DrawerDescription>\n        </PanelContent>\n        <PanelFooter>\n          <div class=\"flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end\">\n            <Button\n              label=\"Cancel\"\n              kind=\"outlined\"\n              @click=\"open = false\"\n            />\n            <Button\n              label=\"Save\"\n              kind=\"primary\"\n            />\n          </div>\n        </PanelFooter>\n      </DrawerContent>\n    </DrawerPortal>\n  </Drawer>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Drawer from '@aziontech/webkit/drawer'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <Drawer\n    v-model:open=\"open\"\n    dismissible\n    side=\"right\"\n    size=\"medium\"\n  >\n    <Drawer.Trigger>\n      <Button\n        label=\"Open drawer\"\n        kind=\"primary\"\n      />\n    </Drawer.Trigger>\n    <Drawer.Portal>\n      <Drawer.Overlay />\n      <Drawer.Content>\n        <Drawer.Header class=\"w-full\">\n          <Drawer.Title>Drawer Title</Drawer.Title>\n          <Drawer.Close />\n        </Drawer.Header>\n        <Drawer.Body>\n          <Drawer.Description>\n            Side panel content. Uses the same Panel header, body, and footer regions as Dialog.\n          </Drawer.Description>\n        </Drawer.Body>\n        <Drawer.Footer>\n          <div class=\"flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end\">\n            <Button\n              label=\"Cancel\"\n              kind=\"outlined\"\n              @click=\"open = false\"\n            />\n            <Button\n              label=\"Save\"\n              kind=\"primary\"\n            />\n          </div>\n        </Drawer.Footer>\n      </Drawer.Content>\n    </Drawer.Portal>\n  </Drawer>\n</template>"
   },
   {
    "name": "Sizes",

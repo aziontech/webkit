@@ -50,20 +50,6 @@
    "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
   },
   {
-   "name": "cards",
-   "type": "CustomerSpotlightCard[]",
-   "default": "[]",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty."
-  },
-  {
-   "name": "storyLabel",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty."
-  },
-  {
    "name": "anchor",
    "type": "string",
    "default": "''",

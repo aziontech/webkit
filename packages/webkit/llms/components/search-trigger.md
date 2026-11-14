@@ -8,7 +8,7 @@
 
 ## When to use
 
-- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.Right`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
+- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
 ## Do
@@ -34,7 +34,7 @@
 - Kbd` — draws the keycap with the OS-aware modifier glyph.
 - IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
 - Tooltip` — shows the label over the folded magnifier on hover and focus.
-- GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`.
+- GlobalHeader` — the bar it sits in, usually in `GlobalHeader.End`.
 
 ## Props
 

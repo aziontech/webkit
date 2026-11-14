@@ -28,7 +28,7 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 
 ### A. Bar — `GlobalHeader` (required)
 
-The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.Right`; keep `GlobalHeader.Middle` empty. Never a bare `<header>`.
+The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.End`; keep `GlobalHeader.Center` empty. Never a bare `<header>`.
 
 ### B. Brand — `Brand` (required)
 
@@ -102,8 +102,8 @@ Each variant is the same screen in another state: `get_pattern("headers/auth-hea
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -111,7 +111,7 @@ Each variant is the same screen in another state: `get_pattern("headers/auth-hea
           icon="pi pi-book"
           href="/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
   </div>
 </template>

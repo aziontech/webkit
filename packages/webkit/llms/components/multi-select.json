@@ -96,6 +96,13 @@
    "doc": "Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array."
   },
   {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
+  },
+  {
    "name": "modelValue",
    "type": "TValue[]",
    "default": "() => []",

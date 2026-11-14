@@ -44,13 +44,6 @@
    "doc": "Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does."
   },
   {
-   "name": "label",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0."
-  },
-  {
    "name": "errorCorrection",
    "type": "'L' | 'M' | 'Q' | 'H'",
    "default": "'M'",

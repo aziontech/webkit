@@ -63,6 +63,20 @@
    "doc": "Disables interaction and applies the disabled tokens."
   },
   {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
+  },
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name. Set, a hidden input inside the button submits `on` under this name while the switch is on and nothing while it is off, as a native checkbox does; `disabled` leaves it out."
+  },
+  {
    "name": "modelValue",
    "type": "boolean",
    "default": "false",

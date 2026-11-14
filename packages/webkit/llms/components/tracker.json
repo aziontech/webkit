@@ -27,7 +27,7 @@
  ],
  "bestPractices": [
   "Write each `label` as period plus state (\"Nov 3 · Partial outage\"), so the readout stands alone.",
-  "Leave periods with no data without a status; they render neutral rather than pretending to be healthy.",
+  "Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.",
   "Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.",
   "Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much."
  ],
@@ -37,7 +37,7 @@
    "type": "TrackerItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "One block per period, oldest first; each item is `{ id?: string; status?: ChartStatus; label: string }`. No status renders a neutral no-data block. The item field `severity` is the same under its old name, **@deprecated since 6.0 — use `status`. Removed in 7.0.** (it is typed `ChartStatus`), read when `status` is unset."
+   "doc": "One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block."
   },
   {
    "name": "loading",
@@ -75,7 +75,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n\n  const DAYS = 90\n  const DEGRADED_DAY = 52\n  const OUTAGE_DAY = 73\n\n  const days = Array.from({ length: DAYS }, (_, index) => {\n    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))\n    const id = date.toISOString().slice(0, 10)\n    const day = date.toLocaleDateString('en-US', {\n      month: 'short',\n      day: 'numeric',\n      timeZone: 'UTC'\n    })\n    if (index === DAYS - 1) return { id, label: `${day} · No data` }\n    if (index === OUTAGE_DAY) return { id, status: 'danger', label: `${day} · Partial outage` }\n    if (index === DEGRADED_DAY)\n      return { id, status: 'warning', label: `${day} · Degraded performance` }\n    return { id, status: 'success', label: `${day} · Operational` }\n  })\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"days\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Tracker from '@aziontech/webkit/tracker'\n\n  const DAYS = 90\n  const DEGRADED_DAY = 52\n  const OUTAGE_DAY = 73\n\n  const days = Array.from({ length: DAYS }, (_, index) => {\n    const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))\n    const id = date.toISOString().slice(0, 10)\n    const day = date.toLocaleDateString('en-US', {\n      month: 'short',\n      day: 'numeric',\n      timeZone: 'UTC'\n    })\n    if (index === DAYS - 1) return { id, label: `${day} · No data` }\n    if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }\n    if (index === DEGRADED_DAY)\n      return { id, severity: 'warning', label: `${day} · Degraded performance` }\n    return { id, severity: 'success', label: `${day} · Operational` }\n  })\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xl) pt-(--spacing-xl)\">\n    <Tracker\n      aria-label=\"Edge Application uptime, last 90 days\"\n      :items=\"days\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Loading",

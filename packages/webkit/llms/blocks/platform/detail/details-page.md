@@ -383,31 +383,31 @@ jobs:
                         </DropdownMenu.Trigger>
 
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="copy-url"
                             label="Copy URL"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-copy"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
 
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="settings"
                             label="Settings"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-cog"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
                       </DropdownMenu>
                     </div>
@@ -428,7 +428,6 @@ jobs:
                               label="1213275262"
                               href="/deployments/1213275262"
                               size="small"
-                              :show-icon="false"
                             />
                           </Tooltip>
                         </div>
@@ -605,7 +604,7 @@ jobs:
                             <div class="mt-(--spacing-xxs) min-w-0">
                               <CodeBlock
                                 :tabs="step.tabs"
-                                :show-line-numbers="false"
+                                :line-numbers="false"
                                 :copy-aria-label="`Copy the commands for ${step.title}`"
                                 class="w-full"
                               />

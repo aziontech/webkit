@@ -638,7 +638,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 text="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <ToggleGroup
                 v-model="trendForm"
                 :options="forms"
@@ -658,14 +658,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -689,7 +689,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -700,7 +700,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Title>Current split</ChartCard.Title>
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('current-split', value)"
@@ -714,14 +714,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <DonutChart
@@ -744,7 +744,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 text="The resources that cost the most this month, their share of the total and the change against last month."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('top-contributors', value)"
@@ -758,14 +758,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
@@ -773,7 +773,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :columns="contributorColumns"
               row-key="id"
               enable-sorting
-              header-kind="compact"
+              density="compact"
               bordered
               :loading="loading"
             >

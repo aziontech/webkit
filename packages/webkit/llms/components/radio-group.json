@@ -1,0 +1,109 @@
+{
+ "name": "radio-group",
+ "binding": "RadioGroup",
+ "import": "@aziontech/webkit/radio-group",
+ "treeShakeableImport": "@aziontech/webkit/radio-group-root",
+ "category": "inputs",
+ "surface": "product",
+ "structure": "composition",
+ "compoundRoot": true,
+ "subcomponents": [
+  "@aziontech/webkit/radio-group-item"
+ ],
+ "purpose": "RadioGroup picks exactly one value from a short list of labelled options shown at once. The root is a `radiogroup` that owns the value (`v-model`), the shared form `name`, the group `disabled` / `required` / `invalid` state and the layout axis, and hands them to every `RadioGroup.Item` through `provide`/`inject`; each item draws the `RadioButton` circle beside its label. Because the items are native radios that share one `name`, the group is a single tab stop and the arrow keys move the selection, as the APG radio group pattern asks, with no wiring by the consumer. It differs from `RadioButton`, a bare circle the consumer groups by hand, and from `RadioCards`, which shows each option as a card with an icon and a description.",
+ "setup": null,
+ "useWhen": [
+  "A required choice of one option among two to seven, where every option should stay visible (billing cycle, region, notification channel).",
+  "A settings form that posts with a native `form` or `FormData`: the selected value submits under `name`.",
+  "A choice inside a `Field` that needs the group label, description and error wired to it."
+ ],
+ "avoidWhen": [
+  "Options that need an icon, a description and a card surface → use `RadioCards`.",
+  "More than about seven options, or options loaded on demand → use `Select`.",
+  "A single on/off setting → use `Switch` or `Checkbox`.",
+  "Several options that may all be on at once → use `Checkbox` items in a `Field.Set`.",
+  "A compact segmented control that switches a view → use `ToggleGroup`."
+ ],
+ "related": [
+  "radio-button` — the circle each item renders; use it alone only when the layout around the circle is fully custom.",
+  "radio-cards` — one choice shown as cards with an icon, a description and an optional tag.",
+  "toggle-group` — a segmented button group for switching views or filters.",
+  "field` — wraps the group with its title, description and error; `Field.Set` with `Field.Legend` names it natively."
+ ],
+ "bestPractices": [
+  "Name the group: put it in a `Field.Set` with a `Field.Legend`, give the `Field` a `Field.Title`, or set `aria-label` on the root.",
+  "Keep labels short and parallel, and order options by likelihood or by a natural sequence.",
+  "Preselect a sensible option when one exists; leave it empty only when the person must choose deliberately, and then set `required`.",
+  "Use `orientation=\"horizontal\"` only for two or three short options; longer lists read better stacked.",
+  "Set `name` whenever the form posts natively; without it the radios share a generated name that is still submitted."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every option and applies the disabled tokens."
+  },
+  {
+   "name": "required",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit."
+  },
+  {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the group invalid: sets `aria-invalid` on the group and on every radio."
+  },
+  {
+   "name": "modelValue",
+   "type": "string | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The `RadioGroup.Item`s."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const cycle = ref('monthly')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"cycle\"\n    name=\"billing-cycle\"\n    aria-label=\"Billing cycle\"\n  >\n    <RadioGroup.Item value=\"monthly\">Monthly</RadioGroup.Item>\n    <RadioGroup.Item value=\"yearly\">Yearly, two months free</RadioGroup.Item>\n    <RadioGroup.Item\n      value=\"contract\"\n      disabled\n    >\n      Annual contract\n    </RadioGroup.Item>\n  </RadioGroup>\n</template>"
+  },
+  {
+   "name": "Horizontal",
+   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const protocol = ref('https')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"protocol\"\n    name=\"protocol\"\n    orientation=\"horizontal\"\n    aria-label=\"Protocol\"\n  >\n    <RadioGroup.Item value=\"http\">HTTP</RadioGroup.Item>\n    <RadioGroup.Item value=\"https\">HTTPS</RadioGroup.Item>\n    <RadioGroup.Item value=\"both\">Both</RadioGroup.Item>\n  </RadioGroup>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import RadioGroup from '@aziontech/webkit/radio-group'\n  import { ref } from 'vue'\n\n  const plan = ref('pro')\n</script>\n\n<template>\n  <RadioGroup\n    v-model=\"plan\"\n    name=\"plan\"\n    disabled\n    aria-label=\"Plan\"\n  >\n    <RadioGroup.Item value=\"free\">Free</RadioGroup.Item>\n    <RadioGroup.Item value=\"pro\">Pro</RadioGroup.Item>\n    <RadioGroup.Item value=\"enterprise\">Enterprise</RadioGroup.Item>\n  </RadioGroup>\n</template>"
+  }
+ ],
+ "docs": "components/radio-group.md"
+}

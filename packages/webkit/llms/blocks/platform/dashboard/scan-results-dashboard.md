@@ -759,7 +759,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     label="Held deliveries"
                     href="#held"
                     size="small"
-                    :show-icon="false"
                   />
                 </div>
                 <div class="flex flex-col items-start gap-(--spacing-xxs)">
@@ -772,7 +771,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     label="Early delivery alerts"
                     href="#alerts"
                     size="small"
-                    :show-icon="false"
                   />
                 </div>
               </div>
@@ -802,7 +800,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     placeholder="Search by name or submitter"
                     aria-label="Search by name or submitter"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -885,8 +883,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 enable-sorting
                 paginated
                 :page-size="10"
-                :rows-per-page-options="[10, 25, 50]"
-                header-kind="compact"
+                :page-size-options="[10, 25, 50]"
+                density="compact"
                 bordered
                 :loading="loading"
               >

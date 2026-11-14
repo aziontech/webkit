@@ -119,12 +119,12 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Actions
 
-- [Button](components/button.md): Interactive control for user actions.
+- [Button](components/button.md): The labelled control that triggers an action.
 - [ButtonGroup](components/button-group.md): A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group.
 - [ButtonHighlight](components/button-highlight.md): Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button).
 - [CopyButton](components/copy-button.md): Icon-only control that copies a string to the clipboard and briefly confirms success.
 - [CopyPromptButton](components/copy-prompt-button.md): The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Curso…
-- [IconButton](components/icon-button.md): Interactive control for user actions.
+- [IconButton](components/icon-button.md): A square control that triggers an action with a glyph and no visible text: close, refresh, delete, more.
 - [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
 - [SearchTrigger](components/search-trigger.md): The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`).
 - [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array (`model` is its deprecated name until 7.0).
@@ -172,11 +172,11 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Content
 
 - [Accordion](components/accordion.md): A vertically stacked set of disclosure items: each item has a clickable header that expands or collapses its content panel.
-- [Avatar](components/avatar.md): Displays content or metadata in the UI.
+- [Avatar](components/avatar.md): Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name.
 - [Badge](components/badge.md): Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding.
 - [Brand](components/brand.md): The Azion brand logo, rendered as an inline SVG lockup.
 - [BrowserFrame](components/browser-frame.md): A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand.
-- [Card](components/card.md): Displays content or metadata in the UI.
+- [Card](components/card.md): A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes.
 - [CardPricing](components/card-pricing.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
 - [Currency](components/currency.md): Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string ea…
 - [FeatureList](components/feature-list.md): The features a plan, product or upgrade includes, each behind a check mark, in one or two columns.
@@ -223,7 +223,6 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
 - [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
 - [DocCodeGroup](components/doc-code-group.md): One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface.
-- [DocCta](components/doc-cta.md): > **@deprecated since 6.0 — use `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`) instead.
 - [DocFrame](components/doc-frame.md): The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset.
 - [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
 - [DocHero](components/doc-hero.md): The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt…
@@ -278,6 +277,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
 - [RadioButton](components/radio-button.md): Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper).
 - [RadioCards](components/radio-cards.md): Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers).
+- [RadioGroup](components/radio-group.md): RadioGroup picks exactly one value from a short list of labelled options shown at once.
 - [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
 - [Select](components/select.md): Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
@@ -345,19 +345,19 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DropdownMenu](components/dropdown-menu.md): Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections.
 - [Link](components/link.md): Helps users move between views or sections.
 - [Menu](components/menu.md): A vertical, hierarchical navigation menu.
-- [NavigationMenu](components/navigation-menu.md): Helps users move between views or sections.
+- [NavigationMenu](components/navigation-menu.md): The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus).
 - [PageTabs](components/page-tabs.md): The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-change…
 - [Stepper](components/stepper.md): A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots.
-- [Tabs](components/tabs.md): Helps users move between views or sections.
+- [Tabs](components/tabs.md): Switches between peer views of one page or panel, showing one at a time: Overview, Settings and Logs on a resource page.
 - [Wizard](components/wizard.md): A multi-step create flow in one surface.
 
 ## Components: Overlay
 
 - [Command](components/command.md): Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions.
-- [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title with a close button, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary…
+- [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit).
 - [Dialog](components/dialog.md): Modal surface above the page, built on the shared Panel shell.
-- [Drawer](components/drawer.md): Layered surface above the page (modal, drawer, menu).
-- [Panel](components/panel.md): Layered surface above the page (modal, drawer, menu).
+- [Drawer](components/drawer.md): A panel that slides in from an edge of the screen and keeps the page behind it in view.
+- [Panel](components/panel.md): The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions.
 - [Popover](components/popover.md): Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a fl…
 - [Tooltip](components/tooltip.md): Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it.
 
@@ -424,7 +424,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 ## Components: Utilities
 
-- [Spinner](components/spinner.md): Shared visual utility used by other components.
+- [Spinner](components/spinner.md): A small rotating mark that says work is in progress, for a row, a log line or a custom control that has no loading state of its own.
 - [WebkitProvider](components/webkit-provider.md): Sets the language and text direction of every WebKit component below it.
 
 ## Optional

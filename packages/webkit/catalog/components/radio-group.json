@@ -1,0 +1,28 @@
+{
+ "purpose": "RadioGroup picks exactly one value from a short list of labelled options shown at once. The root is a `radiogroup` that owns the value (`v-model`), the shared form `name`, the group `disabled` / `required` / `invalid` state and the layout axis, and hands them to every `RadioGroup.Item` through `provide`/`inject`; each item draws the `RadioButton` circle beside its label. Because the items are native radios that share one `name`, the group is a single tab stop and the arrow keys move the selection, as the APG radio group pattern asks, with no wiring by the consumer. It differs from `RadioButton`, a bare circle the consumer groups by hand, and from `RadioCards`, which shows each option as a card with an icon and a description.",
+ "useWhen": [
+  "A required choice of one option among two to seven, where every option should stay visible (billing cycle, region, notification channel).",
+  "A settings form that posts with a native `form` or `FormData`: the selected value submits under `name`.",
+  "A choice inside a `Field` that needs the group label, description and error wired to it."
+ ],
+ "avoidWhen": [
+  "Options that need an icon, a description and a card surface → use `RadioCards`.",
+  "More than about seven options, or options loaded on demand → use `Select`.",
+  "A single on/off setting → use `Switch` or `Checkbox`.",
+  "Several options that may all be on at once → use `Checkbox` items in a `Field.Set`.",
+  "A compact segmented control that switches a view → use `ToggleGroup`."
+ ],
+ "related": [
+  "radio-button` — the circle each item renders; use it alone only when the layout around the circle is fully custom.",
+  "radio-cards` — one choice shown as cards with an icon, a description and an optional tag.",
+  "toggle-group` — a segmented button group for switching views or filters.",
+  "field` — wraps the group with its title, description and error; `Field.Set` with `Field.Legend` names it natively."
+ ],
+ "bestPractices": [
+  "Name the group: put it in a `Field.Set` with a `Field.Legend`, give the `Field` a `Field.Title`, or set `aria-label` on the root.",
+  "Keep labels short and parallel, and order options by likelihood or by a natural sequence.",
+  "Preselect a sensible option when one exists; leave it empty only when the person must choose deliberately, and then set `required`.",
+  "Use `orientation=\"horizontal\"` only for two or three short options; longer lists read better stacked.",
+  "Set `name` whenever the form posts natively; without it the radios share a generated name that is still submitted."
+ ]
+}

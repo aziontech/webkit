@@ -1,6 +1,6 @@
 # Card
 
-> Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/card/`.
+> A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 
 - Import: `import Card from '@aziontech/webkit/card'`
 - Category: content · Surface: product · Structure: monolithic

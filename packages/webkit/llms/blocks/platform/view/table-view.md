@@ -458,7 +458,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                       :more="
                         row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))
                       "
-                      :more-noun="{ one: 'domain', other: 'domains' }"
+                      :noun="{ one: 'domain', other: 'domains' }"
                       copyable
                     />
                   </template>
@@ -484,7 +484,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                           value="deploy"
                           label="Deploy"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-cloud-upload"
                               aria-hidden="true"
@@ -494,7 +494,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                           value="view"
                           label="View details"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-eye"
                               aria-hidden="true"
@@ -504,7 +504,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                           value="duplicate"
                           label="Clone"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-clone"
                               aria-hidden="true"
@@ -516,7 +516,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                           value="delete"
                           label="Delete"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-trash"
                               aria-hidden="true"

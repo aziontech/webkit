@@ -35,7 +35,6 @@
 | --- | --- | --- | --- | --- |
 | `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
-| `label` | `string` | `''` | false | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty. |
 | `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 

@@ -22,7 +22,7 @@
 
 - A count or a very short label attached to another element → use `badge`.
 - A category or status chip with an optional icon → use `tag`.
-- A page or section notice with copy and actions → use `message`.
+- A page or section notice with copy and actions → use `alert`.
 - Measurable progress → use `progress`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false | Severity token driving the status dot color. |
+| `severity` | `Severity \| 'alt'` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger' \| 'alt'`)` | `'success'` | false | Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`). |
 | `loading` | `boolean` | `false` | false | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
 | `label` | `string` | `''` | false | Visible label text. Empty uses the locale catalog (`Status`). |
 

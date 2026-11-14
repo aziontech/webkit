@@ -15,7 +15,7 @@
 ## Do
 
 - Write each `label` as period plus state ("Nov 3 · Partial outage"), so the readout stands alone.
-- Leave periods with no data without a status; they render neutral rather than pretending to be healthy.
+- Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.
 - Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.
 - Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much.
 
@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `TrackerItem[]` | `[]` | false | One block per period, oldest first; each item is `{ id?: string; status?: ChartStatus; label: string }`. No status renders a neutral no-data block. The item field `severity` is the same under its old name, **@deprecated since 6.0 — use `status`. Removed in 7.0.** (it is typed `ChartStatus`), read when `status` is unset. |
+| `items` | `TrackerItem[]` | `[]` | false | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. |
 | `loading` | `boolean` | `false` | false | Renders a Skeleton strip in place of the blocks. |
 | `error` | `string` | `''` | false | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the strip. |
@@ -96,10 +96,10 @@
       timeZone: 'UTC'
     })
     if (index === DAYS - 1) return { id, label: `${day} · No data` }
-    if (index === OUTAGE_DAY) return { id, status: 'danger', label: `${day} · Partial outage` }
+    if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }
     if (index === DEGRADED_DAY)
-      return { id, status: 'warning', label: `${day} · Degraded performance` }
-    return { id, status: 'success', label: `${day} · Operational` }
+      return { id, severity: 'warning', label: `${day} · Degraded performance` }
+    return { id, severity: 'success', label: `${day} · Operational` }
   })
 </script>
 

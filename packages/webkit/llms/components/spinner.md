@@ -1,6 +1,6 @@
 # Spinner
 
-> Shared visual utility used by other components. Lives at `packages/webkit/src/components/utils/spinner/`.
+> A small rotating mark that says work is in progress, for a row, a log line or a custom control that has no loading state of its own. It is decorative by default; with an `aria-label` it becomes a `status` region that announces the work, and it stops rotating under reduced motion.
 
 - Import: `import Spinner from '@aziontech/webkit/spinner'`
 - Category: utils · Surface: product · Structure: monolithic

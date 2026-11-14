@@ -70,20 +70,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "Two-way value (`v-model`)."
-  },
-  {
-   "name": "activeStep",
-   "type": "number",
-   "default": "0",
-   "required": "false",
-   "doc": "Two-way value (`v-model:activeStep`)."
   }
  ],
  "events": [
   {
    "name": "next",
    "payload": "(event: MouseEvent, step: number)",
-   "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to `activeStep`. Not fired by Previous or by rail jumps, which only go back."
+   "notes": "Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only go back."
   },
   {
    "name": "submit",

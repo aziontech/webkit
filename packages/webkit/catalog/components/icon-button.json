@@ -1,5 +1,5 @@
 {
- "purpose": "Interactive control for user actions. Lives at `packages/webkit/src/components/actions/icon-button/`.",
+ "purpose": "A square control that triggers an action with a glyph and no visible text: close, refresh, delete, more. It shares the variants, sizes and loading state of `Button`, takes its accessible name from `aria-label`, can swap between two icons in place, and renders as an anchor when `href` is set.",
  "useWhen": [
   "Compact actions in toolbars, table rows, card headers and overlay close controls where the glyph is widely understood (close, refresh, delete, more).",
   "Swapping between two icons in place (copy to check, show to hide), with `iconTransition` animating the change.",

@@ -25,7 +25,7 @@
 ## Don’t
 
 - To space two elements inside a section → use the layout's own `gap-(--spacing-*)` utility.
-- To draw a single separating line with no air → use `divider` instead.
+- To draw a single separating line with no air → use `separator` instead.
 - When the gap must hold content (a headline, a CTA) → use `section-title`, or a `frame-box` you fill yourself.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

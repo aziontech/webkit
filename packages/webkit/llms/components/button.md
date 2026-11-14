@@ -1,6 +1,6 @@
 # Button
 
-> Interactive control for user actions. Lives at `packages/webkit/src/components/actions/button/`.
+> The labelled control that triggers an action. `kind` ranks the action in its view (one `primary`, the rest `secondary`, `outlined`, `transparent`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
 - Import: `import Button from '@aziontech/webkit/button'`
 - Category: actions · Surface: product · Structure: monolithic
@@ -45,7 +45,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | `—` | true | Visible label text. Use `IconButton` for icon-only controls. |
+| `label` | `string` | `''` | false | Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false | Visual variant. `link` draws an inline text action in the link colour, with no box. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
@@ -67,6 +67,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
+| `default` | — | The visible label, as shadcn and Radix take children; falls back to `label`. Plain text keeps the button's typography. |
 | `prefix` | — | A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition="trailing"`, so a brand mark and a trailing chevron can share one control. |
 
 ## Assets

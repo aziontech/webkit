@@ -528,7 +528,6 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       :label="FUNCTION.name"
                       :href="`/functions/${FUNCTION.id}`"
                       size="small"
-                      :show-icon="false"
                     />
                   </Tooltip>
                 </div>
@@ -578,19 +577,19 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   </DropdownMenu.Trigger>
 
                   <DropdownMenu.Group label="Recent invocations">
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       v-for="option in runs"
                       :key="option.id"
                       :value="option.id"
                       :label="option.id"
                       :selected="option.id === run.id"
                     >
-                      <template #right>
+                      <template #trailing>
                         <span class="text-label-sm text-(--text-muted)">
                           {{ option.status }} · {{ option.started }}
                         </span>
                       </template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
 
@@ -607,28 +606,28 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   </DropdownMenu.Trigger>
 
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="events"
                       label="Open in Real-Time Events"
                     >
-                      <template #left>
+                      <template #leading>
                         <i
                           class="ai ai-real-time-events"
                           aria-hidden="true"
                         />
                       </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
                       value="settings"
                       label="Function settings"
                     >
-                      <template #left>
+                      <template #leading>
                         <i
                           class="pi pi-cog"
                           aria-hidden="true"
                         />
                       </template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </div>

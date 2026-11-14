@@ -43,7 +43,7 @@ Three `Card`s with `:padded="false"`, one per step, each led by a round step num
 
 ### D. Commands — `CodeBlock` (required)
 
-One `CodeBlock` per step with `:show-line-numbers="false"` and a `copy-aria-label` that names the step. A step with alternatives (npm, yarn, pnpm, brew) carries them as tabs of the same block; a workflow file shows its `fileName`.
+One `CodeBlock` per step with `:line-numbers="false"` and a `copy-aria-label` that names the step. A step with alternatives (npm, yarn, pnpm, brew) carries them as tabs of the same block; a workflow file shows its `fileName`.
 
 ## Do
 
@@ -274,7 +274,7 @@ jobs:
                 <div class="mt-(--spacing-xxs) min-w-0">
                   <CodeBlock
                     :tabs="step.tabs"
-                    :show-line-numbers="false"
+                    :line-numbers="false"
                     :copy-aria-label="`Copy the commands for ${step.title}`"
                     class="w-full"
                   />

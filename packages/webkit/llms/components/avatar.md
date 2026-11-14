@@ -1,6 +1,6 @@
 # Avatar
 
-> Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/avatar/`.
+> Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread.
 
 - Import: `import Avatar from '@aziontech/webkit/avatar'`
 - Category: content · Surface: product · Structure: monolithic

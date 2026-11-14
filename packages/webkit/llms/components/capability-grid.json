@@ -78,13 +78,6 @@
    "doc": "Second button under the section title, `outlined`; same shape. Shown only with a label and a link."
   },
   {
-   "name": "actions",
-   "type": "CapabilityGridAction[]",
-   "default": "[]",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined."
-  },
-  {
    "name": "anchor",
    "type": "string",
    "default": "''",

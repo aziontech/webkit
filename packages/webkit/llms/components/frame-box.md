@@ -22,7 +22,7 @@
 ## Don’t
 
 - For a card-shaped surface with padding, a header and a footer → use `card` instead.
-- For a single separating line between two blocks → use `divider` instead.
+- For a single separating line between two blocks → use `separator` instead.
 - For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job.
 - Built to be personalized (style seam): any class is accepted on the tag.
 

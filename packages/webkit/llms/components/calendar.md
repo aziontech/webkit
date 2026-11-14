@@ -45,6 +45,8 @@
 | `min` | `Date \| undefined` | `undefined` | false | Earliest selectable date; earlier days render disabled. |
 | `max` | `Date \| undefined` | `undefined` | false | Latest selectable date; later days render disabled. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger, grid, and all controls, applying disabled tokens. |
+| `invalid` | `boolean` | `false` | false | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too. |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `placeholder` | `string` | `''` | false | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`). |
 | `presets` | `CalendarPresetItem[]` | `[]` | false | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showFields` | `boolean` | `true` | false | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
@@ -92,12 +94,12 @@
 
 ## v-model
 
-| Model          | Type                            | Default     | Emits               | Notes                                                                                                                                                                                         |
-| -------------- | ------------------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
-| `v-model:open` | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts closed.                                              |
-| `v-model:time-zone` | `string`                   | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
-| `v-model:timezone` | `string`                    | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                             |
+| Model               | Type                            | Default     | Emits               | Notes                                                                                                                                                                                            |
+| ------------------- | ------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model`           | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.    |
+| `v-model:open`      | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`.                                       |
+| `v-model:time-zone` | `string`                        | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
+| `v-model:timezone`  | `string`                        | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                                 |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
@@ -110,8 +112,9 @@
 - `data-size` mirrors the `size` prop on the root, trigger, and each day cell (`small` | `medium` | `large`)
 - `data-selected` mirrors a fully-selected day cell (single value, or a range endpoint) and an active preset
 - `data-band` on each day cell drives the connected range highlight: `none` | `single` | `start` | `middle` | `end`
-- `data-today` marks the current date; `data-outside` marks an adjacent-month day cell
+- `data-today` marks the current date, taken from the nearest `WebkitProvider` `now` when set (so a server render and the hydrating client agree), else the current time; the grid also opens on that month when there is no value; `data-outside` marks an adjacent-month day cell
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
 - When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
 - In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box.
@@ -121,7 +124,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and `focus-visible:ring-offset-(--bg-surface-raised)` inside the popover. The Start/End date+time fields reuse `input`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field, so the ring gap matches the raised popover the fields sit on.
 - Field labels: each visible Start / End / Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Start time` / `End time` / `Time`), so every field has a programmatic accessible name.
-- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible window when crossing its first/last month), `Enter`/`Space` selects, `PageUp`/`PageDown` change month. Apply, Clear, presets, fields, and the timezone control are all reachable by `Tab`.
+- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible window when crossing its first/last month), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. Tests: `calendar.test.ts` › Home and End, Shift+PageDown and Shift+PageUp. Apply, Clear, presets, fields, and the timezone control are all reachable by `Tab`.
 - ARIA: each month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; selected cells set `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the popover is labelled by the trigger; decorative icons are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.

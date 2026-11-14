@@ -19,7 +19,7 @@
 ## Don’t
 
 - For several lines or output — use `CodeBlock` or `CliTerminal`.
-- For an editable field — use `InputText`.
+- For an editable field — use `Input`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

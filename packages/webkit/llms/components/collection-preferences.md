@@ -40,7 +40,8 @@
 | `container` | `'dialog' \| 'drawer'` | `'dialog'` | false | Opens in a centered dialog or a side drawer. |
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
-| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 | `preferences` | `CollectionPreferencesValue` | `—` | false | Two-way value (`v-model:preferences`). |
 
 ## Events
@@ -58,7 +59,7 @@
 
 ## v-model
 
-- **`v-model:open`** — `boolean`, default `false`. Whether the panel is open; the trigger, Confirm, Cancel, the close button and `Esc` update it.
+- **`v-model:open`** — `boolean`, default `undefined`, via `defineModel('open')`. Whether the panel is open; the trigger, Confirm, Cancel, the close button and `Esc` update it. Unbound, the panel keeps it itself and starts at `defaultOpen`.
 - **`v-model:preferences`** — `CollectionPreferencesValue`, default `{}`, via `defineModel('preferences')`. Set on Confirm with the sections shown (`update:preferences`). Unbound, the panel keeps the confirmed values itself, so it reopens on them.
 
 ## States

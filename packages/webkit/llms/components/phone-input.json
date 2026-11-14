@@ -85,7 +85,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "HTML name for the internal input (form + vee-validate integration)."
+   "doc": "Form field name. Set, a hidden input submits the full E.164 number (dial code followed by the digits, empty while there are none) under this name; the visible input carries no name, so a native `form` never posts a national number without its country."
   },
   {
    "name": "searchPlaceholder",

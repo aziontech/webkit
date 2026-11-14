@@ -43,13 +43,6 @@
    "doc": "In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link."
   },
   {
-   "name": "id",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty."
-  },
-  {
    "name": "label",
    "type": "string",
    "default": "''",

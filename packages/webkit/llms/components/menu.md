@@ -224,7 +224,7 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`, `disabled`
 - `data-state` values: `open` | `closed` — on `Sub`, `SubTrigger` and `SubContent`. A `Group` has none: it never closes.
 - `data-kind` values: `inline` | `drill` — on `SubTrigger` and `SubContent`. On a trigger they sit on its root, which is always the row **box** holding its label control and its arrow.
-- `data-selected` mirrors the `selected` prop on `Menu.Item`
+- `data-selected` mirrors the `selected` prop on `Menu.Item` (on the `li` and on its link or button, which also carries `data-disabled` and, with an `icon`, `data-icon`; the row styles switch on these, not on class bindings)
 - `data-disabled` mirrors the `disabled` prop on `Menu.Item` and `SubTrigger` (on the row box and on its label alike, so a test can read it from either)
 - `data-level` on `SubContent` — nesting depth, drives the indent step
 - `data-motion` values: `push` | `pop` | `none` — on a drill level, so the direction of the slide is a Tailwind `data-[motion=…]` variant instead of a `:class` ternary (see Motion)

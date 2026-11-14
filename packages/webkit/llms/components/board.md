@@ -311,14 +311,14 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
           <ChartCard.Header>
             <ChartCard.DragHandle :aria-label="'Move ' + cards[item.id].title" />
             <ChartCard.Title>{{ cards[item.id].title }}</ChartCard.Title>
-            <ChartCard.Controls v-if="editing">
+            <ChartCard.Action v-if="editing">
               <Tag
                 :label="item.span + '/12'"
                 severity="secondary"
                 size="small"
                 icon="pi pi-arrows-h"
               />
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart

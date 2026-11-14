@@ -1,5 +1,5 @@
 {
- "purpose": "Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tabs/`.",
+ "purpose": "Switches between peer views of one page or panel, showing one at a time: Overview, Settings and Logs on a resource page. The tab row scrolls with edge fades when it outgrows its container, items can be closable or marked dirty, and the list follows the WAI-ARIA tabs pattern with arrow-key navigation.",
  "useWhen": [
   "A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).",
   "The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.",

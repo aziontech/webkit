@@ -112,6 +112,20 @@
    "doc": "Disables the trigger and the step buttons."
   },
   {
+   "name": "invalid",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too."
+  },
+  {
+   "name": "defaultOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
    "name": "size",
    "type": "'small' | 'medium' | 'large'",
    "default": "'medium'",
@@ -131,6 +145,13 @@
    "default": "''",
    "required": "false",
    "doc": "Two-way value (`v-model:timeZone`)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [],

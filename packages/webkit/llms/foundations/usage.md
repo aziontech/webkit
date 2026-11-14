@@ -32,7 +32,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
   (`@aziontech/webkit/use-console-layout`); a body that also renders on its own calls
-  `useConsoleLayout({ optional: true })`, which returns `null` outside a layout. Bind `v-model:navigation-expanded` to persist the rail or
+  `useConsoleLayout({ optional: true })`, which returns `null` outside a layout. Bind `v-model:navigation-open` to persist the rail or
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
   trail, control crumb included, with `ConsoleLayout.Breadcrumbs`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
@@ -71,7 +71,7 @@ keeping to the guidelines. Only when no pattern fits, compose from components (b
 ## Headers and the docs home — never hand-build these
 
 - **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
-  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.Right`, opening a `Command` palette;
+  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.End`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
   binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
   their palette (rule `webkit-header-search`, lint `webkit/header-search-trigger`).

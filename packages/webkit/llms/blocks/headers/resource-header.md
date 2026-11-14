@@ -30,7 +30,7 @@ The top bar of every page inside the persistent console shell. It sits in the co
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Console"` (the label every console bar uses), in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Console"` (the label every console bar uses), in the content zone, never above the rail. Start cluster in `GlobalHeader.Start`, empty `GlobalHeader.Center`, actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger — `IconButton` (required)
 
@@ -130,7 +130,7 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
 <template>
   <div class="@container w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
           <span class="contents md:hidden">
             <Tooltip
@@ -158,9 +158,9 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
             </a>
           </GlobalHeader.Brand>
         </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <SearchTrigger
           collapsible
           @open="searchOpen = true"
@@ -223,55 +223,55 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
               </div>
             </template>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="settings"
               label="Account settings"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-cog"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
-            <DropdownMenu.Option
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
               value="personal-tokens"
               label="Personal tokens"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-key"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="docs"
               label="Docs"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-book"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
-            <DropdownMenu.Option
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
               value="logout"
               label="Log out"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-sign-out"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <Command v-model:open="searchOpen">
       <Command.Input placeholder="Search" />

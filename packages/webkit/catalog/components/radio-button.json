@@ -11,7 +11,7 @@
   "The options are many or loaded from data → use `select`."
  ],
  "related": [
-  "radio-group` (not shipped yet): one RadioButton per option still binds the same `v-model` and `name` by hand; RadioCards is the shipped group.",
+  "radio-group` — the group for a list of labelled options: it shares the `v-model`, the `name` and the Field state with every `RadioGroup.Item`, each of which draws this circle. Reach for a bare RadioButton only when the layout around the circle is fully custom.",
   "field` — inside a `Field`, the input takes the field's id, description, `invalid` (`aria-invalid`), `required` and `disabled`. A horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.",
   "radio-cards` — horizontal grid of selectable cards with its own model.",
   "checkbox` — the multi-pick counterpart.",
@@ -20,7 +20,7 @@
  "bestPractices": [
   "Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.",
   "value` and `modelValue` are strings; map numeric or object ids to strings before binding.",
-  "Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.",
+  "Give each radio an accessible name: point a `label` element's `for` at its `id`, wrap it in a `Field`, or pass `aria-label`.",
   "Wrap the group in a `fieldset` with a `legend` so the question itself is announced."
  ]
 }

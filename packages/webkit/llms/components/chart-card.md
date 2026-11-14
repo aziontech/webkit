@@ -92,7 +92,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction) and, **@deprecated since 6.0 — use `ChartCard.Action`. Removed in 7.0.**, as `ChartCard.Controls`; both are the same component, imported alone from `@aziontech/webkit/chart-card-controls`.
+- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction); imported alone from `@aziontech/webkit/chart-card-controls`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
@@ -101,7 +101,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
   - Slots: _none_.
 - `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
-  - Props: `padded?: boolean` (default `true` — the inner padding; `false` for an edge-to-edge plot, the same name and polarity as `card`), `flush?: boolean` (default `false`; **@deprecated since 6.0 — use `:padded="false"`. Removed in 7.0.** — no inner padding).
+  - Props: `padded?: boolean` (default `true` — the inner padding; `false` for an edge-to-edge plot, the same name and polarity as `card`).
   - Events: _none_.
   - Slots: `default` — the chart.
 - `chart-card-footer/chart-card-footer.vue` — an optional row under the content, hairline above it.
@@ -125,7 +125,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Visual states: `default`, `dragging` (the card dims while it travels), `resizing`, `focus-visible` on each handle
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
-- `data-flush` on the content is set when the padding is off (`padded` false, or the deprecated `flush`)
+- `data-flush` on the content is set when the padding is off (`padded` false)
 - Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
 
 ## Accessibility

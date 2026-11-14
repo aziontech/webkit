@@ -742,7 +742,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               text="Unique users who reached each step in the period, in order, with the share lost between steps."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu
               placement="bottom-end"
               @select="(_event, value) => onCardOption('conversion-funnel', value)"
@@ -756,14 +756,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   :disabled="loading || !view.steps.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <div
@@ -800,7 +800,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :data="view.steps"
               :columns="stepColumns"
               row-key="id"
-              header-kind="compact"
+              density="compact"
               bordered
               :loading="loading"
             >
@@ -835,7 +835,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               text="Share of each weekly sign-up cohort still active in each week since sign-up."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu
               placement="bottom-end"
               @select="(_event, value) => onCardOption('retention-by-cohort', value)"
@@ -849,14 +849,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   :disabled="loading || !view.retention.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <Chart
@@ -896,7 +896,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               text="Users who signed up each week, and the share of them active in each week since. A dash marks a week that has not ended yet."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu
               placement="bottom-end"
               @select="(_event, value) => onCardOption('weekly-cohorts', value)"
@@ -910,21 +910,21 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   :disabled="loading || !view.cohorts.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <TableRoot
             :data="view.cohorts"
             :columns="cohortColumns"
             row-key="id"
-            header-kind="compact"
+            density="compact"
             bordered
             :loading="loading"
           >

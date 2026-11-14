@@ -35,7 +35,8 @@
 | `reasons` | `{ value: string; label: string }[]` | `[]` | false | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
 | `loading` | `boolean` | `false` | false | The feedback is being sent: Send feedback shows a spinner and the form is locked. |
 | `title` | `string` | `''` | false | Dialog title. Empty uses the locale catalog (`What went wrong?`). |
-| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -45,9 +46,9 @@
 
 ## v-model
 
-| Model          | Type      | Default | Emits         | Notes                                                              |
-| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------ |
-| `v-model:open` | `boolean` | `false` | `update:open` | Opens the dialog; the reason and details reset each time it opens. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Opens the dialog; the reason and details reset each time it opens. Unbound, the dialog keeps it itself and starts at `defaultOpen`. |
 
 ## States
 

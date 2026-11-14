@@ -452,7 +452,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             v-model="form.kind"
                             :value="option.value"
                             name="domain-kind"
-                            :input-id="'domain-kind-' + option.value"
+                            :id="'domain-kind-' + option.value"
                           />
                           <Field.Content>
                             <Field.Title>{{ option.label }}</Field.Title>

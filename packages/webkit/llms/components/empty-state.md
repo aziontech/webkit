@@ -22,7 +22,7 @@
 ## Don’t
 
 - The data is still loading → use `skeleton`.
-- An inline warning or error about content that is present → use `message`.
+- An inline warning or error about content that is present → use `alert`.
 - The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
