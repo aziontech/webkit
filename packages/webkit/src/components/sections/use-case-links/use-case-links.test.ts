@@ -60,6 +60,11 @@ describe('UseCaseLinks', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(UseCaseLinks, { props: { title: TITLE, items, anchor: 'band' } })
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'band')
+  })
+
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(UseCaseLinks, {
       props: { title: TITLE, items },

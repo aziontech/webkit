@@ -53,6 +53,13 @@ describe('HeroWithOpening', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(HeroWithOpening, {
+      props: { title: LONG_TITLE, anchor: 'band' }
+    })
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'band')
+  })
+
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(HeroWithOpening, {
       props: { title: LONG_TITLE },

@@ -139,6 +139,8 @@
     copyPage?: ArticleBodyCopyPage
     /** URL templates of the assistants the copy-page menu opens, keyed by menu value; `{prompt}` is replaced by the encoded prompt. */
     assistants?: Record<string, string>
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -149,7 +151,8 @@
     share: undefined,
     community: undefined,
     copyPage: undefined,
-    assistants: () => ({})
+    assistants: () => ({}),
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -360,6 +363,8 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
   >
     <SectionContainer max-width="site">

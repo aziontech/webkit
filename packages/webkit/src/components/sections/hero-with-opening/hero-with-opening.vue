@@ -59,6 +59,8 @@
     secondaryAction?: HeroWithOpeningAction
     /** The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. */
     items?: HeroWithOpeningItem[]
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -69,7 +71,8 @@
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -99,6 +102,8 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
   >
     <template v-if="title">
