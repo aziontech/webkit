@@ -142,22 +142,22 @@
       "tool": "patterns",
       "lang": "en",
       "query": "billing",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "invoices",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "subscription",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card", "platform/account/change-plan-drawer"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
@@ -452,8 +452,8 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "assinatura",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card", "platform/account/change-plan-drawer"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
@@ -564,8 +564,8 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "faturas",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
@@ -718,8 +718,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "facturación",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
@@ -788,8 +788,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "suscripción",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card", "platform/account/change-plan-drawer"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
@@ -893,8 +893,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "página de facturación",
-      "top1": "platform/account/payment-method-card",
-      "top3": ["platform/account/payment-method-card"]
+      "top1": "platform/account/billing",
+      "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
       "tool": "patterns",
