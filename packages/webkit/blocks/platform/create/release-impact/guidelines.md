@@ -51,6 +51,10 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
+### Before the review: choosing the Deployment Settings
+
+When the release starts from the settings rather than from a service, a ChooseSettings step comes first, with the same page frame and footer. One sentence says what a Deployment Setting binds and that picking one deploys into everything that uses it. Below it, a large search `Input` counting the settings, and on the end side the number selected with transparent Select all and Clear. The settings are horizontal `Field` choice cards with a `Checkbox`, grouped under a small heading (Your Deployment Settings, Managed): the name with a Shared (warning) or Managed `Tag`, the policy line, up to three environment `Tag`s and a +N `Tag` whose `Tooltip` names the rest (repeated for screen readers), and the workloads it affects, a `Skeleton` while that count loads. An inactive setting cannot be picked: it sits in its own group as a dashed note with an Inactive `Tag`, one sentence and a link to activate it. A search with no match says so with Clear search. Continue (primary) stays disabled, with the reason in the footer hint, until one setting is selected.
+
 ## Do
 
 - Show every resource and dependency with the version that goes out, including the ones the user did not touch.
@@ -70,6 +74,7 @@ A sticky bar: the hint on the start side; on the end side the blocker (if any) w
 
 - **Title:** "Review and deploy". **Commit:** "Deploy release"; in progress "Deploying…".
 - **Confirmation:** "Deploy this release?" and one sentence with the resources, versions and reach.
+- **Choosing settings:** title "Choose Deployment Settings"; search "Search 6 Deployment Settings"; "2 selected", "Select all", "Clear"; workloads "4 workloads affected" or "No workloads deploy with it yet"; no match "No Deployment Settings match this search." with "Clear search"; footer "Select at least one Deployment Setting to continue."
 - **Versions:** "Track latest Ready", "resolves at deploy", "Pin a ready version", tag "Current".
 - **Blockers:** "<name> has no Ready version, so the release cannot be deployed."
 - **Outcome:** "Release deployed." / "The release wasn't deployed." with the cause and that nothing changed in traffic.
@@ -82,10 +87,12 @@ A sticky bar: the hint on the start side; on the end side the blocker (if any) w
 - The include `Switch` has an `aria-label`; its `Tooltip` repeats it for pointer users.
 - The Shared `Tag` sits in a focusable wrapper so its `Tooltip` opens from the keyboard.
 - The Impact region is `aria-busy` while loading and announces it in a `role="status"` line.
+- In ChooseSettings each group is a `role="group"` named by its heading, each choice card is a `label` around its `Checkbox`, the selected count is a polite live region, and a loading workloads count is read as text rather than a bare `Skeleton`.
 - The `ConfirmDialog` traps focus and returns it to Deploy release.
 
 ## States
 
+- ChooseSettings: the step before the review; grouped checkbox choice cards with search, Select all and Clear, a loading workloads count, an inactive setting with its activate link, and Continue disabled until one is selected.
 - Ready: every resource with a version, the impact computed, Tree view.
 - Loading: the impact being computed.
 - Unavailable: the impact could not be read; Retry lands on a truncated list.
