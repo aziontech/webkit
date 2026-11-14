@@ -7,6 +7,7 @@ import ChartCrosshair from './chart-crosshair/chart-crosshair.vue'
 import ChartGrid from './chart-grid/chart-grid.vue'
 import ChartLegend from './chart-legend/chart-legend.vue'
 import ChartLine from './chart-line/chart-line.vue'
+import ChartReference from './chart-reference/chart-reference.vue'
 import ChartScatter from './chart-scatter/chart-scatter.vue'
 import ChartTooltip from './chart-tooltip/chart-tooltip.vue'
 
@@ -18,6 +19,7 @@ interface ChartStatic {
   Bar: typeof ChartBar
   Scatter: typeof ChartScatter
   Brush: typeof ChartBrush
+  Reference: typeof ChartReference
   Crosshair: typeof ChartCrosshair
   Tooltip: typeof ChartTooltip
   Legend: typeof ChartLegend
@@ -31,6 +33,7 @@ Chart.Area = ChartArea
 Chart.Bar = ChartBar
 Chart.Scatter = ChartScatter
 Chart.Brush = ChartBrush
+Chart.Reference = ChartReference
 Chart.Crosshair = ChartCrosshair
 Chart.Tooltip = ChartTooltip
 Chart.Legend = ChartLegend
@@ -45,6 +48,7 @@ export {
   ChartGrid,
   ChartLegend,
   ChartLine,
+  ChartReference,
   ChartScatter,
   ChartTooltip
 }
@@ -60,4 +64,5 @@ export type {
   ChartStatus
 } from '../_lib'
 export type { ChartBarKind } from './chart-bar/chart-bar.vue'
+export type { ChartReferenceSeverity } from './chart-reference/chart-reference.vue'
 export type { ChartAxisKind, ChartOrientation } from './injection-key'

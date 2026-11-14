@@ -29,6 +29,13 @@ export interface ChartMarkRegistration {
   fit?: boolean
 }
 
+export interface ChartReferenceRegistration {
+  low: number
+  high: number
+  label: string
+  band: boolean
+}
+
 export interface ChartContext {
   testId: string
   orientation: Readonly<Ref<ChartOrientation>>
@@ -58,6 +65,7 @@ export interface ChartContext {
   registerMark: (read: () => ChartMarkRegistration) => () => void
   registerAxis: (read: () => ChartAxisKind) => () => void
   registerBrush: () => () => void
+  registerReference: (read: () => ChartReferenceRegistration | null) => () => void
 }
 
 export const ChartInjectionKey: InjectionKey<ChartContext> = Symbol('Chart')

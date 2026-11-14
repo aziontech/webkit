@@ -154,7 +154,10 @@ export const chart = {
   otherSeries: 'Other',
   rangeDraft: 'Selecting from {from} to {to}',
   rangeSelected: 'Selected from {from} to {to}',
-  total: 'Total'
+  total: 'Total',
+  reference: 'Reference',
+  referenceLine: '{label} at {value}.',
+  referenceBand: '{label} from {from} to {to}.'
 } as const
 
 export const chartCard = {

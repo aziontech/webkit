@@ -323,6 +323,10 @@
       "types": "./types/components/chart/chart/chart-line/chart-line.vue.d.ts",
       "default": "./src/components/chart/chart/chart-line/chart-line.vue"
     },
+    "./chart-reference": {
+      "types": "./types/components/chart/chart/chart-reference/chart-reference.vue.d.ts",
+      "default": "./src/components/chart/chart/chart-reference/chart-reference.vue"
+    },
     "./chart-scatter": {
       "types": "./types/components/chart/chart/chart-scatter/chart-scatter.vue.d.ts",
       "default": "./src/components/chart/chart/chart-scatter/chart-scatter.vue"

@@ -4,7 +4,7 @@ category: chart
 structure: composition
 status: implemented
 checksum: abf51e645defc8b3bf3e4ddd926493b92818d4c1cb93f6af25f749512d7afd49
-spec_version: 7
+spec_version: 8
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-14
@@ -14,7 +14,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
+A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Reference`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
 
 ## When to use
 
@@ -25,6 +25,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).
 - How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.
 - A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`.
+- A measure against the limit it must stay under or the range it should stay in — a quota, an SLO, an alert threshold, a normal band: add `Chart.Reference` with a `value` (a line) or `from` and `to` (a band).
 
 ## When NOT to use
 
@@ -53,6 +54,8 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
+- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.
+- Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.
 - Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Usage
@@ -88,6 +91,11 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
     <Chart.Bar :ids="['threat']" />
     <Chart.Line :ids="['blocked']" />
     <Chart.Scatter :ids="['threat']" />
+    <Chart.Reference
+      :value="1500"
+      label="Rate limit"
+      severity="danger"
+    />
     <Chart.Crosshair />
     <Chart.Tooltip />
     <Chart.Legend total />
@@ -138,6 +146,10 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_ (the span flows through the root's `v-model:range`).
   - Slots: _none_.
+- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
+  - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: 'neutral' | 'success' | 'warning' | 'danger' | 'info'` (default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role).
+  - Events: _none_.
+  - Slots: _none_.
 - `chart-crosshair/chart-crosshair.vue` — the hairline at the active index in `var(--chart-crosshair)`.
   - Props: _none_.
   - Events: _none_.
@@ -167,6 +179,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
       ├── chart-bar/chart-bar.vue
       ├── chart-scatter/chart-scatter.vue
       ├── chart-brush/chart-brush.vue
+      ├── chart-reference/chart-reference.vue
       ├── chart-crosshair/chart-crosshair.vue
       ├── chart-tooltip/chart-tooltip.vue
       └── chart-legend/chart-legend.vue
@@ -215,7 +228,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 | Slot            | Scope | Notes                                                                                                                   |
 | --------------- | ----- | ----------------------------------------------------------------------------------------------------------------------- |
-| `default`       | —     | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order.                     |
+| `default`       | —     | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order.          |
 | `empty`         | —     | Replaces the default EmptyState.                                                                                        |
 | `empty-actions` | —     | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error`         | —     | Replaces the default danger Alert.                                                                                      |
@@ -246,25 +259,26 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 ## Tokens
 
-| Region                         | Token (DESIGN.md)                                                                                                           |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| series 1 to 6                  | `var(--chart-series-1)` … `var(--chart-series-6)`                                                                           |
-| folded series                  | `var(--chart-series-other)`                                                                                                 |
-| status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`      |
-| severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)` |
-| gridlines                      | `var(--chart-grid)`                                                                                                         |
-| axis rule                      | `var(--chart-axis)`                                                                                                         |
-| tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                      |
-| brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                              |
-| crosshair                      | `var(--chart-crosshair)`                                                                                                    |
-| tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`         |
-| tooltip label and series names | `.text-label-md`                                                                                                            |
-| tooltip values                 | `.text-label-code-md`                                                                                                       |
-| tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                           |
-| marker ring                    | `var(--bg-surface)`                                                                                                         |
-| tooltip and legend shape       | `var(--shape-elements)`                                                                                                     |
-| spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                    |
-| focus                          | `var(--ring-color)`                                                                                                         |
+| Region                         | Token (DESIGN.md)                                                                                                             |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| series 1 to 6                  | `var(--chart-series-1)` … `var(--chart-series-6)`                                                                             |
+| folded series                  | `var(--chart-series-other)`                                                                                                   |
+| status series                  | `var(--chart-status-danger)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-info)`        |
+| severity series                | `var(--severity-critical)`, `var(--severity-high)`, `var(--severity-medium)`, `var(--severity-low)`, `var(--severity-info)`   |
+| gridlines                      | `var(--chart-grid)`                                                                                                           |
+| axis rule                      | `var(--chart-axis)`                                                                                                           |
+| tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                        |
+| brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                                |
+| crosshair                      | `var(--chart-crosshair)`                                                                                                      |
+| reference line, band and label | `var(--chart-label)` (neutral), `var(--chart-status-success)`, `-warning`, `-danger`, `-info`; label halo `var(--bg-surface)` |
+| tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`           |
+| tooltip label and series names | `.text-label-md`                                                                                                              |
+| tooltip values                 | `.text-label-code-md`                                                                                                         |
+| tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                             |
+| marker ring                    | `var(--bg-surface)`                                                                                                           |
+| tooltip and legend shape       | `var(--shape-elements)`                                                                                                       |
+| spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                      |
+| focus                          | `var(--ring-color)`                                                                                                           |
 
 ## Theme gaps
 
@@ -279,7 +293,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 - A polite live region announces the span while it is drawn (`Selecting from … to …`) and once committed (`Selected from … to …`).
 - A polite live region announces the label and every visible series value at the active index.
 - A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover. Above 1,000 categories the hidden twin keeps an even sample of at most 1,000 rows (the first and last category included) so a 10k-point chart mounts within its runtime budget; every value stays reachable with the arrow keys and the live region, and `tableView` shows every row.
-- Every SVG part is `aria-hidden`; identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
+- Every SVG part is `aria-hidden`; a `Chart.Reference` reaches assistive tech through the chart summary, which appends each reference (`Rate limit at 1.5K.`, `Normal range from 200 to 400.`); identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
 - Legend entries are buttons with `aria-pressed`, at least 24px tall.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
@@ -300,6 +314,9 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
 | `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
 | `chart.total`           | `Total`                                        | —                     |
+| `chart.reference`       | `Reference`                                    | `label` (Reference)   |
+| `chart.referenceLine`   | `{label} at {value}.`                          | —                     |
+| `chart.referenceBand`   | `{label} from {from} to {to}.`                 | —                     |
 
 - Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
 
@@ -319,7 +336,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 
 ## Performance
 
-- Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB gzip (`.size-limit.json`).
+- Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB, `chart-reference` 2 KB gzip (`.size-limit.json`).
 - Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows. `Chart.Scatter` with 10k points mounts and moves the active index within `chart-scatter-10k` (the active point is one overlay dot per series, so the dot list never re-renders on a move), and `Chart.Bar` with 1k categories × 3 series within `chart-bar-1k-x3`; both in `perf-budgets.json`. Moving the active index re-renders only the active marks: each mark keeps its `ids` until their content changes (an inline `:ids` array no longer rebuilds the scales on every render of the chart), the hidden twin is memoized, a line without `markers` looks its active point up by index, and a numeric axis whose positions ascend finds the point under the pointer by binary search. `chart-10k-hover` (three 10k-point series, 40 moves) holds this to its budget.
 - Heavy parts: none; in-house SVG, no chart dependency.
 
@@ -335,6 +352,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.
 - Brush — a stacked event-volume histogram (`Chart.Bar kind="histogram" stacked`) whose selected span filters a log.
+- Threshold — p95 latency with an SLO reference line in `danger` and the normal range as a band (`Chart.Reference`).
 - TooltipTotal — the event-volume histogram coloured from the severity ramp, its tooltip with a Total row and a footer hint (`Chart.Tooltip total` + `#footer`).
 - Loading — `loading`.
 - Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).

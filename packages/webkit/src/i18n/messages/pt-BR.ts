@@ -226,7 +226,10 @@ export const ptBR: Messages = {
     otherSeries: 'Outros',
     rangeDraft: 'Selecionando de {from} a {to}',
     rangeSelected: 'Selecionado de {from} a {to}',
-    total: 'Total'
+    total: 'Total',
+    reference: 'Referência',
+    referenceLine: '{label} em {value}.',
+    referenceBand: '{label} de {from} a {to}.'
   },
   chartCard: {
     resize: 'Redimensionar cartão',

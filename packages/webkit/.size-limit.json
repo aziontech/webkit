@@ -827,7 +827,7 @@
   {
     "name": "chart-root",
     "path": "src/components/chart/chart/chart.vue",
-    "limit": "15.4 KB"
+    "limit": "15.5 KB"
   },
   {
     "name": "chart-line",
@@ -868,6 +868,11 @@
     "name": "chart-legend",
     "path": "src/components/chart/chart/chart-legend/chart-legend.vue",
     "limit": "1.5 KB"
+  },
+  {
+    "name": "chart-reference",
+    "path": "src/components/chart/chart/chart-reference/chart-reference.vue",
+    "limit": "2 KB"
   },
   {
     "name": "chart-scatter",

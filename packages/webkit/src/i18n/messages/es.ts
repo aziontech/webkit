@@ -226,7 +226,10 @@ export const es: Messages = {
     otherSeries: 'Otros',
     rangeDraft: 'Seleccionando de {from} a {to}',
     rangeSelected: 'Seleccionado de {from} a {to}',
-    total: 'Total'
+    total: 'Total',
+    reference: 'Referencia',
+    referenceLine: '{label} en {value}.',
+    referenceBand: '{label} de {from} a {to}.'
   },
   chartCard: {
     resize: 'Redimensionar tarjeta',
