@@ -83,12 +83,12 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "21.25 KB"
+    "limit": "21.4 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/inputs/date-range-picker/date-range-picker.vue",
-    "limit": "33.85 KB"
+    "limit": "34 KB"
   },
   {
     "name": "table-root",
@@ -1342,7 +1342,7 @@
   {
     "name": "schema-form",
     "path": "src/components/inputs/schema-form/schema-form.vue",
-    "limit": "52.5 KB"
+    "limit": "53.3 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1859,7 +1859,7 @@
   {
     "name": "calendar",
     "path": "src/components/inputs/calendar/index.ts",
-    "limit": "21.75 KB"
+    "limit": "21.9 KB"
   },
   {
     "name": "calendar-preset",
