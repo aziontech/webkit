@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 6501ae59b717f70273b3ac9e01d48e9af44525315d49274c6d2dc58622365354
+checksum: 73bf7c17f683a495b62f88f0fbef789d30f6f64060f25b02cfa384d0916136d2
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -51,6 +51,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `Menu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `Menu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as any `navigation` row, at any level or drill level, it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Usage
 
@@ -260,6 +261,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Bundle budget: 66 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 65.0 KB measured, up from 64.3 KB for the page trail; it pulls `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumbs` (0.42 KB measured).
 - Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves, and one post-flush watcher on it and on the rail element scrolls the row into view (one layout read per change); the page trail is a short list of registrations.
+- Development warning: in development only, one `MutationObserver` on the `<main>` and a scan of its `Menu` links against the navigation tree; it is removed from production builds (0.02 KB measured in the root budget for the `<main>` ref).
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).
 
 ## Decisions and open questions

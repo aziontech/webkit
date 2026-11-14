@@ -11,6 +11,7 @@ import PageBreadcrumbsExample from '../../../../examples/console-layout/page-bre
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
 import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
+import Menu from '../../navigation/menu/menu.vue'
 import CommandGroup from '../../overlay/command/command-group/command-group.vue'
 import CommandItem from '../../overlay/command/command-item/command-item.vue'
 import { useConsoleLayout } from './composables/use-console-layout'
@@ -904,5 +905,63 @@ describe('ConsoleLayout — fill page', () => {
   it('has no axe violations', async () => {
     const { container } = render(FillPageExample)
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('ConsoleLayout — duplicate destinations in development', () => {
+  const pageMenu = (href: string) =>
+    h(Menu, {
+      'aria-label': 'Account pages',
+      groups: [
+        {
+          items: [
+            { id: 'page-profile', label: 'Profile', href: '/profile' },
+            { id: 'page-team', label: 'Team members', href }
+          ]
+        }
+      ]
+    })
+
+  const duplicateWarnings = (spy: ReturnType<typeof vi.spyOn>) =>
+    spy.mock.calls
+      .map((call: unknown[]) => String(call[0]))
+      .filter((message: string) => message.includes('webkit-navigation-levels'))
+
+  it('warns once per route when a page Menu repeats a navigation row', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const router = fakeRouter('/account/users')
+      const { getByRole } = mount(
+        {},
+        { router },
+        { default: () => pageMenu('/account/users?tab=2#list') }
+      )
+      await waitFor(() => expect(duplicateWarnings(warn)).toHaveLength(1))
+      const [message] = duplicateWarnings(warn)
+      expect(message).toContain('"Team members" (page Menu)')
+      expect(message).toContain('"Users management" (navigation)')
+      expect(message).toContain('/account/users')
+      expect(message).not.toContain('Profile')
+      getByRole('main').append(document.createElement('span'))
+      await nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(duplicateWarnings(warn)).toHaveLength(1)
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it('stays silent when the page Menu shares no route with the navigation', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const router = fakeRouter('/account/users')
+      const { getByRole } = mount({}, { router }, { default: () => pageMenu('/team') })
+      await waitFor(() => expect(getByRole('main').querySelector('a[href="/team"]')).toBeTruthy())
+      await nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(duplicateWarnings(warn)).toEqual([])
+    } finally {
+      warn.mockRestore()
+    }
   })
 })

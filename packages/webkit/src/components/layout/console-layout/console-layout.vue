@@ -6,6 +6,8 @@
     type FunctionalComponent,
     h,
     isVNode,
+    nextTick,
+    onScopeDispose,
     provide,
     readonly,
     ref,
@@ -201,6 +203,8 @@
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
   const navEl = ref<globalThis.HTMLElement | null>(null)
+  const mainEl = ref<globalThis.HTMLElement | null>(null)
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
   const NAV_VALUE = 'console-layout:nav:'
 
@@ -284,6 +288,82 @@
   watch(searchOpen, () => {
     query.value = ''
   })
+
+  if (dev) {
+    const warnedRoutes = new Set<string>()
+    let pageObserver: globalThis.MutationObserver | null = null
+
+    const routeOf = (href: string | null | undefined): string | null => {
+      if (!href || href.startsWith('#') || !globalThis.location) return null
+      try {
+        const url = new globalThis.URL(href, globalThis.location.href)
+        if (url.origin !== globalThis.location.origin) return null
+        const path = url.pathname
+        return path.length > 1 ? path.replace(/\/+$/, '') : path
+      } catch {
+        return null
+      }
+    }
+
+    const navigationRoutes = (): Map<string, string> => {
+      const routes = new Map<string, string>()
+      const walk = (items: ConsoleLayoutNavItem[]) => {
+        for (const item of items) {
+          const route = routeOf(hrefOf(item))
+          if (route && !routes.has(route)) routes.set(route, item.label)
+          if (item.groups) walk(item.groups.flatMap((group) => group.items))
+          if (item.children) walk(item.children)
+        }
+      }
+      walk(props.navigation.flatMap((group) => group.items))
+      return routes
+    }
+
+    const warnDuplicateDestinations = () => {
+      const root = mainEl.value
+      const route = currentPath.value || globalThis.location?.pathname || ''
+      if (!root || warnedRoutes.has(route)) return
+      const menus = [...root.querySelectorAll('[data-testid$="__levels"]')]
+        .map((levels) => levels.parentElement)
+        .filter((menu): menu is globalThis.HTMLElement => Boolean(menu))
+      if (!menus.length) return
+      const routes = navigationRoutes()
+      const pairs: string[] = []
+      for (const menu of menus) {
+        for (const link of menu.querySelectorAll('a[href]')) {
+          const target = routeOf(link.getAttribute('href'))
+          const navLabel = target ? routes.get(target) : undefined
+          if (!target || navLabel === undefined) continue
+          const label = (
+            link.querySelector('[data-testid$="__label"]')?.textContent ??
+            link.textContent ??
+            ''
+          ).trim()
+          pairs.push(`"${label}" (page Menu) and "${navLabel}" (navigation) both lead to ${target}`)
+        }
+      }
+      if (!pairs.length) return
+      warnedRoutes.add(route)
+      console.warn(
+        `[webkit] <ConsoleLayout>: on route "${route}" a Menu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen: reach these pages through the resource (block platform/detail/sectioned-resource) or drop the duplicate rows (rule webkit-navigation-levels, rule 2).`
+      )
+    }
+
+    watch(
+      mainEl,
+      (el) => {
+        pageObserver?.disconnect()
+        pageObserver = null
+        if (!el || typeof globalThis.MutationObserver === 'undefined') return
+        pageObserver = new globalThis.MutationObserver(() => warnDuplicateDestinations())
+        pageObserver.observe(el, { childList: true, subtree: true })
+        void nextTick(warnDuplicateDestinations)
+      },
+      { flush: 'post' }
+    )
+    watch(currentPath, () => void nextTick(warnDuplicateDestinations), { flush: 'post' })
+    onScopeDispose(() => pageObserver?.disconnect())
+  }
 
   const railScroller = (from: globalThis.HTMLElement): globalThis.HTMLElement | null => {
     const limit = from.closest('nav')
@@ -605,6 +685,7 @@
       </template>
 
       <main
+        ref="mainEl"
         :key="pageKey"
         :data-testid="`${testId}__main`"
         class="flex min-h-full min-w-0 flex-col animate-page-enter has-[>[data-layout-fill]]:h-full has-[>[data-layout-fill]]:overflow-hidden motion-reduce:animate-none [&>[data-layout-fill]]:h-auto [&>[data-layout-fill]]:min-h-0 [&>[data-layout-fill]]:flex-1"
