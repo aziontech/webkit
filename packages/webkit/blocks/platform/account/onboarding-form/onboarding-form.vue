@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { primitives } from '@aziontech/theme/colors'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -79,50 +78,10 @@
     return (words[0] ?? '').slice(0, 2).toUpperCase()
   }
 
-  const palette: Record<string, Record<string, string | Record<string, string>>> = primitives
-
-  const marbleOf = (name: string, colors: string[]) => {
-    let seed = 0
-    for (let index = 0; index < name.length; index += 1) {
-      seed = (seed << 5) - seed + name.charCodeAt(index)
-      seed |= 0
-    }
-    seed = Math.abs(seed)
-    const unit = (value: number, range: number, position?: number) => {
-      const magnitude = value % range
-      if (position && Math.floor((value / 10 ** position) % 10) % 2 === 0) return -magnitude
-      return magnitude
-    }
-    const paint = (color: string) => {
-      const [, family, step] = color.match(/^var\(--color-([a-z]+)-(\d+)\)$/) ?? []
-      return family ? palette[family][step] : color
-    }
-    const layers = [0, 1, 2].map((index) => {
-      const value = seed * (index + 1)
-      const scale = 1.2 + unit(value, 4) / 10
-      return {
-        fill: paint(colors[(seed + index) % colors.length]),
-        transform: `translate(${unit(value, 8, 1)} ${unit(value, 8, 2)}) rotate(${unit(value, 360, 1)} 40 40) scale(${scale})`
-      }
-    })
-    const svg = [
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">',
-      '<defs><filter id="blur" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7" /></filter></defs>',
-      `<rect width="80" height="80" fill="${layers[0].fill}" />`,
-      `<path filter="url(#blur)" transform="${layers[1].transform}" fill="${layers[1].fill}" d="M32.414 59.35L50.376 70.5H72.5v-71H33.728L26.5 13.381l19.057 27.08L32.414 59.35z" />`,
-      `<path filter="url(#blur)" transform="${layers[2].transform}" fill="${layers[2].fill}" style="mix-blend-mode: overlay" d="M22.216 24L0 46.75l14.108 38.129L78 86l-3.081-59.276-22.378 4.005 12.972 20.186-23.35 27.395L22.215 24z" />`,
-      '</svg>'
-    ].join('')
-    return `data:image/svg+xml,${encodeURIComponent(svg)}`
-  }
-
   const previewName = computed(() => organizationName.value.trim() || 'Your organization')
   const ownerName = computed(() => fullName.value.trim() || email.split('@')[0])
-  const marble = computed(() =>
-    marbleOf(
-      previewName.value,
-      (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
-    )
+  const accentColors = computed(
+    () => (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
   )
 </script>
 
@@ -248,8 +207,10 @@
                             <template #default="{ item }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
-                                  :src="marbleOf(previewName, item.colors)"
+                                  :label="previewName"
                                   :alt="item.label"
+                                  :colors="item.colors"
+                                  pattern="marble"
                                   size="medium"
                                   kind="square"
                                 />
@@ -303,8 +264,9 @@
 
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <Avatar
-                    :src="marble"
                     :alt="previewName"
+                    :colors="accentColors"
+                    pattern="marble"
                     size="small"
                     kind="square"
                     class="shrink-0"

@@ -3,11 +3,11 @@ name: story-library
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 005f603bb0bf9e8ae9bf7708cc12c120c614899ca18f827e2db2547f51fc7aeb
+checksum: 75ec313a7ddf84f20dc093242048161d29ee0be632868a5c5e8832bde1f576a1
 ---
 
 # StoryLibrary — Component Spec
@@ -175,9 +175,9 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ## Performance
 
-- Bundle budget: the `./story-library` entry in `.size-limit.json`.
+- Bundle budget: the `./story-library` entry in `.size-limit.json`, initial chunk only.
 - Runtime budget: filtering a few hundred stories on each keystroke stays under one frame; only `pageSize` cards render at once.
-- Heavy parts: none.
+- Heavy parts: the applied-filter `Chip`s load in their own chunk the first time a filter is applied.
 
 ## Examples
 

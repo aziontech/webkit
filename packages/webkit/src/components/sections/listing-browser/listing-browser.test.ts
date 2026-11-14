@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -272,7 +272,7 @@ describe('ListingBrowser', () => {
     await pick(getByRole('combobox', { name: 'Department' }), 'Security')
 
     const applied = getByTestId(`${TESTID}__applied`)
-    expect(applied.textContent).toContain('Department: Security')
+    await waitFor(() => expect(applied.textContent).toContain('Department: Security'))
     expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Filters (1)')
 
     await fireEvent.click(within(applied).getByRole('button'))

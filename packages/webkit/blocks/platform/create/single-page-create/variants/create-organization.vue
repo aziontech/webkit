@@ -4,14 +4,13 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioCards from '@aziontech/webkit/radio-cards'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -23,7 +22,8 @@
   interface MarkOption {
     value: string
     label: string
-    icon: string
+    ariaLabel: string
+    colors: string[]
   }
 
   interface ExtraQuestion {
@@ -39,12 +39,48 @@
   const SAVE_FAILURES = 0
 
   const MARKS: MarkOption[] = [
-    { value: 'initials', label: 'Initials', icon: '' },
-    { value: 'building', label: 'Building', icon: 'pi pi-building' },
-    { value: 'globe', label: 'Globe', icon: 'pi pi-globe' },
-    { value: 'bolt', label: 'Bolt', icon: 'pi pi-bolt' },
-    { value: 'cloud', label: 'Cloud', icon: 'pi pi-cloud' },
-    { value: 'star', label: 'Star', icon: 'pi pi-star' }
+    {
+      value: 'orange',
+      label: 'Orange',
+      ariaLabel: 'Orange mark',
+      colors: ['var(--color-orange-200)', 'var(--color-orange-700)', 'var(--color-yellow-400)']
+    },
+    {
+      value: 'yellow',
+      label: 'Yellow',
+      ariaLabel: 'Yellow mark',
+      colors: ['var(--color-yellow-200)', 'var(--color-orange-600)', 'var(--color-yellow-600)']
+    },
+    {
+      value: 'red',
+      label: 'Red',
+      ariaLabel: 'Red mark',
+      colors: ['var(--color-red-200)', 'var(--color-red-700)', 'var(--color-orange-500)']
+    },
+    {
+      value: 'green',
+      label: 'Green',
+      ariaLabel: 'Green mark',
+      colors: ['var(--color-green-200)', 'var(--color-green-700)', 'var(--color-blue-500)']
+    },
+    {
+      value: 'blue',
+      label: 'Blue',
+      ariaLabel: 'Blue mark',
+      colors: ['var(--color-blue-200)', 'var(--color-blue-700)', 'var(--color-violet-500)']
+    },
+    {
+      value: 'violet',
+      label: 'Violet',
+      ariaLabel: 'Violet mark',
+      colors: ['var(--color-violet-200)', 'var(--color-violet-700)', 'var(--color-blue-500)']
+    },
+    {
+      value: 'gray',
+      label: 'Gray',
+      ariaLabel: 'Gray mark',
+      colors: ['var(--color-gray-200)', 'var(--color-gray-700)', 'var(--color-slate-500)']
+    }
   ]
 
   const EXTRA: ExtraQuestion[] = [
@@ -75,7 +111,7 @@
 
   const form = reactive({
     name: '',
-    mark: 'initials',
+    mark: 'orange',
     workspace: DEFAULT_WORKSPACE,
     companySize: '',
     industry: ''
@@ -99,7 +135,9 @@
       .toUpperCase()
 
   const previewName = computed(() => form.name.trim() || 'New organization')
-  const markIcon = (value: string) => MARKS.find((mark) => mark.value === value)?.icon ?? ''
+  const markColors = computed(
+    () => (MARKS.find((mark) => mark.value === form.mark) ?? MARKS[0]).colors
+  )
   const optionLabel = (question: ExtraQuestion) => (value: string) =>
     question.options.find((option) => option.value === value)?.label ?? ''
 
@@ -253,45 +291,29 @@
                         kind="stacked"
                       >
                         <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
-                          <fieldset
-                            class="m-0 grid min-w-0 grid-cols-2 gap-(--spacing-sm) border-0 p-0 sm:grid-cols-3"
+                          <RadioCards
+                            v-model="form.mark"
+                            :items="MARKS"
+                            :disabled="submitting"
+                            aria-label="Organization mark"
+                            class="w-full"
                           >
-                            <legend class="sr-only">Organization mark</legend>
-                            <Field.Label
-                              v-for="mark in MARKS"
-                              :key="mark.value"
-                            >
-                              <Field
-                                orientation="horizontal"
-                                :disabled="submitting"
-                              >
-                                <RadioButton
-                                  v-model="form.mark"
-                                  :value="mark.value"
-                                  name="organization-mark"
-                                  :input-id="'organization-mark-' + mark.value"
+                            <template #default="{ item }">
+                              <span class="flex flex-col items-center gap-(--spacing-xs)">
+                                <Avatar
+                                  :label="previewName"
+                                  :alt="item.label"
+                                  :colors="item.colors"
+                                  pattern="marble"
+                                  size="medium"
+                                  kind="square"
                                 />
-                                <Field.Content>
-                                  <Field.Title>
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                      <span
-                                        aria-hidden="true"
-                                        class="inline-flex shrink-0"
-                                      >
-                                        <Avatar
-                                          :label="mark.icon ? '' : initials(previewName)"
-                                          :icon="mark.icon"
-                                          size="small"
-                                          kind="square"
-                                        />
-                                      </span>
-                                      <span class="truncate">{{ mark.label }}</span>
-                                    </span>
-                                  </Field.Title>
-                                </Field.Content>
-                              </Field>
-                            </Field.Label>
-                          </fieldset>
+                                <span class="text-body-xs text-(--text-muted)">{{
+                                  item.label
+                                }}</span>
+                              </span>
+                            </template>
+                          </RadioCards>
                           <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                             <p class="m-0 text-overline-sm text-(--text-muted)">In the header</p>
                             <span
@@ -303,8 +325,9 @@
                                 class="inline-flex shrink-0"
                               >
                                 <Avatar
-                                  :label="markIcon(form.mark) ? '' : initials(previewName)"
-                                  :icon="markIcon(form.mark)"
+                                  :label="previewName"
+                                  :colors="markColors"
+                                  pattern="marble"
                                   size="small"
                                   kind="square"
                                 />

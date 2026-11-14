@@ -58,7 +58,7 @@ describe('CopyPromptButton', () => {
     expect(none.getByRole('button')).not.toHaveAttribute('aria-describedby')
   })
 
-  it('draws an agent mark from its logo file in the chip ink', () => {
+  it('draws an agent mark from its logo file in the chip ink', async () => {
     const { getByTestId } = render(CopyPromptButton, {
       props: {
         value: PROMPT,
@@ -69,6 +69,7 @@ describe('CopyPromptButton', () => {
       }
     })
     const marks = getByTestId('actions-copy-prompt-button__agents')
+    await waitFor(() => expect(marks.querySelector('[data-agent="Claude"]')).not.toBeNull())
     const logo = marks.querySelector<HTMLElement>('[data-agent="Claude"]')!
     expect(logo).toHaveAttribute('data-testid', 'content-logo')
     expect(logo).toHaveAttribute('data-kind', 'current')
@@ -95,10 +96,10 @@ describe('CopyPromptButton', () => {
 
   it('removes itself and emits close with the click when dismissed', async () => {
     const user = userEvent.setup()
-    const { getByRole, queryByTestId, emitted } = render(CopyPromptButton, {
+    const { findByRole, queryByTestId, emitted } = render(CopyPromptButton, {
       props: { value: PROMPT, closable: true }
     })
-    await user.click(getByRole('button', { name: 'Dismiss' }))
+    await user.click(await findByRole('button', { name: 'Dismiss' }))
     expect(emitted('close')).toHaveLength(1)
     expect(emitted('close')![0][0]).toBeInstanceOf(MouseEvent)
     expect(queryByTestId('actions-copy-prompt-button')).toBeNull()
@@ -179,7 +180,7 @@ describe('CopyPromptButton', () => {
     expect(label.compareDocumentPosition(marks) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
-  it('renders the examples', () => {
+  it('renders the examples', async () => {
     const a = render(DefaultExample)
     expect(a.getByRole('button', { name: 'Copy prompt' })).toBeTruthy()
     a.unmount()
@@ -191,7 +192,7 @@ describe('CopyPromptButton', () => {
     c.unmount()
     const d = render(ClosableExample)
     expect(d.getByRole('button', { name: 'Onboard your agent' })).toBeTruthy()
-    expect(d.getByRole('button', { name: 'Dismiss' })).toBeTruthy()
+    expect(await d.findByRole('button', { name: 'Dismiss' })).toBeTruthy()
   })
 
   it('has no axe violations idle, without marks and disabled', async () => {

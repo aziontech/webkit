@@ -1490,6 +1490,7 @@ describe('Table.ColumnSelector', () => {
     await new Promise((resolve) => setTimeout(resolve, 10))
     await fireEvent.click(getByTestId('data-table__column-selector'))
     await waitFor(() => expect(selectorPanel()).not.toBeNull(), { timeout: 3000 })
+    await waitFor(() => expect(byId('switch-name')).not.toBeNull(), { timeout: 3000 })
     const name = byId('column-name')!
     expect(name.hasAttribute('data-locked')).toBe(true)
     expect(name).toHaveTextContent('Always shown')

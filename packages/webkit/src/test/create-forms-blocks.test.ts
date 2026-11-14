@@ -83,9 +83,10 @@ describe('single-page-create#CreateOrganization', () => {
     expect(preview.textContent).toContain('New organization')
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     expect(preview.textContent).toContain('Northwind Studio')
-    expect(preview.textContent).toContain('NS')
-    await fireEvent.click(screen.getByRole('radio', { name: 'Globe' }))
-    expect(preview.querySelector('.pi-globe')).toBeTruthy()
+    const fill = () => preview.querySelector<SVGRectElement>('rect')?.style.fill ?? ''
+    await waitFor(() => expect(fill()).toMatch(/--color-(orange|yellow)-/), wait)
+    await fireEvent.click(screen.getByRole('radio', { name: 'Green mark' }))
+    await waitFor(() => expect(fill()).toMatch(/--color-(green|blue)-/), wait)
   })
 
   it('flags an empty name and a name already in use only after submit', async () => {
