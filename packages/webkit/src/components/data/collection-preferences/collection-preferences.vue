@@ -55,8 +55,6 @@
   export type CollectionPreferencesContainer = 'dialog' | 'drawer'
 
   interface Props {
-    /** The saved preferences. Supports v-model:preferences; changes apply on Confirm. */
-    preferences?: CollectionPreferencesValue
     /** Columns to show, hide and order. Empty hides the columns section. */
     columns?: CollectionPreferencesColumn[]
     /** Page sizes offered. Empty hides the page size section. */
@@ -72,7 +70,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    preferences: () => ({}),
     columns: () => [],
     pageSizeOptions: () => [],
     sections: () => ['page-size', 'columns', 'wrap-lines', 'striped', 'density'],
@@ -82,9 +79,12 @@
   })
 
   const open = defineModel<boolean>('open', { default: false })
+  /** The saved preferences. Supports v-model:preferences; changes apply on Confirm. */
+  const preferences = defineModel<CollectionPreferencesValue>('preferences', {
+    default: () => ({})
+  })
 
   const emit = defineEmits<{
-    'update:preferences': [value: CollectionPreferencesValue]
     confirm: [event: MouseEvent, value: CollectionPreferencesValue]
     cancel: [event: MouseEvent]
   }>()
@@ -121,7 +121,7 @@
   const draftDensity = ref<CollectionDensity>('comfortable')
 
   const seedColumns = (): CollectionColumnPreference[] => {
-    const saved = props.preferences.columns ?? []
+    const saved = preferences.value.columns ?? []
     const known = new Set(props.columns.map((c) => c.id))
     const kept = saved.filter((c) => known.has(c.id))
     const seen = new Set(kept.map((c) => c.id))
@@ -133,10 +133,10 @@
 
   const reset = (): void => {
     draftColumns.value = seedColumns()
-    draftPageSize.value = props.preferences.pageSize ?? props.pageSizeOptions[0] ?? 0
-    draftWrap.value = props.preferences.wrapLines ?? false
-    draftStriped.value = props.preferences.striped ?? false
-    draftDensity.value = props.preferences.density ?? 'comfortable'
+    draftPageSize.value = preferences.value.pageSize ?? props.pageSizeOptions[0] ?? 0
+    draftWrap.value = preferences.value.wrapLines ?? false
+    draftStriped.value = preferences.value.striped ?? false
+    draftDensity.value = preferences.value.density ?? 'comfortable'
   }
 
   const triggerHost = ref<HTMLElement | null>(null)
@@ -198,7 +198,7 @@
     if (shown('wrap-lines')) value.wrapLines = draftWrap.value
     if (shown('striped')) value.striped = draftStriped.value
     if (shown('density')) value.density = draftDensity.value
-    emit('update:preferences', value)
+    preferences.value = value
     emit('confirm', event, value)
     open.value = false
   }
@@ -309,12 +309,8 @@
                       class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs)"
                     >
                       <label
-                        class="flex min-w-0 flex-1 items-center gap-(--spacing-sm) text-body-sm"
-                        :class="
-                          locked(column.id)
-                            ? 'cursor-default text-(--text-muted)'
-                            : 'cursor-pointer text-(--text-default)'
-                        "
+                        :data-locked="locked(column.id) || null"
+                        class="flex min-w-0 flex-1 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) data-[locked]:cursor-default data-[locked]:text-(--text-muted)"
                       >
                         <Switch
                           :model-value="locked(column.id) || column.visible"
