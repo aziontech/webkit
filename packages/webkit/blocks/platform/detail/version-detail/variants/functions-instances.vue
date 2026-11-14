@@ -399,13 +399,16 @@
       const existing = instances.value.find((instance) => instance.id === editingId.value)
       if (existing) Object.assign(existing, record, { modifiedAgo: 'Just now' })
       else
-        instances.value.push({
-          id: String(5200 + instances.value.length + 1),
-          ...record,
-          active: true,
-          author: 'John Smith',
-          modifiedAgo: 'Just now'
-        })
+        instances.value = [
+          ...instances.value,
+          {
+            id: String(5200 + instances.value.length + 1),
+            ...record,
+            active: true,
+            author: 'John Smith',
+            modifiedAgo: 'Just now'
+          }
+        ]
       submitting.value = false
       drawerOpen.value = false
       toast.success(

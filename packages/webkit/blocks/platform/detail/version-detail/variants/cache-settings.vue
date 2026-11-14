@@ -391,12 +391,15 @@
       const existing = cacheSettings.value.find((setting) => setting.id === editingId.value)
       if (existing) Object.assign(existing, record, { modifiedAgo: 'Just now' })
       else
-        cacheSettings.value.push({
-          ...record,
-          id: String(7100 + cacheSettings.value.length + 1),
-          author: 'John Smith',
-          modifiedAgo: 'Just now'
-        })
+        cacheSettings.value = [
+          ...cacheSettings.value,
+          {
+            ...record,
+            id: String(7100 + cacheSettings.value.length + 1),
+            author: 'John Smith',
+            modifiedAgo: 'Just now'
+          }
+        ]
       submitting.value = false
       drawerOpen.value = false
       toast.success(

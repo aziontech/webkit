@@ -287,12 +287,15 @@
       const existing = groups.value.find((group) => group.id === editingId.value)
       if (existing) Object.assign(existing, record, { modifiedAgo: 'Just now' })
       else
-        groups.value.push({
-          id: String(3100 + groups.value.length + 1),
-          ...record,
-          author: 'John Smith',
-          modifiedAgo: 'Just now'
-        })
+        groups.value = [
+          ...groups.value,
+          {
+            id: String(3100 + groups.value.length + 1),
+            ...record,
+            author: 'John Smith',
+            modifiedAgo: 'Just now'
+          }
+        ]
       submitting.value = false
       drawerOpen.value = false
       toast.success(

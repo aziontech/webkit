@@ -1,0 +1,42 @@
+{
+  "id": "platform/detail/invocations",
+  "name": "Invocations",
+  "title": "Templates/Platform/Detail/Invocations",
+  "surface": "product",
+  "summary": "The Invocations page of one function, as a page body for ConsoleLayout: one run end to end. A `PageHeader` opens on the invocation summary `Card` (the function link, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `Flow` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogView` lists what the function printed, timed on the same clock as the trace. The Failed variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the logs still loading. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `SectionHeader`, `Flow`, `Tag`, `Trace`, `LogView` and `LogViewContent`; Replay reports through `toast`.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "function invocations",
+    "invocation detail",
+    "function run",
+    "request path",
+    "trace waterfall",
+    "function logs",
+    "replay invocation",
+    "invocações da função",
+    "detalhe da invocação",
+    "execução da função",
+    "caminho da requisição",
+    "rastreamento"
+  ],
+  "skills": ["webkit-layout", "webkit-ui-states", "webkit-data-viz"],
+  "primary": {
+    "name": "Completed",
+    "file": "invocations.vue"
+  },
+  "variants": [
+    {
+      "name": "Failed",
+      "summary": "A run the origin timed out: the danger status, the outcome in danger color, the function and origin nodes tagged Failed and Timed out, the failing origin-response span selected in the trace with its message, and the warning lines in the logs.",
+      "file": "variants/failed.vue"
+    },
+    {
+      "name": "Running",
+      "summary": "A run still in progress: a loading Running status, Replay disabled, Completed reading Not yet, the function and origin nodes tagged Running and Waiting, the spans running in the trace and the logs loading under the lines printed so far.",
+      "file": "variants/running.vue"
+    }
+  ]
+}
