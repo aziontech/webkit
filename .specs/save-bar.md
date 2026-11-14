@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 715d3a32ecdddd032682e7d090ff813dc205782ac11fe394ea91f01969de28df
+checksum: 9e7ad7da35930490bf8c42aba8ee5aa2e5ccd5621ff7aeacdb8ce955b4e8dd74
 spec_version: 3
 template: 2
 created: 2026-11-10
@@ -79,7 +79,6 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 Each `kind` is one placement plus one surface, named for what a reader sees:
 
-- `kind`: Placement; Surface; use for Use for.
 - `floating`: overlays the bottom of the scroll region; the content does not move; canvas band with a top border; use for the dirty state of a settings page.
 - `docked`: its own row at the bottom of the region; the content ends above it; canvas band with a top border; use for the dirty state when nothing may be covered.
 - `plain`: the last row of a form column, always shown; surface band with a muted top border; use for a form saved as one unit.
