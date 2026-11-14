@@ -235,6 +235,11 @@
       "mount": 300,
       "update": 280,
       "update_is": "sort 1k rows of link and tag preset cells (the table renders the first 50 rows; the rest load on scroll)"
+    },
+    "timestamp-1k": {
+      "mount": 520,
+      "update": 100,
+      "update_is": "change the provider time zone of 1k timestamps"
     }
   }
 }

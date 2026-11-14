@@ -1077,6 +1077,16 @@ export const es: Messages = {
     dark: 'Oscuro',
     light: 'Claro'
   },
+  timestamp: {
+    title: 'Detalles de la marca de tiempo',
+    utc: 'UTC',
+    local: 'Local',
+    browser: 'Tu navegador',
+    relative: 'Relativo',
+    raw: 'Valor sin procesar',
+    copy: 'Copiar {label}',
+    justNow: 'justo ahora'
+  },
   toast: {
     close: 'Cerrar notificación',
     region: 'Notificaciones ({hotkey})'

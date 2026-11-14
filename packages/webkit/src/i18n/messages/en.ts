@@ -1076,6 +1076,17 @@ export const themeSwitcher = {
   light: 'Light'
 } as const
 
+export const timestamp = {
+  title: 'Timestamp details',
+  utc: 'UTC',
+  local: 'Local',
+  browser: 'Your browser',
+  relative: 'Relative',
+  raw: 'Raw value',
+  copy: 'Copy {label}',
+  justNow: 'just now'
+} as const
+
 export const toast = {
   close: 'Close notification',
   region: 'Notifications ({hotkey})'
@@ -1493,6 +1504,7 @@ export const en = {
   tabs,
   tagEditor,
   themeSwitcher,
+  timestamp,
   toast,
   toggleGroup,
   trace,

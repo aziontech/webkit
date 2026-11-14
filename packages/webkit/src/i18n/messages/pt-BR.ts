@@ -1077,6 +1077,16 @@ export const ptBR: Messages = {
     dark: 'Escuro',
     light: 'Claro'
   },
+  timestamp: {
+    title: 'Detalhes do horário',
+    utc: 'UTC',
+    local: 'Local',
+    browser: 'Seu navegador',
+    relative: 'Relativo',
+    raw: 'Valor bruto',
+    copy: 'Copiar {label}',
+    justNow: 'agora mesmo'
+  },
   toast: {
     close: 'Fechar notificação',
     region: 'Notificações ({hotkey})'

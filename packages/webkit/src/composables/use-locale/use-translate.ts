@@ -19,6 +19,8 @@ export interface LocaleContext {
   messages: ComputedRef<Messages>
   /** Reference time in epoch milliseconds for relative times; undefined reads the real clock. */
   now?: ComputedRef<number | undefined>
+  /** IANA time zone that absolute times below the provider read in (`Timestamp`); undefined reads the browser's zone. */
+  timeZone?: ComputedRef<string | undefined>
 }
 
 /** What `useTranslate()` returns. */

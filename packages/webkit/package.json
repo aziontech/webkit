@@ -419,6 +419,10 @@
       "types": "./types/components/content/status-code/status-code.vue.d.ts",
       "default": "./src/components/content/status-code/status-code.vue"
     },
+    "./timestamp": {
+      "types": "./types/components/content/timestamp/timestamp.vue.d.ts",
+      "default": "./src/components/content/timestamp/timestamp.vue"
+    },
     "./avatar": {
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
       "default": "./src/components/content/avatar/avatar.vue"

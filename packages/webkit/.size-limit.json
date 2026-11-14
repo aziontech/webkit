@@ -961,6 +961,11 @@
     "limit": "1.7 KB"
   },
   {
+    "name": "timestamp",
+    "path": "src/components/content/timestamp/timestamp.vue",
+    "limit": "17.5 KB"
+  },
+  {
     "name": "error-boundary",
     "path": "src/components/feedback/error-boundary/error-boundary.vue",
     "limit": "6.75 KB"

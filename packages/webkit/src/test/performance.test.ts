@@ -30,6 +30,7 @@ import ItemList from '../components/content/item/item-list.vue'
 import ItemTitle from '../components/content/item/item-title.vue'
 import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs.vue'
 import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
+import Timestamp from '../components/content/timestamp/timestamp.vue'
 import Cards from '../components/data/cards/cards.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
@@ -60,6 +61,7 @@ import Command, {
 } from '../components/overlay/command'
 import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
 import ListingTable from '../components/sections/listing-table/listing-table.vue'
+import WebkitProvider from '../components/utils/webkit-provider/webkit-provider.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
@@ -478,6 +480,28 @@ function codeBlockDiffCase(): Case {
     }),
     update: () => {
       view.value = 'unified'
+    }
+  }
+}
+
+function timestampCase(): Case {
+  const start = Date.UTC(2026, 10, 14, 12)
+  const values = Array.from({ length: 1000 }, (_, i) => (start - i * 61_000) * 1000)
+  const zone = ref('UTC')
+  return {
+    mount: () => ({
+      render: () =>
+        h(WebkitProvider, { now: start, timeZone: zone.value }, () =>
+          h(
+            'ul',
+            values.map((value, i) =>
+              h('li', { key: i }, [h(Timestamp, { value, format: i % 2 ? 'relative' : 'local' })])
+            )
+          )
+        )
+    }),
+    update: () => {
+      zone.value = 'America/New_York'
     }
   }
 }
@@ -1281,6 +1305,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('LogView with 10k lines and a search: tail 20 appended lines', async () => {
     check('log-view-10k-tail', await measure(logViewTailCase))
+  })
+  it('Timestamp with 1k values: mount and change the time zone', async () => {
+    check('timestamp-1k', await measure(timestampCase))
   })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))

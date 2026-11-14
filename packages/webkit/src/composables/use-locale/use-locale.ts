@@ -35,6 +35,8 @@ export interface ProvideLocaleOptions {
   catalogs: MaybeRefOrGetter<Record<string, Messages>>
   /** Reference time for relative times below the provider; undefined reads the real clock. */
   now?: MaybeRefOrGetter<string | number | Date | undefined>
+  /** IANA time zone for absolute times below the provider; empty or undefined reads the browser's zone. */
+  timeZone?: MaybeRefOrGetter<string | undefined>
 }
 
 /** Plural forms passed to `plural`; `{count}` in a form is replaced by the formatted count. */
@@ -209,7 +211,8 @@ export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
     return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
   })
   const now = computed<number | undefined>(() => epochOf(toValue(options.now)))
-  const context: LocaleContext = { locale, dir, messages, now }
+  const timeZone = computed<string | undefined>(() => toValue(options.timeZone) || undefined)
+  const context: LocaleContext = { locale, dir, messages, now, timeZone }
   provide(LocaleInjectionKey, context)
   return context
 }
