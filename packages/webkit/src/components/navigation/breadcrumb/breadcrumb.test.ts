@@ -19,7 +19,7 @@ const renderMounted = async (...args: Parameters<typeof render>) => {
   return view
 }
 
-// The Playwright test viewport is narrow (< md / 768px), so useOverlayMobile()
+// The Playwright test viewport is narrow (< md / 768px), so the breadcrumb mobile query
 // resolves TRUE and the root renders its COLLAPSED mobile layout:
 //   first item  -> `__segment-0-mobile` / `__item-0`
 //   middle items -> a DropdownMenu overflow menu (`__overflow-menu` / `__overflow-trigger`

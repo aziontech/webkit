@@ -35,6 +35,36 @@
       "summary": "",
       "file": "site-scene.vue",
       "json": "site-scene.json"
+    },
+    {
+      "name": "Centered carousel",
+      "summary": "The home page hero: one screen with a dot field fading in from the top, the headline centered and the client strip on the floor. The solution pages use the same band with their own copy and clients.",
+      "file": "site-centered-carousel.vue",
+      "json": "site-centered-carousel.json"
+    },
+    {
+      "name": "Title band small",
+      "summary": "The title band at the medium height, for a page whose bands start right under the headline (Contact).",
+      "file": "site-title-band-small.vue",
+      "json": "site-title-band-small.json"
+    },
+    {
+      "name": "Title band carousel",
+      "summary": "The Learning Center and Support hero: the large title band with the client strip on its floor, for list and catalogue pages that open on proof.",
+      "file": "site-title-band-carousel.vue",
+      "json": "site-title-band-carousel.json"
+    },
+    {
+      "name": "Pixel floor",
+      "summary": "The AI Inference hero: copy at the start over an animated pixel field that stands under the client strip; the light stops under reduced motion.",
+      "file": "site-pixel-floor.vue",
+      "json": "site-pixel-floor.json"
+    },
+    {
+      "name": "Copy beside art",
+      "summary": "Copy on one side and a wide illustration on the other, with the client strip on the floor; the illustration bleeds past the column edge from medium widths up.",
+      "file": "site-copy-beside-art.vue",
+      "json": "site-copy-beside-art.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Hero Band/HeroBand",
@@ -42,5 +72,20 @@
     "layout": "fullscreen",
     "background": "dark"
   },
-  "siteStories": ["TitleBand", "TitleBandJson", "Scene", "SceneJson"]
+  "siteStories": [
+    "TitleBand",
+    "TitleBandJson",
+    "Scene",
+    "SceneJson",
+    "CenteredCarousel",
+    "CenteredCarouselJson",
+    "TitleBandSmall",
+    "TitleBandSmallJson",
+    "TitleBandCarousel",
+    "TitleBandCarouselJson",
+    "PixelFloor",
+    "PixelFloorJson",
+    "CopyBesideArt",
+    "CopyBesideArtJson"
+  ]
 }
