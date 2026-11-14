@@ -687,7 +687,7 @@
             :filter="false"
             :allow-custom="false"
             :clearable="!node.required && !isReadonly(node)"
-            :empty-text="optionStates.get(node.path)?.failed ? t('schemaForm.optionsError') : ''"
+            :empty-title="optionStates.get(node.path)?.failed ? t('schemaForm.optionsError') : ''"
             size="large"
             class="w-full"
             :placeholder="placeholderOf(node)"

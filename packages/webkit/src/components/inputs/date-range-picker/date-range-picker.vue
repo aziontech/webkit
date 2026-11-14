@@ -86,6 +86,10 @@
     ariaLabel?: string
     /** Disables the trigger and the step buttons. */
     disabled?: boolean
+    /** Marks the trigger invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
+    invalid?: boolean
+    /** Initial open state of the panel when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
     /** Size token of the trigger and the panel controls. */
     size?: RangeSize
   }
@@ -103,14 +107,21 @@
     placeholder: '',
     ariaLabel: '',
     disabled: false,
+    invalid: false,
+    defaultOpen: false,
     size: 'medium'
   })
 
   const model = defineModel<DateRangeValue | null>({ default: null })
   const timeZone = defineModel<string>('timeZone', { default: '' })
+  /** Controlled open state of the panel (v-model:open); omit for uncontrolled, seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
-  const field = useFieldControl({ disabled: () => props.disabled })
+  const field = useFieldControl({
+    invalid: () => props.invalid,
+    disabled: () => props.disabled
+  })
   const isDisabled = computed(() => field.disabled.value)
   const { t, locale } = useTranslate({ dateRangePicker: en.dateRangePicker, calendar: en.calendar })
   const { context: localeContext } = useLocaleContext()
@@ -176,7 +187,7 @@
   const offersRelative = computed(() => props.rangeSelectorMode !== 'absolute-only')
   const offersAbsolute = computed(() => props.rangeSelectorMode !== 'relative-only')
 
-  const isOpen = ref(false)
+  const isOpen = computed<boolean>(() => openModel.value ?? props.defaultOpen)
   const triggerRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
 
@@ -217,9 +228,17 @@
 
   const setOpen = (open: boolean): void => {
     if (open && isDisabled.value) return
-    if (open) resetDraft()
-    isOpen.value = open
+    if (open === isOpen.value) return
+    openModel.value = open
   }
+
+  watch(
+    isOpen,
+    (open) => {
+      if (open) resetDraft()
+    },
+    { immediate: true, flush: 'sync' }
+  )
 
   const focusTrigger = (): void => {
     triggerRef.value?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus()
@@ -433,12 +452,14 @@
     :data-state="isOpen ? 'open' : 'closed'"
     :data-size="size"
     :data-disabled="isDisabled || null"
+    :data-invalid="field.invalid.value || null"
     class="inline-flex max-w-full"
   >
     <span
       ref="triggerRef"
       :data-disabled="isDisabled || null"
-      class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+      :data-invalid="field.invalid.value || null"
+      class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
     >
       <button
         v-if="showStep"

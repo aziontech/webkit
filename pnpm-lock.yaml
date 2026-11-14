@@ -312,6 +312,9 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
+      '@aziontech/icons':
+        specifier: workspace:^
+        version: link:../icons
       '@aziontech/theme':
         specifier: workspace:^
         version: link:../theme

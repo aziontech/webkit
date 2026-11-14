@@ -72,6 +72,30 @@ describe('date-range helpers', () => {
 })
 
 describe('DateRangePicker', () => {
+  it('opens from defaultOpen and reports and follows v-model:open', async () => {
+    const seeded = render(DateRangePicker, { props: { now: NOW, defaultOpen: true } })
+    await waitFor(() => expect(panel()).toBeTruthy())
+    expect(seeded.getByTestId(TEST_ID).getAttribute('data-state')).toBe('open')
+    seeded.unmount()
+
+    const view = render(DateRangePicker, {
+      props: { now: NOW, open: false, 'onUpdate:open': () => {} }
+    })
+    await fireEvent.click(view.getByTestId(`${TEST_ID}__trigger`))
+    expect(view.emitted()['update:open']).toEqual([[true]])
+    expect(view.getByTestId(TEST_ID).getAttribute('data-state')).toBe('closed')
+    await view.rerender({ open: true })
+    expect(view.getByTestId(TEST_ID).getAttribute('data-state')).toBe('open')
+  })
+
+  it('marks the trigger invalid from its own prop', async () => {
+    const view = render(DateRangePicker, { props: { now: NOW, invalid: true } })
+    expect(view.getByTestId(`${TEST_ID}__trigger`).getAttribute('aria-invalid')).toBe('true')
+    expect(view.getByTestId(TEST_ID).hasAttribute('data-invalid')).toBe(true)
+    await view.rerender({ invalid: false })
+    expect(view.getByTestId(`${TEST_ID}__trigger`).hasAttribute('aria-invalid')).toBe(false)
+  })
+
   it('shows the placeholder and opens on the Relative tab with no value', async () => {
     const view = render(DateRangePicker, { props: { now: NOW } })
     const trigger = view.getByTestId(`${TEST_ID}__trigger`)

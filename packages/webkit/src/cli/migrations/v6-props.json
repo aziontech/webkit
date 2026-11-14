@@ -16,6 +16,14 @@
   "architecture-tabs": {
     "interval": "autoplayInterval"
   },
+  "badge": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "default": "neutral"
+      }
+    }
+  },
   "button": {
     "kind": {
       "to": "kind",
@@ -168,6 +176,9 @@
     "timezone": "timeZone"
   },
   "checkbox": {
+    "inputId": "id"
+  },
+  "radio-button": {
     "inputId": "id"
   },
   "split-button": {

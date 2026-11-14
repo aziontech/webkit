@@ -14,16 +14,14 @@
   export interface TrackerItem {
     /** Stable key for the period. */
     id?: string
-    /** State of the period. No status renders a neutral no-data block. */
-    status?: ChartStatus
-    /** State of the period. @deprecated since 6.0 — use `status`. Removed in 7.0. */
+    /** State of the period. No severity renders a neutral no-data block. */
     severity?: ChartStatus
     /** Period plus state, read in the readout and announced to assistive tech. */
     label: string
   }
 
   interface Props {
-    /** One block per period, oldest first; each item is { id?: string; status?: ChartStatus; label: string }. No status renders a neutral no-data block. */
+    /** One block per period, oldest first; each item is { id?: string; severity?: ChartStatus; label: string }. No severity renders a neutral no-data block. */
     items?: TrackerItem[]
     /** Renders a Skeleton strip in place of the blocks. */
     loading?: boolean
@@ -58,7 +56,7 @@
   const hasError = computed(() => !props.loading && props.error.length > 0)
   const count = computed(() => (props.loading || hasError.value ? 0 : props.items.length))
   const isEmpty = computed(() => !props.loading && !hasError.value && props.items.length === 0)
-  const statusOf = (item: TrackerItem): ChartStatus | undefined => item.status ?? item.severity
+  const statusOf = (item: TrackerItem): ChartStatus | undefined => item.severity
 
   const WORST: ChartStatus[] = ['danger', 'warning', 'info', 'success']
   const summary = computed<string>(() => {

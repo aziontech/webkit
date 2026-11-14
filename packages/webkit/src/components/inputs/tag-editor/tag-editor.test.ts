@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/tag-editor/default.vue'
 import Validation from '../../../../examples/tag-editor/validation.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Field from '../field'
 import TagEditor, { type TagEditorTag } from './tag-editor.vue'
 
 const Harness = (initial: TagEditorTag[], extra: Record<string, unknown> = {}) =>
@@ -145,6 +146,33 @@ describe('TagEditor', () => {
     expect(errorOf(view.getAllByLabelText('Value')[0] as HTMLElement)).toContain('Rejected.')
     await fireEvent.click(view.getByRole('button', { name: 'Add new tag' }))
     expect(keys(view)).toHaveLength(2)
+  })
+
+  it('takes its name, description, invalid and disabled state from Field', async () => {
+    const Host = defineComponent({
+      components: {
+        TagEditor,
+        Field,
+        FieldTitle: Field.Title,
+        FieldDescription: Field.Description
+      },
+      setup: () => ({ tags: ref<TagEditorTag[]>([{ key: 'team', value: 'payments' }]) }),
+      template: `
+        <Field invalid disabled>
+          <FieldTitle>Resource tags</FieldTitle>
+          <TagEditor v-model:tags="tags" />
+          <FieldDescription>Tags help you find resources.</FieldDescription>
+        </Field>`
+    })
+    const view = render(Host)
+    await nextTick()
+    const group = view.getByRole('group', { name: 'Resource tags' })
+    expect(group.getAttribute('data-testid')).toBe('input-tag-editor')
+    expect(group.getAttribute('aria-invalid')).toBe('true')
+    expect(errorOf(group)).toContain('Tags help you find resources.')
+    expect(keys(view)[0]?.disabled).toBe(true)
+    await expectNoA11yViolations(view.container)
+    view.unmount()
   })
 
   it('offers key suggestions through a datalist', () => {

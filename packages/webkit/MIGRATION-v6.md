@@ -66,6 +66,7 @@ component.
 | ----------------- | ------------------ | -------------------- |
 | `accordion`       | `value`            | `modelValue`         |
 | `alert`           | `severity="error"` | `severity="danger"`  |
+| `badge`           | `severity=default` | `severity=neutral`   |
 | `button`          | `kind="text"`      | `kind="transparent"` |
 | `calendar`        | `showTimezone`     | `showTimeZone`       |
 | `calendar`        | `timezone`         | `timeZone`           |
@@ -91,6 +92,7 @@ component.
 | `progress`        | `shape`            | `kind`               |
 | `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
 | `quote-tabs`      | `autoPlay`         | `autoplay`           |
+| `radio-button`    | `inputId`          | `id`                 |
 | `severity-tag`    | `level`            | `severity`           |
 | `shell-mockup`    | `still="false"`    | `animated="true"`    |
 | `shell-mockup`    | `still="true"`     | `animated="false"`   |
@@ -116,11 +118,10 @@ rewrites the prop renames, the rest are listed here so you can move at your own 
 | `table`        | `headerKind`                  | `density` (now sets the header and the rows)   |
 | `table`        | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
 | `table-header` | `kind`                        | `density`                                      |
-| `tracker`      | item field `severity`         | item field `status`                            |
 
 `headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
-codemod leaves `headerKind` for you. `warningsOnly`, `type: 'warning'` and the data field
-`severity` on tracker items are data or inverted booleans; move them by hand.
+codemod leaves `headerKind` for you. `warningsOnly` and `type: 'warning'` are data or inverted
+booleans; move them by hand.
 
 These also keep working in 6.x and are marked `@deprecated` in the types:
 

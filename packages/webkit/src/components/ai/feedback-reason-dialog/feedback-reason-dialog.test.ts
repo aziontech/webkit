@@ -30,6 +30,15 @@ const Harness = defineComponent({
 })
 
 describe('FeedbackReasonDialog', () => {
+  it('opens from defaultOpen while v-model:open is unbound, and stays closed without it', async () => {
+    const closed = render(FeedbackReasonDialog)
+    await nextTick()
+    expect(dialog()).toBeNull()
+    closed.unmount()
+    render(FeedbackReasonDialog, { props: { defaultOpen: true } })
+    await waitFor(() => expect(dialog()).toHaveAccessibleName('What went wrong?'))
+  })
+
   it('offers the catalog reasons in a named group inside a named dialog', async () => {
     render(Harness)
     await waitFor(() => expect(dialog()).toHaveAccessibleName('What went wrong?'))

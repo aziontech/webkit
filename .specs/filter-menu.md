@@ -3,9 +3,9 @@ name: filter-menu
 category: data
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 18fbd7a067a66ee6c44d65d34c678e12d907c013ecc39b2722d3c00854d0e218
+checksum: 413e0ed9a3c17c07cf973fee23a157645ef0e9d7a0f31a67bcab32d9b705ebc1
 created: 2026-11-14
 last_updated: 2026-11-14
 ---
@@ -167,19 +167,20 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Props
 
-| Prop       | Type                             | Default    | Required | JSDoc                                                                 |
-| ---------- | -------------------------------- | ---------- | -------- | --------------------------------------------------------------------- |
-| `fields`   | `FilterMenuField[]`              | `[]`       | false    | Fields the menu lists, in order, each with its kind and values.       |
-| `label`    | `string`                         | `''`       | false    | Text of the trigger button. Empty uses the locale catalog (`Filter`). |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token of the trigger button.                                     |
-| `disabled` | `boolean`                        | `false`    | false    | Disables the trigger: the menu does not open.                         |
+| Prop          | Type                             | Default    | Required | JSDoc                                                                 |
+| ------------- | -------------------------------- | ---------- | -------- | --------------------------------------------------------------------- |
+| `fields`      | `FilterMenuField[]`              | `[]`       | false    | Fields the menu lists, in order, each with its kind and values.       |
+| `label`       | `string`                         | `''`       | false    | Text of the trigger button. Empty uses the locale catalog (`Filter`). |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token of the trigger button.                                     |
+| `disabled`    | `boolean`                        | `false`    | false    | Disables the trigger: the menu does not open.                         |
+| `defaultOpen` | `boolean`                        | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).        |
 
 ## v-model
 
-| Model          | Type              | Default | Emits               | Notes                                                                                                                                                                 |
-| -------------- | ----------------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `FilterMenuModel` | `{}`    | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key.                                             |
-| `v-model:open` | `boolean`         | `false` | `update:open`       | Whether the menu is open, via `defineModel('open')`: the trigger, outside click, `Esc`, a chip and the exposed `open()` update it. Unbound, the menu keeps it itself. |
+| Model          | Type              | Default     | Emits               | Notes                                                                                                                                                                                             |
+| -------------- | ----------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `FilterMenuModel` | `{}`        | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key.                                                                         |
+| `v-model:open` | `boolean`         | `undefined` | `update:open`       | Whether the menu is open, via `defineModel('open')`: the trigger, outside click, `Esc`, a chip and the exposed `open()` update it. Unbound, the menu keeps it itself and starts at `defaultOpen`. |
 
 ## Events
 

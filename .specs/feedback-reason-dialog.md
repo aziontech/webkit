@@ -3,11 +3,11 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 5d382e3391ce078535106008eecb7e250cd292003578ea11502a9fb061b1a79a
+checksum: e314373d9b69460ea034fd368f6c39dc960f283b996d471ac19a6804eb9ec60f
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # FeedbackReasonDialog — Component Spec
@@ -60,23 +60,24 @@ Asks why an assistant response was not helpful, right after the thumbs-down in `
 
 ## Props
 
-| Prop      | Type                                 | Default | Required | JSDoc                                                                                                                                    |
-| --------- | ------------------------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `reasons` | `{ value: string; label: string }[]` | `[]`    | false    | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
-| `loading` | `boolean`                            | `false` | false    | The feedback is being sent: Send feedback shows a spinner and the form is locked.                                                        |
-| `title`   | `string`                             | `''`    | false    | Dialog title. Empty uses the locale catalog (`What went wrong?`).                                                                        |
+| Prop          | Type                                 | Default | Required | JSDoc                                                                                                                                    |
+| ------------- | ------------------------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `reasons`     | `{ value: string; label: string }[]` | `[]`    | false    | Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. |
+| `loading`     | `boolean`                            | `false` | false    | The feedback is being sent: Send feedback shows a spinner and the form is locked.                                                        |
+| `title`       | `string`                             | `''`    | false    | Dialog title. Empty uses the locale catalog (`What went wrong?`).                                                                        |
+| `defaultOpen` | `boolean`                            | `false` | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                           |
 
 ## v-model
 
-| Model          | Type      | Default | Emits         | Notes                                                              |
-| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------ |
-| `v-model:open` | `boolean` | `false` | `update:open` | Opens the dialog; the reason and details reset each time it opens. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Opens the dialog; the reason and details reset each time it opens. Unbound, the dialog keeps it itself and starts at `defaultOpen`. |
 
 ## Events
 
-| Event    | Payload                                                                    | When                                                                                                                                              |
-| -------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `submit` | `(event: SubmitEvent, payload: { reason: string; details: string })`       | Send feedback with a reason chosen. `details` is trimmed. Without a reason the group shows `Choose a reason.` and focus moves to the first radio. |
+| Event    | Payload                                                              | When                                                                                                                                              |
+| -------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event: SubmitEvent, payload: { reason: string; details: string })` | Send feedback with a reason chosen. `details` is trimmed. Without a reason the group shows `Choose a reason.` and focus moves to the first radio. |
 
 ## Slots
 

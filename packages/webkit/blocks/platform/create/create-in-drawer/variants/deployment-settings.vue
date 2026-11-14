@@ -207,7 +207,7 @@
                           v-model="form.bindingPolicy"
                           :value="policy.value"
                           name="binding-policy"
-                          :input-id="`deployment-settings-binding-${policy.value}`"
+                          :id="`deployment-settings-binding-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-binding-${policy.value}`">
@@ -241,7 +241,7 @@
                           v-model="form.deploymentPolicy"
                           :value="policy.value"
                           name="version-policy"
-                          :input-id="`deployment-settings-version-${policy.value}`"
+                          :id="`deployment-settings-version-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-version-${policy.value}`">

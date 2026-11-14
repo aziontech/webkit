@@ -78,50 +78,11 @@
   const isAnchor = computed(() => isOption.value && Boolean(props.href) && !props.disabled)
   const showTag = () => isOption.value && (Boolean(props.tagValue) || Boolean(slots['tag']))
 
-  const listItemClasses = computed(() => cn('relative w-full shrink-0', attrs.class))
+  const INTERACTIVE_CLASS =
+    'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) pe-(--spacing-xs) py-(--spacing-xxs) ps-(--spacing-sm) data-[icon]:ps-(--spacing-xxs) text-(--text-default) transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--menu-item-ring-offset,var(--bg-canvas))] not-data-[selected]:hover:bg-(--bg-hover) not-data-[selected]:focus-visible:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:pointer-events-none data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent data-[disabled]:focus-visible:bg-transparent'
 
-  const focusRingClasses = [
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--menu-item-ring-offset,var(--bg-canvas))]'
-  ]
-
-  const interactiveClasses = computed(() =>
-    cn(
-      'group relative flex h-8 w-full shrink-0 items-center',
-      'gap-(--spacing-xs) rounded-(--shape-elements)',
-      'pe-(--spacing-xs) py-(--spacing-xxs)',
-      props.icon ? 'ps-(--spacing-xxs)' : 'ps-(--spacing-sm)',
-      'transition-colors motion-reduce:transition-none',
-      focusRingClasses,
-      props.selected
-        ? 'bg-(--bg-selected) text-(--text-default)'
-        : 'text-(--text-default) hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover)',
-      props.disabled &&
-        'pointer-events-none text-(--text-disabled) hover:bg-transparent focus-visible:bg-transparent'
-    )
-  )
-
-  const groupRowClasses = computed(() =>
-    cn(
-      'relative flex h-7 w-full shrink-0 items-center',
-      'rounded-(--shape-elements) ps-(--spacing-xxs) pe-(--spacing-xs) py-(--spacing-xxs)',
-      'text-(--text-muted)',
-      attrs.class
-    )
-  )
-
-  const iconBoxClasses = 'flex size-8 shrink-0 items-center justify-center overflow-hidden'
-
-  const iconClasses = computed(() =>
-    cn(
-      'size-4 shrink-0 leading-none text-[length:inherit]',
-      props.disabled
-        ? 'text-(--text-disabled)'
-        : props.selected
-          ? 'text-(--text-default)'
-          : 'text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default)'
-    )
-  )
+  const ICON_CLASS =
+    'size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default) group-data-[selected]:text-(--text-default) group-data-[disabled]:text-(--text-disabled)'
 
   const handleClick = (event: MouseEvent) => {
     if (props.disabled || isGroup.value) {
@@ -137,7 +98,7 @@
   <li
     v-if="isOption"
     v-bind="forwardedAttrs"
-    :class="listItemClasses"
+    :class="cn('relative w-full shrink-0', attrs.class as string | undefined)"
     :data-selected="selected ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"
@@ -147,7 +108,10 @@
       :href="href"
       :target="target"
       :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-      :class="interactiveClasses"
+      :class="INTERACTIVE_CLASS"
+      :data-selected="selected ? '' : undefined"
+      :data-disabled="disabled ? '' : undefined"
+      :data-icon="icon ? '' : undefined"
       :aria-current="selected ? 'page' : undefined"
       :aria-disabled="disabled || undefined"
       :tabindex="disabled ? -1 : undefined"
@@ -156,12 +120,12 @@
     >
       <span
         v-if="icon"
-        :class="iconBoxClasses"
+        class="flex size-8 shrink-0 items-center justify-center overflow-hidden"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, directionalIconClass(icon), iconClasses]"
+          :class="[icon, directionalIconClass(icon), ICON_CLASS]"
           aria-hidden="true"
         />
       </span>
@@ -188,7 +152,10 @@
     <button
       v-else
       type="button"
-      :class="interactiveClasses"
+      :class="INTERACTIVE_CLASS"
+      :data-selected="selected ? '' : undefined"
+      :data-disabled="disabled ? '' : undefined"
+      :data-icon="icon ? '' : undefined"
       :aria-current="selected ? 'page' : undefined"
       :aria-disabled="disabled || undefined"
       :disabled="disabled"
@@ -197,12 +164,12 @@
     >
       <span
         v-if="icon"
-        :class="iconBoxClasses"
+        class="flex size-8 shrink-0 items-center justify-center overflow-hidden"
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       >
         <i
-          :class="[icon, directionalIconClass(icon), iconClasses]"
+          :class="[icon, directionalIconClass(icon), ICON_CLASS]"
           aria-hidden="true"
         />
       </span>
@@ -230,7 +197,12 @@
   <li
     v-else-if="isGroup"
     v-bind="forwardedAttrs"
-    :class="groupRowClasses"
+    :class="
+      cn(
+        'relative flex h-7 w-full shrink-0 items-center rounded-(--shape-elements) ps-(--spacing-xxs) pe-(--spacing-xs) py-(--spacing-xxs) text-(--text-muted)',
+        attrs.class as string | undefined
+      )
+    "
     role="presentation"
     :data-testid="testId"
   >

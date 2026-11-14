@@ -3,9 +3,9 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 3794dbe081bd06f05c181dbb2b1f1e372e10b22cd5ee4f77ada2fd3732b7f588
+checksum: b8ddae1961f1d889ea1684a9611525531d8f8cd96111219986244aa7575f7adb
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom="false"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyText` is the empty-list text prop; AttributeEditor's `empty` names the same idea and the next vocabulary pass should align them on `emptyText`.
+A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom="false"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyTitle` is the empty-list text prop, the name `table` and `select` use; AttributeEditor's `empty` names the same idea.
 
 ## When to use
 
@@ -84,37 +84,38 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 ## Props
 
-| Prop          | Type                             | Default    | Required | JSDoc                                                                                                      |
-| ------------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `options`     | `ComboboxOption[]`               | `[]`       | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                         |
-| `placeholder` | `string`                         | `''`       | false    | Placeholder of the field.                                                                                  |
-| `ariaLabel`   | `string`                         | `''`       | false    | Accessible name when no `Field` label names the field.                                                     |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token, as `Input`: 28 / 32 / 40 px.                                                                   |
-| `allowCustom` | `boolean`                        | `true`     | false    | Accepts a typed value that matches no option, offered as `Use "…"`.                                        |
-| `filter`      | `boolean`                        | `true`     | false    | Filters `options` by the typed text. Turn off when the server filters on `search`.                         |
-| `clearable`   | `boolean`                        | `false`    | false    | Shows a clear button while the field has a value.                                                          |
-| `loading`     | `boolean`                        | `false`    | false    | Shows a spinner and the loading row while options are fetched.                                             |
-| `emptyText`   | `string`                         | `''`       | false    | Text of the list when nothing matches. Empty uses the locale catalog.                                      |
-| `disabled`    | `boolean`                        | `false`    | false    | Disables the field.                                                                                        |
-| `readonly`    | `boolean`                        | `false`    | false    | Shows the value without the list or editing.                                                               |
-| `required`    | `boolean`                        | `false`    | false    | Marks the field required (`aria-required`).                                                                |
-| `invalid`     | `boolean`                        | `false`    | false    | Marks the field invalid (`aria-invalid`, danger border).                                                   |
+| Prop          | Type                             | Default    | Required | JSDoc                                                                                                                            |
+| ------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `options`     | `ComboboxOption[]`               | `[]`       | false    | Suggestions: `{ value, label?, description?, group?, disabled? }`.                                                               |
+| `placeholder` | `string`                         | `''`       | false    | Placeholder of the field.                                                                                                        |
+| `ariaLabel`   | `string`                         | `''`       | false    | Accessible name when no `Field` label names the field.                                                                           |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token, as `Input`: 28 / 32 / 40 px.                                                                                         |
+| `allowCustom` | `boolean`                        | `true`     | false    | Accepts a typed value that matches no option, offered as `Use "…"`.                                                              |
+| `filter`      | `boolean`                        | `true`     | false    | Filters `options` by the typed text. Turn off when the server filters on `search`.                                               |
+| `clearable`   | `boolean`                        | `false`    | false    | Shows a clear button while the field has a value.                                                                                |
+| `loading`     | `boolean`                        | `false`    | false    | Shows a spinner and the loading row while options are fetched.                                                                   |
+| `emptyTitle`  | `string`                         | `''`       | false    | Text of the list when nothing matches. Empty uses the locale catalog. Same name as `table`, `select` and the other empty states. |
+| `disabled`    | `boolean`                        | `false`    | false    | Disables the field.                                                                                                              |
+| `readonly`    | `boolean`                        | `false`    | false    | Shows the value without the list or editing.                                                                                     |
+| `required`    | `boolean`                        | `false`    | false    | Marks the field required (`aria-required`).                                                                                      |
+| `invalid`     | `boolean`                        | `false`    | false    | Marks the field invalid (`aria-invalid`, danger border).                                                                         |
+| `defaultOpen` | `boolean`                        | `false`    | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                   |
 
 `ComboboxOption`: `value: string` (committed and matched), `label?: string` (shown instead of the value), `description?: string` (muted, at the end of the row), `group?: string` (rows with the same group sit under one title, in first-seen order), `disabled?: boolean`.
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-| --- | --- | --- | --- | --- |
-| `v-model` | `string` | `''` | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke. |
-| `v-model:open` | `boolean` | `false` | `update:open` | Whether the list is open, via `defineModel('open')`. Unbound, the combobox opens and closes on its own; bound, the parent can open or close it, and every open and close the combobox makes emits `update:open`. Opening is refused while `disabled` or `readonly`. The panel shows only while there is something to list (options, loading or a typed query). |
+| Model          | Type      | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | --------- | ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `string`  | `''`        | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke.                                                                                                                                                                                                                                                                                                                                                     |
+| `v-model:open` | `boolean` | `undefined` | `update:open`       | Whether the list is open, via `defineModel('open')`: focus, typing, ArrowDown / ArrowUp, Alt+ArrowDown / ArrowUp, Escape, pick and blur update it. The list shows while it is open and has rows, is loading or has a no-match row. Unbound, the field keeps it itself and starts at `defaultOpen`; bound, the parent can open or close it, and every open and close the combobox makes emits `update:open`. Opening is refused while `disabled` or `readonly`. |
 
 ## Events
 
-| Event               | Payload  | Notes                                                                      |
-| ------------------- | -------- | -------------------------------------------------------------------------- |
-| `search`            | `string` | The typed text, on each keystroke while the list is open (server filters). |
-| `create`            | `(event: MouseEvent \| KeyboardEvent \| FocusEvent, value: string)` | A value that matches no option was committed (`allowCustom`).              |
+| Event    | Payload                                                             | Notes                                                                      |
+| -------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `search` | `string`                                                            | The typed text, on each keystroke while the list is open (server filters). |
+| `create` | `(event: MouseEvent \| KeyboardEvent \| FocusEvent, value: string)` | A value that matches no option was committed (`allowCustom`).              |
 
 ## Slots
 
@@ -175,7 +176,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 | Key                    | English source                                | Override prop |
 | ---------------------- | --------------------------------------------- | ------------- |
-| `combobox.empty`       | `No matches`                                  | `emptyText`   |
+| `combobox.empty`       | `No matches`                                  | `emptyTitle`  |
 | `combobox.loading`     | `Loading options`                             | —             |
 | `combobox.useValue`    | `Use "{value}"`                               | —             |
 | `combobox.clear`       | `Clear`                                       | —             |

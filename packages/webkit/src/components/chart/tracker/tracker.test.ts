@@ -163,18 +163,19 @@ describe('Tracker', () => {
     ).toEqual(week.map((item) => item.label))
   })
 
-  it('reads the status field, and still the deprecated severity', () => {
+  it('colors each block by its severity field, and a missing severity as no data', () => {
     const view = render(Tracker, {
       props: {
         items: [
-          { status: 'danger', label: 'A' },
-          { severity: 'warning', label: 'B' }
+          { severity: 'danger', label: 'A' },
+          { label: 'B' },
+          { severity: 'success', label: 'C' }
         ]
       }
     })
     expect(
       view.getAllByTestId('chart-tracker__block').map((block) => block.dataset['severity'])
-    ).toEqual(['danger', 'warning'])
+    ).toEqual(['danger', 'none', 'success'])
   })
 
   it('syncs the active block through v-model:active-index', async () => {

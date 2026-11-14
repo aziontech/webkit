@@ -67,6 +67,8 @@
     title?: string
     /** Disables the trigger. */
     disabled?: boolean
+    /** Initial open state when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -75,10 +77,18 @@
     sections: () => ['page-size', 'columns', 'wrap-lines', 'striped', 'density'],
     container: 'dialog',
     title: '',
-    disabled: false
+    disabled: false,
+    defaultOpen: false
   })
 
-  const open = defineModel<boolean>('open', { default: false })
+  /** Whether the panel is open. Supports v-model:open; omit for uncontrolled, seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
+  const open = computed<boolean>({
+    get: () => openModel.value ?? props.defaultOpen,
+    set: (next) => {
+      if (next !== open.value) openModel.value = next
+    }
+  })
   /** The saved preferences. Supports v-model:preferences; changes apply on Confirm. */
   const preferences = defineModel<CollectionPreferencesValue>('preferences', {
     default: () => ({})

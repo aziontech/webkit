@@ -31,6 +31,18 @@ describe('Switch', () => {
     })
   })
 
+  describe('invalid', () => {
+    it('marks the switch aria-invalid and data-invalid from its own prop', async () => {
+      const view = render(Switch, { props: { invalid: true }, attrs: { 'aria-label': 'Alerts' } })
+      const root = view.getByTestId('input-switch')
+      expect(root.getAttribute('aria-invalid')).toBe('true')
+      expect(root.hasAttribute('data-invalid')).toBe(true)
+      await view.rerender({ invalid: false })
+      expect(root.hasAttribute('aria-invalid')).toBe(false)
+      expect(root.hasAttribute('data-invalid')).toBe(false)
+    })
+  })
+
   describe('root semantics', () => {
     it('renders a native button with role=switch and type=button', () => {
       const { getByTestId } = render(Switch, {

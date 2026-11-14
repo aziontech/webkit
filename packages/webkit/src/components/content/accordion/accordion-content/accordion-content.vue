@@ -28,12 +28,20 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-content'
   )
 
-  const DURATION = 150
   const cancels = new WeakMap<globalThis.HTMLElement, () => void>()
 
   const prefersReducedMotion = () =>
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const seconds = (list: string) => list.split(',').map((d) => parseFloat(d) || 0)
+
+  const transitionMs = (node: globalThis.HTMLElement) => {
+    const style = globalThis.getComputedStyle(node)
+    const durations = seconds(style.transitionDuration)
+    const delays = seconds(style.transitionDelay)
+    return Math.max(0, ...durations.map((d, i) => d + (delays[i % delays.length] ?? 0))) * 1000
+  }
 
   const animateHeight = (
     node: globalThis.HTMLElement,
@@ -42,7 +50,8 @@
     done: () => void
   ) => {
     cancels.get(node)?.()
-    if (prefersReducedMotion() || from === to) {
+    const duration = prefersReducedMotion() || from === to ? 0 : transitionMs(node)
+    if (duration <= 0) {
       node.style.height = ''
       done()
       return
@@ -53,7 +62,7 @@
     const onEnd = (event: globalThis.TransitionEvent) => {
       if (event.target === node && event.propertyName === 'height') finish()
     }
-    const timer = setTimeout(() => finish(), DURATION + 50)
+    const timer = setTimeout(() => finish(), duration + 50)
     const stop = () => {
       clearTimeout(timer)
       node.removeEventListener('transitionend', onEnd)

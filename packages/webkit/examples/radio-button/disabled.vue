@@ -12,7 +12,7 @@
       name="webkit-radio-disabled"
       value="a"
       disabled
-      input-id="webkit-radio-disabled-a"
+      id="webkit-radio-disabled-a"
       aria-label="Disabled selected"
     />
     <RadioButton
@@ -20,7 +20,7 @@
       name="webkit-radio-disabled"
       value="b"
       disabled
-      input-id="webkit-radio-disabled-b"
+      id="webkit-radio-disabled-b"
       aria-label="Disabled unselected"
     />
   </fieldset>

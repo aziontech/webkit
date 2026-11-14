@@ -21,6 +21,7 @@ export const SCANNED = [
 ]
 
 export const VALUE_DEPRECATIONS = [
+  { component: 'content/badge/badge.vue', prop: 'severity', value: 'default', use: 'neutral' },
   { component: 'feedback/skeleton/skeleton.vue', prop: 'kind', value: 'shape', use: 'rectangle' }
 ]
 

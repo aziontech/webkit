@@ -7,6 +7,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
 const SEVERITIES = [
+  'neutral',
   'primary',
   'secondary',
   'success',
@@ -150,7 +151,7 @@ describe('Tag', () => {
 
   it('falls back to primary for a severity outside the union', () => {
     const { getByTestId } = render(Tag, {
-      props: { label: 'Inactive', severity: 'neutral' as never }
+      props: { label: 'Inactive', severity: 'bogus' as never }
     })
 
     expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')

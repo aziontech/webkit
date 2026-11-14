@@ -6,6 +6,10 @@
   <div class="flex flex-wrap items-center gap-4">
     <Tag
       label="Label"
+      severity="neutral"
+    />
+    <Tag
+      label="Label"
       severity="primary"
     />
     <Tag

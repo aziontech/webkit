@@ -44,15 +44,25 @@
     loading?: boolean
     /** Dialog title. Empty uses the locale catalog (`What went wrong?`). */
     title?: string
+    /** Initial open state when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     reasons: () => [],
     loading: false,
-    title: ''
+    title: '',
+    defaultOpen: false
   })
 
-  const open = defineModel<boolean>('open', { default: false })
+  /** Whether the dialog is open. Supports v-model:open; omit for uncontrolled, seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
+  const open = computed<boolean>({
+    get: () => openModel.value ?? props.defaultOpen,
+    set: (next) => {
+      if (next !== open.value) openModel.value = next
+    }
+  })
 
   const emit = defineEmits<{
     submit: [event: SubmitEvent, payload: FeedbackReasonPayload]
@@ -142,7 +152,7 @@
                       v-model="reason"
                       :value="option.value"
                       :name="`${uid}-reason`"
-                      :input-id="`${uid}-${option.value}`"
+                      :id="`${uid}-${option.value}`"
                     />
                     <FieldLabel :for="`${uid}-${option.value}`">{{ option.label }}</FieldLabel>
                   </Field>

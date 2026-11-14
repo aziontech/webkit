@@ -260,7 +260,7 @@
                                 v-model="form.protocolUsage"
                                 :value="option.value"
                                 name="protocolUsage"
-                                :input-id="`app-protocolUsage-${option.value}`"
+                                :id="`app-protocolUsage-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>
@@ -379,7 +379,7 @@
                                 v-model="form.protocolPolicy"
                                 :value="option.value"
                                 name="protocolPolicy"
-                                :input-id="`app-protocolPolicy-${option.value}`"
+                                :id="`app-protocolPolicy-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>
@@ -467,7 +467,7 @@
                                 v-model="form.browserCache"
                                 :value="option.value"
                                 name="browserCache"
-                                :input-id="`app-browserCache-${option.value}`"
+                                :id="`app-browserCache-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>
@@ -509,7 +509,7 @@
                                 v-model="form.cache"
                                 :value="option.value"
                                 name="cache"
-                                :input-id="`app-cache-${option.value}`"
+                                :id="`app-cache-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>
