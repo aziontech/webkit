@@ -22,5 +22,25 @@
       "summary": "`copy-beside-art` with an `image` instead of an illustration: the photograph fills the media column, and a portrait one is drawn at half width, centered, on narrow screens. The eyebrow takes the `</>` prefix.",
       "file": "image.vue"
     }
-  ]
+  ],
+  "site": [
+    {
+      "name": "Title band",
+      "summary": "",
+      "file": "site-title-band.vue",
+      "json": "site-title-band.json"
+    },
+    {
+      "name": "Scene",
+      "summary": "",
+      "file": "site-scene.vue",
+      "json": "site-scene.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Hero Band/HeroBand",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["TitleBand", "TitleBandJson", "Scene", "SceneJson"]
 }
