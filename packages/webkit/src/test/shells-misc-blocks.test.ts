@@ -16,6 +16,7 @@ import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
 import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
 import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
 import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
+import FirstUse from '../../blocks/platform/states/first-use/first-use.vue'
 import ProjectIntake from '../../blocks/platform/states/project-intake/project-intake.vue'
 import Initializing from '../../blocks/platform/states/project-intake/variants/initializing.vue'
 import UploadFailed from '../../blocks/platform/states/project-intake/variants/upload-failed.vue'
@@ -269,5 +270,17 @@ describe('platform/states/project-intake', () => {
     await waitFor(() =>
       expect(view.container.textContent).not.toContain('1 file could not be uploaded')
     )
+  })
+})
+
+describe('platform/states/first-use', () => {
+  it('makes both promos links and copies the real CLI command', () => {
+    const view = render(FirstUse)
+    const catalog = view.getByRole('link', { name: /Start from a Catalog template/ })
+    expect(catalog.getAttribute('target')).toBe('_blank')
+    expect(view.getByRole('link', { name: /Set up your coding agent/ }).getAttribute('href')).toBe(
+      '/agent-setup'
+    )
+    expect((view.getByLabelText('Via CLI command') as HTMLInputElement).value).toBe('azion deploy')
   })
 })

@@ -37,7 +37,7 @@ The resource glyph, a headline that names the first action, and one sentence on 
 
 ### E. Methods — `Item` (required)
 
-An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: a bordered icon frame in `Item.Media`, `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
+An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media kind="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
 
 ### F. Method action — `Button` (required)
 
@@ -62,7 +62,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 - Show the Catalog template promo only for resource kinds that have a template catalog.
 - Keep one primary action across the whole block, on the method most users take.
 - Keep the documentation link as the only action in the `EmptyState`.
-- Hold the block's footprint with `Skeleton` bands while the account reloads, so it does not jump in.
+- Hold the block's own footprint while the account reloads (the empty-state band, one row per method and the promo cards, in `Skeleton`s), so it does not jump in.
 
 ## Don't
 
@@ -86,7 +86,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 ## Accessibility
 
 - The method icons and promo marks are decorative (`aria-hidden="true"`, `alt=""`); the titles carry the meaning.
-- Each promo is a real `<button type="button">` covering the card, so it is reachable and announced by its title.
+- Each promo is a real link (`<a href>`) covering the card, because both navigate; the Catalog one opens a new tab, shows the external-link glyph and says so to screen readers.
 - The command `Input` has an `aria-label`; the copy button has its own label and announces the copied state.
 - The documentation link opens in a new tab; say so in the destination or let `Link` mark it.
 - The headline is the page's first heading under the list title, not a second `h1`.
@@ -94,7 +94,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 ## States
 
 - Default: the explanation, three create methods and the two promos.
-- Loading: while the account reloads, two `Skeleton` bands hold the block's footprint.
+- Loading: while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
 
 ## Related
 
