@@ -170,7 +170,7 @@
                   <CodeBlock
                     :tabs="codeFiles[index]"
                     show-line-numbers
-                    :animate-lines="active"
+                    v-bind="{ animateLines: active }"
                     :copy-aria-label="copyAriaLabel || undefined"
                   />
                 </div>
