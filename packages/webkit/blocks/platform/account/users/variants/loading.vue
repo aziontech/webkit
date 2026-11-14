@@ -3,7 +3,14 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
@@ -14,27 +21,32 @@
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Select from '@aziontech/webkit/select'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   type UserStatus = 'Active' | 'Invited' | 'Inactive'
+  type UserRole = 'Owner' | 'Admin' | 'Developer' | 'Viewer'
 
   interface User {
     id: string
     name: string
     email: string
     owner: boolean
+    role: UserRole
     teams: string[]
     status: UserStatus
     lastActive: Date | null
@@ -52,6 +64,16 @@
   const teamsLabel = (values: string[]): string =>
     values.length ? values.map(teamLabel).join(', ') : 'No team (no access)'
 
+  const ROLES: { value: Exclude<UserRole, 'Owner'>; hint: string }[] = [
+    { value: 'Admin', hint: 'Manages people, teams, billing and every account setting.' },
+    { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
+    { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
+  ]
+  const roleSeverity = (value: UserRole): TagSeverity =>
+    (({ Owner: 'highlight', Admin: 'info', Developer: 'secondary', Viewer: 'secondary' }) as const)[
+      value
+    ] ?? 'secondary'
+
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
 
@@ -61,6 +83,7 @@
       name: 'Avery Stone',
       email: 'avery.stone@example.com',
       owner: true,
+      role: 'Owner',
       teams: ['administrators'],
       status: 'Active',
       lastActive: new Date(REFERENCE - 0.02 * DAY)
@@ -70,6 +93,7 @@
       name: 'Jordan Reyes',
       email: 'jordan.reyes@example.com',
       owner: false,
+      role: 'Admin',
       teams: ['administrators', 'security'],
       status: 'Active',
       lastActive: new Date(REFERENCE - 0.1 * DAY)
@@ -79,6 +103,7 @@
       name: 'Priya Nair',
       email: 'priya.nair@example.com',
       owner: false,
+      role: 'Developer',
       teams: ['developers'],
       status: 'Active',
       lastActive: new Date(REFERENCE - 1 * DAY)
@@ -88,6 +113,7 @@
       name: '',
       email: 'sam.okafor@example.com',
       owner: false,
+      role: 'Developer',
       teams: ['developers', 'support'],
       status: 'Invited',
       lastActive: null
@@ -97,6 +123,7 @@
       name: 'Lena Fischer',
       email: 'lena.fischer@example.com',
       owner: false,
+      role: 'Viewer',
       teams: ['finance'],
       status: 'Active',
       lastActive: new Date(REFERENCE - 3 * DAY)
@@ -106,6 +133,7 @@
       name: 'Marco Bianchi',
       email: 'marco.bianchi@example.com',
       owner: false,
+      role: 'Viewer',
       teams: [],
       status: 'Inactive',
       lastActive: new Date(REFERENCE - 64 * DAY)
@@ -113,6 +141,7 @@
   ]
 
   const INVITE_ON_START = false
+  const EDIT_ROLE_ON_START = ''
   const users = ref<User[]>([])
   const loading = ref(true)
   const loadFailed = ref(false)
@@ -124,18 +153,36 @@
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'email', header: 'Email', grow: 2, minWidth: 220 },
+    { accessorKey: 'role', header: 'Role', enableSorting: true, minWidth: 120 },
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
-    { accessorKey: 'status', header: 'Status', minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 110 },
     { accessorKey: 'lastActive', header: 'Last active', minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const { filterProps, tableProps, clearFilters } = useCollection({
-    items: users,
-    columns,
-    filtering: { fields: ['name', 'email', 'status'] },
-    pagination: { pageSize: 10 }
-  })
+  const optionsOf = (key: 'role' | 'status') =>
+    [...new Set(seedUsers.map((user) => user[key]))].sort().map((value) => ({ value }))
+
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    { key: 'role', label: 'Role', options: optionsOf('role') },
+    { key: 'status', label: 'Status', options: optionsOf('status') }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
+    useCollection({
+      items: users,
+      columns,
+      filtering: { fields: ['name', 'email', 'role', 'status'] },
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'account-users' }
+    })
+
+  const usersTable = ref<TableExposed<User> | null>(null)
+  const exportCsv = () => usersTable.value?.exportCsv({ filename: 'users.csv' })
 
   const alone = computed(() => !loading.value && users.value.length === 1 && users.value[0].owner)
 
@@ -145,6 +192,14 @@
     setTimeout(() => {
       users.value = seedUsers
       loading.value = false
+    }, 700)
+  }
+
+  const refreshing = ref(false)
+  const refresh = () => {
+    refreshing.value = true
+    setTimeout(() => {
+      refreshing.value = false
     }, 700)
   }
 
@@ -169,7 +224,46 @@
 
   const pending = ref<User | null>(null)
   const removeOpen = ref(false)
+  const profileOpen = ref(false)
+  const roleOpen = ref(false)
+  const nextRole = ref<UserRole>('Developer')
+  const roleHint = computed(() => ROLES.find((role) => role.value === nextRole.value)?.hint ?? '')
+  const openRole = (user: User) => {
+    pending.value = user
+    nextRole.value = user.role
+    profileOpen.value = false
+    roleOpen.value = true
+  }
+  const setRole = (id: string, role: UserRole) => {
+    users.value = users.value.map((user) => (user.id === id ? { ...user, role } : user))
+  }
+  const saveRole = () => {
+    const user = pending.value
+    if (!user) return
+    const before = user.role
+    const after = nextRole.value
+    roleOpen.value = false
+    if (before === after) return
+    setRole(user.id, after)
+    toast.success(`${displayName(user)} is now ${after}.`, {
+      description: 'The new role applies on their next request.',
+      actions: [{ label: 'Undo', onClick: () => setRole(user.id, before) }]
+    })
+  }
+
+  const editOnStart = users.value.find((user) => user.id === EDIT_ROLE_ON_START)
+  if (editOnStart) openRole(editOnStart)
+
   const onAction = (value: DropdownMenuOptionValue, user: User) => {
+    if (value === 'view') {
+      pending.value = user
+      profileOpen.value = true
+      return
+    }
+    if (value === 'role') {
+      openRole(user)
+      return
+    }
     if (value === 'resend') {
       toast.success(`Invitation sent again to ${user.email}.`, {
         description: 'The earlier link stops working.'
@@ -233,6 +327,7 @@
           name: '',
           email,
           owner: false,
+          role: 'Developer',
           teams: [...invite.teams],
           status: 'Invited',
           lastActive: null
@@ -276,22 +371,46 @@
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
           v-if="!loadFailed"
-          class="flex items-center gap-(--layout-group-gap)"
+          class="flex flex-wrap items-start gap-(--layout-group-gap)"
         >
-          <div class="min-w-0 grow">
-            <Input
-              v-bind="filterProps"
-              placeholder="Search users"
-              aria-label="Search users"
-              class="w-full"
+          <div class="flex min-w-0 grow basis-(--container-2xs)">
+            <PropertyFilter
+              v-bind="propertyFilterProps"
+              placeholder="Filter users"
+              aria-label="Filter users"
+            />
+          </div>
+          <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+            <Tooltip
+              text="Refresh"
+              class="shrink-0"
             >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
+              <IconButton
+                icon="pi pi-refresh"
+                kind="outlined"
+                size="medium"
+                :loading="refreshing"
+                aria-label="Refresh"
+                @click="refresh"
+              />
+            </Tooltip>
+            <Tooltip
+              text="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="pi pi-download"
+                kind="outlined"
+                size="medium"
+                :disabled="!matchingItems.length"
+                aria-label="Download CSV"
+                @click="exportCsv"
+              />
+            </Tooltip>
+            <CollectionPreferences
+              v-bind="preferencesProps"
+              title="Table preferences"
+            />
           </div>
         </header>
 
@@ -316,8 +435,9 @@
         >
           <template #content>
             <Table
+              ref="usersTable"
               v-bind="tableProps"
-              :loading="loading"
+              :loading="loading || refreshing"
               enable-sorting
               :bordered="false"
               aria-label="Users"
@@ -330,25 +450,25 @@
                     kind="square"
                   />
                   <div class="flex min-w-0 flex-col">
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <span class="truncate text-body-sm text-(--text-default)">{{
-                        displayName(row)
-                      }}</span>
-                      <Tag
-                        v-if="row.owner"
-                        label="Owner"
-                        severity="highlight"
-                        size="small"
-                        class="shrink-0"
-                      />
-                    </span>
-                    <span
-                      v-if="row.name"
-                      class="truncate text-body-xs text-(--text-muted)"
-                      >{{ row.email }}</span
-                    >
+                    <span class="truncate text-body-sm text-(--text-default)">{{
+                      displayName(row)
+                    }}</span>
                   </div>
                 </div>
+              </template>
+              <template #cell-email="{ value }">
+                <span
+                  class="truncate"
+                  dir="ltr"
+                  >{{ value }}</span
+                >
+              </template>
+              <template #cell-role="{ value }">
+                <Tag
+                  :label="value"
+                  :severity="roleSeverity(value)"
+                  size="small"
+                />
               </template>
               <template #cell-teams="{ row }">
                 <Tooltip
@@ -401,16 +521,32 @@
               <template #cell-actions="{ row }">
                 <Table.CellActions
                   :name="displayName(row)"
-                  :disabled="row.owner"
                   @select="(_event, value) => onAction(value, row)"
                 >
-                  <DropdownMenu.Group v-if="row.status === 'Invited'">
+                  <DropdownMenu.Group key="profile">
+                    <DropdownMenu.Option
+                      value="view"
+                      label="View profile"
+                    />
+                    <DropdownMenu.Option
+                      v-if="!row.owner"
+                      value="role"
+                      label="Edit role"
+                    />
+                  </DropdownMenu.Group>
+                  <DropdownMenu.Group
+                    v-if="row.status === 'Invited'"
+                    key="invitation"
+                  >
                     <DropdownMenu.Option
                       value="resend"
                       label="Resend invitation"
                     />
                   </DropdownMenu.Group>
-                  <DropdownMenu.Group>
+                  <DropdownMenu.Group
+                    v-if="!row.owner"
+                    key="remove"
+                  >
                     <DropdownMenu.Option
                       value="remove"
                       :label="
@@ -425,11 +561,11 @@
                   size="small"
                   icon="pi pi-search"
                   title="No matching users"
-                  description="No user matches this search."
+                  description="No user matches these filters."
                 >
                   <template #actions>
                     <Button
-                      label="Clear search"
+                      label="Clear filters"
                       kind="outlined"
                       size="small"
                       @click="clearFilters"
@@ -562,6 +698,144 @@
         </DrawerContent>
       </DrawerPortal>
     </Drawer>
+
+    <Dialog
+      v-model:open="profileOpen"
+      size="medium"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+              <Avatar
+                :label="pending ? displayName(pending) : ''"
+                size="medium"
+                kind="square"
+              />
+              <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
+            </div>
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <DialogDescription>
+                What this person can do comes from their role and their teams.
+              </DialogDescription>
+              <KeyValuePairs
+                v-if="pending"
+                :columns="2"
+                aria-label="Profile"
+              >
+                <KeyValuePairs.Item label="Email">
+                  <span dir="ltr">{{ pending.email }}</span>
+                </KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Role">
+                  <Tag
+                    :label="pending.role"
+                    :severity="roleSeverity(pending.role)"
+                    size="small"
+                  />
+                </KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Teams">{{
+                  teamsLabel(pending.teams)
+                }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Status">{{ pending.status }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Last active">
+                  <Table.CellTime
+                    v-if="pending.lastActive"
+                    :value="pending.lastActive"
+                  />
+                  <span v-else>Not signed in yet</span>
+                </KeyValuePairs.Item>
+              </KeyValuePairs>
+            </div>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                label="Close"
+                kind="outlined"
+                size="medium"
+                @click="profileOpen = false"
+              />
+              <Button
+                v-if="pending && !pending.owner"
+                label="Edit role"
+                kind="primary"
+                size="medium"
+                @click="openRole(pending)"
+              />
+            </div>
+          </PanelFooter>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
+
+    <Dialog
+      v-model:open="roleOpen"
+      size="small"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <form
+            class="flex min-h-0 flex-1 flex-col"
+            aria-label="Edit role"
+            novalidate
+            @submit.prevent="saveRole"
+          >
+            <PanelHeader class="w-full">
+              <DialogTitle>Edit role</DialogTitle>
+            </PanelHeader>
+            <PanelContent>
+              <div class="flex flex-col gap-(--spacing-md)">
+                <DialogDescription>
+                  Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
+                  teams still decide which resources they reach.
+                </DialogDescription>
+                <Field>
+                  <Field.Label for="user-role">Role</Field.Label>
+                  <Select
+                    v-model="nextRole"
+                    size="large"
+                    class="w-full"
+                  >
+                    <Select.Trigger id="user-role" />
+                    <Select.Content>
+                      <Select.Option
+                        v-for="role in ROLES"
+                        :key="role.value"
+                        :value="role.value"
+                      >
+                        {{ role.value }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <Field.Description>{{ roleHint }}</Field.Description>
+                </Field>
+              </div>
+            </PanelContent>
+            <PanelFooter>
+              <div class="flex w-full justify-end gap-(--spacing-xs)">
+                <Button
+                  type="button"
+                  label="Cancel"
+                  kind="outlined"
+                  size="medium"
+                  @click="roleOpen = false"
+                />
+                <Button
+                  type="submit"
+                  label="Save role"
+                  kind="primary"
+                  size="medium"
+                />
+              </div>
+            </PanelFooter>
+          </form>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
 
     <ConfirmDialog
       v-model:open="removeOpen"
