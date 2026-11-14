@@ -224,7 +224,7 @@
       v-if="state === 'running'"
       :value="percent"
       size="small"
-      shape="rounded"
+      kind="rounded"
       :aria-labelledby="titleId"
     />
 
@@ -316,7 +316,7 @@
               :value="item.progress ?? 0"
               :indeterminate="typeof item.progress !== 'number'"
               size="small"
-              shape="rounded"
+              kind="rounded"
               :aria-label="t('uploadProgress.itemProgress', { name: item.name })"
             />
           </li>
