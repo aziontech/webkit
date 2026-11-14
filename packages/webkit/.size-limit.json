@@ -1118,7 +1118,7 @@
   {
     "name": "save-bar",
     "path": "src/components/layout/save-bar/save-bar.vue",
-    "limit": "1.5 KB"
+    "limit": "2.1 KB"
   },
   {
     "name": "page-tabs",

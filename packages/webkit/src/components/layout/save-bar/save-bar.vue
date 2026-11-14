@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, nextTick, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it, `centered` floats the actions as a raised card centred over the bottom of a create page. */
   export type SaveBarKind = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
@@ -14,7 +14,7 @@
     kind?: SaveBarKind
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     kind: 'floating'
   })
 
@@ -29,17 +29,102 @@
 
   const attrs = useAttrs()
 
+  const root = ref<HTMLElement | null>(null)
+  const shell = ref<HTMLElement | null>(null)
+  const reserved = ref(0)
+  let observer: ResizeObserver | null = null
+  let measured = -1
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-save-bar')
+
+  const rootStyle = computed(() => (reserved.value ? { height: `${reserved.value}px` } : undefined))
+
+  function publish(height: number) {
+    const documentRoot = globalThis.document?.documentElement
+    if (!documentRoot) return
+    if (height) {
+      documentRoot.style.setProperty('--save-bar-inset', `${height}px`)
+      documentRoot.style.setProperty('--toast-offset-bottom', `${height}px`)
+    } else {
+      documentRoot.style.removeProperty('--save-bar-inset')
+      documentRoot.style.removeProperty('--toast-offset-bottom')
+    }
+  }
+
+  function scrolls(node: Element) {
+    const overflow = getComputedStyle(node).overflowY
+    return overflow === 'auto' || overflow === 'scroll'
+  }
+
+  function reachableScroll() {
+    const element = root.value
+    if (!element) return 0
+    let total = 0
+    let node = element.parentElement
+    while (node && node !== globalThis.document?.body) {
+      if (scrolls(node)) {
+        total += node.scrollHeight - node.clientHeight
+        break
+      }
+      node = node.parentElement
+    }
+    for (const sibling of Array.from(element.parentElement?.children ?? [])) {
+      if (sibling !== element && scrolls(sibling))
+        total += sibling.scrollHeight - sibling.clientHeight
+    }
+    return total
+  }
+
+  async function measure(element: HTMLElement | null) {
+    const height = element ? element.offsetHeight : 0
+    if (height === measured) return
+    measured = height
+    publish(height)
+    if (reserved.value) {
+      reserved.value = 0
+      await nextTick()
+    }
+    if (!height) return
+    const before = reachableScroll()
+    reserved.value = height
+    await nextTick()
+    if (reachableScroll() <= before) reserved.value = 0
+  }
+
+  function release() {
+    observer?.disconnect()
+    observer = null
+    measured = -1
+    reserved.value = 0
+    publish(0)
+  }
+
+  watch(
+    [shell, () => props.kind],
+    ([element, kind]) => {
+      release()
+      if (!element || kind !== 'floating' || typeof ResizeObserver === 'undefined') return
+      observer = new ResizeObserver(() => measure(element))
+      observer.observe(element)
+      measure(element)
+    },
+    { flush: 'post' }
+  )
+
+  onScopeDispose(release)
 </script>
 
 <template>
   <footer
+    ref="root"
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
+    :style="rootStyle"
     class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas) data-[kind=centered]:pointer-events-none"
   >
     <div
+      ref="shell"
       class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
     >
       <div
