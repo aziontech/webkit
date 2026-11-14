@@ -172,9 +172,36 @@
         activate(event, id)
         break
       default:
-        return
+        if (!typeahead(event, id)) return
     }
     event.preventDefault()
+  }
+
+  let typed = ''
+  let typedAt = 0
+
+  function typeahead(event: KeyboardEvent, fromId: string): boolean {
+    if (
+      event.key.length !== 1 ||
+      event.key === ' ' ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey
+    )
+      return false
+    typed = event.timeStamp - typedAt > 500 ? event.key : `${typed}${event.key}`
+    typedAt = event.timeStamp
+    const query = typed.toLocaleLowerCase()
+    const ids = navigation.visible.value
+    const position = ids.indexOf(fromId)
+    const start = typed.length === 1 ? position + 1 : Math.max(position, 0)
+    const ordered = [...ids.slice(start), ...ids.slice(0, start)]
+    const match = ordered.find((candidate) =>
+      (navigation.entry(candidate)?.item.label ?? '').toLocaleLowerCase().startsWith(query)
+    )
+    if (!match) return false
+    focusItem(match)
+    return true
   }
 
   provide(TreeInjectionKey, {
