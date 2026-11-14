@@ -3,13 +3,13 @@ name: badge
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 30b524661d9a77a40632b1b11e1f1731a4309f58188c71d226fcedb97dccd4fa
+checksum: c4fc25c25fc50457a1ec3e3516aa8a689eb3a8e8d4efa2dd36274c91abe576d4
 created: 2026-06-23
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Badge — Component Spec
@@ -56,11 +56,11 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 ## Props
 
-| Prop       | Type                                                                          | Default     | Required | JSDoc                                                                                                                        |
-| ---------- | ----------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                                                                      | `''`        | false    | Fallback text when the default slot is empty.                                                                                |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'default'` | `'primary'` | false    | Color style for the badge surface and label; `default` uses the neutral `var(--bg-surface)` / `var(--text-default)` surface. |
-| `size`     | `'small' \| 'medium' \| 'large'`                                              | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                         |
+| Prop       | Type                                                                                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                                                   | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                     |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'neutral' \| 'default'` | `'primary'` | false    | Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). `default` is the same look under its old name, deprecated since 6.0 — use `neutral`. Removed in 7.0. |
+| `size`     | `'small' \| 'medium' \| 'large'`                                                           | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                                                                                                                                                                                                              |
 
 ## Events
 
@@ -76,7 +76,7 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 Badge is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed verbatim as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
-- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `default`).
+- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `neutral` | `default`).
 - `data-size` mirrors the `size` prop (`small` | `medium` | `large`).
 
 ## Motion & Animations

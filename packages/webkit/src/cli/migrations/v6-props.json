@@ -19,6 +19,14 @@
   "banner-art": {
     "art": "kind"
   },
+  "badge": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "default": "neutral"
+      }
+    }
+  },
   "button": {
     "kind": {
       "to": "kind",

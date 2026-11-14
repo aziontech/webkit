@@ -5,7 +5,15 @@ import Default from '../../../../examples/badge/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Badge from './badge.vue'
 
-const SEVERITIES = ['primary', 'secondary', 'success', 'warning', 'danger', 'default'] as const
+const SEVERITIES = [
+  'primary',
+  'secondary',
+  'success',
+  'warning',
+  'danger',
+  'neutral',
+  'default'
+] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Badge', () => {

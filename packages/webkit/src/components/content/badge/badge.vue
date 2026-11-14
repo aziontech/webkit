@@ -1,7 +1,12 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type BadgeSeverity = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'default'
+  import type { Severity } from '../../../utils/severity'
+
+  export type { Severity } from '../../../utils/severity'
+
+  /** Color style of the badge: the shared status scale minus `info`, plus `primary` and `secondary`. `default` is deprecated since 6.0 — use `neutral`. Removed in 7.0. */
+  export type BadgeSeverity = Exclude<Severity, 'info'> | 'primary' | 'secondary' | 'default'
 
   export type BadgeSize = 'small' | 'medium' | 'large'
 
@@ -40,6 +45,7 @@
       'success',
       'warning',
       'danger',
+      'neutral',
       'default'
     ]
     const severity = props.severity ?? 'primary'
@@ -55,7 +61,7 @@
     :data-severity="resolvedSeverity"
     :data-size="size"
     :class="attrs.class"
-    class="inline-flex items-center justify-center overflow-hidden leading-none text-label-md data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-xxs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] data-[size=large]:px-(--spacing-xs) rounded-(--shape-elements) data-[severity=primary]:bg-(--primary) data-[severity=primary]:text-(--primary-contrast) data-[severity=secondary]:bg-(--secondary) data-[severity=secondary]:text-(--secondary-contrast) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-contrast) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-contrast) data-[severity=default]:bg-(--bg-surface) data-[severity=default]:text-(--text-default)"
+    class="inline-flex items-center justify-center overflow-hidden leading-none text-label-md data-[size=small]:text-label-sm data-[size=small]:h-5 data-[size=small]:px-(--spacing-xxs) data-[size=medium]:h-6 data-[size=medium]:px-(--spacing-xs) data-[size=large]:h-[30px] data-[size=large]:px-(--spacing-xs) rounded-(--shape-elements) data-[severity=primary]:bg-(--primary) data-[severity=primary]:text-(--primary-contrast) data-[severity=secondary]:bg-(--secondary) data-[severity=secondary]:text-(--secondary-contrast) data-[severity=success]:bg-(--success) data-[severity=success]:text-(--success-contrast) data-[severity=warning]:bg-(--warning) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:bg-(--danger) data-[severity=danger]:text-(--danger-contrast) data-[severity=neutral]:bg-(--bg-surface) data-[severity=neutral]:text-(--text-default) data-[severity=default]:bg-(--bg-surface) data-[severity=default]:text-(--text-default)"
   >
     <slot v-if="$slots['default']" />
     <span

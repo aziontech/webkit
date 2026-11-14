@@ -66,6 +66,7 @@ component.
 | ---------------------- | ------------------ | -------------------- |
 | `accordion`            | `value`            | `modelValue`         |
 | `alert`                | `severity="error"` | `severity="danger"`  |
+| `badge`                | `severity=default` | `severity=neutral`   |
 | `button`               | `kind="text"`      | `kind="transparent"` |
 | `calendar`             | `showTimezone`     | `showTimeZone`       |
 | `calendar`             | `timezone`         | `timeZone`           |
