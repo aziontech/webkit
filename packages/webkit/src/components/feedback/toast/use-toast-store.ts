@@ -39,6 +39,8 @@ export interface ToastOptions {
   onClose?: () => void
   /** Stable id; pass an existing id to update a toast in place. */
   id?: string
+  /** Completion from 0 to 100; renders a progress bar and its percentage under the copy. */
+  progress?: number
 }
 
 /** Messages shown across the lifecycle of a tracked promise. */
@@ -78,6 +80,8 @@ export interface ToastEntry {
   closable?: boolean
   /** Called when the toast is dismissed (close control, auto-dismiss, or programmatic). */
   onClose?: () => void
+  /** Completion from 0 to 100; renders a progress bar and its percentage under the copy. */
+  progress?: number
 }
 
 /** Patch applied by `update()` (every field optional except identity, which is positional). */
@@ -255,7 +259,8 @@ const raise = (severity: ToastSeverity, message: string, options: ToastOptions =
     duration: options.duration,
     position: options.position,
     closable: options.closable,
-    onClose: options.onClose
+    onClose: options.onClose,
+    progress: options.progress
   })
 
 interface ToastFn {
@@ -265,6 +270,7 @@ interface ToastFn {
   info: (message: string, options?: ToastOptions) => string
   warning: (message: string, options?: ToastOptions) => string
   loading: (message: string, options?: ToastOptions) => string
+  progress: (message: string, value: number, options?: ToastOptions) => string
   promise: <T>(
     promise: Promise<T>,
     messages: ToastPromiseMessages<T>,
@@ -282,6 +288,9 @@ toastFn.error = (message, options) => raise('danger', message, options)
 toastFn.info = (message, options) => raise('info', message, options)
 toastFn.warning = (message, options) => raise('warning', message, options)
 toastFn.loading = (message, options) => raise('loading', message, { duration: 0, ...options })
+
+toastFn.progress = (message, value, options) =>
+  raise('default', message, { duration: 0, ...options, progress: value })
 
 toastFn.promise = (promise, messages, options) => {
   const id = raise('loading', messages.loading, { duration: 0, ...options })

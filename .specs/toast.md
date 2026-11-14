@@ -3,7 +3,8 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
+template: 2
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
@@ -17,7 +18,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
+A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.progress`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
 
 The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.
 
@@ -25,6 +26,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 - Confirming the result of an action that finished out of view or in the background: saved, deployed, copied.
 - Following an async operation from start to finish with `toast.promise`, or `toast.loading` plus a dismiss by id.
+- Following an operation whose completion is known (an upload, an import, a migration) with `toast.progress`: a bar and its percentage, updated in place by id, with a Cancel action.
 - A short notice that is not tied to one place on the page and can disappear on its own.
 
 ## When NOT to use
@@ -38,6 +40,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 - `message` — inline severity banner placed in the page flow; it stays until it is closed.
 - `dialog` — blocking modal for decisions and confirmations.
 - `spinner` — rendered by the `loading` toast type.
+- `progress` — rendered under the copy of a `toast.progress` toast.
 
 ## Best practices
 
@@ -46,6 +49,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - A toast with an `action` (or `actions`) stays at least 10 s unless it sets its own `duration`, so a keyboard or screen-reader user has time to reach the action.
 - `duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.
+- Use `toast.progress(message, value, { id })` when the percentage is known; keep calling it with the same `id` as the value moves (the card updates in place, no new announcement per step), and finish with `toast.success` or `toast.error` on that `id`. Use `toast.loading` when it is not known. Give a long operation a Cancel `action`.
 - Don't make a toast the only path to an important action. It auto-dismisses and never takes focus.
 
 ## Usage
@@ -112,6 +116,11 @@ toast.loading('Uploading…', { duration: 0 }) // persists until dismissed
 toast('Heads up', { position: 'top-center' }) // anchor this toast to a corner (overrides Toaster)
 toast('Saved', { closable: true }) // always-visible close control (overrides Toaster)
 toast('Saved', { onClose: () => track('dismissed') }) // callback fired when the toast is dismissed
+const upload = toast.progress('Uploading site-assets.zip', 40, {
+  description: '19 of 48 MB',
+  action: { label: 'Cancel', onClick: () => cancel() }
+}) // persists; call again with { id: upload } to move the bar in place
+toast.success('site-assets.zip uploaded', { id: upload }) // finishes the same toast
 toast.promise(deploy(), { loading: 'Deploying…', success: 'Deployed', error: 'Failed' })
 toast.dismiss(id) // dismiss one; toast.dismiss() clears all
 ```
@@ -165,7 +174,7 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
-- `use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives beside `injection-key.ts` at the component root (one directory up from each sub-component).
+- `use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`progress`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives beside `injection-key.ts` at the component root (one directory up from each sub-component).
 
 <!-- Resulting layout:
 
@@ -210,13 +219,14 @@ The imperative API is backed by a small reactive store composable, declared here
 
 | Slot      | Scope                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | --------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`. |
+| `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration, progress? }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`. |
 
 ## States
 
 - `data-severity` on `ToastItem` (and mirrored on the `Toaster`'s items): `default` | `success` | `info` | `warning` | `danger` | `loading`. Drives the leading icon and its severity color (the `-contrast` icon token). The legacy `data-type` (same values, `error` for `danger`) stays until 7.0.
 - `toast.error()` keeps its Sonner-style name and raises a `danger` toast.
 - `data-removing` on a `Toaster` item while its exit transition runs (switches the transition to the exit token).
+- Progress: an entry with `progress` (set by `toast.progress(message, value, options?)`, which defaults `duration` to `0`) renders `__progress` under the copy: a rounded `Progress` bar named by the toast message (`role="progressbar"`, `aria-valuenow` clamped to 0–100) and the percentage formatted with `Intl.NumberFormat` (`style: 'percent'`) in the provider's locale, `aria-hidden` so the region does not announce every step. A later call with the same `id` replaces the entry in place; a typed toast with that `id` drops the bar.
 - `data-position` on the `Toaster` container: one of the six `position` values; drives the fixed anchoring (`top`/`bottom` × `left`/`center`/`right`) and the enter/leave translate direction.
 - `data-expanded` on the `Toaster` container mirrors the `expand` prop (`true` when expanded).
 - The dismiss control (`ToastClose`) renders, and is **always visible**, only when `closable` is set — the per-toast `closable` option, or the Toaster's `closable` default (the per-toast option overrides). When unset, no close control is shown.
@@ -241,25 +251,28 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)             |
-| --------------------------- | ----------------------------- |
-| toast surface               | `var(--bg-surface-raised)`    |
-| toast border                | `var(--border-default)`       |
-| border width                | `var(--border-width-default)` |
-| elevation                   | `var(--shadow-sm)`            |
-| shape                       | `var(--shape-elements)`       |
-| title typography            | `.text-label-md`              |
-| description typography      | `.text-body-xs`               |
-| title text                  | `var(--text-default)`         |
-| description text            | `var(--text-muted)`           |
-| success icon                | `var(--success-contrast)`     |
-| info icon                   | `var(--info-contrast)`        |
-| warning icon                | `var(--warning-contrast)`     |
-| error icon                  | `var(--danger-contrast)`      |
-| padding                     | `var(--spacing-sm)`           |
-| gap                         | `var(--spacing-xs)`           |
-| stack inset (viewport edge) | `var(--spacing-md)`           |
-| ring                        | `var(--ring-color)`           |
+| Region                      | Token (DESIGN.md)                                                                                    |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| toast surface               | `var(--bg-surface-raised)`                                                                           |
+| toast border                | `var(--border-default)`                                                                              |
+| border width                | `var(--border-width-default)`                                                                        |
+| elevation                   | `var(--shadow-sm)`                                                                                   |
+| shape                       | `var(--shape-elements)`                                                                              |
+| title typography            | `.text-label-md`                                                                                     |
+| description typography      | `.text-body-xs`                                                                                      |
+| title text                  | `var(--text-default)`                                                                                |
+| description text            | `var(--text-muted)`                                                                                  |
+| progress bar                | `Progress` (`shape="rounded"`, `size="small"`): `var(--bg-placeholder)` track, `var(--primary)` fill |
+| progress percentage         | `.text-body-xs` · `var(--text-muted)` · `tabular-nums`                                               |
+| progress row gap            | `var(--spacing-xs)`; `var(--spacing-xxs)` above                                                      |
+| success icon                | `var(--success-contrast)`                                                                            |
+| info icon                   | `var(--info-contrast)`                                                                               |
+| warning icon                | `var(--warning-contrast)`                                                                            |
+| error icon                  | `var(--danger-contrast)`                                                                             |
+| padding                     | `var(--spacing-sm)`                                                                                  |
+| gap                         | `var(--spacing-xs)`                                                                                  |
+| stack inset (viewport edge) | `var(--spacing-md)`                                                                                  |
+| ring                        | `var(--ring-color)`                                                                                  |
 
 ## Theme gaps
 
@@ -276,7 +289,36 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted description text and severity icons.
 - `motion-reduce:animate-none` on the enter/leave fades and `motion-reduce:transition-none` on the move transition.
 - Touch target ≥40×40 px on the action and close controls (from `Button` / `IconButton` `size="small"`).
+- Progress: the bar is a `progressbar` named by the toast message; only the toast's arrival is announced, not each percentage step (the visible percentage is `aria-hidden`; the bar's value is read when the user reaches it).
 - Teleported content: each teleported toaster region binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+
+## Internationalization
+
+| Key           | English source       | Override prop |
+| ------------- | -------------------- | ------------- |
+| `toast.close` | `Close notification` | —             |
+
+- Formatting: the `toast.progress` percentage uses `Intl.NumberFormat` (`style: 'percent'`, no decimals) with the locale from `WebkitProvider`; messages, descriptions and action labels come from the consumer.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-me-`, `start-`, `gap`); each teleported region binds the provider's `dir`, so the icon leads, the controls trail and the progress bar fills from the start edge under `dir="rtl"`.
+- Icons: severity glyphs and the close `×` are not mirrored.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Responsive
+
+- Container queries: none; each region is 356 px wide, capped at `100vw` minus the edge inset.
+- Narrow (≤ 640 px or a narrow container): the card fills the capped width; the copy wraps and the progress bar narrows.
+- Touch: the action and close keep the `Button` / `IconButton` `small` sizes; the stack expands on hover and stays readable without it.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 9.95 KB gzip for `toast` (the compound `index.ts`) in `.size-limit.json`, `Progress` included.
+- Runtime budget: an in-place `toast.progress` update re-renders one card; the stack never re-measures more than the cards whose height changed.
+- Heavy parts: none.
 
 ## Examples
 
@@ -286,6 +328,7 @@ This component has no `kind`/`size` on its root, and it is driven imperatively r
 - Types — buttons triggering each `type` (`toast.success` / `toast.info` / `toast.warning` / `toast.error` / `toast.loading` / default); justified because the severity icons are a distinct axis (the equivalent of a composite Types story for an imperative API).
 - WithDescription — a button raising a toast with the `description` option; justified because the two-line body (title + description) is a distinct layout the API explicitly supports.
 - WithAction — a button raising a toast with the `action` option (label + `onClick`); justified because the inline action affordance (`ToastAction`) is a distinct behavior the API explicitly supports.
+- Progress — a button starting a simulated upload followed with `toast.progress` and a Cancel action, finished with `toast.success` on the same id; justified because the progress row and the in-place update are a distinct layout and behavior the API exposes.
 - Closable — a button raising a toast with the `closable` option; justified because the always-visible dismiss control (`ToastClose`) is a distinct affordance the API exposes (off by default).
 - Positions — buttons that mount the stack at each of the six `position` values; justified because the anchoring is a distinct presentation axis (six mutually-exclusive corners) that the `position` prop exposes.
 
@@ -306,7 +349,7 @@ This component has no `kind`/`size` on its root, and it is driven imperatively r
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
-- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

@@ -4,6 +4,7 @@ import { userEvent as keyboardUser } from 'vitest/browser'
 import { createApp, defineComponent, nextTick } from 'vue'
 
 import Default from '../../../../examples/toast/default.vue'
+import ProgressExample from '../../../../examples/toast/progress.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Toast, { toast, Toaster, ToastPlugin, useToast, useToastStore } from './index'
 import ToastAction from './toast-action/toast-action.vue'
@@ -593,5 +594,88 @@ describe('reduced motion (audit: no inline transition)', () => {
     expect(region!.style.transition).toBe('')
     const card = region!.querySelector<HTMLElement>('[data-front]')!
     expect(card.style.transition).toBe('')
+  })
+})
+
+describe('toast.progress', () => {
+  it('raises a persistent toast with a progressbar named by the message and its percentage', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 4000 })
+
+    const id = toast.progress('Uploading site-assets.zip', 25, { description: '12 of 48 MB' })
+    const region = await regionFor('bottom-right')
+
+    const bar = within(region!).getByRole('progressbar', { name: 'Uploading site-assets.zip' })
+    expect(bar).toHaveAttribute('aria-valuenow', '25')
+    expect(within(region!).getByTestId('feedback-toast__progress').textContent).toContain('25%')
+    expect(within(region!).getByText('12 of 48 MB')).toBeTruthy()
+    expect(useToastStore().toasts.find((entry) => entry.id === id)?.duration).toBe(0)
+  })
+
+  it('updates the same toast in place when called again with its id', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+
+    const id = toast.progress('Uploading', 10)
+    let region = await regionFor('bottom-right')
+    const card = within(region!).getByRole('progressbar').closest('[data-front]')
+
+    toast.progress('Uploading', 70, { id })
+    region = await regionFor('bottom-right')
+
+    expect(within(region!).getAllByRole('progressbar')).toHaveLength(1)
+    expect(within(region!).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '70')
+    expect(within(region!).getByRole('progressbar').closest('[data-front]')).toBe(card)
+    expect(useToastStore().toasts.filter((entry) => entry.id === id)).toHaveLength(1)
+  })
+
+  it('clamps the value to 0..100', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+
+    toast.progress('Uploading', 140)
+    const region = await regionFor('bottom-right')
+
+    expect(within(region!).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '100')
+    expect(within(region!).getByTestId('feedback-toast__progress').textContent).toContain('100%')
+  })
+
+  it('runs the action with the click event and drops the bar once a typed toast replaces it', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    const onClick = vi.fn()
+
+    const id = toast.progress('Uploading', 40, { action: { label: 'Cancel', onClick } })
+    let region = await regionFor('bottom-right')
+    within(region!).getByRole('button', { name: 'Cancel' }).click()
+    expect(onClick).toHaveBeenCalledWith(expect.any(MouseEvent))
+
+    toast.success('Uploaded', { id, duration: 0 })
+    region = await regionFor('bottom-right')
+    expect(within(region!).queryByRole('progressbar')).toBeNull()
+    expect(within(region!).getByText('Uploaded')).toBeTruthy()
+  })
+
+  it('renders no progress row on a toast without progress', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+
+    toast('Saved')
+    const region = await regionFor('bottom-right')
+
+    expect(within(region!).queryByTestId('feedback-toast__progress')).toBeNull()
+  })
+
+  it('starts the Progress example upload from its button with no a11y violations', async () => {
+    const { getByRole } = render(ProgressExample)
+    await nextTick()
+    await nextTick()
+
+    getByRole('button', { name: 'Upload file' }).click()
+    const region = await regionFor('bottom-right')
+
+    expect(
+      within(region!).getByRole('progressbar', { name: 'Uploading site-assets.zip' })
+    ).toBeTruthy()
+    expect(within(region!).getByRole('button', { name: 'Cancel' })).toBeTruthy()
+    await expectNoA11yViolations(region!)
+    within(region!).getByRole('button', { name: 'Cancel' }).click()
+    await nextTick()
+    expect(useToastStore().toasts).toHaveLength(0)
   })
 })
