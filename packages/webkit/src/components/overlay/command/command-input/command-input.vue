@@ -67,13 +67,13 @@
       @update:model-value="ctx.setQuery"
       @keydown="ctx.onInputKeydown"
     >
-      <template #iconLeft>
+      <template #prefix>
         <span
           class="pi pi-search"
           aria-hidden="true"
         />
       </template>
-      <template #iconRight>
+      <template #suffix>
         <Kbd
           size="small"
           key-name="escape"

@@ -170,7 +170,7 @@
                       :display-value="shown"
                     >
                       <Select.Trigger aria-label="Column type">
-                        <template #iconLeft>
+                        <template #prefix>
                           <span
                             class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
@@ -190,7 +190,6 @@
                     <span class="flex items-center justify-center">
                       <Checkbox
                         :model-value="column.primaryKey"
-                        binary
                         aria-label="Primary key"
                       />
                     </span>
@@ -243,7 +242,7 @@
                         :display-value="shown"
                       >
                         <Select.Trigger aria-label="Column type">
-                          <template #iconLeft>
+                          <template #prefix>
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
@@ -263,7 +262,6 @@
                       <span class="flex items-center justify-center">
                         <Checkbox
                           :model-value="false"
-                          binary
                           aria-label="Primary key"
                         />
                       </span>

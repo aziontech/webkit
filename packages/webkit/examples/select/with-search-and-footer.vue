@@ -1,7 +1,7 @@
 <script setup>
-  import Select from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
   import Input from '@aziontech/webkit/input'
+  import Select from '@aziontech/webkit/select'
   import { computed, ref } from 'vue'
 
   const value = ref('')
@@ -42,7 +42,7 @@
             size="small"
             placeholder="Search"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

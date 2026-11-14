@@ -240,56 +240,56 @@ jobs:
                         </DropdownMenu.Trigger>
 
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="copy-url"
                             label="Copy URL"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-copy"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
 
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="edit"
                             label="Edit"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-pencil"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
-                          <DropdownMenu.Option
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item
                             value="deploy"
                             label="Deploy"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-cloud-upload"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
 
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="delete"
                             label="Delete"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-trash"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
                       </DropdownMenu>
                     </div>
@@ -495,7 +495,7 @@ jobs:
                             <div class="mt-(--spacing-xxs) min-w-0">
                               <CodeBlock
                                 :tabs="step.tabs"
-                                :show-line-numbers="false"
+                                :line-numbers="false"
                                 :copy-aria-label="`Copy the commands for ${step.title}`"
                                 class="w-full"
                               />

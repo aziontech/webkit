@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -41,9 +41,6 @@
   /** Zero-based index of the active step. */
   const modelValue = defineModel<number | undefined>()
 
-  /** @deprecated since 6.0 — use v-model. Removed in 7.0. */
-  const activeStep = defineModel<number>('activeStep', { default: 0 })
-
   defineSlots<{
     /** The Wizard.Step children, in the order they are numbered and navigated. */
     default(): unknown
@@ -51,18 +48,6 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ wizard: en.wizard })
-
-  watch(
-    modelValue,
-    (value) => {
-      if (value !== undefined && value !== activeStep.value) activeStep.value = value
-    },
-    { immediate: true }
-  )
-
-  watch(activeStep, (value) => {
-    if (modelValue.value !== value) modelValue.value = value
-  })
 
   const ids = ref<symbol[]>([])
   const metas = new Map<symbol, WizardStepMeta>()
@@ -94,9 +79,10 @@
     mounted.value = true
   })
 
-  const requested = computed<number>(() =>
-    Number.isFinite(activeStep.value) ? Math.max(Math.trunc(activeStep.value), 0) : 0
-  )
+  const requested = computed<number>(() => {
+    const value = modelValue.value
+    return typeof value === 'number' && Number.isFinite(value) ? Math.max(Math.trunc(value), 0) : 0
+  })
 
   const current = computed<number>(() => {
     if (total.value === 0) return 0
@@ -115,7 +101,7 @@
     get: () => String(current.value),
     set: (value) => {
       if (props.loading) return
-      activeStep.value = Number(value)
+      modelValue.value = Number(value)
     }
   })
 
@@ -165,12 +151,12 @@
     const step = current.value
     emit('next', event, step)
     if (event.defaultPrevented) return
-    activeStep.value = step + 1
+    modelValue.value = step + 1
   }
 
   const onPrevious = () => {
     if (props.loading || current.value === 0) return
-    activeStep.value = current.value - 1
+    modelValue.value = current.value - 1
   }
 
   const onCancel = (event: MouseEvent) => {

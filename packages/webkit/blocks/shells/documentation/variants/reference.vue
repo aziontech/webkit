@@ -2,10 +2,10 @@
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Diagram from '@aziontech/webkit/diagram'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocCta from '@aziontech/webkit/doc-cta'
   import DocFrame from '@aziontech/webkit/doc-frame'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
@@ -164,7 +164,7 @@
         </div>
 
         <DocHeading
-          id="request-path"
+          anchor="request-path"
           :level="2"
           >Request path</DocHeading
         >
@@ -173,7 +173,7 @@
         </DocFrame>
 
         <DocHeading
-          id="rule-structure"
+          anchor="rule-structure"
           :level="2"
           >Rule structure</DocHeading
         >
@@ -187,7 +187,7 @@
         />
 
         <DocHeading
-          id="scope-and-limits"
+          anchor="scope-and-limits"
           :level="2"
           >Scope and limits</DocHeading
         >
@@ -201,11 +201,11 @@
         </ul>
 
         <DocHeading
-          id="next-steps"
+          anchor="next-steps"
           :level="2"
           >Next steps</DocHeading
         >
-        <DocCardGroup :cols="2">
+        <DocCardGroup :columns="2">
           <DocCard
             title="Quickstart"
             icon="pi pi-bolt"
@@ -250,15 +250,13 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>

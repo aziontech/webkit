@@ -262,7 +262,7 @@
                 text="Data delivered by every project in the selected period, drawn over the same span of the previous period."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -309,18 +309,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -338,7 +338,7 @@
               <ChartCard.Title>Data transferred by project</ChartCard.Title>
               <Hint text="The projects that delivered the most data in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -371,18 +371,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -400,7 +400,7 @@
               <ChartCard.Title>Usage by project</ChartCard.Title>
               <Hint text="Requests and data transferred per project in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -433,18 +433,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert

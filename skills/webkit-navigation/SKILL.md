@@ -134,11 +134,11 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
 
     <template #account-menu>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="settings"
           label="Account settings"
         />
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="logout"
           label="Log out"
         />
@@ -260,7 +260,7 @@ do compose yourself follows rule `webkit-header-search` (lint `webkit/header-sea
 #### The rail collapses; it never disappears
 
 1. **Collapse.** The rail carries its own collapse control (and an edge affordance): collapsed, it is
-   the `Sidebar`'s narrow rail of icons. Bind `v-model:navigation-expanded` when the state must survive
+   the `Sidebar`'s narrow rail of icons. Bind `v-model:navigation-open` when the state must survive
    a reload (persist it in the app) or be driven from elsewhere — a `Collapse sidebar` /
    `Expand sidebar` command in the `search` slot.
 2. **Compact.** Below 768 px of the layout's own width the rail moves into a drawer opened from the
@@ -331,7 +331,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           v-if="!terminal"
           icon="pi pi-chevron-left"
@@ -356,9 +356,9 @@ When several flows share the bar, lift it once into your own shell, copied from 
           v-if="!terminal"
           :items="breadcrumb"
         />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -370,7 +370,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-auto">
@@ -844,7 +844,7 @@ For `/webkit-navigation <file>`, list gaps. Each:
   rule: One shell per page — a create flow is the focused shell, which has no rail.
   fix: route it outside the layout (meta.shell = 'focused') and head it with the creation bar.
 
-✗ NewResourceForm.vue:40  GlobalHeader.Right is empty on a focused flow
+✗ NewResourceForm.vue:40  GlobalHeader.End is empty on a focused flow
   rule: The user is always visible — a header with no identity reads as signed out.
   fix: render the account avatar at the end of the bar (your CreationShell should anchor it).
 

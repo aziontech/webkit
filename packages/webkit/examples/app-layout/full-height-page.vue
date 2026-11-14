@@ -14,9 +14,9 @@
     <AppLayout>
       <template #header>
         <GlobalHeader aria-label="Console">
-          <GlobalHeader.Left />
-          <GlobalHeader.Middle />
-          <GlobalHeader.Right />
+          <GlobalHeader.Start />
+          <GlobalHeader.Center />
+          <GlobalHeader.End />
         </GlobalHeader>
       </template>
 

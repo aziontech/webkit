@@ -37,9 +37,9 @@ const fakeRouter = (path: string) => ({
 const article = () =>
   h('article', [
     h('h1', 'First deploy'),
-    h(DocHeading, { id: 'before-you-start', level: 2 }, () => 'Before you start'),
+    h(DocHeading, { anchor: 'before-you-start', level: 2 }, () => 'Before you start'),
     h('p', 'Create an account first.'),
-    h(DocHeading, { id: 'deploy-with-cli', level: 2 }, () => 'Deploy with Azion CLI'),
+    h(DocHeading, { anchor: 'deploy-with-cli', level: 2 }, () => 'Deploy with Azion CLI'),
     h('p', 'Run azion deploy.')
   ])
 

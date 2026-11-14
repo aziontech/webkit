@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 71bab53517de4d86b95b92becab7c292c2e52eecda20dd6bf100baf7f0bd2cc7
+checksum: 6ccaa128666b22326ca5beb048527bc4e9113371a5abb2a4a2586df8fcc0de40
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -66,7 +66,6 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 | `removable` | `boolean`                                                              | `false`     | false    | Shows a Delete button on each row that emits `remove`.                                                                                                     |
 | `loading`   | `boolean`                                                              | `false`     | false    | Shows placeholder rows while the history loads.                                                                                                            |
 | `ariaLabel` | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |
-| `label`     | `string`                                                               | `''`        | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty.                                                           |
 
 ## v-model
 

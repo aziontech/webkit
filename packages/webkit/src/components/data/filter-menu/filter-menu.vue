@@ -386,7 +386,7 @@
                     :placeholder="searchPlaceholder"
                     :aria-label="searchLabel"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"

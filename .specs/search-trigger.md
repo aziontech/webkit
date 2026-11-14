@@ -3,9 +3,9 @@ name: search-trigger
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 15d536af35afdb7175ebf4ec084a74d8f1d19bfde99532a4228db0800f1e9015
+checksum: 57109c0a763f75dc82e7ebfe2dad59495760fcc98b282deb1bbad709d1c19033
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -18,7 +18,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 ## When to use
 
-- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.Right`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
+- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
 ## When NOT to use
@@ -33,7 +33,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 - `Kbd` — draws the keycap with the OS-aware modifier glyph.
 - `IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
 - `Tooltip` — shows the label over the folded magnifier on hover and focus.
-- `GlobalHeader` — the bar it sits in, usually in `GlobalHeader.Right`.
+- `GlobalHeader` — the bar it sits in, usually in `GlobalHeader.End`.
 
 ## Best practices
 

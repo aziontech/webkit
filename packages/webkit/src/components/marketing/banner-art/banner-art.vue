@@ -13,15 +13,12 @@
   interface Props {
     /** Which backdrop to draw. */
     kind?: BannerArtKind
-    /** @deprecated since 6.0 — use `kind`. Removed in 7.0. */
-    art?: BannerArtKind | ''
     /** Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. */
     animated?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'map',
-    art: '',
     animated: true
   })
 
@@ -31,7 +28,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-banner-art'
   )
 
-  const backdrop = computed<BannerArtKind>(() => props.art || props.kind)
+  const backdrop = computed<BannerArtKind>(() => props.kind)
 </script>
 
 <template>
@@ -39,7 +36,6 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="backdrop"
-    :data-art="backdrop"
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden [container-type:size]"
   >

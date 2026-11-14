@@ -55,7 +55,7 @@ export default {
     schema: [],
     messages: {
       missing:
-        'This app header has navigation but no search. Add <SearchTrigger collapsible @open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') first in GlobalHeader.Right, wire it to a <Command v-model:open="open">, and wrap the header in an @container. Focused task headers (sign-in, create flows) have no navigation and are not checked.',
+        'This app header has navigation but no search. Add <SearchTrigger collapsible @open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') first in GlobalHeader.End, wire it to a <Command v-model:open="open">, and wrap the header in an @container. Focused task headers (sign-in, create flows) have no navigation and are not checked.',
       handRolled:
         'Hand-rolled ⌘K search field. Use <SearchTrigger> (@aziontech/webkit/search-trigger): it draws the field, the OS-aware keycap, aria-keyshortcuts, the narrow fold, and binds ⌘K / Ctrl K.',
       bareIcon:

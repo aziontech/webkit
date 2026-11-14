@@ -3,9 +3,9 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 1a2fe72bd0ccc12a0e3d6760a06aac455cecda4049c7c682f4d3565bd4f3f801
+checksum: 2cb5592000e422f8116e6386eb420914102188713131d2c8b418610d70b0012f
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -85,7 +85,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
     </template>
     <template #header="{ compact, openNavigation, toggleTools }">
       <GlobalHeader aria-label="Console">
-        <GlobalHeader.Left>
+        <GlobalHeader.Start>
           <IconButton
             v-if="compact"
             icon="pi pi-bars"
@@ -94,8 +94,8 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
             size="medium"
             @click="openNavigation"
           />
-        </GlobalHeader.Left>
-        <GlobalHeader.Right>
+        </GlobalHeader.Start>
+        <GlobalHeader.End>
           <IconButton
             icon="pi pi-question-circle"
             aria-label="Help"
@@ -103,7 +103,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
             size="medium"
             @click="toggleTools"
           />
-        </GlobalHeader.Right>
+        </GlobalHeader.End>
       </GlobalHeader>
     </template>
     <template #notifications>…</template>

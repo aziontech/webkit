@@ -63,7 +63,7 @@
           </div>
           <Popover
             placement="bottom-start"
-            width="small"
+            size="small"
           >
             <Popover.Trigger>
               <div class="shrink-0 cursor-pointer">
@@ -149,7 +149,7 @@
                 </DropdownMenu.Trigger>
 
                 <DropdownMenu.Group label="Environments">
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     v-for="option in environments"
                     :key="option.name"
                     :value="option.name"
@@ -159,17 +159,17 @@
                 </DropdownMenu.Group>
 
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="__add-environment__"
                     label="Add Environment"
                   >
-                    <template #left>
+                    <template #leading>
                       <i
                         class="pi pi-plus"
                         aria-hidden="true"
                       />
                     </template>
-                  </DropdownMenu.Option>
+                  </DropdownMenu.Item>
                 </DropdownMenu.Group>
               </DropdownMenu>
             </Tooltip>
@@ -188,42 +188,42 @@
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Group>
-              <DropdownMenu.Option
+              <DropdownMenu.Item
                 value="copy-url"
                 label="Copy URL"
               >
-                <template #left>
+                <template #leading>
                   <i
                     class="pi pi-copy"
                     aria-hidden="true"
                   />
                 </template>
-              </DropdownMenu.Option>
+              </DropdownMenu.Item>
             </DropdownMenu.Group>
 
             <DropdownMenu.Group>
-              <DropdownMenu.Option
+              <DropdownMenu.Item
                 value="manage-domains"
                 label="Manage domains"
               >
-                <template #left>
+                <template #leading>
                   <i
                     class="pi pi-globe"
                     aria-hidden="true"
                   />
                 </template>
-              </DropdownMenu.Option>
-              <DropdownMenu.Option
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
                 value="settings"
                 label="Settings"
               >
-                <template #left>
+                <template #leading>
                   <i
                     class="pi pi-cog"
                     aria-hidden="true"
                   />
                 </template>
-              </DropdownMenu.Option>
+              </DropdownMenu.Item>
             </DropdownMenu.Group>
           </DropdownMenu>
         </div>

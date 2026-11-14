@@ -35,25 +35,15 @@ describe('CustomerSpotlight', () => {
     expect(getAllByRole('list', { name: 'Customer stories' })).toHaveLength(1)
   })
 
-  it('still reads the deprecated cards and storyLabel', () => {
-    const { getByRole } = render(CustomerSpotlight, {
-      props: { cards: one, storyLabel: 'See the case' }
-    })
-    expect(getByRole('link')).toHaveAttribute('href', '/customers/acme')
-    expect(getByRole('link').getAttribute('aria-label')).toMatch(/^See the case, Acme/)
-  })
-
-  it('prefers items and linkLabel over the deprecated names', () => {
-    const { getByRole } = render(CustomerSpotlight, {
-      props: {
-        items: one,
-        cards: [{ ...one[0], href: '/old' }],
-        linkLabel: 'Read it',
-        storyLabel: 'Old'
-      }
+  it('reads items and linkLabel, and ignores the removed cards and storyLabel', () => {
+    const { getByRole, unmount } = render(CustomerSpotlight, {
+      props: { items: one, linkLabel: 'Read it', storyLabel: 'Old' } as never
     })
     expect(getByRole('link')).toHaveAttribute('href', '/customers/acme')
     expect(getByRole('link').getAttribute('aria-label')).toMatch(/^Read it, Acme/)
+    unmount()
+    const legacy = render(CustomerSpotlight, { props: { cards: one } as never })
+    expect(legacy.queryByRole('link')).toBeNull()
   })
 
   it('renders nothing without cards', () => {

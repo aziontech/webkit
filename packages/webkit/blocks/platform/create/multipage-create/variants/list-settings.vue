@@ -348,7 +348,7 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Access Lists"
@@ -368,9 +368,9 @@
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -382,7 +382,7 @@
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <div class="flex min-h-0 flex-1">

@@ -293,7 +293,7 @@
       :value="progress"
       :max="100"
       size="small"
-      shape="flat"
+      kind="flat"
       class="w-full"
       aria-label="Deployment progress"
     />

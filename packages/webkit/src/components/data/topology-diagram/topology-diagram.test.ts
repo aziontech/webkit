@@ -9,7 +9,7 @@ import Empty from '../../../../examples/topology-diagram/empty.vue'
 import Loading from '../../../../examples/topology-diagram/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TopologyDiagram from './topology-diagram.vue'
-import type { TopologyLevel } from './types'
+import type { TopologyLevel, TopologyNode } from './types'
 
 const settle = async () => {
   await nextTick()
@@ -22,7 +22,7 @@ const levels: TopologyLevel[] = [
   {
     key: 'project',
     nodes: [
-      { key: 'project', kind: 'Project', name: 'web-app', status: 'Live', severity: 'success' }
+      { key: 'project', type: 'Project', name: 'web-app', status: 'Live', severity: 'success' }
     ]
   },
   {
@@ -30,7 +30,7 @@ const levels: TopologyLevel[] = [
     nodes: [
       {
         key: 'policy',
-        kind: 'Policy',
+        type: 'Policy',
         name: 'edge-guard',
         boundValue: 'edge-guard',
         bindable: true,
@@ -47,7 +47,7 @@ const levels: TopologyLevel[] = [
     nodes: [
       {
         key: 'page',
-        kind: 'Error page',
+        type: 'Error page',
         bindable: true,
         terminal: true,
         message: 'Errors answer with the default page.'
@@ -174,7 +174,7 @@ describe('TopologyDiagram', () => {
     expect(view.queryByTestId('data-topology-diagram')).toBeNull()
   })
 
-  it('reads the node type, and still the deprecated kind', () => {
+  it('reads the node type, and not the removed kind', () => {
     const view = render(TopologyDiagram, {
       props: {
         levels: [
@@ -182,14 +182,14 @@ describe('TopologyDiagram', () => {
             key: 'one',
             nodes: [
               { key: 'a', type: 'Workload', name: 'storefront' },
-              { key: 'b', kind: 'Firewall', name: 'edge-rules' }
+              { key: 'b', kind: 'Firewall', name: 'edge-rules' } as TopologyNode
             ]
           }
         ]
       }
     })
     expect(view.getByText('Workload')).toBeTruthy()
-    expect(view.getByText('Firewall')).toBeTruthy()
+    expect(view.queryByText('Firewall')).toBeNull()
   })
 
   it('keeps the scroll area out of the tab order until it overflows', () => {

@@ -162,7 +162,7 @@
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       key,
-      kind: target.kind,
+      type: target.kind,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -194,7 +194,7 @@
       nodes: [
         {
           key: 'domain',
-          kind: 'Domain',
+          type: 'Domain',
           icon: 'pi pi-globe',
           name: 'shop.example.com',
           status: 'Live',
@@ -207,7 +207,7 @@
       nodes: [
         {
           key: 'workload',
-          kind: 'Workload',
+          type: 'Workload',
           icon: 'pi pi-sitemap',
           name: 'storefront',
           status: 'Active',
@@ -221,7 +221,7 @@
       nodes: [
         {
           key: 'application',
-          kind: 'Application',
+          type: 'Application',
           icon: 'pi pi-box',
           name: APP.name,
           status: 'Active',
@@ -395,13 +395,13 @@
                       </Tooltip>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Group>
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         value="copy-url"
                         label="Copy URL"
                       />
                     </DropdownMenu.Group>
                     <DropdownMenu.Group>
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         value="settings"
                         label="Settings"
                       />
@@ -420,7 +420,6 @@
                       :label="APP.deployment"
                       :href="`/deployments/${APP.deployment}`"
                       size="small"
-                      :show-icon="false"
                     />
                     <Tag
                       label="Production"

@@ -348,7 +348,7 @@
                     placeholder="Search keywords..."
                     aria-label="Search keywords"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"

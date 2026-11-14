@@ -1132,7 +1132,7 @@
               class="w-full"
               :disabled="loading"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -1690,7 +1690,7 @@
                                         aria-label="Search behaviors"
                                         @keydown.stop
                                       >
-                                        <template #iconLeft>
+                                        <template #prefix>
                                           <i
                                             class="pi pi-search"
                                             aria-hidden="true"

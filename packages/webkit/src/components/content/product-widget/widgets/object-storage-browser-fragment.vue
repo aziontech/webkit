@@ -216,7 +216,7 @@
                     aria-label="Search in folder"
                     class="w-full"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -235,7 +235,7 @@
                         icon="pi pi-plus"
                         kind="primary"
                         size="medium"
-                        :model="ADD_TO_FILES"
+                        :items="ADD_TO_FILES"
                       />
                     </span>
                   </div>

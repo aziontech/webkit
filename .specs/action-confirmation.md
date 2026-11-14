@@ -3,11 +3,11 @@ name: action-confirmation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: e761c689a0068e9c974ad12899aea4fa958ff0f060cfa3948f2ed9caa11bcb10
+checksum: 2711be5b6fec21bd406d2205e37a2ded1d89aaca16ffed8b34f0b87a519f7505
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # ActionConfirmation — Component Spec
@@ -72,7 +72,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
     @approve="state = 'approved'"
     @deny="state = 'denied'"
   >
-    <CodeBlock :tabs="[{ label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }]" :show-line-numbers="false" />
+    <CodeBlock :tabs="[{ label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }]" :line-numbers="false" />
   </ActionConfirmation>
 </template>
 ```

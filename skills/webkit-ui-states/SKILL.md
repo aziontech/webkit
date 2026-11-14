@@ -143,17 +143,17 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
     class="flex flex-col gap-(--spacing-sm)"
   >
     <Skeleton
-      kind="shape"
+      kind="rectangle"
       width="100%"
       height="44px"
     />
     <Skeleton
-      kind="shape"
+      kind="rectangle"
       width="100%"
       height="44px"
     />
     <Skeleton
-      kind="shape"
+      kind="rectangle"
       width="100%"
       height="44px"
     />

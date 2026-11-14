@@ -4,7 +4,7 @@ category: inputs
 structure: composition
 status: implemented
 spec_version: 3
-checksum: d2985e147a74ee0e5b574b7af94bcb00b1e831b0aaa878a3f7a4a92ff084e937
+checksum: 5e8f8f683363925de9b4fa89ee824917a1bb081ed65eabc04aeaa360a657b9fb
 created: 2026-11-10
 last_updated: 2026-11-14
 ---
@@ -76,10 +76,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
       <Field.Separator>Or</Field.Separator>
       <Field.Label>
         <Field orientation="horizontal">
-          <Checkbox
-            v-model="terms"
-            binary
-          />
+          <Checkbox v-model="terms" />
           <Field.Content>
             <Field.Title>Accept the terms</Field.Title>
             <Field.Description>You can withdraw at any time.</Field.Description>

@@ -20,7 +20,7 @@
         kind="site"
         aria-label="Azion"
       >
-        <GlobalHeader.Left>
+        <GlobalHeader.Start>
           <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
             <div class="shrink-0 xl:hidden">
               <IconButton
@@ -43,9 +43,9 @@
               </a>
             </GlobalHeader.Brand>
           </div>
-        </GlobalHeader.Left>
+        </GlobalHeader.Start>
 
-        <GlobalHeader.Middle>
+        <GlobalHeader.Center>
           <div class="hidden w-full min-w-0 items-center justify-start xl:flex">
             <div class="min-w-0">
               <NavigationMenu
@@ -75,9 +75,9 @@
               </NavigationMenu>
             </div>
           </div>
-        </GlobalHeader.Middle>
+        </GlobalHeader.Center>
 
-        <GlobalHeader.Right>
+        <GlobalHeader.End>
           <SearchTrigger
             collapsible
             @open="searchOpen = true"
@@ -103,7 +103,7 @@
             class="shrink-0"
             href="#"
           />
-        </GlobalHeader.Right>
+        </GlobalHeader.End>
       </GlobalHeader>
       <Command v-model:open="searchOpen">
         <Command.Input placeholder="Search azion.com" />

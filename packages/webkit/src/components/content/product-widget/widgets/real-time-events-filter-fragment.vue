@@ -159,7 +159,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"
@@ -186,7 +186,7 @@
                 placeholder="Filter by…"
                 aria-label="Search filter fields"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -241,7 +241,7 @@
                 placeholder="Filter source…"
                 aria-label="Search Source values"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"

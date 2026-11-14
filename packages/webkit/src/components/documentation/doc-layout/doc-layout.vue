@@ -19,8 +19,8 @@
   import Brand from '../../content/brand/brand.vue'
   import GlobalHeader from '../../layout/global-header/global-header.vue'
   import GlobalHeaderBrand from '../../layout/global-header/global-header-brand.vue'
-  import GlobalHeaderLeft from '../../layout/global-header/global-header-left.vue'
-  import GlobalHeaderRight from '../../layout/global-header/global-header-right.vue'
+  import GlobalHeaderEnd from '../../layout/global-header/global-header-end.vue'
+  import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Sidebar from '../../layout/sidebar/sidebar.vue'
   import type { MenuNode } from '../../navigation/menu/injection-key'
@@ -143,13 +143,6 @@
   const menuPath = ref<string[]>([])
   const headingId = ref('')
   const header = ref<globalThis.HTMLElement | null>(null)
-
-  const railCollapsed = computed({
-    get: () => !navigationExpanded.value,
-    set: (value: boolean) => {
-      navigationExpanded.value = !value
-    }
-  })
 
   const NAV_VALUE = 'doc-layout:nav:'
 
@@ -308,7 +301,7 @@
       class="@container sticky top-0 z-30 w-full"
     >
       <GlobalHeader :data-testid="`${testId}__header`">
-        <GlobalHeaderLeft>
+        <GlobalHeaderStart>
           <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
             <IconButton
               v-if="navigation.length"
@@ -355,8 +348,8 @@
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-        </GlobalHeaderLeft>
-        <GlobalHeaderRight>
+        </GlobalHeaderStart>
+        <GlobalHeaderEnd>
           <SearchTrigger
             collapsible
             :label="t('docLayout.search')"
@@ -364,7 +357,7 @@
             @open="openSearch"
           />
           <slot name="actions" />
-        </GlobalHeaderRight>
+        </GlobalHeaderEnd>
       </GlobalHeader>
     </div>
 
@@ -377,7 +370,7 @@
           class="sticky top-(--layout-header-height) flex h-[calc(100dvh-var(--layout-header-height))]"
         >
           <Sidebar
-            v-model:collapsed="railCollapsed"
+            v-model:open="navigationExpanded"
             v-model:width="navigationWidth"
             resizable
             collapsible

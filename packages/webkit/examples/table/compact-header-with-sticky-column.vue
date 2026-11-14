@@ -118,7 +118,7 @@
             :value="option.value"
             :label="option.label"
           >
-            <template #left
+            <template #leading
               ><i
                 :class="option.icon"
                 aria-hidden="true"

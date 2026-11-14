@@ -10,7 +10,7 @@
 <template>
   <div class="w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <GlobalHeader.Brand>
           <a
             href="/home"
@@ -23,9 +23,9 @@
             />
           </a>
         </GlobalHeader.Brand>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -47,44 +47,44 @@
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
               </div>
             </template>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="settings"
               label="Account settings"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-cog"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="docs"
               label="Docs"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-book"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
-            <DropdownMenu.Option
+            </DropdownMenu.Item>
+            <DropdownMenu.Item
               value="logout"
               label="Log out"
             >
-              <template #right>
+              <template #trailing>
                 <i
                   class="pi pi-sign-out"
                   aria-hidden="true"
                 />
               </template>
-            </DropdownMenu.Option>
+            </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
   </div>
 </template>

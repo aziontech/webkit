@@ -138,7 +138,7 @@
             aria-label="Search buckets"
             class="w-full"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

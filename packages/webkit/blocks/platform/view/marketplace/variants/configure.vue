@@ -81,7 +81,6 @@
           href="/marketplace/waiting-room"
           label="Back to Waiting Room"
           size="medium"
-          :show-icon="false"
         />
       </nav>
       <PageHeader

@@ -119,11 +119,11 @@
 
     <template #account-menu>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="settings"
           label="Account settings"
         />
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="logout"
           label="Log out"
         />

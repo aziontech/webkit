@@ -53,18 +53,18 @@ describe('PaymentBrand', () => {
     expect(fills.every((f) => f === 'currentColor' || f === 'none')).toBe(true)
   })
 
-  it('takes a label and a size', () => {
+  it('takes an aria-label and a size', () => {
     const view = render(PaymentBrand, {
-      props: { brand: 'visa', label: 'Visa card', size: 'small' }
+      props: { brand: 'visa', ariaLabel: 'Visa card', size: 'small' }
     })
     expect(view.getByRole('img', { name: 'Visa card' })).toHaveAttribute('data-size', 'small')
   })
 
-  it('takes an ariaLabel, which wins over the deprecated label', () => {
+  it('is not named by the removed label prop', () => {
     const view = render(PaymentBrand, {
-      props: { brand: 'visa', ariaLabel: 'Card on file', label: 'Visa card' }
+      props: { brand: 'visa', label: 'Old name' } as never
     })
-    expect(view.getByRole('img', { name: 'Card on file' })).toBeInTheDocument()
+    expect(view.queryByRole('img', { name: 'Old name' })).toBeNull()
   })
 
   it('hides a decorative plate from assistive technology', () => {

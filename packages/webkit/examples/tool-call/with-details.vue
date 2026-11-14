@@ -17,13 +17,13 @@
       <template #input>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'input', code: input, language: 'json' }]"
-          :show-line-numbers="false"
+          :line-numbers="false"
         />
       </template>
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'output', code: output, language: 'json' }]"
-          :show-line-numbers="false"
+          :line-numbers="false"
         />
       </template>
     </ToolCall>
@@ -36,7 +36,7 @@
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'error', code: failure, language: 'json' }]"
-          :show-line-numbers="false"
+          :line-numbers="false"
         />
       </template>
     </ToolCall>

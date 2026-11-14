@@ -909,10 +909,6 @@
       "types": "./types/components/documentation/doc-code-group/doc-code-group.vue.d.ts",
       "default": "./src/components/documentation/doc-code-group/doc-code-group.vue"
     },
-    "./doc-cta": {
-      "types": "./types/components/documentation/doc-cta/doc-cta.vue.d.ts",
-      "default": "./src/components/documentation/doc-cta/doc-cta.vue"
-    },
     "./doc-heading": {
       "types": "./types/components/documentation/doc-heading/doc-heading.vue.d.ts",
       "default": "./src/components/documentation/doc-heading/doc-heading.vue"

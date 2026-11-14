@@ -31,7 +31,7 @@ const Flow = defineComponent({
   },
   template: `
     <Wizard
-      v-model:active-step="step"
+      v-model="step"
       aria-label="Create resource"
       submit-label="Deploy"
       :loading="loading"
@@ -267,7 +267,7 @@ describe('Wizard', () => {
     })
   })
 
-  describe('v-model:activeStep (deprecated)', () => {
+  describe('v-model', () => {
     it('writes Next back to the bound model', async () => {
       const view = await mount()
       await userEvent.click(button(view, 'Next'))
@@ -282,7 +282,7 @@ describe('Wizard', () => {
         },
         template: `
           <button type="button" @click="step = 2">Jump</button>
-          <Wizard v-model:active-step="step" aria-label="Create">
+          <Wizard v-model="step" aria-label="Create">
             <WizardStep title="One" />
             <WizardStep title="Two" />
             <WizardStep title="Three" />
@@ -295,6 +295,23 @@ describe('Wizard', () => {
       await userEvent.click(view.getByRole('button', { name: 'Jump' }))
       expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
       expect(headingOf(view).textContent?.trim()).toBe('Three')
+    })
+
+    it('ignores the removed active-step model', async () => {
+      const view = render(
+        defineComponent({
+          components: { Wizard, WizardStep },
+          template: `
+            <Wizard :active-step="2" aria-label="Create">
+              <WizardStep title="One" />
+              <WizardStep title="Two" />
+              <WizardStep title="Three" />
+            </Wizard>
+          `
+        })
+      )
+      await nextTick()
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('0')
     })
 
     it('clamps an out-of-range model without writing it back', async () => {

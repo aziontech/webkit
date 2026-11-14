@@ -319,7 +319,7 @@
             :label="item.label"
             :disabled="item.disabled"
           >
-            <template #left>
+            <template #leading>
               <i
                 :class="iconOf(item)"
                 class="w-4 text-center"
@@ -328,7 +328,7 @@
             </template>
             <template
               v-if="isToggle(item) && item.pressed"
-              #right
+              #trailing
             >
               <i
                 class="pi pi-check text-(--text-default)"

@@ -71,8 +71,8 @@
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -80,7 +80,7 @@
           icon="pi pi-book"
           href="/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
@@ -141,7 +141,7 @@
                       <div class="flex flex-col items-center gap-(--spacing-sm)">
                         <QrCode
                           :value="otpauthUri"
-                          :label="`QR code to add ${account} to an authenticator app`"
+                          :aria-label="`QR code to add ${account} to an authenticator app`"
                         />
                       </div>
 

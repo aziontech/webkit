@@ -1669,8 +1669,7 @@
           class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
         >
           <Checkbox
-            binary
-            :input-id="selectAllId"
+            :id="selectAllId"
             :model-value="pageSelection === 'all'"
             :indeterminate="pageSelection === 'some'"
             @update:model-value="(v) => toggleAllPageRows(!!v)"
@@ -1718,7 +1717,6 @@
                 >
                   <Checkbox
                     v-if="!stacked"
-                    binary
                     :model-value="pageSelection === 'all'"
                     :indeterminate="pageSelection === 'some'"
                     :aria-label="t('table.selectAll')"
@@ -1782,7 +1780,7 @@
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 >
                   <Skeleton
-                    kind="shape"
+                    kind="rectangle"
                     width="16px"
                     height="16px"
                   />
@@ -1904,7 +1902,6 @@
                   >
                     <Checkbox
                       v-if="row.getCanSelect()"
-                      binary
                       :model-value="row.getIsSelected()"
                       :aria-label="t('table.selectRow')"
                       @update:model-value="(v) => row.toggleSelected(!!v)"

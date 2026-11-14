@@ -2,7 +2,7 @@
 
 Every header that navigates — the console and demo top bar, the docs header, the site header —
 offers search the same way: one `SearchTrigger` (`@aziontech/webkit/search-trigger`) first in
-`GlobalHeader.Right`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
+`GlobalHeader.End`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
 A header without it is incomplete, even when nobody asked for search.
 
 `ConsoleLayout`, `SiteLayout` and `DocLayout` already render the trigger and the palette, wired to
@@ -12,7 +12,7 @@ groups go in their `search` slot; a page opens the console palette with
 
 ## Do
 
-- Put the trigger first in `GlobalHeader.Right` and wire it to the palette:
+- Put the trigger first in `GlobalHeader.End` and wire it to the palette:
 
   ```vue
   <script setup>
@@ -27,14 +27,14 @@ groups go in their `search` slot; a page opens the console palette with
   <template>
     <div class="@container w-full">
       <GlobalHeader aria-label="Console">
-        <GlobalHeader.Left><!-- brand, breadcrumb --></GlobalHeader.Left>
-        <GlobalHeader.Right>
+        <GlobalHeader.Start><!-- brand, breadcrumb --></GlobalHeader.Start>
+        <GlobalHeader.End>
           <SearchTrigger
             collapsible
             @open="searchOpen = true"
           />
           <!-- the header's other actions -->
-        </GlobalHeader.Right>
+        </GlobalHeader.End>
       </GlobalHeader>
       <Command v-model:open="searchOpen">
         <Command.Input placeholder="Search…" />
@@ -77,6 +77,6 @@ groups go in their `search` slot; a page opens the console palette with
 ## Enforced
 
 `webkit/header-search-trigger` (ESLint, in the recommended preset and in `webkit check`) flags a
-`GlobalHeader` with navigation (`GlobalHeader.Nav`, `NavigationMenu`, or a `Sidebar` in the same
+`GlobalHeader` with navigation (`GlobalHeader.Center`, `NavigationMenu`, or a `Sidebar` in the same
 template) and no `SearchTrigger`, any `aria-keyshortcuts="Meta+K"` / `Control+K` outside
 `SearchTrigger`, and a `pi-search` button inside a `GlobalHeader`.

@@ -3,10 +3,10 @@ name: sticky-stack
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: a7b01827f3cadb58e78db7418bf648251549ee5916a488812dbb9cc74d00a0f6
+spec_version: 2
+checksum: 611e421160e80782143616de92fa9310b5698616e7d1b30b98c97726ddf69b22
 created: 2026-09-25
-last_updated: 2026-10-21
+last_updated: 2026-11-14
 ---
 
 # Sticky Stack — Component Spec
@@ -85,7 +85,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
       <template #media>
         <CodeBlock
           :tabs="samples"
-          show-line-numbers
+          line-numbers
         />
       </template>
     </StickyStack>

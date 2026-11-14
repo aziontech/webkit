@@ -45,7 +45,7 @@
         size="medium"
         :aria-label="t.filter"
       >
-        <template #iconLeft>
+        <template #prefix>
           <i
             class="pi pi-filter text-(--text-muted)"
             aria-hidden="true"

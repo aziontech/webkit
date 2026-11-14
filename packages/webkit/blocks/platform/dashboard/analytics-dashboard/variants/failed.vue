@@ -234,7 +234,7 @@
               <ChartCard.Title>Requests over time</ChartCard.Title>
               <Hint text="Sum of requests served by every service, per interval." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -281,18 +281,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -310,7 +310,7 @@
               <ChartCard.Title>Status codes</ChartCard.Title>
               <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -356,18 +356,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -385,7 +385,7 @@
               <ChartCard.Title>Requests by country</ChartCard.Title>
               <Hint text="Sum of requests per country of origin, top countries first." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -418,18 +418,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -447,7 +447,7 @@
               <ChartCard.Title>Top hosts</ChartCard.Title>
               <Hint text="Hosts that served the most requests in the period, with their service." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -481,18 +481,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert

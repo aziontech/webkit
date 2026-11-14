@@ -688,28 +688,28 @@
                     </Tooltip>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="create"
                       label="Create Table"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-plus"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="truncate"
                       label="Truncate table"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-eraser"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </div>
@@ -734,16 +734,16 @@
               @select="(_event, value) => onColumnAction(value, row)"
             >
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="alter"
                   label="Change type"
                 >
-                  <template #left
+                  <template #leading
                     ><i
                       class="pi pi-pencil"
                       aria-hidden="true"
                   /></template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
             </Table.CellActions>
           </template>
@@ -842,7 +842,7 @@
                     <FileTokenGroup
                       v-if="csvFile"
                       :items="csvTokens"
-                      @dismiss="clearCsv"
+                      @remove="clearCsv"
                     />
                     <template v-if="csvRows.length">
                       <p class="m-0 text-body-sm text-(--text-muted)">
@@ -906,7 +906,7 @@
                           class="w-full"
                         >
                           <Select.Trigger>
-                            <template #iconLeft>
+                            <template #prefix>
                               <span
                                 class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                                 aria-hidden="true"
@@ -951,10 +951,7 @@
                         />
                       </template>
                       <template #cell-primaryKey="{ index }">
-                        <Checkbox
-                          v-model="createForm.columns[index].primaryKey"
-                          binary
-                        />
+                        <Checkbox v-model="createForm.columns[index].primaryKey" />
                       </template>
                     </AttributeEditor>
                     <HelperText
@@ -1141,7 +1138,7 @@
                         class="w-full"
                       >
                         <Select.Trigger>
-                          <template #iconLeft>
+                          <template #prefix>
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
@@ -1349,7 +1346,7 @@
             class="w-full"
           >
             <Select.Trigger>
-              <template #iconLeft>
+              <template #prefix>
                 <span
                   class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                   aria-hidden="true"

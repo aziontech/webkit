@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 274faed584d635251bbfd09b6226ac25714413e72ba95c5d0f55ddf94ac6e8c8
+checksum: 385e282794d768608038bc6b2beafa8fb5ed4dc14e40e2f5a05b547751c85844
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -161,7 +161,6 @@ packages/webkit/src/components/layout/console-layout/
 | `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
 | `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
 | `v-model:navigation-open`     | `boolean` | `true`  | `update:navigationOpen`     | Whether the navigation rail is shown on wide layouts; `false` collapses it (the Sidebar's `open`). It has no effect while compact, where the rail is a drawer. Same name as `AppLayout`'s `navigationOpen`. |
-| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | **@deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0.** Same state and polarity; both are emitted on every change, and a host that binds only this one still drives the rail. |
 
 ## Events
 

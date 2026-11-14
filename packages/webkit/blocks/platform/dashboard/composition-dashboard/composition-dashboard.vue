@@ -476,7 +476,7 @@
                 text="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <ToggleGroup
                 v-model="trendForm"
                 :options="forms"
@@ -496,14 +496,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -527,7 +527,7 @@
               />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -538,7 +538,7 @@
               <ChartCard.Title>Current split</ChartCard.Title>
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('current-split', value)"
@@ -552,14 +552,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <DonutChart
@@ -582,7 +582,7 @@
                 text="The resources that cost the most this month, their share of the total and the change against last month."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('top-contributors', value)"
@@ -596,14 +596,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
@@ -611,7 +611,7 @@
               :columns="contributorColumns"
               row-key="id"
               enable-sorting
-              header-kind="compact"
+              density="compact"
               bordered
               :loading="loading"
             >

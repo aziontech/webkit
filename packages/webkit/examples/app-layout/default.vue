@@ -67,7 +67,7 @@
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
           <GlobalHeader aria-label="Console">
-            <GlobalHeader.Left>
+            <GlobalHeader.Start>
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
@@ -78,9 +78,9 @@
                   @click="openNavigation"
                 />
               </div>
-            </GlobalHeader.Left>
-            <GlobalHeader.Middle />
-            <GlobalHeader.Right>
+            </GlobalHeader.Start>
+            <GlobalHeader.Center />
+            <GlobalHeader.End>
               <SearchTrigger
                 collapsible
                 @open="searchOpen = true"
@@ -93,7 +93,7 @@
                 :aria-pressed="toolsOpen"
                 @click="toggleTools"
               />
-            </GlobalHeader.Right>
+            </GlobalHeader.End>
           </GlobalHeader>
           <Command v-model:open="searchOpen">
             <Command.Input placeholder="Search the console" />

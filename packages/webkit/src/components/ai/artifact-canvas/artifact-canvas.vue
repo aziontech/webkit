@@ -139,7 +139,7 @@
       <ResponseBranches
         v-model="version"
         :count="versions"
-        :label="t('artifactCanvas.versions')"
+        :aria-label="t('artifactCanvas.versions')"
         :disabled="streaming"
         :data-testid="`${testId}__versions`"
       />

@@ -104,7 +104,7 @@
               <Overline
                 v-if="eyebrow"
                 :prefix="EYEBROW_PREFIX"
-                show-cursor
+                cursor
               >
                 {{ eyebrow }}
               </Overline>

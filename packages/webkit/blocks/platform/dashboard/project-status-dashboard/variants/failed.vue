@@ -188,7 +188,7 @@
               <ChartCard.Title>Completion</ChartCard.Title>
               <Hint text="Every task in the project, by its current status." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -199,19 +199,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     disabled
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -231,7 +231,7 @@
                 text="Story points left in the sprint each working day, against a straight line to zero."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 label="Story points"
                 severity="secondary"
@@ -255,19 +255,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     disabled
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -285,7 +285,7 @@
               <ChartCard.Title>Milestones</ChartCard.Title>
               <Hint text="Dated checkpoints to launch, oldest first." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -296,19 +296,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     disabled
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -326,7 +326,7 @@
               <ChartCard.Title>At risk</ChartCard.Title>
               <Hint text="Tasks that threaten the next milestone, with the reason." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 v-if="atRisk.length && !loading"
                 :label="atRisk.length + ' open'"
@@ -343,19 +343,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     disabled
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -373,7 +373,7 @@
               <ChartCard.Title>Owners</ChartCard.Title>
               <Hint text="Tasks per owner. Overdue counts open tasks past their due date." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -384,19 +384,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     disabled
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert

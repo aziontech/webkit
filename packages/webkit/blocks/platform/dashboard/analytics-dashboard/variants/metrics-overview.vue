@@ -466,7 +466,7 @@
                 <ChartCard.Title>{{ card.title }}</ChartCard.Title>
                 <Hint :text="card.hint" />
               </span>
-              <ChartCard.Controls>
+              <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex">
                   <Tag
                     label="Sum"
@@ -503,17 +503,17 @@
                     />
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="query"
                       label="Copy query"
                     />
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="export"
                       label="Export CSV"
                     />
                   </DropdownMenu.Group>
                 </DropdownMenu>
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <Chart
@@ -536,7 +536,7 @@
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
             </ChartCard.Content>
             <ChartCard.Footer>
@@ -544,7 +544,6 @@
                 :label="`Open ${card.product} dashboard`"
                 :href="card.href"
                 size="medium"
-                :show-icon="false"
               />
             </ChartCard.Footer>
           </ChartCard>
@@ -599,7 +598,7 @@
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
             </div>
           </PanelContent>

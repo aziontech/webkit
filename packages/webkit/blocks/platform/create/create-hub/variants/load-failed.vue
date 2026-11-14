@@ -492,7 +492,7 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Home"
@@ -512,9 +512,9 @@
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -526,7 +526,7 @@
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main
@@ -661,7 +661,7 @@
                         @update:model-value="onSelectScope"
                       >
                         <Select.Trigger>
-                          <template #iconLeft>
+                          <template #prefix>
                             <i
                               class="ai ai-github text-body-md leading-none shrink-0 text-(--text-default)"
                               aria-hidden="true"
@@ -694,7 +694,7 @@
                         aria-label="Search repositories or paste a repository URL"
                         class="w-full"
                       >
-                        <template #iconLeft>
+                        <template #prefix>
                           <i class="pi pi-search" />
                         </template>
                       </Input>
@@ -739,7 +739,7 @@
                               >
                                 <Item.Media>
                                   <Skeleton
-                                    kind="shape"
+                                    kind="rectangle"
                                     width="1.75rem"
                                     height="1.75rem"
                                   />
@@ -865,7 +865,7 @@
                       aria-label="Search templates"
                       class="w-full"
                     >
-                      <template #iconLeft>
+                      <template #prefix>
                         <i class="pi pi-search" />
                       </template>
                     </Input>

@@ -45,7 +45,7 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
-    /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
+    /** Button kind; the panel draws the primary action `secondary` and the secondary `outlined`. */
     kind?: ConsolePanelActionKind
   }
 
@@ -80,8 +80,6 @@
     primaryAction?: ConsolePanelAction
     /** Second button under the headline, outlined; shown only with a label and a link. */
     secondaryAction?: ConsolePanelAction
-    /** @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. */
-    actions?: ConsolePanelAction[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -99,8 +97,7 @@
     tabsAriaLabel: '',
     crop: 0,
     primaryAction: undefined,
-    secondaryAction: undefined,
-    actions: () => []
+    secondaryAction: undefined
   })
 
   defineSlots<{
@@ -123,16 +120,10 @@
     Boolean(action?.label && action.href)
 
   const buttons = computed<ConsolePanelAction[]>(() => {
-    if (props.primaryAction || props.secondaryAction) {
-      const named: ConsolePanelAction[] = []
-      if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
-      if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
-      return named
-    }
-    return props.actions.map((action, index) => ({
-      ...action,
-      kind: action.kind ?? (index === 0 ? 'secondary' : 'outlined')
-    }))
+    const named: ConsolePanelAction[] = []
+    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
+    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+    return named
   })
 
   const SCENE_ASPECT = 1.9

@@ -6,10 +6,10 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocCta from '@aziontech/webkit/doc-cta'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
@@ -378,7 +378,7 @@
       />
       <DocProse>
         <DocHeading
-          id="pick-your-agent"
+          anchor="pick-your-agent"
           :level="2"
           >Pick your agent</DocHeading
         >
@@ -389,7 +389,7 @@
             :key="grid.filter"
             :title="grid.filter"
           >
-            <DocCardGroup :cols="3">
+            <DocCardGroup :columns="3">
               <DocCard
                 v-for="agent in grid.agents"
                 :key="agent.slug"
@@ -422,7 +422,7 @@
         </p>
 
         <DocHeading
-          id="compare-agents"
+          anchor="compare-agents"
           :level="2"
           >Compare agents</DocHeading
         >
@@ -489,17 +489,17 @@
         </DocCallout>
 
         <DocHeading
-          id="understanding-agents"
+          anchor="understanding-agents"
           :level="2"
           >Understanding agents</DocHeading
         >
         <p>Common types, concepts and tradeoffs.</p>
         <DocHeading
-          id="workflow"
+          anchor="workflow"
           :level="3"
           >Workflow</DocHeading
         >
-        <DocCardGroup :cols="2">
+        <DocCardGroup :columns="2">
           <DocCard
             v-for="type in workflowTypes"
             :key="type.title"
@@ -509,11 +509,11 @@
           />
         </DocCardGroup>
         <DocHeading
-          id="key-concepts"
+          anchor="key-concepts"
           :level="3"
           >Key concepts</DocHeading
         >
-        <DocCardGroup :cols="2">
+        <DocCardGroup :columns="2">
           <DocCard
             v-for="concept in keyConcepts"
             :key="concept.title"
@@ -523,11 +523,11 @@
           />
         </DocCardGroup>
         <DocHeading
-          id="common-tradeoffs"
+          anchor="common-tradeoffs"
           :level="3"
           >Common tradeoffs</DocHeading
         >
-        <DocCardGroup :cols="2">
+        <DocCardGroup :columns="2">
           <DocCard
             v-for="tradeoff in tradeoffs"
             :key="tradeoff.title"
@@ -570,15 +570,13 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>

@@ -22,8 +22,8 @@
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -31,7 +31,7 @@
           icon="pi pi-book"
           href="/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
   </div>
 </template>

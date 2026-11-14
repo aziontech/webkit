@@ -400,41 +400,41 @@
                 </Tooltip>
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="logs"
                   label="Logs"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-align-left"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
-                <DropdownMenu.Option
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
                   value="requests"
                   label="Requests"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-arrow-right-arrow-left"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="redeploy"
                   label="Redeploy"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-refresh"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
             </DropdownMenu>
           </div>

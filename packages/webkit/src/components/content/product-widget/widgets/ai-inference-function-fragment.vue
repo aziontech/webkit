@@ -79,7 +79,7 @@
           <CodeBlock
             :tabs="FILES"
             :bordered="false"
-            show-line-numbers
+            line-numbers
             copy-aria-label="Copy the function code"
           />
         </ShellMockupPart>

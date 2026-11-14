@@ -14,7 +14,7 @@ The sticky top bar of the marketing site. A visitor is deciding whether to try A
 
 ### A. Bar — `GlobalHeader` (required)
 
-`kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Left`, navigation in `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
+`kind="site"`, `aria-label="Azion"`, in a `sticky top-0` wrapper. Start in `GlobalHeader.Start`, navigation in `GlobalHeader.Center`, actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger — `IconButton` (required)
 

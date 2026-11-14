@@ -42,8 +42,8 @@
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -51,7 +51,7 @@
           icon="pi pi-book"
           href="/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">

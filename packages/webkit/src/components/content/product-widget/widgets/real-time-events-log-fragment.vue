@@ -190,7 +190,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

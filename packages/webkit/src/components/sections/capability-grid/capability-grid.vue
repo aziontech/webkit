@@ -40,7 +40,7 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
-    /** Button kind; by default the first action is `secondary` and the rest `outlined`. */
+    /** Button kind; the grid draws the primary action `secondary` and the secondary `outlined`. */
     kind?: CapabilityGridActionKind
   }
 
@@ -59,8 +59,6 @@
     primaryAction?: CapabilityGridAction
     /** Second button under the section title, outlined; shown only with a label and a link. */
     secondaryAction?: CapabilityGridAction
-    /** @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. */
-    actions?: CapabilityGridAction[]
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
@@ -75,7 +73,6 @@
     columns: 3,
     primaryAction: undefined,
     secondaryAction: undefined,
-    actions: () => [],
     anchor: '',
     titleKind: 'centered'
   })
@@ -92,16 +89,10 @@
     Boolean(action?.label && action.href)
 
   const buttons = computed<CapabilityGridAction[]>(() => {
-    if (props.primaryAction || props.secondaryAction) {
-      const named: CapabilityGridAction[] = []
-      if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
-      if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
-      return named
-    }
-    return props.actions.map((action, index) => ({
-      ...action,
-      kind: action.kind ?? (index === 0 ? 'secondary' : 'outlined')
-    }))
+    const named: CapabilityGridAction[] = []
+    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
+    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+    return named
   })
 </script>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import DocCta from '@aziontech/webkit/doc-cta'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
@@ -161,13 +161,13 @@
       />
       <DocProse>
         <DocHeading
-          id="prerequisites"
+          anchor="prerequisites"
           :level="2"
           >Prerequisites</DocHeading
         >
         <p>An Azion account and an application that already answers on its Azion domain.</p>
         <DocHeading
-          id="create-the-function"
+          anchor="create-the-function"
           :level="2"
           >Create the function</DocHeading
         >
@@ -176,7 +176,7 @@
           it.
         </p>
         <DocHeading
-          id="instantiate-the-function"
+          anchor="instantiate-the-function"
           :level="2"
           >Instantiate it in your application</DocHeading
         >
@@ -185,13 +185,13 @@
           created.
         </p>
         <DocHeading
-          id="verify-the-response"
+          anchor="verify-the-response"
           :level="2"
           >Verify the response</DocHeading
         >
         <p>Request the domain and read the header the function sets.</p>
         <DocHeading
-          id="next-steps"
+          anchor="next-steps"
           :level="2"
           >Next steps</DocHeading
         >
@@ -226,15 +226,13 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>
@@ -291,7 +289,7 @@
                 placeholder="Language"
               >
                 <Select.Trigger aria-label="Language">
-                  <template #iconLeft>
+                  <template #prefix>
                     <i
                       class="pi pi-globe text-(--text-muted)"
                       aria-hidden="true"

@@ -180,7 +180,7 @@
             :placeholder="languageAriaLabel || t('siteFooter.language')"
           >
             <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-globe text-(--text-muted)"
                   aria-hidden="true"

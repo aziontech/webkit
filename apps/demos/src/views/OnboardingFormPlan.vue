@@ -266,8 +266,8 @@
           />
         </a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Documentation"
           kind="outlined"
@@ -275,7 +275,7 @@
           icon="pi pi-book"
           href="https://example.com/docs"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
@@ -292,7 +292,7 @@
                 :value="2"
                 :max="3"
                 size="small"
-                shape="flat"
+                kind="flat"
                 class="shrink-0"
                 aria-label="Step 2 of 3"
               />
@@ -665,7 +665,6 @@
                                             <Field orientation="horizontal">
                                               <Checkbox
                                                 v-model="address.useAccountInformation"
-                                                binary
                                                 name="useAccountInformation"
                                               />
                                               <Field.Content>

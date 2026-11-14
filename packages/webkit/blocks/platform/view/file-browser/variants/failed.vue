@@ -54,7 +54,7 @@
                     icon="pi pi-plus"
                     kind="primary"
                     size="medium"
-                    :model="addToFilesActions"
+                    :items="addToFilesActions"
                     disabled
                   />
                 </div>

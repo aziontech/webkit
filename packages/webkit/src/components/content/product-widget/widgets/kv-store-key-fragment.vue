@@ -188,7 +188,7 @@
             <Textarea
               id="kv-value"
               :model-value="VALUE"
-              resizable="none"
+              resize="none"
               data-cursor="value"
               aria-label="Value"
             />
@@ -204,7 +204,7 @@
           <Textarea
             id="kv-metadata"
             model-value='{ "source": "login" }'
-            resizable="none"
+            resize="none"
             aria-label="Metadata"
           />
         </div>

@@ -253,7 +253,7 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Teams and permissions"
@@ -274,8 +274,8 @@
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
     </GlobalHeader>
 
     <main
@@ -439,7 +439,7 @@
                             aria-label="Filter permissions"
                             class="w-full"
                           >
-                            <template #iconLeft>
+                            <template #prefix>
                               <i
                                 class="pi pi-search"
                                 aria-hidden="true"
@@ -507,7 +507,6 @@
                             <Table.Cell principal>
                               <Field orientation="horizontal">
                                 <Checkbox
-                                  binary
                                   :model-value="groupState(group).all"
                                   :indeterminate="groupState(group).some"
                                   @update:model-value="(checked) => toggleGroup(group, checked)"
@@ -536,7 +535,6 @@
                             >
                               <Checkbox
                                 v-if="has(resource, action)"
-                                binary
                                 :model-value="isChecked(`${resource.key}.${action}`)"
                                 :aria-label="`${action === 'view' ? 'View' : 'Edit'} ${resource.label}`"
                                 @update:model-value="

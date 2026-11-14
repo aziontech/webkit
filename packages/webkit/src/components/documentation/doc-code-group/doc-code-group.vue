@@ -87,7 +87,7 @@
       :tabs="tabs"
       :kind="kind"
       :show-label="showLabel"
-      :show-line-numbers="showLineNumbers"
+      :line-numbers="showLineNumbers"
       :data-testid="`${testId}__code`"
     />
     <CodeBlock
@@ -95,7 +95,7 @@
       key="output"
       :tabs="outputTabs"
       kind="output"
-      :show-line-numbers="false"
+      :line-numbers="false"
       :data-testid="`${testId}__output`"
     />
   </div>

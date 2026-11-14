@@ -251,7 +251,7 @@
               :placeholder="search.placeholder"
               :aria-label="search.label"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i class="pi pi-search text-(--text-muted)" />
               </template>
             </Input>

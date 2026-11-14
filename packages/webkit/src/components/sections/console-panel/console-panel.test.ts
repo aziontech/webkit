@@ -51,18 +51,9 @@ describe('ConsolePanel', () => {
     expect(queryAllByRole('link')).toHaveLength(0)
   })
 
-  it('still reads the deprecated actions when no named action is set', () => {
-    const { getByRole, queryByRole } = panel({
-      actions: [{ label: 'Docs', href: '/docs' }]
-    })
-    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('href', '/docs')
-    const both = panel({
-      actions: [{ label: 'Old', href: '/old' }],
-      primaryAction: { label: 'New', href: '/new' }
-    })
-    expect(both.queryByRole('link', { name: 'Old' })).toBeNull()
-    expect(both.getByRole('link', { name: 'New' })).toBeInTheDocument()
-    expect(queryByRole('link', { name: 'Old' })).toBeNull()
+  it('draws no button from the removed actions array', () => {
+    const { queryByRole } = panel({ actions: [{ label: 'Docs', href: '/docs' }] })
+    expect(queryByRole('link', { name: 'Docs' })).toBeNull()
   })
 
   it('hands the first tab to the scene slot', () => {

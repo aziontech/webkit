@@ -3,11 +3,11 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: e7e8b2709ab072a5deb799e01eaa4714194c8c3e8bfef65b22e4f40af9999b9d
+checksum: d15c6d4bb186ec85fc185e425cf4cb20ffd91eb1fd117f9975be3d42326b5f1f
 created: 2026-06-23
 last_updated: 2026-11-14
 ---
@@ -64,7 +64,7 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
   <Textarea
     v-model="value"
     placeholder="Any direction"
-    resizable="both"
+    resize="both"
   />
 </template>
 ```

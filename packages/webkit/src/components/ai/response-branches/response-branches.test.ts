@@ -98,12 +98,12 @@ describe('ResponseBranches', () => {
 })
 
 describe('ResponseBranches naming and test ids', () => {
-  it('names the pager from ariaLabel and still reads the deprecated label', () => {
+  it('names the pager from ariaLabel, not from the removed label', () => {
     const named = render(ResponseBranches, { props: { count: 3, ariaLabel: 'Answers' } })
     expect(named.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
     named.unmount()
-    const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } })
-    expect(legacy.getByRole('group', { name: 'Drafts' })).toBeInTheDocument()
+    const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } as never })
+    expect(legacy.queryByRole('group', { name: 'Drafts' })).toBeNull()
   })
 
   it('lets a consumer data-testid win over the fallback', () => {

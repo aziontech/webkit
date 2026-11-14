@@ -80,7 +80,7 @@
       v-if="eyebrow"
       :prefix="eyebrowPrefix"
       :single-line="false"
-      show-cursor
+      cursor
       >{{ eyebrow }}</Overline
     >
     <h1

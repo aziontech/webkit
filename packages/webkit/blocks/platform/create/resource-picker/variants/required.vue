@@ -213,7 +213,7 @@
               placeholder="Search projects"
               aria-label="Search projects"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -270,7 +270,7 @@
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="shape"
+                      kind="rectangle"
                       width="2rem"
                       height="2rem"
                     />

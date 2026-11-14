@@ -25,8 +25,6 @@ export interface TopologyNode {
   key: string
   /** Resource type shown in the header, e.g. `Policy`. */
   type?: string
-  /** Resource type shown in the header. @deprecated since 6.0 — use `type`. Removed in 7.0. */
-  kind?: string
   /** Icon class of the kind. */
   icon?: string
   /** Resource name. Empty renders the dashed, unbound slot. */

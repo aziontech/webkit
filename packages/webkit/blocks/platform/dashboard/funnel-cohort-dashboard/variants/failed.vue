@@ -207,7 +207,7 @@
               text="Unique users who reached each step in the period, in order, with the share lost between steps."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
                 <IconButton
@@ -218,14 +218,14 @@
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   disabled
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <Alert
@@ -245,7 +245,7 @@
               text="Share of each weekly sign-up cohort still active in each week since sign-up."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
                 <IconButton
@@ -256,14 +256,14 @@
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   disabled
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <Alert
@@ -283,7 +283,7 @@
               text="Users who signed up each week, and the share of them active in each week since. A dash marks a week that has not ended yet."
             />
           </span>
-          <ChartCard.Controls>
+          <ChartCard.Action>
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
                 <IconButton
@@ -294,14 +294,14 @@
                 />
               </DropdownMenu.Trigger>
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="export"
                   label="Export CSV"
                   disabled
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
-          </ChartCard.Controls>
+          </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
           <Alert

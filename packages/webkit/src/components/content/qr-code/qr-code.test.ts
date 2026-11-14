@@ -53,8 +53,8 @@ describe('encodeQr', () => {
 })
 
 describe('QrCode', () => {
-  it('is an image named by the label, with the code dark on a light plate', () => {
-    const view = render(QrCode, { props: { value: URI, label: 'QR code to add ana' } })
+  it('is an image named by the aria-label, with the code dark on a light plate', () => {
+    const view = render(QrCode, { props: { value: URI, ariaLabel: 'QR code to add ana' } })
     const img = view.getByRole('img', { name: 'QR code to add ana' })
     expect(img).toHaveAttribute('data-theme', 'light')
     expect(img).toHaveAttribute('data-version', '5')
@@ -67,11 +67,9 @@ describe('QrCode', () => {
     expect(plate.color).not.toBe(plate.backgroundColor)
   })
 
-  it('takes an ariaLabel, which wins over the deprecated label', () => {
-    const view = render(QrCode, {
-      props: { value: URI, ariaLabel: 'Scan to sign in', label: 'Old name' }
-    })
-    expect(view.getByRole('img', { name: 'Scan to sign in' })).toBeInTheDocument()
+  it('is not named by the removed label prop', () => {
+    const view = render(QrCode, { props: { value: URI, label: 'Old name' } as never })
+    expect(view.queryByRole('img', { name: 'Old name' })).toBeNull()
   })
 
   it('takes a size', () => {

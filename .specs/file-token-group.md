@@ -3,9 +3,9 @@ name: file-token-group
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 5101f72e284c1ad98f288992265612e3ca137a5418cf9dd35905f1063d35b2a9
+checksum: f7751f9a10baf535a72946c9f57eb00f2fb732c6a3fbbf22f7eaf9e930a7ce60
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -68,7 +68,6 @@ The files a person picked for upload, shown as removable tokens before or while 
 | ---------------------- | ---------------------------- | ------------ | -------- | ----------------------------------------------------------------------------- |
 | `items`                | `FileTokenGroupItem[]`       | `[]`         | false    | The files, in order; each with its optional upload state, error and warning.  |
 | `orientation`          | `'vertical' \| 'horizontal'` | `'vertical'` | false    | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis. |
-| `alignment`            | `'vertical' \| 'horizontal'` | `'vertical'` | false    | `@deprecated since 6.0 — use orientation. Removed in 7.0.` Read when `orientation` is left vertical. |
 | `limit`                | `number`                     | `0`          | false    | Shows this many tokens and a Show more toggle for the rest. 0 shows them all. |
 | `showFileSize`         | `boolean`                    | `true`       | false    | Shows the size beside the name, formatted for the locale.                     |
 | `showFileLastModified` | `boolean`                    | `false`      | false    | Shows the last-modified date, formatted for the locale.                       |
@@ -77,14 +76,13 @@ The files a person picked for upload, shown as removable tokens before or while 
 
 **Booleans that default to true.** `showFileSize` defaults to `true`: the size is what tells two files apart and what an upload limit is checked against. Inverting it would break every consumer, so it is recorded as an exception to props.md's default-false rule.
 
-Types (`FileTokenGroupOrientation`; `FileTokenGroupAlignment` stays exported as a deprecated alias until 7.0): `FileTokenGroupFile = { name: string; webkitRelativePath?: string; size?: number; type?: string; lastModified?: number }`; `FileTokenGroupItem = { file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`. `progress` is 0–100; `loading` without `progress` shows an indeterminate bar.
+Types (`FileTokenGroupOrientation`): `FileTokenGroupFile = { name: string; webkitRelativePath?: string; size?: number; type?: string; lastModified?: number }`; `FileTokenGroupItem = { file: File | FileTokenGroupFile; loading?: boolean; progress?: number; error?: string; warning?: string }`. `progress` is 0–100; `loading` without `progress` shows an indeterminate bar.
 
 ## Events
 
 | Event     | Payload                                   | Notes                                                                                      |
 | --------- | ----------------------------------------- | ------------------------------------------------------------------------------------------ |
 | `remove`  | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor. |
-| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | `@deprecated since 6.0 — listen to remove. Removed in 7.0.` Fires right after `remove` with the same payload. |
 
 ## Slots
 
@@ -92,7 +90,7 @@ _none_
 
 ## States
 
-- Root `data-orientation` (and the deprecated mirror `data-alignment`): `vertical` | `horizontal`; `data-readonly` when read-only.
+- Root `data-orientation`: `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
 - A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.

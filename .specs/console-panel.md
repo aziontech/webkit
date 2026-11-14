@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: be6d199b0576f2542a62832957e0a66d14711f84a18522beda614c0c01297559
+checksum: 358dbda3ed32f2b81afcfb58085c247781ddfab855681d723d1b85bed48c8596
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -79,7 +79,6 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 | `crop`            | `number`                 | `0`          | false    | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up.                                                                                                                                    |
 | `primaryAction`   | `ConsolePanelAction`     | `undefined`  | false    | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                           |
 | `secondaryAction` | `ConsolePanelAction`     | `undefined`  | false    | Second button under the headline, `outlined`; same shape. Shown only with a label and a link.                                                                                                                                      |
-| `actions`         | `ConsolePanelAction[]`   | `[]`         | false    | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 
 ## Events
 

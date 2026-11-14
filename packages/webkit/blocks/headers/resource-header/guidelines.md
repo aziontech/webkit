@@ -18,7 +18,7 @@ The top bar of every page inside the persistent console shell. It sits in the co
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Console"` (the label every console bar uses), in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Console"` (the label every console bar uses), in the content zone, never above the rail. Start cluster in `GlobalHeader.Start`, empty `GlobalHeader.Center`, actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger — `IconButton` (required)
 

@@ -8,16 +8,10 @@
   interface Props {
     /** Inner padding; off for an edge-to-edge plot (the same name as Card). */
     padded?: boolean
-    /**
-     * No inner padding, for an edge-to-edge plot.
-     * @deprecated since 6.0 — use `:padded="false"`. Removed in 7.0.
-     */
-    flush?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    padded: true,
-    flush: false
+    padded: true
   })
 
   defineSlots<{
@@ -28,7 +22,7 @@
   const attrs = useAttrs()
   const ctx = useChartCardContext()
 
-  const unpadded = computed<boolean>(() => props.flush || !props.padded)
+  const unpadded = computed<boolean>(() => !props.padded)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`

@@ -17,7 +17,7 @@
     { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }
   ]
   const search = ref('')
-  const warningsOnly = ref(false)
+  const level = ref('')
 </script>
 
 <template>
@@ -25,7 +25,7 @@
     <LogView
       :lines="lines"
       v-model:search="search"
-      v-model:warnings-only="warningsOnly"
+      v-model:level="level"
       class="h-full"
     >
       <LogView.Header />

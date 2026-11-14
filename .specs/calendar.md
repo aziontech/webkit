@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 7b7c629bae59dc36535230b2f613062dff0780a1bae1884a3d2f4d48faeaa9b4
+checksum: 31b3c0024dde59ee08ab75bb300cc8166b0c87570d4cc28c7d5c8915041f7576
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -69,7 +69,7 @@ Date-range picker. A trigger button opens a popover that holds a month grid, Sta
     mode="range"
     :presets="presets"
     show-time
-    show-timezone
+    show-time-zone
     clearable
   />
 </template>

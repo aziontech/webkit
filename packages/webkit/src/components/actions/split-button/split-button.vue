@@ -161,7 +161,7 @@
       </div>
 
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           v-for="(item, index) in actions"
           :key="`${optionValue(item)}-${index}`"
           :value="optionValue(item)"
@@ -172,7 +172,7 @@
         >
           <template
             v-if="item.icon"
-            #left
+            #leading
           >
             <i
               :class="[item.icon, directionalIconClass(item.icon)]"
@@ -180,7 +180,7 @@
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
     </DropdownMenu>
   </div>

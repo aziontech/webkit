@@ -3,9 +3,9 @@ name: banner-art
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 7f3d3144e1d57bd2abb410ad0afdd9594af3644fb80fcad8447d9bb260a4b308
+checksum: 57b8cfcd26c712d14e4c71d46765bcee5d388a019054e00680210cf3a359f4a6
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -62,11 +62,10 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## Props
 
-| Prop       | Type                  | Default | Required | JSDoc                                                                                      |
-| ---------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------ |
-| `kind`     | `BannerArtKind`       | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                       |
-| `art`      | `BannerArtKind \| ''` | `''`    | false    | @deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop. |
-| `animated` | `boolean`             | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion.      |
+| Prop       | Type            | Default | Required | JSDoc                                                                                 |
+| ---------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------- |
+| `kind`     | `BannerArtKind` | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                  |
+| `animated` | `boolean`       | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
 
 ## Events
 
@@ -78,7 +77,7 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## States
 
-- `data-kind` mirrors the backdrop drawn; `data-art` carries the same value for one major, deprecated with `art`.
+- `data-kind` mirrors the backdrop drawn.
 
 ## Motion & Animations
 

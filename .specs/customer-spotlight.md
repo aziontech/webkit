@@ -3,9 +3,9 @@ name: customer-spotlight
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: d3ed73400530b4f6fe54aeb34d280a054833a4dc8dfdce79efb0db6d6dcc5cac
+checksum: df9f808b660e6b50b88964105703c8ce0de2eda5dad055f1402f75ff79d59a0d
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -61,14 +61,12 @@ A row of client cards, each painted in the client's own colours with its reverse
 
 ## Props
 
-| Prop         | Type                      | Default | Required | JSDoc                                                                                                                                                                                                                 |
-| ------------ | ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`      | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
-| `ariaLabel`  | `string`                  | `''`    | false    | Accessible name of the list; empty uses the built-in "Customer stories".                                                                                                                                              |
-| `linkLabel`  | `string`                  | `''`    | false    | Label revealed under the description while the card is open; empty uses the built-in "Read story".                                                                                                                    |
-| `cards`      | `CustomerSpotlightCard[]` | `[]`    | false    | @deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty.                                                                                                                                 |
-| `storyLabel` | `string`                  | `''`    | false    | @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty.                                                                                                                         |
-| `anchor`     | `string`                  | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                              |
+| Prop        | Type                      | Default | Required | JSDoc                                                                                                                                                                                                                 |
+| ----------- | ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
+| `ariaLabel` | `string`                  | `''`    | false    | Accessible name of the list; empty uses the built-in "Customer stories".                                                                                                                                              |
+| `linkLabel` | `string`                  | `''`    | false    | Label revealed under the description while the card is open; empty uses the built-in "Read story".                                                                                                                    |
+| `anchor`    | `string`                  | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                              |
 
 ## Events
 

@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 72c4fd4a3646ec85a8f7435474196e8221459409b9eea2265859951c5dfe62c4
-spec_version: 6
+checksum: a7ff538b84831ff18b81ce703cbae2acc068876c3c0cb113f6e01bb0fba56594
+spec_version: 7
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-14
@@ -147,7 +147,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`), `totals?: boolean` (default `false`; **@deprecated since 6.0 — use `total`. Removed in 7.0.**). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 

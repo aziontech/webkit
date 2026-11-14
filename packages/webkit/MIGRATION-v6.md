@@ -62,90 +62,71 @@ component.
 
 ## 3. Renamed props and values
 
-| Component              | v5                 | v6                   |
-| ---------------------- | ------------------ | -------------------- |
-| `accordion`            | `value`            | `modelValue`         |
-| `alert`                | `severity="error"` | `severity="danger"`  |
-| `button`               | `kind="text"`      | `kind="transparent"` |
-| `calendar`             | `showTimezone`     | `showTimeZone`       |
-| `calendar`             | `timezone`         | `timeZone`           |
-| `calendar`             | `timezones`        | `timeZones`          |
-| `card-pricing`         | `planTitle`        | `title`              |
-| `checkbox`             | `inputId`          | `id`                 |
-| `code-block`           | `border`           | `bordered`           |
-| `code-block`           | `value`            | `modelValue`         |
-| `conversation-history` | `label`            | `ariaLabel`          |
-| `doc-card-group`       | `cols`             | `columns`            |
-| `doc-card-group`       | `mobileCols`       | `mobileColumns`      |
-| `doc-card`             | `link`             | `linkLabel`          |
-| `doc-card`             | `overline`         | `eyebrow`            |
-| `doc-heading`          | `id`               | `anchor`             |
-| `doc-tooltip`          | `cta`              | `linkLabel`          |
-| `doc-tooltip`          | `headline`         | `title`              |
-| `file-token-group`     | `alignment`        | `orientation`        |
-| `item`                 | `kind="outline"`   | `kind="outlined"`    |
-| `log-view`             | `border`           | `bordered`           |
-| `log-view`             | `showCopy`         | `copyable`           |
-| `media-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
-| `media-tabs`           | `autoPlay`         | `autoplay`           |
-| `navigation-menu`      | `value`            | `modelValue`         |
-| `overline`             | `showCursor`       | `cursor`             |
-| `payment-brand`        | `label`            | `ariaLabel`          |
-| `popover`              | `width`            | `size`               |
-| `progress`             | `shape`            | `kind`               |
-| `qr-code`              | `label`            | `ariaLabel`          |
-| `quote-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
-| `quote-tabs`           | `autoPlay`         | `autoplay`           |
-| `response-branches`    | `label`            | `ariaLabel`          |
-| `severity-tag`         | `level`            | `severity`           |
-| `shell-mockup`         | `still="false"`    | `animated="true"`    |
-| `shell-mockup`         | `still="true"`     | `animated="false"`   |
-| `skeleton`             | `kind="shape"`     | `kind="rectangle"`   |
-| `split-button`         | `model`            | `items`              |
-| `table`                | `border`           | `bordered`           |
-| `tabs`                 | `value`            | `modelValue`         |
-| `textarea`             | `resizable`        | `resize`             |
-| `theme-switcher`       | `value`            | `modelValue`         |
-| `wizard`               | `activeStep`       | `modelValue`         |
+| Component         | v5                 | v6                   |
+| ----------------- | ------------------ | -------------------- |
+| `accordion`       | `value`            | `modelValue`         |
+| `alert`           | `severity="error"` | `severity="danger"`  |
+| `button`          | `kind="text"`      | `kind="transparent"` |
+| `calendar`        | `showTimezone`     | `showTimeZone`       |
+| `calendar`        | `timezone`         | `timeZone`           |
+| `calendar`        | `timezones`        | `timeZones`          |
+| `card-pricing`    | `planTitle`        | `title`              |
+| `checkbox`        | `inputId`          | `id`                 |
+| `code-block`      | `border`           | `bordered`           |
+| `code-block`      | `value`            | `modelValue`         |
+| `doc-card-group`  | `cols`             | `columns`            |
+| `doc-card-group`  | `mobileCols`       | `mobileColumns`      |
+| `doc-card`        | `link`             | `linkLabel`          |
+| `doc-card`        | `overline`         | `eyebrow`            |
+| `doc-tooltip`     | `cta`              | `linkLabel`          |
+| `doc-tooltip`     | `headline`         | `title`              |
+| `item`            | `kind="outline"`   | `kind="outlined"`    |
+| `log-view`        | `border`           | `bordered`           |
+| `log-view`        | `showCopy`         | `copyable`           |
+| `media-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
+| `media-tabs`      | `autoPlay`         | `autoplay`           |
+| `navigation-menu` | `value`            | `modelValue`         |
+| `overline`        | `showCursor`       | `cursor`             |
+| `popover`         | `width`            | `size`               |
+| `progress`        | `shape`            | `kind`               |
+| `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
+| `quote-tabs`      | `autoPlay`         | `autoplay`           |
+| `severity-tag`    | `level`            | `severity`           |
+| `shell-mockup`    | `still="false"`    | `animated="true"`    |
+| `shell-mockup`    | `still="true"`     | `animated="false"`   |
+| `skeleton`        | `kind="shape"`     | `kind="rectangle"`   |
+| `split-button`    | `model`            | `items`              |
+| `table`           | `border`           | `bordered`           |
+| `tabs`            | `value`            | `modelValue`         |
+| `textarea`        | `resizable`        | `resize`             |
+| `theme-switcher`  | `value`            | `modelValue`         |
 
 ### Deprecated in 6.0, removed in 7.0
 
 These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
 rewrites the prop renames, the rest are listed here so you can move at your own pace.
 
-| Component            | Deprecated                    | Use instead                                    |
-| -------------------- | ----------------------------- | ---------------------------------------------- |
-| `chart-card`         | `ChartCard.Controls`          | `ChartCard.Action` (same part)                 |
-| `chart-card-content` | `flush`                       | `:padded="false"`                              |
-| `chart-legend`       | `totals`                      | `total` (the name `Chart.Tooltip` uses)        |
-| `code-block`         | `showLineNumbers`             | `lineNumbers`                                  |
-| `doc-card-group`     | type `DocCardGroupCols`       | type `DocCardGroupColumns`                     |
-| `flow-anchor`        | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
-| `log-view`           | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
-| `log-view`           | line `type: 'warning'`        | line `level: 'warn'`                           |
-| `pick-list`          | `dataKey`                     | `trackBy` (the name `cards` uses)              |
-| `table`              | `headerKind`                  | `density` (now sets the header and the rows)   |
-| `table`              | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
-| `table-cell-link`    | `moreNoun`                    | `noun` (the name `table-cell-tags` uses)       |
-| `table-header`       | `kind`                        | `density`                                      |
-| `topology-diagram`   | node field `kind`             | node field `type`                              |
-| `tracker`            | item field `severity`         | item field `status`                            |
+| Component      | Deprecated                    | Use instead                                    |
+| -------------- | ----------------------------- | ---------------------------------------------- |
+| `code-block`   | `showLineNumbers`             | `lineNumbers`                                  |
+| `flow-anchor`  | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
+| `log-view`     | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
+| `log-view`     | line `type: 'warning'`        | line `level: 'warn'`                           |
+| `pick-list`    | `dataKey`                     | `trackBy` (the name `cards` uses)              |
+| `table`        | `headerKind`                  | `density` (now sets the header and the rows)   |
+| `table`        | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
+| `table-header` | `kind`                        | `density`                                      |
+| `tracker`      | item field `severity`         | item field `status`                            |
 
 `headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
-codemod leaves `headerKind` for you. `flush`, `warningsOnly`, `type: 'warning'` and the data fields
-(`kind` on topology nodes, `severity` on tracker items) are data or inverted booleans; move them by
-hand.
+codemod leaves `headerKind` for you. `warningsOnly`, `type: 'warning'` and the data field
+`severity` on tracker items are data or inverted booleans; move them by hand.
 
 These also keep working in 6.x and are marked `@deprecated` in the types:
 
-- `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`).
-  The flat `primary-label` / `primary-href` / `secondary-label` / `secondary-href` become
-  `:primary-action="{ label, href }"` and `:secondary-action="{ label, href }"`, so the codemod does not
-  rewrite it: change the import and the four attributes by hand.
 - The old prop names in the table above that are marked as aliases: `card-pricing` `planTitle`,
-  `conversation-history` and `response-branches` `label`, `doc-card-group` `cols`, `doc-heading` `id`,
-  `overline` `showCursor`, `payment-brand` and `qr-code` `label`. The new name wins when both are set;
-  the codemod writes the new name.
+  `doc-card-group` `cols` and `overline` `showCursor`. The new name wins when both are set; the codemod
+  writes the new name.
 
 `Illustration` keeps eight retired scene names as aliases of the renamed scenes; `name` resolves
 them through 6.x and they are removed in 7.0:
@@ -294,7 +275,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `UploadProgress`        | `cancel`, `retry`   | `(id?)`                          | `(event, id?)`                                      |
 | `UploadProgress`        | `close`             | `()`                             | `(event)`                                           |
 | `ConfirmDialog`         | `confirm`, `cancel` | `()`                             | `(event)`                                           |
-| `FileTokenGroup`        | `dismiss`           | `(index, item)`                  | `(event, { index, item })`                          |
+| `FileTokenGroup`        | `remove`            | `(index, item)`                  | `(event, { index, item })`                          |
 | `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                   |
 | `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
 | `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
@@ -310,7 +291,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 <!-- v6 -->
 <SuggestionGroup :items="items" @select="(event, item) => send(item.label)" />
 <PromptInput v-model="draft" @submit="(event, { value, references }) => send(value, references)" />
-<FileTokenGroup :items="files" @dismiss="(event, { index }) => removeFile(index)" />
+<FileTokenGroup :items="files" @remove="(event, { index }) => removeFile(index)" />
 <ButtonGroup :items="actions" @click="(event, id) => run(id)" />
 ```
 
@@ -357,14 +338,13 @@ The old names still work in v6 and are marked `@deprecated`; move to the new one
 code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` `kind="shape"`
 (section 3); the rest need a hand edit, because a mechanical rename would invert or retype a value.
 
-| Component         | Deprecated                     | Use instead                                                            |
-| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
-| `toast-item`      | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too              |
-| `toast`           | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name                        |
-| `upload-progress` | `v-model:collapsed`            | `v-model:expanded`, inverted (`collapsed = true` → `expanded = false`) |
-| `tooltip`         | `@show`, `@hide`               | `@update:open`                                                         |
-| `popover`         | `PopoverWidth`                 | `PopoverSize`                                                          |
-| `progress`        | `ProgressShape`                | `ProgressKind`                                                         |
+| Component    | Deprecated                     | Use instead                                               |
+| ------------ | ------------------------------ | --------------------------------------------------------- |
+| `toast-item` | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too |
+| `toast`      | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name           |
+| `tooltip`    | `@show`, `@hide`               | `@update:open`                                            |
+| `popover`    | `PopoverWidth`                 | `PopoverSize`                                             |
+| `progress`   | `ProgressShape`                | `ProgressKind`                                            |
 
 Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; `StatusIndicator` is
 no longer a `role="status"` live region (announce a change you need heard through a toast);
@@ -394,7 +374,6 @@ These keep working in v6 and are marked `@deprecated` in their JSDoc and spec; m
 | `navigation-menu` | `native-button` on `NavigationMenu.Trigger`  | nothing: the trigger is always a button or an anchor                  |
 | `tabs`            | `Tabs.Content` without `value` (the wrapper) | a plain element; `Tabs.Content value="…"` is the panel                |
 | `tabs`            | `selected` on a standalone `Tabs.Item`       | `ToggleGroup`                                                         |
-| `wizard`          | `v-model:activeStep`                         | `v-model`                                                             |
 
 Defaults that showed placeholder content now default to empty: `Link` (`href`, `icon`: a same-tab
 link shows no trailing icon unless `icon` is set), `Menu.Item` (`label`, `icon`, `tagValue`: no home
@@ -456,17 +435,12 @@ the old look.
 
 These still work in 6.x and are removed in 7.0. `webkit migrate` rewrites the prop renames marked
 with a codemod; move the rest by hand. When both names are set, the new one wins (except
-`banner-art`, where a set `art` still picks the backdrop, and `architecture-tabs` / `feature-tabs`,
-where a non-zero `interval` still sets the hold).
+`architecture-tabs` / `feature-tabs`, where a non-zero `interval` still sets the hold).
 
 | Component                | Deprecated                                   | Use                                    | Codemod |
 | ------------------------ | -------------------------------------------- | -------------------------------------- | ------- |
 | `architecture-tabs`      | `interval`                                   | `autoplayInterval` (and `autoplay`)    | yes     |
-| `banner-art`             | `art`                                        | `kind`                                 | yes     |
-| `capability-grid`        | `actions`                                    | `primaryAction` / `secondaryAction`    | no      |
 | `compare-plans`          | section `link`                               | section `action`                       | no      |
-| `console-panel`          | `actions`                                    | `primaryAction` / `secondaryAction`    | no      |
-| `customer-spotlight`     | `cards`, `storyLabel`                        | `items`, `linkLabel`                   | yes     |
 | `feature-tabs`           | `interval`                                   | `autoplayInterval` (and `autoplay`)    | yes     |
 | `hero`                   | `carousel`, `carouselMarks`, `carouselLabel` | `ticker`, `tickerMarks`, `tickerLabel` | yes     |
 | `hero-band`, `hero-form` | `carouselMarks`, `carouselLabel`             | `tickerMarks`, `tickerLabel`           | yes     |
@@ -624,7 +598,6 @@ Move to the new name when you touch the code; they are removed in 7.0.
 | Component        | Deprecated                           | Use instead                                    | Codemod                                                         |
 | ---------------- | ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------- |
 | `Sidebar`        | `v-model:collapsed`                  | `v-model:open` (inverted: `open = !collapsed`) | no, the bound value inverts                                     |
-| `ConsoleLayout`  | `v-model:navigation-expanded`        | `v-model:navigation-open` (same value)         | yes                                                             |
 | `Resizable.Pane` | `v-model:collapsed`                  | `v-model:expanded` (inverted)                  | no, the bound value inverts                                     |
 | `GlobalHeader`   | `.Left`, `.Middle`, `.Nav`, `.Right` | `.Start`, `.Center`, `.Center`, `.End`         | no; the new parts use `__start` / `__center` / `__end` test ids |
 
@@ -661,8 +634,6 @@ props in section 3; move the rest by hand:
   (the same names `DateRangePicker` uses).
 - `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
   attribute, not a prop.
-- `FileTokenGroup`: listen to `remove` instead of `dismiss` (both fire in v6);
-  `FileTokenGroupAlignment` → `FileTokenGroupOrientation`.
 - `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
   `#prefix`, `#iconRight` → `#suffix`.
 - `MiniButton`: `:show-icon="false"` → `icon=""`.

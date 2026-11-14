@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: fec501a43d757b9b5e3141f443f037dbce6a43a93cd7a31de9339913785bb5fc
+checksum: d17dfafa53445924f25629151dd541cbb49c574488f28715b602e51b41b5239f
 created: 2026-06-26
 last_updated: 2026-11-14
 ---
@@ -40,7 +40,7 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 
 ## Best practices
 
-- Give every `DropdownMenu.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
+- Give every `DropdownMenu.Item` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
 - `selected` is a display flag. The dropdown never sets it, so derive it from your own state.
 - Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only: the one in the open menu, else the one whose trigger has focus, else the first registered.
 - Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); `DropdownMenu.Option` and the `left` / `right` slots keep working as deprecated aliases until 7.0. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
@@ -66,17 +66,17 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
     </DropdownMenu.Trigger>
 
     <DropdownMenu.Group label="Account">
-      <DropdownMenu.Option
+      <DropdownMenu.Item
         value="profile"
         label="Profile"
         command="⌘P"
       />
-      <DropdownMenu.Option
+      <DropdownMenu.Item
         value="settings"
         label="Settings"
         command="⌘,"
       />
-      <DropdownMenu.Option
+      <DropdownMenu.Item
         value="billing"
         label="Billing"
         disabled
@@ -84,11 +84,11 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
     </DropdownMenu.Group>
 
     <DropdownMenu.Group label="Workspace">
-      <DropdownMenu.Option
+      <DropdownMenu.Item
         value="invite"
         label="Invite members"
       />
-      <DropdownMenu.Option
+      <DropdownMenu.Item
         value="logs"
         label="Audit log"
         selected
@@ -118,7 +118,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 - `dropdown-menu-group/dropdown-menu-group.vue` — labeled section. Renders a `label` row (`text-label-sm` in `--text-muted`, sentence case) above its default slot and a top divider when it is not the first group inside the panel. The divider runs edge-to-edge across the panel's inner width — the panel carries only vertical padding, and the horizontal inset the option rows need lives on the group's own content wrapper — so the hairline reads like the panel's own border rather than a floated rule. It carries `--spacing-sm` above and `--spacing-xs` below.
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
-  - Slots: `default` — one or more `<DropdownMenu.Option>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
+  - Slots: `default` — one or more `<DropdownMenu.Item>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
 - `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item` and as the deprecated alias `DropdownMenu.Option` (`@deprecated since 6.0 — use DropdownMenu.Item. Removed in 7.0.`). Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
@@ -150,7 +150,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 | -------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Option`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
 
 ## Slots
 
@@ -228,7 +228,7 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
 
 - Default — one trigger, one group, six options, no leading/trailing affordances.
 - Groups — composite story rendering two `<DropdownMenu.Group>` with labels and a divider between them; required because grouping is the central anatomy of this component and is not covered by `Default`.
-- States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `DropdownMenu.Option` has no `kind` / `size` axis but a state axis that is the component's visual identity.
+- States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `DropdownMenu.Item` has no `kind` / `size` axis but a state axis that is the component's visual identity.
 - Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
 - AutoPlacement — composite story demonstrating `placement="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
 - OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.

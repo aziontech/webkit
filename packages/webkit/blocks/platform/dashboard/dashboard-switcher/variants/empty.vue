@@ -994,7 +994,7 @@
               :display-value="viewLabel"
             >
               <Select.Trigger aria-label="Dashboard">
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-chart-bar text-(--text-muted)"
                     aria-hidden="true"
@@ -1129,7 +1129,7 @@
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip :total="active.chart.series.length > 1" />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
             </ChartCard.Content>
           </ChartCard>

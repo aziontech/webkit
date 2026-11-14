@@ -87,7 +87,7 @@
       <Progress
         v-if="kind === 'bar'"
         indeterminate
-        shape="rounded"
+        kind="rounded"
         size="small"
         aria-hidden="true"
         :data-testid="`${testId}__bar`"

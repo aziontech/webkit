@@ -94,7 +94,6 @@
           href="/marketplace?tab=templates"
           label="Back to Templates"
           size="medium"
-          :show-icon="false"
         />
       </nav>
       <PageHeader

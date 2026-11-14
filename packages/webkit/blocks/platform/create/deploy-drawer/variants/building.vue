@@ -484,7 +484,7 @@
                               <Popover
                                 v-if="domainGroup.total > 1"
                                 placement="bottom-start"
-                                width="small"
+                                size="small"
                               >
                                 <Popover.Trigger
                                   :aria-label="`${domainGroup.total - 1} more domains`"
@@ -510,7 +510,7 @@
                                       placeholder="Search domains"
                                       aria-label="Search domains"
                                     >
-                                      <template #iconLeft>
+                                      <template #prefix>
                                         <i
                                           class="pi pi-search"
                                           aria-hidden="true"
@@ -578,19 +578,19 @@
                               :key="group.key"
                               :label="group.label"
                             >
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 v-for="entry in group.projects"
                                 :key="entry.id"
                                 :value="entry.id"
                                 :label="entry.name"
                                 :selected="entry.id === project.id"
                               >
-                                <template #right>
+                                <template #trailing>
                                   <span class="truncate text-body-xs text-(--text-muted)">
                                     {{ entry.detail }}
                                   </span>
                                 </template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                           </DropdownMenu>
                         </Item.Actions>
@@ -721,7 +721,7 @@
                                 <Popover
                                   v-if="domainGroup.total > 1"
                                   placement="bottom-start"
-                                  width="small"
+                                  size="small"
                                 >
                                   <Popover.Trigger
                                     :aria-label="`${domainGroup.total - 1} more domains`"
@@ -747,7 +747,7 @@
                                         placeholder="Search domains"
                                         aria-label="Search domains"
                                       >
-                                        <template #iconLeft>
+                                        <template #prefix>
                                           <i
                                             class="pi pi-search"
                                             aria-hidden="true"

@@ -20,7 +20,7 @@
 <template>
   <div class="@container w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Azion documentation">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
           <div class="shrink-0 lg:hidden">
             <IconButton
@@ -62,9 +62,9 @@
             </NavigationMenu>
           </div>
         </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <SearchTrigger
           collapsible
           label="Search docs"
@@ -86,7 +86,7 @@
           class="shrink-0"
           href="/home"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <Command v-model:open="searchOpen">
       <Command.Input placeholder="Search docs" />

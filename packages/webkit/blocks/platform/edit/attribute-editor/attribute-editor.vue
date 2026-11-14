@@ -817,42 +817,42 @@
                     @select="(_event, value) => onRowAction(value, row)"
                   >
                     <DropdownMenu.Group>
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         value="edit"
                         label="Edit"
                       >
-                        <template #left>
+                        <template #leading>
                           <i
                             class="pi pi-pencil"
                             aria-hidden="true"
                           />
                         </template>
-                      </DropdownMenu.Option>
-                      <DropdownMenu.Option
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item
                         value="duplicate"
                         label="Clone"
                       >
-                        <template #left>
+                        <template #leading>
                           <i
                             class="pi pi-clone"
                             aria-hidden="true"
                           />
                         </template>
-                      </DropdownMenu.Option>
+                      </DropdownMenu.Item>
                     </DropdownMenu.Group>
 
                     <DropdownMenu.Group>
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         value="delete"
                         label="Delete"
                       >
-                        <template #left>
+                        <template #leading>
                           <i
                             class="pi pi-trash"
                             aria-hidden="true"
                           />
                         </template>
-                      </DropdownMenu.Option>
+                      </DropdownMenu.Item>
                     </DropdownMenu.Group>
                   </Table.CellActions>
                 </template>
@@ -1069,8 +1069,7 @@
                                       >
                                       <Checkbox
                                         v-model="entries[index].secret"
-                                        binary
-                                        :input-id="fieldId(entries[index], 'secret')"
+                                        :id="fieldId(entries[index], 'secret')"
                                         :aria-label="secretAriaLabel(entries[index])"
                                       />
                                     </Field>
@@ -1183,7 +1182,7 @@
                                   aria-label="Search"
                                   @keydown.stop
                                 >
-                                  <template #iconLeft>
+                                  <template #prefix>
                                     <i
                                       class="pi pi-search"
                                       aria-hidden="true"

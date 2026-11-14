@@ -36,11 +36,6 @@
       more?: OverflowCountItem[]
       /** What the `more` values are (`{ one: 'domain', other: 'domains' }`), the same name as CellTags. */
       noun?: OverflowCountNoun
-      /**
-       * What the `more` values are.
-       * @deprecated since 6.0 — use `noun`. Removed in 7.0.
-       */
-      moreNoun?: OverflowCountNoun
     }>(),
     {
       label: '',
@@ -51,8 +46,7 @@
       copyable: false,
       copyValue: '',
       more: () => [],
-      noun: undefined,
-      moreNoun: undefined
+      noun: undefined
     }
   )
 
@@ -138,7 +132,7 @@
     <OverflowCount
       v-if="more.length > 0"
       :items="more"
-      :noun="noun ?? moreNoun"
+      :noun="noun"
       :data-testid="`${testId}__more`"
     />
     <CopyButton

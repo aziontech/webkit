@@ -16,7 +16,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Middle`, the actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Start`, an empty `GlobalHeader.Center`, the actions in `GlobalHeader.End`.
 
 ### B. Navigation trigger and GitHub — `IconButton` (required)
 

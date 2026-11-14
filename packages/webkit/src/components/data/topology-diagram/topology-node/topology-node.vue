@@ -52,7 +52,7 @@
     const severity = props.node.severity ?? 'neutral'
     return severity === 'neutral' ? 'secondary' : severity
   })
-  const resourceType = computed<string>(() => props.node.type ?? props.node.kind ?? '')
+  const resourceType = computed<string>(() => props.node.type ?? '')
   const bound = computed<boolean>(() => !unbound.value && Boolean(props.node.boundValue))
   const options = computed(() => props.node.bindOptions ?? [])
   const bindLabel = computed<string>(() =>

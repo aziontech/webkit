@@ -438,7 +438,7 @@
               manual-sorting
               paginated
               :page-size="50"
-              :rows-per-page-options="[25, 50, 100]"
+              :page-size-options="[25, 50, 100]"
               :bordered="false"
               :loading="loading"
               export-filename="files.csv"
@@ -534,7 +534,7 @@
                       icon="pi pi-plus"
                       kind="primary"
                       size="medium"
-                      :model="addToFilesActions"
+                      :items="addToFilesActions"
                       class="shrink-0"
                     />
                   </div>
@@ -608,7 +608,7 @@
                       value="open"
                       label="Open"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-folder-open"
                           aria-hidden="true"
@@ -620,7 +620,7 @@
                       value="download"
                       label="Download"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-download"
                           aria-hidden="true"
@@ -632,7 +632,7 @@
                       value="move"
                       label="Move"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-arrow-right-arrow-left"
                           aria-hidden="true"
@@ -644,7 +644,7 @@
                       value="delete"
                       label="Delete"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-trash"
                           aria-hidden="true"
@@ -685,7 +685,7 @@
                       icon="pi pi-plus"
                       kind="secondary"
                       size="medium"
-                      :model="addToFilesActions"
+                      :items="addToFilesActions"
                     />
                   </template>
                 </EmptyState>

@@ -112,7 +112,7 @@
             :data-testid="`${testId}__search`"
             @update:model-value="ctx.setSearch"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

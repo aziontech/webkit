@@ -600,7 +600,6 @@
                     label="Held deliveries"
                     href="#held"
                     size="small"
-                    :show-icon="false"
                   />
                 </div>
                 <div class="flex flex-col items-start gap-(--spacing-xxs)">
@@ -613,7 +612,6 @@
                     label="Early delivery alerts"
                     href="#alerts"
                     size="small"
-                    :show-icon="false"
                   />
                 </div>
               </div>
@@ -643,7 +641,7 @@
                     placeholder="Search by name or submitter"
                     aria-label="Search by name or submitter"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -726,8 +724,8 @@
                 enable-sorting
                 paginated
                 :page-size="10"
-                :rows-per-page-options="[10, 25, 50]"
-                header-kind="compact"
+                :page-size-options="[10, 25, 50]"
+                density="compact"
                 bordered
                 :loading="loading"
               >

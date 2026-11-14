@@ -38,7 +38,7 @@ describe('ChartCard', () => {
     expect(ChartCard?.Header).toBe(ChartCardHeader)
     expect(ChartCard?.Title).toBe(ChartCardTitle)
     expect(ChartCard?.Description).toBe(ChartCardDescription)
-    expect(ChartCard?.Controls).toBe(ChartCardControls)
+    expect(ChartCard?.Action).toBe(ChartCardControls)
     expect(ChartCard?.DragHandle).toBe(ChartCardDragHandle)
     expect(ChartCard?.Content).toBe(ChartCardContent)
     expect(ChartCard?.Footer).toBe(ChartCardFooter)
@@ -197,10 +197,10 @@ describe('ChartCard', () => {
     expect(height.value).toBe(400)
   })
 
-  it('pads content unless flush', () => {
+  it('pads content unless padded is false', () => {
     const view = render(
       h(ChartCard, null, {
-        default: () => [h(ChartCardContent, { flush: true }, { default: () => 'x' })]
+        default: () => [h(ChartCardContent, { padded: false }, { default: () => 'x' })]
       })
     )
     expect(view.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
@@ -234,12 +234,12 @@ describe('ChartCard on devices', () => {
 })
 
 describe('ChartCard parts: Action, padded, title and group role', () => {
-  it('attaches Action as the same part as the deprecated Controls', () => {
+  it('attaches Action and no longer the removed Controls', () => {
     expect(ChartCard.Action).toBe(ChartCardControls)
-    expect(ChartCard.Controls).toBe(ChartCardControls)
+    expect((ChartCard as unknown as Record<string, unknown>)['Controls']).toBeUndefined()
   })
 
-  it('drops the content padding with padded false, and still with the deprecated flush', () => {
+  it('drops the content padding with padded false and ignores the removed flush', () => {
     const padded = render(ChartCard, {
       slots: { default: () => h(ChartCardContent, { padded: false }, () => 'plot') }
     })
@@ -248,7 +248,7 @@ describe('ChartCard parts: Action, padded, title and group role', () => {
     const flush = render(ChartCard, {
       slots: { default: () => h(ChartCardContent, { flush: true }, () => 'plot') }
     })
-    expect(flush.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
+    expect(flush.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(false)
     flush.unmount()
     const normal = render(ChartCard, {
       slots: { default: () => h(ChartCardContent, null, () => 'plot') }

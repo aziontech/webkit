@@ -304,14 +304,14 @@
                 text="The latest requests, newest first, with the rule that decided each one."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 v-if="!loading && rows.length"
                 :label="rows.length + ' requests'"
                 severity="secondary"
                 size="small"
               />
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
