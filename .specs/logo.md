@@ -3,9 +3,9 @@ name: logo
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: caf854665741d50b9e141e7a351e1dbbe4563db6868ee036314b4193d5c03e59
+checksum: 354a34f87e423b8574527fc29d3e27d0415b8c3a0f2ac02ef9832cd74c134eda
 created: 2026-11-14
 last_updated: 2026-11-14
 ---
@@ -40,7 +40,7 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 ## Best practices
 
 - Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
-- Set the height with a class on the component (`class="h-8"`; the default is `h-6`, 24 px); the width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
+- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
 - In a list of many clients, use `kind="monochrome"`: per-brand colour reads as noise next to twenty others.
 - On a coloured fill (white, `--primary`), use `kind="knockout"`: a fill does not follow the theme, so the ink must not either.
 - On a surface that is dark in both themes, or among drawn diagram parts, use `kind="current"` so the mark takes the surface's own ink.
@@ -62,22 +62,24 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
     :src="client.logo"
     :src-light="client.logoLight"
     :artwork="client.artwork"
-    class="h-8 max-w-40"
+    size="large"
+    class="max-w-40"
   />
 </template>
 ```
 
 ## Props
 
-| Prop         | Type                                                 | Default   | Required | JSDoc                                                                                                                                                                                                                        |
-| ------------ | ---------------------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`       | `string`                                             | —         | true     | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set.                                                                                                     |
-| `src`        | `string`                                             | `''`      | false    | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark.                                                                                                  |
-| `srcLight`   | `string`                                             | `''`      | false    | URL of the light-theme file; with `src` both files render and the theme reveals one.                                                                                                                                         |
-| `artwork`    | `'color' \| 'light' \| 'dark'`                       | `'color'` | false    | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`. |
-| `kind`       | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false    | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill.    |
-| `ariaLabel`  | `string`                                             | `''`      | false    | Accessible name when it should differ from `name`.                                                                                                                                                                           |
-| `decorative` | `boolean`                                            | `false`   | false    | Hides the mark from assistive technology when the text beside it already names the company.                                                                                                                                  |
+| Prop         | Type                                                 | Default    | Required | JSDoc                                                                                                                                                                                                                        |
+| ------------ | ---------------------------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`       | `string`                                             | —          | true     | The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set.                                                                                                     |
+| `src`        | `string`                                             | `''`       | false    | URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark.                                                                                                  |
+| `srcLight`   | `string`                                             | `''`       | false    | URL of the light-theme file; with `src` both files render and the theme reveals one.                                                                                                                                         |
+| `artwork`    | `'color' \| 'light' \| 'dark'`                       | `'color'`  | false    | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`. |
+| `kind`       | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'`  | false    | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill.    |
+| `ariaLabel`  | `string`                                             | `''`       | false    | Accessible name when it should differ from `name`.                                                                                                                                                                           |
+| `size`       | `'small' \| 'medium' \| 'large'`                     | `'medium'` | false    | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio.                                                                                                                 |
+| `decorative` | `boolean`                                            | `false`    | false    | Hides the mark from assistive technology when the text beside it already names the company.                                                                                                                                  |
 
 ## Events
 
@@ -92,7 +94,8 @@ _none_
 - `data-kind` on the root: `color` | `monochrome` | `current` | `knockout`.
 - `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `kind`), `wordmark` (no file: the name in type).
 - `data-artwork` on the root mirrors `artwork`.
-- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); without it the root falls back to `h-6`.
+- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
 
 ## Motion & Animations
@@ -138,7 +141,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ## Responsive
 
-- Container queries: none; the caller sets the height (`h-*`) and the width cap (`max-w-*`).
+- Container queries: none; `size` sets the height and the caller sets the width cap (`max-w-*`).
 - Narrow: the files keep their aspect ratio inside the cap (`object-contain`); the wordmark does not wrap.
 - Touch: not interactive.
 - Reflow: no horizontal scroll at 320 px when the caller caps the width.
@@ -152,6 +155,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 ## Examples
 
 - Default — a client from the registry with its light/dark pair.
+- Sizes — `small`, `medium` and `large` on the same client pair and a wordmark.
 - Types — the four inks (`color`, `monochrome`, `current`, `knockout`) on the same row of marks: a client pair, a single `light` artwork file inverted on the light theme, a coding agent and a wordmark with no file.
 
 ## Constraints — DO NOT

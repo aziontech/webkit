@@ -2,6 +2,7 @@ import { cleanup, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/logo/default.vue'
+import Sizes from '../../../../examples/logo/sizes.vue'
 import Types from '../../../../examples/logo/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Logo from './logo.vue'
@@ -97,6 +98,18 @@ describe('Logo', () => {
     expect(root()).not.toHaveAttribute('aria-label')
   })
 
+  it('mirrors size on the root and defaults it to medium', () => {
+    render(Logo, { props: { name: 'Acme Inc.', src: DARK } })
+    expect(root()).toHaveAttribute('data-size', 'medium')
+    cleanup()
+    render(Logo, { props: { name: 'Acme Inc.', src: DARK, size: 'small' } })
+    expect(root()).toHaveAttribute('data-size', 'small')
+    cleanup()
+    render(Logo, { props: { name: 'Acme Inc.', size: 'large' } })
+    expect(root()).toHaveAttribute('data-size', 'large')
+    expect(root()).toHaveAttribute('data-route', 'wordmark')
+  })
+
   it('marks the root sized only when the caller sets a height', () => {
     render(Logo, { props: { name: 'Acme Inc.', src: DARK } })
     expect(root()).not.toHaveAttribute('data-sized')
@@ -110,6 +123,7 @@ describe('Logo', () => {
 
   it.each([
     ['Default', Default],
+    ['Sizes', Sizes],
     ['Types', Types]
   ])('has no a11y violations in the %s example', async (_name, example) => {
     const { container } = render(example)

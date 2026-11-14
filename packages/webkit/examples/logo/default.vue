@@ -11,6 +11,7 @@
     :src="client.logo"
     :src-light="client.logoLight"
     :artwork="client.artwork"
-    class="h-8 max-w-40"
+    size="large"
+    class="max-w-40"
   />
 </template>

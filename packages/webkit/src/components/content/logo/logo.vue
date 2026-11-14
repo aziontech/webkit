@@ -12,6 +12,9 @@
   /** How the mark is inked: its own colours, one theme silhouette, the surrounding text colour, or black pinned for a coloured fill. */
   export type LogoKind = 'color' | 'monochrome' | 'current' | 'knockout'
 
+  /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px. */
+  export type LogoSize = 'small' | 'medium' | 'large'
+
   interface Props {
     /** The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. */
     name: string
@@ -25,6 +28,8 @@
     kind?: LogoKind
     /** Accessible name when it should differ from `name`. */
     ariaLabel?: string
+    /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. */
+    size?: LogoSize
     /** Hides the mark from assistive technology when the text beside it already names the company. */
     decorative?: boolean
   }
@@ -35,6 +40,7 @@
     artwork: 'color',
     kind: 'color',
     ariaLabel: '',
+    size: 'medium',
     decorative: false
   })
 
@@ -62,11 +68,12 @@
     :data-kind="kind"
     :data-route="route"
     :data-artwork="artwork"
+    :data-size="size"
     :data-sized="sized || undefined"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel || name"
     :aria-hidden="decorative ? 'true' : undefined"
-    class="relative inline-flex max-w-full shrink-0 items-center not-data-[sized]:h-6"
+    class="relative inline-flex max-w-full shrink-0 items-center not-data-[sized]:data-[size=small]:h-4 not-data-[sized]:data-[size=medium]:h-6 not-data-[sized]:data-[size=large]:h-8"
   >
     <template v-if="route === 'pair'">
       <img
