@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -22,7 +22,7 @@
     /** Size token; `small` is a denser keycap for menus, command bars, and table cells. */
     size?: KbdSize
     /** Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. */
-    keyName?: KbdKeyName
+    keyName?: KbdKeyName | ''
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +31,7 @@
     shift: false,
     alt: false,
     size: 'medium',
-    keyName: undefined
+    keyName: ''
   })
 
   defineSlots<{
@@ -44,11 +44,11 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-kbd')
 
-  const isMac = computed(
-    () =>
-      typeof navigator !== 'undefined' &&
-      /mac/i.test(navigator.platform || navigator.userAgent || '')
-  )
+  const isMac = ref(false)
+
+  onMounted(() => {
+    isMac.value = /mac/i.test(navigator.platform || navigator.userAgent || '')
+  })
 
   const modifierGlyphs = computed<{ id: string; glyph: string }[]>(() => {
     const list: { id: string; glyph: string }[] = []
