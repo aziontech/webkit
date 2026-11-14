@@ -2,7 +2,7 @@
   import UploadProgress from '@aziontech/webkit/upload-progress'
   import { ref } from 'vue'
 
-  const collapsed = ref(true)
+  const expanded = ref(false)
 
   const items = [
     { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },
@@ -14,7 +14,7 @@
 <template>
   <div class="w-full max-w-(--container-xs)">
     <UploadProgress
-      v-model:collapsed="collapsed"
+      v-model:expanded="expanded"
       :items="items"
       operation="move"
       :floating="false"

@@ -23,6 +23,11 @@
       "mount": 240,
       "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
+    },
+    "upload-progress-1k": {
+      "mount": 150,
+      "update": 100,
+      "update_is": "one progress tick on all 1k running files"
     }
   }
 }

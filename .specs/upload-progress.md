@@ -3,11 +3,11 @@ name: upload-progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 583320bf62842a86dd93f083d99da5ffd37fb794eb77045983f870e0ee13dfc2
+checksum: fd8201c24fe2e3555cb9a402ff11f77c9e9397fad7572539f77cc0f29888ae54
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # UploadProgress — Component Spec
@@ -78,7 +78,8 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 
 | Model               | Type      | Default | Emits              | Notes                                                     |
 | ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:collapsed` | `boolean` | `false` | `update:collapsed` | Hides the file list and keeps the header and overall bar. |
+| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While neither model is bound the card starts expanded. Takes precedence over `collapsed` when both are bound. |
+| `v-model:collapsed` | `boolean` | `undefined` (resolves to `false`) | `update:collapsed` | **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** Kept working: it is read when `expanded` is unbound, and the toggle emits both `update:expanded` and `update:collapsed`. |
 
 ## Events
 
@@ -174,8 +175,8 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 ## Performance
 
 - Bundle budget: see `.size-limit.json` entry `upload-progress`.
-- Runtime budget: 200 rows update in < 16 ms per progress tick.
-- Heavy parts: none.
+- Runtime budget: `upload-progress-1k` in `perf-budgets.json` (mount 1k rows, then one progress tick on every row), measured by `src/test/performance.test.ts`.
+- Heavy parts: the file list. Above 300 files it mounts in chunks of 100 rows (`use-lazy-chunks`): the first chunk renders, the rest are height-estimated placeholders that mount as they scroll into view.
 
 ## Examples
 

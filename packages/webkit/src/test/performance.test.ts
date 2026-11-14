@@ -17,6 +17,9 @@ import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import LogViewHeader from '../components/code/log-view/log-view-header.vue'
 import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
+import UploadProgress, {
+  type UploadProgressItem
+} from '../components/feedback/upload-progress/upload-progress.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -307,6 +310,26 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
   }
 }
 
+function uploadProgressCase(): Case {
+  const items = ref<UploadProgressItem[]>(
+    Array.from({ length: 1000 }, (_, i) => ({
+      id: `f${i}`,
+      name: `asset-${i}.png`,
+      size: 2048 + i,
+      status: 'running',
+      progress: i % 90
+    }))
+  )
+  return {
+    mount: () => ({
+      render: () => h(UploadProgress, { items: items.value, floating: false })
+    }),
+    update: () => {
+      items.value = items.value.map((item) => ({ ...item, progress: (item.progress ?? 0) + 1 }))
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -333,6 +356,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))
+  })
+  it('UploadProgress with 1k files: mount and one progress tick', async () => {
+    check('upload-progress-1k', await measure(uploadProgressCase))
   })
   it('Table with 1k rows under useCollection: mount and sort', async () => {
     check('table-1k', await measure(() => tableCase(1000, false, 'sort')))
