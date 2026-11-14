@@ -6,6 +6,7 @@ import CreateEnvironment from '../../blocks/platform/create/create-in-drawer/var
 import FunctionInstance from '../../blocks/platform/create/create-in-drawer/variants/function-instance.vue'
 import CreateOrganization from '../../blocks/platform/create/single-page-create/variants/create-organization.vue'
 import CreateZone from '../../blocks/platform/create/single-page-create/variants/create-zone.vue'
+import WafSettings from '../../blocks/platform/edit/edit-resource/variants/waf-settings.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -190,5 +191,27 @@ describe('create-in-drawer#FunctionInstance', () => {
     expect(panel.getByRole('heading', { name: 'Edit Function Instance' })).toBeTruthy()
     expect((panel.getByLabelText(/Width/) as HTMLInputElement).value).toBe('800')
     expect(panel.getByRole('radiogroup', { name: 'Arguments view' })).toBeTruthy()
+  })
+})
+
+describe('edit-resource#WafSettings', () => {
+  it('disables a threat sensitivity while the threat is off, without axe findings', async () => {
+    const view = render(WafSettings)
+    const sensitivity = screen.getByRole('combobox', { name: 'File upload sensitivity' })
+    expect(sensitivity.hasAttribute('disabled')).toBe(true)
+    await fireEvent.click(screen.getByRole('switch', { name: 'File upload' }))
+    expect(
+      screen.getByRole('combobox', { name: 'File upload sensitivity' }).hasAttribute('disabled')
+    ).toBe(false)
+    await expectNoA11yViolations(view.container as HTMLElement)
+  })
+
+  it('raises the save bar on a change and confirms the save in a toast', async () => {
+    render(WafSettings)
+    expect(screen.queryByRole('button', { name: 'Save' })).toBeNull()
+    await fireEvent.click(screen.getByRole('switch', { name: 'SQL injection' }))
+    await fireEvent.click(await screen.findByRole('button', { name: 'Save' }))
+    await waitFor(() => expect(screen.getByText('Rule set saved.')).toBeTruthy(), wait)
+    await waitFor(() => expect(screen.queryByRole('button', { name: 'Discard' })).toBeNull())
   })
 })
