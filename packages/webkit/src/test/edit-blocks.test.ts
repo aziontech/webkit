@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import AttributeEditorList from '../../blocks/platform/edit/attribute-editor/attribute-editor.vue'
+import CodeEditorArguments from '../../blocks/platform/edit/code-editor/variants/arguments.vue'
+import CodeEditorSaving from '../../blocks/platform/edit/code-editor/variants/saving.vue'
 import EditResource from '../../blocks/platform/edit/edit-resource/edit-resource.vue'
 import DangerZone from '../../blocks/platform/edit/edit-resource/variants/danger-zone.vue'
 import StaleRecord from '../../blocks/platform/edit/edit-resource/variants/stale-record.vue'
@@ -95,5 +97,56 @@ describe('edit-resource locked modules', () => {
       expect(link.target).toBe('_blank')
       expect(link.rel).toContain('noopener')
     }
+  })
+})
+
+describe('code-editor#Arguments', () => {
+  it('reorders fields with native Move buttons and announces the move', async () => {
+    const view = render(CodeEditorArguments)
+    const up = view.getByRole('button', { name: 'Move quality up' })
+    expect(up.tagName).toBe('BUTTON')
+    expect(
+      (view.getByRole('button', { name: 'Move defaultFormat up' }) as HTMLButtonElement).disabled
+    ).toBe(true)
+    await userEvent.click(up)
+    await waitFor(() =>
+      expect(view.container.textContent).toContain('quality moved to position 1 of 2.')
+    )
+    expect(view.container.querySelector('[role="button"]')).toBeNull()
+    await waitFor(() =>
+      expect(document.activeElement?.getAttribute('aria-label')).toBe('Move quality down')
+    )
+  })
+
+  it('shows Save loading, then a success toast', async () => {
+    const view = render(CodeEditorArguments)
+    await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
+    const save = await waitFor(() => buttonIn(document, 'Save'))
+    await fireEvent.click(save)
+    await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
+    await waitFor(() => expect(document.body.textContent).toContain('image-optimizer saved.'), wait)
+  })
+
+  it('keeps the bar with a danger alert when the save fails', async () => {
+    Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
+    const view = render(CodeEditorArguments)
+    await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
+    await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
+    await waitFor(
+      () =>
+        expect(
+          document.querySelector('[data-testid="code-editor-save-error"]')?.textContent
+        ).toContain('Not saved.'),
+      wait
+    )
+    expect(buttonIn(document, 'Discard').disabled).toBe(false)
+  })
+})
+
+describe('code-editor#Saving', () => {
+  it('holds Save in its loading state with Discard disabled', async () => {
+    render(CodeEditorSaving)
+    await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
+    expect(buttonIn(document, 'Save').getAttribute('aria-busy')).toBe('true')
   })
 })
