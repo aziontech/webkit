@@ -26,8 +26,13 @@ export function raisedBudgets(baseEntries, headEntries) {
   for (const e of headEntries) {
     const before = base.get(key(e))
     if (!before) continue
-    if (limitToBytes(e.limit) > limitToBytes(before.limit)) {
-      raised.push({ name: e.name, from: before.limit, to: e.limit })
+    const narrowed = Boolean(e.entryOnly) && !before.entryOnly
+    if (narrowed || limitToBytes(e.limit) > limitToBytes(before.limit)) {
+      raised.push({
+        name: e.name,
+        from: before.limit,
+        to: narrowed ? `${e.limit} (entryOnly: lazy chunks no longer counted)` : e.limit
+      })
     }
   }
   return raised.sort((a, b) => a.name.localeCompare(b.name))

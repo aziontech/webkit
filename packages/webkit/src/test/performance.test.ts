@@ -1,6 +1,6 @@
 // Runtime budgets (M1.7): mount and update time of the components that receive the biggest inputs.
-// Budgets live in ../../perf-budgets.json, in milliseconds, set at 3–5× the median measured on a
-// developer machine so CI stays stable. A component over budget fails here; fix the component
+// Budgets live in ../../perf-budgets.json, in milliseconds, set at about 3× the median measured on
+// the shared development host so CI stays stable. A component over budget fails here; fix the component
 // (window long lists, render collapsed children lazily), do not raise the number.
 import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -989,8 +989,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('Chart with 10k points per series', async () => {
     check('chart-10k', await measure(chartCase))
   })
-  it('Tree with 5k nodes', async () => {
-    check('tree-5k', await measure(treeCase))
+  it('Tree with 5k nodes, collapsed: mount 50 folders and expand two', async () => {
+    check('tree-5k-collapsed', await measure(treeCase))
   })
   it('Select with 1k options: open and filter', async () => {
     check('select-1k', await measure(() => selectCase(false)))
@@ -1013,8 +1013,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('UploadProgress with 1k files: mount and one progress tick', async () => {
     check('upload-progress-1k', await measure(uploadProgressCase))
   })
-  it('Table with 1k rows under useCollection: mount and sort', async () => {
-    check('table-1k', await measure(() => tableCase(1000, false, 'sort')))
+  it('Table with 1k rows under useCollection, first 50 rendered lazily: mount and sort', async () => {
+    check('table-1k-lazy-50', await measure(() => tableCase(1000, false, 'sort')))
   })
   it('Table with 10k virtual rows under useCollection: mount and sort', async () => {
     check('table-10k-virtual', await measure(() => tableCase(10_000, true, 'sort')))
@@ -1094,7 +1094,7 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('Cards with 1k items: mount and select all', async () => {
     check('cards-1k', await measure(cardsCase))
   })
-  it('Table with 1k rows of preset cells: mount and sort', async () => {
-    check('table-1k-presets', await measure(tablePresetsCase))
+  it('Table with 1k rows of preset cells, first 50 rendered lazily: mount and sort', async () => {
+    check('table-1k-presets-lazy-50', await measure(tablePresetsCase))
   })
 })

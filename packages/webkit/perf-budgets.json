@@ -1,89 +1,89 @@
 {
-  "note": "Milliseconds, median of 5 runs in Vitest browser mode (Chromium), measured by src/test/performance.test.ts. Each budget is about 4x the median measured on a developer machine (50 ms floor) so CI stays stable; the test fails above it. mount = first render + layout; update = the change named in the scenario + layout.",
+  "note": "Milliseconds, median of 5 runs in Vitest browser mode (Chromium), measured by src/test/performance.test.ts. Each budget is about 3x the median of three suite runs on the shared development host (25 ms floor), never above the previous budget, so a 2x slowdown fails while CI retry absorbs noise. mount = first render + layout; update = the change named in the scenario + layout. A scenario's name says what it renders: lazy-50 and collapsed mean the component draws only that part of the data.",
   "scenarios": {
     "chart-10k": {
-      "mount": 640,
-      "update": 320,
+      "mount": 520,
+      "update": 190,
       "update_is": "replace both 10k-point series"
     },
-    "tree-5k": {
-      "mount": 60,
-      "update": 170,
-      "update_is": "expand two folders of 99 nodes"
+    "tree-5k-collapsed": {
+      "mount": 50,
+      "update": 140,
+      "update_is": "expand two folders of 99 nodes (50 folders rendered collapsed at mount, about 250 rows after)"
     },
     "select-1k": {
-      "mount": 50,
-      "update": 260,
+      "mount": 30,
+      "update": 160,
       "update_is": "open the list, then filter it"
     },
     "multi-select-1k": {
-      "mount": 50,
-      "update": 480,
+      "mount": 30,
+      "update": 360,
       "update_is": "open the list, then filter it"
     },
     "dropdown-menu-1k": {
-      "mount": 1800,
-      "update": 50,
+      "mount": 1190,
+      "update": 30,
       "update_is": "20 document mousedowns and window keydowns with 1k closed menus mounted"
     },
     "donut-chart-500": {
-      "mount": 50,
-      "update": 50,
+      "mount": 30,
+      "update": 30,
       "update_is": "replace the 500 slices"
     },
     "bar-list-1k": {
-      "mount": 240,
-      "update": 160,
+      "mount": 220,
+      "update": 120,
       "update_is": "replace the 1k rows"
     },
     "log-view-10k": {
-      "mount": 60,
-      "update": 60,
-      "update_is": "search the 10k lines"
+      "mount": 50,
+      "update": 50,
+      "update_is": "search the 10k lines (the log view renders only the visible window)"
     },
     "code-block-5k-lines": {
-      "mount": 360,
-      "update": 370,
+      "mount": 230,
+      "update": 260,
       "update_is": "switch to the second 5k-line tab"
     },
-    "table-1k": {
-      "mount": 520,
-      "update": 440,
-      "update_is": "sort 1k rows under useCollection"
+    "table-1k-lazy-50": {
+      "mount": 180,
+      "update": 170,
+      "update_is": "sort 1k rows under useCollection (the table renders the first 50 rows; the rest load on scroll)"
     },
     "table-10k-virtual": {
-      "mount": 240,
-      "update": 260,
+      "mount": 110,
+      "update": 150,
       "update_is": "sort 10k virtual rows under useCollection"
     },
     "table-10k-virtual-filter": {
-      "mount": 240,
-      "update": 80,
+      "mount": 110,
+      "update": 50,
       "update_is": "filter 10k virtual rows by text under useCollection"
     },
     "conversation-history-5k": {
-      "mount": 680,
-      "update": 100,
+      "mount": 480,
+      "update": 40,
       "update_is": "select a conversation"
     },
     "conversation-500": {
-      "mount": 420,
-      "update": 50,
+      "mount": 370,
+      "update": 30,
       "update_is": "stream 20 tokens into the last message"
     },
     "streaming-response-2k-lines": {
-      "mount": 440,
-      "update": 1100,
+      "mount": 320,
+      "update": 740,
       "update_is": "stream 20 tokens"
     },
     "doc-markdown-5k-lines": {
-      "mount": 440,
-      "update": 160,
+      "mount": 420,
+      "update": 140,
       "update_is": "replace the page source"
     },
     "doc-layout-1k": {
-      "mount": 480,
-      "update": 800,
+      "mount": 410,
+      "update": 610,
       "update_is": "open the search palette"
     },
     "item-list-1k": {
@@ -92,48 +92,48 @@
       "update_is": "reverse the 1k rows"
     },
     "key-value-pairs-1k": {
-      "mount": 240,
-      "update": 120,
+      "mount": 170,
+      "update": 90,
       "update_is": "change the 1k values"
     },
     "upload-progress-1k": {
-      "mount": 150,
-      "update": 100,
-      "update_is": "one progress tick on all 1k running files"
+      "mount": 70,
+      "update": 50,
+      "update_is": "one progress tick on all 1k running files (the list renders about 100 rows)"
     },
     "listing-table-1k": {
-      "mount": 1900,
-      "update": 2200,
+      "mount": 1880,
+      "update": 1900,
       "update_is": "replace the 1k rows"
     },
     "listing-browser-1k": {
-      "mount": 1900,
-      "update": 200,
+      "mount": 1230,
+      "update": 150,
       "update_is": "type a query into the search of 1k grouped rows"
     },
     "select-1k-preselected": {
-      "mount": 50,
-      "update": 200,
+      "mount": 30,
+      "update": 130,
       "update_is": "open the list, then filter it (mount collects the selected option's label)"
     },
     "multi-select-1k-preselected": {
-      "mount": 50,
-      "update": 360,
+      "mount": 30,
+      "update": 210,
       "update_is": "open the list, then filter it (mount collects the 10 selected labels)"
     },
     "schema-form-200-fields": {
-      "mount": 400,
-      "update": 150,
+      "mount": 260,
+      "update": 110,
       "update_is": "set one of the 200 values from the parent"
     },
     "combobox-1k": {
-      "mount": 50,
-      "update": 160,
+      "mount": 30,
+      "update": 90,
       "update_is": "focus the field to open the list, then type a filter"
     },
     "chart-scatter-10k": {
-      "mount": 440,
-      "update": 50,
+      "mount": 380,
+      "update": 30,
       "update_is": "move the active index to the middle point"
     },
     "chart-bar-1k-x3": {
@@ -142,49 +142,49 @@
       "update_is": "replace the three 1k-category series"
     },
     "map-chart-1k-points": {
-      "mount": 200,
-      "update": 50,
+      "mount": 190,
+      "update": 30,
       "update_is": "make one of the 1k points active"
     },
     "tracker-1k": {
-      "mount": 140,
-      "update": 50,
+      "mount": 110,
+      "update": 30,
       "update_is": "make the middle block active"
     },
     "trace-1k": {
-      "mount": 260,
-      "update": 50,
+      "mount": 190,
+      "update": 30,
       "update_is": "search the 1k spans"
     },
     "code-editor-5k-lines": {
-      "mount": 320,
-      "update": 130,
+      "mount": 300,
+      "update": 110,
       "update_is": "append one typed line"
     },
     "property-filter-1k": {
-      "mount": 50,
-      "update": 50,
+      "mount": 30,
+      "update": 30,
       "update_is": "focus the field, then type a word matching every value"
     },
     "filter-menu-1k": {
-      "mount": 50,
-      "update": 50,
+      "mount": 30,
+      "update": 30,
       "update_is": "open the menu, open the 1k-option field, then search it"
     },
     "pick-list-1k": {
-      "mount": 180,
-      "update": 140,
+      "mount": 130,
+      "update": 110,
       "update_is": "move every source item to the target"
     },
     "cards-1k": {
-      "mount": 430,
-      "update": 300,
+      "mount": 300,
+      "update": 250,
       "update_is": "select all 1k cards"
     },
-    "table-1k-presets": {
-      "mount": 340,
-      "update": 320,
-      "update_is": "sort 1k rows of link and tag preset cells"
+    "table-1k-presets-lazy-50": {
+      "mount": 300,
+      "update": 280,
+      "update_is": "sort 1k rows of link and tag preset cells (the table renders the first 50 rows; the rest load on scroll)"
     }
   }
 }
