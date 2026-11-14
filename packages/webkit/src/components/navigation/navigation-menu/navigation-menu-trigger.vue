@@ -174,7 +174,8 @@
   }
 
   onMounted(() => {
-    if (import.meta.env?.DEV && !props.nativeButton) {
+    const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
+    if (dev && !props.nativeButton) {
       console.warn(
         '[webkit] <NavigationMenu.Trigger>: `native-button` is deprecated since 6.0 and removed in 7.0; the trigger is always a button or an anchor.'
       )
