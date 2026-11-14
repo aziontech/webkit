@@ -36,9 +36,13 @@
   })
 
   interface Props {
+    /** Data-driven tree of groups and items; leave empty to compose the parts in the default slot. */
     groups?: MenuGroupNode[]
+    /** Id of the node rendered as the current page. */
     activeId?: string
+    /** Plays the level enter motion on the first render. */
     enterOnMount?: boolean
+    /** Accessible name of the navigation landmark; empty uses the locale catalog. */
     ariaLabel?: string
   }
 
@@ -51,8 +55,6 @@
 
   const emit = defineEmits<{
     navigate: [event: globalThis.MouseEvent, node: MenuNode]
-    'update:path': [value: string[]]
-    'update:expanded': [value: string[]]
   }>()
 
   const path = defineModel<string[]>('path', { default: () => [] })

@@ -757,3 +757,51 @@ describe('MenuGroup slot presence', () => {
     expect(group.getAttribute('aria-label')).toBe('Fallback name')
   })
 })
+
+describe('Menu audit fixes', () => {
+  it('emits click on a sub-trigger with the event and its label and href', async () => {
+    const calls: unknown[][] = []
+    const { getByTestId } = render(
+      defineComponent({
+        components: COMPONENTS,
+        setup: () => ({ onClick: (...args: unknown[]) => calls.push(args) }),
+        template: `
+          <Menu aria-label="Docs">
+            <MenuGroup>
+              <MenuSub>
+                <MenuSubTrigger label="Guides" kind="inline" href="/guides" @click="onClick" />
+                <MenuSubContent><MenuItem label="Intro" /></MenuSubContent>
+              </MenuSub>
+            </MenuGroup>
+          </Menu>
+        `
+      })
+    )
+    await fireEvent.click(getByTestId('navigation-menu-sub-trigger__reference'))
+    expect(calls).toHaveLength(1)
+    expect(calls[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(calls[0]?.[1]).toEqual({ label: 'Guides', href: '/guides' })
+  })
+
+  it('still emits update:path and update:expanded through defineModel', async () => {
+    const expanded = ref<string[]>([])
+    const { getByTestId } = render(
+      defineComponent({
+        components: { Menu },
+        setup: () => ({
+          expanded,
+          groups: [
+            {
+              items: [
+                { id: 'guides', label: 'Guides', children: [{ id: 'intro', label: 'Intro' }] }
+              ]
+            }
+          ]
+        }),
+        template: `<Menu v-model:expanded="expanded" :groups="groups" />`
+      })
+    )
+    await fireEvent.click(getByTestId('navigation-menu-sub-trigger__control'))
+    await waitFor(() => expect(expanded.value).toContain('guides'))
+  })
+})
