@@ -289,3 +289,23 @@ describe('SearchTrigger', () => {
     expect(getByRole('button', { name: 'Search Ctrl K projects' })).toBeTruthy()
   })
 })
+
+describe('SearchTrigger on a page with two triggers', () => {
+  it('emits open from one trigger only for one Cmd+K', async () => {
+    let opened = 0
+    const view = render({
+      components: { SearchTrigger },
+      template: '<div><SearchTrigger @open="count" /><SearchTrigger @open="count" /></div>',
+      setup: () => ({ count: () => (opened += 1) })
+    })
+    await userEvent.keyboard('{Meta>}k{/Meta}')
+    expect(opened).toBe(1)
+    view.unmount()
+  })
+
+  it('renders a consumer class once on the button', () => {
+    const { getByTestId } = render(SearchTrigger, { attrs: { class: 'ms-auto' } })
+    const classes = getByTestId('actions-search-trigger').className.split(/\s+/)
+    expect(classes.filter((name) => name === 'ms-auto')).toHaveLength(1)
+  })
+})

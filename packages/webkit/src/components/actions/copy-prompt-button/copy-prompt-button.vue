@@ -50,6 +50,9 @@
     close: [event: MouseEvent]
   }>()
 
+  /** Whether the chip is shown (v-model:open). The dismiss button sets it to false; bind it to persist or restore the dismissal. */
+  const open = defineModel<boolean>('open', { default: true })
+
   const attrs = useAttrs()
   const { t } = useTranslate({ copyPromptButton: en.copyPromptButton })
 
@@ -86,7 +89,6 @@
   const copied = ref(false)
   const fallbackRequested = ref(false)
   const fallbackOpen = ref(false)
-  const dismissed = ref(false)
   let resetTimer: ReturnType<typeof setTimeout> | null = null
 
   async function onClick() {
@@ -108,7 +110,7 @@
   }
 
   function onClose(event: MouseEvent) {
-    dismissed.value = true
+    open.value = false
     emit('close', event)
   }
 
@@ -119,7 +121,7 @@
 
 <template>
   <span
-    v-if="!dismissed"
+    v-if="open"
     :data-testid="`${testId}__frame`"
     class="inline-flex max-w-full items-center gap-(--spacing-xxs)"
   >

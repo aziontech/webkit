@@ -95,7 +95,6 @@
       :data-disabled="disabled ? '' : undefined"
       :disabled="disabled"
       :aria-keyshortcuts="keyShortcuts"
-      :class="attrs.class"
       class="group/search-trigger relative inline-flex h-8 w-56 min-w-0 shrink cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-start text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none enabled:[&:not(:focus-visible)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:bg-(--bg-disabled) data-[collapsible=true]:w-8 data-[collapsible=true]:shrink-0 data-[collapsible=true]:justify-center data-[collapsible=true]:px-0 data-[collapsible=true]:@2xl:w-56 data-[collapsible=true]:@2xl:shrink data-[collapsible=true]:@2xl:justify-start data-[collapsible=true]:@2xl:px-(--spacing-sm)"
       @click="onClick"
     >

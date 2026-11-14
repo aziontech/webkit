@@ -45,7 +45,7 @@
   {
     "name": "copy-prompt-button",
     "path": "src/components/actions/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "7.9 KB",
+    "limit": "4.2 KB",
     "entryOnly": true
   },
   {

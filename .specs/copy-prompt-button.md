@@ -3,9 +3,9 @@ name: copy-prompt-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: ee87149ad383f0dd2d8e67fe44cdede7be57a96cc0307bcf6249006a12e75790
+checksum: 019955d56a7c5390b5a0f1b26d8ac3b0ef59983464bd504e9f9b479ce0c04616
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -43,7 +43,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
 - To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `Logo` flattens it to the chip's ink.
-- Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Listen to `close` to remember the choice; the chip only hides itself.
+- Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click).
 
 ## Usage
 
@@ -78,6 +78,12 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 | `disabled`    | `boolean`           | `false`                         | false    | Disables the button; `copy` is not emitted.                                                                                                                                                       |
 | `closable`    | `boolean`           | `false`                         | false    | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`.                                                                                             |
 
+## v-model
+
+| Model          | Type      | Default | Emits         | Notes                                                                                                                                 |
+| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `true`  | `update:open` | Whether the chip is shown, via `defineModel('open')`. The dismiss button sets it to `false`; set it back to `true` to show the chip again. Unbound, the chip keeps its own state. |
+
 ## Events
 
 | Event   | Payload      | Notes                                                                                                                                 |
@@ -91,7 +97,7 @@ _none_
 
 ## States
 
-- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the rotating glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (with `closable`, the chip and its dismiss button unmount).
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the rotating glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (`open` is false: the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
 - Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
