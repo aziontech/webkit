@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Error404 from '@aziontech/webkit/svg/error-404'
+  import LineFigure from '@aziontech/webkit/line-figure'
 </script>
 
 <template>
@@ -15,7 +15,12 @@
         description="There is nothing deployed at this address. Check the URL or head back to the start."
       >
         <template #icon>
-          <Error404 class="h-auto w-48 sm:w-64" />
+          <div class="w-64 sm:w-80">
+            <LineFigure
+              name="azion-404"
+              play
+            />
+          </div>
         </template>
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
