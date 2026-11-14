@@ -53,6 +53,25 @@ describe('TagEditor', () => {
     expect(view.queryByTestId('input-tag-editor__marked')).toBeNull()
   })
 
+  it('falls back to the input-tag-editor test id and lets a passed one win', () => {
+    expect(render(TagEditor).getByTestId('input-tag-editor')).toBeTruthy()
+    const custom = render(TagEditor, { attrs: { 'data-testid': 'resource-tags' } })
+    expect(custom.getByTestId('resource-tags')).toBeTruthy()
+    expect(custom.getByTestId('resource-tags__editor')).toBeTruthy()
+  })
+
+  it('reserves no prefix by default', async () => {
+    const view = render(Harness([{ key: 'azion:managed', value: 'true' }]))
+    await nextTick()
+    expect(errorOf(keys(view)[0] as HTMLElement)).not.toContain('cannot start')
+  })
+
+  it('keeps its own tags when v-model:tags is not bound', async () => {
+    const view = render(TagEditor, { props: { tags: [{ key: 'env', value: 'dev' }] } })
+    await fireEvent.click(view.getByRole('button', { name: 'Remove tag 1' }))
+    expect(view.getByText('No tags associated with the resource.')).toBeTruthy()
+  })
+
   it('deletes a new tag on Remove', async () => {
     const view = render(Harness([{ key: 'env', value: 'dev' }]))
     await fireEvent.click(view.getByRole('button', { name: 'Remove tag 1' }))
@@ -63,18 +82,18 @@ describe('TagEditor', () => {
     const view = render(
       Harness(
         [
-          { key: 'azion:managed', value: '' },
+          { key: 'acme:managed', value: '' },
           { key: 'region', value: 'a' },
           { key: 'region', value: 'b' },
           { key: 'bad#key', value: '' },
           { key: 'x'.repeat(10), value: '' }
         ],
-        { keyMaxLength: 8 }
+        { keyMaxLength: 8, reservedPrefix: 'acme:' }
       )
     )
     await nextTick()
     const inputs = keys(view)
-    expect(errorOf(inputs[0] as HTMLElement)).toContain('Keys cannot start with "azion:".')
+    expect(errorOf(inputs[0] as HTMLElement)).toContain('Keys cannot start with "acme:".')
     expect(errorOf(inputs[1] as HTMLElement)).toContain('already used')
     expect(errorOf(inputs[3] as HTMLElement)).toContain('Use letters, numbers')
     expect(errorOf(inputs[4] as HTMLElement)).toContain('Use 8 characters or fewer.')

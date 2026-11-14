@@ -476,6 +476,11 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
+### Changed defaults and deprecated names in the input and action controls
+
+- `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
+  `reserved-prefix="azion:"` where the platform reserves it.
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
