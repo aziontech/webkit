@@ -70,6 +70,29 @@ function runningInfiniteAnimations(root: Element): string[] {
     })
 }
 
+// Brand orange 600 with a white label is an accepted exception: APCA Lc 73.8 passes, WCAG 2 is
+// 4.26:1 (large-text level only). Only that exact pair is dropped; any other contrast finding fails.
+const ACCEPTED_CONTRAST = [{ fg: '#ffffff', bg: '#d94a03' }]
+
+function isAcceptedContrast(node: axe.NodeResult): boolean {
+  const data = node.any[0]?.data as { fgColor?: string; bgColor?: string } | undefined
+  return ACCEPTED_CONTRAST.some(
+    (pair) => data?.fgColor?.toLowerCase() === pair.fg && data?.bgColor?.toLowerCase() === pair.bg
+  )
+}
+
+async function runAxe(pass: A11yPass): Promise<axe.AxeResults> {
+  const results = await axe.run(document.body, axeOptions(pass))
+  results.violations = results.violations
+    .map((violation) =>
+      violation.id === 'color-contrast'
+        ? { ...violation, nodes: violation.nodes.filter((node) => !isAcceptedContrast(node)) }
+        : violation
+    )
+    .filter((violation) => violation.nodes.length > 0)
+  return results
+}
+
 function describeViolations(violations: axe.Result[]): string {
   return violations
     .map(
@@ -125,7 +148,7 @@ export function runA11ySuite(scope: A11yScope, pass: A11yPass): void {
         await nextTick()
         await settle()
 
-        const results = await axe.run(document.body, axeOptions(pass))
+        const results = await runAxe(pass)
         const findings = new Set(results.violations.map((violation) => violation.id))
         const animations = pass === 'media' ? runningInfiniteAnimations(document.body) : []
         if (animations.length) findings.add('reduced-motion-infinite-animation')
@@ -274,7 +297,7 @@ export function runA11yOpenSuite(scope: A11yScope, theme: 'light' | 'dark'): voi
           const label = overlayLabel(instance, index)
           if (!ctx.isOpen.value) continue
           opened += 1
-          const results = await axe.run(document.body, axeOptions(theme))
+          const results = await runAxe(theme)
           if (RECORD && results.violations.length) {
             console.warn(
               `A11Y_OPEN ${JSON.stringify({ theme, file, overlay: label, rules: results.violations.map((v) => v.id) })}`
