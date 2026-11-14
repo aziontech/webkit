@@ -3,13 +3,13 @@ name: menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 164496fce986255c63f279cdd822e70867def12bd2f47abbc7c46a311f2b45bf
+checksum: 67964e4f9096474de765cc7b98dc528297abed625473ee1877861c5a4ebb666d
 created: 2026-08-03
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Menu — Component Spec
@@ -364,6 +364,14 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 - `data-node-id` on a `Sub` rendered from `groups` — carries the `MenuNode.id` so `update:path` reports real node ids rather than generated ones
 - Empty: `groups` is `[]` and the `default` slot is empty → the root renders nothing; the empty
   message belongs to the host shell, not the menu.
+- Icon rail: inside a `Sidebar` collapsed with `collapsible="icon"` (read from the sidebar context
+  with `inject(SidebarInjectionKey, null)`; a menu anywhere else is unaffected), `Menu.Item` carries
+  `data-rail`, centres its icon in a 32 px box, renders its label screen-reader-only and shows it in
+  a `Tooltip`, and drops its tag; a `Menu.Item` without an icon, a `kind="group"` overline and an
+  inline `SubTrigger` (which never has an icon) are hidden, an inline `SubContent` is hidden, a
+  `Group` title becomes screen-reader-only (it still names the section), and a drill `SubTrigger`
+  shows its icon in a `Tooltip` with no arrow — activating it expands the sidebar, then pushes its
+  level.
 
 ## Motion & Animations
 
@@ -518,6 +526,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elem
   - A drill `SubTrigger` carries **no** `aria-expanded` on any control — it replaces the view rather than expanding one. An announced drill arrow is named `Open <label> menu`. On push, focus moves to the level's `Back` button and the pushed `<ul>` takes `aria-label` from the trigger's label; on pop, focus returns to whichever control pushed it. A level that is not current carries **both `aria-hidden` and `inert`** while it is still mounted for the slide, so it leaves the accessibility tree and the tab order together (the pattern Kumo's `SlidingViews` uses).
   - `Back` is a `<button>` whose **visible text** names its destination (`Back to Settings`, or a bare `Back` when that destination is the unnamed root) and is therefore also its accessible name — it renders no `aria-label`, so the two cannot disagree (2.5.3 Label in Name).
   - A selected `Menu.Item` rendered as an anchor carries `aria-current="page"`; a disabled row carries `aria-disabled` and is removed from the tab order.
+  - In a sidebar icon rail every visible row keeps its label as its accessible name (visually hidden, not removed); the `Tooltip` repeats it on hover and focus toward the inline end (`left` under `rtl`).
   - The connector rail and every chevron are `aria-hidden="true"` — decorative, and the indentation already conveys the hierarchy.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.

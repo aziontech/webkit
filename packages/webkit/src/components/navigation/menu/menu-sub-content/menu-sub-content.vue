@@ -2,6 +2,7 @@
   import {
     type ComponentPublicInstance,
     computed,
+    inject,
     nextTick,
     ref,
     shallowRef,
@@ -10,6 +11,7 @@
   } from 'vue'
 
   import { cn } from '../../../../utils/cn'
+  import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useMenuContext } from '../composables/use-menu-context'
   import { useMenuSubContext } from '../composables/use-menu-sub-context'
   import {
@@ -31,6 +33,7 @@
   const ctx = useMenuContext()
   const sub = useMenuSubContext()
   const attrs = useAttrs()
+  const sidebar = inject(SidebarInjectionKey, null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-sub-content'
@@ -98,7 +101,9 @@
     'data-[state=closed]:motion-reduce:hidden ' +
     'motion-reduce:transition-none motion-reduce:transform-none'
 
-  const inlineClass = computed(() => cn(INLINE_CLASS, attrs.class as string | undefined))
+  const inlineClass = computed(() =>
+    cn(INLINE_CLASS, sidebar?.rail === true && 'hidden', attrs.class as string | undefined)
+  )
   const drillClass = computed(() => cn(DRILL_CLASS, attrs.class as string | undefined))
 
   const levelStyle = computed(() =>

@@ -469,6 +469,7 @@
           v-model:open="navigationOpen"
           :resizable="!drawer"
           :collapsible="!drawer"
+          :shortcut="!drawer"
           :aria-label="ariaLabel || t('consoleLayout.navigation')"
           :data-testid="`${testId}__navigation`"
         >

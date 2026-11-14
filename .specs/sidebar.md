@@ -3,13 +3,14 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 2ccb6366763abdeb5caae4ab9a02b5c5722f5a051ac4bbb1e7cc6d562abb0210
+checksum: 5981b130fff1053b2a015948e8e6a8cd815f102dfcf6410bb4f96068834a05da
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Sidebar — Component Spec
@@ -27,13 +28,15 @@ and every app that has a sidebar wants the same one. Two shells re-implementing 
 drift apart.
 
 Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the
-collapse trigger and the edge affordance. With neither set the component renders exactly as it
+collapse trigger and the edge affordance. `collapsible="icon"` collapses to an **icon rail** instead
+of leaving the layout, and `shortcut` adds the Ctrl+B / Cmd+B toggle. With neither set the component renders exactly as it
 always has, with the host owning the width — every existing consumer is unaffected.
 
 ## When to use
 
 - The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.
 - The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
+- Wide work surfaces where the navigation should shrink to its icons rather than disappear (`collapsible="icon"`), so a destination stays one click away.
 - The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app.
 
 ## When NOT to use
@@ -56,6 +59,8 @@ always has, with the host owning the width — every existing consumer is unaffe
 - Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
 - When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
 - Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
+- With `collapsible="icon"`, give every top-level `Menu.Item` and drill `Menu.SubTrigger` an icon: rows without one (and inline sub-menus) step aside in the rail. Use the `{ rail }` slot scope to compact header and footer content (an avatar without the name).
+- Turn on `shortcut` for one sidebar per page only; Ctrl+B / Cmd+B is a page-wide key.
 
 ## Usage
 
@@ -346,27 +351,34 @@ working.
   lint green→red on a minor). Reach for `Menu` in anything new.
 - `sidebar-header.vue` — Public sub-component `sidebar-header`.
 
-`Sidebar` does not import `Menu` and `Menu` does not import `Sidebar`; the only thing that passes
-between them is the ring-offset surface below.
+`Sidebar` does not import `Menu` and `Menu` does not import `Sidebar`. Two things pass between
+them: the ring-offset surface below, and the sidebar context (`SidebarInjectionKey`, read with
+`inject(…, null)` so a `Menu` outside a sidebar is unaffected), which tells the menu rows whether
+the sidebar is an icon rail, which side their tooltips open on, the `Tooltip` component to wrap a rail row in (handed down so
+`Menu` bundles no tooltip of its own), and how to expand it.
 
 ## Props
 
-| Prop                | Type      | Default             | Required | JSDoc                                                                                                                                |
-| ------------------- | --------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `ariaLabel`         | `string`  | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Sidebar`).                                              |
-| `resizable`         | `boolean` | `false`             | false    | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.                                             |
-| `collapsible`       | `boolean` | `false`             | false    | Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back.                       |
-| `minWidthToken`     | `string`  | `'--container-3xs'` | false    | Theme container token the sized width is clamped up to, read off the document at runtime.                                            |
-| `maxWidthToken`     | `string`  | `'--container-sm'`  | false    | Theme container token the sized width is clamped down to, read off the document at runtime.                                          |
-| `collapseAriaLabel` | `string`  | `''`                | false    | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`).                                        |
-| `expandAriaLabel`   | `string`  | `''`                | false    | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
-| `resizeAriaLabel`   | `string`  | `''`                | false    | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`).                                     |
+| Prop                | Type                            | Default             | Required | JSDoc                                                                                                                                                                       |
+| ------------------- | ------------------------------- | ------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel`         | `string`                        | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Sidebar`).                                                                                     |
+| `resizable`         | `boolean`                       | `false`             | false    | Adds the drag handle on the trailing edge; dragging past the minimum collapses the rail.                                                                                    |
+| `collapsible`       | `boolean \| SidebarCollapsible` | `false`             | false    | Adds the collapse trigger; `true` or `'offcanvas'` takes a collapsed sidebar out of the layout (with the edge affordance that brings it back), `'icon'` keeps an icon rail. |
+| `shortcut`          | `boolean`                       | `false`             | false    | Lets Ctrl+B / Cmd+B toggle `open` while the sidebar is collapsible. Ignored while focus is in an editable field.                                                       |
+| `minWidthToken`     | `string`                        | `'--container-3xs'` | false    | Theme container token the sized width is clamped up to, read off the document at runtime.                                                                                   |
+| `maxWidthToken`     | `string`                        | `'--container-sm'`  | false    | Theme container token the sized width is clamped down to, read off the document at runtime.                                                                                 |
+| `collapseAriaLabel` | `string`                        | `''`                | false    | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`).                                                                               |
+| `expandAriaLabel`   | `string`                        | `''`                | false    | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`).                                        |
+| `resizeAriaLabel`   | `string`                        | `''`                | false    | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`).                                                                            |
+
+Exported type: `SidebarCollapsible` = `'offcanvas' | 'icon'`. `collapsible` keeps accepting a
+boolean; `true` is `'offcanvas'`, so every existing consumer is unchanged.
 
 ## v-model
 
 | Model               | Type             | Default | Emits              | Notes                                                                                                                                                                                                                                                                                           |
 | ------------------- | ---------------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.                          |
+| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.                          |
 | `v-model:width`     | `number \| null` | `null`  | `update:width`     | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
 | `v-model:collapsed` | `boolean`        | `false` | `update:collapsed` | **@deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0.** Still works: it is the inverse of `open`, both are emitted on every change, and when a host binds only `collapsed` it drives the rail.                                                                                 |
 
@@ -382,11 +394,11 @@ The only events are the `update:*` of the models above.
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                                                               |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | —                                                                                                                                                                   |
-| `header`  | —     | Named slot.                                                                                                                                                         |
-| `footer`  | —     | Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. |
+| Slot      | Scope               | Notes                                                                                                                                                                                                                                          |
+| --------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | `{ rail: boolean }` | The navigation. `rail` is true while the sidebar is collapsed to its icon rail.                                                                                                                                                                |
+| `header`  | `{ rail: boolean }` | Named slot. Use `rail` to compact the content in the icon rail.                                                                                                                                                                                |
+| `footer`  | `{ rail: boolean }` | Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. In the icon rail the row stacks and the trigger becomes the expand button. |
 
 ## Exposed
 
@@ -397,7 +409,12 @@ The only events are the `update:*` of the models above.
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-collapsed` on the root while the rail is out of the layout
+- `data-collapsed` on the root while the rail is collapsed (out of the layout, or down to the icon rail)
+- `data-rail` on the root while `collapsible="icon"` and collapsed; the rail stays in the layout at
+  `var(--size-14)`, is **not** `inert` or `aria-hidden`, renders no edge affordance, and its footer
+  trigger becomes `__expand-button` (`Expand sidebar`). Menu rows inside it carry `data-rail` too:
+  labels become screen-reader-only and move into a `Tooltip`, tags and group labels step aside,
+  rows without an icon and inline sub-menus are hidden.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
 - `data-collapsed` / `data-resizing` / `data-preview` are **reported state, not the motion
@@ -415,7 +432,7 @@ The only events are the `update:*` of the models above.
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
-- A collapsed rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out
+- A collapsed offcanvas rail carries `inert` + `aria-hidden`, so it holds no tab stops while it is out; an icon rail keeps its rows reachable
 
 ## Motion & Animations
 
@@ -561,6 +578,13 @@ canvas the tokens fall back to.
   Right-to-left: the rail sits on the inline start, so in an `rtl` subtree the keys and the drag
   mirror (`ArrowLeft` and a leftward drag widen it, `ArrowRight` narrows it), the expand affordance
   slides in from the right, and its tooltip opens on the left.
+- **Shortcut** (`shortcut`): Ctrl+B / Cmd+B toggles `open` from anywhere on the page, except
+  while focus is in an input, a textarea, a select or a contenteditable host, and not when another
+  handler already called `preventDefault`. The collapse and expand triggers announce it with
+  `aria-keyshortcuts="Control+B Meta+B"`.
+- **Icon rail** (`collapsible="icon"`): every row keeps its label as its accessible name (visually
+  hidden, not removed) and shows it in a `Tooltip` on hover and focus, opening toward the inline
+  end (`right`, `left` under `rtl`). Activating a drill row in the rail expands the sidebar first.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component. Each
   separator is named (`resizeAriaLabel` / `expandAriaLabel`) because a bare separator announces
   nothing about what it sizes; the collapse trigger is named by `collapseAriaLabel`.
@@ -598,7 +622,43 @@ canvas the tokens fall back to.
   affordance that brings it back. None of that is expressible as an args delta on a static story,
   and the page morphing beside it needs a sibling to morph against.
 
+- Icon Rail — **justified addition.** `collapsible="icon"` with `shortcut`, starting collapsed: the
+  icon rail, its tooltips, the `{ rail }` footer scope and the Ctrl+B toggle are a distinct
+  presentation and interaction that no args delta on Default shows.
+
 Every story composes `Menu`; none composes `SidebarGroup` (see Sub-components).
+
+## Internationalization
+
+- All strings come from the locale catalog (`sidebar.label`, `sidebar.collapse`, `sidebar.expand`,
+  `sidebar.resize`, `sidebar.expandByDragging`) and each has an `*AriaLabel` prop override. The icon
+  rail adds no string: its tooltips show the consumer's own row labels.
+- Labels truncate with an ellipsis at full width; in the rail the label lives in the tooltip, which
+  wraps at `--container-3xs`.
+
+## Right-to-left
+
+- The sidebar sits on the inline start; logical utilities (`border-e`, `start-0`, `ps-`/`pe-`) mirror
+  it under `dir="rtl"`.
+- The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
+  right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
+- The collapse / expand glyphs (`pi-angle-double-left` / `-right`) keep their meaning through the
+  direction-aware placement of the trigger.
+
+## Responsive
+
+- The sidebar is a column of an app shell; below `md` the shell hides it or turns it into a drawer
+  (`app-layout` / `console-layout` own that, not the sidebar). Call `measure()` when it is revealed
+  after mount.
+- The icon rail is a fixed `var(--size-14)` column at every width; resizing is suspended while it is
+  collapsed and the drag from the rail grows it back past the minimum.
+
+## Performance
+
+- One `keydown` listener on the document while mounted (VueUse `useEventListener`, removed on scope
+  dispose); it returns immediately unless `shortcut` and `collapsible` are both set.
+- The rail renders the same rows as the full sidebar (no second tree); each rail row adds one
+  `Tooltip`, whose panel mounts only while it is open.
 
 ## Constraints — DO NOT
 

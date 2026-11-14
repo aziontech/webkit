@@ -20,6 +20,9 @@ export const SIDEBAR_NUDGE_STEP = 16
 const TAP_SLOP = 3
 
 export const SIDEBAR_PREVIEW_WIDTH_TOKEN = '--size-10'
+
+export const SIDEBAR_ICON_RAIL_TOKEN = '--size-14'
+const SIDEBAR_ICON_RAIL_FALLBACK = 56
 const SIDEBAR_PREVIEW_WIDTH_FALLBACK = 40
 
 const RAIL_MIN_OPACITY = 0.2
@@ -30,6 +33,7 @@ export interface UseSidebarRailOptions {
   minWidthToken: MaybeRefOrGetter<string>
   maxWidthToken: MaybeRefOrGetter<string>
   enabled: MaybeRefOrGetter<boolean>
+  collapsedWidthToken?: MaybeRefOrGetter<string>
 }
 
 export interface UseSidebarRailReturn {
@@ -84,6 +88,11 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
   const peekWidth = ref(0)
   const peeking = computed(() => resizing.value && collapsed.value)
 
+  const iconRailWidth = ref(SIDEBAR_ICON_RAIL_FALLBACK)
+  const collapsedWidth = computed(() =>
+    toValue(options.collapsedWidthToken) ? iconRailWidth.value : 0
+  )
+
   const previewHover = ref(false)
   const previewWidth = ref(SIDEBAR_PREVIEW_WIDTH_FALLBACK)
 
@@ -119,7 +128,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     if (Math.abs(travel) > TAP_SLOP) dragMoved = true
 
     pullProgress.value = Math.max(0, Math.min(1, next / railMin.value))
-    peekWidth.value = Math.max(0, Math.min(next, railMin.value))
+    peekWidth.value = Math.max(collapsedWidth.value, Math.min(next, railMin.value))
 
     if (collapsed.value) {
       if (next >= railMin.value) {
@@ -165,10 +174,10 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     resizing.value = true
     dragMoved = false
     startX = event.clientX
-    startWidth = fromCollapsed ? 0 : (width.value ?? railMin.value)
+    startWidth = fromCollapsed ? collapsedWidth.value : (width.value ?? railMin.value)
     restoreWidth = width.value ?? railMin.value
     pullProgress.value = fromCollapsed ? 0 : 1
-    peekWidth.value = 0
+    peekWidth.value = fromCollapsed ? collapsedWidth.value : 0
     const target = event.currentTarget as globalThis.HTMLElement | null
     try {
       target?.setPointerCapture(event.pointerId)
@@ -204,6 +213,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     railMin.value = readTokenPx(toValue(options.minWidthToken), railMin.value)
     railMax.value = readTokenPx(toValue(options.maxWidthToken), railMax.value)
     previewWidth.value = readTokenPx(SIDEBAR_PREVIEW_WIDTH_TOKEN, previewWidth.value)
+    iconRailWidth.value = readTokenPx(SIDEBAR_ICON_RAIL_TOKEN, iconRailWidth.value)
     if (width.value != null) width.value = clamp(width.value)
     measure()
     railEl.value?.style.removeProperty('width')
@@ -224,7 +234,9 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
 
   const innerStyle = computed(() => {
     if (!toValue(options.enabled) || !resizing.value) return {}
-    if (!underMin.value) return { translate: '0%', opacity: '1', transition: 'none' }
+    if (!underMin.value || collapsedWidth.value > 0) {
+      return { translate: '0%', opacity: '1', transition: 'none' }
+    }
     return {
       width: `${railMin.value}px`,
       translate: `${(peekWidth.value - railMin.value) * (dir.value === 'rtl' ? -1 : 1)}px`,
