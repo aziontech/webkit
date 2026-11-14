@@ -956,6 +956,11 @@
     "limit": "1.65 KB"
   },
   {
+    "name": "status-code",
+    "path": "src/components/content/status-code/status-code.vue",
+    "limit": "1.7 KB"
+  },
+  {
     "name": "error-boundary",
     "path": "src/components/feedback/error-boundary/error-boundary.vue",
     "limit": "6.75 KB"

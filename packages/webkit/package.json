@@ -415,6 +415,10 @@
       "types": "./types/components/content/severity-tag/severity-tag.vue.d.ts",
       "default": "./src/components/content/severity-tag/severity-tag.vue"
     },
+    "./status-code": {
+      "types": "./types/components/content/status-code/status-code.vue.d.ts",
+      "default": "./src/components/content/status-code/status-code.vue"
+    },
     "./avatar": {
       "types": "./types/components/content/avatar/avatar.vue.d.ts",
       "default": "./src/components/content/avatar/avatar.vue"
