@@ -172,19 +172,23 @@
     </li>
     <li
       v-else-if="hasError"
-      role="alert"
       class="flex items-stretch"
     >
-      <slot name="error">
-        <EmptyState
-          :title="t('barList.errorTitle')"
-          :description="error"
-          icon="pi pi-exclamation-triangle"
-          size="small"
-          bordered
-          :data-testid="`${testId}__error`"
-        />
-      </slot>
+      <div
+        role="alert"
+        class="flex min-w-0 flex-1 items-stretch"
+      >
+        <slot name="error">
+          <EmptyState
+            :title="t('barList.errorTitle')"
+            :description="error"
+            icon="pi pi-exclamation-triangle"
+            size="small"
+            bordered
+            :data-testid="`${testId}__error`"
+          />
+        </slot>
+      </div>
     </li>
     <li
       v-else-if="isEmpty"

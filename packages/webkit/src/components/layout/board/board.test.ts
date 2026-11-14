@@ -203,7 +203,7 @@ describe('Board', () => {
     const { view, layout } = mount({ editing: true })
     const [first, , third] = view.getAllByTestId('layout-board-item')
     await fireEvent.pointerDown(view.getByTestId('drag-requests'))
-    const card = first?.querySelector('section') as HTMLElement
+    const card = first?.querySelector('[data-testid="chart-chart-card"]') as HTMLElement
     await fireEvent.dragStart(card)
     await fireEvent.dragOver(third as HTMLElement)
     expect(third?.hasAttribute('data-over')).toBe(true)

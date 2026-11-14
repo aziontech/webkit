@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
 import CreationHeader from '../../blocks/headers/creation-header/creation-header.vue'
 import DocsHeader from '../../blocks/headers/docs-header/docs-header.vue'
@@ -180,7 +181,7 @@ describe('platform/auth', () => {
 describe('platform/delete/delete-with-confirmation', () => {
   const confirmPanel = () =>
     waitFor(() => {
-      const found = Array.from(document.querySelectorAll('[role="dialog"]')).find((el) =>
+      const found = Array.from(document.querySelectorAll('[role="alertdialog"]')).find((el) =>
         el.textContent?.includes('to confirm.')
       )
       expect(found).toBeTruthy()
@@ -189,7 +190,7 @@ describe('platform/delete/delete-with-confirmation', () => {
 
   it('locks the dialog while Delete runs, then closes it', async () => {
     const view = render(DeleteWithConfirmation)
-    await fireEvent.click(view.getByRole('button', { name: 'Delete resource' }))
+    await userEvent.click(view.getByRole('button', { name: 'Delete resource' }))
     const panel = await confirmPanel()
     expect(panel.querySelector('button[aria-label="Copy resource-01"]')).not.toBeNull()
     const input = panel.querySelector('input') as HTMLInputElement

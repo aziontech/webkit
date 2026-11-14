@@ -123,13 +123,17 @@
           >{{ name }}</code
         >
       </div>
-      <StatusIndicator
-        :severity="severity"
-        :loading="state === 'running'"
-        :label="t(`toolCall.${state}`)"
-        :data-testid="`${testId}__status`"
-        class="shrink-0"
-      />
+      <span
+        role="status"
+        class="flex shrink-0"
+      >
+        <StatusIndicator
+          :severity="severity"
+          :loading="state === 'running'"
+          :label="t(`toolCall.${state}`)"
+          :data-testid="`${testId}__status`"
+        />
+      </span>
     </div>
     <div
       v-if="expandable()"

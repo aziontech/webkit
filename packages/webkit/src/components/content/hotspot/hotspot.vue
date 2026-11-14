@@ -99,7 +99,7 @@
     :data-side="side"
     :data-active="entry ? true : null"
     :data-current="isCurrent || null"
-    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-xxs)"
+    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-xxs) data-[active]:data-[side=end]:pe-(--spacing-xs) data-[active]:data-[side=start]:ps-(--spacing-xs)"
   >
     <slot v-if="side !== 'start'" />
     <Popover

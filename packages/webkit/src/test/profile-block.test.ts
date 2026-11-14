@@ -16,8 +16,8 @@ describe('platform/account/profile', () => {
     expect(view.getByRole('link', { name: 'Manage MFA' }).getAttribute('href')).toBe(
       '/account/security/mfa'
     )
-    expect(view.getByRole('link', { name: 'Connect GitLab' }).getAttribute('href')).toContain(
-      'gitlab.com'
+    expect(view.getByRole('link', { name: 'Connect GitLab' }).getAttribute('href')).toBe(
+      '/account/integrations/gitlab'
     )
   })
 
@@ -34,7 +34,7 @@ describe('platform/account/profile', () => {
   it('deletes the account only after the name is typed', async () => {
     const view = render(Profile)
     await fireEvent.click(view.getByRole('button', { name: 'Delete account' }))
-    const dialog = await view.findByRole('dialog', { name: 'Delete account' })
+    const dialog = await view.findByRole('alertdialog', { name: 'Delete account' })
     const confirm = within(dialog).getByRole('button', { name: 'Delete account' })
     expect(confirm).toBeDisabled()
     await userEvent.type(within(dialog).getByRole('textbox'), 'Acme')

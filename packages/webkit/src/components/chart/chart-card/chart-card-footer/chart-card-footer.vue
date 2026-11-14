@@ -19,11 +19,11 @@
 </script>
 
 <template>
-  <footer
+  <div
     v-bind="$attrs"
     :data-testid="testId"
     class="flex min-h-12 shrink-0 flex-wrap items-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
   >
     <slot />
-  </footer>
+  </div>
 </template>

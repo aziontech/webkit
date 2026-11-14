@@ -4,7 +4,7 @@
 // result: roles, names, states and order. A change here is reviewed like a visual diff.
 import './reflow.css'
 
-import { cleanup, render } from '@testing-library/vue'
+import { cleanup, render, screen } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { commands, userEvent } from 'vitest/browser'
 import type { Component } from 'vue'
@@ -52,10 +52,7 @@ const byRole = (role: string, name?: string | RegExp): HTMLElement => {
   return match
 }
 
-const button = (name: string): HTMLElement =>
-  [...document.querySelectorAll<HTMLElement>('button')].find(
-    (node) => (node.getAttribute('aria-label') ?? node.textContent ?? '').trim() === name
-  ) ?? byRole('button', name)
+const button = (name: string): HTMLElement => screen.getByRole('button', { name })
 
 afterEach(() => cleanup())
 
