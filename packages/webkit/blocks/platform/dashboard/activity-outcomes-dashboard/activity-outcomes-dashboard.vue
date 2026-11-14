@@ -1,9 +1,13 @@
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel
+  } from '@aziontech/webkit/filter-menu'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -14,7 +18,7 @@
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   type Outcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
 
@@ -33,9 +37,7 @@
   const loading = false
   const comparison = 'vs prior day'
   const timeRange = ref('Last 24 hours')
-  const actor = ref('Any actor')
-  const outcome = ref('Any outcome')
-  const category = ref('Any category')
+  const filters = ref<FilterMenuModel>({})
   const destination = ref('')
   const activeIndex = ref<number | null>(null)
 
@@ -63,96 +65,38 @@
     }
   ]
 
-  const actorOptions: SelectOptionItem[] = [
+  const filterFields: FilterMenuField[] = [
     {
-      value: 'Any actor',
-      label: 'Any actor'
+      id: 'actor',
+      label: 'Actor',
+      options: [
+        'report-builder',
+        'ticket-triage',
+        'inventory-sync',
+        'invoice-reader',
+        'release-helper',
+        'data-export',
+        'calendar-sync'
+      ].map((name) => ({ value: name, label: name }))
     },
     {
-      value: 'report-builder',
-      label: 'report-builder'
+      id: 'outcome',
+      label: 'Outcome',
+      options: [
+        { value: 'allowed', label: 'Allowed' },
+        { value: 'blocked', label: 'Blocked' },
+        { value: 'held', label: 'Held' },
+        { value: 'approved', label: 'Approved' },
+        { value: 'denied', label: 'Denied' }
+      ]
     },
     {
-      value: 'ticket-triage',
-      label: 'ticket-triage'
-    },
-    {
-      value: 'inventory-sync',
-      label: 'inventory-sync'
-    },
-    {
-      value: 'invoice-reader',
-      label: 'invoice-reader'
-    },
-    {
-      value: 'release-helper',
-      label: 'release-helper'
-    },
-    {
-      value: 'data-export',
-      label: 'data-export'
-    },
-    {
-      value: 'calendar-sync',
-      label: 'calendar-sync'
-    }
-  ]
-
-  const outcomeOptions: SelectOptionItem[] = [
-    {
-      value: 'Any outcome',
-      label: 'Any outcome'
-    },
-    {
-      value: 'Allowed',
-      label: 'Allowed'
-    },
-    {
-      value: 'Blocked',
-      label: 'Blocked'
-    },
-    {
-      value: 'Held',
-      label: 'Held'
-    },
-    {
-      value: 'Approved',
-      label: 'Approved'
-    },
-    {
-      value: 'Denied',
-      label: 'Denied'
-    }
-  ]
-
-  const categoryOptions: SelectOptionItem[] = [
-    {
-      value: 'Any category',
-      label: 'Any category'
-    },
-    {
-      value: 'Read',
-      label: 'Read'
-    },
-    {
-      value: 'Write',
-      label: 'Write'
-    },
-    {
-      value: 'Search',
-      label: 'Search'
-    },
-    {
-      value: 'Export',
-      label: 'Export'
-    },
-    {
-      value: 'Delete',
-      label: 'Delete'
-    },
-    {
-      value: 'Admin',
-      label: 'Admin'
+      id: 'category',
+      label: 'Category',
+      options: ['Read', 'Write', 'Search', 'Export', 'Delete', 'Admin'].map((name) => ({
+        value: name,
+        label: name
+      }))
     }
   ]
 
@@ -576,6 +520,94 @@
   }
 
   const outcomeTag = (outcome: Outcome) => outcomeTags[outcome]
+
+  const picked = (id: string) => (filters.value[id] ?? []).map(String)
+  const keeps = (id: string, value: string) => {
+    const values = picked(id)
+    return !values.length || values.includes(value)
+  }
+  const host = computed(() => destination.value.trim().toLowerCase())
+
+  const filtering = computed(
+    () => Object.values(filters.value).some((values) => values.length > 0) || host.value !== ''
+  )
+
+  const filteredRows = computed(() =>
+    rows.filter(
+      (row) =>
+        keeps('actor', row.actor) &&
+        keeps('outcome', row.outcome) &&
+        keeps('category', row.category) &&
+        (!host.value || row.destination.toLowerCase().includes(host.value))
+    )
+  )
+
+  const share = computed(() => (rows.length ? filteredRows.value.length / rows.length : 0))
+  const outcomeIds: ReadonlySet<string> = new Set([
+    'allowed',
+    'blocked',
+    'held',
+    'approved',
+    'denied'
+  ])
+
+  const visibleFigures = computed(() =>
+    filtering.value
+      ? figures.map((figure) => {
+          if (!filteredRows.value.length) return { ...figure, value: null, delta: null }
+          const excluded = outcomeIds.has(figure.id) && !keeps('outcome', figure.id)
+          return {
+            ...figure,
+            value: excluded ? 0 : Math.round(figure.value * share.value),
+            delta: null
+          }
+        })
+      : figures
+  )
+
+  const visibleOutcomes = computed<ChartSeries[]>(() =>
+    filtering.value
+      ? filteredRows.value.length
+        ? outcomes
+            .filter((entry) => keeps('outcome', entry.id))
+            .map((entry) => ({
+              ...entry,
+              values: entry.values.map((value) =>
+                value === null ? null : Math.round(value * share.value)
+              )
+            }))
+        : []
+      : outcomes
+  )
+
+  const narrow = (items: BarListItem[], keep: (item: BarListItem) => boolean) =>
+    filtering.value ? (filteredRows.value.length ? items.filter(keep) : []) : items
+
+  const visibleActors = computed(() =>
+    narrow(actors, (item) => keeps('actor', String(item.id ?? item.name)))
+  )
+  const visibleCategories = computed(() =>
+    narrow(categories, (item) => keeps('category', String(item.id ?? item.name)))
+  )
+  const visibleDestinations = computed(() =>
+    narrow(destinations, (item) => !host.value || item.name.toLowerCase().includes(host.value))
+  )
+
+  const emptyTitle = computed(() =>
+    filtering.value ? 'No requests match these filters' : 'No requests in this time range'
+  )
+  const emptyDescription = computed(() =>
+    filtering.value
+      ? 'Clear the filters or pick other values.'
+      : 'Requests the rules evaluate appear here. Widen the time range to see older ones.'
+  )
+
+  const clearFilters = () => {
+    filters.value = {}
+    destination.value = ''
+  }
+
+  const emit = defineEmits<{ refresh: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -586,110 +618,62 @@
         description="What each actor requested through the rules: what was allowed, blocked or held for approval, and what went over budget, per actor, category and destination."
       >
         <template #actions>
+          <div class="w-full sm:w-44">
+            <Select
+              v-model="timeRange"
+              size="medium"
+            >
+              <Select.Trigger aria-label="Time range" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in timeRanges"
+                  :key="String(option.value)"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </div>
           <IconButton
             icon="pi pi-refresh"
             kind="outlined"
             size="medium"
             aria-label="Refresh"
+            @click="(event: MouseEvent) => emit('refresh', event)"
           />
         </template>
       </PageHeader>
 
       <section
         aria-label="Filters"
-        class="grid grid-cols-1 items-start gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-5"
+        class="flex min-w-0 flex-col gap-(--spacing-xs)"
       >
-        <Field>
-          <Field.Label>Time range</Field.Label>
-          <Select
-            v-model="timeRange"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in timeRanges"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Actor</Field.Label>
-          <Select
-            v-model="actor"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in actorOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Outcome</Field.Label>
-          <Select
-            v-model="outcome"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in outcomeOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Category</Field.Label>
-          <Select
-            v-model="category"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in categoryOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Destination</Field.Label>
-          <Input
-            v-model="destination"
-            placeholder="api.example.com"
+        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+          <FilterMenu
+            v-model="filters"
+            :fields="filterFields"
             size="medium"
           />
-          <Field.Description>Exact host.</Field.Description>
-        </Field>
+          <div class="w-full min-w-0 sm:w-(--container-3xs)">
+            <Input
+              v-model="destination"
+              placeholder="api.example.com"
+              size="medium"
+              aria-label="Destination host"
+            />
+          </div>
+        </div>
+        <FilterMenu.Chips
+          v-model="filters"
+          :fields="filterFields"
+        />
       </section>
 
       <section aria-label="Outcomes">
         <ul class="grid grid-cols-2 gap-(--spacing-md) sm:grid-cols-4 2xl:grid-cols-7">
           <li
-            v-for="figure in figures"
+            v-for="figure in visibleFigures"
             :key="figure.id"
             class="flex min-w-0 flex-col"
           >
@@ -723,13 +707,24 @@
           <ChartCard.Content>
             <Chart
               v-model:active-index="activeIndex"
-              :series="outcomes"
+              :series="visibleOutcomes"
               :labels="labels"
               :format-value="formatCount"
-              empty-title="No requests in this time range"
-              empty-description="Requests the rules evaluate appear here. Widen the time range to see older ones."
+              :empty-title="emptyTitle"
+              :empty-description="emptyDescription"
               :loading="loading"
             >
+              <template
+                v-if="filtering"
+                #empty-actions
+              >
+                <Button
+                  label="Clear filters"
+                  kind="outlined"
+                  size="small"
+                  @click="clearFilters"
+                />
+              </template>
               <Chart.Grid />
               <Chart.Axis kind="y" />
               <Chart.Axis kind="x" />
@@ -750,9 +745,9 @@
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="actors"
+              :items="visibleActors"
               :format-value="formatCount"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by actor"
             />
@@ -768,10 +763,10 @@
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="categories"
+              :items="visibleCategories"
               :format-value="formatCount"
               :color="2"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by category"
             />
@@ -787,10 +782,10 @@
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="destinations"
+              :items="visibleDestinations"
               :format-value="formatCount"
               :color="3"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by destination"
             />
@@ -807,8 +802,8 @@
             </span>
             <ChartCard.Controls>
               <Tag
-                v-if="!loading && rows.length"
-                :label="rows.length + ' requests'"
+                v-if="!loading && filteredRows.length"
+                :label="filteredRows.length + ' requests'"
                 severity="secondary"
                 size="small"
               />
@@ -816,8 +811,8 @@
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
-              v-if="loading || rows.length"
-              :data="rows"
+              v-if="loading || filteredRows.length"
+              :data="filteredRows"
               :columns="columns"
               row-key="id"
               enable-sorting
@@ -845,6 +840,24 @@
               </template>
             </TableRoot>
             <EmptyState
+              key="empty-state-1"
+              v-else-if="filtering"
+              size="small"
+              icon="pi pi-filter-slash"
+              title="No requests match these filters"
+              description="Clear the filters or pick other values."
+            >
+              <template #actions>
+                <Button
+                  label="Clear filters"
+                  kind="outlined"
+                  size="small"
+                  @click="clearFilters"
+                />
+              </template>
+            </EmptyState>
+            <EmptyState
+              key="empty-state-2"
               v-else
               size="small"
               icon="pi pi-list"

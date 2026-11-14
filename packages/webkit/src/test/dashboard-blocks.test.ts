@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import Activity from '../../blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue'
 import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
 import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
 import CompositionEmpty from '../../blocks/platform/dashboard/composition-dashboard/variants/empty.vue'
@@ -190,5 +191,38 @@ describe('platform/dashboard exports', () => {
     expect((view.getByRole('button', { name: 'Export CSV' }) as HTMLButtonElement).disabled).toBe(
       true
     )
+  })
+})
+
+describe('platform/dashboard/activity-outcomes-dashboard', () => {
+  it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
+    const view = render(Activity)
+    const table = () => byTestId('data-table', view.container)
+    expect(table()?.textContent).toContain('storage.example.com')
+    const input = view.getByRole('textbox', { name: 'Destination host' })
+    await userEvent.fill(input, 'storage.example.com')
+    await waitFor(() => expect(table()?.textContent).not.toContain('api.example.com'))
+    expect(table()?.textContent).toContain('storage.example.com')
+    await userEvent.fill(input, 'nothing.example.org')
+    await waitFor(() =>
+      expect(view.container.textContent).toContain('No requests match these filters')
+    )
+    const clear = Array.from(view.container.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Clear filters'
+    ) as HTMLButtonElement
+    await fireEvent.click(clear)
+    await waitFor(() => expect(table()?.textContent).toContain('api.example.com'))
+  })
+
+  it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {
+    const view = render(Activity)
+    expect(byTestId('data-filter-menu', view.container)).not.toBeNull()
+    expect(view.getByRole('combobox', { name: 'Time range' })).toBeTruthy()
+  })
+
+  it('emits refresh from the Refresh button', async () => {
+    const view = render(Activity)
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('refresh')?.length).toBe(1)
   })
 })
