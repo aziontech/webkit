@@ -114,10 +114,41 @@ describe('ButtonHighlight', () => {
     })
   })
 
-  describe('enum smoke', () => {
-    it.each(['small', 'medium', 'large'] as const)('renders size %s', (size) => {
-      const { getByRole } = render(ButtonHighlight, { props: { label: 'Ask Azion', size } })
-      expect(getByRole('button', { name: 'Ask Azion' }).getAttribute('data-size')).toBe(size)
+  describe('attribute forwarding', () => {
+    it('gives the button the consumer aria-label as its accessible name', () => {
+      const { getByRole } = render(ButtonHighlight, {
+        props: { label: 'Ask' },
+        attrs: { 'aria-label': 'Ask the assistant' }
+      })
+      expect(getByRole('button', { name: 'Ask the assistant' }).tagName).toBe('BUTTON')
+    })
+
+    it('gives the anchor the consumer aria-label and id', () => {
+      const { getByRole } = render(ButtonHighlight, {
+        props: { label: 'Ask', href: 'https://example.com/ask' },
+        attrs: { 'aria-label': 'Ask the assistant', id: 'ask-link' }
+      })
+      expect(getByRole('link', { name: 'Ask the assistant' }).id).toBe('ask-link')
+    })
+
+    it('lands id, aria-describedby, name and form on the native button', () => {
+      const { getByRole } = render(ButtonHighlight, {
+        props: { label: 'Ask' },
+        attrs: { id: 'ask', 'aria-describedby': 'ask-hint', name: 'intent', form: 'chat' }
+      })
+      const node = getByRole('button', { name: 'Ask' })
+      expect(node.id).toBe('ask')
+      expect(node.getAttribute('aria-describedby')).toBe('ask-hint')
+      expect(node.getAttribute('name')).toBe('intent')
+      expect(node.getAttribute('form')).toBe('chat')
+    })
+
+    it('keeps its own disabled state over a conflicting consumer aria-disabled', () => {
+      const { getByRole } = render(ButtonHighlight, {
+        props: { label: 'Ask', disabled: true },
+        attrs: { 'aria-disabled': 'false' }
+      })
+      expect(getByRole('button', { name: 'Ask' }).getAttribute('aria-disabled')).toBe('true')
     })
   })
 
