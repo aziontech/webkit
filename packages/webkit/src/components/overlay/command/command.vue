@@ -235,6 +235,16 @@
 
   onBeforeUnmount(() => releaseShortcut())
 
+  const activeId = computed(() => items.value.find((item) => item.value === activeValue.value)?.id)
+
+  watch(activeValue, (value) => {
+    if (value === null) return
+    void nextTick(() => {
+      const item = items.value.find((entry) => entry.value === value)
+      item?.el.value?.scrollIntoView?.({ block: 'nearest' })
+    })
+  })
+
   watch(query, () => {
     resetActive()
     nextTick(() => resetActive())
@@ -264,6 +274,7 @@
     select,
     registerItem,
     activeValue,
+    activeId,
     setActive,
     isActive,
     hasVisibleItems,

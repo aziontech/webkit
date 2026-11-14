@@ -7,6 +7,8 @@ export type CommandItemValue = string | number
 export interface CommandRegisteredItem {
   /** The item's identifier, emitted on `select`. */
   value: CommandItemValue
+  /** The item element's id, referenced by the input's `aria-activedescendant`. */
+  id: string
   /** The group this item belongs to, or `null` when ungrouped. */
   groupId: string | null
   /** Whether the item is disabled (skipped by roving navigation). */
@@ -40,6 +42,8 @@ export interface CommandContext {
   registerItem: (item: CommandRegisteredItem) => () => void
   /** The value of the currently active (roving-highlighted) item, or `null`. */
   activeValue: Ref<CommandItemValue | null>
+  /** The element id of the active item, for the input's `aria-activedescendant`. */
+  activeId: Readonly<Ref<string | undefined>>
   /** Sets the active item value. */
   setActive: (value: CommandItemValue | null) => void
   /** Whether the given value is the active item. */

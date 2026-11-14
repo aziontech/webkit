@@ -63,6 +63,7 @@
       autocomplete="off"
       :aria-expanded="ctx.isOpen.value"
       :aria-controls="ctx.listId"
+      :aria-activedescendant="ctx.activeId.value"
       @update:model-value="ctx.setQuery"
       @keydown="ctx.onInputKeydown"
     >

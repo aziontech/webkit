@@ -371,6 +371,56 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
     })
   })
 
+  describe('active option is announced and kept in view', () => {
+    it('points aria-activedescendant at the active item id as ArrowDown moves', async () => {
+      render(composed({ defaultOpen: true }))
+      await settle()
+      const input = byTestId('overlay-command__input')!.querySelector('input')!
+      const items = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+      )
+      expect(items[0]!.id).not.toBe('')
+
+      await fireEvent.keyDown(input, { key: 'Home' })
+      await settle()
+      expect(input.getAttribute('aria-activedescendant')).toBe(items[0]!.id)
+
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+      expect(input.getAttribute('aria-activedescendant')).toBe(items[1]!.id)
+      expect(document.getElementById(input.getAttribute('aria-activedescendant')!)).toBe(items[1])
+    })
+
+    it('scrolls the active row into view in a scrolling list', async () => {
+      render(
+        defineComponent({
+          components: { Command, CommandInput, CommandList, CommandItem },
+          setup: () => ({
+            open: ref(true),
+            rows: Array.from({ length: 40 }, (_, i) => `row-${i}`)
+          }),
+          template: `
+            <Command v-model:open="open">
+              <CommandInput placeholder="Search" />
+              <CommandList style="max-height: 120px; overflow-y: auto">
+                <CommandItem v-for="row in rows" :key="row" :value="row">{{ row }}</CommandItem>
+              </CommandList>
+            </Command>
+          `
+        })
+      )
+      await settle()
+      const input = byTestId('overlay-command__input')!.querySelector('input')!
+      await fireEvent.keyDown(input, { key: 'End' })
+      await settle()
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+      const last = document.getElementById(input.getAttribute('aria-activedescendant')!)!
+      const list = byTestId('overlay-command__list')!
+      expect(last.textContent).toContain('row-39')
+      expect(list.scrollTop).toBeGreaterThan(0)
+    })
+  })
+
   describe('accessibility (axe on the open, Teleported palette)', () => {
     it('has no WCAG violations while open', async () => {
       render(composed({ defaultOpen: true }))
