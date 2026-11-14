@@ -8,6 +8,7 @@ import { loadCatalog } from '../eslint-plugin/catalog.js'
 export const UI_EXTENSIONS = ['vue', 'astro']
 
 export const RULE_PURPOSE = {
+  'no-page-navigation-menu': 'free Menu in a page body (one navigation per level)',
   'no-viewport-height-calc':
     'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
   'no-root-relative-asset':

@@ -13,6 +13,7 @@ export default ConsoleLayout
 
 export { ConsoleLayoutBreadcrumbs }
 
+export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
 export type {
   ConsoleLayoutAccount,
   ConsoleLayoutCrumb,

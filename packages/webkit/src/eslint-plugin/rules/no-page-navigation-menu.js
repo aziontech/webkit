@@ -17,7 +17,8 @@ const MENU_HOST = /^sidebar(?:-|$)/
 
 const PAGE_PATH = /(?:^|\/)(?:views|pages)\//
 
-const SECTIONED_RESOURCE = /(?:^|\/)blocks\/platform\/detail\/sectioned-resource\//
+const SECTIONED_RESOURCE =
+  /(?:^|\/)blocks\/platform\/detail\/sectioned-resource\/|(?:^|\/)platform__detail__sectioned-resource__/
 
 const MARKER = /\/\*\s*webkit-local-navigation\s*\*\/|<!--\s*webkit-local-navigation\s*-->/
 

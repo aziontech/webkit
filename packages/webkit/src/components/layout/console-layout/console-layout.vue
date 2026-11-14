@@ -311,7 +311,8 @@
         for (const item of items) {
           const route = routeOf(hrefOf(item))
           if (route && !routes.has(route)) routes.set(route, item.label)
-          if (item.groups) walk(item.groups.flatMap((group) => group.items))
+          if (item.groups && menuPath.value.includes(item.id))
+            walk(item.groups.flatMap((group) => group.items))
           if (item.children) walk(item.children)
         }
       }

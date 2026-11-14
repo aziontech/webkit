@@ -964,4 +964,19 @@ describe('ConsoleLayout — duplicate destinations in development', () => {
       warn.mockRestore()
     }
   })
+  it('ignores the rows of a closed drill level', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const router = fakeRouter('/workloads')
+      const { getByRole } = mount({}, { router }, { default: () => pageMenu('/account/users') })
+      await waitFor(() =>
+        expect(getByRole('main').querySelector('a[href="/account/users"]')).toBeTruthy()
+      )
+      await nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(duplicateWarnings(warn)).toEqual([])
+    } finally {
+      warn.mockRestore()
+    }
+  })
 })

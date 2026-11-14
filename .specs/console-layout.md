@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 73bf7c17f683a495b62f88f0fbef789d30f6f64060f25b02cfa384d0916136d2
+checksum: 308060948382c7f25b2b16c7a184141c3ca5fed97266935b7176b600eb88d160
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -51,7 +51,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
-- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `Menu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `Menu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as any `navigation` row, at any level or drill level, it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `Menu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `Menu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Usage
 
