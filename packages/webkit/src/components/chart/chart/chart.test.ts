@@ -257,6 +257,34 @@ describe('Chart', () => {
     expect(text.indexOf('WAF requests allowed')).toBeLessThan(text.indexOf('1.4K'))
   })
 
+  it('sums the visible series in a Total row and renders the footer hint', async () => {
+    const view = mount({ activeIndex: 0 }, () => [
+      h(ChartBar, { stacked: true }),
+      h(ChartTooltip, { total: true }, { footer: () => 'Click to filter to this bucket.' })
+    ])
+    await nextTick()
+    expect(view.getByTestId('chart-chart__tooltip__total').textContent).toContain('1.6K')
+    expect(view.getByTestId('chart-chart__tooltip__footer').textContent).toContain(
+      'Click to filter to this bucket.'
+    )
+  })
+
+  it('leaves hidden series out of the total and skips empty values', async () => {
+    const view = mount({ activeIndex: 2, hiddenSeries: ['allowed'] }, () => [
+      h(ChartLine),
+      h(ChartTooltip, { total: true })
+    ])
+    await nextTick()
+    expect(view.getByTestId('chart-chart__tooltip__total').textContent).toContain('70')
+  })
+
+  it('renders no Total row or footer by default', async () => {
+    const view = mount({ activeIndex: 1 })
+    await nextTick()
+    expect(view.queryByTestId('chart-chart__tooltip__total')).toBeNull()
+    expect(view.queryByTestId('chart-chart__tooltip__footer')).toBeNull()
+  })
+
   it('renders exactly one state at a time', () => {
     const loading = mount({ loading: true })
     expect(loading.getByTestId('chart-chart__skeleton')).toBeTruthy()

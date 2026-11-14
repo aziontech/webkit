@@ -791,7 +791,7 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "22.1 KB"
+    "limit": "22.3 KB"
   },
   {
     "name": "chart-root",
@@ -831,7 +831,7 @@
   {
     "name": "chart-tooltip",
     "path": "src/components/chart/chart/chart-tooltip/chart-tooltip.vue",
-    "limit": "1.75 KB"
+    "limit": "2.6 KB"
   },
   {
     "name": "chart-legend",

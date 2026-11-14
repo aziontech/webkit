@@ -129,7 +129,8 @@ export const chart = {
   summaryRange: ', from {from} to {to}',
   otherSeries: 'Other',
   rangeDraft: 'Selecting from {from} to {to}',
-  rangeSelected: 'Selected from {from} to {to}'
+  rangeSelected: 'Selected from {from} to {to}',
+  total: 'Total'
 } as const
 
 export const chartCard = {

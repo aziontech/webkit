@@ -43,6 +43,11 @@
       "file": "brush.vue"
     },
     {
+      "name": "TooltipTotal",
+      "summary": "Event volume by level, each level coloured from the severity ramp. The tooltip adds a Total row that sums the visible levels in the bucket and a footer hint that says what a click or a drag on the plot does.",
+      "file": "tooltip-total.vue"
+    },
+    {
       "name": "Loading",
       "summary": "A Skeleton fills the plot while the first response loads.",
       "file": "loading.vue"

@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 7b22a47f0d24cd27c293c584a857b12e48612368fde5707ce73d416630311d53
-spec_version: 3
+checksum: 09ffc8ab61af29b78424ed8d0d61782a98e2d1cb37d149fbb17fdd605bd0ab55
+spec_version: 4
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Chart — Component Spec
@@ -142,10 +142,10 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot.
-  - Props: _none_.
+- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot. With `total`, a Total row under a hairline in `var(--chart-tooltip-border)` sums the visible series at the active index (empty values count as zero) in the same value format; the `footer` slot adds a hint line under the rows, also divided edge to edge, such as what a click on the plot does.
+  - Props: `total?: boolean` (default `false` — a Total row summing the visible series under the rows).
   - Events: _none_.
-  - Slots: _none_.
+  - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
   - Props: `totals?: boolean` (default `false` — show each series total beside its name).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
@@ -260,6 +260,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`         |
 | tooltip label and series names | `.text-label-md`                                                                                                            |
 | tooltip values                 | `.text-label-code-md`                                                                                                       |
+| tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                           |
 | marker ring                    | `var(--bg-surface)`                                                                                                         |
 | tooltip and legend shape       | `var(--shape-elements)`                                                                                                     |
 | spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                    |
@@ -298,6 +299,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | `chart.otherSeries`     | `Other`                                        | `otherLabel`          |
 | `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
 | `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
+| `chart.total`           | `Total`                                        | —                     |
 
 - Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
 
@@ -333,6 +335,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.
 - Brush — a stacked event-volume histogram (`Chart.Bar kind="histogram" stacked`) whose selected span filters a log.
+- TooltipTotal — the event-volume histogram coloured from the severity ramp, its tooltip with a Total row and a footer hint (`Chart.Tooltip total` + `#footer`).
 - Loading — `loading`.
 - Empty — composite: the three reasons a range comes back empty, each with its own copy: nothing in the range, filters that match nothing (with a Clear filters action), and a source not set up yet (with a setup link).
 - Error — `error` set.
