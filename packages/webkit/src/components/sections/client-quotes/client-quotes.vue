@@ -48,7 +48,7 @@
     items?: ClientQuotesItem[]
     /** Button under the quotes; omitted when absent. */
     primaryAction?: ClientQuotesAction
-    /** Advances to the next quote on a timer, as QuoteTabs does; pauses under the pointer or keyboard focus and never runs under reduced motion. */
+    /** Advances to the next quote on a timer, as QuoteTabs does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. */
     autoplay?: boolean
     /** Milliseconds each quote is held before the band advances. */
     autoplayInterval?: number

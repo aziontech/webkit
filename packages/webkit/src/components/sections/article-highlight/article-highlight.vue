@@ -3,7 +3,10 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
@@ -44,7 +47,7 @@
     actionLabel?: string
     /** Accessible name of the wall of titles. */
     ariaLabel?: string
-    /** Advances to the next article every `autoplayInterval`, pausing under hover and keyboard focus; off under reduced motion and with one article. */
+    /** Advances to the next article every `autoplayInterval`, with a visible pause control, pausing under hover and keyboard focus; off under reduced motion and with one article. */
     autoplay?: boolean
     /** Milliseconds each article is held before the band advances. */
     autoplayInterval?: number
@@ -109,7 +112,15 @@
     () => mounted.value && props.autoplay && props.items.length > 1 && !reducedMotion.value
   )
 
-  const running = computed(() => autoplaying.value && !pointerInside.value && !focusInside.value)
+  const paused = ref(false)
+  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const pauseLabel = computed(() =>
+    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+  )
+
+  const running = computed(
+    () => autoplaying.value && !paused.value && !pointerInside.value && !focusInside.value
+  )
 
   const progress = computed(() =>
     Math.min(100, (elapsed.value / Math.max(props.autoplayInterval, TICK_MS)) * 100)
@@ -202,13 +213,23 @@
       >
         <div
           :data-autoplay="running || null"
+          :data-paused="(autoplaying && paused) || null"
           :data-fill="fill || null"
-          class="group/highlight flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-xxl)*2)]"
+          class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-xxl)*2)]"
           @pointerenter="pointerInside = true"
           @pointerleave="pointerInside = false"
           @focusin="onFocusIn"
           @focusout="onFocusOut"
         >
+          <IconButton
+            v-if="autoplaying"
+            :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
+            :aria-label="pauseLabel"
+            kind="outlined"
+            size="small"
+            class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
+            @click="paused = !paused"
+          />
           <FrameBox
             :id="panelId"
             borders="bottom"
