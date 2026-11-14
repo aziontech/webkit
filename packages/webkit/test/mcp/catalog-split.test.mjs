@@ -74,7 +74,7 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
   assert.deepEqual(catalog.patterns['a/b'], {
     name: 'B',
     primary: 'Default',
-    variants: [{ name: 'Empty', summary: 's' }],
+    variants: [{ name: 'Empty' }],
     file: 'catalog/patterns/a/b.json'
   })
   assert.deepEqual(files['catalog/patterns/a/b.json'], {

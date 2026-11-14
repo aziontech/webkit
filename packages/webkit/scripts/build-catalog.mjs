@@ -740,7 +740,7 @@ export function splitCatalog(full) {
       if (PATTERN_HEAVY_KEYS.includes(k)) part[k] = v
       else meta[k] = v
     }
-    meta.variants = (p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
+    meta.variants = (p.variants || []).map((v) => ({ name: v.name }))
     meta.file = file
     patterns[id] = meta
     files[file] = part
