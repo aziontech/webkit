@@ -13,7 +13,7 @@
       <StatusIndicator
         loading
         severity="info"
-        label="Building"
+        label="Cloning"
       />
     </template>
 

@@ -13,6 +13,8 @@ import DeploySuccess from '../../blocks/platform/create/deploy-success/deploy-su
 import DeploySuccessCli from '../../blocks/platform/create/deploy-success/variants/cli-created.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
+import DeploymentFlowFailed from '../../blocks/platform/create/deployment-flow/variants/failed.vue'
+import DeploymentFlowRunning from '../../blocks/platform/create/deployment-flow/variants/running.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -193,5 +195,24 @@ describe('deploy-success', () => {
     render(DeploySuccessCli)
     expect(screen.getByRole('button', { name: 'Deploy this resource' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Deploy using a new service' })).toBeTruthy()
+  })
+})
+
+describe('deployment-flow', () => {
+  it('gives every step its status in words', () => {
+    render(DeploymentFlowRunning)
+    const triggers = screen.getAllByRole('button', { expanded: false })
+    expect(triggers.some((trigger) => /Done/.test(trigger.textContent ?? ''))).toBe(true)
+    expect(triggers.some((trigger) => /Waiting/.test(trigger.textContent ?? ''))).toBe(true)
+    expect(screen.getByRole('button', { expanded: true }).textContent).toContain('In progress')
+  })
+
+  it('ends a failure with Edit and Redeploy', async () => {
+    render(DeploymentFlowFailed)
+    expect(screen.getByRole('link', { name: 'Edit' })).toBeTruthy()
+    expect(screen.getByLabelText('Log view')).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Redeploy' }))
+    expect(screen.queryByLabelText('Log view')).toBeNull()
+    expect(document.body.textContent).toContain('Redeploying')
   })
 })

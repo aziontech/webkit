@@ -17,6 +17,13 @@
     duration: string
     lines: LogViewLine[]
   }
+  const STATUS_TEXT: Record<StepStatus, string> = {
+    done: 'Done',
+    running: 'In progress',
+    pending: 'Waiting',
+    failed: 'Failed',
+    skipped: 'Skipped'
+  }
 
   const steps: DeploymentStep[] = [
     {
@@ -30,25 +37,25 @@
           id: '0',
           time: '13:47:33',
           type: 'success',
-          message: '[TASK] - #. Deploy started successfully!'
+          message: '[TASK] - #. Deploy started successfully.'
         },
         {
           id: '1',
           time: '13:47:33',
           type: 'text',
-          message: '[TASK] - #. Creating access token!'
+          message: '[TASK] - #. Creating access token.'
         },
         {
           id: '2',
           time: '13:47:35',
           type: 'text',
-          message: '[TASK] - #. Adding token to the CLI!'
+          message: '[TASK] - #. Adding token to the CLI.'
         },
         {
           id: '3',
           time: '13:47:36',
           type: 'success',
-          message: '[TASK] - #. Token added successfully!'
+          message: '[TASK] - #. Token added successfully.'
         }
       ]
     },
@@ -65,7 +72,7 @@
           type: 'text',
           message: '[TASK] - # Current directory: vue/vue3-vite-static/'
         },
-        { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+        { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template.' },
         {
           id: '2',
           time: '13:47:39',
@@ -76,7 +83,7 @@
           id: '3',
           time: '13:47:40',
           type: 'success',
-          message: '[TASK] - #. Template cloned successfully!'
+          message: '[TASK] - #. Template cloned successfully.'
         }
       ]
     },
@@ -110,7 +117,7 @@
           id: '4',
           time: '13:47:49',
           type: 'success',
-          message: '[TASK] - # Dependencies installed successfully!'
+          message: '[TASK] - # Dependencies installed successfully.'
         }
       ]
     },
@@ -138,7 +145,7 @@
           id: '3',
           time: '13:47:57',
           type: 'success',
-          message: '[TASK] - # Build completed successfully!'
+          message: '[TASK] - # Build completed successfully.'
         }
       ]
     },
@@ -172,7 +179,7 @@
           id: '4',
           time: '13:48:02',
           type: 'success',
-          message: '[TASK] - # Upload completed successfully!'
+          message: '[TASK] - # Upload completed successfully.'
         }
       ]
     },
@@ -194,7 +201,7 @@
           id: '2',
           time: '13:48:07',
           type: 'success',
-          message: '[TASK] - # Service created successfully!'
+          message: '[TASK] - # Service created successfully.'
         }
       ]
     },
@@ -221,7 +228,7 @@
           id: '2',
           time: '13:48:11',
           type: 'success',
-          message: '[TASK] - # Routing rules configured successfully!'
+          message: '[TASK] - # Routing rules configured successfully.'
         }
       ]
     },
@@ -248,7 +255,7 @@
           id: '2',
           time: '13:48:15',
           type: 'success',
-          message: '[TASK] - #. Deploy finalized successfully!'
+          message: '[TASK] - #. Deploy finalized successfully.'
         }
       ]
     }
@@ -320,6 +327,9 @@
                     v-else
                     class="size-3.5 rounded-full border border-dashed border-(--border-default)"
                   />
+                </span>
+                <span class="sr-only">
+                  {{ STATUS_TEXT[step.status] }}
                 </span>
                 <span
                   :data-state="step.status"
