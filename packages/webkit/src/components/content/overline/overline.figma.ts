@@ -12,7 +12,7 @@ const prefix = ['//', '<>', '</>'].includes(rawPrefix) ? rawPrefix : ''
 const showCursor = instance.getBoolean('showCursor')
 
 export default {
-  example: figma.code`<Overline${prefix ? figma.code` prefix="${prefix}"` : ''}${showCursor ? figma.code` show-cursor` : ''}>${label}</Overline>`,
+  example: figma.code`<Overline${prefix ? figma.code` prefix="${prefix}"` : ''}${showCursor ? figma.code` cursor` : ''}>${label}</Overline>`,
   imports: ["import Overline from '@aziontech/webkit/overline'"],
   id: 'overline',
   metadata: { nestable: true }
