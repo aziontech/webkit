@@ -1,7 +1,11 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs, watch } from 'vue'
+  import { computed, inject, ref, useAttrs, watch } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
+  import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
+  import { usePickListSide } from '../composables/use-pick-list-side'
   import { pickListContextKey, type PickListSide } from '../injection-key'
   import { getItemTransitionStyle, pickListItemTransitionClasses } from '../presets/transitions'
 
@@ -35,6 +39,9 @@
   }
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ pickList: en.pickList })
+  const listRef = ref<HTMLElement | null>(null)
+  const { tabindexFor, onFocus, onKeydown } = usePickListSide(side, ctx, listRef)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-target'
@@ -51,11 +58,9 @@
     { immediate: true }
   )
 
-  const onOptionKeydown = (index: number, event: globalThis.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
-      event.preventDefault()
-      ctx.toggleSelection(side, index)
-    }
+  const setListRef = (el: unknown): void => {
+    const node = (el as { $el?: unknown } | null)?.$el ?? el
+    listRef.value = node instanceof HTMLElement ? node : null
   }
 </script>
 
@@ -72,55 +77,70 @@
     >
       <slot name="title">{{ title }}</slot>
     </h3>
-    <TransitionGroup
-      tag="ul"
-      role="listbox"
-      aria-multiselectable="true"
-      :aria-label="title || undefined"
-      :aria-disabled="ctx.disabled.value || undefined"
-      :aria-busy="loading || undefined"
-      :data-testid="`${testId}__list`"
-      :data-disabled="ctx.disabled.value || null"
-      :data-loading="loading || null"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      :enter-active-class="itemTransitionActive"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-      :leave-active-class="itemTransitionActive"
-      class="m-0 flex min-h-[14rem] list-none flex-col gap-(--spacing-xxs) overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) data-[disabled]:bg-(--bg-disabled)"
-    >
-      <li
-        v-if="loading"
-        key="__pick-list-loading"
-        role="presentation"
-        :data-testid="`${testId}__loading`"
-        :style="itemTransitionStyle"
-        class="flex flex-1 items-center justify-center py-(--spacing-md)"
+    <div class="relative flex min-w-0 flex-col">
+      <TransitionGroup
+        :ref="setListRef"
+        tag="ul"
+        role="listbox"
+        aria-multiselectable="true"
+        :aria-label="title || undefined"
+        :aria-disabled="ctx.disabled.value || undefined"
+        :aria-busy="loading || undefined"
+        :data-testid="`${testId}__list`"
+        :data-disabled="ctx.disabled.value || null"
+        :data-loading="loading || null"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        :enter-active-class="itemTransitionActive"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+        :leave-active-class="itemTransitionActive"
+        class="m-0 flex min-h-[14rem] list-none flex-col gap-(--spacing-xxs) overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) data-[disabled]:bg-(--bg-disabled)"
       >
-        <Spinner class="size-6 text-(--text-muted)" />
-      </li>
-      <li
-        v-for="(item, index) in visibleItems"
-        :key="ctx.itemKey(item, index)"
-        role="option"
-        :aria-selected="ctx.isSelected(side, index)"
-        :tabindex="ctx.disabled.value ? -1 : 0"
-        :data-selected="ctx.isSelected(side, index) || null"
-        :data-testid="`${testId}__option`"
-        :style="itemTransitionStyle"
-        class="cursor-pointer select-none rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) aria-disabled:cursor-not-allowed"
-        @click="ctx.toggleSelection(side, index)"
-        @dblclick="ctx.itemDoubleClick($event, side, index)"
-        @keydown="onOptionKeydown(index, $event)"
+        <li
+          v-if="loading"
+          key="__pick-list-loading"
+          role="presentation"
+          :data-testid="`${testId}__loading`"
+          :style="itemTransitionStyle"
+          class="flex flex-1 items-center justify-center py-(--spacing-md)"
+        >
+          <Spinner class="size-6 text-(--text-muted)" />
+        </li>
+
+        <li
+          v-for="(item, index) in visibleItems"
+          :key="ctx.itemKey(item, index)"
+          role="option"
+          :aria-selected="ctx.isSelected(side, index)"
+          :tabindex="tabindexFor(index)"
+          :data-selected="ctx.isSelected(side, index) || null"
+          :data-testid="`${testId}__option`"
+          :style="itemTransitionStyle"
+          class="cursor-pointer select-none rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) aria-disabled:cursor-not-allowed"
+          @click="ctx.toggleSelection(side, index)"
+          @dblclick="ctx.itemDoubleClick($event, side, index)"
+          @keydown="onKeydown(index, $event)"
+          @focus="onFocus(index)"
+        >
+          <slot
+            name="item"
+            :item="item"
+            :index="index"
+            :list="side"
+          />
+        </li>
+      </TransitionGroup>
+      <div
+        v-if="!loading && visibleItems.length === 0"
+        :data-testid="`${testId}__empty`"
+        class="pointer-events-none absolute inset-0 flex items-center justify-center"
       >
-        <slot
-          name="item"
-          :item="item"
-          :index="index"
-          :list="side"
+        <EmptyState
+          size="small"
+          :title="t('pickList.empty')"
         />
-      </li>
-    </TransitionGroup>
+      </div>
+    </div>
   </section>
 </template>

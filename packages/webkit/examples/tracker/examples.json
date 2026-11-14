@@ -16,6 +16,11 @@
       "name": "Empty",
       "summary": "No periods for the range: the strip renders one neutral block and is announced as No data.",
       "file": "empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "`error` renders the message inline in place of the blocks, announced as an alert.",
+      "file": "error.vue"
     }
   ]
 }

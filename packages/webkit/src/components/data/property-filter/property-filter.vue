@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
   import {
     type FilteringProperty,
@@ -53,8 +53,6 @@
   export type PropertyFilterMode = 'tokens' | 'query'
 
   interface Props {
-    /** The tokens and how they combine. Supports v-model:query. */
-    query?: PropertyFilterQuery
     /** Properties the suggestions offer, with their operators and values. */
     properties?: FilteringProperty[]
     /** Items that match the query, announced next to the tokens. Hidden when unset. */
@@ -69,8 +67,6 @@
     disabled?: boolean
     /** `tokens` turns each choice into a token; `query` edits one query string. */
     mode?: PropertyFilterMode
-    /** The query string in query mode. Supports v-model:text. */
-    text?: string
     /** Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. */
     validate?: (text: string) => string
     /** Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. */
@@ -78,7 +74,6 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    query: undefined,
     properties: () => [],
     totalCount: undefined,
     placeholder: '',
@@ -86,16 +81,20 @@
     freeText: true,
     disabled: false,
     mode: 'tokens',
-    text: undefined,
     validate: undefined,
     suggest: undefined
   })
 
   const emit = defineEmits<{
-    'update:query': [query: PropertyFilterQuery]
-    'update:text': [text: string]
     submit: [event: KeyboardEvent, payload: PropertyFilterSubmit]
   }>()
+
+  /** The tokens and how they combine. Supports v-model:query. */
+  const query = defineModel<PropertyFilterQuery>('query', {
+    default: () => ({ tokens: [], operation: 'and' })
+  })
+  /** The query string in query mode. Supports v-model:text. */
+  const queryText = defineModel<string>('text', { default: '' })
 
   const attrs = useAttrs()
   const { t } = useTranslate({
@@ -114,19 +113,12 @@
   const listId = `${uid}-suggestions`
   const errorId = `${uid}-error`
 
-  const internal = ref<PropertyFilterQuery>(props.query ?? { tokens: [], operation: 'and' })
-  watch(
-    () => props.query,
-    (next) => {
-      if (next) internal.value = next
-    }
-  )
-  const tokens = computed<PropertyFilterToken[]>(() => internal.value.tokens)
-  const operation = computed<PropertyFilterOperation>(() => internal.value.operation)
+  const tokens = computed<PropertyFilterToken[]>(() => query.value.tokens)
+  const operation = computed<PropertyFilterOperation>(() => query.value.operation)
 
   const commitQuery = (next: PropertyFilterQuery): void => {
-    internal.value = next
-    emit('update:query', next)
+    if (props.disabled) return
+    query.value = next
   }
 
   const draft = ref<string>('')
@@ -255,19 +247,11 @@
   })
 
   const isQuery = computed<boolean>(() => props.mode === 'query')
-  const queryText = ref<string>(props.text ?? '')
-  watch(
-    () => props.text,
-    (next) => {
-      if (next !== undefined) queryText.value = next
-    }
-  )
   const caret = ref<number>(queryText.value.length)
   const touched = ref<boolean>(false)
 
   const setText = (value: string): void => {
     queryText.value = value
-    emit('update:text', value)
   }
 
   const builtInParse = computed(() => parseQuery(queryText.value, props.properties, props.freeText))
@@ -364,9 +348,17 @@
       }))
   })
 
-  const suggestions = computed<Suggestion[]>(() =>
-    isQuery.value ? querySuggestions.value : tokenSuggestions.value
-  )
+  const MAX_SUGGESTIONS = 100
+
+  const suggestions = computed<Suggestion[]>(() => {
+    const list = isQuery.value ? querySuggestions.value : tokenSuggestions.value
+    if (list.length <= MAX_SUGGESTIONS) return list
+    const typed = list.filter((item) => item.group === 'text')
+    return [
+      ...list.filter((item) => item.group !== 'text').slice(0, MAX_SUGGESTIONS - typed.length),
+      ...typed
+    ]
+  })
 
   const syncCaret = (event: Event): void => {
     const target = event.target as HTMLInputElement | null
@@ -376,6 +368,7 @@
   }
 
   const submitQuery = (event: KeyboardEvent): void => {
+    if (props.disabled) return
     touched.value = true
     if (queryError.value) return
     open.value = false

@@ -233,6 +233,46 @@ describe('Chart', () => {
     expect(indexes.at(-1)).toBeNull()
   })
 
+  it('emits point-click with the mouse event first and the active point second on click', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({
+      activeIndex: 2,
+      onPointClick: (...args: unknown[]) => clicks.push(args)
+    })
+    await fireEvent.click(plotOf(view))
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(MouseEvent)
+    expect(clicks[0]?.[1]).toEqual({
+      index: 2,
+      label: '14:10',
+      values: { allowed: 1280, blocked: null, threat: 70 }
+    })
+  })
+
+  it('emits point-click for the point the keyboard walked to', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    const plot = plotOf(view)
+    plot.focus()
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    await fireEvent.keyDown(plot, { key: ' ' })
+    expect(clicks).toHaveLength(1)
+    expect(clicks[0]?.[0]).toBeInstanceOf(KeyboardEvent)
+    expect(clicks[0]?.[1]).toEqual({
+      index: 1,
+      label: '14:05',
+      values: { allowed: 1350, blocked: 410, threat: 95 }
+    })
+  })
+
+  it('emits no point-click on a click with no active point', async () => {
+    const clicks: unknown[][] = []
+    const view = mount({ onPointClick: (...args: unknown[]) => clicks.push(args) })
+    await fireEvent.click(plotOf(view))
+    expect(clicks).toHaveLength(0)
+  })
+
   it('snaps the active index to the nearest category under the pointer', async () => {
     const indexes: Array<number | null> = []
     const view = mount({ 'onUpdate:activeIndex': (index: number | null) => indexes.push(index) })
@@ -489,5 +529,18 @@ describe('Chart table twin on devices', () => {
     const twin = view.getByTestId('chart-chart__twin')
 
     expect(twin.parentElement?.className).toBe('sr-only')
+  })
+})
+
+describe('ChartLegend total', () => {
+  it('shows the totals with total, and still with the deprecated totals', () => {
+    const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
+    const withTotal = next.getAllByTestId('chart-chart__legend-item')[0]!.textContent
+    next.unmount()
+    const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
+    expect(legacy.getAllByTestId('chart-chart__legend-item')[0]!.textContent).toBe(withTotal)
+    legacy.unmount()
+    const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
+    expect(none.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)
   })
 })

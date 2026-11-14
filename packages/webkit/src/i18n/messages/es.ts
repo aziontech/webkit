@@ -146,7 +146,8 @@ export const es: Messages = {
     imageAlt: 'Avatar'
   },
   barList: {
-    emptyTitle: 'No hay datos disponibles'
+    emptyTitle: 'No hay datos disponibles',
+    errorTitle: 'No se pudieron cargar los datos'
   },
   board: {
     label: 'Panel',
@@ -556,6 +557,10 @@ export const es: Messages = {
     rangeSince: 'Desde {date}',
     rangeUntil: 'Hasta {date}',
     more: '+{count}',
+    moreValues: {
+      one: '{count} valor más. Escribe para acotar la lista.',
+      other: '{count} valores más. Escribe para acotar la lista.'
+    },
     applied: 'Filtros aplicados'
   },
   uploadProgress: {
@@ -665,6 +670,9 @@ export const es: Messages = {
     warningCount: { one: '{count} advertencia', other: '{count} advertencias' },
     gzip: 'gzip:',
     empty: 'Ninguna línea de registro coincide con los filtros actuales.',
+    noLines: 'Todavía no hay líneas de log.',
+    noMatch: 'Ninguna línea coincide con “{query}”.',
+    clearSearch: 'Borrar búsqueda',
     copy: 'Copiar registros',
     copied: 'Registros copiados',
     levels: 'Niveles de registro',
@@ -718,6 +726,7 @@ export const es: Messages = {
     info: 'Mostrando {start} a {end} de {total} registros',
     previous: 'Página anterior',
     next: 'Página siguiente',
+    page: 'Página {page}',
     pageSize: 'Filas por página'
   },
   passwordInput: {
@@ -743,7 +752,8 @@ export const es: Messages = {
     moveSelectedToTarget: 'Mover seleccionados al destino',
     moveAllToTarget: 'Mover todos al destino',
     moveSelectedToSource: 'Mover seleccionados al origen',
-    moveAllToSource: 'Mover todos al origen'
+    moveAllToSource: 'Mover todos al origen',
+    empty: 'Sin elementos'
   },
   popover: {
     close: 'Cerrar'
@@ -904,7 +914,8 @@ export const es: Messages = {
     selectAll: 'Seleccionar todas las filas',
     selectRow: 'Seleccionar fila',
     emptyTitle: 'Aún no hay resultados',
-    emptyDescription: 'Empieza creando tu primer recurso.'
+    emptyDescription: 'Empieza creando tu primer recurso.',
+    errorTitle: 'No se pudieron cargar los datos'
   },
   tableAppliedFilters: {
     contains: 'contiene',
@@ -991,7 +1002,8 @@ export const es: Messages = {
     cancelled: 'Reordenación cancelada.'
   },
   tableSearch: {
-    placeholder: 'Buscar'
+    placeholder: 'Buscar',
+    label: 'Buscar en la tabla'
   },
   tableSortButton: {
     ascending: 'Orden ascendente',
@@ -1043,6 +1055,7 @@ export const es: Messages = {
     noMatch: 'Ningún span coincide con “{query}”.',
     clearSearch: 'Borrar búsqueda',
     empty: 'No hay spans en esta traza.',
+    loading: 'Cargando spans',
     details: 'Detalles de {name}',
     close: 'Cerrar',
     copyName: 'Copiar nombre del span',
@@ -1072,9 +1085,15 @@ export const es: Messages = {
   },
   tracker: {
     noData: 'Sin datos',
+    summary: { one: '{count} periodo', other: '{count} periodos' },
+    summaryWorst: {
+      one: '{count} periodo. Peor: {label}',
+      other: '{count} periodos. Peor: {label}'
+    },
     roleDescription: 'historial de estado'
   },
   tree: {
+    label: 'Árbol',
     emptyTitle: 'No hay elementos'
   },
   unsavedChanges: {

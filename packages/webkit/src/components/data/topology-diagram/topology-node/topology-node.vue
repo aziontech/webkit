@@ -52,12 +52,15 @@
     const severity = props.node.severity ?? 'neutral'
     return severity === 'neutral' ? 'secondary' : severity
   })
+  const resourceType = computed<string>(() => props.node.type ?? props.node.kind ?? '')
   const bound = computed<boolean>(() => !unbound.value && Boolean(props.node.boundValue))
   const options = computed(() => props.node.bindOptions ?? [])
   const bindLabel = computed<string>(() =>
-    t(bound.value ? 'topologyDiagram.change' : 'topologyDiagram.bind', { kind: props.node.kind })
+    t(bound.value ? 'topologyDiagram.change' : 'topologyDiagram.bind', { kind: resourceType.value })
   )
-  const removeLabel = computed<string>(() => t('topologyDiagram.remove', { kind: props.node.kind }))
+  const removeLabel = computed<string>(() =>
+    t('topologyDiagram.remove', { kind: resourceType.value })
+  )
 
   const onSelect = (
     event: globalThis.MouseEvent | globalThis.KeyboardEvent,
@@ -92,7 +95,7 @@
           class="shrink-0 text-body-xs leading-none text-(--text-muted)"
           aria-hidden="true"
         />
-        <span class="truncate text-label-sm text-(--text-muted)">{{ node.kind }}</span>
+        <span class="truncate text-label-sm text-(--text-muted)">{{ resourceType }}</span>
         <Tag
           v-if="status"
           class="ms-auto shrink-0"
@@ -180,7 +183,7 @@
             <DropdownMenuGroup>
               <DropdownMenuOption
                 :value="CREATE"
-                :label="t('topologyDiagram.create', { kind: node.kind })"
+                :label="t('topologyDiagram.create', { kind: resourceType })"
               />
             </DropdownMenuGroup>
           </DropdownMenu>
@@ -243,7 +246,7 @@
                 v-if="field.copyable"
                 kind="outlined"
                 :value="field.value"
-                :ariaLabel="t('topologyDiagram.copy', { field: `${node.kind} ${field.label}` })"
+                :ariaLabel="t('topologyDiagram.copy', { field: `${resourceType} ${field.label}` })"
               />
             </div>
           </div>

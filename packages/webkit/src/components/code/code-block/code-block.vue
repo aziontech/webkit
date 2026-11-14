@@ -7,6 +7,7 @@
     onMounted,
     ref,
     useAttrs,
+    useId,
     watch
   } from 'vue'
 
@@ -68,7 +69,16 @@
     tabs?: CodeBlockTab[]
     /** Initial active tab when uncontrolled. */
     defaultValue?: string
+    /** Code of a single snippet, used when `tabs` is empty. */
+    code?: string
+    /** Language of the single `code` snippet (highlighting and the label header). */
+    language?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
+    lineNumbers?: boolean
+    /**
+     * Shows the line-number gutter.
+     * @deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.
+     */
     showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
@@ -89,7 +99,10 @@
   const props = withDefaults(defineProps<Props>(), {
     tabs: () => [],
     defaultValue: undefined,
-    showLineNumbers: true,
+    code: '',
+    language: '',
+    lineNumbers: true,
+    showLineNumbers: undefined,
     copyAriaLabel: '',
     copyable: undefined,
     kind: 'code',
@@ -127,10 +140,20 @@
   const panelVersion = ref(0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-block')
+  const uid = useId()
+  const panelId = `${uid}-panel`
+  const tabId = (index: number): string => `${uid}-tab-${index}`
 
-  const normalizedTabs = computed(() =>
-    props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
-  )
+  const gutter = computed<boolean>(() => props.showLineNumbers ?? props.lineNumbers)
+
+  const normalizedTabs = computed<CodeBlockTab[]>(() => {
+    if (props.tabs.length === 0) {
+      return props.code
+        ? [{ label: '', value: 'code', code: props.code, language: props.language || undefined }]
+        : []
+    }
+    return props.tabs.filter((tab): tab is CodeBlockTab => Boolean(tab && tab.value && tab.code))
+  })
 
   const isControlled = computed(() => valueModel.value !== undefined)
 
@@ -163,6 +186,10 @@
   )
 
   const showTabHeader = computed(() => normalizedTabs.value.length > 1)
+
+  const activeTabIndex = computed(() =>
+    activeTab.value ? normalizedTabs.value.indexOf(activeTab.value) : -1
+  )
 
   const isSingleLine = computed(() => highlightedLines.value.length === 1)
 
@@ -658,22 +685,13 @@
           :ref="(element) => setTabRef(element, index)"
           type="button"
           role="tab"
-          :id="`${testId}-tab-${tab.value}`"
-          :class="
-            cn(
-              'relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-elements) px-(--spacing-sm)',
-              'text-label-sm transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
-              tab.value === activeValue
-                ? 'text-(--text-default)'
-                : 'text-(--text-muted) hover:text-(--text-default)'
-            )
-          "
-          :aria-selected="tab.value === activeValue"
-          :aria-controls="`${testId}-panel-${tab.value}`"
-          :tabindex="tab.value === activeValue ? 0 : -1"
+          :id="tabId(index)"
+          class="relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-elements) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[state=active]:text-(--text-default) motion-reduce:transition-none"
+          :aria-selected="index === activeTabIndex"
+          :aria-controls="index === activeTabIndex ? panelId : undefined"
+          :tabindex="index === activeTabIndex ? 0 : -1"
           :data-testid="`${testId}__tab`"
-          :data-state="tab.value === activeValue ? 'active' : 'inactive'"
+          :data-state="index === activeTabIndex ? 'active' : 'inactive'"
           @click="setActiveTab(tab.value)"
           @keydown="onTabKeydown($event, tab.value)"
         >
@@ -749,8 +767,8 @@
         <div
           v-if="activeTab"
           :role="showTabHeader ? 'tabpanel' : undefined"
-          :id="showTabHeader ? `${testId}-panel-${activeTab.value}` : undefined"
-          :aria-labelledby="showTabHeader ? `${testId}-tab-${activeTab.value}` : undefined"
+          :id="showTabHeader ? panelId : undefined"
+          :aria-labelledby="showTabHeader ? tabId(activeTabIndex) : undefined"
           class="min-w-full w-max"
           :data-testid="`${testId}__panel`"
         >
@@ -794,7 +812,7 @@
                     {{ getDiffMarker(getLineState(chunk.start + offset + 1)) }}
                   </span>
                   <span
-                    v-if="showLineNumbers"
+                    v-if="gutter"
                     class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
                     :data-testid="`${testId}__line-number`"
                   >

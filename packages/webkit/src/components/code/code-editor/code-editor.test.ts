@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -161,6 +162,37 @@ describe('CodeEditor', () => {
     const input = textarea(view.container)
     expect(input.readOnly).toBe(true)
     expect(pressTab(input)).toBe(true)
+  })
+
+  it('suppresses edits when read-only or disabled, and leaves the tab order when disabled', async () => {
+    const readonly = render(CodeEditor, {
+      props: { modelValue: 'x', readonly: true, ariaLabel: 'Read only' }
+    })
+    const ro = textarea(readonly.container)
+    await userEvent.type(ro, 'abc')
+    await userEvent.keyboard('{Tab}')
+    expect(readonly.emitted()['update:modelValue']).toBeUndefined()
+    expect(ro.value).toBe('x')
+    readonly.unmount()
+
+    const disabled = render(CodeEditor, {
+      props: { modelValue: 'y', disabled: true, ariaLabel: 'Disabled' }
+    })
+    const input = textarea(disabled.container)
+    expect(input.disabled).toBe(true)
+    await userEvent.type(input, 'abc')
+    expect(disabled.emitted()['update:modelValue']).toBeUndefined()
+    expect(disabled.getByTestId('code-code-editor').hasAttribute('data-disabled')).toBe(true)
+  })
+
+  it('takes the consumer data-testid over the fallback', () => {
+    const view = render(CodeEditor, {
+      props: { modelValue: 'z', ariaLabel: 'Code' },
+      attrs: { 'data-testid': 'rules-editor' }
+    })
+    expect(view.getByTestId('rules-editor')).toBeTruthy()
+    expect(view.queryByTestId('code-code-editor')).toBeNull()
+    expect(view.getByTestId('rules-editor__input')).toBeTruthy()
   })
 
   it('paints markers on their lines, lists them and moves the caret to one', async () => {

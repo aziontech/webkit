@@ -72,6 +72,9 @@ export type TableExportScope = 'page' | 'filtered' | 'all'
 /** Body row density. */
 export type TableDensity = 'comfortable' | 'compact'
 
+/** Sort state of a column header and its sort button. */
+export type SortDirection = 'none' | 'ascending' | 'descending'
+
 /** Imperative API a Table template ref exposes; type the ref with it, as a generic component has no InstanceType. */
 export interface TableExposed<TRecord extends object = TableRowRecord> {
   /** Emits refresh so the app refetches; no-op while loading. */

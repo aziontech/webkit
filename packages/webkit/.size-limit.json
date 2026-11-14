@@ -93,7 +93,7 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "54.1 KB"
+    "limit": "54.25 KB"
   },
   {
     "name": "property-filter",
@@ -893,12 +893,12 @@
   {
     "name": "donut-chart",
     "path": "src/components/chart/donut-chart/donut-chart.vue",
-    "limit": "11.85 KB"
+    "limit": "12.35 KB"
   },
   {
     "name": "stat-tile",
     "path": "src/components/chart/stat-tile/stat-tile.vue",
-    "limit": "9.25 KB"
+    "limit": "9.3 KB"
   },
   {
     "name": "stat-tile-group",
@@ -923,7 +923,7 @@
   {
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
-    "limit": "2.45 KB"
+    "limit": "2.5 KB"
   },
   {
     "name": "board",
@@ -943,7 +943,7 @@
   {
     "name": "tracker",
     "path": "src/components/chart/tracker/tracker.vue",
-    "limit": "5.1 KB"
+    "limit": "5.75 KB"
   },
   {
     "name": "severity-tag",
@@ -1201,7 +1201,7 @@
   {
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
-    "limit": "22.75 KB",
+    "limit": "23.25 KB",
     "entryOnly": true
   },
   {
@@ -1218,7 +1218,7 @@
   {
     "name": "topology-diagram",
     "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "34.1 KB"
+    "limit": "34.75 KB"
   },
   {
     "name": "action-confirmation",
@@ -1432,7 +1432,7 @@
   {
     "name": "filter-menu-chips",
     "path": "src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
-    "limit": "19.9 KB",
+    "limit": "20 KB",
     "entryOnly": true
   },
   {
@@ -1629,8 +1629,13 @@
   },
   {
     "name": "log-view",
+    "path": "src/components/code/log-view/index.ts",
+    "limit": "34.25 KB"
+  },
+  {
+    "name": "log-view-root",
     "path": "src/components/code/log-view/log-view.vue",
-    "limit": "13.45 KB"
+    "limit": "12.75 KB"
   },
   {
     "name": "log-view-footer",
@@ -1701,7 +1706,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "15.7 KB",
+    "limit": "3.75 KB",
     "entryOnly": true
   },
   {
@@ -1713,7 +1718,7 @@
   {
     "name": "table-column-selector",
     "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "9.05 KB",
+    "limit": "11.25 KB",
     "entryOnly": true
   },
   {
@@ -1754,32 +1759,32 @@
   {
     "name": "flow",
     "path": "src/components/data/flow/index.ts",
-    "limit": "15.75 KB"
+    "limit": "14.5 KB"
   },
   {
     "name": "flow-root",
     "path": "src/components/data/flow/flow.vue",
-    "limit": "14.75 KB"
+    "limit": "13.5 KB"
   },
   {
     "name": "flow-node",
     "path": "src/components/data/flow/flow-node/flow-node.vue",
-    "limit": "12.15 KB"
+    "limit": "11.25 KB"
   },
   {
     "name": "flow-parallel",
     "path": "src/components/data/flow/flow-parallel/flow-parallel.vue",
-    "limit": "11.65 KB"
+    "limit": "0.75 KB"
   },
   {
     "name": "flow-anchor",
     "path": "src/components/data/flow/flow-anchor/flow-anchor.vue",
-    "limit": "11.85 KB"
+    "limit": "1 KB"
   },
   {
     "name": "pick-list",
     "path": "src/components/data/pick-list/index.ts",
-    "limit": "5.6 KB"
+    "limit": "6.75 KB"
   },
   {
     "name": "pick-list-root",
@@ -1789,12 +1794,12 @@
   {
     "name": "pick-list-source",
     "path": "src/components/data/pick-list/pick-list-source/pick-list-source.vue",
-    "limit": "2.8 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "pick-list-target",
     "path": "src/components/data/pick-list/pick-list-target/pick-list-target.vue",
-    "limit": "2.8 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "pick-list-controls",

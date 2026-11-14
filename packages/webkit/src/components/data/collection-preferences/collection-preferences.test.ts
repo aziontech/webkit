@@ -130,6 +130,82 @@ describe('CollectionPreferences', () => {
     expect(panel.queryByText('Wrap lines')).toBeNull()
   })
 
+  it('reopens on the confirmed values with no v-model:preferences bound', async () => {
+    const view = render(CollectionPreferences, {
+      props: { columns, pageSizeOptions: [10, 25] }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Preferences' }))
+    await settle()
+    await fireEvent.click(within(dialog()).getByRole('radio', { name: '25 items' }))
+    await fireEvent.click(within(dialog()).getByRole('button', { name: 'Confirm' }))
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Preferences' }))
+    await settle()
+    expect(
+      (within(dialog()).getByRole('radio', { name: '25 items' }) as HTMLInputElement).checked
+    ).toBe(true)
+  })
+
+  it('does not open while disabled', async () => {
+    const view = render(CollectionPreferences, { props: { columns, disabled: true } })
+    const trigger = view.getByRole('button', { name: 'Preferences' })
+    expect((trigger as HTMLButtonElement).disabled).toBe(true)
+    await fireEvent.click(trigger)
+    await settle()
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull()
+    expect(view.emitted()['update:open']).toBeUndefined()
+  })
+
+  for (const close of ['Cancel', 'Confirm', 'Escape'] as const) {
+    it(`returns focus to the trigger after ${close}`, async () => {
+      const view = render(CollectionPreferences, { props: { columns } })
+      const trigger = view.getByRole('button', { name: 'Preferences' })
+      trigger.focus()
+      await userEvent.click(trigger)
+      await settle()
+      if (close === 'Escape') await userEvent.keyboard('{Escape}')
+      else await userEvent.click(within(dialog()).getByRole('button', { name: close }))
+      await settle()
+      await settle()
+      expect(document.activeElement).toBe(trigger)
+    })
+  }
+
+  it('moves a column with its buttons and keeps focus on the moved row', async () => {
+    const view = render(CollectionPreferences, { props: { open: true, columns } })
+    await settle()
+    const panel = within(dialog())
+    await userEvent.click(panel.getByRole('button', { name: 'Move Region up' }))
+    await settle()
+    const rows = panel.getAllByTestId('data-collection-preferences__column')
+    expect(rows.map((row) => row.textContent?.includes('Region'))).toEqual([false, true, false])
+    expect(rows[1]?.contains(document.activeElement)).toBe(true)
+    await fireEvent.click(panel.getByRole('button', { name: 'Confirm' }))
+    expect(
+      (view.emitted()['update:preferences']?.[0]?.[0] as { columns: { id: string }[] }).columns.map(
+        (column) => column.id
+      )
+    ).toEqual(['name', 'region', 'status'])
+  })
+
+  it('takes the consumer data-testid over the fallback', () => {
+    const view = render(CollectionPreferences, {
+      props: { columns },
+      attrs: { 'data-testid': 'domains-preferences' }
+    })
+    expect(view.getByTestId('domains-preferences')).toBeTruthy()
+    expect(view.getByTestId('domains-preferences__trigger')).toBeTruthy()
+    expect(view.queryByTestId('data-collection-preferences')).toBeNull()
+  })
+
+  it('marks a locked column label with data-locked', async () => {
+    render(CollectionPreferences, { props: { open: true, columns } })
+    await settle()
+    const labels = Array.from(dialog().querySelectorAll('label[data-locked]'))
+    expect(labels).toHaveLength(1)
+    expect(labels[0]?.textContent).toContain('Name')
+  })
+
   it('opens in a drawer from a custom trigger', async () => {
     const view = render(InADrawer)
     await fireEvent.click(view.getByRole('button', { name: 'Table settings' }))

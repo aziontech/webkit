@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -7,6 +7,8 @@
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import Tag from '../../content/tag/tag.vue'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Input from '../../inputs/input/input.vue'
 
   export type TraceSpanStatus = 'ok' | 'error' | 'running'
@@ -57,21 +59,23 @@
   interface Props {
     /** Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. */
     spans?: TraceSpan[]
-    /** Id of the span whose details show under the waterfall. Supports v-model:selected. */
-    selected?: string
     /** Accessible name of the waterfall. Empty uses the locale catalog. */
     ariaLabel?: string
+    /** Draws the outer border and radius. Off for a trace inside a card or panel that has its own. */
+    bordered?: boolean
+    /** Shows placeholder rows while the spans load; search and selection wait. */
+    loading?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     spans: () => [],
-    selected: '',
-    ariaLabel: ''
+    ariaLabel: '',
+    bordered: true,
+    loading: false
   })
 
-  const emit = defineEmits<{
-    'update:selected': [id: string]
-  }>()
+  /** Id of the span whose details show under the waterfall. Supports v-model:selected. */
+  const current = defineModel<string>('selected', { default: '' })
 
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ trace: en.trace })
@@ -86,14 +90,6 @@
 
   const gridRef = ref<HTMLElement | null>(null)
   const dir = useDirection(gridRef)
-
-  const current = ref<string>(props.selected)
-  watch(
-    () => props.selected,
-    (next) => {
-      current.value = next
-    }
-  )
 
   const search = ref<string>('')
   const collapsed = ref<Set<string>>(new Set())
@@ -114,7 +110,7 @@
   })
 
   const total = computed<number>(() =>
-    Math.max(1, ...props.spans.map((span) => span.start + span.duration))
+    props.spans.reduce((max, span) => Math.max(max, span.start + span.duration), 1)
   )
 
   const term = computed<string>(() => search.value.trim().toLocaleLowerCase())
@@ -196,8 +192,8 @@
     return ids[0] ?? ''
   })
 
-  const detail = computed<TraceSpan | null>(
-    () => props.spans.find((span) => span.id === current.value) ?? null
+  const detail = computed<TraceSpan | null>(() =>
+    props.loading ? null : (props.spans.find((span) => span.id === current.value) ?? null)
   )
 
   const detailFacts = computed(() => {
@@ -224,7 +220,6 @@
 
   const setSelected = (id: string): void => {
     current.value = id
-    emit('update:selected', id)
   }
 
   const rowElement = (id: string): HTMLElement | null =>
@@ -309,13 +304,18 @@
       .join(', ')
 
   const detailId = `${uid}-detail`
+
+  const LOADING_ROWS = 5
 </script>
 
 <template>
   <div
     v-bind="rootAttrs"
     :data-testid="testId"
-    class="@container/trace flex w-full min-w-0 flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+    :data-bordered="bordered || null"
+    :data-loading="loading || null"
+    :aria-busy="loading || undefined"
+    class="@container/trace flex w-full min-w-0 flex-col overflow-hidden bg-(--bg-surface) data-bordered:rounded-(--shape-card) data-bordered:border data-bordered:border-(--border-default)"
   >
     <div
       class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
@@ -324,6 +324,7 @@
         <Input
           v-model="search"
           size="medium"
+          :disabled="loading"
           :placeholder="t('trace.search')"
           :aria-label="t('trace.search')"
           :data-testid="`${testId}__search`"
@@ -371,7 +372,32 @@
       </div>
 
       <div
-        v-if="rows.length"
+        v-if="loading"
+        role="status"
+        :aria-label="t('trace.loading')"
+        :data-testid="`${testId}__loading`"
+        class="flex flex-col"
+      >
+        <div
+          v-for="n in LOADING_ROWS"
+          :key="n"
+          :data-testid="`${testId}__skeleton`"
+          class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 grid-cols-[var(--trace-name)_minmax(0,1fr)] items-center border-b border-(--border-muted) last:border-b-0"
+        >
+          <span class="px-(--spacing-sm) py-(--spacing-xs)">
+            <Skeleton
+              height="0.75rem"
+              width="70%"
+            />
+          </span>
+          <span class="px-(--spacing-md) py-(--spacing-xs)">
+            <Skeleton height="0.75rem" />
+          </span>
+        </div>
+      </div>
+
+      <div
+        v-else-if="rows.length"
         ref="gridRef"
         role="treegrid"
         :aria-label="ariaLabel || t('trace.label')"
@@ -472,28 +498,26 @@
 
       <div
         v-else
-        class="flex min-h-(--size-20) flex-col items-center justify-center gap-(--spacing-xs) p-(--spacing-md)"
+        class="p-(--spacing-md)"
         :data-testid="`${testId}__empty`"
       >
-        <p
-          v-if="term"
-          class="text-body-sm text-(--text-muted)"
+        <EmptyState
+          size="small"
+          :icon="term ? 'pi pi-search' : 'pi pi-sitemap'"
+          :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.empty')"
         >
-          {{ t('trace.noMatch', { query: search.trim() }) }}
-        </p>
-        <p
-          v-else
-          class="text-body-sm text-(--text-muted)"
-        >
-          {{ t('trace.empty') }}
-        </p>
-        <Button
-          v-if="term"
-          :label="t('trace.clearSearch')"
-          kind="transparent"
-          size="medium"
-          @click="search = ''"
-        />
+          <template
+            v-if="term"
+            #actions
+          >
+            <Button
+              :label="t('trace.clearSearch')"
+              kind="transparent"
+              size="medium"
+              @click="search = ''"
+            />
+          </template>
+        </EmptyState>
       </div>
     </div>
 

@@ -3,11 +3,11 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 7916656ab00720094563e39adf0c23f5851ab7dbb4c42daead88c0192f0885c1
+checksum: fb93b436a646954fa2738a26ab14554e7882f6e2ee38b0cf7b8bb386ce33aa11
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # TopologyDiagram — Component Spec
@@ -53,9 +53,43 @@ The deployment topology of a resource as a left-to-right diagram: each column is
   import { ref } from 'vue'
 
   const levels = [
-    { key: 'domains', nodes: [{ key: 'domains', kind: 'Domains', icon: 'pi pi-globe', name: 'web-app.azion.app', status: '1 domain' }] },
-    { key: 'project', nodes: [{ key: 'project', kind: 'Project', name: 'web-app', href: '/projects/web-app', status: 'Live', severity: 'success' }] },
-    { key: 'policy', nodes: [{ key: 'policy', kind: 'Policy', bindable: true, bindOptions: [{ value: 'edge-guard', label: 'edge-guard' }], terminal: true }] }
+    {
+      key: 'domains',
+      nodes: [
+        {
+          key: 'domains',
+          type: 'Domains',
+          icon: 'pi pi-globe',
+          name: 'web-app.azion.app',
+          status: '1 domain'
+        }
+      ]
+    },
+    {
+      key: 'project',
+      nodes: [
+        {
+          key: 'project',
+          type: 'Project',
+          name: 'web-app',
+          href: '/projects/web-app',
+          status: 'Live',
+          severity: 'success'
+        }
+      ]
+    },
+    {
+      key: 'policy',
+      nodes: [
+        {
+          key: 'policy',
+          type: 'Policy',
+          bindable: true,
+          bindOptions: [{ value: 'edge-guard', label: 'edge-guard' }],
+          terminal: true
+        }
+      ]
+    }
   ]
   const expanded = ref([])
 </script>
@@ -87,11 +121,11 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
 | Prop        | Type              | Default | Required | JSDoc                                                                                  |
 | ----------- | ----------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `levels`    | `TopologyLevel[]` | `[]`    | false    | Columns of the diagram, from the entry point to the last dependency.                    |
-| `loading`   | `boolean`         | `false` | false    | Shows placeholder cards while the topology loads.                                       |
+| `levels`    | `TopologyLevel[]` | `[]`    | false    | Columns of the diagram, from the entry point to the last dependency.                   |
+| `loading`   | `boolean`         | `false` | false    | Shows placeholder cards while the topology loads.                                      |
 | `ariaLabel` | `string`          | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 
-Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { key: string; kind: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`.
+Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { key: string; type?: string; kind?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`); `kind` is the same field under its old name, **@deprecated since 6.0 — use `type`. Removed in 7.0.** (`kind` is the vocabulary word for a visual variant), read when `type` is unset.
 
 ## v-model
 
@@ -107,36 +141,36 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 ## Slots
 
-| Slot      | Scope                  | Notes                                                             |
-| --------- | ---------------------- | ----------------------------------------------------------------- |
-| `actions` | `{ node: TopologyNode }` | Extra controls in a node's identity row, before the bind control. |
-| `empty`   | —                      | Replaces the line shown when there are no levels.                 |
+| Slot      | Scope                    | Notes                                                                                                                       |
+| --------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `actions` | `{ node: TopologyNode }` | Extra controls in a node's identity row, before the bind control.                                                           |
+| `empty`   | —                        | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels. |
 
 ## States
 
-- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty.
+- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged or unbound node.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
 ## Motion & Animations
 
-| Trigger                    | Animation / Transition                                                 | Token                                     | Reduced-motion fallback          |
-| -------------------------- | ---------------------------------------------------------------------- | ----------------------------------------- | -------------------------------- |
-| connectors                 | `animate-flow-dash`                                                    | semantic `flow-dash`                       | `motion-reduce:animate-none`     |
-| card open / close          | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance` | duration `moderate-01`, curve `productive-entrance` | `motion-reduce:transition-none`  |
-| chevron, hover, border     | `transition-transform` / `transition-colors` `duration-moderate-01` | duration `moderate-01`                      | `motion-reduce:transition-none`  |
+| Trigger                | Animation / Transition                                                          | Token                                               | Reduced-motion fallback         |
+| ---------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------- |
+| connectors             | `animate-flow-dash`                                                             | semantic `flow-dash`                                | `motion-reduce:animate-none`    |
+| card open / close      | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance` | duration `moderate-01`, curve `productive-entrance` | `motion-reduce:transition-none` |
+| chevron, hover, border | `transition-transform` / `transition-colors` `duration-moderate-01`             | duration `moderate-01`                              | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region          | Token                                       |
-| --------------- | ------------------------------------------- |
-| card surface    | `var(--bg-surface)`, `var(--shape-card)`    |
-| card border     | `var(--border-default)`, hover `var(--border-strong)` |
-| body divider    | `var(--border-muted)`                       |
-| connector       | `var(--accent)`                             |
-| muted text      | `var(--text-muted)`                         |
-| name link       | `.text-label-sm` `var(--text-default)`, open glyph `pi pi-external-link` `.text-body-xs`, underline on hover |
-| column gap      | `var(--spacing-xl)`; node gap `var(--spacing-md)` |
+| Region       | Token                                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------------ |
+| card surface | `var(--bg-surface)`, `var(--shape-card)`                                                                     |
+| card border  | `var(--border-default)`, hover `var(--border-strong)`                                                        |
+| body divider | `var(--border-muted)`                                                                                        |
+| connector    | `var(--accent)`                                                                                              |
+| muted text   | `var(--text-muted)`                                                                                          |
+| name link    | `.text-label-sm` `var(--text-default)`, open glyph `pi pi-external-link` `.text-body-xs`, underline on hover |
+| column gap   | `var(--spacing-xl)`; node gap `var(--spacing-md)`                                                            |
 
 ## Theme gaps
 
@@ -154,16 +188,16 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 ## Internationalization
 
-| Key                          | English source              | Override prop |
-| ---------------------------- | --------------------------- | ------------- |
-| `topologyDiagram.label`     | Deployment topology         | `ariaLabel`   |
-| `topologyDiagram.notBound`  | Not bound                   | node `status` |
-| `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | — |
-| `topologyDiagram.existing`  | Existing                    | —             |
-| `topologyDiagram.noOptions` | No options yet.             | —             |
-| `topologyDiagram.copy`      | Copy {field}                | —             |
-| `topologyDiagram.empty`     | Nothing is connected yet.   | `empty` slot  |
-| `topologyDiagram.loading`   | Loading the topology        | —             |
+| Key                                                     | English source                                              | Override prop |
+| ------------------------------------------------------- | ----------------------------------------------------------- | ------------- |
+| `topologyDiagram.label`                                 | Deployment topology                                         | `ariaLabel`   |
+| `topologyDiagram.notBound`                              | Not bound                                                   | node `status` |
+| `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | —             |
+| `topologyDiagram.existing`                              | Existing                                                    | —             |
+| `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
+| `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
+| `topologyDiagram.empty`                                 | Nothing is connected yet.                                   | `empty` slot  |
+| `topologyDiagram.loading`                               | Loading the topology                                        | —             |
 
 - Formatting: none; kinds, names, statuses and fields are data.
 
@@ -183,7 +217,7 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 
 ## Performance
 
-- Bundle budget: 32 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip` and `copy-button`) in `.size-limit.json`.
+- Bundle budget: 34.75 KB gzip for `./topology-diagram` (it carries `dropdown-menu`, `tooltip`, `copy-button` and `empty-state`) in `.size-limit.json`.
 - Runtime budget: connectors re-measure on resize and DOM mutations; a 7-column, 10-node topology measures in one frame.
 - Heavy parts: none; no node-graph library.
 
@@ -192,7 +226,7 @@ Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`;
 - Default — a full topology with linked names (open glyph), a bound and an unbound bindable node and the `actions` slot (the Domains `+`).
 - Binding — justified: staging bind, remove and create needs state across interactions.
 - Loading — the `loading` prop.
-- Empty — the empty line and the `empty` slot.
+- Empty — the empty state and the `empty` slot.
 
 ## Decisions and open questions
 

@@ -108,6 +108,33 @@ component.
 | `theme-switcher`       | `value`            | `modelValue`         |
 | `wizard`               | `activeStep`       | `modelValue`         |
 
+### Deprecated in 6.0, removed in 7.0
+
+These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
+rewrites the prop renames, the rest are listed here so you can move at your own pace.
+
+| Component            | Deprecated                    | Use instead                                    |
+| -------------------- | ----------------------------- | ---------------------------------------------- |
+| `chart-card`         | `ChartCard.Controls`          | `ChartCard.Action` (same part)                 |
+| `chart-card-content` | `flush`                       | `:padded="false"`                              |
+| `chart-legend`       | `totals`                      | `total` (the name `Chart.Tooltip` uses)        |
+| `code-block`         | `showLineNumbers`             | `lineNumbers`                                  |
+| `flow-anchor`        | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
+| `log-view`           | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
+| `log-view`           | line `type: 'warning'`        | line `level: 'warn'`                           |
+| `pick-list`          | `dataKey`                     | `trackBy` (the name `cards` uses)              |
+| `table`              | `headerKind`                  | `density` (now sets the header and the rows)   |
+| `table`              | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
+| `table-cell-link`    | `moreNoun`                    | `noun` (the name `table-cell-tags` uses)       |
+| `table-header`       | `kind`                        | `density`                                      |
+| `topology-diagram`   | node field `kind`             | node field `type`                              |
+| `tracker`            | item field `severity`         | item field `status`                            |
+
+`headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
+codemod leaves `headerKind` for you. `flush`, `warningsOnly`, `type: 'warning'` and the data fields
+(`kind` on topology nodes, `severity` on tracker items) are data or inverted booleans; move them by
+hand.
+
 ## 4. Manual changes
 
 ### Deprecated in 6.0, removed in 7.0

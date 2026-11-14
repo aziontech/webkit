@@ -33,7 +33,7 @@ describe('StatTileGroup', () => {
 
   it('is a group, named by ariaLabel when set', () => {
     const unnamed = render(Strip())
-    const root = unnamed.getByRole('group')
+    const root = unnamed.getByTestId('chart-stat-tile-group')
     expect(root).not.toHaveAttribute('aria-label')
     unnamed.unmount()
     const named = render(Strip({ ariaLabel: 'Usage' }))
@@ -46,8 +46,11 @@ describe('StatTileGroup', () => {
     expect(cells).toHaveLength(2)
     for (const cell of cells) expect(cell).toHaveAttribute('data-grouped')
     expect(
-      view.getAllByRole('region').map((region) => region.getAttribute('aria-labelledby'))
-    ).toHaveLength(2)
+      cells.map(
+        (cell) => cell.getAttribute('role') === 'group' && cell.getAttribute('aria-labelledby')
+      )
+    ).toEqual([expect.any(String), expect.any(String)])
+    expect(view.queryAllByRole('region')).toHaveLength(0)
     expect(cells[0].textContent).toContain('Data transferred')
     expect(cells[1].textContent).toContain('Requests / second')
   })
@@ -56,7 +59,7 @@ describe('StatTileGroup', () => {
     const view = render(Strip())
     const [first] = view.getAllByTestId('chart-stat-tile__delta-tag')
     expect(first.textContent).toContain('+12.4%')
-    expect(view.getByRole('region', { name: 'Data transferred' })).toBeTruthy()
+    expect(view.getByRole('group', { name: 'Data transferred' })).toBeTruthy()
   })
 
   it('renders the Default example as four grouped cells under dir="rtl"', () => {

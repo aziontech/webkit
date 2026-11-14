@@ -627,6 +627,10 @@
       "default": "./src/components/code/trace/trace.vue"
     },
     "./log-view": {
+      "types": "./types/components/code/log-view/index.d.ts",
+      "default": "./src/components/code/log-view/index.ts"
+    },
+    "./log-view-root": {
       "types": "./types/components/code/log-view/log-view.vue.d.ts",
       "default": "./src/components/code/log-view/log-view.vue"
     },

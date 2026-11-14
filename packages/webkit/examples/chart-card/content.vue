@@ -55,7 +55,7 @@
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
-          <Chart.Legend totals />
+          <Chart.Legend total />
         </Chart>
       </ChartCard.Content>
     </ChartCard>
@@ -63,7 +63,7 @@
       <ChartCard.Header>
         <ChartCard.Title>Flush</ChartCard.Title>
       </ChartCard.Header>
-      <ChartCard.Content flush>
+      <ChartCard.Content :padded="false">
         <Chart
           :series="series"
           :labels="labels"
@@ -74,7 +74,7 @@
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
-          <Chart.Legend totals />
+          <Chart.Legend total />
         </Chart>
       </ChartCard.Content>
     </ChartCard>

@@ -15,7 +15,12 @@
   })
 
   interface Props {
-    /** Item field that uniquely identifies a record; enables selection tracking and stable keys. */
+    /** Item field that uniquely identifies a record (the same name as Cards); keys the selection and the rows. */
+    trackBy?: string
+    /**
+     * Item field that uniquely identifies a record.
+     * @deprecated since 6.0 — use `trackBy`. Removed in 7.0.
+     */
     dataKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
     disabled?: boolean
@@ -24,6 +29,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    trackBy: '',
     dataKey: '',
     disabled: false,
     moveOnDoubleClick: true
@@ -73,20 +79,25 @@
     else targetLoading.value = value
   }
 
-  const selectedSource = ref<Set<number>>(new Set())
-  const selectedTarget = ref<Set<number>>(new Set())
+  const selectedSource = ref<Set<string | number>>(new Set())
+  const selectedTarget = ref<Set<string | number>>(new Set())
   const selectionFor = (side: PickListSide) => (side === 'source' ? selectedSource : selectedTarget)
 
+  const keyField = computed<string>(() => props.trackBy || props.dataKey)
+
   const itemKey = (item: unknown, index: number): string | number => {
-    if (props.dataKey && item && typeof item === 'object') {
-      const value = (item as Record<string, unknown>)[props.dataKey]
+    if (keyField.value && item && typeof item === 'object') {
+      const value = (item as Record<string, unknown>)[keyField.value]
       if (typeof value === 'string' || typeof value === 'number') return value
     }
     return index
   }
 
+  const keyAt = (side: PickListSide, index: number): string | number =>
+    itemKey(items(side)[index], index)
+
   const isSelected = (side: PickListSide, index: number): boolean =>
-    selectionFor(side).value.has(index)
+    selectionFor(side).value.has(keyAt(side, index))
 
   const hasSelection = (side: PickListSide): boolean => selectionFor(side).value.size > 0
 
@@ -94,10 +105,17 @@
 
   const toggleSelection = (side: PickListSide, index: number): void => {
     if (props.disabled || isLoading(side)) return
+    setSelected(side, index, !isSelected(side, index))
+  }
+
+  const setSelected = (side: PickListSide, index: number, value: boolean): void => {
+    if (props.disabled || isLoading(side)) return
     const selection = selectionFor(side)
+    const key = keyAt(side, index)
+    if (selection.value.has(key) === value) return
     const next = new Set(selection.value)
-    if (next.has(index)) next.delete(index)
-    else next.add(index)
+    if (value) next.add(key)
+    else next.delete(key)
     selection.value = next
   }
 
@@ -106,7 +124,9 @@
   }
 
   const pickSelectedIndexes = (side: PickListSide): number[] =>
-    [...selectionFor(side).value].sort((a, b) => a - b)
+    items(side)
+      .map((_, index) => index)
+      .filter((index) => isSelected(side, index))
 
   const move = (direction: MoveDirection): void => {
     if (props.disabled || anyLoading.value) return
@@ -175,7 +195,7 @@
   }
 
   provide(pickListContextKey, {
-    dataKey: computed(() => props.dataKey),
+    dataKey: keyField,
     disabled: computed(() => props.disabled),
     anyLoading,
     items,
@@ -183,6 +203,7 @@
     itemKey,
     isSelected,
     toggleSelection,
+    setSelected,
     hasSelection,
     move,
     moveAll,

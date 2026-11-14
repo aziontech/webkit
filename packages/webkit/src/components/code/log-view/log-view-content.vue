@@ -4,7 +4,10 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import Alert from '../../feedback/alert/alert.vue'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../utils/spinner/spinner.vue'
   import { formatLogLineText } from './composables/format-log-line-text'
@@ -61,13 +64,19 @@
     }
   )
 
+  const emptyTitle = computed(() => {
+    if (ctx.lines.value.length === 0) return t('logView.noLines')
+    if (searchQuery.value) return t('logView.noMatch', { query: searchQuery.value })
+    return t('logView.empty')
+  })
+
   const segmentsFor = (text: string) => splitTextByQuery(text, searchQuery.value)
 
   const highlightMarkClass =
     'rounded-(--shape-elements) bg-(--bg-selected) text-inherit motion-reduce:transition-none'
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
+    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__content`
   )
 </script>
 
@@ -78,9 +87,9 @@
     class="relative min-h-0 flex-1"
   >
     <div
-      v-if="ctx.copyable.value && !ctx.loading.value"
+      v-if="ctx.copyable.value && !ctx.loading.value && !ctx.error.value"
       class="absolute end-(--spacing-sm) top-(--spacing-sm) z-3"
-      :data-testid="`${ctx.testId}__copy-anchor`"
+      :data-testid="`${ctx.testId.value}__copy-anchor`"
     >
       <CopyButton
         :value="ctx.copyText.value"
@@ -89,7 +98,7 @@
         :ariaLabel="t('logView.copy')"
         :copiedLabel="t('logView.copied')"
         :disabled="!ctx.canCopy.value"
-        :data-testid="`${ctx.testId}__copy`"
+        :data-testid="`${ctx.testId.value}__copy`"
         @copy="ctx.emitCopy"
       />
     </div>
@@ -121,6 +130,17 @@
       </span>
     </div>
 
+    <div
+      v-else-if="ctx.error.value"
+      :data-testid="`${testId}__error`"
+      class="bg-(--bg-canvas) p-(--spacing-md)"
+    >
+      <Alert
+        severity="danger"
+        :label="ctx.error.value"
+      />
+    </div>
+
     <ScrollArea
       v-else
       orientation="both"
@@ -145,14 +165,14 @@
               <div
                 v-for="line in chunk.items"
                 :key="line.id"
-                :data-testid="`${ctx.testId}__line`"
+                :data-testid="`${ctx.testId.value}__line`"
                 :data-type="line.type"
                 :data-level="line.level"
                 class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
               >
                 <span
                   v-if="line.time"
-                  :data-testid="`${ctx.testId}__line-time`"
+                  :data-testid="`${ctx.testId.value}__line-time`"
                   :data-level="line.level"
                   dir="ltr"
                   class="relative z-1 shrink-0 text-(--text-muted) data-[level=error]:text-(--text-default)"
@@ -162,7 +182,7 @@
 
                 <span
                   v-if="line.level"
-                  :data-testid="`${ctx.testId}__line-level`"
+                  :data-testid="`${ctx.testId.value}__line-level`"
                   :data-level="line.level"
                   dir="ltr"
                   class="relative z-1 w-12 shrink-0 uppercase text-(--text-muted) data-[level=error]:text-(--danger-contrast) data-[level=info]:text-(--info-contrast) data-[level=warn]:text-(--warning-contrast)"
@@ -172,7 +192,7 @@
 
                 <span
                   v-if="line.type !== 'folder'"
-                  :data-testid="`${ctx.testId}__line-message`"
+                  :data-testid="`${ctx.testId.value}__line-message`"
                   dir="auto"
                   class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-contrast) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
                   :data-type="line.type"
@@ -258,7 +278,7 @@
 
                 <template v-else>
                   <span
-                    :data-testid="`${ctx.testId}__line-message`"
+                    :data-testid="`${ctx.testId.value}__line-message`"
                     dir="auto"
                     class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xl) text-(--text-default) max-sm:whitespace-nowrap"
                   >
@@ -296,7 +316,7 @@
 
                     <span
                       v-if="line.size"
-                      :data-testid="`${ctx.testId}__line-size`"
+                      :data-testid="`${ctx.testId.value}__line-size`"
                       class="flex shrink-0 items-center gap-(--spacing-sm) whitespace-nowrap tabular-nums"
                     >
                       <span>
@@ -344,10 +364,29 @@
 
       <div
         v-else
-        :data-testid="`${ctx.testId}__empty`"
-        class="px-(--spacing-md) py-(--spacing-sm) text-label-code-sm text-(--text-muted)"
+        :data-testid="`${ctx.testId.value}__empty`"
+        class="px-(--spacing-md) py-(--spacing-sm)"
       >
-        <slot name="empty">{{ t('logView.empty') }}</slot>
+        <slot name="empty">
+          <EmptyState
+            size="small"
+            :icon="searchQuery ? 'pi pi-search' : 'pi pi-align-left'"
+            :title="emptyTitle"
+          >
+            <template
+              v-if="searchQuery"
+              #actions
+            >
+              <Button
+                :label="t('logView.clearSearch')"
+                kind="transparent"
+                size="medium"
+                :disabled="ctx.disabled.value"
+                @click="ctx.setSearch('')"
+              />
+            </template>
+          </EmptyState>
+        </slot>
       </div>
     </ScrollArea>
   </div>

@@ -3,18 +3,18 @@ name: cards
 category: data
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 71a163dced16f9b67db3c4450a793bc9fac237696f0ad3b5d16ad6b04d6e991d
+checksum: ca40daa6c2362043d9796b552d3487ff62d377dcb8fb6aa2e96409a348d345e1
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Cards — Component Spec
 
 ## Purpose
 
-A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
+A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 ## When to use
 
@@ -83,11 +83,11 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Slots
 
-| Slot      | Scope                                                                 | Notes                                                 |
-| --------- | --------------------------------------------------------------------- | ----------------------------------------------------- |
+| Slot      | Scope                       | Notes                                                 |
+| --------- | --------------------------- | ----------------------------------------------------- |
 | `header`  | `CardsItemSlotProps<TItem>` | Card title; names the card and its selection control. |
 | `default` | `CardsItemSlotProps<TItem>` | Card body: the item's fields.                         |
-| `empty`   | —                                                                     | Shown when there are no items.                        |
+| `empty`   | —                           | Shown when there are no items.                        |
 
 ## States
 
@@ -155,13 +155,16 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 ## Performance
 
 - Bundle budget: 19 KB gzip for `./cards` (it carries `checkbox`, `radio-button`, `skeleton` and `empty-state`) in `.size-limit.json`.
-- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more.
+- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. The `Cards with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
 - Heavy parts: none.
 
 ## Examples
 
 - Default — four cards, no selection.
 - Selectable — bound to `useCollection` with multi selection and pagination; justified because the binding is the main use.
+- SingleSelection — `selection-mode="single"`: one radio per card and no select-all; justified because the single mode changes the control and drops the select-all.
+- Loading — placeholder cards while `loading`.
+- Empty — the `empty` slot replacing the default empty state; justified because `empty` is a state the component owns.
 
 ## Constraints — DO NOT
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, provide, reactive, useAttrs } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { type TableDensity, TableInjectionKey, TableRowGroupKey } from '../injection-key'
 
   defineOptions({
     name: 'TableHeader',
@@ -15,11 +15,17 @@
     /** Sticks the header to the top of the scroll container. */
     frozen?: boolean
     /** `compact` shrinks the header cells' height and padding for a denser header. */
+    density?: TableDensity
+    /**
+     * Header density.
+     * @deprecated since 6.0 — use `density`. Removed in 7.0.
+     */
     kind?: TableHeaderKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
     frozen: false,
+    density: undefined,
     kind: 'default'
   })
 
@@ -27,7 +33,7 @@
     TableRowGroupKey,
     reactive({
       hoverable: false,
-      compact: computed(() => props.kind === 'compact')
+      compact: computed(() => (props.density ?? props.kind) === 'compact')
     })
   )
 

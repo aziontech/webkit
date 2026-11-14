@@ -6,7 +6,7 @@ export type PickListSide = 'source' | 'target'
 export type MoveDirection = 'to-target' | 'to-source'
 
 export interface PickListContext {
-  /** Item field that uniquely identifies a record; enables stable keys. */
+  /** Item field that uniquely identifies a record (`trackBy`, else the deprecated `dataKey`); enables stable keys. */
   dataKey: ComputedRef<string>
   /** Whether the whole control is disabled. */
   disabled: ComputedRef<boolean>
@@ -22,6 +22,8 @@ export interface PickListContext {
   isSelected: (side: PickListSide, index: number) => boolean
   /** Toggles the selection of the option at `index` in `side`. */
   toggleSelection: (side: PickListSide, index: number) => void
+  /** Selects or clears the option at `index` in `side`. */
+  setSelected: (side: PickListSide, index: number, value: boolean) => void
   /** Whether `side` has at least one selected option. */
   hasSelection: (side: PickListSide) => boolean
   /** Moves the current selection of the originating list across. */

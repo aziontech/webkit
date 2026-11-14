@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: a80a0d520a01d379aa5423c94f9e566eefeb211bcf165323b387c1b478d50e59
-spec_version: 1
+checksum: 56b022dfefaacfd32a4d0b9649ae10d32318557fb03c968480ce7f2ba9b58b7b
+spec_version: 2
 created: 2026-10-20
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # StatTile — Component Spec
@@ -79,7 +79,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 | `delta`       | `number \| null`            | `null`          | false    | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel`  | `string`                    | `''`            | false    | The comparison period, read after the delta.                                                                                       |
 | `inverse`     | `boolean`                   | `false`         | false    | A rise is bad for this metric; flips the delta between success and danger.                                                         |
-| `trend`       | `number[]`                  | `[]`            | false    | Sparkline values, oldest first. Empty hides the sparkline.                                                                         |
+| `trend`       | `(number \| null)[]`        | `[]`            | false    | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline.                               |
 | `loading`     | `boolean`                   | `false`         | false    | Renders Skeleton lines in place of the figure, delta and sparkline.                                                                |
 
 ## Events
@@ -131,7 +131,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The tile is a `<section>` named by its label (`aria-labelledby`).
+- The tile is a `role="group"` named by its label (`aria-labelledby`), not a region landmark, so a strip of KPI tiles adds no landmarks.
 - The animated figure and its unit are `aria-hidden`; a visually hidden copy holds the final formatted value with its unit, so assistive tech never reads a ticking number.
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
 - The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.

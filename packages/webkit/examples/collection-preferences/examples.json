@@ -11,6 +11,11 @@
       "name": "InADrawer",
       "summary": "`container=\"drawer\"` opens the panel from the side, `sections` keeps only the columns and the density, and the `trigger` slot replaces the cog with a labelled button.",
       "file": "in-a-drawer.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` turns the cog trigger off: the panel does not open.",
+      "file": "disabled.vue"
     }
   ]
 }

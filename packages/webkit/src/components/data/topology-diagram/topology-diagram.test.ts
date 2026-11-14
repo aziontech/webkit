@@ -159,6 +159,39 @@ describe('TopologyDiagram', () => {
     expect(empty.getByRole('button', { name: 'Deploy' })).toBeTruthy()
   })
 
+  it('renders the package EmptyState when there are no levels', () => {
+    const view = render(TopologyDiagram, { props: { levels: [] } })
+    const empty = view.getByTestId('data-topology-diagram__empty')
+    expect(within(empty).getByTestId('feedback-empty-state')).toBeTruthy()
+  })
+
+  it('takes the consumer data-testid over the fallback', () => {
+    const fallback = render(TopologyDiagram, { props: { levels } })
+    expect(fallback.getByTestId('data-topology-diagram')).toBeTruthy()
+    fallback.unmount()
+    const view = render(TopologyDiagram, { props: { levels }, attrs: { 'data-testid': 'stack' } })
+    expect(view.getByTestId('stack')).toBeTruthy()
+    expect(view.queryByTestId('data-topology-diagram')).toBeNull()
+  })
+
+  it('reads the node type, and still the deprecated kind', () => {
+    const view = render(TopologyDiagram, {
+      props: {
+        levels: [
+          {
+            key: 'one',
+            nodes: [
+              { key: 'a', type: 'Workload', name: 'storefront' },
+              { key: 'b', kind: 'Firewall', name: 'edge-rules' }
+            ]
+          }
+        ]
+      }
+    })
+    expect(view.getByText('Workload')).toBeTruthy()
+    expect(view.getByText('Firewall')).toBeTruthy()
+  })
+
   it('keeps the scroll area out of the tab order until it overflows', () => {
     const view = render(TopologyDiagram, { props: { levels } })
     const area = view.getByTestId('data-topology-diagram').firstElementChild as HTMLElement

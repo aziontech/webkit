@@ -112,9 +112,9 @@ describe('Pagination (composition)', () => {
 
     it('marks the current page button with aria-current="page"', () => {
       const { getByRole } = render(Pagination, { props: { total: 30, pageSize: 10, page: 2 } })
-      const current = getByRole('button', { name: '2' })
+      const current = getByRole('button', { name: 'Page 2' })
       expect(current.getAttribute('aria-current')).toBe('page')
-      expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBeNull()
+      expect(getByRole('button', { name: 'Page 1' }).getAttribute('aria-current')).toBeNull()
     })
 
     it('renders an inert overflow ellipsis when the page count exceeds the window', () => {
@@ -128,7 +128,7 @@ describe('Pagination (composition)', () => {
         expect(el.getAttribute('aria-hidden')).toBe('true')
       })
       expect(getAllByRole('button').some((b) => b.getAttribute('data-kind') === 'more')).toBe(false)
-      expect(getByRole('button', { name: '20' })).toBeTruthy()
+      expect(getByRole('button', { name: 'Page 20' })).toBeTruthy()
     })
   })
 
@@ -156,7 +156,7 @@ describe('Pagination (composition)', () => {
       const { getByRole, emitted } = render(Pagination, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
-      await fireEvent.click(getByRole('button', { name: '3' }))
+      await fireEvent.click(getByRole('button', { name: 'Page 3' }))
       expect(emitted()['update:page'][0]).toEqual([3])
     })
 
@@ -164,7 +164,7 @@ describe('Pagination (composition)', () => {
       const { getByRole, emitted } = render(Pagination, {
         props: { total: 30, pageSize: 10, page: 2 }
       })
-      await fireEvent.click(getByRole('button', { name: '2' }))
+      await fireEvent.click(getByRole('button', { name: 'Page 2' }))
       expect(emitted()['update:page']).toBeUndefined()
     })
 
@@ -205,13 +205,36 @@ describe('Pagination (composition)', () => {
       const { getByRole, emitted, rerender } = render(Pagination, {
         props: { total: 30, pageSize: 10, page: 1 }
       })
-      await fireEvent.click(getByRole('button', { name: '2' }))
+      await fireEvent.click(getByRole('button', { name: 'Page 2' }))
       const next = emitted()['update:page'][0][0] as number
       expect(next).toBe(2)
 
       await rerender({ total: 30, pageSize: 10, page: next })
-      expect(getByRole('button', { name: '2' }).getAttribute('aria-current')).toBe('page')
-      expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBeNull()
+      expect(getByRole('button', { name: 'Page 2' }).getAttribute('aria-current')).toBe('page')
+      expect(getByRole('button', { name: 'Page 1' }).getAttribute('aria-current')).toBeNull()
+    })
+    it('names each number button from the locale catalog ("Page 3"), not the bare digit', () => {
+      const { getByRole, queryByRole } = render(Pagination, {
+        props: { total: 30, pageSize: 10, page: 1 }
+      })
+      expect(getByRole('button', { name: 'Page 3' }).textContent?.trim()).toBe('3')
+      expect(queryByRole('button', { name: '3' })).toBeNull()
+    })
+  })
+
+  describe('uncontrolled mode (no v-model bound)', () => {
+    it('Next moves the highlighted page and the range text without a bound v-model:page', async () => {
+      const { getByRole, getByTestId } = render(Pagination, { props: { total: 30 } })
+      await fireEvent.click(getByRole('button', { name: /Next/i }))
+      expect(getByRole('button', { name: 'Page 2' }).getAttribute('aria-current')).toBe('page')
+      expect(getByTestId('data-pagination__info').textContent).toContain('Showing 11 to 20 of 30')
+    })
+
+    it('the page-size selector re-windows the pages without a bound v-model:page-size', async () => {
+      const { getByRole, queryByRole, getByTestId } = render(Pagination, { props: { total: 30 } })
+      await fireEvent.update(getByRole('combobox', { name: 'Rows per page' }), '25')
+      expect(queryByRole('button', { name: 'Page 3' })).toBeNull()
+      expect(getByTestId('data-pagination__info').textContent).toContain('Showing 1 to 25 of 30')
     })
   })
 

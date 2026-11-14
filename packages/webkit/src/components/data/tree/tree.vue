@@ -33,7 +33,7 @@
     emptyTitle?: string
     /** Supporting line under the empty title. */
     emptyDescription?: string
-    /** Accessible name of the tree. */
+    /** Accessible name of the tree. Empty uses the locale catalog (`Tree`). */
     ariaLabel?: string
   }
 
@@ -223,7 +223,7 @@
       v-else
       ref="treeRef"
       role="tree"
-      :aria-label="ariaLabel || undefined"
+      :aria-label="ariaLabel || t('tree.label')"
       class="m-0 flex list-none flex-col p-0"
       @click="onClick"
       @keydown="onKeydown"

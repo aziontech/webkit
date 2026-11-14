@@ -3,10 +3,10 @@ name: bar-list
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-11
-checksum: 4e02f1af7e2a907e589c4e678eb7dcfccaba490985a264f67ff43e15611c077e
+last_updated: 2026-11-14
+checksum: 9fea8662c7104c217eccda9fdf79f1ab1e357867e19df47004480368c358bffa
 ---
 
 # BarList — Component Spec
@@ -63,16 +63,19 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 ## Props
 
-| Prop          | Type                                    | Default         | Required | JSDoc                                                                                                                            |
-| ------------- | --------------------------------------- | --------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `BarListItem[]`                         | `[]`            | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link. |
-| `sort`        | `'descending' \| 'ascending' \| 'none'` | `'descending'`  | false    | Row order; `none` keeps the order of `items`.                                                                                    |
-| `color`       | `ChartColor`                            | `1`             | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                   |
-| `clickable`   | `boolean`                               | `false`         | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                |
-| `formatValue` | `(value: number) => string`             | `formatCompact` | false    | Formats the value column.                                                                                                        |
-| `loading`     | `boolean`                               | `false`         | false    | Renders Skeleton rows in place of the list.                                                                                      |
-| `emptyTitle`  | `string`                                | `''`            | false    | Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`).                       |
-| `ariaLabel`   | `string`                                | `''`            | false    | Accessible name of the list.                                                                                                     |
+| Prop               | Type                                    | Default         | Required | JSDoc                                                                                                                                                                                                                  |
+| ------------------ | --------------------------------------- | --------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `BarListItem[]`                         | `[]`            | false    | Rows to rank; each item is `{ id?: string; name: string; value: number; href?: string }`. An item with `href` renders as a link.                                                                                       |
+| `sort`             | `'descending' \| 'ascending' \| 'none'` | `'descending'`  | false    | Row order; `none` keeps the order of `items`.                                                                                                                                                                          |
+| `color`            | `ChartColor`                            | `1`             | false    | Hue of the bars: a categorical slot (1–6), `other`, or a status. The fill is that hue tinted over the surface.                                                                                                         |
+| `clickable`        | `boolean`                               | `false`         | false    | Renders rows without an `href` as buttons that emit `item-click`.                                                                                                                                                      |
+| `formatValue`      | `(value: number) => string`             | `formatCompact` | false    | Formats the value column.                                                                                                                                                                                              |
+| `loading`          | `boolean`                               | `false`         | false    | Renders Skeleton rows in place of the list.                                                                                                                                                                            |
+| `refetching`       | `boolean`                               | `false`         | false    | Holds the previous rows at reduced opacity while new data loads (the same as `chart`).                                                                                                                                 |
+| `error`            | `string`                                | `''`            | false    | Error message; when set, the list renders an error state in an `alert` region instead of rows: a bordered small `EmptyState` with the error mark, `barList.errorTitle` and the message (the `error` slot replaces it). |
+| `emptyTitle`       | `string`                                | `''`            | false    | Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`).                                                                                                             |
+| `emptyDescription` | `string`                                | `''`            | false    | Supporting line under the empty title: why the list is empty, or what to do next.                                                                                                                                      |
+| `ariaLabel`        | `string`                                | `''`            | false    | Accessible name of the list.                                                                                                                                                                                           |
 
 ## Events
 
@@ -82,12 +85,18 @@ A ranked list of named values: each row is a tinted bar whose length is the valu
 
 ## Slots
 
-_No slots — the rows are data (`items`); the empty state is the package's `EmptyState` titled by `emptyTitle`._
+| Slot            | Scope | Notes                                                             |
+| --------------- | ----- | ----------------------------------------------------------------- |
+| `empty`         | —     | Replaces the default `EmptyState` shown when `items` is empty.    |
+| `empty-actions` | —     | Actions under the default empty state (a Clear filters or Retry). |
+| `error`         | —     | Replaces the default error state shown while `error` is set.      |
+
+The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `gauge-chart` and `map-chart`.
 
 ## States
 
-- Visual states: `default`, `hover` and `focus-visible` (interactive rows only), `loading` (Skeleton rows), `empty` (`EmptyState`)
-- `data-loading` mirrors `loading`
+- Visual states: `default`, `hover` and `focus-visible` (interactive rows only), `loading` (Skeleton rows), `refetching` (previous rows at 60% opacity), `error` (error state in an `alert` region), `empty` (`EmptyState`). Precedence: loading, then error, then empty.
+- `data-loading` mirrors `loading`; `data-refetching` mirrors `refetching`; `data-error` is set while an error shows
 - `data-interactive` on a row that is a link or a button
 - Bar width: `value / max`, at least 2% when the value is above zero, 0 when it is zero
 
@@ -97,6 +106,7 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 | ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
 | entrance and value change | bar `transition-[width] duration-slow-01 ease-productive-entrance` | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
 | row hover                 | `transition-colors duration-fast-02 ease-productive-entrance`      | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| refetching                | list `transition-opacity duration-moderate-01`                     | `moderate-01`                                     | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -122,9 +132,9 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 - A link row is a native `<a>`; a clickable row is a native `<button>`; a static row is neither, and is not focusable.
 - Keyboard map: Tab moves between interactive rows; Enter activates (Space too on buttons).
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
-- `aria-busy` on the root while `loading`.
+- `aria-busy` on the root while `loading` or `refetching`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
-- Interactive rows are 32px tall and full width.
+- Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
 ## Examples
@@ -133,6 +143,7 @@ _No slots — the rows are data (`items`); the empty state is the package's `Emp
 - Interactive — rows with `href` and a `clickable` list emitting `item-click`; justified because link and button rows render different elements.
 - Loading — `loading`.
 - Empty — `items` empty.
+- Error — `error` set after a failed load; justified because `error` is a state the component owns.
 
 ## Constraints — DO NOT
 

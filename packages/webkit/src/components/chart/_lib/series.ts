@@ -24,7 +24,7 @@ function cleanValues(values: ReadonlyArray<number | null>): Array<number | null>
 }
 
 function foldValues(series: readonly ChartSeries[]): Array<number | null> {
-  const length = Math.max(0, ...series.map((entry) => entry.values.length))
+  const length = series.reduce((max, entry) => Math.max(max, entry.values.length), 0)
   return Array.from({ length }, (_, index) => {
     let sum: number | null = null
     for (const entry of series) {

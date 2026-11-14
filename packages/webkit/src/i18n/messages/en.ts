@@ -66,7 +66,8 @@ export const avatar = {
 } as const
 
 export const barList = {
-  emptyTitle: 'No data available'
+  emptyTitle: 'No data available',
+  errorTitle: 'Could not load the data'
 } as const
 
 export const board = {
@@ -495,6 +496,10 @@ export const filterMenu = {
   rangeSince: 'Since {date}',
   rangeUntil: 'Until {date}',
   more: '+{count}',
+  moreValues: {
+    one: '{count} more value. Type to narrow the list.',
+    other: '{count} more values. Type to narrow the list.'
+  },
   applied: 'Applied filters'
 } as const
 
@@ -617,6 +622,9 @@ export const logView = {
   warningCount: { one: '{count} warning', other: '{count} warnings' },
   gzip: 'gzip:',
   empty: 'No log lines match the current filters.',
+  noLines: 'No log lines yet.',
+  noMatch: 'No line matches “{query}”.',
+  clearSearch: 'Clear search',
   copy: 'Copy logs',
   copied: 'Copied logs',
   levels: 'Log levels',
@@ -678,6 +686,7 @@ export const pagination = {
   info: 'Showing {start} to {end} of {total} entries',
   previous: 'Previous page',
   next: 'Next page',
+  page: 'Page {page}',
   pageSize: 'Rows per page'
 } as const
 
@@ -707,7 +716,8 @@ export const pickList = {
   moveSelectedToTarget: 'Move selected to target',
   moveAllToTarget: 'Move all to target',
   moveSelectedToSource: 'Move selected to source',
-  moveAllToSource: 'Move all to source'
+  moveAllToSource: 'Move all to source',
+  empty: 'No items'
 } as const
 
 export const popover = {
@@ -881,7 +891,8 @@ export const table = {
   selectAll: 'Select all rows',
   selectRow: 'Select row',
   emptyTitle: 'No results yet',
-  emptyDescription: 'Get started by creating your first resource.'
+  emptyDescription: 'Get started by creating your first resource.',
+  errorTitle: 'Could not load the data'
 } as const
 
 export const tableAppliedFilters = {
@@ -984,7 +995,8 @@ export const tableReorder = {
 } as const
 
 export const tableSearch = {
-  placeholder: 'Search'
+  placeholder: 'Search',
+  label: 'Search the table'
 } as const
 
 export const tableSortButton = {
@@ -1043,6 +1055,7 @@ export const trace = {
   noMatch: 'No span matches “{query}”.',
   clearSearch: 'Clear search',
   empty: 'No spans in this trace.',
+  loading: 'Loading spans',
   details: 'Details of {name}',
   close: 'Close',
   copyName: 'Copy span name',
@@ -1060,6 +1073,8 @@ export const trace = {
 
 export const tracker = {
   noData: 'No data',
+  summary: { one: '{count} period', other: '{count} periods' },
+  summaryWorst: { one: '{count} period. Worst: {label}', other: '{count} periods. Worst: {label}' },
   roleDescription: 'status history'
 } as const
 
@@ -1078,6 +1093,7 @@ export const topologyDiagram = {
 } as const
 
 export const tree = {
+  label: 'Tree',
   emptyTitle: 'No items'
 } as const
 

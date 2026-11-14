@@ -178,9 +178,10 @@
 </script>
 
 <template>
-  <section
+  <div
     ref="rootRef"
     v-bind="$attrs"
+    role="group"
     :data-testid="testId"
     :draggable="armed ? 'true' : undefined"
     :data-draggable="canDrag || null"
@@ -196,5 +197,5 @@
     @dragend="onDragEnd"
   >
     <slot />
-  </section>
+  </div>
 </template>

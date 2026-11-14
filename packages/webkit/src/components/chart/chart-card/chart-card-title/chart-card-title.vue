@@ -21,12 +21,12 @@
 </script>
 
 <template>
-  <h3
+  <div
     v-bind="$attrs"
     :id="ctx.titleId"
     :data-testid="testId"
     class="m-0 min-w-0 flex-1 truncate text-label-md text-(--text-default)"
   >
     <slot />
-  </h3>
+  </div>
 </template>

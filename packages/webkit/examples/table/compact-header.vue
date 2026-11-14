@@ -77,7 +77,7 @@
     :columns="columns"
     row-key="id"
     enable-sorting
-    header-kind="compact"
+    density="compact"
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >

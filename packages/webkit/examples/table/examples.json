@@ -19,7 +19,7 @@
     },
     {
       "name": "CompactHeader",
-      "summary": "A denser header via `header-kind=\"compact\"` (forwarded to `Table.Header`): the column-header row uses a reduced height and padding, so the table opens straight onto that header row.",
+      "summary": "A denser table via `density=\"compact\"`, which sets the header and the rows: the column-header row and the body rows use a reduced height and padding, so the table opens straight onto that header row.",
       "file": "compact-header.vue"
     },
     {
@@ -49,7 +49,7 @@
     },
     {
       "name": "CompactHeaderWithStickyColumn",
-      "summary": "A compact header (`header-kind=\"compact\"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No pagination.",
+      "summary": "A compact header (`density=\"compact\"`) combined with the freeze system: the frozen **Name** / **actions** columns stay pinned while the middle columns scroll horizontally, and the denser header is sticky within the scroll viewport. No pagination.",
       "file": "compact-header-with-sticky-column.vue"
     },
     {
@@ -106,6 +106,26 @@
       "name": "FilterMenu",
       "summary": "`Table.Filter` and `Table.AppliedFilters` with `kind=\"menu\"`: the Filter button opens the drill-in `FilterMenu` over the table's filter fields (Status picks one value, Region several, Last modified a period or a custom range) and each pick writes the table's `filters`. Beside it, `Table.ColumnSelector` lists each column with a switch; Name cannot hide, so it reads Always shown, and Show all columns appears once a column is hidden.",
       "file": "filter-menu.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "`loading` renders skeleton rows aligned to the columns and sets `aria-busy` while the data loads.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "`error` holds the message of a failed load and replaces the rows; the `error` slot (scope `{ message }`) swaps the default empty-state block for resource copy and a Try again action.",
+      "file": "error.vue"
+    },
+    {
+      "name": "Export",
+      "summary": "`Table.Export` in the toolbar writes the visible, ordered and filtered rows as CSV, named by `export-filename`.",
+      "file": "export.vue"
+    },
+    {
+      "name": "SerializableState",
+      "summary": "`getState()` saves the sort, page, visible columns and filters as a plain object and `setState()` restores it, while `v-model:state` mirrors every change; the app keeps the snapshot in the URL or storage.",
+      "file": "serializable-state.vue"
     }
   ]
 }

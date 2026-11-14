@@ -9,7 +9,7 @@
     },
     {
       "name": "Content",
-      "summary": "Padded content for a chart with axes and a legend; flush content for an edge-to-edge plot.",
+      "summary": "Padded content for a chart with axes and a legend; unpadded content (`:padded=\"false\"`) for an edge-to-edge plot.",
       "file": "content.vue"
     },
     {

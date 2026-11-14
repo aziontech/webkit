@@ -21,6 +21,11 @@
       "name": "Empty",
       "summary": "No items for the range: the list shows an EmptyState instead.",
       "file": "empty.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "`error` holds the message of a failed load and renders an error state in place of the rows, the same state surface as Chart.",
+      "file": "error.vue"
     }
   ]
 }

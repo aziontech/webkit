@@ -2,6 +2,7 @@ import '../../../test/reflow.css'
 
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import AnchoredNode from '../../../../examples/flow/anchored-node.vue'
 import Branches from '../../../../examples/flow/branches.vue'
@@ -242,6 +243,51 @@ describe('Flow (composition compound)', () => {
         </Flow>
       `)
       expect(getByTestId('data-flow__parallel').getAttribute('data-align')).toBe('end')
+    })
+  })
+
+  describe('Flow.Anchor side, Flow.Parallel default and live context', () => {
+    it.each([['end'], ['start']])('maps side=%s to data-flow-anchor and its port', (side) => {
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode unstyled>
+            <FlowAnchor side="${side}" type="${side === 'end' ? 'start' : 'end'}">x</FlowAnchor>
+          </FlowNode>
+        </Flow>
+      `)
+      const anchor = getByTestId('data-flow__anchor')
+      expect(anchor.getAttribute('data-flow-anchor')).toBe(side)
+      expect(
+        Array.from(anchor.querySelectorAll('[data-flow-port]')).map((port) =>
+          port.getAttribute('data-flow-port')
+        )
+      ).toEqual([side])
+    })
+
+    it('defaults Flow.Parallel align to start', () => {
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowParallel><FlowNode>A</FlowNode><FlowNode>B</FlowNode></FlowParallel>
+        </Flow>
+      `)
+      expect(getByTestId('data-flow__parallel').getAttribute('data-align')).toBe('start')
+    })
+
+    it('passes a changed root data-testid on to the children', async () => {
+      const testid = ref('pipeline')
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(Flow, { 'data-testid': testid.value }, () => [
+              h(FlowNode, null, () => 'A'),
+              h(FlowNode, null, () => 'B')
+            ])
+        })
+      )
+      expect(view.getAllByTestId('pipeline__node')).toHaveLength(2)
+      testid.value = 'release'
+      await nextTick()
+      expect(view.getAllByTestId('release__node')).toHaveLength(2)
     })
   })
 

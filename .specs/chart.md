@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 09ffc8ab61af29b78424ed8d0d61782a98e2d1cb37d149fbb17fdd605bd0ab55
-spec_version: 4
+checksum: 72c4fd4a3646ec85a8f7435474196e8221459409b9eea2265859951c5dfe62c4
+spec_version: 6
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-14
@@ -90,7 +90,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
     <Chart.Scatter :ids="['threat']" />
     <Chart.Crosshair />
     <Chart.Tooltip />
-    <Chart.Legend totals />
+    <Chart.Legend total />
   </Chart>
 </template>
 ```
@@ -147,7 +147,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `totals?: boolean` (default `false` — show each series total beside its name).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`), `totals?: boolean` (default `false`; **@deprecated since 6.0 — use `total`. Removed in 7.0.**). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 
@@ -320,7 +320,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 ## Performance
 
 - Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB gzip (`.size-limit.json`).
-- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows.
+- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows. `Chart.Scatter` with 10k points mounts and moves the active index within `chart-scatter-10k` (the active point is one overlay dot per series, so the dot list never re-renders on a move), and `Chart.Bar` with 1k categories × 3 series within `chart-bar-1k-x3`; both in `perf-budgets.json`.
 - Heavy parts: none; in-house SVG, no chart dependency.
 
 ## Examples

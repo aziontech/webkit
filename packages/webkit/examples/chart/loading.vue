@@ -51,6 +51,6 @@
     <Chart.Line :ids="['blocked', 'threat']" />
     <Chart.Crosshair />
     <Chart.Tooltip />
-    <Chart.Legend totals />
+    <Chart.Legend total />
   </Chart>
 </template>

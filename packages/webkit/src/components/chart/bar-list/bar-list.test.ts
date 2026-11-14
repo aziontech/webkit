@@ -132,6 +132,41 @@ describe('BarList', () => {
     )
   })
 
+  it('renders the error Alert in place of the rows, and the error slot over it', () => {
+    const view = render(BarList, { props: { items: ITEMS, error: 'Timed out' } })
+    expect(view.getByTestId('chart-bar-list__error').textContent).toContain('Timed out')
+    expect(view.queryAllByTestId('chart-bar-list__row')).toHaveLength(0)
+    expect(view.getByTestId('chart-bar-list').hasAttribute('data-error')).toBe(true)
+    view.unmount()
+    const custom = render(BarList, {
+      props: { items: [], error: 'Timed out' },
+      slots: { error: '<p>Custom error</p>' }
+    })
+    expect(custom.getByText('Custom error')).toBeTruthy()
+    expect(custom.queryByTestId('chart-bar-list__empty')).toBeNull()
+  })
+
+  it('keeps the rows and marks the list busy while refetching', () => {
+    const view = render(BarList, { props: { items: ITEMS, refetching: true } })
+    const root = view.getByTestId('chart-bar-list')
+    expect(root.hasAttribute('data-refetching')).toBe(true)
+    expect(root.getAttribute('aria-busy')).toBe('true')
+    expect(view.getAllByTestId('chart-bar-list__row').length).toBeGreaterThan(0)
+  })
+
+  it('shows emptyDescription and the empty-actions slot, and the empty slot replaces it', () => {
+    const view = render(BarList, {
+      props: { items: [], emptyDescription: 'No traffic in this range.' },
+      slots: { 'empty-actions': '<button type="button">Change range</button>' }
+    })
+    expect(view.getByText('No traffic in this range.')).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Change range' })).toBeTruthy()
+    view.unmount()
+    const custom = render(BarList, { props: { items: [] }, slots: { empty: '<p>Nothing yet</p>' } })
+    expect(custom.getByText('Nothing yet')).toBeTruthy()
+    expect(custom.queryByTestId('chart-bar-list__empty')).toBeNull()
+  })
+
   it('has no a11y violations across static, interactive, loading and empty renders', async () => {
     for (const props of [
       {},

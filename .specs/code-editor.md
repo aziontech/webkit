@@ -3,9 +3,9 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 64d6d1b518cd111d6fc6651cff42f183187ea5a7ad96e301d0eed5707c877ddb
+checksum: 548a6c94a31de8bbf139d3c1a7443942119029a9ac6fdc854e34925a33a031b8
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -227,7 +227,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 ## Performance
 
 - Bundle budget: 9.15 KB gzip for `./code-editor` in `.size-limit.json` (measured 8.46 KB on 2026-11-12, up from 7.97 KB for the function-call rules and `padLineNumbers`; `schema`, `bordered` and `validate` brought it to 9.11 KB on 2026-11-14; Monaco is never bundled: the app's `loader` code-splits it).
-- Runtime budget: the plain editor re-renders the gutter per line count change only; tested to 5,000 lines.
+- Runtime budget: the plain editor re-renders the gutter per line count change only; the `CodeEditor with 5k lines: mount and type` scenario of `performance.test.ts` holds a 5,000-line file to its budget in `perf-budgets.json`.
 - Heavy parts: Monaco loads on mount, after the plain editor is interactive; the theme is rebuilt only when the theme attribute or the colour scheme changes.
 
 ## Examples

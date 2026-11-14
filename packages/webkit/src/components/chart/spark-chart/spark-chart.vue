@@ -10,7 +10,9 @@
     colorToken,
     isFiniteNumber,
     linearScale,
-    linePath
+    linePath,
+    maxOf,
+    minOf
   } from '../_lib'
 
   defineOptions({ name: 'SparkChart', inheritAttrs: false })
@@ -78,8 +80,8 @@
 
   const stroke = computed(() => {
     if (!hasValue.value || props.kind === 'bar') return null
-    const low = Math.min(...finite.value)
-    const high = Math.max(...finite.value)
+    const low = minOf(finite.value, Infinity)
+    const high = maxOf(finite.value, -Infinity)
     const floor = props.fromZero ? Math.min(0, low) : low
     const domain: [number, number] = high === floor ? [floor - 1, high + 1] : [floor, high]
     const scale = linearScale(domain, [height.value - STROKE_INSET, STROKE_INSET])
@@ -101,8 +103,8 @@
 
   const bars = computed(() => {
     if (!hasValue.value || props.kind !== 'bar') return []
-    const low = Math.min(0, ...finite.value)
-    const high = Math.max(0, ...finite.value)
+    const low = minOf(finite.value, 0)
+    const high = maxOf(finite.value, 0)
     const scale = linearScale([low, high], [height.value, 0])
     const base = scale(0)
     const layout = categoryLayout(props.values.length, 0, width.value, true)

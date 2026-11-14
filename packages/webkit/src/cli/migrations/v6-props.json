@@ -32,7 +32,8 @@
   },
   "code-block": {
     "border": "bordered",
-    "value": "modelValue"
+    "value": "modelValue",
+    "showLineNumbers": "lineNumbers"
   },
   "console-layout": {
     "navigationExpanded": "navigationOpen"
@@ -168,10 +169,12 @@
     }
   },
   "table": {
-    "border": "bordered"
+    "border": "bordered",
+    "rowsPerPageOptions": "pageSizeOptions"
   },
   "table-root": {
-    "border": "bordered"
+    "border": "bordered",
+    "rowsPerPageOptions": "pageSizeOptions"
   },
   "tabs": {
     "value": "modelValue"
@@ -203,5 +206,29 @@
   },
   "textarea": {
     "resizable": "resize"
+  },
+  "chart-legend": {
+    "totals": "total"
+  },
+  "flow-anchor": {
+    "type": "side"
+  },
+  "pick-list": {
+    "dataKey": "trackBy"
+  },
+  "pick-list-root": {
+    "dataKey": "trackBy"
+  },
+  "table-cell-link": {
+    "moreNoun": "noun"
+  },
+  "table-header": {
+    "kind": {
+      "to": "density",
+      "values": {
+        "default": "comfortable",
+        "compact": "compact"
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/filter-menu/default.vue'
@@ -319,5 +319,85 @@ describe('FilterMenu examples', () => {
     first.unmount()
     const sizes = render(Sizes)
     expect(sizes.getAllByTestId('data-filter-menu__count')).toHaveLength(3)
+  })
+})
+
+describe('FilterMenu open state, disabled and long value lists', () => {
+  it('opens and closes through v-model:open', async () => {
+    const open = ref(false)
+    const opens: boolean[] = []
+    render(
+      defineComponent({
+        setup: () => () =>
+          h(FilterMenu, {
+            fields,
+            open: open.value,
+            'onUpdate:open': (value: boolean) => {
+              opens.push(value)
+              open.value = value
+            }
+          })
+      })
+    )
+    await settle()
+    open.value = true
+    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+    await fireEvent.click(trigger())
+    expect(opens.at(-1)).toBe(false)
+    await waitFor(() => expect(panel()).toBeNull(), WAIT)
+  })
+
+  it('does not open while disabled', async () => {
+    render(FilterMenu, { props: { fields, disabled: true } })
+    await settle()
+    expect(trigger().disabled).toBe(true)
+    await fireEvent.click(trigger())
+    await settle()
+    expect(panel()).toBeNull()
+  })
+
+  it('renders at most 100 values and says how many more there are', async () => {
+    const hosts: FilterMenuField[] = [
+      {
+        id: 'host',
+        label: 'Host',
+        options: Array.from({ length: 1000 }, (_, i) => ({
+          value: `h${i}`,
+          label: `host-${i}.example.com`
+        }))
+      }
+    ]
+    render(FilterMenu, { props: { fields: hosts } })
+    await openField('host')
+    expect(panel()!.querySelectorAll('[data-filter-row][role="checkbox"]')).toHaveLength(100)
+    expect(byTestId('data-filter-menu__more-values')?.textContent).toContain('900 more values')
+  })
+
+  it('warns when FilterMenu.Chips has no FilterMenu with the same fields array', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    render(
+      defineComponent({
+        setup: () => () =>
+          h('div', null, [
+            h(FilterMenu, { fields: [...fields], modelValue: { status: ['live'] } }),
+            h(FilterMenuChips, { fields: [...fields], modelValue: { status: ['live'] } })
+          ])
+      })
+    )
+    await settle()
+    const chip = byTestId('data-filter-menu-chips__chip-status')!
+    await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
+    warn.mockRestore()
+  })
+
+  it('does not warn when both share one fields array', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    mount({ status: ['live'] }, true)
+    await settle()
+    const chip = byTestId('data-filter-menu-chips__chip-status')!
+    await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
+    expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
+    warn.mockRestore()
   })
 })

@@ -38,8 +38,14 @@
     formatValue?: (value: number) => string
     /** Renders Skeleton rows in place of the list. */
     loading?: boolean
+    /** Holds the previous rows at reduced opacity while new data loads. */
+    refetching?: boolean
+    /** Error message; when set, the list renders an error state instead of rows. */
+    error?: string
     /** Title of the empty state shown when items is empty. Empty uses the locale catalog (`No data available`). */
     emptyTitle?: string
+    /** Supporting line under the empty title: why the list is empty, or what to do next. */
+    emptyDescription?: string
     /** Accessible name of the list. */
     ariaLabel?: string
   }
@@ -51,13 +57,25 @@
     clickable: false,
     formatValue: formatCompact,
     loading: false,
+    refetching: false,
+    error: '',
     emptyTitle: '',
+    emptyDescription: '',
     ariaLabel: ''
   })
 
   const emit = defineEmits<{
     /** A row activated: a clickable row, or a link row (the link still navigates). */
     'item-click': [event: MouseEvent, item: BarListItem]
+  }>()
+
+  defineSlots<{
+    /** Replaces the default empty state. */
+    empty(): unknown
+    /** Actions under the default empty state. */
+    'empty-actions'(): unknown
+    /** Replaces the default error Alert. */
+    error(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -85,7 +103,7 @@
     } else if (props.sort === 'ascending') {
       ordered.sort((a, b) => magnitude(a.item.value) - magnitude(b.item.value))
     }
-    const max = Math.max(0, ...ordered.map(({ item }) => magnitude(item.value)))
+    const max = ordered.reduce((top, { item }) => Math.max(top, magnitude(item.value)), 0)
     return ordered.map(({ item, index }) => {
       const value = magnitude(item.value)
       const share = value > 0 && max > 0 ? Math.max(2, (value / max) * 100) : 0
@@ -102,7 +120,8 @@
     })
   })
 
-  const isEmpty = computed(() => !props.loading && rows.value.length === 0)
+  const hasError = computed(() => !props.loading && props.error.length > 0)
+  const isEmpty = computed(() => !props.loading && !hasError.value && rows.value.length === 0)
 
   function onRowClick(event: MouseEvent, item: BarListItem, interactive: boolean) {
     if (!interactive) return
@@ -132,10 +151,12 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-loading="loading || null"
+    :data-refetching="refetching || null"
+    :data-error="hasError || null"
     :aria-label="ariaLabel || undefined"
-    :aria-busy="loading || undefined"
+    :aria-busy="loading || refetching || undefined"
     :style="fill"
-    class="flex min-w-0 list-none flex-col gap-(--spacing-xxs)"
+    class="flex min-w-0 list-none flex-col gap-(--spacing-xxs) transition-opacity duration-moderate-01 data-[refetching]:opacity-60 motion-reduce:transition-none"
   >
     <li
       v-if="loading"
@@ -150,16 +171,42 @@
       />
     </li>
     <li
+      v-else-if="hasError"
+      role="alert"
+      class="flex items-stretch"
+    >
+      <slot name="error">
+        <EmptyState
+          :title="t('barList.errorTitle')"
+          :description="error"
+          icon="pi pi-exclamation-triangle"
+          size="small"
+          bordered
+          :data-testid="`${testId}__error`"
+        />
+      </slot>
+    </li>
+    <li
       v-else-if="isEmpty"
       class="flex items-stretch"
     >
-      <EmptyState
-        :title="emptyTitle || t('barList.emptyTitle')"
-        icon="pi pi-chart-bar"
-        size="small"
-        bordered
-        :data-testid="`${testId}__empty`"
-      />
+      <slot name="empty">
+        <EmptyState
+          :title="emptyTitle || t('barList.emptyTitle')"
+          :description="emptyDescription"
+          icon="pi pi-chart-bar"
+          size="small"
+          bordered
+          :data-testid="`${testId}__empty`"
+        >
+          <template
+            v-if="$slots['empty-actions']"
+            #actions
+          >
+            <slot name="empty-actions" />
+          </template>
+        </EmptyState>
+      </slot>
     </li>
     <template v-else>
       <li
@@ -173,7 +220,7 @@
           :type="row.tag === 'button' ? 'button' : undefined"
           :data-interactive="row.interactive || null"
           :data-testid="`${testId}__row`"
-          class="flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
+          class="relative flex w-full min-w-0 items-center gap-(--spacing-md) rounded-(--shape-elements) pe-(--spacing-xs) data-[interactive]:before:absolute data-[interactive]:before:inset-x-0 data-[interactive]:before:-inset-y-1 data-[interactive]:before:content-[''] text-start text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface) data-[interactive]:cursor-pointer data-[interactive]:hover:bg-(--bg-hover)"
           @click="onRowClick($event, row.item, row.interactive)"
         >
           <span class="relative flex h-8 min-w-0 flex-1 items-center">

@@ -76,7 +76,7 @@ wire_api = "chat"`
   <div class="max-w-[692px]">
     <CodeBlock
       :tabs="agentTabs"
-      show-line-numbers
+      line-numbers
     >
       <template #tab-icon="{ tab }">
         <span

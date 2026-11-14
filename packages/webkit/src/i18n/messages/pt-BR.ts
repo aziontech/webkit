@@ -146,7 +146,8 @@ export const ptBR: Messages = {
     imageAlt: 'Avatar'
   },
   barList: {
-    emptyTitle: 'Nenhum dado disponível'
+    emptyTitle: 'Nenhum dado disponível',
+    errorTitle: 'Não foi possível carregar os dados'
   },
   board: {
     label: 'Painel',
@@ -556,6 +557,10 @@ export const ptBR: Messages = {
     rangeSince: 'Desde {date}',
     rangeUntil: 'Até {date}',
     more: '+{count}',
+    moreValues: {
+      one: 'Mais {count} valor. Digite para filtrar a lista.',
+      other: 'Mais {count} valores. Digite para filtrar a lista.'
+    },
     applied: 'Filtros aplicados'
   },
   uploadProgress: {
@@ -665,6 +670,9 @@ export const ptBR: Messages = {
     warningCount: { one: '{count} aviso', other: '{count} avisos' },
     gzip: 'gzip:',
     empty: 'Nenhuma linha de log corresponde aos filtros atuais.',
+    noLines: 'Ainda não há linhas de log.',
+    noMatch: 'Nenhuma linha corresponde a “{query}”.',
+    clearSearch: 'Limpar busca',
     copy: 'Copiar logs',
     copied: 'Logs copiados',
     levels: 'Níveis de log',
@@ -718,6 +726,7 @@ export const ptBR: Messages = {
     info: 'Mostrando {start} a {end} de {total} registros',
     previous: 'Página anterior',
     next: 'Próxima página',
+    page: 'Página {page}',
     pageSize: 'Linhas por página'
   },
   passwordInput: {
@@ -743,7 +752,8 @@ export const ptBR: Messages = {
     moveSelectedToTarget: 'Mover selecionados para o destino',
     moveAllToTarget: 'Mover todos para o destino',
     moveSelectedToSource: 'Mover selecionados para a origem',
-    moveAllToSource: 'Mover todos para a origem'
+    moveAllToSource: 'Mover todos para a origem',
+    empty: 'Nenhum item'
   },
   popover: {
     close: 'Fechar'
@@ -904,7 +914,8 @@ export const ptBR: Messages = {
     selectAll: 'Selecionar todas as linhas',
     selectRow: 'Selecionar linha',
     emptyTitle: 'Nenhum resultado ainda',
-    emptyDescription: 'Comece criando seu primeiro recurso.'
+    emptyDescription: 'Comece criando seu primeiro recurso.',
+    errorTitle: 'Não foi possível carregar os dados'
   },
   tableAppliedFilters: {
     contains: 'contém',
@@ -991,7 +1002,8 @@ export const ptBR: Messages = {
     cancelled: 'Reordenação cancelada.'
   },
   tableSearch: {
-    placeholder: 'Buscar'
+    placeholder: 'Buscar',
+    label: 'Buscar na tabela'
   },
   tableSortButton: {
     ascending: 'Ordenado em ordem crescente',
@@ -1043,6 +1055,7 @@ export const ptBR: Messages = {
     noMatch: 'Nenhum span corresponde a “{query}”.',
     clearSearch: 'Limpar busca',
     empty: 'Nenhum span neste rastreamento.',
+    loading: 'Carregando spans',
     details: 'Detalhes de {name}',
     close: 'Fechar',
     copyName: 'Copiar nome do span',
@@ -1072,9 +1085,15 @@ export const ptBR: Messages = {
   },
   tracker: {
     noData: 'Sem dados',
+    summary: { one: '{count} período', other: '{count} períodos' },
+    summaryWorst: {
+      one: '{count} período. Pior: {label}',
+      other: '{count} períodos. Pior: {label}'
+    },
     roleDescription: 'histórico de status'
   },
   tree: {
+    label: 'Árvore',
     emptyTitle: 'Nenhum item'
   },
   unsavedChanges: {

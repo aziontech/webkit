@@ -130,6 +130,61 @@
       "mount": 50,
       "update": 160,
       "update_is": "focus the field to open the list, then type a filter"
+    },
+    "chart-scatter-10k": {
+      "mount": 440,
+      "update": 50,
+      "update_is": "move the active index to the middle point"
+    },
+    "chart-bar-1k-x3": {
+      "mount": 230,
+      "update": 90,
+      "update_is": "replace the three 1k-category series"
+    },
+    "map-chart-1k-points": {
+      "mount": 200,
+      "update": 50,
+      "update_is": "make one of the 1k points active"
+    },
+    "tracker-1k": {
+      "mount": 140,
+      "update": 50,
+      "update_is": "make the middle block active"
+    },
+    "trace-1k": {
+      "mount": 260,
+      "update": 50,
+      "update_is": "search the 1k spans"
+    },
+    "code-editor-5k-lines": {
+      "mount": 320,
+      "update": 130,
+      "update_is": "append one typed line"
+    },
+    "property-filter-1k": {
+      "mount": 50,
+      "update": 50,
+      "update_is": "focus the field, then type a word matching every value"
+    },
+    "filter-menu-1k": {
+      "mount": 50,
+      "update": 50,
+      "update_is": "open the menu, open the 1k-option field, then search it"
+    },
+    "pick-list-1k": {
+      "mount": 180,
+      "update": 140,
+      "update_is": "move every source item to the target"
+    },
+    "cards-1k": {
+      "mount": 430,
+      "update": 300,
+      "update_is": "select all 1k cards"
+    },
+    "table-1k-presets": {
+      "mount": 340,
+      "update": 320,
+      "update_is": "sort 1k rows of link and tag preset cells"
     }
   }
 }

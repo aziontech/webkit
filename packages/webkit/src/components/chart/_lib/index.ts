@@ -8,6 +8,7 @@ export {
   linearLayout,
   linearScale,
   maxOf,
+  minOf,
   mirrorLayout,
   niceTicks
 } from './scale'

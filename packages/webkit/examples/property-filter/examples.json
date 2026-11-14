@@ -16,6 +16,11 @@
       "name": "QueryMode",
       "summary": "`mode=\"query\"` edits one query string (`level = Error AND method = GET`) in a monospaced field. Suggestions follow the word at the caret: a field, then an operator, then a value, then AND or OR, and picking one replaces that word. Enter submits a valid query with its flat token list; an invalid one shows its reason under the field instead.",
       "file": "query-mode.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the applied tokens readable but locks the field, the tokens, the Match all / Match any switch and Clear filters: nothing is added, removed or submitted.",
+      "file": "disabled.vue"
     }
   ]
 }

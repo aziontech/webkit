@@ -7,7 +7,11 @@ import AdvancedFilter from '../../../../examples/table/advanced-filter.vue'
 import Composition from '../../../../examples/table/composition.vue'
 import Default from '../../../../examples/table/default.vue'
 import Empty from '../../../../examples/table/empty.vue'
+import ErrorExample from '../../../../examples/table/error.vue'
+import ExportExample from '../../../../examples/table/export.vue'
 import FilterMenuExample from '../../../../examples/table/filter-menu.vue'
+import Loading from '../../../../examples/table/loading.vue'
+import SerializableState from '../../../../examples/table/serializable-state.vue'
 import StackedRows from '../../../../examples/table/stacked-rows.vue'
 import WithCheckboxes from '../../../../examples/table/with-checkboxes.vue'
 import { useCollection } from '../../../composables/use-collection'
@@ -1522,5 +1526,217 @@ describe('Table.ColumnSelector', () => {
     await fireEvent.click(getByTestId('data-table__column-selector'))
     await waitFor(() => expect(selectorPanel()).not.toBeNull(), { timeout: 3000 })
     await expectNoA11yViolations(selectorPanel()!)
+  })
+})
+
+describe('Table.Filter and Table.ColumnSelector popovers: focus, Escape and outside click', () => {
+  const panelOf = (id: string): HTMLElement | null =>
+    document.body.querySelector<HTMLElement>(`[data-testid="data-table__${id}__panel"]`)
+
+  const fields = [{ id: 'name', label: 'Name', type: 'text' as const }]
+  const mount = (id: 'filter' | 'column-selector') =>
+    id === 'filter' ? render(TableFilter, { props: { fields } }) : render(FilterMenuExample)
+
+  for (const id of ['filter', 'column-selector'] as const) {
+    it(`${id}: the trigger names its dialog, Tab reaches the panel and Escape returns focus`, async () => {
+      const view = mount(id)
+      await new Promise((resolve) => setTimeout(resolve, 10))
+      const trigger = view.getByTestId(`data-table__${id}`)
+      expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await waitFor(() => expect(panelOf(id)).not.toBeNull(), { timeout: 3000 })
+      const dialog = panelOf(id)!.closest('[role="dialog"]') as HTMLElement
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(trigger.getAttribute('aria-controls')).toBe(dialog.id)
+      expect(dialog).toHaveAccessibleName(id === 'filter' ? 'Filters' : 'Columns')
+      await waitFor(() => expect(dialog.querySelector('button, input, select')).toBeTruthy(), {
+        timeout: 3000
+      })
+      await userEvent.tab()
+      expect(dialog.contains(document.activeElement)).toBe(true)
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(panelOf(id)).toBeNull())
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it(`${id}: an outside click closes the panel`, async () => {
+      const view = mount(id)
+      await new Promise((resolve) => setTimeout(resolve, 10))
+      await userEvent.click(view.getByTestId(`data-table__${id}`))
+      await waitFor(() => expect(panelOf(id)).not.toBeNull(), { timeout: 3000 })
+      await userEvent.click(document.body)
+      await waitFor(() => expect(panelOf(id)).toBeNull())
+    })
+  }
+})
+
+describe('Table density, page sizes and data states', () => {
+  const headCells = (container: HTMLElement) =>
+    Array.from(container.querySelectorAll<HTMLElement>('[role="columnheader"]'))
+
+  it('compacts the header with density, and still with the deprecated headerKind', () => {
+    const dense = render(Table, { props: { columns, data: rows, density: 'compact' } })
+    expect(headCells(dense.container).every((cell) => cell.hasAttribute('data-compact'))).toBe(true)
+    dense.unmount()
+    const legacy = render(Table, { props: { columns, data: rows, headerKind: 'compact' } })
+    expect(headCells(legacy.container).every((cell) => cell.hasAttribute('data-compact'))).toBe(
+      true
+    )
+    legacy.unmount()
+    const roomy = render(Table, { props: { columns, data: rows } })
+    expect(headCells(roomy.container).some((cell) => cell.hasAttribute('data-compact'))).toBe(false)
+  })
+
+  it('takes Table.Header density over its deprecated kind', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(Table, null, () =>
+            h(TableHeader, { density: 'compact', kind: 'default' }, () =>
+              h(TableRow, null, () => h(TableHeadCell, null, () => 'Name'))
+            )
+          )
+      })
+    )
+    expect(view.getByRole('columnheader').hasAttribute('data-compact')).toBe(true)
+  })
+
+  it('offers pageSizeOptions in the footer, falling back to rowsPerPageOptions', () => {
+    const many = Array.from({ length: 30 }, (_, i) => ({
+      id: String(i),
+      name: `Row ${i}`,
+      status: 'Active'
+    }))
+    const sizes = (container: HTMLElement) =>
+      Array.from(container.querySelectorAll('option')).map((option) => option.value)
+    const next = render(Table, {
+      props: { columns, data: many, paginated: true, pageSizeOptions: [5, 15], pageSize: 5 }
+    })
+    expect(sizes(next.container)).toEqual(['5', '15'])
+    next.unmount()
+    const legacy = render(Table, {
+      props: { columns, data: many, paginated: true, rowsPerPageOptions: [5, 20], pageSize: 5 }
+    })
+    expect(sizes(legacy.container)).toEqual(['5', '20'])
+  })
+
+  it('moves pages through the footer and emits update:pagination', async () => {
+    const many = Array.from({ length: 12 }, (_, i) => ({
+      id: String(i),
+      name: `Row ${i}`,
+      status: 'Active'
+    }))
+    const view = render(Table, { props: { columns, data: many, paginated: true, pageSize: 5 } })
+    await fireEvent.click(view.getByRole('button', { name: 'Next page' }))
+    expect(view.emitted()['update:pagination']?.at(-1)).toEqual([{ pageIndex: 1, pageSize: 5 }])
+    expect(view.getByText('Row 5')).toBeTruthy()
+    expect(view.queryByText('Row 0')).toBeNull()
+  })
+
+  it('renders skeleton rows with aria-busy and ignores row clicks while loading', async () => {
+    const view = render(Table, { props: { columns, data: rows, loading: true } })
+    expect(view.container.querySelector('[aria-busy="true"]')).toBeTruthy()
+    expect(view.queryByText('Charlie')).toBeNull()
+    const body = view.getAllByRole('row').slice(1)
+    if (body[0]) await fireEvent.click(body[0])
+    expect(view.emitted()['row-click']).toBeUndefined()
+  })
+
+  it('shows the error in an alert in place of the rows, and the error slot replaces it', () => {
+    const view = render(Table, {
+      props: { columns, data: rows, error: 'The service did not answer.' }
+    })
+    const alert = view.getByRole('alert')
+    expect(alert.textContent).toContain('Could not load the data')
+    expect(alert.textContent).toContain('The service did not answer.')
+    expect(view.queryByText('Charlie')).toBeNull()
+    view.unmount()
+    const custom = render(Table, {
+      props: { columns, data: [], error: 'Timeout' },
+      slots: { error: ({ message }: { message: string }) => h('p', `Custom: ${message}`) }
+    })
+    expect(custom.getByRole('alert').textContent).toBe('Custom: Timeout')
+    expect(custom.queryByTestId('data-table__empty')).toBeNull()
+  })
+
+  it('round-trips getState and setState and mirrors update:state', async () => {
+    const tableRef = ref<{
+      getState: () => { sorting: unknown[] }
+      setState: (next: { sorting: { id: string; desc: boolean }[] }) => void
+    } | null>(null)
+    const states: unknown[] = []
+    render(
+      defineComponent({
+        setup: () => () =>
+          h(Table, {
+            ref: tableRef,
+            columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
+            data: rows,
+            enableSorting: true,
+            'onUpdate:state': (value: unknown) => states.push(value)
+          })
+      })
+    )
+    expect(tableRef.value?.getState().sorting).toEqual([])
+    tableRef.value?.setState({ sorting: [{ id: 'name', desc: true }] })
+    await nextTick()
+    expect(tableRef.value?.getState().sorting).toEqual([{ id: 'name', desc: true }])
+    await waitFor(() => expect(states.length).toBeGreaterThan(0))
+    expect((states.at(-1) as { sorting: unknown[] }).sorting).toEqual([{ id: 'name', desc: true }])
+  })
+
+  it('emits refresh from Table.RefreshButton through the root', async () => {
+    const refreshes: unknown[][] = []
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            Table,
+            { columns, data: rows, onRefresh: (...args: unknown[]) => refreshes.push(args) },
+            { toolbar: () => h(Table.RefreshButton) }
+          )
+      })
+    )
+    await fireEvent.click(view.getByRole('button', { name: /refresh/i }))
+    expect(refreshes).toHaveLength(1)
+  })
+
+  it('names Table.Search from the locale catalog and an ariaLabel', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () => h(Table, { columns, data: rows }, { toolbar: () => h(TableSearch) })
+      })
+    )
+    expect(view.getByRole('textbox', { name: 'Search the table' })).toBeTruthy()
+    view.unmount()
+    const named = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            Table,
+            { columns, data: rows },
+            { toolbar: () => h(TableSearch, { 'aria-label': 'Search domains' }) }
+          )
+      })
+    )
+    expect(named.getByRole('textbox', { name: 'Search domains' })).toBeTruthy()
+  })
+})
+
+describe('Table state examples', () => {
+  it('render their state and have no axe violations', async () => {
+    for (const example of [Loading, ErrorExample, ExportExample, SerializableState]) {
+      const view = render(example)
+      await nextTick()
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    }
+  })
+
+  it('saves and restores the view in the SerializableState example', async () => {
+    const view = render(SerializableState)
+    await fireEvent.click(view.getByRole('button', { name: 'Save view' }))
+    expect(view.getByRole('button', { name: 'Restore view' }).hasAttribute('disabled')).toBe(false)
   })
 })

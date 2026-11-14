@@ -1,7 +1,5 @@
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -67,7 +65,7 @@
     v-model:level="level"
     v-model:search="search"
   >
-    <LogViewHeader />
-    <LogViewContent />
+    <LogView.Header />
+    <LogView.Content />
   </LogView>
 </template>

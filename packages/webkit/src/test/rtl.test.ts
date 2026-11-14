@@ -233,9 +233,10 @@ describe('Table.Filter and Table.ColumnSelector panels keep the WebkitProvider d
 
   it('bind rtl and ar on the panel teleported to body under <WebkitProvider locale="ar">', async () => {
     for (const panel of await tablePanels(true)) {
-      expect(panel.closest('[data-testid="utils-webkit-provider"]')).toBeNull()
-      expect(panel.getAttribute('dir')).toBe('rtl')
-      expect(panel.getAttribute('lang')).toBe('ar')
+      const dialog = panel.closest<HTMLElement>('[role="dialog"]')!
+      expect(dialog.closest('[data-testid="utils-webkit-provider"]')).toBeNull()
+      expect(dialog.getAttribute('dir')).toBe('rtl')
+      expect(dialog.getAttribute('lang')).toBe('ar')
     }
   })
 
