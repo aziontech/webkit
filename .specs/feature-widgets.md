@@ -3,16 +3,16 @@ name: feature-widgets
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: e80152e7cfed4446bd81d4752d07c499257b363f5e4c822c34ea64233898a48c
+last_updated: 2026-11-14
+checksum: eda325909e196e0fc3c38d2f54d0fe55fc4a722ba253c3e8ee0e2fa8f6b197a2
 ---
 # FeatureWidgets — Component Spec
 
 ## Purpose
 
-The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is an illustration above a bold-led sentence and one affordance — a link button or a copy button that puts a prompt on the clipboard. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration` and `button-highlight`.
+The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration`, `button-highlight` and the webkit scene assets.
 
 ## When to use
 
@@ -30,7 +30,8 @@ The "three ways to start" band of a product page: a centered section title with 
 
 ## Best practices
 
-- Give each item exactly one of `action` (a link) or `copy` (text to put on the clipboard).
+- Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.
+- On a product page give each item a `scene` naming a `ProductWidget` fragment (`{ component: 'ProductWidget', props: { name } }`); keep `illustration` for cells with no console to show.
 - Keep `copy.text` self-contained; it is what the reader pastes into their agent.
 - Set `anchor` when a hero button scrolls to this band.
 
@@ -63,12 +64,14 @@ import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 |---|---|---|---|---|
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`, and the accessible name of the band. |
+| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `primaryAction` | `FeatureWidgetsAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
 | `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `columns` | `FeatureWidgetsColumns` | `3` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
-| `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, illustration, action?, copy? }` where `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard. |
+| `titleKind` | `SectionTitleKind` | `'centered'` | false | Alignment of the section title over the grid: `centered`, `left` or `horizontal`. |
+| `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
+| `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
+| `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
 
 ## Events
 
@@ -83,7 +86,9 @@ import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 - Visual states: `default`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; the two actions ride with it
-- A cell's copy button writes `copy.text` to the clipboard on activation; the feedback is `button-highlight`'s own
+- A cell's copy button writes `copy.text` to the clipboard on activation, then reads `copiedLabel` (or the catalog's `Copied`) with a check icon for two seconds before it returns to its label; the timer is cleared when the band unmounts. A failed write leaves the label as it was
+- A cell with both `action` and `copy` renders the link button first, then the copy button
+- Media per cell: `scene` wins over `illustration`; the scene receives `hover: true` while the pointer is over its cell (also on `pointermove`, so a pointer left still while the page scrolls under it counts). A scene name that is not registered draws nothing
 
 ## Motion & Animations
 
@@ -100,6 +105,7 @@ _none_
 | cell rhythm | `var(--spacing-lg)` |
 | action row gap | `var(--spacing-sm)` |
 | frame rules and marks | `var(--border-default)` |
+| scene fade | `var(--bg-surface)` |
 
 ## Theme gaps
 
@@ -110,8 +116,8 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed `button` and `button-highlight`, which carry the `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
-- Keyboard map: `Tab` moves between the header actions and each cell's button; `Enter` / `Space` activates.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is an unnamed `bento-grid` inside that landmark, so the name is not duplicated; the cell lead is a `strong` inside the sentence, not a heading, so the outline stays the band's `h2`.
+- Keyboard map: `Tab` moves between the header actions and each cell's buttons; `Enter` / `Space` activates. The scene's hover beat is decorative, so keyboard users lose nothing without it.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is an unnamed `bento-grid` inside that landmark, so the name is not duplicated; the cell lead is a `strong` inside the sentence, not a heading, so the outline stays the band's `h2`; the action row is a polite live region, so the copy button's "Copied" is announced.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lead `var(--text-default)`, copy `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the buttons' motion carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the cell buttons are medium `button` / `button-highlight`.
@@ -119,6 +125,7 @@ _none_
 ## Examples
 
 - Default
+- Live scenes — each cell draws a `ProductWidget` fragment that plays while the pointer is over it; one cell carries a link and a copy button.
 
 ## Constraints — DO NOT
 
