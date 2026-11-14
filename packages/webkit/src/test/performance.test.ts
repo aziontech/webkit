@@ -11,11 +11,22 @@ import budgets from '../../perf-budgets.json'
 import BarList from '../components/chart/bar-list/bar-list.vue'
 import Chart from '../components/chart/chart'
 import DonutChart from '../components/chart/donut-chart/donut-chart.vue'
+import MapChart from '../components/chart/map-chart/map-chart.vue'
+import { MAP_CHART_COUNTRIES } from '../components/chart/map-chart/map-chart-countries'
+import Tracker from '../components/chart/tracker/tracker.vue'
 import CodeBlock from '../components/code/code-block/code-block.vue'
+import CodeEditor from '../components/code/code-editor/code-editor.vue'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import LogViewHeader from '../components/code/log-view/log-view-header.vue'
+import Trace from '../components/code/trace/trace.vue'
+import Cards from '../components/data/cards/cards.vue'
+import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
+import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
+import PropertyFilter from '../components/data/property-filter/property-filter.vue'
 import Table from '../components/data/table/table.vue'
+import TableCellLink from '../components/data/table/table-cell-link/table-cell-link.vue'
+import TableCellTags from '../components/data/table/table-cell-tags/table-cell-tags.vue'
 import Tree from '../components/data/tree/tree.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
@@ -307,6 +318,307 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
   }
 }
 
+const typeInto = async (selector: string, value: string) => {
+  const input = document.body.querySelector<HTMLInputElement>(selector)
+  if (!input) return
+  input.focus()
+  input.value = value
+  input.dispatchEvent(new Event('input', { bubbles: true }))
+}
+
+function scatterCase(): Case {
+  const n = 10_000
+  const labels = Array.from({ length: n }, (_, i) => `t${i}`)
+  const data = [{ id: 'latency', name: 'Latency', color: 1, values: series(n, 0) }]
+  const active = ref<number | null>(null)
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(
+            Chart,
+            {
+              series: data,
+              labels,
+              ariaLabel: 'Latency',
+              activeIndex: active.value,
+              'onUpdate:activeIndex': (v: number | null) => (active.value = v)
+            },
+            { default: () => [h(Chart.Axis, { kind: 'y' }), h(Chart.Scatter)] }
+          )
+        ])
+    }),
+    update: () => {
+      active.value = 5000
+    }
+  }
+}
+
+function barCase(): Case {
+  const n = 1000
+  const labels = Array.from({ length: n }, (_, i) => `c${i}`)
+  const data = ref(
+    [0, 1, 2].map((slot) => ({
+      id: `s${slot}`,
+      name: `Series ${slot}`,
+      color: slot + 1,
+      values: series(n, slot)
+    }))
+  )
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(
+            Chart,
+            { series: data.value, labels, ariaLabel: 'Requests' },
+            { default: () => [h(Chart.Axis, { kind: 'y' }), h(Chart.Bar)] }
+          )
+        ])
+    }),
+    update: () => {
+      data.value = data.value.map((s, i) => ({ ...s, values: series(n, i + 4) }))
+    }
+  }
+}
+
+function mapChartCase(): Case {
+  const regions = Object.keys(MAP_CHART_COUNTRIES).map((id, i) => ({ id, value: (i * 97) % 1000 }))
+  const points = Array.from({ length: 1000 }, (_, i) => ({
+    id: `p${i}`,
+    name: `Point ${i}`,
+    lat: ((i * 37) % 160) - 80,
+    lon: ((i * 53) % 340) - 170,
+    value: 100 + ((i * 31) % 900)
+  }))
+  const active = ref<string | null>(null)
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(MapChart, {
+            regions,
+            points,
+            ariaLabel: 'Requests by location',
+            activeId: active.value,
+            'onUpdate:activeId': (v: string | null) => (active.value = v)
+          })
+        ])
+    }),
+    update: () => {
+      active.value = 'p500'
+    }
+  }
+}
+
+function trackerCase(): Case {
+  const statuses = ['success', 'success', 'warning', 'danger'] as const
+  const items = Array.from({ length: 1000 }, (_, i) => ({
+    id: `d${i}`,
+    status: statuses[i % statuses.length],
+    label: `Day ${i}`
+  }))
+  const active = ref<number | null>(null)
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(Tracker, {
+            items,
+            ariaLabel: 'Uptime',
+            activeIndex: active.value,
+            'onUpdate:activeIndex': (v: number | null) => (active.value = v)
+          })
+        ])
+    }),
+    update: () => {
+      active.value = 500
+    }
+  }
+}
+
+function traceCase(): Case {
+  const spans = Array.from({ length: 1000 }, (_, i) => ({
+    id: `s${i}`,
+    parentId: i === 0 ? undefined : `s${Math.floor((i - 1) / 4)}`,
+    name: `span-${i}`,
+    service: i % 3 ? 'Network' : 'Compute',
+    start: i,
+    duration: 10 + (i % 50)
+  }))
+  return {
+    mount: () => ({ render: () => h(Trace, { spans, style: 'width:900px' }) }),
+    update: () =>
+      typeInto(
+        '[data-testid="code-trace__search"] input, input[data-testid="code-trace__search"]',
+        'span-99'
+      )
+  }
+}
+
+function codeEditorCase(): Case {
+  const lines = Array.from({ length: 5000 }, (_, i) => `const value${i} = ${i} * 2`)
+  const value = ref(lines.join('\n'))
+  return {
+    mount: () => ({
+      render: () =>
+        h(CodeEditor, {
+          modelValue: value.value,
+          'onUpdate:modelValue': (v: string) => (value.value = v),
+          ariaLabel: 'Script'
+        })
+    }),
+    update: () => {
+      value.value = `${value.value}\nconst typed = true`
+    }
+  }
+}
+
+function propertyFilterCase(): Case {
+  const properties = [
+    {
+      key: 'host',
+      label: 'Host',
+      options: Array.from({ length: 1000 }, (_, i) => ({ value: `host-${i}.example.com` }))
+    }
+  ]
+  return {
+    mount: () => ({ render: () => h(PropertyFilter, { properties }) }),
+    update: async () => {
+      const input = document.body.querySelector<HTMLInputElement>('[role="combobox"]')
+      input?.focus()
+      await settle()
+      await typeInto('[role="combobox"]', 'example')
+    }
+  }
+}
+
+function filterMenuCase(): Case {
+  const fields = [
+    {
+      id: 'host',
+      label: 'Host',
+      options: Array.from({ length: 1000 }, (_, i) => ({
+        value: `h${i}`,
+        label: `host-${i}.example.com`
+      }))
+    }
+  ]
+  const open = ref(false)
+  return {
+    mount: () => ({
+      render: () =>
+        h(FilterMenu, {
+          fields,
+          open: open.value,
+          'onUpdate:open': (v: boolean) => (open.value = v)
+        })
+    }),
+    update: async () => {
+      open.value = true
+      await settle()
+      document.body
+        .querySelector<HTMLElement>('[data-testid="data-filter-menu__field-host"]')
+        ?.click()
+      await settle()
+      await typeInto('[data-testid="data-filter-menu__panel"] input', '99')
+      await settle()
+    }
+  }
+}
+
+function pickListCase(): Case {
+  const make = (side: string) =>
+    Array.from({ length: 1000 }, (_, i) => ({ id: `${side}${i}`, label: `${side} item ${i}` }))
+  const model = ref<[unknown[], unknown[]]>([make('a'), make('b')])
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          PickList,
+          {
+            modelValue: model.value,
+            'onUpdate:modelValue': (v: [unknown[], unknown[]]) => (model.value = v),
+            trackBy: 'id'
+          },
+          {
+            default: () => [
+              h(PickListSource, { title: 'Available' }),
+              h(PickListTarget, { title: 'Selected' })
+            ]
+          }
+        )
+    }),
+    update: () => {
+      model.value = [[], [...model.value[0], ...model.value[1]]]
+    }
+  }
+}
+
+function cardsCase(): Case {
+  const items = Array.from({ length: 1000 }, (_, i) => ({ id: `c${i}`, name: `Card ${i}` }))
+  const selected = ref<string[]>([])
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          Cards,
+          {
+            items,
+            selectionMode: 'multi',
+            selectedKeys: selected.value,
+            'onUpdate:selectedKeys': (v: string[]) => (selected.value = v)
+          },
+          { header: ({ item }: { item: { name: string } }) => item.name }
+        )
+    }),
+    update: () => {
+      selected.value = items.map((item) => item.id)
+    }
+  }
+}
+
+function tablePresetsCase(): Case {
+  const data = Array.from({ length: 1000 }, (_, i) => ({
+    id: String(i),
+    name: `resource-${i}`,
+    tags: ['production', 'edge', `team-${i % 7}`, 'cache'],
+    requests: (i * 7919) % 100_000
+  }))
+  const columns = [
+    { accessorKey: 'name', header: 'Name', enableSorting: true },
+    { accessorKey: 'tags', header: 'Tags' },
+    { accessorKey: 'requests', header: 'Requests', enableSorting: true }
+  ]
+  const sorting = ref<{ id: string; desc: boolean }[]>([])
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:1024px' }, [
+          h(
+            Table,
+            {
+              data,
+              columns,
+              stackable: false,
+              sorting: sorting.value,
+              'onUpdate:sorting': (v: { id: string; desc: boolean }[]) => (sorting.value = v)
+            },
+            {
+              'cell-name': ({ row }: { row: { name: string } }) =>
+                h(TableCellLink, { label: row.name, href: 'https://app.example.com/' }),
+              'cell-tags': ({ row }: { row: { tags: string[] } }) =>
+                h(TableCellTags, { items: row.tags })
+            }
+          )
+        ])
+    }),
+    update: () => {
+      sorting.value = [{ id: 'requests', desc: true }]
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -342,5 +654,38 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('Chart scatter with 10k points: mount and move the active index', async () => {
+    check('chart-scatter-10k', await measure(scatterCase))
+  })
+  it('Chart bar with 1k categories x 3 series', async () => {
+    check('chart-bar-1k-x3', await measure(barCase))
+  })
+  it('MapChart with all countries + 1k points: mount and walk', async () => {
+    check('map-chart-1k-points', await measure(mapChartCase))
+  })
+  it('Tracker with 1k items: mount and move', async () => {
+    check('tracker-1k', await measure(trackerCase))
+  })
+  it('Trace with 1k spans: mount and search', async () => {
+    check('trace-1k', await measure(traceCase))
+  })
+  it('CodeEditor with 5k lines: mount and type', async () => {
+    check('code-editor-5k-lines', await measure(codeEditorCase))
+  })
+  it('PropertyFilter with 1k values: open and search', async () => {
+    check('property-filter-1k', await measure(propertyFilterCase))
+  })
+  it('FilterMenu field with 1k options: open and search', async () => {
+    check('filter-menu-1k', await measure(filterMenuCase))
+  })
+  it('PickList with 1k items per side: mount and move all', async () => {
+    check('pick-list-1k', await measure(pickListCase))
+  })
+  it('Cards with 1k items: mount and select all', async () => {
+    check('cards-1k', await measure(cardsCase))
+  })
+  it('Table with 1k rows of preset cells: mount and sort', async () => {
+    check('table-1k-presets', await measure(tablePresetsCase))
   })
 })

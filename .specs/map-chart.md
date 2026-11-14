@@ -3,11 +3,11 @@ name: map-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 10868bdd3ad8d69f420e6fa64d7feec6b6b52113b039c3864fe558c817214961
+checksum: 4d113789353e6cb1b4ae6f591dcc4c02abe390b295c69836f591db64fef7b821
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # MapChart — Component Spec
@@ -176,7 +176,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 ## Performance
 
 - Bundle budget: `map-chart` 17.5 KB gzip for the initial chunk (the land grid is ~5 KB of it); the country shapes are a separate async chunk of ~4.7 KB gzip, loaded only when `regions` is set.
-- Runtime budget: 128 countries and 500 bubbles render in one frame; no per-frame work.
+- Runtime budget: every country plus 1,000 bubbles mount and walk within the `map-chart-1k-points` scenario of `perf-budgets.json`; no per-frame work, and the colour domain is a loop, never an argument spread.
 - Heavy parts: country shapes, lazy (`import('./map-chart-countries')`). They are derived from Natural Earth country polygons (public domain) through the Console Kit map data, sampled onto the `NetworkMap` dot grid.
 
 ## Examples

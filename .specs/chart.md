@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: a9bf44f238bfdec6c291772f3aba469bee902e222b235a1b4d9be87b4e9af537
-spec_version: 5
+checksum: 72c4fd4a3646ec85a8f7435474196e8221459409b9eea2265859951c5dfe62c4
+spec_version: 6
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-14
@@ -320,7 +320,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 ## Performance
 
 - Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB gzip (`.size-limit.json`).
-- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows.
+- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows. `Chart.Scatter` with 10k points mounts and moves the active index within `chart-scatter-10k` (the active point is one overlay dot per series, so the dot list never re-renders on a move), and `Chart.Bar` with 1k categories × 3 series within `chart-bar-1k-x3`; both in `perf-budgets.json`.
 - Heavy parts: none; in-house SVG, no chart dependency.
 
 ## Examples
