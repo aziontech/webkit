@@ -96,3 +96,22 @@ describe('ResponseBranches', () => {
     expect(view.getByText('4 of 4')).toBeTruthy()
   })
 })
+
+describe('ResponseBranches naming and test ids', () => {
+  it('names the pager from ariaLabel and still reads the deprecated label', () => {
+    const named = render(ResponseBranches, { props: { count: 3, ariaLabel: 'Answers' } })
+    expect(named.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
+    named.unmount()
+    const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } })
+    expect(legacy.getByRole('group', { name: 'Drafts' })).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId } = render(ResponseBranches, {
+      props: { count: 3 },
+      attrs: { 'data-testid': 'branches' }
+    })
+    expect(getByTestId('branches')).toBeInTheDocument()
+    expect(getByTestId('branches__pager')).toBeInTheDocument()
+  })
+})

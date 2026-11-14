@@ -3,11 +3,11 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 7d6731c3e27b452cf929efd412e715fbe0247ea828dab73450badf998d3acf58
+checksum: 3e79ffdc40c1a86f7f7c99a6fdf5313ce0c9f65b3c61dc48355131223b6b0b68
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # ConversationHistory — Component Spec
@@ -65,7 +65,8 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 | `now`       | `string \| number \| Date`                                             | `undefined` | false    | Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
 | `removable` | `boolean`                                                              | `false`     | false    | Shows a Delete button on each row that emits `remove`.                                                                                                     |
 | `loading`   | `boolean`                                                              | `false`     | false    | Shows placeholder rows while the history loads.                                                                                                            |
-| `label`     | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |
+| `ariaLabel` | `string`                                                               | `''`        | false    | Accessible name of the list. Empty uses the locale catalog (`Conversation history`).                                                                       |
+| `label`     | `string`                                                               | `''`        | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty.                                                           |
 
 ## v-model
 
@@ -75,8 +76,8 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 
 ## Events
 
-| Event    | Payload                           | When                                                                                       |
-| -------- | --------------------------------- | ------------------------------------------------------------------------------------------ |
+| Event    | Payload                           | When                                                                                         |
+| -------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
 | `remove` | `(event: MouseEvent, id: string)` | Delete pressed on a row (with `removable`); `id` is the row's item id. The owner removes it. |
 
 ## Slots
@@ -113,7 +114,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root is a `nav` named by `label`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
+- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
@@ -123,7 +124,7 @@ _none_
 
 | Key                              | English source          | Override prop |
 | -------------------------------- | ----------------------- | ------------- |
-| `conversationHistory.label`      | `Conversation history`  | `label`       |
+| `conversationHistory.label`      | `Conversation history`  | `ariaLabel`   |
 | `conversationHistory.today`      | `Today`                 | —             |
 | `conversationHistory.yesterday`  | `Yesterday`             | —             |
 | `conversationHistory.previous7`  | `Previous 7 days`       | —             |

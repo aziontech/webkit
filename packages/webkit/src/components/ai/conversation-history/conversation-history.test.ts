@@ -131,3 +131,35 @@ describe('ConversationHistory — reference time from WebkitProvider', () => {
     expect(groupNames(view)[0]).toBe('Today')
   })
 })
+
+describe('ConversationHistory naming and test ids', () => {
+  it('takes its accessible name from ariaLabel and still reads the deprecated label', () => {
+    const named = render(ConversationHistory, { props: { items, now, ariaLabel: 'Chats' } })
+    expect(named.getByRole('navigation', { name: 'Chats' })).toBeInTheDocument()
+    named.unmount()
+    const legacy = render(ConversationHistory, { props: { items, now, label: 'Old chats' } })
+    expect(legacy.getByRole('navigation', { name: 'Old chats' })).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(ConversationHistory, {
+      props: { items, now },
+      attrs: { 'data-testid': 'chats' }
+    })
+    expect(getByTestId('chats')).toBeInTheDocument()
+    expect(queryByTestId('ai-conversation-history')).toBeNull()
+  })
+
+  it('keeps every conversation of a large history, newest first in each group', () => {
+    const many = Array.from({ length: 300 }, (_, i) => ({
+      id: `c${i}`,
+      title: `Chat ${i}`,
+      updatedAt: new Date(Date.parse('2026-11-11T14:00:00') - i * 60_000).toISOString()
+    }))
+    const { getAllByTestId } = render(ConversationHistory, { props: { items: many, now } })
+    const rows = getAllByTestId('ai-conversation-history__item')
+    expect(rows).toHaveLength(300)
+    expect(rows[0]!.textContent).toContain('Chat 0')
+    expect(rows[299]!.textContent).toContain('Chat 299')
+  })
+})
