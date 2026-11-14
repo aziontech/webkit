@@ -47,29 +47,29 @@
       "tool": "patterns",
       "lang": "en",
       "query": "manage users",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "invite teammate",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "api tokens",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/tokens",
+      "top3": ["platform/account/tokens"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "audit log",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/activity-history",
+      "top3": ["platform/account/activity-history"]
     },
     {
       "tool": "patterns",
@@ -508,15 +508,15 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "lista de usuários",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users"]
     },
     {
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "convidar membro",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users"]
     },
     {
       "tool": "patterns",
@@ -620,15 +620,15 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "tokens de api",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/tokens",
+      "top3": ["platform/account/tokens"]
     },
     {
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "histórico de atividades",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/activity-history",
+      "top3": ["platform/account/activity-history"]
     },
     {
       "tool": "patterns",
@@ -697,8 +697,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "lista de usuarios",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users"]
     },
     {
       "tool": "patterns",
@@ -802,8 +802,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "registro de auditoría",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view"]
+      "top1": "platform/account/activity-history",
+      "top3": ["platform/account/activity-history"]
     },
     {
       "tool": "patterns",
@@ -830,8 +830,8 @@
       "tool": "patterns",
       "lang": "en",
       "query": "remove user",
-      "top1": "platform/view/table-view",
-      "top3": ["platform/view/table-view", "platform/delete/delete-with-confirmation"]
+      "top1": "platform/account/users",
+      "top3": ["platform/account/users", "platform/delete/delete-with-confirmation"]
     },
     {
       "tool": "patterns",
