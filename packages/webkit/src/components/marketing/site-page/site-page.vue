@@ -81,7 +81,7 @@
 
   const closesPage = computed(() => {
     const last = columnEntries.value.at(-1)
-    return isClosing(last?.entry) && last?.props.hatch !== false
+    return isClosing(last?.entry) && last?.props['hatch'] !== false
   })
 
   function isClosing(entry?: SitePageSection): boolean {
@@ -115,7 +115,7 @@
         component,
         scenes: resolveScenes(entry),
         gapSize:
-          entry.gap === 'none' || (closing && bound.kind === 'frame')
+          entry.gap === 'none' || (closing && bound['kind'] === 'frame')
             ? null
             : entry.gap === 'small'
               ? 'small'
