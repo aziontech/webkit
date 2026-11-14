@@ -19,7 +19,7 @@
   const template = {
     title: 'Nuxt Storefront',
     framework: 'Nuxt',
-    publisher: 'Example',
+    publisher: 'Azion',
     updated: 'Oct 21, 2026',
     description:
       'A storefront with a product list, a product page and a cart, rendered on the edge and cached per page.'

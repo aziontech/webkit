@@ -43,9 +43,9 @@ A `ul` grid, one to three tiles a row by width, of `Card kind="integration"`: th
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### G. Templates — `Input`, `Card`, `EmptyState`, `Button` (required)
+### G. Templates — `PropertyFilter`, `Card`, `EmptyState`, `Button` (required)
 
-The first tab is the full template catalog. A medium `Input` with a leading search glyph (placeholder and `aria-label` "Search templates") matches the name and the description as the person types. Under it a `ul` grid of small `Card` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark in a bordered square, grey until the tile is hovered or focused, then in colour; the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`); two lines of description. Hovering or focusing a tile lights a soft glow from its top start corner, drawn from the mark itself: an `aria-hidden` span under the content holds a scaled, blurred, faded copy of the mark, so a colour mark (`ai-cor`) glows in its own colours and a one-colour font mark (a starter) in `text-(--primary)`; `isolate` on the `Card` keeps the glow under the content, and no colour value lives in the data. When the search matches nothing, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear search `Button`.
+The first tab is the full template catalog. A second `useCollection` runs the templates: its `PropertyFilter` (placeholder and `aria-label` "Search templates") turns free text over the name, the framework and the description, and a Framework property, into tokens that live in the URL under the `templates` prefix, so they never collide with the integration filter. Under it a `ul` grid of small `Card` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark in a bordered square, grey until the tile is hovered or focused, then in colour; the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`); two lines of description. Hovering or focusing a tile lights a soft glow from its top start corner, drawn from the mark itself: an `aria-hidden` span under the content holds a scaled, blurred, faded copy of the mark, so a colour mark (`ai-cor`) glows in its own colours and a one-colour font mark (a starter) in `text-(--primary)`; `isolate` on the `Card` keeps the glow under the content, and no colour value lives in the data. When its `status` is `no-match`, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear filters `Button` bound to the templates' `clearFilters`.
 
 ### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
@@ -88,7 +88,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
 - Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
 - Hide the Featured row while any filter is set.
-- Open on Templates and keep the template search to one `Input`; the grouped catalog with category and framework filters is the template browser's job.
+- Open on Templates and narrow the templates with one `PropertyFilter` on their own `useCollection`, as every list does; the grouped catalog with a preview drawer is the template browser's job.
 - Draw the template glow from the mark (a blurred copy), never from a brand colour written into the data: a hex value fails `webkit/no-hardcoded-color` in the app that copies the block.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
 - Show the permissions before the install form, and the target as a required field.
@@ -109,7 +109,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 - **Title:** "Marketplace". Description: "Find integrations and templates that run on your applications."
 - **Tabs:** "Templates", "Integrations". **Sections:** "Featured", "All integrations".
-- **Template search:** placeholder and `aria-label` "Search templates"; no match: "No matching templates", "No template matches this search. Try another name or framework.", "Clear search".
+- **Template search:** placeholder and `aria-label` "Search templates"; no match: "No matching templates", "No template matches these filters. Try another name or framework.", "Clear filters".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
 - **Drawer:** the name, "by <publisher>", "Overview", "Permissions", "Install" or "Install on another application", the field "Application" with "Select an application".
@@ -140,7 +140,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
 - InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
 - NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- TemplatesNoMatch: the template search "kubernetes" matches nothing; the bordered empty state offers Clear search.
+- TemplatesNoMatch: the template search "kubernetes" matches nothing; the bordered empty state offers Clear filters.
 - Loading: on Templates, the search is disabled and ten `Skeleton` tiles (mark, name, two lines) hold the grid in a band that is `aria-busy`; the Integrations tab holds six skeleton integration tiles under a disabled filter.
 
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.

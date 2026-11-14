@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -56,17 +55,12 @@
                 aria-busy="true"
                 aria-label="Loading templates"
               >
-                <Input
-                  size="medium"
+                <PropertyFilter
+                  v-bind="propertyFilterProps"
                   placeholder="Search templates"
                   aria-label="Search templates"
-                  class="w-full"
                   disabled
-                >
-                  <template #iconLeft>
-                    <i class="pi pi-search" />
-                  </template>
-                </Input>
+                />
                 <ul
                   class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
                 >
