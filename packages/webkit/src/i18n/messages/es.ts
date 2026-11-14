@@ -1057,7 +1057,9 @@ export const es: Messages = {
   copyPromptButton: {
     label: 'Copiar prompt',
     copied: 'Copiado',
-    worksWith: 'Funciona con {agents}'
+    worksWith: 'Funciona con {agents}',
+    tooltip: 'Copia un prompt de configuración para tu herramienta de IA',
+    dismiss: 'Descartar'
   },
   docAgentCard: {
     title: 'Tu agente de IA, fluido en Azion',

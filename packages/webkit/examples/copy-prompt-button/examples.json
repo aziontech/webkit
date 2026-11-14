@@ -16,6 +16,11 @@
       "name": "Disabled",
       "summary": "`disabled`: the chip greys out and copies nothing.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "Closable",
+      "summary": "`closable` puts a dismiss button beside the chip; activating it removes both from the layout and emits `close`, so the page can remember the choice. The agent marks are drawn from their asset files through `Logo`, flattened to the chip's white.",
+      "file": "closable.vue"
     }
   ]
 }
