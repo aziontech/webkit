@@ -1,14 +1,4 @@
-## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.0.0...@aziontech/icons@4.1.0) (2026-07-23)
-
-
-### Features
-
-* webkit init hardening, toast service auto-mount, and motion token adoption ([#772](https://github.com/aziontech/webkit/issues/772)) ([5534fb2](https://github.com/aziontech/webkit/commit/5534fb2f570729c79728b33b561082b65d5d44af))
-
-
-### Bug Fixes
-
-* bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
+# Changelog
 
 ## [4.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.3.0...@aziontech/icons@4.4.0) (2026-11-03)
 
@@ -47,6 +37,18 @@
 ### Bug Fixes
 
 * **icons:** resolve currentColor per theme in the colored-icon CSS ([#930](https://github.com/aziontech/webkit/issues/930)) ([a517b14](https://github.com/aziontech/webkit/commit/a517b147c7e545d1fae9d3a726c6dade419f35bb))
+
+## [4.1.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@4.0.0...@aziontech/icons@4.1.0) (2026-07-23)
+
+
+### Features
+
+* webkit init hardening, toast service auto-mount, and motion token adoption ([#772](https://github.com/aziontech/webkit/issues/772)) ([5534fb2](https://github.com/aziontech/webkit/commit/5534fb2f570729c79728b33b561082b65d5d44af))
+
+
+### Bug Fixes
+
+* bump fast-uri version from 4.1.0 to 4.1.1 ([#773](https://github.com/aziontech/webkit/issues/773)) ([2f43cbb](https://github.com/aziontech/webkit/commit/2f43cbb0e128fdc8fbea16b6ed04bcf63356b08f))
 
 ## [1.4.0](https://github.com/aziontech/webkit/compare/@aziontech/icons@1.3.0...@aziontech/icons@1.4.0) (2026-03-25)
 
