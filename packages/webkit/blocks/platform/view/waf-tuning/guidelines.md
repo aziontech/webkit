@@ -20,15 +20,15 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Header — `PageHeader`, `Button` (required)
 
-`PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Add Allowed Rule and is disabled until rows are checked, then reads "Allow 2 selected".
+`PageHeader` at `size="small"` titled Tuning, with a description that says what the list is and what to do with it. Actions: outlined Export to CSV (disabled while loading or empty) and the allow action, which reads Allow selected and is disabled until rows are checked, then reads "Allow 2 selected".
 
 ### B. Threshold settings — `Field`, `Select`, `Input`, `IconButton`, `Tooltip` (required)
 
 A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
-### C. Matches table — `Card`, `TableRoot`, `Tag`, `EmptyState` (required)
+### C. Matches table — `Card`, `TableRoot`, `Table.CellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells show two values and a small `Tag` with "+n". The `empty` slot is a small `EmptyState` naming the minimum and the range and saying how to widen them.
+A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -55,7 +55,8 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 
 ## Copy
 
-- **Header action:** "Add Allowed Rule", then "Allow 2 selected".
+- **Header action:** "Allow selected" (disabled), then "Allow 2 selected".
+- **No match:** "No matching rules", "No rule, IP address, country or path matches “cache”.", "Clear search".
 - **Settings labels:** "Time range", "Minimum hits".
 - **Empty after threshold:** "No rule reaches the minimum", "No rule matched 100 times or more in the last 24 hours. Lower the minimum hits or widen the time range."
 - **First use:** "No matches yet", "This rule set has not matched any request. Matches appear here as traffic arrives."
@@ -78,6 +79,7 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 - AllowFailed: the dialog with the failure `Alert` and Try again.
 - Empty: no match yet, no settings.
 - Loading: settings disabled, skeleton rows.
+- LoadFailed: the matched requests did not load; a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
 
 ## Related
 
