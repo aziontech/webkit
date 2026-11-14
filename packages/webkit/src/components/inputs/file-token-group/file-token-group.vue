@@ -8,7 +8,10 @@
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Progress from '../../feedback/progress/progress.vue'
 
-  export type FileTokenGroupAlignment = 'vertical' | 'horizontal'
+  /** Layout axis of the tokens. */
+  export type FileTokenGroupOrientation = 'vertical' | 'horizontal'
+  /** @deprecated since 6.0 — use `FileTokenGroupOrientation`. Removed in 7.0. */
+  export type FileTokenGroupAlignment = FileTokenGroupOrientation
 
   export interface FileTokenGroupFile {
     name: string
@@ -32,6 +35,8 @@
     /** The files, in order; each with its optional upload state, error and warning. */
     items?: FileTokenGroupItem[]
     /** Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. */
+    orientation?: FileTokenGroupOrientation
+    /** @deprecated since 6.0 — use `orientation`. Removed in 7.0. */
     alignment?: FileTokenGroupAlignment
     /** Shows this many tokens and a Show more toggle for the rest. 0 shows them all. */
     limit?: number
@@ -47,6 +52,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
+    orientation: 'vertical',
     alignment: 'vertical',
     limit: 0,
     showFileSize: true,
@@ -57,6 +63,8 @@
 
   const emit = defineEmits<{
     /** The remove button of the token at `index` was pressed. The parent removes it from `items`. */
+    remove: [event: MouseEvent, payload: { index: number; item: FileTokenGroupItem }]
+    /** @deprecated since 6.0 — listen to `remove`. Removed in 7.0. */
     dismiss: [event: MouseEvent, payload: { index: number; item: FileTokenGroupItem }]
   }>()
 
@@ -72,6 +80,10 @@
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
+  )
+
+  const layout = computed<FileTokenGroupOrientation>(() =>
+    props.orientation === 'horizontal' ? 'horizontal' : props.alignment
   )
 
   const hidden = computed<number>(() =>
@@ -138,6 +150,7 @@
   const onDismiss = (event: MouseEvent, index: number): void => {
     const item = props.items[index]
     if (!item) return
+    emit('remove', event, { index, item })
     emit('dismiss', event, { index, item })
     void focusAfterRemoval(index)
   }
@@ -147,7 +160,8 @@
   <div
     v-bind="rootAttrs"
     :data-testid="testId"
-    :data-alignment="alignment"
+    :data-alignment="layout"
+    :data-orientation="layout"
     :data-readonly="readonly || null"
     class="group/ftg flex w-full flex-col gap-(--spacing-xs)"
   >

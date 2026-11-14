@@ -17,9 +17,9 @@
   <div class="w-full max-w-(--container-lg)">
     <FileTokenGroup
       :items="items"
-      alignment="horizontal"
+      orientation="horizontal"
       :limit="3"
-      @dismiss="(_event, { index }) => remove(index)"
+      @remove="(_event, { index }) => remove(index)"
     />
   </div>
 </template>
