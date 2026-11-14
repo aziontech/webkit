@@ -11,7 +11,7 @@
     max-width="site"
   >
     <template #background>
-      <BannerArt art="map" />
+      <BannerArt kind="map" />
     </template>
     <HeroTitle
       eyebrow="Network"

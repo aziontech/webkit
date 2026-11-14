@@ -1,9 +1,9 @@
 {
   "renamed": {
-    "sample:shared/ui/banners/GlobeBanner": "banner-art (art=\"globe\")",
-    "sample:shared/ui/banners/GlobeDisc": "banner-art (art=\"globe\") on assets/spinning-globe",
-    "sample:shared/ui/banners/MapBanner": "banner-art (art=\"map\") on network-map",
-    "sample:shared/ui/banners/NetworkBanner": "banner-art (art=\"network\") on network-map",
+    "sample:shared/ui/banners/GlobeBanner": "banner-art (kind=\"globe\")",
+    "sample:shared/ui/banners/GlobeDisc": "banner-art (kind=\"globe\") on assets/spinning-globe",
+    "sample:shared/ui/banners/MapBanner": "banner-art (kind=\"map\") on network-map",
+    "sample:shared/ui/banners/NetworkBanner": "banner-art (kind=\"network\") on network-map",
     "sample:shared/ui/flow/FlowCard": "flow-node (unstyled) with flow-anchor and a tag, as composed in assets/console-trace-scene",
     "sample:shared/ui/line-figure/LineFigure": "line-figure",
     "sample:shared/ui/line-figure/figures/ai-versioning": "line-figure (name=\"ai-versioning\")",

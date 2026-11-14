@@ -305,7 +305,7 @@
   },
   {
     "name": "banner-art",
-    "path": "src/components/marketing/banner/banner-art/banner-art.vue",
+    "path": "src/components/marketing/banner-art/banner-art.vue",
     "limit": "11.1 KB"
   },
   {
