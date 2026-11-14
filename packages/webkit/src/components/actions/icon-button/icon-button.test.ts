@@ -159,14 +159,42 @@ describe('IconButton', () => {
     const { getByTestId } = render(IconButton, {
       props: { icon: 'pi pi-plus', ariaLabel: 'Add', kind }
     })
-    expect(getByTestId('actions-icon-button')).toBeInTheDocument()
+    expect(getByTestId('actions-icon-button').getAttribute('data-kind')).toBe(kind)
   })
 
   it.each(SIZES)('renders size=%s', (size) => {
     const { getByTestId } = render(IconButton, {
       props: { icon: 'pi pi-plus', ariaLabel: 'Add', size }
     })
-    expect(getByTestId('actions-icon-button')).toBeInTheDocument()
+    expect(getByTestId('actions-icon-button').getAttribute('data-size')).toBe(size)
+  })
+
+  it('defaults to type=button and takes type=submit to submit its form', async () => {
+    const plain = render(IconButton, { props: { icon: 'pi pi-search', ariaLabel: 'Search' } })
+    expect(plain.getByRole('button', { name: 'Search' }).getAttribute('type')).toBe('button')
+    plain.unmount()
+
+    let submitted = 0
+    const view = render({
+      components: { IconButton },
+      template:
+        '<form @submit.prevent="onSubmit"><IconButton type="submit" icon="pi pi-send" aria-label="Send" /></form>',
+      setup: () => ({ onSubmit: () => (submitted += 1) })
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Send' }))
+    expect(submitted).toBe(1)
+  })
+
+  it('does not submit its form while loading', async () => {
+    let submitted = 0
+    const view = render({
+      components: { IconButton },
+      template:
+        '<form @submit.prevent="onSubmit"><IconButton type="submit" loading icon="pi pi-send" aria-label="Send" /></form>',
+      setup: () => ({ onSubmit: () => (submitted += 1) })
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Send' }))
+    expect(submitted).toBe(0)
   })
 
   it('has no a11y violations on the default button render', async () => {

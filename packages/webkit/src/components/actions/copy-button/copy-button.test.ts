@@ -228,17 +228,17 @@ describe('CopyButton', () => {
     })
   })
 
-  describe('variant smoke (kind/size forwarded to IconButton)', () => {
+  describe('kind and size forwarded to IconButton', () => {
     const kinds = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
     it.each(kinds)('renders an accessible button for kind=%s', (kind) => {
       const { getByRole } = render(CopyButton, { props: { value: 'token', kind } })
-      expect(getByRole('button', { name: 'Copy' }).tagName).toBe('BUTTON')
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-kind')).toBe(kind)
     })
 
     const sizes = ['small', 'medium', 'large'] as const
     it.each(sizes)('renders an accessible button for size=%s', (size) => {
       const { getByRole } = render(CopyButton, { props: { value: 'token', size } })
-      expect(getByRole('button', { name: 'Copy' }).tagName).toBe('BUTTON')
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-size')).toBe(size)
     })
   })
 })
