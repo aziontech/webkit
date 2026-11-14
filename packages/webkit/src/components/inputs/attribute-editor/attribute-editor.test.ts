@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CustomCells from '../../../../examples/attribute-editor/custom-cells.vue'
 import Default from '../../../../examples/attribute-editor/default.vue'
+import EmptyAndDisabled from '../../../../examples/attribute-editor/empty-and-disabled.vue'
 import Grouped from '../../../../examples/attribute-editor/grouped.vue'
 import Reorderable from '../../../../examples/attribute-editor/reorderable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -369,5 +370,17 @@ describe('AttributeEditor', () => {
   ])('renders the %s example with no axe violations', async (_name, Example) => {
     const { container } = render(Example)
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('AttributeEditor EmptyAndDisabled example', () => {
+  it('shows the empty text in the first editor and disables the second', async () => {
+    const view = render(EmptyAndDisabled)
+    expect(view.getAllByTestId('input-attribute-editor__empty')[0]!.textContent).toContain(
+      'No environment variables yet.'
+    )
+    const adds = view.getAllByTestId('input-attribute-editor__add') as HTMLButtonElement[]
+    expect(adds[1]!.disabled).toBe(true)
+    await expectNoA11yViolations(view.container)
   })
 })
