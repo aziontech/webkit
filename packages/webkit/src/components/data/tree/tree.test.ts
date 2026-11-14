@@ -74,6 +74,11 @@ describe('Tree', () => {
     expect(custom.queryByTestId('data-tree')).toBeNull()
   })
 
+  it('names the tree from the locale catalog when ariaLabel is empty', () => {
+    const view = render(Tree, { props: { items: ITEMS } })
+    expect(view.getByRole('tree', { name: 'Tree' })).toBeTruthy()
+  })
+
   it('follows the tree pattern with level, set size and position on each node', () => {
     const view = mount()
     const tree = view.getByRole('tree', { name: 'Bucket objects' })

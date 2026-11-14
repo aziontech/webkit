@@ -1086,6 +1086,7 @@ export const ptBR: Messages = {
     roleDescription: 'histórico de status'
   },
   tree: {
+    label: 'Árvore',
     emptyTitle: 'Nenhum item'
   },
   unsavedChanges: {

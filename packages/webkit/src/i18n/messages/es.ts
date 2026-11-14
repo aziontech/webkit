@@ -1086,6 +1086,7 @@ export const es: Messages = {
     roleDescription: 'historial de estado'
   },
   tree: {
+    label: 'Árbol',
     emptyTitle: 'No hay elementos'
   },
   unsavedChanges: {

@@ -3,10 +3,10 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 2c008d09c32bf27cc17474c17856a43fe648fb413f3374a97793b9edbdbcef34
-spec_version: 1
+checksum: 93394e7672dca304476035c807cafb0d8977cd90db96152dc012e2aaa72931cd
+spec_version: 2
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Tree — Component Spec
@@ -92,7 +92,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 | `loading`          | `boolean`    | `false` | false    | Renders Skeleton rows in place of the tree and sets `aria-busy`.                                                                                                                                |
 | `emptyTitle`       | `string`     | `''`    | false    | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`).                                                                                       |
 | `emptyDescription` | `string`     | `''`    | false    | Supporting line under the empty title.                                                                                                                                                          |
-| `ariaLabel`        | `string`     | `''`    | false    | Accessible name of the tree.                                                                                                                                                                    |
+| `ariaLabel`        | `string`     | `''`    | false    | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name.                                                                        |
 
 Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. `icon` is an icon class string (`pi pi-folder`, `ai ai-…`), the same convention `empty-state` uses.
 
@@ -168,7 +168,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel`, inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
+- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel` (or `tree.label` when it is empty), inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
 - Selection: while `selectable`, every treeitem carries `aria-selected="true|false"`; otherwise none does. `aria-multiselectable` is not set (single selection).
 - Disabled: a disabled node carries `aria-disabled="true"`.
 - Roving tabindex: exactly one treeitem has `tabindex="0"`, every other `-1`. The tab stop is the selected node when it is visible, else the last focused node when visible, else the first node. When the tab-stop node is hidden by a collapse (from the keyboard or from a `v-model:expanded` change), the tab stop moves to its nearest visible ancestor. Clicking a row moves the tab stop and focus to it.

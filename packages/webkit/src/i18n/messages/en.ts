@@ -1089,6 +1089,7 @@ export const topologyDiagram = {
 } as const
 
 export const tree = {
+  label: 'Tree',
   emptyTitle: 'No items'
 } as const
 
