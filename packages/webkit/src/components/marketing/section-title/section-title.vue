@@ -135,7 +135,7 @@
 
       <div
         v-if="slots.actions"
-        class="flex w-full flex-col items-stretch gap-(--spacing-md) [&>*]:w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[kind=centered]:justify-center"
+        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[kind=centered]:justify-center"
       >
         <slot name="actions" />
       </div>
