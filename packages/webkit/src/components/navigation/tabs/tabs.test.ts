@@ -344,6 +344,33 @@ describe('Tabs (composition)', () => {
   })
 
   describe('keyboard navigation on the tablist (context.onListKeydown)', () => {
+    it('manual activation moves focus with the arrows and selects only on Enter', async () => {
+      const { getByText } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem },
+          template: `
+            <Tabs default-value="tab-1" activation-mode="manual">
+              <TabsList>
+                <TabsItem value="tab-1" label="First" />
+                <TabsItem value="tab-2" label="Second" />
+                <TabsItem value="tab-3" label="Third" />
+              </TabsList>
+            </Tabs>
+          `
+        })
+      )
+      const tab = (label: string) => getByText(label).closest('[role="tab"]') as HTMLElement
+      tab('First').focus()
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(tab('Second'))
+      expect(tab('First').getAttribute('aria-selected')).toBe('true')
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(tab('Third'))
+      expect(tab('Third').getAttribute('aria-selected')).toBe('false')
+      await keyboardUser.keyboard('{Enter}')
+      expect(tab('Third').getAttribute('aria-selected')).toBe('true')
+    })
+
     it('ArrowRight/ArrowLeft move selection across enabled tabs and wrap around', async () => {
       const { getByTestId, getByText } = render(Tree)
       const list = getByTestId('tv__list')
