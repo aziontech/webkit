@@ -3,6 +3,8 @@ name: doc-cta
 category: documentation
 structure: monolithic
 status: implemented
+deprecated: true
+replaced_by: doc-call-to-action
 spec_version: 2
 template: 2
 checksum: 44683697d81a163383fcfbe0238116f7b397e67087d9401e6c630e35b4cfed01
