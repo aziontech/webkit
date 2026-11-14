@@ -11,6 +11,11 @@
       "name": "Band links",
       "summary": "A plan `description` under each name says who the plan is for, and a band `link` closes a product band with its own rates page.",
       "file": "band-links.vue"
+    },
+    {
+      "name": "Hints and marks",
+      "summary": "Rows with a `hint` open a popover titled by the label; included and not-included cells draw their marks with a tooltip of the label. With no closing link, the last row draws the closing rule. Below 1024px the plan picker carries a search field.",
+      "file": "hints-and-marks.vue"
     }
   ],
   "site": [

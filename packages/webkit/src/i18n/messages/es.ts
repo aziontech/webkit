@@ -277,6 +277,14 @@ export const es: Messages = {
     placeholder: 'Buscar en todo',
     title: 'Menú de comandos'
   },
+  comparePlans: {
+    about: 'Acerca de {label}',
+    search: 'Buscar',
+    searchPicker: 'Buscar {picker}',
+    empty: 'No se encontraron resultados.',
+    included: 'Incluido',
+    excluded: 'No incluido'
+  },
   comparisonTable: {
     about: 'Acerca de {capability}'
   },

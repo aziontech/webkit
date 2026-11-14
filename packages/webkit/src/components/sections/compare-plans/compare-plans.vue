@@ -1,16 +1,25 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import Overline from '../../content/overline/overline.vue'
   import Tag from '../../content/tag/tag.vue'
-  import Hint from '../../inputs/hint/hint.vue'
+  import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import Link from '../../navigation/link/link.vue'
+  import Popover from '../../overlay/popover/popover.vue'
+  import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
+  import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'
+  import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
+  import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({
     name: 'ComparePlans',
@@ -39,7 +48,7 @@
     action: ComparePlansAction
   }
 
-  /** One cell value: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
+  /** One cell value: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank. */
   export type ComparePlansValue = string | boolean
 
   /** One feature row. */
@@ -50,7 +59,7 @@
     values: ComparePlansValue[]
     /** Renders the row as a group heading. */
     group?: boolean
-    /** Guidance revealed from a hint next to the label. */
+    /** Definition of the term the label names, opened in a popover beside the label. */
     hint?: string
     /** Short tag next to the label, such as Preview. */
     tag?: string
@@ -79,13 +88,13 @@
     columnLabel?: string
     /** Accessible name of the plan picker shown below the large breakpoint. */
     pickerAriaLabel?: string
-    /** Screen-reader text of a ticked cell. */
+    /** Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`). */
     includedLabel?: string
-    /** Screen-reader text of a dashed cell. */
+    /** Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). */
     excludedLabel?: string
     /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: ComparePlansPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick ticks, a dash dashes, other text shows as written, empty is blank. */
+    /** The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
     sections?: ComparePlansSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ComparePlansAction
@@ -104,6 +113,7 @@
   })
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ comparePlans: en.comparePlans })
 
   const EYEBROW_PREFIX = '//' as const
 
@@ -131,6 +141,29 @@
   const planName = (id: unknown) =>
     columns.value.find(({ plan }) => plan.id === id)?.plan.name ?? ''
 
+  const pickerQuery = ref('')
+
+  const matchingColumns = computed(() => {
+    const term = pickerQuery.value.trim().toLowerCase()
+    return term
+      ? columns.value.filter(({ plan }) => plan.name.toLowerCase().includes(term))
+      : columns.value
+  })
+
+  const resetPickerQuery = () => {
+    pickerQuery.value = ''
+  }
+
+  const pickerSearchLabel = computed(() =>
+    props.pickerAriaLabel
+      ? t('comparePlans.searchPicker', { picker: props.pickerAriaLabel.toLowerCase() })
+      : t('comparePlans.search')
+  )
+
+  const includedText = computed(() => props.includedLabel || t('comparePlans.included'))
+
+  const excludedText = computed(() => props.excludedLabel || t('comparePlans.excluded'))
+
   const labelHead = (label: string) => label.slice(0, label.lastIndexOf(' ') + 1)
 
   const labelTail = (label: string) => label.slice(label.lastIndexOf(' ') + 1)
@@ -138,6 +171,12 @@
   const isIncluded = (value: ComparePlansValue | undefined) => value === true || value === '✓'
 
   const isExcluded = (value: ComparePlansValue | undefined) => value === '—'
+
+  const isClosingRow = (sectionIndex: number, rowIndex: number) =>
+    !props.primaryAction &&
+    sectionIndex === props.sections.length - 1 &&
+    !props.sections[sectionIndex]?.link &&
+    rowIndex === (props.sections[sectionIndex]?.rows.length ?? 0) - 1
 </script>
 
 <template>
@@ -175,16 +214,39 @@
                 :display-value="planName"
                 size="large"
                 class="w-full lg:hidden"
+                @update:open="resetPickerQuery"
               >
                 <SelectTrigger :aria-label="pickerAriaLabel || undefined" />
                 <SelectContent>
+                  <template #search>
+                    <Input
+                      v-model="pickerQuery"
+                      size="small"
+                      :placeholder="t('comparePlans.search')"
+                      :aria-label="pickerSearchLabel"
+                    >
+                      <template #iconLeft>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
+                  </template>
                   <SelectOption
-                    v-for="{ plan } in columns"
+                    v-for="{ plan } in matchingColumns"
                     :key="plan.id"
                     :value="plan.id"
                   >
                     {{ plan.name }}
                   </SelectOption>
+                  <p
+                    v-if="matchingColumns.length === 0"
+                    role="status"
+                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                  >
+                    {{ t('comparePlans.empty') }}
+                  </p>
                 </SelectContent>
               </Select>
             </th>
@@ -254,21 +316,37 @@
             :key="rowIndex"
             :data-lead="row.group || null"
             :data-ruled="(row.group && rowIndex > 0) || null"
+            :data-closing="isClosingRow(sectionIndex, rowIndex) || null"
             class="group/row"
           >
             <th
               scope="row"
-              class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t"
+              class="border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-start align-middle lg:px-(--spacing-lg) text-label-md font-normal text-(--text-muted) group-data-lead/row:text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b"
             >
               <span>
                 <template v-if="row.hint">
                   {{ labelHead(row.label)
                   }}<span class="whitespace-nowrap"
                     >{{ labelTail(row.label)
-                    }}<Hint
-                      :text="row.hint"
-                      class="ms-(--spacing-xxs) align-middle"
-                  /></span>
+                    }}<span class="-my-(--spacing-xxs) ms-(--spacing-xxs) inline-flex align-middle"
+                      ><Popover placement="auto">
+                        <PopoverTrigger>
+                          <IconButton
+                            kind="transparent"
+                            size="small"
+                            icon="pi pi-info-circle"
+                            :aria-label="t('comparePlans.about', { label: row.label })"
+                          />
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                            <PopoverTitle>{{ row.label }}</PopoverTitle>
+                            <PopoverDescription>{{ row.hint }}</PopoverDescription>
+                          </div>
+                        </PopoverContent>
+                      </Popover></span
+                    ></span
+                  >
                 </template>
                 <template v-else>{{ row.label }}</template>
                 <Tag
@@ -284,22 +362,25 @@
               v-for="{ plan, index } in columns"
               :key="plan.id"
               :data-folded="plan.id !== visiblePlan || null"
-              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t max-lg:data-folded:hidden"
+              class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
             >
               <template v-if="isIncluded(row.values[index])">
-                <i
-                  class="pi pi-check text-body-sm text-(--success-contrast)"
-                  aria-hidden="true"
-                />
-                <span class="sr-only">{{ includedLabel }}</span>
+                <Tooltip :text="includedText">
+                  <i
+                    class="pi pi-check-circle text-body-md text-(--success-contrast)"
+                    aria-hidden="true"
+                  />
+                </Tooltip>
+                <span class="sr-only">{{ includedText }}</span>
               </template>
               <template v-else-if="isExcluded(row.values[index])">
-                <span
-                  class="text-(--text-muted)"
-                  aria-hidden="true"
-                  >—</span
-                >
-                <span class="sr-only">{{ excludedLabel }}</span>
+                <Tooltip :text="excludedText">
+                  <i
+                    class="ai ai-circle-minus text-body-md text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Tooltip>
+                <span class="sr-only">{{ excludedText }}</span>
               </template>
               <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
             </td>

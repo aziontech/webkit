@@ -211,6 +211,15 @@ export const command = {
   title: 'Command menu'
 } as const
 
+export const comparePlans = {
+  about: 'About {label}',
+  search: 'Search',
+  searchPicker: 'Search {picker}',
+  empty: 'No results found.',
+  included: 'Included',
+  excluded: 'Not included'
+} as const
+
 export const comparisonTable = {
   about: 'About {capability}'
 } as const
@@ -1230,6 +1239,7 @@ export const en = {
   combobox,
   command,
   consoleLayout,
+  comparePlans,
   comparisonTable,
   confirmDialog,
   conversation,
