@@ -19,6 +19,7 @@ import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
 import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
 import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
+import ServiceMonitoring from '../../blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -224,5 +225,24 @@ describe('platform/dashboard/activity-outcomes-dashboard', () => {
     const view = render(Activity)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')?.length).toBe(1)
+  })
+})
+
+describe('platform/dashboard/service-monitoring-dashboard', () => {
+  it('titles the page and drives every tile from the one window in the header', async () => {
+    const view = render(ServiceMonitoring)
+    expect(view.getByRole('heading', { level: 1, name: 'Service monitoring' })).toBeTruthy()
+    expect(view.getAllByRole('radiogroup').length).toBe(1)
+    expect(view.container.textContent).toContain('p95 latency vs previous 24 hours')
+    await fireEvent.click(view.getByRole('radio', { name: '6h' }))
+    await waitFor(() =>
+      expect(view.container.textContent).toContain('p95 latency vs previous 6 hours')
+    )
+  })
+
+  it('links every open alert to its page', () => {
+    const view = render(ServiceMonitoring)
+    const link = view.getByRole('link', { name: /Status 5xx above 5%/ })
+    expect(link.getAttribute('href')).toBe('/alerts/stage-5xx')
   })
 })

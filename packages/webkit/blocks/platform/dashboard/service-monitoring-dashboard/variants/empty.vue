@@ -4,12 +4,13 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   interface Service {
     id: string
@@ -37,8 +38,11 @@
   const loading = false
   const empty = true
 
-  const latencyWindow = ref('24h')
-  const errorWindow = ref('24h')
+  const timeWindow = ref('24h')
+  const windowNames: Record<string, string> = { '1h': 'hour', '6h': '6 hours', '24h': '24 hours' }
+  const deltaLabel = computed(
+    () => `p95 latency vs previous ${windowNames[timeWindow.value] ?? '24 hours'}`
+  )
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
   const formatRate = (value: number) => {
@@ -267,108 +271,105 @@
     data-layout-fill
     class="flex h-dvh min-w-0 flex-col overflow-y-auto xl:flex-row"
   >
-    <div
-      class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md) xl:overflow-y-auto"
-    >
-      <ul
-        class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
-      >
-        <li
-          v-for="service in services"
-          :key="service.id"
-          class="flex min-w-0 flex-col"
+    <div class="layout-boundary flex min-w-0 flex-1 flex-col xl:overflow-y-auto">
+      <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="Service monitoring"
+          description="Latency and error rate of every service, with the alerts still open."
         >
-          <StatTile
-            :label="service.name"
-            :value="service.latency"
-            :format-value="formatLatency"
-            :delta="service.delta"
-            delta-label="p95 latency vs previous 24 hours"
-            inverse
-            :trend="service.trend"
-            :loading="loading"
+          <template #actions>
+            <ToggleGroup
+              v-model="timeWindow"
+              :options="windows"
+              size="medium"
+              aria-label="Window"
+            />
+          </template>
+        </PageHeader>
+        <ul
+          class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
+        >
+          <li
+            v-for="service in services"
+            :key="service.id"
+            class="flex min-w-0 flex-col"
           >
-            <template #aside>
-              <StatusIndicator
-                v-if="!loading && !empty"
-                :severity="service.status.severity"
-                :label="service.status.label"
-              />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
-
-      <div class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1]">
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-              <ChartCard.Title>Latency</ChartCard.Title>
-              <Hint text="Time to the first byte, by percentile, across every service." />
-            </span>
-            <ChartCard.Controls>
-              <ToggleGroup
-                v-model="latencyWindow"
-                :options="windows"
-                size="small"
-                aria-label="Window for Latency"
-              />
-            </ChartCard.Controls>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Chart
-              :series="latency[latencyWindow].series"
-              :labels="latency[latencyWindow].labels"
+            <StatTile
+              :label="service.name"
+              :value="service.latency"
               :format-value="formatLatency"
-              empty-title="No traffic yet"
-              empty-description="Latency appears here once a service serves requests."
+              :delta="service.delta"
+              :delta-label="deltaLabel"
+              inverse
+              :trend="service.trend"
               :loading="loading"
             >
-              <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
-              <Chart.Line />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+              <template #aside>
+                <StatusIndicator
+                  v-if="!loading && !empty"
+                  :severity="service.status.severity"
+                  :label="service.status.label"
+                />
+              </template>
+            </StatTile>
+          </li>
+        </ul>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-              <ChartCard.Title>Error rate</ChartCard.Title>
-              <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
-            </span>
-            <ChartCard.Controls>
-              <ToggleGroup
-                v-model="errorWindow"
-                :options="windows"
-                size="small"
-                aria-label="Window for Error rate"
-              />
-            </ChartCard.Controls>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Chart
-              :series="errorRate[errorWindow].series"
-              :labels="errorRate[errorWindow].labels"
-              :format-value="formatRate"
-              empty-title="No traffic yet"
-              empty-description="Error rates appear here once a service serves requests."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
-              <Chart.Line />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+        <div class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1]">
+          <ChartCard :span="12">
+            <ChartCard.Header>
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>Latency</ChartCard.Title>
+                <Hint text="Time to the first byte, by percentile, across every service." />
+              </span>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <Chart
+                :series="latency[timeWindow].series"
+                :labels="latency[timeWindow].labels"
+                :format-value="formatLatency"
+                empty-title="No traffic yet"
+                empty-description="Latency appears here once a service serves requests."
+                :loading="loading"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Line />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend />
+              </Chart>
+            </ChartCard.Content>
+          </ChartCard>
+
+          <ChartCard :span="12">
+            <ChartCard.Header>
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>Error rate</ChartCard.Title>
+                <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
+              </span>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <Chart
+                :series="errorRate[timeWindow].series"
+                :labels="errorRate[timeWindow].labels"
+                :format-value="formatRate"
+                empty-title="No traffic yet"
+                empty-description="Error rates appear here once a service serves requests."
+                :loading="loading"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Line />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend />
+              </Chart>
+            </ChartCard.Content>
+          </ChartCard>
+        </div>
       </div>
     </div>
 
@@ -416,7 +417,7 @@
           <Item
             v-for="alert in alerts"
             :key="alert.id"
-            role="listitem"
+            :href="`/alerts/${alert.id}`"
             size="small"
           >
             <Item.Content>
