@@ -234,6 +234,35 @@ describe('Table cell presets', () => {
     expect(render(TableCellTags).getByText('—')).toBeTruthy()
   })
 
+  it('CellTags shares one size observer across every cell', async () => {
+    const Native = globalThis.ResizeObserver
+    let created = 0
+    globalThis.ResizeObserver = class extends Native {
+      constructor(callback: ConstructorParameters<typeof ResizeObserver>[0]) {
+        super(callback)
+        created += 1
+      }
+    }
+    try {
+      const many = ['production', 'edge', 'cache']
+      const view = render(
+        defineComponent({
+          render: () =>
+            h(
+              'div',
+              { style: 'width:240px' },
+              Array.from({ length: 20 }, (_, i) => h(TableCellTags, { key: i, items: many }))
+            )
+        })
+      )
+      expect(view.getAllByTestId('data-table__cell-tags')).toHaveLength(20)
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+      expect(created).toBeLessThanOrEqual(1)
+    } finally {
+      globalThis.ResizeObserver = Native
+    }
+  })
+
   it('CellActions names the trigger after the row and emits select', async () => {
     const selected: unknown[] = []
     const Host = defineComponent({

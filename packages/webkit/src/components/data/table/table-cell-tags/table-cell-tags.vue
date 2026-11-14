@@ -75,21 +75,15 @@
     fit.value = Math.max(1, count)
   }
 
-  let observer: ResizeObserver | null = null
-  let frame = 0
-  const scheduleMeasure = (): void => {
-    globalThis.cancelAnimationFrame(frame)
-    frame = globalThis.requestAnimationFrame(measure)
-  }
+  let watched: HTMLElement | null = null
   onMounted(() => {
-    if (!rowRef.value || typeof ResizeObserver === 'undefined') return
-    observer = new ResizeObserver(scheduleMeasure)
-    observer.observe(rowRef.value)
+    watched = rowRef.value
+    if (watched) watchSize(watched, measure)
     measure()
   })
   onBeforeUnmount(() => {
-    observer?.disconnect()
-    globalThis.cancelAnimationFrame(frame)
+    if (watched) unwatchSize(watched, measure)
+    watched = null
   })
   watch(
     () => props.items,
@@ -99,6 +93,43 @@
       measure()
     }
   )
+</script>
+
+<script lang="ts">
+  const jobs = new WeakMap<Element, () => void>()
+  const pending = new Set<() => void>()
+  let sizeObserver: ResizeObserver | null = null
+  let frame = 0
+
+  const flush = (): void => {
+    frame = 0
+    const due = [...pending]
+    pending.clear()
+    for (const job of due) job()
+  }
+
+  const schedule = (job: () => void): void => {
+    pending.add(job)
+    if (!frame) frame = globalThis.requestAnimationFrame(flush)
+  }
+
+  function watchSize(el: Element, job: () => void): void {
+    if (typeof ResizeObserver === 'undefined') return
+    sizeObserver ??= new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const due = jobs.get(entry.target)
+        if (due) schedule(due)
+      }
+    })
+    jobs.set(el, job)
+    sizeObserver.observe(el)
+  }
+
+  function unwatchSize(el: Element, job: () => void): void {
+    jobs.delete(el)
+    pending.delete(job)
+    sizeObserver?.unobserve(el)
+  }
 </script>
 
 <template>
