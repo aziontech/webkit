@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocaleContext, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -69,6 +70,10 @@
     return date.getTime()
   }
 
+  const lazy = Object.fromEntries(
+    ORDER.map((key) => [key, useLazyChunks({ rowHeight: 36 })])
+  ) as Record<GroupKey, ReturnType<typeof useLazyChunks>>
+
   const groupOf = (time: number, today: number): GroupKey => {
     const days = Math.round((today - startOfDay(time)) / DAY)
     if (days <= 0) return 'today'
@@ -91,10 +96,12 @@
     }
     return ORDER.filter((key) => buckets.has(key)).map((key) => ({
       key,
-      items: buckets
-        .get(key)!
-        .sort((a, b) => b.time - a.time)
-        .map(({ item }) => item)
+      chunks: lazy[key].split(
+        buckets
+          .get(key)!
+          .sort((a, b) => b.time - a.time)
+          .map(({ item }) => item)
+      )
     }))
   })
 </script>
@@ -148,36 +155,51 @@
           :aria-labelledby="`${uid}-${group.key}`"
           class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
         >
-          <li
-            v-for="item in group.items"
-            :key="item.id"
-            :data-active="item.id === model || null"
-            :data-testid="`${testId}__item`"
-            class="group/item flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected) motion-reduce:transition-none"
+          <template
+            v-for="chunk in group.chunks"
+            :key="chunk.index"
           >
-            <button
-              type="button"
-              :aria-current="item.id === model ? 'page' : undefined"
-              :title="item.title"
-              class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-elements) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
-              @click="model = item.id"
-            >
-              <bdi
-                dir="auto"
-                class="truncate"
-                >{{ item.title }}</bdi
-              >
-            </button>
-            <IconButton
-              v-if="removable"
-              icon="pi pi-trash"
-              :ariaLabel="t('conversationHistory.remove', { title: item.title })"
-              kind="transparent"
-              size="small"
-              :data-testid="`${testId}__remove`"
-              @click="(event: MouseEvent) => emit('remove', event, item.id)"
+            <li
+              v-if="!chunk.mounted"
+              :ref="(el) => lazy[group.key].observe(el, chunk.index)"
+              :data-chunk="chunk.index"
+              aria-hidden="true"
+              class="shrink-0"
+              :style="{ height: `${chunk.estimatedHeight}px` }"
             />
-          </li>
+            <template v-else>
+              <li
+                v-for="item in chunk.items"
+                :key="item.id"
+                :data-active="item.id === model || null"
+                :data-testid="`${testId}__item`"
+                class="group/item flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected) motion-reduce:transition-none"
+              >
+                <button
+                  type="button"
+                  :aria-current="item.id === model ? 'page' : undefined"
+                  :title="item.title"
+                  class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-elements) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                  @click="model = item.id"
+                >
+                  <bdi
+                    dir="auto"
+                    class="truncate"
+                    >{{ item.title }}</bdi
+                  >
+                </button>
+                <IconButton
+                  v-if="removable"
+                  icon="pi pi-trash"
+                  :ariaLabel="t('conversationHistory.remove', { title: item.title })"
+                  kind="transparent"
+                  size="small"
+                  :data-testid="`${testId}__remove`"
+                  @click="(event: MouseEvent) => emit('remove', event, item.id)"
+                />
+              </li>
+            </template>
+          </template>
         </ul>
       </div>
     </template>

@@ -72,8 +72,8 @@
       "update_is": "open the palette over 1k items in 20 groups, then type four queries"
     },
     "conversation-history-5k": {
-      "mount": 680,
-      "update": 100,
+      "mount": 80,
+      "update": 50,
       "update_is": "select a conversation"
     },
     "conversation-500": {

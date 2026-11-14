@@ -162,4 +162,19 @@ describe('ConversationHistory naming and test ids', () => {
     expect(rows[0]!.textContent).toContain('Chat 0')
     expect(rows[299]!.textContent).toContain('Chat 299')
   })
+
+  it('mounts a long group in chunks instead of every row at once', async () => {
+    const base = Date.parse('2026-11-11T14:00:00')
+    const items = Array.from({ length: 1000 }, (_, i) => ({
+      id: `c${i}`,
+      title: `Conversation ${i}`,
+      updatedAt: base - 40 * 86_400_000 - i * 60_000
+    }))
+    const { getAllByTestId, container } = render(ConversationHistory, {
+      props: { items, now: '2026-11-11T15:00:00' }
+    })
+    expect(getAllByTestId('ai-conversation-history__item').length).toBeLessThan(1000)
+    expect(getAllByTestId('ai-conversation-history__item')[0]).toHaveTextContent('Conversation 0')
+    expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
+  })
 })

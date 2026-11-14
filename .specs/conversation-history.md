@@ -3,9 +3,9 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: e0067d4e9b5f1a76f90e045f043d018ae49dad7fb3b1b91c6f8643930379bb1d
+checksum: 6d82a269da6458668960b6e229fd6af7bbee5dc30c7590d787fec726139d6636
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -151,8 +151,8 @@ _none_
 
 ## Performance
 
-- Bundle budget: 4.96 KB gzip for `./conversation-history` in `.size-limit.json`.
-- Runtime budget: one linear grouping pass per `items` change; rows render without virtualization. `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
+- Bundle budget: 5.8 KB gzip for `./conversation-history` in `.size-limit.json` (includes `useLazyChunks`).
+- Runtime budget: one linear grouping pass per `items` change. A group longer than 300 rows mounts in chunks of 100 (`useLazyChunks`): the first chunk renders, the rest are sized placeholders that mount as they scroll near the viewport. `conversation-history-5k` in `perf-budgets.json` holds mounting 5k conversations and selecting one.
 - Heavy parts: none.
 
 ## Examples
