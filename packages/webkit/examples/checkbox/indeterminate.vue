@@ -8,7 +8,6 @@
 <template>
   <Checkbox
     v-model="checked"
-    binary
     indeterminate
     input-id="webkit-checkbox-indeterminate"
     aria-label="Toggle option"

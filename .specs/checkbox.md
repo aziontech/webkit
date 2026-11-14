@@ -3,17 +3,17 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: edcfdc3007a5dd3d7aa5323f36fdf027cb7bab59dc20950d6ac1beaf79905938
+spec_version: 5
+checksum: d5c51df43921668e62177c9bf701fd461103d3e38fe33040cc5a5c71c91473b8
 created: 2026-05-22
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Checkbox — Component Spec
 
 ## Purpose
 
-Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
+Binary selection control. Supports a single boolean (no `value`), a scalar paired with `value`, and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. "select all" rows where some children are selected). Aligned with Figma frame `2027:7311`.
 
 ## When to use
 
@@ -37,8 +37,8 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 ## Best practices
 
-- Set `binary` for a plain true/false value; without it the checkbox adds or removes its `value` in an array `modelValue`.
-- Give every checkbox an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label` (attributes land on the inner input).
+- Leave `value` unset for a plain true/false model. With `value`, the checkbox adds or removes it in an array model, or sets a scalar model to `value` (checked) and `null` (unchecked).
+- Give every checkbox an accessible name: point a `label` element's `for` at the `id` you pass (or wrap it in a `Field`), or pass `aria-label` (attributes land on the inner input).
 - `indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.
 - Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable.
 
@@ -54,7 +54,6 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 <template>
   <Checkbox
     v-model="checked"
-    binary
     aria-label="Subscribe to newsletter"
   />
 </template>
@@ -64,22 +63,22 @@ Binary selection control. Supports a single boolean (`binary: true`) and array-b
 
 | Prop            | Type      | Default     | Required | JSDoc                                                                                                                 |
 | --------------- | --------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array).            |
-| `binary`        | `boolean` | `false`     | false    | When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing).                                       |
+| `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. |
+| `binary`        | `boolean` | `false`     | false    | `@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`. |
 | `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled`      | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.                                                                     |
 | `readonly`      | `boolean` | `false`     | false    | Marks the field read-only; value is visible but cannot change via interaction.                                        |
-| `inputId`       | `string`  | `''`        | false    | Forwarded to the inner `<input id>` for label association.                                                            |
+| `inputId`       | `string`  | `''`        | false    | `@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set. |
 | `name`          | `string`  | `''`        | false    | HTML name for form submission.                                                                                        |
-| `tabindex`      | `number`  | `0`         | false    | Forwarded to the inner `<input tabindex>`.                                                                            |
+| `tabindex`      | `number`  | `0`         | false    | `@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0.` |
 
-**Generic.** The component is generic over `TModel` (default `unknown`), the type of the bound `modelValue`: `v-model` on a `Ref<boolean>` (with `binary`) or a `Ref<string[]>` (with `value`) sends `update:modelValue` as that same type, so a handler needs no narrowing. Bind the shape the mode emits: a boolean in `binary` mode, an array otherwise.
+**Generic.** The component is generic over `TModel` (default `unknown`), the type of the bound `modelValue`: `v-model` on a `Ref<boolean>` (no `value`) or a `Ref<string[]>` (with `value`) sends `update:modelValue` as that same type, so a handler needs no narrowing. Bind the shape the mode emits: a boolean with no `value`, an array or a scalar with one.
 
 ## v-model
 
 | Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                |
 | --------- | -------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting. Fires on activation with the next boolean (binary mode) or the next array (every other mode). Uncontrolled when unbound. |
+| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset (or `binary`); with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
 
 ## Events
 
@@ -133,7 +132,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.)
+- Keyboard map: `Tab` focuses; `Space` toggles. (The native `<input type="checkbox">` carries the semantics.) When `readonly`, `disabled`, or the parent refuses the change, the native `checked` is put back to the model's state, so assistive tech never announces a state the model does not hold; `readonly` also sets `aria-readonly` and cancels the click.
 - ARIA: native `<input type="checkbox">` is the source of truth. No `aria-checked` is set on it: the checked state comes from `checked`, and the mixed state from the `indeterminate` DOM property, which browsers expose as mixed (an `aria-checked` on a native checkbox conflicts with its real state, axe `aria-conditional-attr`). The wrapping `<span>` is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none` on every transition-bearing class.

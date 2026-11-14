@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TModel = unknown">
-  import { computed, useAttrs } from 'vue'
+  import { computed, nextTick, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
 
@@ -10,9 +10,9 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array). */
+      /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
       value?: unknown
-      /** When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing). */
+      /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
       binary?: boolean
       /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
       indeterminate?: boolean
@@ -20,11 +20,11 @@
       disabled?: boolean
       /** Marks the field read-only; value is visible but cannot change via interaction. */
       readonly?: boolean
-      /** Forwarded to the inner input id for label association. */
+      /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
       inputId?: string
       /** HTML name for form submission. */
       name?: string
-      /** Forwarded to the inner input tabindex. */
+      /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
       tabindex?: number
     }>(),
     {
@@ -39,7 +39,7 @@
     }
   )
 
-  /** Two-way bound value. Boolean in `binary` mode, scalar when paired with `value`, array when multi-selecting; update:modelValue sends the same type. */
+  /** Two-way bound value: a boolean when `value` is unset; with `value`, an array to add it to and remove it from, or a scalar set to `value` when checked and to null when unchecked. An unset (undefined) model with `value` is treated as an empty array. */
   const model = defineModel<TModel>({ default: undefined as never })
 
   const attrs = useAttrs()
@@ -69,8 +69,10 @@
     return rest
   })
 
+  const isBinary = computed(() => props.binary || props.value === undefined)
+
   const isChecked = computed(() => {
-    if (props.binary) {
+    if (isBinary.value) {
       return Boolean(model.value)
     }
 
@@ -86,13 +88,33 @@
     return isChecked.value ? 'checked' : 'unchecked'
   })
 
-  const handleChange = () => {
+  const syncNative = (input: HTMLInputElement) => {
+    nextTick(() => {
+      if (input.checked !== isChecked.value) input.checked = isChecked.value
+    })
+  }
+
+  const handleClick = (event: MouseEvent) => {
+    if (props.readonly) event.preventDefault()
+  }
+
+  const handleChange = (event: Event) => {
+    const input = event.target as HTMLInputElement
+
     if (isDisabled.value || props.readonly) {
+      input.checked = isChecked.value
       return
     }
 
-    if (props.binary) {
+    syncNative(input)
+
+    if (isBinary.value) {
       model.value = !model.value as TModel
+      return
+    }
+
+    if (model.value !== undefined && !Array.isArray(model.value)) {
+      model.value = (isChecked.value ? null : props.value) as TModel
       return
     }
 
@@ -133,9 +155,11 @@
       :checked="isChecked"
       :disabled="isDisabled"
       :readonly="readonly"
+      :aria-readonly="readonly || undefined"
       :tabindex="tabindex"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
+      @click="handleClick"
       @change="handleChange"
     />
     <svg
