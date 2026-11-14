@@ -9,6 +9,8 @@ import CreateInDrawer from '../../blocks/platform/create/create-in-drawer/create
 import CreateInDrawerSaveFailed from '../../blocks/platform/create/create-in-drawer/variants/save-failed.vue'
 import DeployDrawer from '../../blocks/platform/create/deploy-drawer/deploy-drawer.vue'
 import DeployProgressDialog from '../../blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue'
+import DeploySuccess from '../../blocks/platform/create/deploy-success/deploy-success.vue'
+import DeploySuccessCli from '../../blocks/platform/create/deploy-success/variants/cli-created.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import { expectNoA11yViolations } from './axe'
@@ -167,5 +169,29 @@ describe('deploy-progress-dialog', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), wait)
     await fireEvent.click(screen.getByRole('button', { name: 'Show progress' }))
     expect(await screen.findByRole('dialog')).toBeTruthy()
+  })
+})
+
+describe('deploy-success', () => {
+  it('links the domain and repository with Link and the next steps with integration Cards', async () => {
+    const view = render(DeploySuccess)
+    const domain = screen.getByRole('link', { name: /web-app-k3x9q2\.example\.com/ })
+    expect(domain.getAttribute('target')).toBe('_blank')
+    expect(domain.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(screen.getByRole('link', { name: /acme\/web-app/ }).getAttribute('target')).toBe(
+      '_blank'
+    )
+    expect(screen.getByRole('link', { name: 'Customize domain' }).getAttribute('href')).toBe(
+      'https://example.com/docs'
+    )
+    expect(screen.getByRole('heading', { name: 'Resources' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Manage service' })).toBeTruthy()
+    await expectNoA11yViolations(view.container as HTMLElement)
+  })
+
+  it('makes the in-place next step a button tile', () => {
+    render(DeploySuccessCli)
+    expect(screen.getByRole('button', { name: 'Deploy this resource' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Deploy using a new service' })).toBeTruthy()
   })
 })

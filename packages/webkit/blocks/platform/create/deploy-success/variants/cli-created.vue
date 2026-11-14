@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import Card, { type CardBadge } from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Item from '@aziontech/webkit/item'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, ref } from 'vue'
 
   interface NextStep {
@@ -13,10 +13,11 @@
     title: string
     description: string
     href?: string
-    external?: boolean
     action?: boolean
     recommended?: boolean
   }
+
+  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', severity: 'primary' }]
 
   const resources = [
     {
@@ -184,7 +185,7 @@ jobs:
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
             <section class="flex flex-col gap-(--spacing-sm)">
-              <h2 class="text-label-md text-(--text-default)">Resources created</h2>
+              <h2 class="text-label-md text-(--text-default)">Resources</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -229,50 +230,13 @@ jobs:
                 <Card
                   v-for="step in nextSteps"
                   :key="step.title"
-                  :padded="false"
-                >
-                  <template #content>
-                    <component
-                      :is="step.action ? 'button' : 'a'"
-                      :type="step.action ? 'button' : undefined"
-                      :href="step.href || undefined"
-                      :target="step.external ? '_blank' : undefined"
-                      :rel="step.external ? 'noopener noreferrer' : undefined"
-                      class="group/step relative flex h-full w-full cursor-pointer flex-col gap-(--spacing-sm) rounded-(--shape-card) border-0 bg-transparent p-(--spacing-md) text-start text-inherit no-underline before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:before:transition-none"
-                    >
-                      <span class="relative flex items-center justify-between gap-(--spacing-xs)">
-                        <span
-                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
-                        >
-                          <i
-                            :class="step.icon"
-                            class="text-body-sm leading-none text-(--text-default)"
-                            aria-hidden="true"
-                          />
-                        </span>
-                        <i
-                          :class="step.external ? 'pi pi-external-link' : 'pi pi-chevron-right'"
-                          class="text-body-xs leading-none text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span class="relative flex flex-col gap-(--spacing-xxs)">
-                        <span class="flex flex-wrap items-center gap-(--spacing-xs)">
-                          <span class="text-label-md text-(--text-default)">{{ step.title }}</span>
-                          <Tag
-                            v-if="step.recommended"
-                            label="Recommended"
-                            severity="primary"
-                            size="small"
-                          />
-                        </span>
-                        <span class="text-pretty text-body-sm text-(--text-muted)">{{
-                          step.description
-                        }}</span>
-                      </span>
-                    </component>
-                  </template>
-                </Card>
+                  kind="integration"
+                  :title="step.title"
+                  :logo="step.icon"
+                  :description="step.description"
+                  :href="step.href ?? ''"
+                  :badges="step.recommended ? recommendedBadge : []"
+                />
               </div>
             </section>
 
@@ -348,7 +312,7 @@ jobs:
 
             <Button
               class="w-full"
-              label="Manage"
+              label="Manage service"
               kind="secondary"
               size="large"
             />
