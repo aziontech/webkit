@@ -3,10 +3,10 @@ name: logo-wall
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: a6107b219df5e81dd2743d29c9a5f61bdf94786965c9eceac2a8bff155ef85ef
+spec_version: 3
+checksum: 0d27386278c5141ca854eb4fd322a4287e28a17d9993dfff7bb4bab9d8c32bf3
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Logo Wall — Component Spec
@@ -87,27 +87,27 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ## Props
 
-| Prop        | Type           | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
-| ----------- | -------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | `LogoWallKind` | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
-| `items`     | `LogoItem[]`   | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
-| `ariaLabel` | `string`       | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
-| `linkLabel` | `string`       | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
+| Prop        | Type             | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
+| ----------- | ---------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`      | `LogoWallKind`   | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
+| `items`     | `LogoWallItem[]` | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `ariaLabel` | `string`         | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
+| `linkLabel` | `string`         | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
 
-`LogoItem` is `{ src: string; alt: string; href?: string; shape?: LogoShape }`, `LogoShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported.
+`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported; the v5-era names `LogoItem` and `LogoShape` stay exported as aliases, @deprecated since 6.0 — use `LogoWallItem` / `LogoWallShape`. Removed in 7.0.
 
 ## Events
 
-| Event        | Payload                               | Notes                                                                                                                                                                                                   |
-| ------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `item-click` | `(event: MouseEvent, item: LogoItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
+| Event        | Payload                                   | Notes                                                                                                                                                                                                   |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `item-click` | `(event: MouseEvent, item: LogoWallItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
 
 ## Slots
 
-| Slot    | Scope                               | Notes                                                                                                                                                                                                                                                                                                                                                                                |
-| ------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `aside` | —                                   | Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width. |
-| `mark`  | `{ item: LogoItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion.                                                                                            |
+| Slot    | Scope                                   | Notes                                                                                                                                                                                                                                                                                                                                                                                |
+| ------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `aside` | —                                       | Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width. |
+| `mark`  | `{ item: LogoWallItem; index: number }` | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion.                                                                                            |
 
 ## States
 

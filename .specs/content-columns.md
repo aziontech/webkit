@@ -3,10 +3,10 @@ name: content-columns
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: a4504544a0696a7cce5afb65175594516c98b8c9fad09f4f11c782520965ed27
+spec_version: 3
+checksum: 8ac6a12c827f4d8e6c6349439e52496ecd1d5de93cd58b52451749a7b2857687
 created: 2026-09-22
-last_updated: 2026-09-26
+last_updated: 2026-11-14
 ---
 
 # Content Columns — Component Spec
@@ -48,7 +48,7 @@ A titled band whose body is two or three columns of short copy, drawn in one hai
 
 ```vue
 <script setup>
-import ContentColumns from '@aziontech/webkit/content-columns'
+  import ContentColumns from '@aziontech/webkit/content-columns'
 </script>
 
 <template>
@@ -67,13 +67,13 @@ import ContentColumns from '@aziontech/webkit/content-columns'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `ContentColumnItem[]` | `[]` | false | The columns, in reading order; each item is `{ title, description }`. |
-| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` above the columns. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `columns` | `2 \| 3` | `3` | false | How many columns the grid holds from the medium breakpoint up; below it the columns stack. |
+| Prop          | Type                   | Default | Required | JSDoc                                                                                      |
+| ------------- | ---------------------- | ------- | -------- | ------------------------------------------------------------------------------------------ |
+| `items`       | `ContentColumnsItem[]` | `[]`    | false    | The columns, in reading order; each item is `{ title, description }`.                      |
+| `title`       | `string`               | `''`    | false    | Headline of the band, rendered as its `h2` above the columns.                              |
+| `description` | `string`               | `''`    | false    | Supporting sentence under the headline.                                                    |
+| `eyebrow`     | `string`               | `''`    | false    | Short uppercase overline rendered above the headline.                                      |
+| `columns`     | `2 \| 3`               | `3`     | false    | How many columns the grid holds from the medium breakpoint up; below it the columns stack. |
 
 ## Events
 
@@ -96,22 +96,22 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (column title) | `.text-heading-sm` |
-| typography (column body) | `.text-body-sm` |
-| column title text | `var(--text-default)` |
-| column body text | `var(--text-muted)` |
-| grid rules and marks | `var(--border-default)` |
-| column surface | `var(--bg-surface)` |
-| spacing (column padding) | `var(--spacing-xl)` |
-| spacing (column stack) | `var(--spacing-sm)` |
+| Region                    | Token (DESIGN.md)       |
+| ------------------------- | ----------------------- |
+| typography (column title) | `.text-heading-sm`      |
+| typography (column body)  | `.text-body-sm`         |
+| column title text         | `var(--text-default)`   |
+| column body text          | `var(--text-muted)`     |
+| grid rules and marks      | `var(--border-default)` |
+| column surface            | `var(--bg-surface)`     |
+| spacing (column padding)  | `var(--spacing-xl)`     |
+| spacing (column stack)    | `var(--spacing-sm)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

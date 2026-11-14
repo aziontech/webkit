@@ -22,7 +22,7 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
-  import type { LogoShape } from '../logo-wall/logo-wall.vue'
+  import type { LogoWallShape } from '../logo-wall/logo-wall.vue'
   import Quote from '../quote/quote.vue'
 
   defineOptions({
@@ -39,7 +39,7 @@
     /** The client's name in prose, naming its card; falls back to the registry's label for mark. */
     clientName?: string
     /** How tall the mark sits on its card: wide for a wordmark, compact for a mark closer to square. */
-    shape?: LogoShape
+    shape?: LogoWallShape
     /** The quotation itself, featured in the panel while this client's card is selected. */
     text: string
     /** Who said it, the attribution's lead. */

@@ -12,7 +12,7 @@
   })
 
   /** One headline figure and the caption naming what it measures. */
-  export type BigNumberItem = {
+  export type BigNumbersItem = {
     /** The figure itself, set at big-number scale. */
     value: string
     /** Caption naming what the figure measures, set at overline scale. */
@@ -26,9 +26,12 @@
   /** Size token; picks the big-number scale the figures are set at. */
   export type BigNumbersSize = 'small' | 'medium' | 'large'
 
+  /** @deprecated since 6.0 — use `BigNumbersItem`. Removed in 7.0. */
+  export type BigNumberItem = BigNumbersItem
+
   interface Props {
     /** The figures rendered as cells, in order; each item is a value, a label, and an optional prefix and suffix — the figure, its caption, and the qualifier and unit set beside it. */
-    items?: BigNumberItem[]
+    items?: BigNumbersItem[]
     /** Size token; picks the big-number scale the figures are set at. */
     size?: BigNumbersSize
   }

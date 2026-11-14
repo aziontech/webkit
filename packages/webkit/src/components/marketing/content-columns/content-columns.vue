@@ -10,7 +10,7 @@
   })
 
   /** One column of the band: a short title and the sentence that develops it. */
-  export type ContentColumnItem = {
+  export type ContentColumnsItem = {
     /** The point itself, rendered as the column's `h3`. */
     title: string
     /** One or two sentences developing the point, rendered under the column title. */
@@ -20,9 +20,12 @@
   /** How many columns the grid holds from the medium breakpoint up. */
   export type ContentColumnsCount = 2 | 3
 
+  /** @deprecated since 6.0 — use `ContentColumnsItem`. Removed in 7.0. */
+  export type ContentColumnItem = ContentColumnsItem
+
   interface Props {
     /** The columns, in reading order; each item is a title and a description. */
-    items?: ContentColumnItem[]
+    items?: ContentColumnsItem[]
     /** Headline of the band, rendered as its h2 above the columns. */
     title?: string
     /** Supporting sentence under the headline. */
