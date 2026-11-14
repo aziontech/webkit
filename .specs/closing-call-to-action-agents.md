@@ -3,10 +3,11 @@ name: closing-call-to-action-agents
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: f7c4db48cb0856c480c52c58a32b06ddf7c1b9080dd581596a04dcf614f8c9b2
+last_updated: 2026-11-14
+checksum: 80fa9d9c28cd5532842a57e52a39cd7c13ca810da80fcd0fe86d61ec1a53f93b
+template: 2
 ---
 
 # ClosingCallToActionAgents — Component Spec
@@ -73,16 +74,17 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 
 ## Props
 
-| Prop                 | Type                                  | Default | Required | JSDoc                                                                                                                                        |
-| -------------------- | ------------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`             | `string`                              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                               |
-| `title`              | `string`                              | `''`    | false    | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty.                                       |
-| `typedLead`          | `string`                              | `''`    | false    | Fixed opening of the typed line, before the typed word.                                                                                      |
-| `typedWords`         | `string[]`                            | `[]`    | false    | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words.                      |
-| `description`        | `string`                              | `''`    | false    | Closing sentence under the typed line, the same for every audience.                                                                          |
-| `audiences`          | `ClosingCallToActionAgentsAudience[]` | `[]`    | false    | The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more. |
-| `audiencesAriaLabel` | `string`                              | `''`    | false    | Accessible name of the audience switch.                                                                                                      |
-| `lineAriaLabel`      | `string`                              | `''`    | false    | Accessible name of the read-only field that shows an audience's copyable line.                                                               |
+| Prop                 | Type                                  | Default | Required | JSDoc                                                                                                                                                                                                              |
+| -------------------- | ------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`             | `string`                              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                     |
+| `title`              | `string`                              | `''`    | false    | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty.                                                                                                             |
+| `typedLead`          | `string`                              | `''`    | false    | Fixed opening of the typed line, before the typed word.                                                                                                                                                            |
+| `typedWords`         | `string[]`                            | `[]`    | false    | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words.                                                                                            |
+| `description`        | `string`                              | `''`    | false    | Closing sentence under the typed line, the same for every audience.                                                                                                                                                |
+| `audiences`          | `ClosingCallToActionAgentsAudience[]` | `[]`    | false    | The ways in, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt) and the first one opens. The switch renders only with two or more. |
+| `audiencesAriaLabel` | `string`                              | `''`    | false    | Accessible name of the audience switch.                                                                                                                                                                            |
+| `lineAriaLabel`      | `string`                              | `''`    | false    | Accessible name of the read-only field that shows an audience's copyable line.                                                                                                                                     |
+| `hatch`              | `boolean`                             | `true`  | false    | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame.                                                                            |
 
 ## Events
 
@@ -99,6 +101,8 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 - Typed word: after mount the words are typed (90 ms a character), held (1.8 s), erased (45 ms a character) and the next one typed (after 270 ms), in a loop; the timer is cleared on scope dispose
 - Reduced motion: the typed word shows every word at once, joined by commas, and the cursor is hidden
 - Empty: when `title` is empty the band renders nothing but its root; an audience without `copy` shows no field; without `typedWords` the typed line is omitted
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
+- `copy.shell`: the copyable line draws the `$` shell prompt before the text, so a command reads apart from a prompt meant for an agent; without it the line is bare
 
 ## Motion & Animations
 
@@ -131,9 +135,36 @@ The close for a reader who may be a person or an agent: one centred ask in the l
 - `motion-reduce:transition-none motion-reduce:transform-none` — see the Motion table; under reduced motion nothing types or blinks.
 - Touch target ≥40×40 px — the switch, the copy button and the actions are large.
 
+## Internationalization
+
+No built-in strings: the switch, field and copy-button names and every visible text are props from the page JSON (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`).
+
+- Formatting: none; the reduced-motion typed line joins the words with commas.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-px` on the cursor); the switch and the row follow the direction.
+- Icons: the trailing chevron mirrors with `button`; the `$` prompt and the copyable line are not mirrored.
+- Keyboard: the switch's arrow keys follow the direction (owned by `toggle-group`).
+- User data: the copyable line is a command or a URL and renders as written.
+
+## Responsive
+
+- Container queries: none; the row switches at viewport breakpoints.
+- Narrow (below `lg`): the copyable line and the actions stack full width; from `sm` the stack centres.
+- Touch: the switch, the copy button and the actions are large; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; a long line scrolls inside its field.
+
+## Performance
+
+- Bundle budget: 28.5 KB gzip, the `.size-limit.json` entry `closing-call-to-action-agents` (entry chunk only).
+- Runtime budget: one timer for the typed word, cleared on scope dispose; none under reduced motion.
+- Heavy parts: none.
+
 ## Examples
 
 - Default
+- Shell — justification: `copy.shell` draws the `$` prompt; an audience whose line is a CLI command beside one whose line is a prompt for an agent shows the difference.
 
 ## Constraints — DO NOT
 

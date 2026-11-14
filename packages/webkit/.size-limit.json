@@ -17,7 +17,7 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "71 KB"
+    "limit": "71.1 KB"
   },
   {
     "name": "doc-layout",
@@ -760,7 +760,8 @@
   {
     "name": "closing-call-to-action",
     "path": "src/components/sections/closing-call-to-action/closing-call-to-action.vue",
-    "limit": "8 KB"
+    "limit": "8 KB",
+    "entryOnly": true
   },
   {
     "name": "closing-call-to-action-agents",

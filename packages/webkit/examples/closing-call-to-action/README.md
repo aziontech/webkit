@@ -102,10 +102,25 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `kind` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention.
 - `title` is the headline and `description` the sentence under it. `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
 - `primaryAction` is the white button and `secondaryAction` the outlined one beside it. Each takes a `label`, an `href` and `trailing` for the chevron.
+- `command` is an optional shell line set before the actions, with the `$` prompt and a copy button; `split` and `panel` take it too. See [`command.vue`](./command.vue).
 
 Example:
 
 Site JSON: [`site-primary.json`](./site-primary.json)
+
+<hr
+  style={{
+    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    border: 0,
+    borderTop: '1px solid var(--border-default)'
+  }}
+/>
+
+### Stacked closings and the bare frame
+
+Every closing band draws the hatched closing frame under itself. When two closings stack, the upper one sets `hatch: false` so the page closes once; `SitePage` does it for you. A page that ends on a band with its own actions closes on `{ "_id": "closing-call-to-action", "props": { "kind": "frame" } }`, the frame alone, with no gap before it.
+
+Example: [`stacked.vue`](./stacked.vue)
 
 <hr
   style={{

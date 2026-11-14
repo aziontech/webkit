@@ -63,6 +63,16 @@ describe('ClosingCallToActionAgents', () => {
     vi.useRealTimers()
   })
 
+  it('draws the closing frame by default and drops it when hatch is off', () => {
+    const on = band()
+    expect(on.getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
+    on.unmount()
+
+    const off = band({ hatch: false })
+    expect(off.getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
+    expect(off.getByRole('heading', { level: 2 })).toBeInTheDocument()
+  })
+
   it('renders the band under the default testid with the anchor as its id', () => {
     const { getByTestId } = band()
 
@@ -111,6 +121,33 @@ describe('ClosingCallToActionAgents', () => {
       '/site/docs/agent-setup'
     )
     expect(queryByRole('link', { name: 'Start for free' })).toBeNull()
+  })
+
+  it('draws the shell prompt only on a line marked shell', async () => {
+    const shellAudiences = [
+      {
+        ...audiences[1],
+        value: 'cli',
+        label: 'CLI',
+        copy: { label: 'Copy command', text: 'npm i -g azion', shell: true }
+      },
+      audiences[1]
+    ]
+    const { getByRole, getByTestId } = band({ audiences: shellAudiences })
+    const root = getByTestId(TESTID)
+
+    expect(root.textContent).toContain('$')
+    expect((getByRole('textbox', { name: 'Prompt' }) as HTMLInputElement).value).toBe(
+      'npm i -g azion'
+    )
+
+    await userEvent.click(getByRole('radio', { name: 'For agents' }))
+    expect((getByRole('textbox', { name: 'Prompt' }) as HTMLInputElement).value).toBe(PROMPT)
+    expect(
+      Array.from(root.querySelectorAll('[aria-hidden="true"]')).some(
+        (el) => el.textContent?.trim() === '$'
+      )
+    ).toBe(false)
   })
 
   it('copies exactly the line it shows', async () => {

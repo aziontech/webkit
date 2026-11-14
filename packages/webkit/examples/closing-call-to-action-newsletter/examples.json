@@ -21,6 +21,11 @@
       "name": "Failed",
       "summary": "The site could not send the address: `form.errorMessage` shows under the form, which stays editable.",
       "file": "failed.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "The newsletter close with `hatch` off, so the closing band stacked under it draws the page's one closing frame.",
+      "file": "stacked.vue"
     }
   ]
 }

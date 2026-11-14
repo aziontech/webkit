@@ -11,6 +11,16 @@
       "name": "Types",
       "summary": "The three layouts stacked: the `split` close with two actions over the tall closing frame, the `panel` close with one action over the short closing frame, then the loud `primary` close under its pixelated texture.",
       "file": "types.vue"
+    },
+    {
+      "name": "Command",
+      "summary": "The `primary` close with a copyable install command before its actions: the line draws the `$` prompt and copies the command as written.",
+      "file": "command.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "Two closings stacked on one page: the upper `panel` turns `hatch` off so only the lower `primary` draws the closing frame. Below, a page that ends on a band with its own actions closes on the bare `frame`, with no gap before it.",
+      "file": "stacked.vue"
     }
   ],
   "site": [

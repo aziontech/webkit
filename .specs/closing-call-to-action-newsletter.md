@@ -3,10 +3,11 @@ name: closing-call-to-action-newsletter
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 9b62e702af5f569fec69b46abce38bde731766f74ff46e19f1e7a12968e354d0
+last_updated: 2026-11-14
+checksum: 40ab336a92a8845704b349c3646d2a4175275ea0d0206feb14b0798d7f1bf379
+template: 2
 ---
 
 # ClosingCallToActionNewsletter — Component Spec
@@ -85,16 +86,17 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ## Props
 
-| Prop          | Type                                | Default | Required | JSDoc                                                                                                                      |
-| ------------- | ----------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `form`        | `ClosingCallToActionNewsletterForm` | `—`     | true     | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. |
-| `anchor`      | `string`                            | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                             |
-| `eyebrow`     | `string`                            | `''`    | false    | Overline on the lead side, closed by the blinking cursor.                                                                  |
-| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band.                                                 |
-| `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                             |
-| `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.        |
-| `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                    |
-| `error`       | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                             |
+| Prop          | Type                                | Default | Required | JSDoc                                                                                                                                   |
+| ------------- | ----------------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `form`        | `ClosingCallToActionNewsletterForm` | `—`     | true     | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`.              |
+| `anchor`      | `string`                            | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                          |
+| `eyebrow`     | `string`                            | `''`    | false    | Overline on the lead side, closed by the blinking cursor.                                                                               |
+| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band.                                                              |
+| `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                                          |
+| `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.                     |
+| `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                                 |
+| `error`       | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                                          |
+| `hatch`       | `boolean`                           | `true`  | false    | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 
 ## Events
 
@@ -113,6 +115,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `error` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
 
 ## Motion & Animations
 
@@ -143,12 +146,39 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the button carry their own fallback.
 - Touch target ≥40×40 px — the field and the button are large.
 
+## Internationalization
+
+No built-in strings: the ask, the button label and every message are props from the page JSON (`title`, `form.*`).
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the lead side and the form mirror under `dir="rtl"`.
+- Icons: the button glyph follows `button`; the texture and the mark are not mirrored.
+- Keyboard: no arrow-key handling.
+- User data: the email field is `type="email"` and renders the address as typed.
+
+## Responsive
+
+- Container queries: none; the lead side and the form stack below `lg`.
+- Narrow (below `lg`): the headline sits over the form, the field and the button share the row and the message drops under them.
+- Touch: the field and the button are large; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 15 KB gzip, the `.size-limit.json` entry `closing-call-to-action-newsletter`.
+- Runtime budget: validation runs on submit only.
+- Heavy parts: none.
+
 ## Examples
 
 - Default
 - Loading
 - Submitted
 - Failed
+- Stacked — justification: `hatch` off is a layout no other example shows (the band without its closing frame, as when another closing band follows).
 
 ## Constraints — DO NOT
 

@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The ask and its two actions on the start side over the waving texture, eight templates to deploy in a scrolling grid on the end side, then the closing frame. Marks flagged `invertInDark` invert under the dark theme.",
       "file": "default.vue"
+    },
+    {
+      "name": "Stacked",
+      "summary": "The templates close with `hatch` off, so the closing band stacked under it draws the page's one closing frame.",
+      "file": "stacked.vue"
     }
   ]
 }

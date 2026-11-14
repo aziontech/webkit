@@ -137,6 +137,57 @@ describe('ClosingCallToAction', () => {
     expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
   })
 
+  it('drops the closing frame when hatch is off, keeping the band', () => {
+    const { getByTestId, getByRole } = band({ hatch: false })
+
+    expect(getByRole('heading', { name: new RegExp(TITLE) })).toBeInTheDocument()
+    expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
+  })
+
+  it('draws only the closing frame in frame, with no copy or action', () => {
+    const { getByTestId, queryByRole } = band({ kind: 'frame' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'frame')
+    expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
+    expect(queryByRole('heading')).toBeNull()
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('draws the frame in frame even with no title and hatch off', () => {
+    const { getByTestId } = render(ClosingCallToAction, { props: { kind: 'frame', hatch: false } })
+
+    expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
+  })
+
+  it.each(['split', 'panel', 'primary'] as const)(
+    'renders the command as a copyable shell line before the actions in %s',
+    async (kind) => {
+      const { findByRole, getByRole, getAllByRole } = band({
+        kind,
+        command: 'npm create azion@latest'
+      })
+
+      const field = await findByRole('textbox', { name: 'Command' })
+      expect(field).toHaveValue('npm create azion@latest')
+      expect(getByRole('button', { name: 'Copy command' })).toBeInTheDocument()
+      const first = getAllByRole('link')[0]!
+      expect(field.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    }
+  )
+
+  it('renders no command line without a command', () => {
+    const { queryByRole } = band()
+
+    expect(queryByRole('textbox')).toBeNull()
+  })
+
+  it('has no a11y violations with a command line', async () => {
+    const { container, findByRole } = band({ kind: 'primary', command: 'npm create azion@latest' })
+
+    await findByRole('textbox', { name: 'Command' })
+    await expectNoA11yViolations(container)
+  })
+
   it.each(['split', 'panel', 'primary'] as const)('has no a11y violations in %s', async (kind) => {
     const { container } = band({ kind })
 
