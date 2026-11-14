@@ -3,14 +3,14 @@
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { type SortDirection, TableInjectionKey, TableRowGroupKey } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
   export type TableHeadCellKind = 'default' | 'checkbox' | 'action' | 'slot'
   export type TableHeadCellAlign = 'start' | 'center' | 'end'
   export type TableHeadCellGrow = 1 | 2 | 3
   export type TableHeadCellFrozen = 'start' | 'end'
-  export type SortDirection = 'none' | 'ascending' | 'descending'
+  export type { SortDirection }
 
   defineOptions({
     name: 'TableHeadCell',

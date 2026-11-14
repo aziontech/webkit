@@ -93,7 +93,7 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "54.1 KB"
+    "limit": "54.25 KB"
   },
   {
     "name": "property-filter",
@@ -1701,7 +1701,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "15.7 KB",
+    "limit": "3.75 KB",
     "entryOnly": true
   },
   {
@@ -1713,7 +1713,7 @@
   {
     "name": "table-column-selector",
     "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "9.05 KB",
+    "limit": "11.25 KB",
     "entryOnly": true
   },
   {

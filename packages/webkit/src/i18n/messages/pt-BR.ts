@@ -908,7 +908,8 @@ export const ptBR: Messages = {
     selectAll: 'Selecionar todas as linhas',
     selectRow: 'Selecionar linha',
     emptyTitle: 'Nenhum resultado ainda',
-    emptyDescription: 'Comece criando seu primeiro recurso.'
+    emptyDescription: 'Comece criando seu primeiro recurso.',
+    errorTitle: 'Não foi possível carregar os dados'
   },
   tableAppliedFilters: {
     contains: 'contém',
@@ -995,7 +996,8 @@ export const ptBR: Messages = {
     cancelled: 'Reordenação cancelada.'
   },
   tableSearch: {
-    placeholder: 'Buscar'
+    placeholder: 'Buscar',
+    label: 'Buscar na tabela'
   },
   tableSortButton: {
     ascending: 'Ordenado em ordem crescente',

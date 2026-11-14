@@ -4,9 +4,9 @@
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import { TableInjectionKey } from '../injection-key'
+  import { type SortDirection, TableInjectionKey } from '../injection-key'
 
-  export type SortDirection = 'none' | 'ascending' | 'descending'
+  export type { SortDirection }
 
   defineOptions({
     name: 'TableSortButton',

@@ -101,7 +101,10 @@
       rowSelectable?: (row: TRow) => boolean
       /** Data-driven mode: clicking a row toggles its selection (requires enableRowSelection). */
       selectOnRowClick?: boolean
-      /** Header density: `compact` shrinks the column-header row's height and padding. */
+      /**
+       * Header density: `compact` shrinks the column-header row's height and padding.
+       * @deprecated since 6.0 — use `density`, which now sets the header and the rows. Removed in 7.0.
+       */
       headerKind?: TableHeaderKind
       /** Render a Pagination in the footer. */
       paginated?: boolean
@@ -125,10 +128,17 @@
       manualFiltering?: boolean
       /** Total row count for manual pagination. */
       rowCount?: number
-      /** Rows-per-page options shown in the footer selector. */
+      /** Page-size options shown in the footer selector (the same name as Pagination). Unset uses `rowsPerPageOptions`. */
+      pageSizeOptions?: number[]
+      /**
+       * Rows-per-page options shown in the footer selector.
+       * @deprecated since 6.0 — use `pageSizeOptions`. Removed in 7.0.
+       */
       rowsPerPageOptions?: number[]
       /** Data-driven mode: render skeleton rows and set aria-busy while true. */
       loading?: boolean
+      /** Data-driven mode: message of a failed load, shown in place of the rows (the `error` slot replaces it). Empty shows the rows. */
+      error?: string
       /** v-model:filters — structured applied conditions (distinct from globalFilter). */
       filters?: AppliedFilter[]
       /** Field catalog the built-in Table.Filter builder offers. */
@@ -147,7 +157,7 @@
       wrapLines?: boolean
       /** Data-driven mode: every other body row takes the raised surface. */
       striped?: boolean
-      /** Row density: `compact` shrinks body rows and cell padding. */
+      /** Density of the header and the body rows: `compact` shrinks their height and padding. */
       density?: TableDensity
       /** Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout. */
       virtual?: boolean
@@ -184,8 +194,10 @@
       manualPagination: false,
       manualFiltering: false,
       rowCount: undefined,
+      pageSizeOptions: undefined,
       rowsPerPageOptions: () => [10, 25, 50, 100],
       loading: false,
+      error: '',
       filters: undefined,
       filterFields: () => [],
       state: undefined,
@@ -237,6 +249,8 @@
       caption(): unknown
       /** Data-driven empty state when there are no rows. */
       empty(): unknown
+      /** Data-driven error state shown in place of the rows while `error` is set. */
+      error(props: { message: string }): unknown
       /** Footer region below the scroll viewport, auto-rendered when data-driven and paginated. */
       footer(): unknown
     } & TableCellSlots<TRow> &
@@ -245,6 +259,10 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ table: en.table, tableReorder: en.tableReorder })
+
+  const headerDensity = computed<TableDensity>(() =>
+    props.headerKind === 'compact' ? 'compact' : props.density
+  )
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -1678,7 +1696,7 @@
           <template v-if="dataDriven">
             <TableHeader
               frozen
-              :kind="headerKind"
+              :density="headerDensity"
               :class="stacked ? 'sr-only!' : undefined"
             >
               <TableRow>
@@ -1796,7 +1814,7 @@
               @enter-cancelled="onBodyEntered"
             >
               <TableBody
-                v-if="!loading && rowTotal > 0"
+                v-if="!loading && !error && rowTotal > 0"
                 key="rows"
                 :class="stacked ? 'gap-(--spacing-xs) p-(--spacing-xs)' : undefined"
                 :style="virtualPadding"
@@ -1970,7 +1988,25 @@
         enter-to-class="opacity-100"
       >
         <div
-          v-if="!loading && rowTotal === 0"
+          v-if="!loading && error"
+          role="alert"
+          :data-testid="`${testId}__error`"
+          class="sticky start-0 w-full"
+        >
+          <slot
+            name="error"
+            :message="error"
+          >
+            <EmptyState
+              size="small"
+              icon="pi pi-exclamation-triangle"
+              :title="t('table.errorTitle')"
+              :description="error"
+            />
+          </slot>
+        </div>
+        <div
+          v-else-if="!loading && rowTotal === 0"
           :data-testid="`${testId}__empty`"
           class="sticky start-0 w-full"
         >
@@ -2010,7 +2046,7 @@
           :page="pageIndex + 1"
           :total="totalRows"
           :page-size="currentPageSize"
-          :page-size-options="rowsPerPageOptions"
+          :page-size-options="pageSizeOptions ?? rowsPerPageOptions"
           @update:page="(page) => table.setPageIndex(page - 1)"
           @update:page-size="(size) => table.setPageSize(size)"
         />

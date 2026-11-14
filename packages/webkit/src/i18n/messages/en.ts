@@ -885,7 +885,8 @@ export const table = {
   selectAll: 'Select all rows',
   selectRow: 'Select row',
   emptyTitle: 'No results yet',
-  emptyDescription: 'Get started by creating your first resource.'
+  emptyDescription: 'Get started by creating your first resource.',
+  errorTitle: 'Could not load the data'
 } as const
 
 export const tableAppliedFilters = {
@@ -988,7 +989,8 @@ export const tableReorder = {
 } as const
 
 export const tableSearch = {
-  placeholder: 'Search'
+  placeholder: 'Search',
+  label: 'Search the table'
 } as const
 
 export const tableSortButton = {

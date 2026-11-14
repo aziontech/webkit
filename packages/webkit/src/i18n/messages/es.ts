@@ -908,7 +908,8 @@ export const es: Messages = {
     selectAll: 'Seleccionar todas las filas',
     selectRow: 'Seleccionar fila',
     emptyTitle: 'Aún no hay resultados',
-    emptyDescription: 'Empieza creando tu primer recurso.'
+    emptyDescription: 'Empieza creando tu primer recurso.',
+    errorTitle: 'No se pudieron cargar los datos'
   },
   tableAppliedFilters: {
     contains: 'contiene',
@@ -995,7 +996,8 @@ export const es: Messages = {
     cancelled: 'Reordenación cancelada.'
   },
   tableSearch: {
-    placeholder: 'Buscar'
+    placeholder: 'Buscar',
+    label: 'Buscar en la tabla'
   },
   tableSortButton: {
     ascending: 'Orden ascendente',

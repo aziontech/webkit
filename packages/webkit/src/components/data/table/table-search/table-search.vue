@@ -15,9 +15,12 @@
     defineProps<{
       /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
       placeholder?: string
+      /** Accessible name of the search field. Empty uses the locale catalog (`Search the table`). */
+      ariaLabel?: string
     }>(),
     {
-      placeholder: ''
+      placeholder: '',
+      ariaLabel: ''
     }
   )
 
@@ -36,6 +39,10 @@
     return instance ? ((instance.getState().globalFilter as string | undefined) ?? '') : ''
   })
   const setFilter = (value: string) => ctx?.table.value?.setGlobalFilter(value)
+
+  if (!ctx) {
+    console.warn('[webkit] Table.Search renders outside a Table and filters nothing.')
+  }
 </script>
 
 <template>
@@ -46,6 +53,7 @@
     class="flex-1"
     :model-value="globalFilter"
     :placeholder="placeholder || t('tableSearch.placeholder')"
+    :aria-label="ariaLabel || t('tableSearch.label')"
     @update:model-value="setFilter"
   >
     <template #iconLeft>

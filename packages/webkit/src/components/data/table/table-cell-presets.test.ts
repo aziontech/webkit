@@ -126,6 +126,18 @@ describe('Table cell presets', () => {
     expect(view.getByRole('button', { name: 'Show all 2 domains' })).toBeTruthy()
   })
 
+  it('CellLink: noun names the more values, over the deprecated moreNoun', () => {
+    const view = render(TableCellLink, {
+      props: {
+        label: 'a.example.com',
+        more: ['b.example.com', 'c.example.com'],
+        noun: { one: 'origin', other: 'origins' },
+        moreNoun: { one: 'domain', other: 'domains' }
+      }
+    })
+    expect(view.getByRole('button', { name: 'Show all 2 origins' })).toBeTruthy()
+  })
+
   it('CellTime shows a relative time, the absolute one for screen readers, and the author', () => {
     const value = new Date(Date.now() - 3 * 86_400_000)
     const view = render(TableCellTime, {

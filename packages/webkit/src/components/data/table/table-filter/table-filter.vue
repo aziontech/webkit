@@ -1,23 +1,17 @@
 <script setup lang="ts">
-  import {
-    computed,
-    defineAsyncComponent,
-    inject,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { computed, defineAsyncComponent, inject, ref, useAttrs, watch } from 'vue'
 
   import type { MessageKey } from '../../../../composables/use-locale'
-  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
-  import { usePlacement } from '../../../../composables/use-placement'
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Badge from '../../../content/badge/badge.vue'
   import Input from '../../../inputs/input/input.vue'
+  import Popover from '../../../overlay/popover/popover.vue'
+  import PopoverContent from '../../../overlay/popover/popover-content/popover-content.vue'
+  import PopoverTitle from '../../../overlay/popover/popover-title/popover-title.vue'
+  import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
   import { useFilterMenuLabels } from '../../filter-menu/composables/use-filter-menu-labels'
   import type FilterMenuComponent from '../../filter-menu/filter-menu.vue'
   import type { FilterMenuModel } from '../../filter-menu/types'
@@ -68,13 +62,12 @@
       clear: (event: Event) => void
       remove: (event: Event, filter: AppliedFilter) => void
     }): unknown
-    /** Replace the default trigger button. */
-    trigger(props: { open: () => void; count: number }): unknown
+    /** Replace the default trigger button; it toggles the panel on click by itself. `expanded` is the panel state; `open` opens it from elsewhere. */
+    trigger(props: { open: () => void; expanded: boolean; count: number }): unknown
   }>()
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableFilter: en.tableFilter })
-  const portalLocale = usePortalLocale()
   const heading = computed(() => props.title || t('tableFilter.title'))
   const ctx = inject(TableInjectionKey, null)
 
@@ -85,39 +78,14 @@
   )
 
   const open = ref<boolean>(false)
-  const triggerRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
-  const { panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
-    isOpen: open,
-    placement: 'bottom-end',
-    offset: 4
-  })
-  const toggle = (): void => {
-    open.value = !open.value
-  }
   const close = (): void => {
     open.value = false
   }
-  const onPointerDown = (event: MouseEvent): void => {
-    if (!open.value) return
-    const target = event.target as Node | null
-    if (!target) return
-    if (triggerRef.value?.contains(target) || panelRef.value?.contains(target)) return
-    close()
+  const openPanel = (): void => {
+    queueMicrotask(() => {
+      open.value = true
+    })
   }
-  const onKeydown = (event: globalThis.KeyboardEvent): void => {
-    if (open.value && event.key === 'Escape') close()
-  }
-  onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onPointerDown)
-    globalThis.document?.addEventListener('keydown', onKeydown)
-  })
-  onBeforeUnmount(() => {
-    globalThis.document?.removeEventListener('mousedown', onPointerDown)
-    globalThis.document?.removeEventListener('keydown', onKeydown)
-  })
 
   const fields = computed<FilterField[]>(() =>
     props.fields.length ? props.fields : (ctx?.filterFields.value ?? [])
@@ -266,17 +234,18 @@
     :model-value="menuModel"
     @update:model-value="onMenuChange"
   />
-  <div
+  <Popover
     v-else
-    class="relative inline-flex"
+    v-model:open="open"
+    placement="bottom-end"
+    :data-testid="`${testId}__popover`"
+    class="relative"
   >
-    <span
-      ref="triggerRef"
-      class="relative inline-flex"
-    >
+    <PopoverTrigger>
       <slot
         name="trigger"
-        :open="() => (open = true)"
+        :open="openPanel"
+        :expanded="open"
         :count="count"
       >
         <IconButton
@@ -285,8 +254,6 @@
           :ariaLabel="triggerName"
           kind="outlined"
           size="medium"
-          :aria-expanded="open"
-          @click="toggle"
         />
         <span
           v-if="count > 0"
@@ -302,101 +269,91 @@
           />
         </span>
       </slot>
-    </span>
+    </PopoverTrigger>
 
-    <Teleport to="body">
-      <Transition
-        enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
-        leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
+    <PopoverContent>
+      <div
+        :data-testid="`${testId}__panel`"
+        class="flex min-w-(--container-2xs) flex-col gap-(--spacing-sm) p-(--spacing-sm)"
       >
-        <div
-          v-if="open"
-          ref="panelRef"
-          role="dialog"
-          :dir="portalLocale.dir"
-          :lang="portalLocale.lang"
-          :aria-label="heading"
-          :data-testid="`${testId}__panel`"
-          :style="panelStyle"
-          class="flex min-w-(--container-2xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+        <PopoverTitle class="text-label-md">{{ heading }}</PopoverTitle>
+
+        <slot
+          :fields="fields"
+          :applied="applied"
+          :apply="commit"
+          :clear="clearAll"
+          :remove="removeOne"
         >
-          <p class="text-label-md text-(--text-default)">{{ heading }}</p>
-
-          <slot
-            :fields="fields"
-            :applied="applied"
-            :apply="commit"
-            :clear="clearAll"
-            :remove="removeOne"
-          >
-            <div class="flex flex-col gap-(--spacing-xs)">
-              <select
-                v-model="draftField"
-                :data-testid="`${testId}__field`"
-                :aria-label="t('tableFilter.field')"
-                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          <div class="flex flex-col gap-(--spacing-xs)">
+            <select
+              v-model="draftField"
+              :data-testid="`${testId}__field`"
+              :aria-label="t('tableFilter.field')"
+              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            >
+              <option
+                v-for="field in fields"
+                :key="field.id"
+                :value="field.id"
               >
-                <option
-                  v-for="field in fields"
-                  :key="field.id"
-                  :value="field.id"
-                >
-                  {{ field.label }}
-                </option>
-              </select>
+                {{ field.label }}
+              </option>
+            </select>
 
-              <select
-                :value="draftOperator"
-                :data-testid="`${testId}__operator`"
-                :aria-label="t('tableFilter.operator')"
-                :disabled="!draftField"
-                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:opacity-60"
-                @change="
-                  (event) =>
-                    (draftOperator = (event.target as HTMLSelectElement).value as FilterOperator)
-                "
+            <select
+              :value="draftOperator"
+              :data-testid="`${testId}__operator`"
+              :aria-label="t('tableFilter.operator')"
+              :disabled="!draftField"
+              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:opacity-60"
+              @change="
+                (event) =>
+                  (draftOperator = (event.target as HTMLSelectElement).value as FilterOperator)
+              "
+            >
+              <option
+                v-for="operator in operators"
+                :key="operator"
+                :value="operator"
               >
-                <option
-                  v-for="operator in operators"
-                  :key="operator"
-                  :value="operator"
-                >
-                  {{ operatorLabel(operator) }}
-                </option>
-              </select>
+                {{ operatorLabel(operator) }}
+              </option>
+            </select>
 
-              <select
-                v-if="needsValue && valueOptions.length > 0"
-                v-model="draftValue"
-                :data-testid="`${testId}__value`"
-                :aria-label="t('tableFilter.value')"
-                class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            <select
+              v-if="needsValue && valueOptions.length > 0"
+              v-model="draftValue"
+              :data-testid="`${testId}__value`"
+              :aria-label="t('tableFilter.value')"
+              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            >
+              <option
+                v-for="option in valueOptions"
+                :key="String(option.value)"
+                :value="String(option.value)"
               >
-                <option
-                  v-for="option in valueOptions"
-                  :key="String(option.value)"
-                  :value="String(option.value)"
-                >
-                  {{ option.label }}
-                </option>
-              </select>
-              <Input
-                v-else-if="needsValue"
-                v-model="draftValue"
-                :data-testid="`${testId}__value`"
-                :placeholder="t('tableFilter.value')"
-              />
+                {{ option.label }}
+              </option>
+            </select>
+            <Input
+              v-else-if="needsValue"
+              v-model="draftValue"
+              :type="selectedField?.type === 'number' ? 'number' : 'text'"
+              :data-testid="`${testId}__value`"
+              :aria-label="t('tableFilter.value')"
+              :placeholder="t('tableFilter.value')"
+            />
 
-              <Button
-                :label="t('tableFilter.apply')"
-                size="small"
-                :disabled="!draftField"
-                @click="commit"
-              />
-            </div>
-          </slot>
-        </div>
-      </Transition>
-    </Teleport>
-  </div>
+            <Button
+              :label="t('tableFilter.apply')"
+              size="small"
+              :disabled="!draftField"
+              @click="commit"
+            />
+          </div>
+        </slot>
+      </div>
+    </PopoverContent>
+  </Popover>
 </template>
