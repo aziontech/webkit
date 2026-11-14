@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 7d656b65305461a879dc3aed640a0c276e4ae94f2b0ea1d4b4c2f3d5d9cbe1ee
+checksum: 15d536af35afdb7175ebf4ec084a74d8f1d19bfde99532a4228db0800f1e9015
 created: 2026-11-12
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # SearchTrigger — Component Spec
@@ -43,6 +43,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 - With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
 - With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
+- Leave the accessible name to the label: to name a narrower scope, change `label` (`Search docs`), not `aria-label`. An `aria-label` attribute replaces the name and must start with the visible text, or a voice-control user who says what they see cannot activate the button (WCAG 2.5.3 Label in Name).
 
 ## Usage
 
@@ -114,8 +115,8 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`aria-label` keeps it when the label is visually hidden in the folded form).
-- Shortcut: `aria-keyshortcuts="Meta+K Control+K"` (both chords `Command` listens for, so the server and the client render the same attribute) when `shortcut` is set; the keycap is `aria-hidden` so the name is not read twice.
+- Pattern: a WAI-ARIA APG **button** (`<button type="button">`) named from its content: a visually hidden span (`sr-only`, test id `<testid>__name`) carries the label, and the drawn label, the magnifier and the keycap are `aria-hidden`. The name is exactly the visible label (`Search`), in the wide and in the folded form, and the button carries no `aria-label`, so the visible text (`Search ⌘K`) never disagrees with an author-supplied name (WCAG 2.5.3 Label in Name; axe `label-content-name-mismatch` only applies to `aria-label` / `aria-labelledby`). A consumer `aria-label` attribute still wins and must start with the visible text.
+- Shortcut: `aria-keyshortcuts="Meta+K Control+K"` (both chords `Command` listens for, in ARIA key syntax, so the server and the client render the same attribute) when `shortcut` is set; the keycap is `aria-hidden`, so the shortcut is announced once, through `aria-keyshortcuts`, and stays out of the name.
 - Keyboard map: `Tab` focuses; `Enter` and `Space` activate; `⌘K` / `Ctrl K` anywhere on the page opens search (handled by `Command` when one is mounted, otherwise by the trigger, which emits `open`).
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Disabled: native `disabled` (out of the tab order, not announced as actionable); text and border keep ≥ 3:1 against the surface.

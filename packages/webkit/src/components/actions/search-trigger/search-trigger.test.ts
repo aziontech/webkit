@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
+import axe from 'axe-core'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
@@ -253,5 +254,38 @@ describe('SearchTrigger', () => {
     b.unmount()
     const c = render(SearchTrigger, { props: { disabled: true } })
     await expectNoA11yViolations(c.container)
+  })
+
+  const labelInName = async (container: Element) => {
+    const results = await axe.run(container, {
+      runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
+    })
+    return results.violations
+  }
+
+  it('names the button from its visible label, so the label is in the name (2.5.3)', async () => {
+    const plain = render(SearchTrigger)
+    const button = plain.getByTestId('actions-search-trigger')
+    expect(button).not.toHaveAttribute('aria-label')
+    expect(plain.getByTestId('actions-search-trigger__name')).toHaveTextContent('Search')
+    expect(plain.getByTestId('actions-search-trigger__label')).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    )
+    expect(button).toHaveAttribute('aria-keyshortcuts', 'Meta+K Control+K')
+    expect(plain.getByRole('button', { name: 'Search' })).toBe(button)
+    expect(await labelInName(plain.container)).toEqual([])
+    plain.unmount()
+    const folding = render(SearchTrigger, { props: { collapsible: true, label: 'Search docs' } })
+    folding.getByTestId('actions-search-trigger__label').style.display = 'none'
+    expect(folding.getByRole('button', { name: 'Search docs' })).toBeTruthy()
+    expect(await labelInName(folding.container)).toEqual([])
+  })
+
+  it('lets a consumer aria-label win over the label', () => {
+    const { getByRole } = render(SearchTrigger, {
+      attrs: { 'aria-label': 'Search Ctrl K projects' }
+    })
+    expect(getByRole('button', { name: 'Search Ctrl K projects' })).toBeTruthy()
   })
 })
