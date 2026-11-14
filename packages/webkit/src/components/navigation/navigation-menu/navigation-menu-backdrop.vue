@@ -8,7 +8,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__backdrop'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__backdrop'
   )
 
   const root = useNavigationMenuRoot()

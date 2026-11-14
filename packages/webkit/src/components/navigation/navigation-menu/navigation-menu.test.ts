@@ -5,12 +5,14 @@ import { userEvent as keyboardUser } from 'vitest/browser'
 import { defineComponent, ref } from 'vue'
 
 import Default from '../../../../examples/navigation-menu/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
 import NavigationMenu from './index'
 import NavigationMenuArrow from './navigation-menu-arrow.vue'
 import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
 import NavigationMenuContent from './navigation-menu-content.vue'
 import NavigationMenuIcon from './navigation-menu-icon.vue'
 import NavigationMenuItem from './navigation-menu-item.vue'
+import NavigationMenuLink from './navigation-menu-link.vue'
 import NavigationMenuList from './navigation-menu-list.vue'
 import NavigationMenuPopup from './navigation-menu-popup.vue'
 import NavigationMenuPortal from './navigation-menu-portal.vue'
@@ -41,7 +43,8 @@ const COMPONENTS = {
   NavigationMenuPopup,
   NavigationMenuViewport,
   NavigationMenuArrow,
-  NavigationMenuBackdrop
+  NavigationMenuBackdrop,
+  NavigationMenuLink
 }
 
 const renderTree = (template: string) =>
@@ -111,7 +114,7 @@ const body = () => within(document.body)
 afterEach(() => {
   // Portal teleports into document.body; ensure nothing leaks between tests.
   document.body
-    .querySelectorAll('[data-testid="navigation-menu__portal"]')
+    .querySelectorAll('[data-testid="navigation-navigation-menu__portal"]')
     .forEach((node) => node.remove())
 })
 
@@ -132,8 +135,8 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       expect(NavigationMenu.Arrow).toBe(NavigationMenuArrow)
     })
 
-    it('aliases Link to the Trigger sub-component (index.js: NavigationMenu.Link = NavigationMenuTrigger)', () => {
-      expect(NavigationMenu.Link).toBe(NavigationMenuTrigger)
+    it('exposes the link part as NavigationMenu.Link', () => {
+      expect(NavigationMenu.Link).toBe(NavigationMenuLink)
     })
 
     it('names the compound members from the anatomy (defineOptions.name)', () => {
@@ -151,7 +154,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
         `<NavigationMenu><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
 
-      const root = getByTestId('navigation-menu')
+      const root = getByTestId('navigation-navigation-menu')
       expect(root.tagName).toBe('NAV')
       expect(root).toHaveAttribute('aria-label', 'Main')
       expect(root).toHaveAttribute('data-orientation', 'horizontal')
@@ -164,21 +167,22 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
         `<NavigationMenu aria-label="Sidebar" orientation="vertical"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
 
-      const root = getByTestId('navigation-menu')
+      const root = getByTestId('navigation-navigation-menu')
       expect(root).toHaveAttribute('aria-label', 'Sidebar')
       expect(root).toHaveAttribute('data-orientation', 'vertical')
     })
   })
 
   describe('trigger a11y wiring (navigation-menu-trigger.vue)', () => {
-    it('a submenu trigger is a button with aria-haspopup and aria-expanded=false when closed', () => {
+    it('a submenu trigger is a disclosure button with aria-expanded=false and no aria-haspopup when closed', () => {
       const { getByRole } = renderTree(COMPOSED)
 
       const trigger = getByRole('button', { name: /Solutions/ })
       expect(trigger.tagName).toBe('BUTTON')
       expect(trigger).toHaveAttribute('type', 'button')
-      expect(trigger).toHaveAttribute('aria-haspopup', 'true')
+      expect(trigger).not.toHaveAttribute('aria-haspopup')
       expect(trigger).toHaveAttribute('aria-expanded', 'false')
+      expect(trigger).not.toHaveAttribute('aria-controls')
     })
 
     it('a plain link trigger renders as an anchor with aria-current when active (no aria-expanded/haspopup)', () => {
@@ -206,7 +210,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
         timeout: OPEN_TIMEOUT
       })
-      expect(getByTestId('navigation-menu')).toHaveAttribute('data-open', '')
+      expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-open', '')
       expect(trigger).toHaveAttribute('data-popup-open', '')
 
       // Content is teleported to document.body — query it there, not the container.
@@ -217,7 +221,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       })
       expect(panelLink).toHaveAttribute('href', 'https://example.com/dev')
 
-      const content = body().getByTestId('navigation-menu__content')
+      const content = body().getByTestId('navigation-navigation-menu__content')
       expect(content).toHaveAttribute('role', 'region')
       expect(content).toHaveAttribute('data-open', '')
     })
@@ -251,7 +255,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
   describe('size-aware placement (ENG-47063) — shared computePlacement geometry', () => {
     // No CSS is loaded in browser mode, so the trigger is pinned with inline styles and
     // the positioner's inline transform / CSS vars are what get asserted.
-    const positioner = () => body().getByTestId('navigation-menu__positioner')
+    const positioner = () => body().getByTestId('navigation-navigation-menu__positioner')
 
     const TALL_PANEL = (rows: number, wrapperStyle: string) => `
       <div style="${wrapperStyle}">
@@ -306,7 +310,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
     it('keeps the positioner box equal to the popup it carries, with no trailing line box', async () => {
       const { getByRole } = renderTree(TALL_PANEL(6, 'position:fixed;left:8px;top:8px'))
       await userEvent.click(getByRole('button', { name: /Solutions/ }))
-      const popup = await waitFor(() => body().getByTestId('navigation-menu__popup'), {
+      const popup = await waitFor(() => body().getByTestId('navigation-navigation-menu__popup'), {
         timeout: OPEN_TIMEOUT
       })
       await waitFor(
@@ -407,7 +411,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
       await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
         timeout: OPEN_TIMEOUT
       })
-      expect(getByTestId('navigation-menu')).not.toHaveAttribute('data-open')
+      expect(getByTestId('navigation-navigation-menu')).not.toHaveAttribute('data-open')
     })
 
     it('ArrowRight roves to the next trigger and opens it', async () => {
@@ -507,7 +511,7 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
         timeout: OPEN_TIMEOUT
       })
 
-      const backdrop = body().getByTestId('navigation-menu__backdrop')
+      const backdrop = body().getByTestId('navigation-navigation-menu__backdrop')
       await fireEvent.click(backdrop)
 
       await waitFor(() => expect(updateValues).toContain(null), {
@@ -614,7 +618,10 @@ describe('NavigationMenu (composition + overlay + recursive)', () => {
         const { getByTestId } = renderTree(
           `<NavigationMenu orientation="${orientation}"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
         )
-        expect(getByTestId('navigation-menu')).toHaveAttribute('data-orientation', orientation)
+        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute(
+          'data-orientation',
+          orientation
+        )
       }
     )
   })
@@ -734,5 +741,75 @@ describe('keyboard map (spec)', () => {
     await keyboardUser.keyboard('{Escape}')
     await expanded(solutions, 'false')
     expect(document.activeElement).toBe(solutions)
+  })
+})
+
+describe('NavigationMenu audit fixes', () => {
+  it('forwards consumer attributes to the nav landmark', () => {
+    const { getByTestId } = renderTree(
+      `<NavigationMenu id="site-nav" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+    )
+    const root = getByTestId('navigation-navigation-menu')
+    expect(root.id).toBe('site-nav')
+    expect(root).toHaveAttribute('aria-labelledby', 'nav-heading')
+    expect(root).toHaveAttribute('data-track', 'nav')
+  })
+
+  it('names the open panel with aria-controls on its trigger', async () => {
+    const { getByRole } = renderTree(COMPOSED)
+    const trigger = getByRole('button', { name: /Solutions/ })
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
+      timeout: OPEN_TIMEOUT
+    })
+    const id = trigger.getAttribute('aria-controls')
+    expect(id).toBeTruthy()
+    expect(document.getElementById(id as string)).toBe(
+      body().getByTestId('navigation-navigation-menu__content')
+    )
+  })
+
+  it('keeps a deprecated native-button=false trigger keyboard reachable', async () => {
+    const { getByRole } = renderTree(
+      COMPOSED.replace('<NavigationMenuTrigger>', '<NavigationMenuTrigger :native-button="false">')
+    )
+    const trigger = getByRole('button', { name: /Solutions/ })
+    expect(trigger.tagName).toBe('DIV')
+    expect(trigger).toHaveAttribute('tabindex', '0')
+    trigger.focus()
+    await keyboardUser.keyboard('{Enter}')
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
+      timeout: OPEN_TIMEOUT
+    })
+  })
+
+  it('renders NavigationMenu.Link as an anchor, and as a trigger button without href', () => {
+    const { getByRole } = renderTree(
+      `<NavigationMenu><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuLink href="https://example.com/pricing" active>Pricing</NavigationMenuLink></NavigationMenuItem><NavigationMenuItem value="more"><NavigationMenuLink>More</NavigationMenuLink></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+    )
+    const link = getByRole('link', { name: 'Pricing' })
+    expect(link).toHaveAttribute('href', 'https://example.com/pricing')
+    expect(link).toHaveAttribute('aria-current', 'page')
+    expect(getByRole('button', { name: 'More' })).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('has no axe violations closed, open and vertical', async () => {
+    const closed = renderTree(COMPOSED)
+    await expectNoA11yViolations(closed.container)
+    const trigger = closed.getByRole('button', { name: /Solutions/ })
+    await userEvent.click(trigger)
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
+      timeout: OPEN_TIMEOUT
+    })
+    await expectNoA11yViolations(document.body)
+    closed.unmount()
+
+    const vertical = renderTree(
+      COMPOSED.replace(
+        '<NavigationMenu aria-label="Primary">',
+        '<NavigationMenu aria-label="Primary" orientation="vertical">'
+      )
+    )
+    await expectNoA11yViolations(vertical.container)
   })
 })

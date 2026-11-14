@@ -358,7 +358,6 @@
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::token:js-class-preset",
-  "packages/webkit/src/components/navigation/navigation-menu/navigation-menu-root.vue::spec:data-testid fallback \"'navigation-navigation-menu'\" not found in <script setup>. Expected: ?? 'navigation-navigation-menu'",
   "packages/webkit/src/components/navigation/tabs/presets/transitions.ts::token:js-class-preset",
   "packages/webkit/src/components/navigation/tabs/tabs-content.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/tabs/tabs-item.vue::i18n:hardcoded-default-string",

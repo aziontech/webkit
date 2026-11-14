@@ -11,6 +11,7 @@ export type NavigationMenuRootContext = UseNavigationMenuRootStateReturn
 export interface NavigationMenuItemContext {
   itemValue: ComputedRef<NavigationMenuItemValue>
   open: ComputedRef<boolean>
+  contentId: string
 }
 
 export interface UseNavigationMenuRootReturn extends NavigationMenuRootContext {

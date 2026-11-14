@@ -46,7 +46,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__item'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__item'
   )
 
   const root = useNavigationMenuRoot()
@@ -57,7 +57,8 @@
 
   provideNavigationMenuItem({
     itemValue,
-    open
+    open,
+    contentId: `${autoId}-content`
   })
 
   const ENTRY_CLASS =
