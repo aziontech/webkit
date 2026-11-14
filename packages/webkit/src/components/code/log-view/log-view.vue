@@ -93,6 +93,27 @@
     return counts
   })
 
+  const haystacks = new WeakMap<LogViewLine, { message: string; text: string }>()
+
+  const haystackOf = (line: LogViewLine): string => {
+    const cached = haystacks.get(line)
+    if (cached && cached.message === line.message) return cached.text
+    const text = [
+      line.time,
+      line.level,
+      line.message,
+      line.folderType,
+      line.size,
+      line.gzipSize,
+      line.suffix
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+    haystacks.set(line, { message: line.message, text })
+    return text
+  }
+
   const filteredLines = computed(() => {
     const query = search.value.trim().toLowerCase()
     let result = props.lines
@@ -106,22 +127,7 @@
     }
 
     if (query) {
-      result = result.filter((line) => {
-        const haystack = [
-          line.time,
-          line.level,
-          line.message,
-          line.folderType,
-          line.size,
-          line.gzipSize,
-          line.suffix
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .toLowerCase()
-
-        return haystack.includes(query)
-      })
+      result = result.filter((line) => haystackOf(line).includes(query))
     }
 
     return result
@@ -135,9 +141,17 @@
     return count > 0 ? t('logView.warningCount', { count }) : t('logView.warnings')
   })
 
-  const copyText = computed(() =>
-    filteredLines.value.map((line) => formatLogLineText(line)).join('\n')
-  )
+  const copyLines = new WeakMap<LogViewLine, { message: string; text: string }>()
+
+  const copyLineOf = (line: LogViewLine): string => {
+    const cached = copyLines.get(line)
+    if (cached && cached.message === line.message) return cached.text
+    const text = formatLogLineText(line)
+    copyLines.set(line, { message: line.message, text })
+    return text
+  }
+
+  const copyText = computed(() => filteredLines.value.map(copyLineOf).join('\n'))
 
   const canCopy = computed(
     () =>
@@ -145,7 +159,7 @@
       !props.disabled &&
       !props.loading &&
       !props.error &&
-      copyText.value.length > 0
+      filteredLines.value.length > 0
   )
 
   const setSearch = (value: string) => {

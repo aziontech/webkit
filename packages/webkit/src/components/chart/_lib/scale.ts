@@ -116,25 +116,47 @@ export function linearLayout(
     value === null ? start + (length * index) / Math.max(1, values.length - 1) : scale(value)
   )
   const step = values.length > 1 ? length / (values.length - 1) : length
+  const ascending = positions.every(
+    (position, index) => index === 0 || position >= positions[index - 1]
+  )
   return {
     count: values.length,
     banded: false,
     step,
     bandwidth: step,
     position: (index) => positions[index] ?? start,
-    indexAt: (offset) => {
-      let best = 0
-      let distance = Number.POSITIVE_INFINITY
-      positions.forEach((position, index) => {
-        const gap = Math.abs(position - offset)
-        if (gap < distance) {
-          distance = gap
-          best = index
-        }
-      })
-      return best
-    }
+    indexAt: (offset) =>
+      ascending ? nearestSorted(positions, offset) : nearestAny(positions, offset)
   }
+}
+
+function nearestAny(positions: readonly number[], offset: number): number {
+  let best = 0
+  let distance = Number.POSITIVE_INFINITY
+  positions.forEach((position, index) => {
+    const gap = Math.abs(position - offset)
+    if (gap < distance) {
+      distance = gap
+      best = index
+    }
+  })
+  return best
+}
+
+function nearestSorted(positions: readonly number[], offset: number): number {
+  let low = 0
+  let high = positions.length - 1
+  while (low < high) {
+    const middle = (low + high) >> 1
+    if (positions[middle] < offset) low = middle + 1
+    else high = middle
+  }
+  let best =
+    low > 0 && Math.abs(positions[low - 1] - offset) <= Math.abs(positions[low] - offset)
+      ? low - 1
+      : low
+  while (best > 0 && positions[best - 1] === positions[best]) best -= 1
+  return best
 }
 
 export function mirrorLayout(

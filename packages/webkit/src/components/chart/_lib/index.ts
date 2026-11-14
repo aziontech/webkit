@@ -17,6 +17,7 @@ export {
   colorToken,
   hasAnyValue,
   isFiniteNumber,
+  keepIds,
   normalizeSeries,
   OTHER_SERIES_ID,
   seriesTotal

@@ -2,6 +2,7 @@
   import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId } from 'vue'
 
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -228,6 +229,25 @@
       .map((group) => ({ group, rows: matches.value.filter((row) => row.group === group) }))
       .filter((entry) => entry.rows.length > 0)
   )
+
+  const LAZY_ROWS = 300
+  const phoneChunks = useLazyChunks({ rowHeight: 1, chunkSize: 1, threshold: 0 })
+  const tableChunks = useLazyChunks({ rowHeight: 1, chunkSize: 1, threshold: 0 })
+  const lazyGroups = computed(() => matches.value.length > LAZY_ROWS)
+  const blocksOf = (chunks: typeof phoneChunks, rowHeight: number) =>
+    computed(() =>
+      (lazyGroups.value
+        ? chunks.split(listed.value)
+        : listed.value.map((entry, index) => ({ index, items: [entry], mounted: true }))
+      ).map((chunk) => ({
+        index: chunk.index,
+        entry: chunk.items[0],
+        mounted: chunk.mounted,
+        height: `${(chunk.items[0].rows.length + 1) * rowHeight}px`
+      }))
+    )
+  const phoneBlocks = blocksOf(phoneChunks, 76)
+  const tableBlocks = blocksOf(tableChunks, 56)
 
   const SORT_KEY = '__sort'
 
@@ -484,54 +504,65 @@
             :data-testid="`${testId}__list`"
             class="sm:hidden"
           >
-            <section
-              v-for="(entry, index) in listed"
+            <template
+              v-for="{ entry, index, mounted: shown, height } in phoneBlocks"
               :key="entry.group"
-              :data-ruled="index > 0 || null"
-              class="data-[ruled]:border-t data-[ruled]:border-(--border-default)"
             >
-              <h3
-                class="sticky top-(--layout-header-height) z-20 m-0 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
+              <div
+                v-if="!shown"
+                :ref="(el) => phoneChunks.observe(el, index)"
+                :data-chunk="index"
+                aria-hidden="true"
+                :style="{ height }"
+              />
+              <section
+                v-else
+                :data-ruled="index > 0 || null"
+                class="data-[ruled]:border-t data-[ruled]:border-(--border-default)"
               >
-                {{ entry.group }}
-              </h3>
-              <ItemList>
-                <Item
-                  v-for="row in entry.rows"
-                  :key="row.href"
-                  role="listitem"
-                  class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
+                <h3
+                  class="sticky top-(--layout-header-height) z-20 m-0 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
                 >
-                  <ItemContent class="gap-(--spacing-xs)">
-                    <span
-                      v-if="row.mark"
-                      class="flex h-5 items-center"
-                    >
-                      <img
-                        :src="row.mark.logo"
-                        :alt="row.mark.name"
-                        loading="lazy"
-                        class="h-full w-auto max-w-28 object-contain brightness-0 [[data-theme=dark]_&]:invert"
-                      />
-                    </span>
-                    <ItemTitle>
-                      <a
-                        :href="row.href"
-                        class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                  {{ entry.group }}
+                </h3>
+                <ItemList>
+                  <Item
+                    v-for="row in entry.rows"
+                    :key="row.href"
+                    role="listitem"
+                    class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
+                  >
+                    <ItemContent class="gap-(--spacing-xs)">
+                      <span
+                        v-if="row.mark"
+                        class="flex h-5 items-center"
                       >
-                        {{ row.values[nameKey] }}
-                      </a>
-                    </ItemTitle>
-                    <ItemDescription
-                      v-if="detailKey && row.values[detailKey]"
-                      class="line-clamp-none! text-overline-sm! text-pretty"
-                    >
-                      {{ row.values[detailKey] }}
-                    </ItemDescription>
-                  </ItemContent>
-                </Item>
-              </ItemList>
-            </section>
+                        <img
+                          :src="row.mark.logo"
+                          :alt="row.mark.name"
+                          loading="lazy"
+                          class="h-full w-auto max-w-28 object-contain brightness-0 [[data-theme=dark]_&]:invert"
+                        />
+                      </span>
+                      <ItemTitle>
+                        <a
+                          :href="row.href"
+                          class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                        >
+                          {{ row.values[nameKey] }}
+                        </a>
+                      </ItemTitle>
+                      <ItemDescription
+                        v-if="detailKey && row.values[detailKey]"
+                        class="line-clamp-none! text-overline-sm! text-pretty"
+                      >
+                        {{ row.values[detailKey] }}
+                      </ItemDescription>
+                    </ItemContent>
+                  </Item>
+                </ItemList>
+              </section>
+            </template>
           </div>
 
           <Table
@@ -553,68 +584,77 @@
               </TableRow>
             </TableHeader>
 
-            <TableBody
-              v-for="(entry, index) in listed"
+            <template
+              v-for="{ entry, index, mounted: shown, height } in tableBlocks"
               :key="entry.group"
             >
-              <TableRow
-                :data-ruled="index > 0 || null"
-                class="sticky top-(--layout-header-height) z-20 bg-(--bg-surface) data-[ruled]:border-t data-[ruled]:border-(--border-default)"
-              >
-                <TableCell
-                  :grow="3"
-                  class="ps-(--spacing-xl)!"
+              <div
+                v-if="!shown"
+                :ref="(el) => tableChunks.observe(el, index)"
+                :data-chunk="index"
+                aria-hidden="true"
+                :style="{ height }"
+              />
+              <TableBody v-else>
+                <TableRow
+                  :data-ruled="index > 0 || null"
+                  class="sticky top-(--layout-header-height) z-20 bg-(--bg-surface) data-[ruled]:border-t data-[ruled]:border-(--border-default)"
                 >
-                  <h3 class="m-0 text-overline-md text-(--text-default)">{{ entry.group }}</h3>
-                </TableCell>
-              </TableRow>
-              <TableRow
-                v-for="row in entry.rows"
-                :key="row.href"
-                class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
-                @click="followRow"
-              >
-                <TableCell
-                  v-for="(column, cellIndex) in columns"
-                  :key="column.key"
-                  :grow="column.grow ?? 1"
-                  :align="column.align ?? 'start'"
-                  :principal="cellIndex === 0"
-                  :data-edge="edge(cellIndex)"
-                  :data-meta="cellIndex > 0 || null"
-                  class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
-                >
-                  <div
-                    v-if="cellIndex === 0"
-                    class="flex min-w-0 items-center gap-(--spacing-lg)"
+                  <TableCell
+                    :grow="3"
+                    class="ps-(--spacing-xl)!"
                   >
+                    <h3 class="m-0 text-overline-md text-(--text-default)">{{ entry.group }}</h3>
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  v-for="row in entry.rows"
+                  :key="row.href"
+                  class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
+                  @click="followRow"
+                >
+                  <TableCell
+                    v-for="(column, cellIndex) in columns"
+                    :key="column.key"
+                    :grow="column.grow ?? 1"
+                    :align="column.align ?? 'start'"
+                    :principal="cellIndex === 0"
+                    :data-edge="edge(cellIndex)"
+                    :data-meta="cellIndex > 0 || null"
+                    class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
+                  >
+                    <div
+                      v-if="cellIndex === 0"
+                      class="flex min-w-0 items-center gap-(--spacing-lg)"
+                    >
+                      <span
+                        v-if="row.mark"
+                        class="flex h-5 w-28 shrink-0 items-center"
+                      >
+                        <img
+                          :src="row.mark.logo"
+                          :alt="row.mark.name"
+                          loading="lazy"
+                          class="h-full w-auto max-w-full object-contain brightness-0 [[data-theme=dark]_&]:invert"
+                        />
+                      </span>
+                      <a
+                        :href="row.href"
+                        class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                      >
+                        {{ row.values[column.key] }}
+                      </a>
+                    </div>
                     <span
-                      v-if="row.mark"
-                      class="flex h-5 w-28 shrink-0 items-center"
+                      v-else
+                      class="min-w-0 truncate"
+                      :title="row.values[column.key]"
+                      >{{ row.values[column.key] }}</span
                     >
-                      <img
-                        :src="row.mark.logo"
-                        :alt="row.mark.name"
-                        loading="lazy"
-                        class="h-full w-auto max-w-full object-contain brightness-0 [[data-theme=dark]_&]:invert"
-                      />
-                    </span>
-                    <a
-                      :href="row.href"
-                      class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                    >
-                      {{ row.values[column.key] }}
-                    </a>
-                  </div>
-                  <span
-                    v-else
-                    class="min-w-0 truncate"
-                    :title="row.values[column.key]"
-                    >{{ row.values[column.key] }}</span
-                  >
-                </TableCell>
-              </TableRow>
-            </TableBody>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </template>
           </Table>
         </template>
 

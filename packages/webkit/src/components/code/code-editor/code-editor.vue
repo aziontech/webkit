@@ -235,8 +235,14 @@
     ]
   })
 
-  const columnsOf = (lines: string[]) =>
-    Math.max(1, ...lines.map((line) => line.replace(/\t/g, INDENT).length)) + 1
+  const columnsOf = (lines: string[]) => {
+    let widest = 1
+    for (const line of lines) {
+      const width = line.includes('\t') ? line.replace(/\t/g, INDENT).length : line.length
+      if (width > widest) widest = width
+    }
+    return widest + 1
+  }
 
   const setTextarea = (key: string, el: unknown) => {
     textareas.value[key] = el instanceof HTMLTextAreaElement ? el : null
@@ -329,6 +335,7 @@
   let diffEditor: CodeEditorMonacoDiffEditor | null = null
   let api: CodeEditorMonaco | null = null
   let mainModel: CodeEditorMonacoModel | null = null
+  let editorValue: string | null = null
   let originalModel: CodeEditorMonacoModel | null = null
   const disposables: CodeEditorDisposable[] = []
   const editorRef = shallowRef<CodeEditorMonacoEditor | null>(null)
@@ -512,6 +519,7 @@
       disposables.push(
         mainModel.onDidChangeContent(() => {
           const value = mainModel?.getValue() ?? ''
+          editorValue = value
           if (value !== model.value) model.value = value
         })
       )
@@ -540,13 +548,15 @@
     originalModel?.dispose()
     editor = null
     diffEditor = null
+    editorValue = null
     mainModel = null
     originalModel = null
     editorRef.value = null
   }
 
   watch(model, (value) => {
-    if (mainModel && mainModel.getValue() !== value) mainModel.setValue(value)
+    if (!mainModel || value === editorValue) return
+    if (mainModel.getValue() !== value) mainModel.setValue(value)
   })
 
   watch(
@@ -658,6 +668,7 @@
             <div class="flex min-h-full w-max min-w-full">
               <ol
                 v-if="lineNumbers"
+                v-memo="[pane.lines.length, pane.main && markerByLine, padLineNumbers, testId]"
                 aria-hidden="true"
                 class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm text-(--code-sintax-line-number) select-none"
                 :data-testid="`${testId}__gutter`"

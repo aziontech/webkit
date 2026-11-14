@@ -15,6 +15,17 @@ export function isFiniteNumber(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value)
 }
 
+export function keepIds(
+  previous: readonly string[] | undefined,
+  next: readonly string[]
+): readonly string[] {
+  return previous &&
+    previous.length === next.length &&
+    previous.every((id, index) => id === next[index])
+    ? previous
+    : next
+}
+
 export function seriesTotal(values: ReadonlyArray<number | null>): number {
   return values.reduce<number>((sum, value) => sum + (isFiniteNumber(value) ? value : 0), 0)
 }

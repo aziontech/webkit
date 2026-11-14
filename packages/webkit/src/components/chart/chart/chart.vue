@@ -737,6 +737,17 @@
     </p>
     <div
       v-if="showMarks"
+      v-memo="[
+        twinRows,
+        visibleSeries,
+        ariaLabel,
+        summary,
+        testId,
+        locale,
+        labelZone,
+        formatValue,
+        formatLabel
+      ]"
       class="sr-only"
     >
       <table :data-testid="`${testId}__twin`">

@@ -386,8 +386,11 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   const allMatching = ref<boolean>(false)
   const excluded = ref<string[]>([])
 
+  const selectedSet = computed<Set<string>>(() => new Set(selected.value))
+  const excludedSet = computed<Set<string>>(() => new Set(excluded.value))
+
   const isSelected = (key: string): boolean =>
-    allMatching.value ? !excluded.value.includes(key) : selected.value.includes(key)
+    allMatching.value ? !excludedSet.value.has(key) : selectedSet.value.has(key)
 
   const pageKeys = computed<string[]>(() => items.value.map(keyOf))
 
@@ -405,7 +408,10 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     if (selectionMode === 'single') {
       const last = keys[keys.length - 1]
       if (value && last !== undefined) selected.value = [last]
-      else selected.value = selected.value.filter((key) => !keys.includes(key))
+      else {
+        const drop = new Set(keys)
+        selected.value = selected.value.filter((key) => !drop.has(key))
+      }
       return
     }
     const set = new Set(selected.value)
@@ -461,7 +467,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
         .map((key) => seen.get(key))
         .filter((item): item is T => item !== undefined)
     }
-    const set = new Set(selected.value)
+    const set = selectedSet.value
     return sourceItems.value.filter((item) => set.has(keyOf(item)))
   })
 

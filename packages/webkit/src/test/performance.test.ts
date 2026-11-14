@@ -155,7 +155,42 @@ function chartCase(): Case {
   }
 }
 
-function treeCase(): Case {
+function chartHoverCase(): Case {
+  const n = 10_000
+  const labels = Array.from({ length: n }, (_, i) => i)
+  const data = [
+    { id: 'allowed', name: 'Allowed', color: 'success', values: series(n, 0) },
+    { id: 'blocked', name: 'Blocked', color: 'danger', values: series(n, 1) },
+    { id: 'cached', name: 'Cached', color: 'info', values: series(n, 2) }
+  ]
+  const active = ref<number | null>(null)
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(
+            Chart,
+            {
+              series: data,
+              labels,
+              ariaLabel: 'Requests',
+              activeIndex: active.value,
+              'onUpdate:activeIndex': (v: number | null) => (active.value = v)
+            },
+            { default: () => [h(Chart.Line), h(Chart.Scatter, { ids: ['cached'] })] }
+          )
+        ])
+    }),
+    update: async () => {
+      for (let i = 0; i < 40; i++) {
+        active.value = 100 + i * 211
+        await nextTick()
+      }
+    }
+  }
+}
+
+function treeCase(expandAll = false): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
@@ -167,7 +202,7 @@ function treeCase(): Case {
       description: `${c} KB`
     }))
   }))
-  const expanded = ref<string[]>([])
+  const expanded = ref<string[]>(expandAll ? items.map((item) => item.id) : [])
   return {
     mount: () => ({
       render: () =>
@@ -179,7 +214,7 @@ function treeCase(): Case {
         })
     }),
     update: () => {
-      expanded.value = ['f0', 'f1']
+      expanded.value = expandAll ? expanded.value.slice(1) : ['f0', 'f1']
     }
   }
 }
@@ -318,6 +353,38 @@ function logViewCase(): Case {
   }
 }
 
+function logViewTailCase(): Case {
+  const make = (i: number) => ({
+    id: String(i),
+    time: '13:47:33',
+    type: 'text' as const,
+    message: `Line ${i}: request handled in ${i % 97} ms`
+  })
+  const lines = ref(Array.from({ length: 10_000 }, (_, i) => make(i)))
+  const search = ref('handled')
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          LogView,
+          {
+            lines: lines.value,
+            search: search.value,
+            'onUpdate:search': (v: string) => (search.value = v),
+            style: 'height:640px'
+          },
+          { default: () => [h(LogViewHeader), h(LogViewContent)] }
+        )
+    }),
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        lines.value = [...lines.value, make(lines.value.length)]
+        await nextTick()
+      }
+    }
+  }
+}
+
 function codeBlockCase(): Case {
   const code = Array.from(
     { length: 5000 },
@@ -349,7 +416,7 @@ function codeBlockCase(): Case {
   }
 }
 
-function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case {
+function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter' | 'select-all'): Case {
   const statuses = ['Live', 'Inactive', 'Pending']
   const items = Array.from({ length: n }, (_, i) => ({
     id: String(i),
@@ -387,6 +454,7 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
     mount: () => Host,
     update: () => {
       if (change === 'sort') collection?.setSorting([{ id: 'requests', desc: true }])
+      else if (change === 'select-all') collection?.selectAllMatching()
       else collection?.setFilteringText('resource-0001')
     }
   }
@@ -941,7 +1009,7 @@ function traceCase(): Case {
   }
 }
 
-function codeEditorCase(): Case {
+function codeEditorCase(change: 'line' | 'char' = 'line'): Case {
   const lines = Array.from({ length: 5000 }, (_, i) => `const value${i} = ${i} * 2`)
   const value = ref(lines.join('\n'))
   return {
@@ -953,8 +1021,13 @@ function codeEditorCase(): Case {
           ariaLabel: 'Script'
         })
     }),
-    update: () => {
-      value.value = `${value.value}\nconst typed = true`
+    update: async () => {
+      if (change === 'line') {
+        value.value = `${value.value}\nconst typed = true`
+        return
+      }
+      const mid = Math.floor(value.value.length / 2)
+      await typeInto('textarea', `${value.value.slice(0, mid)}x${value.value.slice(mid)}`)
     }
   }
 }
@@ -1110,8 +1183,14 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('Chart with 10k points per series', async () => {
     check('chart-10k', await measure(chartCase))
   })
+  it('Chart with 3 series of 10k points: walk the active index 40 times', async () => {
+    check('chart-10k-hover', await measure(chartHoverCase))
+  })
   it('Tree with 5k nodes, collapsed: mount 50 folders and expand two', async () => {
-    check('tree-5k-collapsed', await measure(treeCase))
+    check('tree-5k-collapsed', await measure(() => treeCase()))
+  })
+  it('Tree with 5k nodes all expanded: collapse one folder', async () => {
+    check('tree-5k-expanded', await measure(() => treeCase(true)))
   })
   it('Select with 1k options: open and filter', async () => {
     check('select-1k', await measure(() => selectCase(false)))
@@ -1131,6 +1210,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('LogView with 10k lines: mount and search', async () => {
     check('log-view-10k', await measure(logViewCase))
   })
+  it('LogView with 10k lines and a search: tail 20 appended lines', async () => {
+    check('log-view-10k-tail', await measure(logViewTailCase))
+  })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))
   })
@@ -1145,6 +1227,12 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('Table with 10k virtual rows under useCollection: select every matching row', async () => {
+    check(
+      'table-10k-virtual-select-all',
+      await measure(() => tableCase(10_000, true, 'select-all'))
+    )
   })
   it('DropdownMenu x1k closed instances: mount and global events', async () => {
     check('dropdown-menu-1k', await measure(dropdownMenuCase))
@@ -1210,7 +1298,10 @@ describe('runtime budgets (perf-budgets.json)', () => {
     check('trace-1k', await measure(traceCase))
   })
   it('CodeEditor with 5k lines: mount and type', async () => {
-    check('code-editor-5k-lines', await measure(codeEditorCase))
+    check('code-editor-5k-lines', await measure(() => codeEditorCase()))
+  })
+  it('CodeEditor with 5k lines: type one character mid-document', async () => {
+    check('code-editor-5k-lines-char', await measure(() => codeEditorCase('char')))
   })
   it('PropertyFilter with 1k values: open and search', async () => {
     check('property-filter-1k', await measure(propertyFilterCase))

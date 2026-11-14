@@ -3,9 +3,9 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 548a6c94a31de8bbf139d3c1a7443942119029a9ac6fdc854e34925a33a031b8
+checksum: 68682f2927332f399f9ebf658c1384a2dc5873ea4d2c2102ae74158e63532c2c
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -226,8 +226,8 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Performance
 
-- Bundle budget: 9.15 KB gzip for `./code-editor` in `.size-limit.json` (measured 8.46 KB on 2026-11-12, up from 7.97 KB for the function-call rules and `padLineNumbers`; `schema`, `bordered` and `validate` brought it to 9.11 KB on 2026-11-14; Monaco is never bundled: the app's `loader` code-splits it).
-- Runtime budget: the plain editor re-renders the gutter per line count change only; the `CodeEditor with 5k lines: mount and type` scenario of `performance.test.ts` holds a 5,000-line file to its budget in `perf-budgets.json`.
+- Bundle budget: 9.2 KB gzip for `./code-editor` in `.size-limit.json` (measured 8.46 KB on 2026-11-12, up from 7.97 KB for the function-call rules and `padLineNumbers`; `schema`, `bordered` and `validate` brought it to 9.11 KB on 2026-11-14, the memoized gutter and the single Monaco read to 9.19 KB; Monaco is never bundled: the app's `loader` code-splits it).
+- Runtime budget: the plain editor re-renders the gutter only when the line count, the markers or `padLineNumbers` change (`v-memo`), and finds the widest line in one pass; with Monaco the document is read once per edit. The `CodeEditor with 5k lines: mount and type` and `CodeEditor with 5k lines: type one character mid-document` scenarios of `performance.test.ts` hold a 5,000-line file to their budgets in `perf-budgets.json`; what remains of a keystroke there is the browser laying out the native textarea, so a document of thousands of lines belongs in Monaco.
 - Heavy parts: Monaco loads on mount, after the plain editor is interactive; the theme is rebuilt only when the theme attribute or the colour scheme changes.
 
 ## Examples

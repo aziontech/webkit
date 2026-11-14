@@ -103,6 +103,21 @@ describe('ListingTable', () => {
     expect(links.map((link) => link.getAttribute('href'))).toEqual(rows.map((row) => row.href))
   })
 
+  it('mounts a long listing in chunks in both the table and the phone list', () => {
+    const many = Array.from({ length: 1000 }, (_, i) => ({
+      href: `/careers/role-${i}`,
+      values: { role: `Role ${i}`, team: 'Engineering', type: 'Remote' }
+    }))
+    const { getAllByRole } = band({ rows: many })
+    const links = getAllByRole('link')
+    const cellLinks = links.filter((link) => link.closest('[role="cell"]'))
+    const itemLinks = links.filter((link) => link.closest('[role="listitem"]'))
+    expect(cellLinks.length).toBeGreaterThan(0)
+    expect(cellLinks.length).toBeLessThan(many.length)
+    expect(itemLinks.length).toBeGreaterThan(0)
+    expect(itemLinks.length).toBeLessThan(many.length)
+  })
+
   it('renders every value of a row in column order', () => {
     const { getAllByRole } = band()
 

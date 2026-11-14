@@ -57,7 +57,7 @@
   /** Id of the selected node; empty when nothing is selected. */
   const selected = defineModel<string>('selected', { default: '' })
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** Replaces the label region of every row; receives the node, its level and whether it is expanded. */
     item(props: { item: TreeItem; level: number; expanded: boolean }): unknown
     /** Trailing per-row controls, end-aligned in the row. */
@@ -68,6 +68,12 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tree: en.tree })
+
+  const ItemOutlet = (outlet: {
+    scope: { item: TreeItem; level: number; expanded: boolean }
+  }): unknown => slots.item?.(outlet.scope)
+  const ActionsOutlet = (outlet: { scope: { item: TreeItem; level: number } }): unknown =>
+    slots.actions?.(outlet.scope)
 
   const activeSelection = computed(() => (props.selectable ? selected.value : ''))
 
@@ -87,8 +93,10 @@
 
   const selectable = computed(() => props.selectable)
 
+  const expandedSet = computed(() => new Set(expanded.value))
+
   function isExpanded(id: string) {
-    return navigation.isParent(id) && expanded.value.includes(id)
+    return navigation.isParent(id) && expandedSet.value.has(id)
   }
 
   function isSelected(id: string) {
@@ -257,18 +265,20 @@
       @focusin="onFocusin"
     >
       <TreeNode
-        v-for="(item, index) in items"
-        :key="item.id"
-        :item="item"
+        v-for="(root, position) in items"
+        :key="root.id"
+        :item="root"
         :level="1"
-        :posinset="index + 1"
+        :posinset="position + 1"
         :setsize="items.length"
+        :actionable="!!$slots['actions']"
       >
         <template #item="scope">
-          <slot
-            name="item"
-            v-bind="scope"
-          >
+          <ItemOutlet
+            v-if="$slots['item']"
+            :scope="scope"
+          />
+          <template v-else>
             <span
               v-if="scope.item.icon"
               aria-hidden="true"
@@ -292,16 +302,10 @@
                 {{ scope.item.description }}
               </span>
             </span>
-          </slot>
+          </template>
         </template>
-        <template
-          v-if="$slots['actions']"
-          #actions="scope"
-        >
-          <slot
-            name="actions"
-            v-bind="scope"
-          />
+        <template #actions="scope">
+          <ActionsOutlet :scope="scope" />
         </template>
       </TreeNode>
     </ul>

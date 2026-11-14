@@ -7,7 +7,7 @@ spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 81de36847aaebf7f6f7bebd94ed6392c7b6ebac06223f08e4922ef8f48d86eb5
+checksum: 19b404b9b255b67f2ea93f73bbedea88a96df3e94ff6be278933cfabe8538368
 created: 2026-06-16
 last_updated: 2026-11-14
 ---
@@ -396,7 +396,7 @@ Per-column slots (data-driven mode) are name-computed at runtime, one per column
 - Per-row selectability (data-driven, `rowSelectable`): a row the function rejects renders an empty selection cell, ignores `selectOnRowClick` and is skipped by Select all; the header checkbox reads `all` when every selectable row is selected.
 - Density and wrapping: `data-density="compact"` on the root shrinks the header (through `Table.Header`'s `density`) and the body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
 - Virtual rows (`virtual`): only the rows in view plus 8 above and below render; the slice starts on an even row so stripes stay put; rows of different heights (`wrapLines` with long text) are measured as they render and the rows in view do not shift while scrolling; the root sets `aria-rowcount` and each row `aria-rowindex`. Skeleton and stacked layouts render every row.
-- Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`.
+- Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`. When `data`, the sort or a filter changes, the mounted rows drop back to the ones within reach of the viewport (at least 50), so a sort after scrolling to the end and back does not patch every row.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.

@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { type ChartCurve, isFiniteNumber, linePath } from '../../_lib'
+  import { type ChartCurve, isFiniteNumber, keepIds, linePath } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartLine', inheritAttrs: false })
@@ -24,9 +24,10 @@
 
   const attrs = useAttrs()
   const ctx = useChartContext()
+  const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
-    ctx.registerMark(() => ({ kind: 'line', stacked: false, labeled: false, ids: props.ids }))
+    ctx.registerMark(() => ({ kind: 'line', stacked: false, labeled: false, ids: ids.value }))
   )
 
   const testId = computed(
@@ -36,7 +37,7 @@
   const lines = computed(() => {
     const layout = ctx.category.value
     const scale = ctx.valueScale.value
-    return ctx.resolveSeries(props.ids).map((entry, order) => {
+    return ctx.resolveSeries(ids.value).map((entry, order) => {
       const points = entry.values.map((value, index) =>
         isFiniteNumber(value) ? ([layout.position(index), scale(value)] as const) : null
       )
@@ -54,9 +55,11 @@
 
   const markersOf = (points: ReadonlyArray<readonly [number, number] | null>) => {
     const active = ctx.activeIndex.value
-    return points.flatMap((point, index) =>
-      point && (props.markers || index === active) ? [{ index, x: point[0], y: point[1] }] : []
-    )
+    if (!props.markers) {
+      const point = active === null ? null : points[active]
+      return point ? [{ index: active as number, x: point[0], y: point[1] }] : []
+    }
+    return points.flatMap((point, index) => (point ? [{ index, x: point[0], y: point[1] }] : []))
   }
 </script>
 

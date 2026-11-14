@@ -30,7 +30,7 @@
 
   const searchQuery = computed(() => ctx.search.value.trim())
 
-  const { split, observe } = useLazyChunks({ rowHeight: 24 })
+  const { split, observe } = useLazyChunks({ rowHeight: 24, release: true })
   const chunks = computed(() => split(ctx.filteredLines.value))
 
   const announced = ref<{ id: string; text: string }[]>([])
@@ -161,7 +161,12 @@
               aria-hidden="true"
               :style="{ height: `${chunk.estimatedHeight}px` }"
             />
-            <template v-else>
+            <div
+              v-else
+              :ref="(el) => observe(el, chunk.index)"
+              :data-chunk="chunk.index"
+              :data-chunk-count="chunk.items.length"
+            >
               <div
                 v-for="line in chunk.items"
                 :key="line.id"
@@ -357,7 +362,7 @@
                   </span>
                 </template>
               </div>
-            </template>
+            </div>
           </template>
         </div>
       </template>
