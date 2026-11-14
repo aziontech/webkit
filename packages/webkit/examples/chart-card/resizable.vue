@@ -50,7 +50,7 @@
     >
       <ChartCard.Header>
         <ChartCard.Title>Threats vs requests</ChartCard.Title>
-        <ChartCard.Controls>{{ span }} of 12 columns</ChartCard.Controls>
+        <ChartCard.Action>{{ span }} of 12 columns</ChartCard.Action>
       </ChartCard.Header>
       <ChartCard.Content>
         <Chart
@@ -63,7 +63,7 @@
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
-          <Chart.Legend totals />
+          <Chart.Legend total />
         </Chart>
       </ChartCard.Content>
       <ChartCard.ResizeHandle />

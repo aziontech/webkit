@@ -58,7 +58,7 @@
         <Chart.Line />
         <Chart.Crosshair />
         <Chart.Tooltip />
-        <Chart.Legend totals />
+        <Chart.Legend total />
       </Chart>
     </ChartCard.Content>
     <ChartCard.Footer>Last hour, 5 minute buckets</ChartCard.Footer>

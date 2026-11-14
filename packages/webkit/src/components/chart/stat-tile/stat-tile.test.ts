@@ -12,7 +12,7 @@ const mount = (props: Record<string, unknown> = {}) =>
 describe('StatTile', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
-    expect(fallback.getByTestId('chart-stat-tile').tagName).toBe('SECTION')
+    expect(fallback.getByTestId('chart-stat-tile').getAttribute('role')).toBe('group')
     fallback.unmount()
     expect(mount({ 'data-testid': 'kpi' }).getByTestId('kpi')).toBeTruthy()
   })

@@ -39,7 +39,7 @@
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
         <Hint text="Requests carrying cross-site scripting attacks against your domains." />
       </span>
-      <ChartCard.Controls>
+      <ChartCard.Action>
         <Tag
           label="Sum"
           severity="secondary"
@@ -73,7 +73,7 @@
             />
           </DropdownMenuGroup>
         </DropdownMenuRoot>
-      </ChartCard.Controls>
+      </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
       <Chart

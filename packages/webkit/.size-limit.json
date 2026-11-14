@@ -888,12 +888,12 @@
   {
     "name": "donut-chart",
     "path": "src/components/chart/donut-chart/donut-chart.vue",
-    "limit": "11.85 KB"
+    "limit": "12.35 KB"
   },
   {
     "name": "stat-tile",
     "path": "src/components/chart/stat-tile/stat-tile.vue",
-    "limit": "9.25 KB"
+    "limit": "9.3 KB"
   },
   {
     "name": "stat-tile-group",
@@ -918,7 +918,7 @@
   {
     "name": "chart-card-resize-handle",
     "path": "src/components/chart/chart-card/chart-card-resize-handle/chart-card-resize-handle.vue",
-    "limit": "2.45 KB"
+    "limit": "2.5 KB"
   },
   {
     "name": "board",

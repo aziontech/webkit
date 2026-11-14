@@ -92,6 +92,12 @@ export function maxOf(values: Iterable<number>, floor = 0): number {
   return max
 }
 
+export function minOf(values: Iterable<number>, ceiling = 0): number {
+  let min = ceiling
+  for (const value of values) if (value < min) min = value
+  return min
+}
+
 export function labelValue(label: unknown): number | null {
   if (label instanceof Date) return label.getTime()
   return typeof label === 'number' && Number.isFinite(label) ? label : null
@@ -103,8 +109,8 @@ export function linearLayout(
   length: number
 ): CategoryLayout {
   const finite = values.filter((value): value is number => value !== null)
-  const low = finite.length ? Math.min(...finite) : 0
-  const high = finite.length ? Math.max(...finite) : 1
+  const low = finite.length ? minOf(finite, Infinity) : 0
+  const high = finite.length ? maxOf(finite, -Infinity) : 1
   const scale = linearScale([low, high === low ? low + 1 : high], [start, start + length])
   const positions = values.map((value, index) =>
     value === null ? start + (length * index) / Math.max(1, values.length - 1) : scale(value)

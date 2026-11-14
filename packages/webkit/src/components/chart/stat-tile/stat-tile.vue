@@ -35,7 +35,7 @@
     /** A rise is bad for this metric; flips the delta between success and danger. */
     inverse?: boolean
     /** Sparkline values, oldest first. Empty hides the sparkline. */
-    trend?: number[]
+    trend?: (number | null)[]
     /** Renders Skeleton lines in place of the figure, delta and sparkline. */
     loading?: boolean
   }
@@ -110,8 +110,9 @@
 </script>
 
 <template>
-  <section
+  <div
     v-bind="$attrs"
+    role="group"
     :data-testid="testId"
     :data-loading="loading || null"
     :data-kind="kind"
@@ -216,5 +217,5 @@
         class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2"
       />
     </div>
-  </section>
+  </div>
 </template>

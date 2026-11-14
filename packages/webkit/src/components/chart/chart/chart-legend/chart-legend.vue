@@ -6,11 +6,17 @@
   defineOptions({ name: 'ChartLegend', inheritAttrs: false })
 
   interface Props {
-    /** Shows each series total beside its name. */
+    /** Shows each series total beside its name (the same name as ChartTooltip). */
+    total?: boolean
+    /**
+     * Shows each series total beside its name.
+     * @deprecated since 6.0 — use `total`. Removed in 7.0.
+     */
     totals?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
+    total: false,
     totals: false
   })
 
@@ -49,7 +55,7 @@
         :aria-pressed="!entry.hidden"
         :data-hidden="entry.hidden || null"
         :data-testid="`${testId}-item`"
-        class="inline-flex min-h-6 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+        class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
         @click="ctx.toggleSeries($event, entry.id)"
         @pointerenter="ctx.setEmphasized(entry.hidden ? null : entry.id)"
         @pointerleave="ctx.setEmphasized(null)"
@@ -64,7 +70,7 @@
         />
         <span>{{ entry.name }}</span>
         <span
-          v-if="totals"
+          v-if="total || totals"
           class="tabular-nums text-(--text-muted)"
         >
           {{ entry.total }}

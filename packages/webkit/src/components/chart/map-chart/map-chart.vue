@@ -19,7 +19,7 @@
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../_lib'
+  import { type ChartColor, colorToken, formatCompact, isFiniteNumber, maxOf, minOf } from '../_lib'
   import { ChartCardInjectionKey } from '../chart-card/injection-key'
 
   defineOptions({ name: 'MapChart', inheritAttrs: false })
@@ -179,7 +179,7 @@
   const domain = computed(() => {
     const values = shaded.value.map((region) => region.value)
     return values.length
-      ? { min: Math.min(...values), max: Math.max(...values) }
+      ? { min: minOf(values, Infinity), max: maxOf(values, -Infinity) }
       : { min: 0, max: 0 }
   })
   const binOf = (value: number) => {
@@ -212,7 +212,7 @@
   })
 
   const maxPoint = computed(() =>
-    Math.max(0, ...props.points.filter((point) => isFiniteNumber(point.value)).map((p) => p.value))
+    maxOf(props.points.filter((point) => isFiniteNumber(point.value)).map((p) => p.value))
   )
   const bubbles = computed(() =>
     props.points

@@ -3,6 +3,7 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
@@ -83,6 +84,7 @@
   }>()
 
   const attrs = useAttrs()
+  const dir = useDirection()
   const { t, locale } = useTranslate({ donutChart: en.donutChart })
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
@@ -221,9 +223,10 @@
     const last = slices.value.length - 1
     if (last < 0) return
     const current = activeIndex.value
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown')
+    const key = logicalArrowKey(event.key, dir.value)
+    if (key === 'ArrowRight' || key === 'ArrowDown')
       setActive(current === null ? 0 : Math.min(last, current + 1))
-    else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp')
+    else if (key === 'ArrowLeft' || key === 'ArrowUp')
       setActive(current === null ? last : Math.max(0, current - 1))
     else if (event.key === 'Home') setActive(0)
     else if (event.key === 'End') setActive(last)
@@ -423,7 +426,7 @@
             :aria-pressed="!entry.hidden"
             :data-hidden="entry.hidden || null"
             :data-testid="`${testId}__legend-item`"
-            class="inline-flex min-h-6 w-full items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+            class="relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
             @click="toggle($event, entry.id)"
           >
             <span

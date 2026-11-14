@@ -531,3 +531,16 @@ describe('Chart table twin on devices', () => {
     expect(twin.parentElement?.className).toBe('sr-only')
   })
 })
+
+describe('ChartLegend total', () => {
+  it('shows the totals with total, and still with the deprecated totals', () => {
+    const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
+    const withTotal = next.getAllByTestId('chart-chart__legend-item')[0]!.textContent
+    next.unmount()
+    const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
+    expect(legacy.getAllByTestId('chart-chart__legend-item')[0]!.textContent).toBe(withTotal)
+    legacy.unmount()
+    const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
+    expect(none.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)
+  })
+})

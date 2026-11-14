@@ -71,6 +71,6 @@
     <Chart.Line />
     <Chart.Crosshair />
     <Chart.Tooltip />
-    <Chart.Legend totals />
+    <Chart.Legend total />
   </Chart>
 </template>

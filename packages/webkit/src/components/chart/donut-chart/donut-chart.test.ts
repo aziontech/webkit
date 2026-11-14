@@ -172,3 +172,16 @@ describe('DonutChart table twin on devices', () => {
     expect(twin.parentElement?.className).toBe('sr-only')
   })
 })
+
+describe('DonutChart right-to-left keys', () => {
+  it('swaps ArrowLeft and ArrowRight under dir="rtl"', async () => {
+    const view = render({
+      render: () =>
+        h('div', { dir: 'rtl' }, [h(DonutChart, { series: countries, ariaLabel: 'Countries' })])
+    })
+    const ring = view.getByTestId('chart-donut-chart__ring')
+    ring.focus()
+    await fireEvent.keyDown(ring, { key: 'ArrowLeft' })
+    expect(view.getByTestId('chart-donut-chart__center').textContent).toContain('Brazil')
+  })
+})

@@ -47,7 +47,7 @@ describe('ChartCard', () => {
 
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = render(card())
-    expect(fallback.getByTestId('chart-chart-card').tagName).toBe('SECTION')
+    expect(fallback.getByTestId('chart-chart-card').getAttribute('role')).toBe('group')
     fallback.unmount()
     expect(render(card({ 'data-testid': 'threats-card' })).getByTestId('threats-card')).toBeTruthy()
   })
@@ -230,5 +230,41 @@ describe('ChartCard on devices', () => {
     expect(view.getByTestId('chart-chart-card__controls').className).toContain(
       '@max-xs/chart-card:w-full'
     )
+  })
+})
+
+describe('ChartCard parts: Action, padded, title and group role', () => {
+  it('attaches Action as the same part as the deprecated Controls', () => {
+    expect(ChartCard.Action).toBe(ChartCardControls)
+    expect(ChartCard.Controls).toBe(ChartCardControls)
+  })
+
+  it('drops the content padding with padded false, and still with the deprecated flush', () => {
+    const padded = render(ChartCard, {
+      slots: { default: () => h(ChartCardContent, { padded: false }, () => 'plot') }
+    })
+    expect(padded.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
+    padded.unmount()
+    const flush = render(ChartCard, {
+      slots: { default: () => h(ChartCardContent, { flush: true }, () => 'plot') }
+    })
+    expect(flush.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
+    flush.unmount()
+    const normal = render(ChartCard, {
+      slots: { default: () => h(ChartCardContent, null, () => 'plot') }
+    })
+    expect(normal.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(false)
+  })
+
+  it('names a group, not a region landmark, and renders the title as no heading', async () => {
+    const view = render(ChartCard, {
+      slots: {
+        default: () => h(ChartCardHeader, null, () => h(ChartCardTitle, null, () => 'Requests'))
+      }
+    })
+    await nextTick()
+    expect(view.getByRole('group', { name: 'Requests' })).toBeTruthy()
+    expect(view.queryByRole('region')).toBeNull()
+    expect(view.queryByRole('heading')).toBeNull()
   })
 })
