@@ -678,6 +678,7 @@ export const pagination = {
   info: 'Showing {start} to {end} of {total} entries',
   previous: 'Previous page',
   next: 'Next page',
+  page: 'Page {page}',
   pageSize: 'Rows per page'
 } as const
 

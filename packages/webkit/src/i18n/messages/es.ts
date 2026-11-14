@@ -718,6 +718,7 @@ export const es: Messages = {
     info: 'Mostrando {start} a {end} de {total} registros',
     previous: 'Página anterior',
     next: 'Página siguiente',
+    page: 'Página {page}',
     pageSize: 'Filas por página'
   },
   passwordInput: {

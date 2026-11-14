@@ -3,13 +3,13 @@ name: pagination
 category: data
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: aab78d9938a910682bf899d31061d5da4d3bc07d3307b861f118b053eee8e323
+checksum: 74bffcfb07b64d8eff262c84141dd79dd87d53c6bad4140aba87f39e7d4910ec
 created: 2026-06-16
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Pagination — Component Spec
@@ -138,21 +138,23 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 
 | Prop              | Type       | Default             | Required | JSDoc                                                                                             |
 | ----------------- | ---------- | ------------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `page`            | `number`   | `1`                 | false    | Current page, 1-based (data-driven mode). Supports `v-model:page`.                                |
 | `total`           | `number`   | `undefined`         | false    | Total item count. When set, the Pagination runs in data-driven mode and renders its own controls. |
-| `pageSize`        | `number`   | `10`                | false    | Rows per page (data-driven mode). Supports `v-model:page-size`.                                   |
 | `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | false    | Page-size options offered in the rows-per-page selector.                                          |
 | `siblingCount`    | `number`   | `1`                 | false    | Page numbers shown on each side of the current page before collapsing into an overflow ellipsis.  |
 | `ariaLabel`       | `string`   | `''`                | false    | Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`).        |
 
+## v-model
+
+| Model               | Type     | Default | Emits             | Notes                                                                                                                                                                                                         |
+| ------------------- | -------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:page`      | `number` | `1`     | `update:page`     | Current page, 1-based (data-driven mode), via `defineModel('page')`. Previous / Next / a page number / Arrow keys change it. Unbound, the Pagination keeps the page itself (uncontrolled), so it still moves. |
+| `v-model:page-size` | `number` | `10`    | `update:pageSize` | Rows per page (data-driven mode), via `defineModel('pageSize')`. Changing it through the selector also resets the page to `1`. Unbound, the Pagination keeps the size itself.                                 |
+
 ## Events
 
-| Event             | Payload              | Notes                                                                                              |
-| ----------------- | -------------------- | -------------------------------------------------------------------------------------------------- |
-| `update:page`     | `[page: number]`     | Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`. |
-| `update:pageSize` | `[pageSize: number]` | Rows-per-page changed via the internal selector. Supports `v-model:page-size`.                     |
+_None of its own._ The two-way values above are the root's only emits.
 
-<!-- These events are emitted by the root Pagination only in data-driven mode (when `total` is set). In composition mode the root emits nothing: page changes come from the slotted pagination-button (`click`) and the rows-per-page change from the slotted PaginatorPageSize (`update:modelValue`). -->
+<!-- The update events are emitted by the root Pagination only in data-driven mode (when `total` is set). In composition mode the root emits nothing: page changes come from the slotted pagination-button (`click`) and the rows-per-page change from the slotted PaginatorPageSize (`update:modelValue`). -->
 
 ## Slots
 
@@ -212,7 +214,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on every pagination button.
 - Keyboard map: `Tab` moves across buttons and the rows-per-page selector; `Enter`/`Space` activates a button; disabled buttons and the overflow ellipsis are skipped. In data-driven mode, `ArrowRight`/`ArrowLeft` inside the button group go to the next/previous page, swapped under `dir="rtl"` (`useDirection`).
-- ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
+- ARIA: root `<nav>` with `aria-label` (the `ariaLabel` prop); current-page button sets `aria-current="page"`; in data-driven mode each number button is named from the locale catalog (`pagination.page`, "Page 3") instead of the bare digit; disabled buttons set the `disabled` attribute and `aria-disabled`; icon glyphs and the overflow ellipsis are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: each button is drawn 28×28 (above the 24×24 minimum of WCAG 2.5.8) so the strip stays compact in a table footer; on a coarse pointer its hit area grows to 28×44 invisibly and the page-size select's to its full width × 44. The width cannot grow because the buttons are butted with no gap; growing the drawn size instead was rejected because it turned the phone footer into an oversized strip that no longer matched the design sample.

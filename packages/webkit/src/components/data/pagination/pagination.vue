@@ -17,12 +17,8 @@
   })
 
   interface Props {
-    /** Current page, 1-based (data-driven mode). Supports v-model:page. */
-    page?: number
     /** Total item count. When set, the Pagination runs in data-driven mode and renders its own controls. */
     total?: number
-    /** Rows per page (data-driven mode). Supports v-model:page-size. */
-    pageSize?: number
     /** Page-size options offered in the rows-per-page selector. */
     pageSizeOptions?: number[]
     /** Page numbers shown on each side of the current page before collapsing into an overflow ellipsis. */
@@ -32,18 +28,16 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    page: 1,
     total: undefined,
-    pageSize: 10,
     pageSizeOptions: () => [10, 25, 50, 100],
     siblingCount: 1,
     ariaLabel: ''
   })
 
-  const emit = defineEmits<{
-    'update:page': [page: number]
-    'update:pageSize': [pageSize: number]
-  }>()
+  /** Current page, 1-based (data-driven mode). Supports v-model:page. */
+  const page = defineModel<number>('page', { default: 1 })
+  /** Rows per page (data-driven mode). Supports v-model:page-size. */
+  const pageSize = defineModel<number>('pageSize', { default: 10 })
 
   defineSlots<{
     info(): unknown
@@ -64,19 +58,19 @@
   const dataDriven = computed<boolean>(() => props.total !== undefined)
 
   const pageCount = computed<number>(() =>
-    props.total === undefined ? 0 : Math.max(1, Math.ceil(props.total / props.pageSize))
+    props.total === undefined ? 0 : Math.max(1, Math.ceil(props.total / pageSize.value))
   )
 
   const currentPage = computed<number>(() =>
-    Math.min(Math.max(1, props.page), pageCount.value || 1)
+    Math.min(Math.max(1, page.value), pageCount.value || 1)
   )
 
   const rangeStart = computed<number>(() =>
-    !props.total ? 0 : (currentPage.value - 1) * props.pageSize + 1
+    !props.total ? 0 : (currentPage.value - 1) * pageSize.value + 1
   )
 
   const rangeEnd = computed<number>(() =>
-    Math.min(currentPage.value * props.pageSize, props.total ?? 0)
+    Math.min(currentPage.value * pageSize.value, props.total ?? 0)
   )
 
   const range = (start: number, end: number): number[] => {
@@ -120,7 +114,7 @@
   const goToPage = (next: number) => {
     const clamped = Math.min(Math.max(1, next), pageCount.value)
     if (clamped === currentPage.value) return
-    emit('update:page', clamped)
+    page.value = clamped
   }
 
   const onPrevious = () => goToPage(currentPage.value - 1)
@@ -139,9 +133,9 @@
   }
 
   const onPageSizeChange = (value: number) => {
-    emit('update:pageSize', value)
-    if (currentPage.value !== 1) {
-      emit('update:page', 1)
+    pageSize.value = value
+    if (page.value !== 1) {
+      page.value = 1
     }
   }
 </script>
@@ -177,6 +171,9 @@
             :key="item.key"
             :kind="item.type === 'more' ? 'more' : 'number'"
             :selected="item.type === 'page' && item.value === currentPage"
+            :aria-label="
+              item.type === 'page' ? t('pagination.page', { page: item.value }) : undefined
+            "
             @click="onItemClick(item)"
           >
             {{ item.type === 'page' ? item.value : '' }}

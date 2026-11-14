@@ -718,6 +718,7 @@ export const ptBR: Messages = {
     info: 'Mostrando {start} a {end} de {total} registros',
     previous: 'Página anterior',
     next: 'Próxima página',
+    page: 'Página {page}',
     pageSize: 'Linhas por página'
   },
   passwordInput: {
