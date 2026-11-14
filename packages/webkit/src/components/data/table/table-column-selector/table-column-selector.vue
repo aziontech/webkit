@@ -1,13 +1,20 @@
 <script setup lang="ts">
   import type { Column } from '@tanstack/vue-table'
-  import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    h,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs
+  } from 'vue'
 
   import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import * as en from '../../../../i18n/messages/en'
-  import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Switch from '../../../inputs/switch/switch.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey, type TableRowRecord } from '../injection-key'
 
@@ -42,6 +49,24 @@
       (attrs['data-testid'] as string | undefined) ??
       (ctx ? `${ctx.testId}__column-selector` : 'data-table__column-selector')
   )
+
+  const loadSwitch = () => import('../../../inputs/switch/switch.vue')
+  const loadButton = () => import('../../../actions/button/button.vue')
+  const Switch = defineAsyncComponent({
+    loader: loadSwitch,
+    loadingComponent: () =>
+      h('span', { 'aria-hidden': 'true', class: 'inline-block h-5 w-9 shrink-0' }),
+    delay: 0
+  })
+  const Button = defineAsyncComponent({
+    loader: loadButton,
+    loadingComponent: () => h('span', { 'aria-hidden': 'true', class: 'block h-7 w-full' }),
+    delay: 0
+  })
+  const preload = (): void => {
+    void loadSwitch()
+    void loadButton()
+  }
 
   const open = ref<boolean>(false)
   const triggerRef = ref<HTMLElement | null>(null)
@@ -107,6 +132,8 @@
     <span
       ref="triggerRef"
       class="inline-flex"
+      @pointerenter.once="preload"
+      @focusin.once="preload"
     >
       <slot
         name="trigger"

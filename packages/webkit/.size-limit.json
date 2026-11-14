@@ -1694,17 +1694,20 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "48.6 KB"
+    "limit": "48.6 KB",
+    "entryOnly": true
   },
   {
     "name": "table-applied-filters",
     "path": "src/components/data/table/table-applied-filters/table-applied-filters.vue",
-    "limit": "22.4 KB"
+    "limit": "22.4 KB",
+    "entryOnly": true
   },
   {
     "name": "table-column-selector",
     "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "20.8 KB"
+    "limit": "20.8 KB",
+    "entryOnly": true
   },
   {
     "name": "table-export",
