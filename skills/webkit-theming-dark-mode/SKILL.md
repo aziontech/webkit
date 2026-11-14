@@ -2,7 +2,7 @@
 name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-11-14
 scope: general
 enforced_by: [webkit-tokens, ui-verify]
 ---
@@ -55,6 +55,28 @@ function toggleTheme() {
   const el = document.documentElement
   el.dataset.theme = el.dataset.theme === 'dark' ? 'light' : 'dark'
 }
+```
+
+To follow the operating system, set `data-theme="system"`: the dark values apply while the OS prefers
+dark, in CSS alone. Each theme sets `color-scheme`, so native scrollbars and form controls match, and
+Tailwind's `dark:` variant follows the same three hooks. For a settings control, let
+`useColorMode()` store the choice (`system`, `light` or `dark`) and bind it to `ThemeSwitcher`; inline
+`colorModeScript` in the document head so the stored choice applies before the first paint:
+
+```vue
+<script setup lang="ts">
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
+
+  const { mode } = useColorMode()
+</script>
+
+<template>
+  <ThemeSwitcher
+    v-model="mode"
+    aria-label="Theme"
+  />
+</template>
 ```
 
 ## The core rule — style through the role, never the value
@@ -176,8 +198,8 @@ production; the two-theme screenshot is what catches it first.
 
 - Style through **semantic tokens** only — no hex, `rgb()`/`hsl()`, or Tailwind palette color
   (`bg-white`, `text-zinc-900`, `border-slate-200`) anywhere on the screen.
-- Dark is `data-theme="dark"` on `<html>` (or a `.dark` ancestor); light is the default `:root`. Don't
-  ship a second stylesheet or a JS color map for dark.
+- Dark is `data-theme="dark"` on `<html>` (or a `.dark` ancestor), `data-theme="system"` follows the
+  OS, and light is the default `:root`. Don't ship a second stylesheet or a JS color map for dark.
 - Depth in dark comes from **lighter surface tokens** (`--bg-surface-raised` / `--bg-surface-overlay`),
   not a heavier shadow.
 - No `dark:` override for a role a token already covers; reserve `dark:` for the property no token

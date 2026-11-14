@@ -2428,6 +2428,10 @@
       "types": "./types/composables/use-collection/index.d.ts",
       "default": "./src/composables/use-collection/index.ts"
     },
+    "./use-color-mode": {
+      "types": "./types/composables/use-color-mode/index.d.ts",
+      "default": "./src/composables/use-color-mode/index.ts"
+    },
     "./vite": {
       "types": "./types/vite/index.d.ts",
       "default": "./src/vite/index.js"
@@ -3951,6 +3955,9 @@
       ],
       "use-collection": [
         "./types/composables/use-collection/index.d.ts"
+      ],
+      "use-color-mode": [
+        "./types/composables/use-color-mode/index.d.ts"
       ],
       "vite": [
         "./types/vite/index.d.ts"

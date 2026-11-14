@@ -93,12 +93,12 @@ describe('account/tokens', () => {
     expect(within(drawer).getByRole('heading', { name: 'Create Personal Token' })).toBeTruthy()
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() => expect(drawer.textContent).toContain('This field is required.'))
-    await userEvent.type(view.getByLabelText(/^Name/), 'Local CLI')
+    await userEvent.type(within(drawer).getByLabelText(/^Name/), 'Local CLI')
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() =>
       expect(drawer.textContent).toContain('A token with this name already exists.')
     )
-    const name = view.getByLabelText(/^Name/) as HTMLInputElement
+    const name = within(drawer).getByLabelText(/^Name/) as HTMLInputElement
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
     await fireEvent.click(buttonByText('Create Personal Token', drawer))

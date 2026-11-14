@@ -62,6 +62,15 @@ document.documentElement.dataset.theme = 'dark' // or 'light'
 Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light`.
 Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`.
 
+To follow the operating system, set `data-theme="system"`: the dark tokens apply while
+`prefers-color-scheme: dark` matches, in CSS alone, with no flash and no script. Each theme also sets
+`color-scheme`, so native scrollbars and form controls match, and Tailwind's `dark:` variant follows the
+same hooks (`data-theme="dark"`, `.dark`, and `data-theme="system"` on a dark OS). In a Vue app,
+`useColorMode()` from `@aziontech/webkit/use-color-mode` stores the choice and drives a `ThemeSwitcher`.
+
+Derived tokens reference their source (`--border-selected: var(--primary)`), so overriding `--primary`
+rebrands them too.
+
 ## Exports
 
 The entire public surface, from `package.json#exports`:

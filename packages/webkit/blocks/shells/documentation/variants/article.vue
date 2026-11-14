@@ -19,8 +19,8 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
-  import { ref } from 'vue'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
   const sections = [
     { label: 'Reference', href: '/docs/reference' },
@@ -63,7 +63,7 @@
     }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('system')
+  const { mode: theme } = useColorMode()
 
   const crumbs = [
     { label: 'Fundamentals', href: '/docs/fundamentals' },

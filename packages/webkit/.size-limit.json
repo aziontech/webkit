@@ -121,6 +121,11 @@
     "limit": "6 KB"
   },
   {
+    "name": "use-color-mode",
+    "path": "src/composables/use-color-mode/index.ts",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "frame-box",
     "path": "src/components/layout/frame-box/frame-box.vue",
     "limit": "2.5 KB"
