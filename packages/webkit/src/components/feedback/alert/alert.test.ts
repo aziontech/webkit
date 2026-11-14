@@ -6,6 +6,7 @@ import { createSSRApp, h, nextTick, ref } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import Default from '../../../../examples/alert/default.vue'
+import WithTitle from '../../../../examples/alert/with-title.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Alert from './alert.vue'
 
@@ -300,23 +301,6 @@ describe('Alert', () => {
     })
   })
 
-  describe('title', () => {
-    it('renders the title as the first line above the copy', () => {
-      const { getByTestId } = render(Alert, {
-        props: { title: 'Deploy failed', label: 'The build step exited with code 1.' }
-      })
-      const content = getByTestId('feedback-alert__content')
-      expect(getByTestId('feedback-alert__title').textContent).toBe('Deploy failed')
-      expect(content.firstElementChild).toBe(getByTestId('feedback-alert__title'))
-      expect(content.textContent).toContain('The build step exited with code 1.')
-    })
-
-    it('renders no title node when the title is empty', () => {
-      const { queryByTestId } = render(Alert, { props: { label: 'Plain' } })
-      expect(queryByTestId('feedback-alert__title')).toBeNull()
-    })
-  })
-
   describe('accessibility', () => {
     it('has no a11y violations for the default status message', async () => {
       const { container } = render(Alert, {
@@ -431,5 +415,71 @@ describe('Alert slot presence', () => {
     await nextTick()
     expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
     expect(queryByTestId('probe')).toBeNull()
+  })
+})
+
+describe('Alert title', () => {
+  it('renders no title and no data-titled by default', () => {
+    const { getByTestId, queryByTestId } = render(Alert, { props: { label: 'Saved.' } })
+
+    expect(getByTestId('feedback-alert')).not.toHaveAttribute('data-titled')
+    expect(queryByTestId('feedback-alert__title')).toBeNull()
+  })
+
+  it('renders the title above the label copy and marks the root', () => {
+    const { getByTestId } = render(Alert, {
+      props: { title: 'Deploy failed', label: 'Check the logs.' }
+    })
+
+    const root = getByTestId('feedback-alert')
+    const title = getByTestId('feedback-alert__title')
+    const content = getByTestId('feedback-alert__content')
+    expect(root).toHaveAttribute('data-titled')
+    expect(title).toHaveTextContent('Deploy failed')
+    expect(content).toHaveTextContent('Check the logs.')
+    expect(title.compareDocumentPosition(content) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders the title over default-slot copy', () => {
+    const { getByTestId } = render(Alert, {
+      props: { title: 'Request limit at 90%' },
+      slots: { default: 'Requests above the limit are throttled.' }
+    })
+
+    expect(getByTestId('feedback-alert__title')).toHaveTextContent('Request limit at 90%')
+    expect(getByTestId('feedback-alert__content')).toHaveTextContent('throttled')
+  })
+
+  it('renders only the title when there is no copy', () => {
+    const { getByTestId, queryByTestId } = render(Alert, { props: { title: 'Saved' } })
+
+    expect(getByTestId('feedback-alert__title')).toHaveTextContent('Saved')
+    expect(queryByTestId('feedback-alert__content')).toBeNull()
+  })
+
+  it('does not leak the title prop onto the root as a native tooltip', () => {
+    const { getByTestId } = render(Alert, { props: { title: 'Saved', label: 'Done.' } })
+
+    expect(getByTestId('feedback-alert')).not.toHaveAttribute('title')
+  })
+
+  it('reads the title inside the live region before the copy', () => {
+    const { getByRole } = render(Alert, {
+      props: { severity: 'danger', title: 'Deploy failed', label: 'Check the logs.' }
+    })
+
+    const region = getByRole('alert')
+    const title = region.querySelector('[data-testid="feedback-alert__title"]')
+    const content = region.querySelector('[data-testid="feedback-alert__content"]')
+    expect(title).toHaveTextContent('Deploy failed')
+    expect(content).toHaveTextContent('Check the logs.')
+    expect(title!.compareDocumentPosition(content!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders the WithTitle example with no a11y violations', async () => {
+    const { container, getAllByTestId } = render(WithTitle)
+
+    expect(getAllByTestId('feedback-alert__title')).toHaveLength(4)
+    await expectNoA11yViolations(container)
   })
 })

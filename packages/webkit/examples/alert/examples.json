@@ -34,7 +34,7 @@
     },
     {
       "name": "WithTitle",
-      "summary": "A bold `title` line above the copy, for a failure that needs a heading and a sentence of detail.",
+      "summary": "A bold `title` over the copy, one per severity: the title says what happened, the copy says what it means or what to do. Works with `label`, the default slot, an action and the close control.",
       "file": "with-title.vue"
     }
   ]
