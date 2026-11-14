@@ -37,6 +37,28 @@ describe('platform/account/manage-resources', () => {
     expect(view.getByRole('heading', { name: 'No resource selected' })).toBeTruthy()
   })
 
+  it('finds a nested resource by name and keeps its ancestors open', async () => {
+    const view = render(ManageResources)
+    expect(view.getByRole('link', { name: 'Create Workspace' })).toBeTruthy()
+    await userEvent.type(view.getByRole('textbox', { name: 'Search resources' }), 'media')
+    await waitFor(() => expect(rowNames()).toEqual(['org-1001', 'grp-2102', 'ws-30455']))
+  })
+
+  it('shows an EmptyState with Clear search when no resource matches', async () => {
+    const view = render(ManageResources)
+    await userEvent.type(view.getByRole('textbox', { name: 'Search resources' }), 'zzz')
+    await waitFor(() => expect(view.getByText('No matching resources')).toBeTruthy())
+    expect(view.queryByRole('treegrid')).toBeNull()
+    await userEvent.click(view.getByRole('button', { name: 'Clear search' }))
+    await waitFor(() => expect(view.getByRole('treegrid', { name: 'Resources' })).toBeTruthy())
+  })
+
+  it('marks an empty charge as such', () => {
+    render(ManageResources)
+    const charge = row('grp-2101').querySelector('[data-empty]')
+    expect(charge?.textContent).toBe('—')
+  })
+
   it('opens a branch from the keyboard', async () => {
     render(ManageResources)
     row('grp-2102').focus()
@@ -53,7 +75,7 @@ describe('platform/account/manage-resources', () => {
       expect(view.getByRole('heading', { name: '1 resource selected' })).toBeTruthy()
     )
     expect(view.getByRole('button', { name: 'Move' })).toBeEnabled()
-    expect(view.getByRole('list', { name: 'Role bindings' }).textContent).toContain('Owner')
+    expect(view.getByLabelText('Role bindings').textContent).toContain('Owner')
     await userEvent.click(checkboxOf('ws-30437'))
     await waitFor(() =>
       expect(view.getByRole('heading', { name: '2 resources selected' })).toBeTruthy()
