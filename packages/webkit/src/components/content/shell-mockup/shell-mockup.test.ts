@@ -1,8 +1,11 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { commands } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
+import Default from '../../../../examples/shell-mockup/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { useHydrationHost } from '../../../test/hydration-shared'
 import ShellMockup from './index'
 import ShellMockupPart from './shell-mockup-part/shell-mockup-part.vue'
 
@@ -312,5 +315,32 @@ describe('ShellMockup right-to-left', () => {
     const frame = container.querySelector('.origin-top-left')
     expect(frame?.className).toContain('start-0')
     expect(frame?.className).toContain('rtl:origin-top-right')
+  })
+})
+
+describe('ShellMockup under reduced motion', () => {
+  const { hydrate } = useHydrationHost()
+
+  it('hydrates the server-rendered HTML without a mismatch', async () => {
+    await commands.emulateMedia({ reducedMotion: 'reduce' })
+    try {
+      const rendered = await commands.renderOnServer('examples/shell-mockup/default.vue')
+      expect(rendered.error).toBeNull()
+      const mismatches = await hydrate(Default, rendered.html, rendered.teleports)
+      expect(mismatches, mismatches.join('\n')).toEqual([])
+    } finally {
+      await commands.emulateMedia({ reducedMotion: null })
+    }
+  })
+
+  it('draws every part in place once mounted', async () => {
+    await commands.emulateMedia({ reducedMotion: 'reduce' })
+    try {
+      const { container } = render(host({ active: false }))
+      await nextTick()
+      expect(parts(container).every((part) => part.hasAttribute('data-entered'))).toBe(true)
+    } finally {
+      await commands.emulateMedia({ reducedMotion: null })
+    }
   })
 })

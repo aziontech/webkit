@@ -3,10 +3,10 @@ name: shell-mockup
 category: content
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 421aa4845665667f15a9dca0ef1d15395dc9ccb918674c8d2b9ba8dc4655c722
+spec_version: 2
+checksum: 689b17f5f06624ab194c3e80e6aabfbf6648f0b27b0f3ca6cea2210f73d876e5
 created: 2026-10-21
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # ShellMockup — Component Spec
@@ -142,7 +142,7 @@ _No events — the mockup is a picture; nothing in it reports activation._
 - `data-interactive` is present while `interactive` is set; otherwise the root is `inert` and `aria-hidden`, ignores the pointer and blocks text selection.
 - The bars and the rail are drawings: plain `div`s (no `header`, `aside` or `nav` landmark), each `inert` and `aria-hidden="true"` whatever `interactive` says, so only the slot body is ever operable.
 - Shell matrix: `shell="console"` without `rail` draws the slim bar (brand, title, avatar); with `rail` it draws the side rail (from `md` up) and a top bar with breadcrumbs, a search field, Create, Agent and the avatar; `shell="legacy"` draws the previous console's top bar (menu, brand, Create, Copilot, Feedback, help, account) and swaps the legacy typography weights and line heights onto the frame. `chrome` off removes the bars; the rail stays.
-- Entrance: parts are at rest offset and transparent until the root is at least 30% on screen and `active`; two animation frames later the root flips to entered and each part lands on its beat. `active` turning off resets it so it replays. `animated` off, or a reduced-motion preference, starts entered with no transition.
+- Entrance: parts are at rest offset and transparent until the root is at least 30% on screen and `active`; two animation frames later the root flips to entered and each part lands on its beat. `active` turning off resets it so it replays. `animated` off starts entered with no transition. A reduced-motion preference is read on mount, not during setup, so the server and the first client render match; the parts are drawn in place by the `motion-reduce:` classes until then, and the root flips to entered with zero durations once mounted.
 - Scale: the frame keeps the design width (`width` from `md` up, `mobileWidth` below) and scales to the host's width, deriving its design height from the host's height; It measures the host's layout box (its untransformed border box), never its on-screen box, so a mockup nested in another scaled mockup (a fragment framed in a window) scales once, at any frame width. It re-measures when the host resizes and when `width` or `mobileWidth` changes.
 
 ## Motion & Animations

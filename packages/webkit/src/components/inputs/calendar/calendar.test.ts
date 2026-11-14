@@ -1124,3 +1124,21 @@ describe('Calendar composition', () => {
     await waitFor(() => expect(clear.disabled).toBe(true))
   })
 })
+
+describe('Calendar reference time', () => {
+  it('opens on the WebkitProvider now and marks that day as today', async () => {
+    const { getByTestId } = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { now: '2030-03-15T12:00:00' },
+            { default: () => h(Calendar, { mode: 'single' }) }
+          )
+      })
+    )
+    const popover = await openCalendar(getByTestId)
+    expect(popover.querySelector('[aria-current="date"]')?.textContent?.trim()).toBe('15')
+    expect(popover.textContent).toContain('2030')
+  })
+})
