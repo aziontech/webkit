@@ -73,9 +73,10 @@
         : 'menuitem'
   )
 
-  const ariaChecked = computed(() =>
-    checkable.value ? String(props.selected) : props.selected ? 'true' : undefined
-  )
+  const ariaChecked = computed<'true' | 'false' | undefined>(() => {
+    if (checkable.value) return props.selected ? 'true' : 'false'
+    return props.selected ? 'true' : undefined
+  })
 
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return

@@ -21,9 +21,8 @@
       <Button
         kind="secondary"
         icon="pi pi-sliders-h"
-      >
-        View
-      </Button>
+        label="View"
+      />
     </DropdownMenu.Trigger>
 
     <DropdownMenu.Group label="Columns">

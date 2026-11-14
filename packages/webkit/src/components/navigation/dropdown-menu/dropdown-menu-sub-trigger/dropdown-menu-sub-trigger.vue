@@ -74,7 +74,7 @@
     :ref="setRowRef"
     role="menuitem"
     aria-haspopup="menu"
-    :aria-expanded="String(isOpen)"
+    :aria-expanded="isOpen ? 'true' : 'false'"
     :aria-controls="isOpen ? sub.contentId : undefined"
     :tabindex="disabled ? -1 : 0"
     :aria-disabled="disabled || undefined"

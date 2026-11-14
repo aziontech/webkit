@@ -9,9 +9,8 @@
       <Button
         kind="secondary"
         icon="pi pi-ellipsis-h"
-      >
-        Actions
-      </Button>
+        label="Actions"
+      />
     </DropdownMenu.Trigger>
 
     <DropdownMenu.Group>
