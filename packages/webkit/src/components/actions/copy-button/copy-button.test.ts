@@ -102,6 +102,35 @@ describe('CopyButton', () => {
     })
   })
 
+  describe('live announcement', () => {
+    it('announces the copied label in a status region after a copy', async () => {
+      stubClipboardResolved()
+      const { getByRole, getByTestId } = render(CopyButton, {
+        props: { value: 'secret-value', copiedLabel: 'Copied' }
+      })
+      const status = getByTestId('actions-copy-button__status')
+      expect(status.getAttribute('role')).toBe('status')
+      expect(status.textContent?.trim()).toBe('')
+
+      await fireEvent.click(getByRole('button', { name: 'Copy' }))
+
+      await waitFor(() => expect(status.textContent?.trim()).toBe('Copied'))
+    })
+  })
+
+  describe('attribute forwarding', () => {
+    it('lands consumer class, id and aria-describedby on the root', () => {
+      const { getByTestId } = render(CopyButton, {
+        props: { value: 'token' },
+        attrs: { class: 'ms-auto', id: 'copy-token', 'aria-describedby': 'token-hint' }
+      })
+      const root = getByTestId('actions-copy-button')
+      expect(root.id).toBe('copy-token')
+      expect(root.classList.contains('ms-auto')).toBe(true)
+      expect(root.getAttribute('aria-describedby')).toBe('token-hint')
+    })
+  })
+
   describe('disabled', () => {
     it('renders a natively disabled button and does not emit copy on click', async () => {
       const writeText = stubClipboardResolved()

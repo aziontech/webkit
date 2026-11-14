@@ -98,6 +98,7 @@
 
 <template>
   <span
+    v-bind="$attrs"
     ref="root"
     class="inline-flex"
     :data-state="copied ? 'copied' : 'default'"
@@ -119,6 +120,12 @@
         @click="handleCopy"
       />
     </Tooltip>
+    <span
+      role="status"
+      class="sr-only"
+      :data-testid="`${testId}__status`"
+      >{{ copied ? label : '' }}</span
+    >
     <CopyButtonFallback
       v-if="fallbackRequested"
       v-model:open="fallbackOpen"
